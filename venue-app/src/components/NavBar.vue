@@ -20,6 +20,7 @@
           <router-link to="/Account" class="nav-link">Account</router-link>
         </li>
       </ul>
+      <a class="nav-item">Log out</a>
     </div>
   </nav>
 </template>
@@ -35,7 +36,19 @@ export default {
   background: rgb(124, 71, 146);
 }
 
+.nav-item {
+  color: white ! important;
+}
+
+a.nav-link, a.navbar-brand {
+  color: white !important;
+}
+
+.navbar-light .navbar-toggler-icon {
+  filter: invert(100%);
+}
+
 .navbar-brand{
-  
+
 }
 </style>
