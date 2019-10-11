@@ -62,7 +62,6 @@ p {
 
 hr {
   background: black;
-  width: 30%;
 }
 
 </style>
