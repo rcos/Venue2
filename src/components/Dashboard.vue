@@ -1,6 +1,6 @@
 <template>
   <h1>
-    Welcome to dashboard
+    Recent Submissions
   </h1>
 </template>
 
@@ -10,5 +10,9 @@ export default {
 </script>
 
 <style>
+h1{
+  padding-top: 10px;
+  text-align: center;
+}
 
 </style>
