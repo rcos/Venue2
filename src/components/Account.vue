@@ -7,7 +7,7 @@
 <script>
 export default {
 }
-</script>
+</script scoped>
 
 <style>
 
