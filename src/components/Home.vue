@@ -41,7 +41,7 @@ export default {
   width: 25%;
 }
 
-p {
+p{
   max-width: 70vw;
   margin: 0 auto;
 }
