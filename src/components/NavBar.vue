@@ -11,16 +11,15 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
         <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
-          <router-link to="/Classes" class="nav-link">Classes</router-link>
-        </li>
-        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
           <router-link to="/Grades" class="nav-link">Grades</router-link>
         </li>
         <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
           <router-link to="/Account" class="nav-link">Account</router-link>
         </li>
       </ul>
-      <a class="nav-item">Log out</a>
+      <a class="nav-item">
+          <router-link to="/" class="nav-link">Logout</router-link>
+      </a>
     </div>
   </nav>
 </template>
@@ -46,9 +45,5 @@ a.nav-link, a.navbar-brand {
 
 .navbar-light .navbar-toggler-icon {
   filter: invert(100%);
-}
-
-.navbar-brand{
-
 }
 </style>

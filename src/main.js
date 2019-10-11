@@ -1,26 +1,19 @@
 import Vue from "vue";
 import App from "./App.vue";
 
+import VueRouter from 'vue-router';
+Vue.use(VueRouter);
+import routes from './routes.js'
+
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-import VueRouter from 'vue-router';
-
-Vue.use(VueRouter);
 Vue.config.productionTip = false;
-
-import Dashboard from './components/Dashboard';
-
-const routes = [
-  {
-    name: 'Dashboard',
-    path: '/',
-    component: Dashboard
-  }
-
-];
 
 const router = new VueRouter({mode: 'history', routes: routes});
 
 //give the routes to the application on boot
-new Vue(Vue.util.extend({router}, App)).$mount('#app');
+new Vue({
+    router,
+    render: h => h(App)
+}).$mount('#app');
