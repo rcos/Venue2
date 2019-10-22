@@ -3,10 +3,30 @@
     <div class="section-header">
       Recent Submissions
     </div>
-    
+
     <div class="group">
       <div class ="scrolling-wrapper">
         <div class="card valid">
+          <div class="card-header">
+            Class name
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">CSCI XXXX</h5>
+            <p class="card-text">Time: 12pm - 2pm</p>
+          </div>
+        </div>
+
+        <div class="card valid">
+          <div class="card-header">
+            Class name
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">CSCI XXXX</h5>
+            <p class="card-text">Time: 12pm - 2pm</p>
+          </div>
+        </div>
+
+        <div class="card invalid">
           <div class="card-header">
             Class name
           </div>
@@ -36,7 +56,7 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card pending">
           <div class="card-header">
             Class name
           </div>
@@ -45,6 +65,10 @@
             <p class="card-text">Time: 12pm - 2pm</p>
           </div>
         </div>
+
+
+
+
       </div>
     </div>
 
@@ -131,6 +155,40 @@
             <a href="#" class="btn btn-primary">Create Submission</a>
           </div>
         </div>
+
+        <div class="card">
+          <div class="card-header">
+            Class name
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">CSCI XXXX</h5>
+            <p class="card-text">Time: 12pm - 2pm</p>
+            <a href="#" class="btn btn-primary">Create Submission</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            Class name
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">CSCI XXXX</h5>
+            <p class="card-text">Time: 12pm - 2pm</p>
+            <a href="#" class="btn btn-primary">Create Submission</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            Class name
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">CSCI XXXX</h5>
+            <p class="card-text">Time: 12pm - 2pm</p>
+            <a href="#" class="btn btn-primary">Create Submission</a>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -151,6 +209,7 @@ export default {
 }
 .group{
   padding-left: 55px;
+  padding-right: 55px;
 }
 .scrolling-wrapper {
   overflow-x: scroll;
