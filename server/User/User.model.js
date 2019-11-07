@@ -1,5 +1,3 @@
-// post.model.js
-
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -9,8 +7,8 @@ let User = new Schema({
 	last_name: String,
 	//implement email
 	//implement password
-	is_instructor: Boolean,
-	is_ta: Boolean,
+	// is_instructor: Boolean,
+	// is_ta: Boolean,
 	//implement courses
 	//implement ta_sections
 	//implement submissions
