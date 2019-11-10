@@ -43,6 +43,8 @@ userRoutes.route('/update/:id').post(function (req, res) {
     else {
         user.first_name = req.body.first_name;
         user.last_name = req.body.last_name;
+        user.is_instructor = req.body.is_instructor;
+        user.is_ta = req.body.is_ta;
         user.save().then(() => {
           res.json('Update complete');
       })

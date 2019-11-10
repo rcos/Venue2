@@ -5,10 +5,16 @@ const Schema = mongoose.Schema;
 let User = new Schema({
 	first_name: String,
 	last_name: String,
-	//implement email
-	//implement password
-	// is_instructor: Boolean,
-	// is_ta: Boolean,
+	email: String,
+	password: String,
+	is_instructor: {
+		type: Boolean,
+		default: false
+	},
+	is_ta: {
+		type: Boolean,
+		default: false
+	},
 	//implement courses
 	//implement ta_sections
 	//implement submissions
