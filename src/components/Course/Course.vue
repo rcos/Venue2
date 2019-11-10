@@ -61,7 +61,6 @@
         </tbody>
     </table>
 
-
   <!-- SHOWING Courses -->
     <h1>Courses</h1>
       <table class="table table-hover">
@@ -115,9 +114,12 @@
       async addCourse(evt){
         evt.preventDefault(); // prevents the form's default action from redirecting the page
         this.course.instructor = this.instructor;
+        console.log("About to add course with instructor: " + this.course.instructor.first_name + " " + 
+        	this.course.instructor.last_name);
         const response = await CourseAPI.addCourse(this.course);
         this.courses.push(response.data);
         this.course = {}; // clear the input field
+        this.instructor = {};
       },
       async deleteCourse(id){
         const response = await CourseAPI.deleteCourse(id);
