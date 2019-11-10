@@ -56,44 +56,22 @@
       }
     },
     created() {
-      // let uri = 'http://localhost:4000/users';
-      // this.axios.get(uri).then(response => {
-      //   this.users = response.data;
-      // });
       this.loadUsers();
     },
-    // mounted () {
-    //   this.loadUsers();
-    // },
     methods: {
       async loadUsers () {
         const response = await UserAPI.getUsers();
         this.users = response.data;
       },
-      // async addTodo (evt) {
-      //   evt.preventDefault() // prevents the form's default action from redirecting the page
-      //   const response = await ToDoAPI.addTodo(this.newTodo)
-      //   this.todos.push(response.data)
-      //   this.newTodo = '' // clear the input field
-      // },
       async addUser(evt){
         evt.preventDefault(); // prevents the form's default action from redirecting the page
         const response = await UserAPI.addUser(this.user);
         this.users.push(response.data);
         this.user = {}; // clear the input field
-
-        // let uri = 'http://localhost:4000/users/add';
-        // this.axios.post(uri, this.user).then(() => {
-        //    this.$router.go();
-        // });
-        // console.log(this.user);
       },
-      deleteUser(id)
-      {
-        let uri = `http://localhost:4000/users/delete/${id}`;
-        this.axios.delete(uri).then(() => {
-          this.users.splice(this.users.findIndex(i => i._id == id), 1);
-        });
+      async deleteUser(id){
+        const response = await UserAPI.deleteUser(id);
+        this.users.splice(this.users.findIndex(i => i._id == id), 1);
       }
     }
   }

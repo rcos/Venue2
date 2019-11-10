@@ -35,36 +35,14 @@
       }
     },
     created() {
-      // let uri = `http://localhost:4000/users/edit/${this.$route.params.id}`;
-      // this.axios.get(uri).then((response) => {
-      //     this.user = response.data;
-      // });
       this.getCurrentUser();
     },
     methods: {
-      // async addUser(evt){
-      //   evt.preventDefault(); // prevents the form's default action from redirecting the page
-      //   const response = await UserAPI.addUser(this.user);
-      //   this.users.push(response.data);
-      //   this.user = {}; // clear the input field
-
-      //   // let uri = 'http://localhost:4000/users/add';
-      //   // this.axios.post(uri, this.user).then(() => {
-      //   //    this.$router.go();
-      //   // });
-      //   // console.log(this.user);
-      // },
       async getCurrentUser() {
         let user_id = this.$route.params.id;
         const response = await UserAPI.getUser(user_id);
         this.user = response.data;
       },
-      // updateUser() {
-      //   let uri = `http://localhost:4000/users/update/${this.$route.params.id}`;
-      //   this.axios.post(uri, this.user).then(() => {
-      //     this.$router.push({name: 'user'});
-      //   });
-      // }
       async updateUser() {
         let user_id = this.$route.params.id;
         const response = await UserAPI.updateUser(user_id, this.user);
