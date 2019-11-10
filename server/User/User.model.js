@@ -20,17 +20,4 @@ let User = new Schema({
 	//implement submissions
 });
 
-// User
-// first_name (str)
-// last_name (str)
-// email (str or obj?)
-// password (str or obj?)
-// is_instructor (bool)
-// is_ta (bool)
-// courses (array of Course)
-// For students: courses the User is a student for
-// For instructors: courses the User is an instructor for
-// ta_sections (array of Section)
-// submissions (array of Submission)
-
 module.exports = mongoose.model('User', User);
