@@ -18,6 +18,8 @@
             </div>
           </div>
         </div><br />
+        is_instructor: <input type="checkbox" v-model="user.is_instructor">
+        is_ta: <input type="checkbox" v-model="user.is_ta">
         <div class="form-group">
           <button class="btn btn-primary">Update</button>
         </div>
