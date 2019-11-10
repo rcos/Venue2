@@ -17,10 +17,8 @@ export default {
       first_name: user.first_name,
       last_name: user.last_name
     })
+  },
+  deleteUser (id) {
+    return API().delete('users/delete/' + id)
   }
-  // deleteTodo (todoID) {
-  //   return API().post('deleteTodo', {
-  //     todoID: todoID // add our data to the request body
-  //   })
-  // }
 }

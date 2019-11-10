@@ -1,10 +1,8 @@
 const express = require('express');
 const userRoutes = express.Router();
 
-// Require User model in our routes module
 let User = require('./User.model');
 
-// Defined store route
 userRoutes.route('/add').post(function (req, res) {
   let user = new User(req.body.user);
   user.save()
@@ -16,7 +14,6 @@ userRoutes.route('/add').post(function (req, res) {
     });
 });
 
-// Defined get data(index or listing) route
 userRoutes.route('/').get(function (req, res) {
     User.find(function(err, users){
     if(err){
@@ -28,7 +25,6 @@ userRoutes.route('/').get(function (req, res) {
   });
 });
 
-// Defined edit route
 userRoutes.route('/edit/:id').get(function (req, res) {
   let id = req.params.id;
   User.findById(id, function (err, user){
@@ -39,7 +35,6 @@ userRoutes.route('/edit/:id').get(function (req, res) {
   });
 });
 
-//  Defined update route
 userRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
   User.findById(id, function(err, user) {
@@ -58,7 +53,6 @@ userRoutes.route('/update/:id').post(function (req, res) {
   });
 });
 
-// Defined delete | remove | destroy route
 userRoutes.route('/delete/:id').delete(function (req, res) {
     User.findByIdAndRemove({_id: req.params.id}, function(err){
         if(err) res.json(err);
