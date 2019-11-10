@@ -1,17 +1,26 @@
 import API from '@/services/API'
 
 export default {
-  getToDos () {
-    return API().get('todo')
+  getUsers() {
+    return API().get('users')
   },
-  addTodo (todo) {
-    return API().post('addTodo', {
-      todo: todo // add our data to the request body
+  addUser(user) {
+    return API().post('users/add', {
+      user: user // add our data to the request body
     })
   },
-  deleteTodo (todoID) {
-    return API().post('deleteTodo', {
-      todoID: todoID // add our data to the request body
+  getUser(id) {
+    return API().get('users/edit/' + id)
+  },
+  updateUser(id, user){
+    return API().post('users/update/' + id, {
+      first_name: user.first_name,
+      last_name: user.last_name
     })
   }
+  // deleteTodo (todoID) {
+  //   return API().post('deleteTodo', {
+  //     todoID: todoID // add our data to the request body
+  //   })
+  // }
 }
