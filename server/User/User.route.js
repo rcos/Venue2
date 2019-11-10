@@ -6,10 +6,10 @@ let User = require('./User.model');
 
 // Defined store route
 userRoutes.route('/add').post(function (req, res) {
-  let user = new User(req.body);
+  let user = new User(req.body.user);
   user.save()
     .then(() => {
-      res.status(200).json({'business': 'business in added successfully'});
+      res.status(200).json(user);
     })
     .catch(() => {
       res.status(400).send("unable to save to database");
@@ -41,7 +41,8 @@ userRoutes.route('/edit/:id').get(function (req, res) {
 
 //  Defined update route
 userRoutes.route('/update/:id').post(function (req, res) {
-    User.findById(req.params.id, function(err, user) {
+  let id = req.params.id;
+  User.findById(id, function(err, user) {
     if (!user)
       res.status(404).send("data is not found");
     else {
