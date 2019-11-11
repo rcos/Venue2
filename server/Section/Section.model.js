@@ -15,7 +15,7 @@ let Section = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
-	section_number: Number,
+	number: Number,
 	students: [{
 		student: {
 			type: mongoose.Schema.Types.ObjectId,
