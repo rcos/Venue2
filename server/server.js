@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const config = require('./DB.js');
 const userRoute = require('./User/User.route')
 const courseRoute = require('./Course/Course.route')
+const sectionRoute = require('./Section/Section.route')
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -20,6 +21,7 @@ app.use(bodyParser.json());
 
 app.use('/users', userRoute);
 app.use('/courses', courseRoute);
+app.use('/sections', sectionRoute);
 
 app.listen(PORT, function(){
   console.log('Server is running on Port:',PORT);

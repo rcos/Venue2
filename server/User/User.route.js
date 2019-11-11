@@ -10,7 +10,7 @@ userRoutes.route('/add').post(function (req, res) {
       res.status(200).json(user);
     })
     .catch(() => {
-      res.status(400).send("unable to save to database");
+      res.status(400).send("unable to save user to database");
     });
 });
 

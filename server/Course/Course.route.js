@@ -25,7 +25,7 @@ courseRoutes.route('/add').post(function (req, res) {
           res.status(200).json(course);
         })
         .catch(() => {
-          res.status(400).send("unable to save to database");
+          res.status(400).send("unable to save course to database");
         });
   });
 });
