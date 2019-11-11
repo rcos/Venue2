@@ -8,7 +8,12 @@ let Course = new Schema({
 	name: String,
 	dept: String,
 	course_number: Number,
-	//sections
+	sections: [{
+		section: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Section'
+		}
+	}],
 	instructor: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
@@ -16,9 +21,3 @@ let Course = new Schema({
 });
 
 module.exports = mongoose.model('Course', Course);
-
-// name (str)
-// dept (str)
-// course_number (int)
-// sections (array of  Section)
-// instructor (User)
