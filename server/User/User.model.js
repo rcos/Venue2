@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+let Course = require('../Course/Course.model');
+let Section = require('../Section/Section.model');
+
 //Define collection and schema for User
 let User = new Schema({
 	first_name: String,
@@ -15,8 +18,18 @@ let User = new Schema({
 		type: Boolean,
 		default: false
 	},
-	//implement courses
-	//implement ta_sections
+	courses: [{
+		course: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Course'
+		}
+	}],
+	ta_sections: [{
+		section: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Section'
+		}
+	}],
 	//implement submissions
 });
 
