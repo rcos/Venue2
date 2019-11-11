@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 let Course = require('../Course/Course.model');
 let User = require('../User/User.model');
+let Event = require('../Event/Event.model');
 
 //Define collection and schema for User
 let Section = new Schema({
@@ -15,21 +16,24 @@ let Section = new Schema({
 		ref: 'User'
 	},
 	section_number: Number,
+	students: [{
+		student: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'User'
+		}
+	}],
 	teaching_assistants: [{
 		ta: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User'
 		}
 	}],
-	//implement events	
+	events: [{
+		event: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Event'
+		}
+	}],
 });
 
 module.exports = mongoose.model('Section', Section);
-
-
-// course (Course)
-// instructor (User)
-// section_number (int)
-// student (array of User)
-// teaching_assistants (array of User)
-// events (array of Event)
