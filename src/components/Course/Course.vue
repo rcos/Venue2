@@ -42,24 +42,7 @@
     </form>
 
   <!-- Showing Instructors -->
-  <h1>Select an instructor</h1>
-    <table class="table table-hover">
-        <thead>
-        <tr>
-          <th>first_name</th>
-          <th>last_name</th>
-          <th>is_instructor</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr v-for="instructor in instrcutors" :key="instructor._id">
-              <td>{{ instructor.first_name }}</td>
-              <td>{{ instructor.last_name }}</td>
-              <td>{{ instructor.is_instructor }}</td>
-              <td><button class="btn btn-secondary" @click.prevent="selectInstructor(instructor._id)">Select</button></td>
-            </tr>
-        </tbody>
-    </table>
+  <Instructors v-on:select-instructor="selectInstructor" />
 
   <!-- SHOWING Courses -->
     <h1>Courses</h1>
@@ -89,35 +72,44 @@
 <script>
   import CourseAPI from '@/services/CourseAPI.js';
   import UserAPI from '@/services/UserAPI.js';
+  import Instructors from '../User/Instructors'
 
   export default {
+    name: 'Course',
+    components: {
+      Instructors
+    },
     data(){
       return {
         course:{},
         courses: [],
-        users: [],
+        // users: [],
         instructor: {},
-        new_instructor: {},
-        all_instructors: []
+        instructors: []
       }
     },
     created() {
       this.loadCourses()
-      this.loadUsers()
+      // this.loadUsers()
+      this.loadInstructors()
     },
-    computed: {
-      instrcutors: function() {
-        return this.users.filter(function(u) {
-          return u.is_instructor
-        })
-      }
-    },
+    // computed: {
+    //   instrcutors: function() {
+    //     return this.users.filter(function(u) {
+    //       return u.is_instructor
+    //     })
+    //   }
+    // },
     methods: {
       async loadCourses () {
         const response = await CourseAPI.getCourses()
         this.courses = response.data
         // this.loadInstructors()
         this.getInstructorsForCourses()
+      },
+      async loadInstructors(){
+        const response = await UserAPI.getInstructors()
+        this.instructors = response.data
       },
       async getInstructorsForCourses(){
         this.courses.forEach(async course => {
@@ -145,8 +137,8 @@
         const response = await CourseAPI.deleteCourse(id);
         this.courses.splice(this.courses.findIndex(i => i._id == id), 1);
       },
-      selectInstructor(id){
-      	this.instructor = this.users.find(user => user._id == id);
+      selectInstructor(instructor){
+        this.instructor = instructor
       },
     }
   }

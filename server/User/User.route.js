@@ -62,4 +62,19 @@ userRoutes.route('/delete/:id').delete(function (req, res) {
     });
 });
 
+userRoutes.route('/instructors').get(function (req, res) {
+    User.find(function(err, users){
+    if(err){
+      res.json(err);
+    }else {
+      let instructors = [];
+      users.forEach(user => {
+        if(user.is_instructor)
+          instructors.push(user);
+      });
+      res.json(instructors);
+    }
+  });
+});
+
 module.exports = userRoutes;

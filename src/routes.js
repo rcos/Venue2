@@ -4,6 +4,7 @@ import Grades from './components/Grades.vue';
 import Home from './components/Home.vue';
 import User from './components/User/User.vue';
 import EditUser from './components/User/EditUser.vue';
+import Instructors from './components/User/Instructors.vue';
 import Course from './components/Course/Course.vue';
 import EditCourse from './components/Course/EditCourse.vue';
 import Section from './components/Section/Section.vue';
@@ -36,6 +37,11 @@ const routes = [
     	path: '/editUser/:id', 
     	component: EditUser
     },
+    {  
+        name: 'instructors',
+        path: '/instructors', 
+        component: Instructors
+    },  
     {
         name: 'course',
         path: '/Course',

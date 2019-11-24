@@ -23,4 +23,7 @@ export default {
   deleteUser (id) {
     return API().delete('users/delete/' + id)
   },
+  getInstructors() {
+    return API().get('users/instructors')
+  }
 }
