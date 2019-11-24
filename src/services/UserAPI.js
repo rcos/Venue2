@@ -22,5 +22,5 @@ export default {
   },
   deleteUser (id) {
     return API().delete('users/delete/' + id)
-  }
+  },
 }
