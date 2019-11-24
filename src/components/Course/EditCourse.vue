@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Edit Course</h1>
+    <h2>Edit Course</h2>
     <form @submit.prevent="updateCourse">
       <div class="row">
         <div class="col-md-6">

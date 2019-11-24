@@ -7,6 +7,7 @@ import EditUser from './components/User/EditUser.vue';
 import Instructors from './components/User/Instructors.vue';
 import Course from './components/Course/Course.vue';
 import EditCourse from './components/Course/EditCourse.vue';
+import Courses from './components/Course/Courses.vue'; 
 import Section from './components/Section/Section.vue';
 import EditSection from './components/Section/EditSection.vue';
 
@@ -51,6 +52,11 @@ const routes = [
         name: 'editCourse',
         path: '/editCourse/:id',
         component: EditCourse
+    },
+    {
+        name: 'courses',
+        path: '/courses',
+        component: Courses
     },
     {
         name: 'section',

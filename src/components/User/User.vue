@@ -1,7 +1,7 @@
 <template>
   <!-- ADDING USER -->
   <div>
-    <h1>Create A User</h1>
+    <h2>Create A User</h2>
     <form @submit.prevent="addUser">
       <div class="row">
         <div class="col-md-6">
@@ -25,7 +25,7 @@
     </form>
 
   <!-- SHOWING USERS -->
-    <h1>Users</h1>
+    <h2>Users</h2>
       <table class="table table-hover">
           <thead>
           <tr>
