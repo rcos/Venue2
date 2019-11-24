@@ -1,6 +1,10 @@
 <template>
   <div>
-
+    <div>
+      <button type="button" class="btn btn-primary">
+        <router-link to="/CreateEvent" class="nav-link">New Event</router-link>
+      </button>
+    </div>
     <div class="container-fluid py-3">
       <h2 class="text-center">Current Events</h2>
       <div class="card-columns">
