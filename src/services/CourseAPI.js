@@ -22,5 +22,8 @@ export default {
   },
   deleteCourse (id) {
     return API().delete('courses/delete/' + id)
+  },
+  getInstructor (course_id) {
+    return API().get('courses/getInstructor/' + course_id)
   }
 }

@@ -28,8 +28,8 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>instructor</label>
-              <input class="form-control" v-model="course.instructor.first_name" rows="5" readonly>
-              <input class="form-control" v-model="course.instructor.last_name" rows="5" readonly>
+              <input class="form-control" v-model="instructor.first_name" rows="5" readonly>
+              <input class="form-control" v-model="instructor.last_name" rows="5" readonly>
             </div>
           </div>
         </div>
@@ -46,22 +46,28 @@
   export default {
     data() {
       return {
-        course: {}
+        course: {},
+        instructor: {}
       }
     },
     created() {
-      this.getCurrentCourse();
+      this.getCurrentCourse()
     },
     methods: {
       async getCurrentCourse() {
-        let course_id = this.$route.params.id;
-        const response = await CourseAPI.getCourse(course_id);
-        this.course = response.data;
+        let course_id = this.$route.params.id
+        const response = await CourseAPI.getCourse(course_id)
+        this.course = response.data
+        this.getCurrentCourseInstructor()
+      },
+      async getCurrentCourseInstructor(){
+        const response = await CourseAPI.getInstructor(this.course._id)
+        this.instructor = response.data
       },
       async updateCourse() {
-        let course_id = this.$route.params.id;
-        const response = await CourseAPI.updateCourse(course_id, this.course);
-        this.$router.push({name: 'course'});
+        let course_id = this.$route.params.id
+        const response = await CourseAPI.updateCourse(course_id, this.course)
+        this.$router.push({name: 'course'})
       }
     }
   }
