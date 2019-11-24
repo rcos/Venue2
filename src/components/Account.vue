@@ -1,7 +1,7 @@
 <template>
-  <h1>
-    Account info
-  </h1>
+  <div>
+    ACCOUNT PAGE
+  </div>
 </template>
 
 <script>
