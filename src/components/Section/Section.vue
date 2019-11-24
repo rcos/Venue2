@@ -1,12 +1,13 @@
 <template>
   <div>
-<!--     <h1>Create A Section</h1>
+
+    <h2>Create A Section</h2>
     <form @submit.prevent="addSection">
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
             <label>course:</label>
-            <input type="text" class="form-control" v-model="section.course.name" readonly>
+            <input type="text" class="form-control" v-model="course.name" readonly>
           </div>
         </div>
       </div>
@@ -14,8 +15,8 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>instructor:</label>
-            <input class="form-control" v-model="section.instructor.first_name" readonly>
-            <input class="form-control" v-model="section.instructor.last_name" readonly>
+            <input class="form-control" v-model="instructor.first_name" readonly>
+            <input class="form-control" v-model="instructor.last_name" readonly>
           </div>
         </div>
       </div>
@@ -27,7 +28,12 @@
           </div>
         </div>
       </div>
-      <h1>Students</h1>
+
+      <Courses />
+
+      <Instructors />
+
+      <h2>Students</h2>
       <table class="table table-hover">
           <thead>
           <tr>
@@ -46,7 +52,7 @@
               </tr>
           </tbody>
       </table>
-      <h1>Teaching Assistants</h1>
+      <h2>Teaching Assistants</h2>
       <table class="table table-hover">
           <thead>
           <tr>
@@ -61,7 +67,7 @@
               </tr>
           </tbody>
       </table>
-      <h1>Events</h1>
+      <h2>Events</h2>
       <table class="table table-hover">
           <thead>
           <tr>
@@ -82,12 +88,12 @@
       <div class="form-group">
         <button class="btn btn-primary">Create</button>
       </div>
-    </form> -->
+    </form>
 
     <!-- SHOWING SECTIONS -->
-    <h1>Sections</h1>
-    <div v-for="section in sections" :key="section._id">
-      <h2>Section {{  section.number }}, {{ section.course.dept }} {{ section.course.name }}</h2>
+    <h2>Sections</h2>
+<!--     <div v-for="section in sections" :key="section._id">
+      <h2>Section {{  section.number }}, {{ section.course.dept }} {{ section.course.name }}</h2> -->
     
 <!--       <table class="table table-hover">
           <thead>
@@ -116,22 +122,38 @@
 <script>
   import SectionAPI from '@/services/SectionAPI.js';
   import UserAPI from '@/services/UserAPI.js';
+  import CourseAPI from '@/services/CourseAPI.js';
+  import Courses from '../Course/Courses'
+  import Instructors from '../User/Instructors';
 
 
   export default {
+    name: 'Section',
+    components: {
+      Instructors,
+      Courses
+    },
     data(){
       return {
-        section:{},
-        sections: []
+        section: {},
+        sections: [],
+        courses: [],
+        course: {},
+        instructor: {}
       }
     },
     created() {
-      this.loadSections();
+      this.loadSections()
+      this.loadCourses()
     },
     methods: {
       async loadSections () {
-        const response = await SectionAPI.getSections();
-        this.sections = response.data;
+        const response = await SectionAPI.getSections()
+        this.sections = response.data
+      },
+      async loadCourses(){
+        const response = await CourseAPI.getCourses()
+        this.courses = response.data
       },
       async addSection(evt){
         evt.preventDefault(); // prevents the form's default action from redirecting the page

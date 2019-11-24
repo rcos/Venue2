@@ -1,7 +1,7 @@
 <template>
   <!-- ADDING USER -->
   <div>
-    <h1>Create A Course</h1>
+    <h2>Create A Course</h2>
     <form @submit.prevent="addCourse">
       <div class="row">
         <div class="col-md-6">
@@ -45,27 +45,8 @@
   <Instructors v-on:select-instructor="selectInstructor" />
 
   <!-- SHOWING Courses -->
-    <h1>Courses</h1>
-      <table class="table table-hover">
-          <thead>
-          <tr>
-            <th>name</th>
-            <th>dept</th>
-            <th>course_number</th>
-            <th>instructor</th>
-          </tr>
-          </thead>
-          <tbody>
-              <tr v-for="course in courses" :key="course._id">
-                <td>{{ course.name }}</td>
-                <td>{{ course.dept }}</td>
-                <td>{{ course.course_number }}</td>
-                <td>{{ course.instructor.first_name }} {{ course.instructor.last_name }}</td>
-                <td><router-link :to="{name: 'editCourse', params: { id: course._id }}" class="btn btn-primary">Edit</router-link></td>
-                <td><button class="btn btn-danger" @click.prevent="deleteCourse(course._id)">Delete</button></td>
-              </tr>
-          </tbody>
-      </table>
+  <Courses />
+
   </div>
 </template>
 
@@ -73,53 +54,28 @@
   import CourseAPI from '@/services/CourseAPI.js';
   import UserAPI from '@/services/UserAPI.js';
   import Instructors from '../User/Instructors'
+  import Courses from './Courses'
 
   export default {
     name: 'Course',
     components: {
-      Instructors
+      Instructors,
+      Courses
     },
     data(){
       return {
         course:{},
-        courses: [],
-        // users: [],
         instructor: {},
         instructors: []
       }
     },
     created() {
-      this.loadCourses()
-      // this.loadUsers()
       this.loadInstructors()
     },
-    // computed: {
-    //   instrcutors: function() {
-    //     return this.users.filter(function(u) {
-    //       return u.is_instructor
-    //     })
-    //   }
-    // },
     methods: {
-      async loadCourses () {
-        const response = await CourseAPI.getCourses()
-        this.courses = response.data
-        // this.loadInstructors()
-        this.getInstructorsForCourses()
-      },
       async loadInstructors(){
         const response = await UserAPI.getInstructors()
         this.instructors = response.data
-      },
-      async getInstructorsForCourses(){
-        this.courses.forEach(async course => {
-          const response = await CourseAPI.getInstructor(course._id)
-          course.instructor = response.data
-        })
-      },
-      async loadUsers () {
-        const response = await UserAPI.getUsers()
-        this.users = response.data
       },
       async addCourse(evt){
         evt.preventDefault(); // prevents the form's default action from redirecting the page
@@ -132,10 +88,6 @@
         console.log("new course: " + new_course.instructor.first_name + " " + new_course.instructor.last_name)
         this.course = {}; // clear the input field
         this.instructor = {};
-      },
-      async deleteCourse(id){
-        const response = await CourseAPI.deleteCourse(id);
-        this.courses.splice(this.courses.findIndex(i => i._id == id), 1);
       },
       selectInstructor(instructor){
         this.instructor = instructor
