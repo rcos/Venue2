@@ -1,0 +1,112 @@
+<template>
+  <div>
+    <form @submit.prevent="updateSection">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>course:</label>
+            <input type="text" class="form-control" v-model="course.name" readonly>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>instructor:</label>
+            <input class="form-control" v-model="instructor.first_name" readonly>
+            <input class="form-control" v-model="instructor.last_name" readonly>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>section_number:</label>
+            <input type="number" class="form-control" v-model="section.number">
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary">Update</button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <h4>Section Students</h4>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>is_instructor</th>
+          <th>is_ta</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr v-for="student in students" :key="student._id">
+              <td>{{ student.first_name }}</td>
+              <td>{{ student.last_name }}</td>
+              <td>{{ student.is_instructor }}</td>
+              <td>{{ student.is_ta }}</td>
+              <td v-if="is_section_view"><button class="btn btn-secondary" @click.prevent="$emit('select-student', student)">Select</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <Courses v-bind:is_course_view="false" v-on:select-course="selectCourse" />
+
+    <Instructors v-on:select-instructor="selectInstructor" />
+
+    <Students v-bind:is_section_view="true" />
+
+  </div>
+</template>
+
+<script>
+  import SectionAPI from '@/services/SectionAPI.js';
+  import Courses from '../Course/Courses';
+  import Instructors from '../User/Instructors';
+  import Students from '../User/Students';
+
+  export default {
+    name: 'Sections',
+    components: {
+      Courses,
+      Instructors,
+      Students
+    },
+    data(){
+      return {
+        section: {},
+        instructor: {},
+        course: {},
+        students: []
+      }
+    },
+    created() {
+      this.getCurrentSection()
+    },
+    methods: {
+      async getCurrentSection(){
+        let section_id = this.$route.params.id
+        const response = await SectionAPI.getSection(section_id)
+        this.section = response.data
+        this.getCurrentSectionInstructor()
+        this.getCurrentSectionCourse()
+      },
+      async getCurrentSectionInstructor(){
+        const response = await SectionAPI.getInstructor(this.section._id)
+        this.instructor = response.data
+      },
+      async getCurrentSectionCourse(){
+        const response = await SectionAPI.getCourse(this.section._id)
+        this.course = response.data
+      },
+      selectCourse(course){
+        this.course = course
+      },
+      selectInstructor(instructor){
+        this.instructor = instructor
+      }
+    }
+  }
+</script>
