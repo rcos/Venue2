@@ -5,6 +5,7 @@ import Home from './components/Home.vue';
 import User from './components/User/User.vue';
 import EditUser from './components/User/EditUser.vue';
 import Instructors from './components/User/Instructors.vue';
+import Students from './components/User/Students.vue';
 import Course from './components/Course/Course.vue';
 import EditCourse from './components/Course/EditCourse.vue';
 import Courses from './components/Course/Courses.vue'; 
@@ -42,6 +43,11 @@ const routes = [
         name: 'instructors',
         path: '/instructors', 
         component: Instructors
+    },
+    {  
+        name: 'students',
+        path: '/students', 
+        component: Students
     },  
     {
         name: 'course',

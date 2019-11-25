@@ -45,7 +45,7 @@
   <Instructors v-on:select-instructor="selectInstructor" />
 
   <!-- SHOWING Courses -->
-  <Courses />
+  <Courses v-bind:is_course_view="true" />
 
   </div>
 </template>

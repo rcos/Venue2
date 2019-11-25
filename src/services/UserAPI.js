@@ -25,5 +25,8 @@ export default {
   },
   getInstructors() {
     return API().get('users/instructors')
+  },
+  getStudents() {
+    return API().get('users/students')
   }
 }

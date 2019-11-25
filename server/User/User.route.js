@@ -77,4 +77,19 @@ userRoutes.route('/instructors').get(function (req, res) {
   });
 });
 
+userRoutes.route('/students').get(function (req, res) {
+    User.find(function(err, users){
+    if(err){
+      res.json(err);
+    }else {
+      let students = [];
+      users.forEach(user => {
+        if(!user.is_instructor)
+          students.push(user);
+      });
+      res.json(students);
+    }
+  });
+});
+
 module.exports = userRoutes;
