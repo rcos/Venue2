@@ -24,49 +24,37 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>section_number:</label>
-            <input type="number" class="form-control" v-model="section.section_number">
+            <input type="number" class="form-control" v-model="section.number">
           </div>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary">Create</button>
         </div>
       </div>
 
-      <Courses />
+      <Courses v-bind:is_course_view="false" v-on:select-course="selectCourse" />
 
-      <Instructors />
+      <Instructors v-on:select-instructor="selectInstructor" />
 
-      <h2>Students</h2>
+      <h2>New Students</h2>
       <table class="table table-hover">
           <thead>
           <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>is_instructor</th>
-            <th>is_ta</th>
+            <th>title</th>
+            <th>section course</th>
+            <th>section number</th>
           </tr>
           </thead>
           <tbody>
-              <tr v-for="student in section.students" :key="student._id">
-                <td>{{ student.first_name }}</td>
-                <td>{{ student.last_name }}</td>
-                <td>{{ student.is_instructor }}</td>
-                <td>{{ student.is_ta }}</td>
+              <tr v-for="student in new_students" :key="student._id">
+                <td>{{  }}</td>
+                <td>{{ event.section.course.name }}</td>
+                <td>{{ event.section.section_number }}</td>
               </tr>
           </tbody>
       </table>
-      <h2>Teaching Assistants</h2>
-      <table class="table table-hover">
-          <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-          </tr>
-          </thead>
-          <tbody>
-              <tr v-for="ta in section.teaching_assistants" :key="ta._id">
-                <td>{{ ta.first_name }}</td>
-                <td>{{ ta.last_name }}</td>
-              </tr>
-          </tbody>
-      </table>
+
+
       <h2>Events</h2>
       <table class="table table-hover">
           <thead>
@@ -90,32 +78,8 @@
       </div>
     </form>
 
-    <!-- SHOWING SECTIONS -->
-    <h2>Sections</h2>
-<!--     <div v-for="section in sections" :key="section._id">
-      <h2>Section {{  section.number }}, {{ section.course.dept }} {{ section.course.name }}</h2> -->
-    
-<!--       <table class="table table-hover">
-          <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>is_instructor</th>
-            <th>is_ta</th>
-          </tr>
-          </thead>
-          <tbody>
-              <tr v-for="section in sections" :key="section._id">
-                <td>{{ section.first_name }}</td>
-                <td>{{ section.last_name }}</td>
-                <td>{{ section.is_instructor }}</td>
-                <td>{{ section.is_ta }}</td>
-                <td><router-link :to="{name: 'editSection', params: { id: section._id }}" class="btn btn-primary">Edit</router-link></td>
-                <td><button class="btn btn-danger" @click.prevent="deleteSection(section._id)">Delete</button></td>
-              </tr>
-          </tbody>
-      </table> -->
-    </div>
+    <Sections />    
+
   </div>
 </template>
 
@@ -125,19 +89,22 @@
   import CourseAPI from '@/services/CourseAPI.js';
   import Courses from '../Course/Courses'
   import Instructors from '../User/Instructors';
-
+  import Sections from '../Section/Sections';
 
   export default {
     name: 'Section',
     components: {
       Instructors,
-      Courses
+      Courses,
+      Sections
     },
     data(){
       return {
         section: {},
         sections: [],
         courses: [],
+        students: [],
+        new_students: [],
         course: {},
         instructor: {}
       }
@@ -156,14 +123,24 @@
         this.courses = response.data
       },
       async addSection(evt){
-        evt.preventDefault(); // prevents the form's default action from redirecting the page
-        const response = await SectionAPI.addSection(this.section);
+        evt.preventDefault() // prevents the form's default action from redirecting the page
+        this.section.instructor = this.instructor
+        this.section.course = this.course
+        const response = await SectionAPI.addSection(this.section)
         this.sections.push(response.data);
-        this.section = {}; // clear the input field
+        this.section = {} // clear the input field
+        this.course = {}
+        this.instructor = {}
       },
       async deleteSection(id){
         const response = await SectionAPI.deleteSection(id);
         this.sections.splice(this.sections.findIndex(i => i._id == id), 1);
+      },
+      selectCourse(course){
+        this.course = course
+      },
+      selectInstructor(instructor){
+        this.instructor = instructor
       }
     }
   }

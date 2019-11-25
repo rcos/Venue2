@@ -79,23 +79,18 @@ courseRoutes.route('/delete/:id').delete(function (req, res) {
 });
 
 courseRoutes.route('/getInstructor/:id').get(function (req, res) {
-  console.log("In get instructor function")
   let id = req.params.id;
   Course.findById(id, function (err, course){
       if(err) {
         res.json(err);
       }
-      console.log("Course was found. About to search for instructor")
       let instructor_id = course.instructor;
-      console.log("Id for this courses: instructor: " + instructor_id);
       User.findById(instructor_id, function(error, instructor){
-        if(error){
-          console.log("ERROR occured when looking for instructor");
+        if(error)
           res.json(error);
-        }
         res.json(instructor);
-        console.log("Found instructor " + instructor.first_name + " " + instructor.last_name);
       });
   });
 });
+
 module.exports = courseRoutes;

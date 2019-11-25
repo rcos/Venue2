@@ -16,8 +16,11 @@
               <td>{{ course.dept }}</td>
               <td>{{ course.course_number }}</td>
               <td>{{ course.instructor.first_name }} {{ course.instructor.last_name }}</td>
-              <td><router-link :to="{name: 'editCourse', params: { id: course._id }}" class="btn btn-primary">Edit</router-link></td>
-              <td><button class="btn btn-danger" @click.prevent="deleteCourse(course._id)">Delete</button></td>
+              <div v-if="is_course_view">
+                <td><router-link :to="{name: 'editCourse', params: { id: course._id }}" class="btn btn-primary">Edit</router-link></td>
+                <td><button class="btn btn-danger" @click.prevent="deleteCourse(course._id)">Delete</button></td>
+              </div>
+              <td v-if="!is_course_view"><button class="btn btn-secondary" @click.prevent="$emit('select-course', course)">Select</button></td>
             </tr>
         </tbody>
     </table>
@@ -29,6 +32,7 @@
 
   export default {
     name: 'Courses',
+    props: ["is_course_view"],
     data(){
       return {
         courses: []
@@ -53,6 +57,6 @@
     async deleteCourse(id){
       const response = await CourseAPI.deleteCourse(id);
       this.courses.splice(this.courses.findIndex(i => i._id == id), 1);
-    },
+    }
   }
 </script>
