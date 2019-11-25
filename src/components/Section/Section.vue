@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <h2>Create A Section</h2>
     <form @submit.prevent="addSection">
       <div class="row">
@@ -26,60 +25,59 @@
             <label>section_number:</label>
             <input type="number" class="form-control" v-model="section.number">
           </div>
+          <div class="form-group">
+            <button class="btn btn-primary">Create</button>
+          </div>
         </div>
-        <div class="form-group">
-          <button class="btn btn-primary">Create</button>
-        </div>
-      </div>
-
-      <Courses v-bind:is_course_view="false" v-on:select-course="selectCourse" />
-
-      <Instructors v-on:select-instructor="selectInstructor" />
-
-      <h2>New Students</h2>
-      <table class="table table-hover">
-          <thead>
-          <tr>
-            <th>title</th>
-            <th>section course</th>
-            <th>section number</th>
-          </tr>
-          </thead>
-          <tbody>
-              <tr v-for="student in new_students" :key="student._id">
-                <td>{{  }}</td>
-                <td>{{ event.section.course.name }}</td>
-                <td>{{ event.section.section_number }}</td>
-              </tr>
-          </tbody>
-      </table>
-
-
-      <h2>Events</h2>
-      <table class="table table-hover">
-          <thead>
-          <tr>
-            <th>title</th>
-            <th>section course</th>
-            <th>section number</th>
-          </tr>
-          </thead>
-          <tbody>
-              <tr v-for="event in section.events" :key="event._id">
-                <td>{{ event.title }}</td>
-                <td>{{ event.section.course.name }}</td>
-                <td>{{ event.section.section_number }}</td>
-              </tr>
-          </tbody>
-      </table>
-
-      <div class="form-group">
-        <button class="btn btn-primary">Create</button>
       </div>
     </form>
 
-    <Sections />    
+    <Courses v-bind:is_course_view="false" v-on:select-course="selectCourse" />
 
+    <Instructors v-on:select-instructor="selectInstructor" />
+
+    <h2>New Students</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>title</th>
+          <th>section course</th>
+          <th>section number</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr v-for="student in new_students" :key="student._id">
+              <td>{{  }}</td>
+              <td>{{ event.section.course.name }}</td>
+              <td>{{ event.section.section_number }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <h2>Events</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>title</th>
+          <th>section course</th>
+          <th>section number</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr v-for="event in section.events" :key="event._id">
+              <td>{{ event.title }}</td>
+              <td>{{ event.section.course.name }}</td>
+              <td>{{ event.section.section_number }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="form-group">
+      <button class="btn btn-primary">Create</button>
+    </div>
+
+    <Sections />    
   </div>
 </template>
 
@@ -131,10 +129,6 @@
         this.section = {} // clear the input field
         this.course = {}
         this.instructor = {}
-      },
-      async deleteSection(id){
-        const response = await SectionAPI.deleteSection(id);
-        this.sections.splice(this.sections.findIndex(i => i._id == id), 1);
       },
       selectCourse(course){
         this.course = course
