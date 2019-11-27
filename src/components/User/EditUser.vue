@@ -14,12 +14,11 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>Last Name</label>
-              <textarea class="form-control" v-model="user.last_name" rows="5"></textarea>
+              <input class="form-control" v-model="user.last_name" rows="5">
             </div>
           </div>
         </div><br />
         is_instructor: <input type="checkbox" v-model="user.is_instructor">
-        is_ta: <input type="checkbox" v-model="user.is_ta">
         <div class="form-group">
           <button class="btn btn-primary">Update</button>
         </div>

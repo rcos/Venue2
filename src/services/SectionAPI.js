@@ -14,7 +14,7 @@ export default {
   },
   updateSection(id, section){
     return API().post('sections/update/' + id, {
-      section: section
+      updated_section: section
     })
   },
   deleteSection(id) {

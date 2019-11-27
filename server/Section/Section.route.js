@@ -39,16 +39,15 @@ sectionRoutes.route('/edit/:id').get(function (req, res) {
 
 sectionRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
-  let new_section = req.body.section;
-  console.log("New instructor: " + new_section.instructor)
+  let updated_section = req.body.updated_section;
   Section.findByIdAndUpdate(id, 
     {
-      course: new_section.course,
-      instructor: new_section.instructor,
-      number: new_section.number,
-      students: new_section.students,
-      teaching_assistants: new_section.teaching_assistants,
-      events: new_section.events
+      course: updated_section.course,
+      instructor: updated_section.instructor,
+      number: updated_section.number,
+      students: updated_section.students,
+      teaching_assistants: updated_section.teaching_assistants,
+      events: updated_section.events
     },
     function(err, section) {
       if (!section)
