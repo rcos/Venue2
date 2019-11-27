@@ -59,6 +59,12 @@
     },
     methods: {
       async addUser(evt){
+        if(this.user.is_instructor){
+          console.log("Should add an instructor")
+        }
+        else{
+          console.log("Should add a student")
+        }
         evt.preventDefault(); // prevents the form's default action from redirecting the page
         const response = await UserAPI.addUser(this.user);
         this.$router.push({name: 'user'});

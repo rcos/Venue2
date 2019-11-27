@@ -6,7 +6,7 @@ let Course = require('../Course/Course.model');
 let Section = require('../Section/Section.model');
 
 //Abstract User Model
-let User = new Schema({
+let UserSchema = new Schema({
 	first_name: String,
 	last_name: String,
 	email: String,
@@ -22,7 +22,7 @@ let User = new Schema({
 });
 
 //Instructor - Inherits from User
-let Instructor = User.extend({
+let InstructorSchema = UserSchema.extend({
   courses: [{
     course: {
       type: mongoose.Schema.Types.ObjectId,
@@ -32,7 +32,7 @@ let Instructor = User.extend({
 });
 
 //Student - Inherits from User
-let Student = User.extend({
+let StudentSchema = UserSchema.extend({
   courses: [{
     course: {
       type: mongoose.Schema.Types.ObjectId,
@@ -59,21 +59,8 @@ let Student = User.extend({
   }]
 });
 
-module.exports = mongoose.model('User', User);
+let User = mongoose.model('User', UserSchema);
+let Student = mongoose.model('Student', StudentSchema);
+let Instructor = mongoose.model('Instructor', InstructorSchema);
 
-//User Model
-//first_name,
-//last_name,
-//email,
-//password,
-//is_instructor
-
-//Instructor Model (inherits from User)
-//courses (courses that the instructor teaches)
-
-//Student Model (inherits from User)
-//courses (courses the student is taking)
-//sections (sections the student is a student for)
-//ta_sections (sections the student is a TA for)
-//submissions 
-
+module.exports = {User, Student, Instructor};

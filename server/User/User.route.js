@@ -1,17 +1,26 @@
 const express = require('express');
 const userRoutes = express.Router();
 
-let User = require('./User.model');
+let user_models = require('./User.model');
+let User = user_models.User;
+let Student = user_models.Student;
+let Instructor = user_models.Instructor;
 
 userRoutes.route('/add').post(function (req, res) {
-  let user = new User(req.body.user);
+  let new_user = req.body.user;
+  let user;
+  if(new_user.is_instructor)
+    user = new Instructor(new_user);
+  else
+    user = new Student(new_user);
+
   user.save()
     .then(() => {
       res.status(200).json(user);
     })
     .catch(() => {
       res.status(400).send("unable to save user to database");
-    });
+  });
 });
 
 userRoutes.route('/').get(function (req, res) {
