@@ -6,7 +6,7 @@ let User = require('../User/User.model');
 let Event = require('../Event/Event.model');
 
 //Define collection and schema for User
-let Section = new Schema({
+let SectionSchema = new Schema({
 	course: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Course'
@@ -36,4 +36,4 @@ let Section = new Schema({
 	}],
 });
 
-module.exports = mongoose.model('Section', Section);
+module.exports = mongoose.model('Section', SectionSchema);
