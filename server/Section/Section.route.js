@@ -39,24 +39,42 @@ sectionRoutes.route('/edit/:id').get(function (req, res) {
 
 sectionRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
-  Section.findById(id, function(err, section) {
-    if (!section)
-      res.status(404).send("data is not found");
-    else {
-        section.course = req.body.course;
-        section.instructor = req.body.instructor;
-        section.section_number = req.body.section_number;
-        section.students = req.body.students;
-        section.teaching_assistants = req.body.teaching_assistants;
-        section.events = req.body.events;
-        section.save().then(() => {
-          res.json('Update complete');
-      })
-      .catch(() => {
-            res.status(400).send("unable to update section in the database");
-      });
+  let new_section = req.body.section;
+  Section.findByIdAndUpdate(id, 
+    {
+      course: new_section.course,
+      instructor: new_section.instructor,
+      number: new_section.number,
+      students: new_section.students,
+      teaching_assistants: new_section.teaching_assistants,
+      events: new_section.events
+    },
+    function(err, section) {
+      if (!section)
+        res.status(404).send("section not found");
+      res.json(section);    
     }
-  });
+  );
+
+
+  // Section.findById(id, function(err, section) {
+  //   if (!section)
+  //     res.status(404).send("data is not found");
+  //   else {
+  //       section.course = req.body.course;
+  //       section.instructor = req.body.instructor;
+  //       section.section_number = req.body.section_number;
+  //       section.students = req.body.students;
+  //       section.teaching_assistants = req.body.teaching_assistants;
+  //       section.events = req.body.events;
+  //       section.save().then(() => {
+  //         res.json('Update complete');
+  //     })
+  //     .catch(() => {
+  //           res.status(400).send("unable to update section in the database");
+  //     });
+  //   }
+  // });
 });
 
 sectionRoutes.route('/delete/:id').delete(function (req, res) {

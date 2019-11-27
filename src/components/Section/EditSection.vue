@@ -101,11 +101,23 @@
         const response = await SectionAPI.getCourse(this.section._id)
         this.course = response.data
       },
+      async getCurrentSectionStudents(){
+        const response = await SectionAPI.getStudents(this.section._id)
+        this.course = response.data
+      },
       selectCourse(course){
         this.course = course
       },
       selectInstructor(instructor){
         this.instructor = instructor
+      },
+      async updateSection() {
+        let section_id = this.$route.params.id
+        this.section.instructor = this.instructor
+        this.section.course = this.course
+        this.section.students = this.students
+        const response = await SectionAPI.updateSection(section_id, this.section)
+        this.$router.push({name: 'section'})
       }
     }
   }
