@@ -25,5 +25,8 @@ export default {
   },
   getCourse (section_id) {
     return API().get('sections/getCourse/' + section_id)
-  }
+  },
+  getStudents (section_id) {
+    return API().get('sections/getStudents/' + section_id)
+  },  
 }

@@ -47,7 +47,29 @@
               <td>{{ student.last_name }}</td>
               <td>{{ student.is_instructor }}</td>
               <td>{{ student.is_ta }}</td>
-              <td v-if="is_section_view"><button class="btn btn-secondary" @click.prevent="$emit('select-student', student)">Select</button></td>
+              <!-- <td v-if="is_section_view"><button class="btn btn-secondary" @click.prevent="$emit('select-student', student)">Select</button></td> -->
+            </tr>
+        </tbody>
+    </table>
+
+    <h4>Add new Students</h4>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>is_instructor</th>
+          <th>is_ta</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr v-for="student in new_students" :key="student._id">
+              <td>{{ student.first_name }}</td>
+              <td>{{ student.last_name }}</td>
+              <td>{{ student.is_instructor }}</td>
+              <td>{{ student.is_ta }}</td>
+              <td><button class="btn btn-danger" @click.prevent="removeNewStudent(student)">Remove</button></td>
+              <!-- <td v-if="is_section_view"><button class="btn btn-secondary" @click.prevent="$emit('select-student', student)">Select</button></td> -->
             </tr>
         </tbody>
     </table>
@@ -56,7 +78,7 @@
 
     <Instructors v-on:select-instructor="selectInstructor" />
 
-    <Students v-bind:is_section_view="true" />
+    <Students v-on:select-student="addNewStudent" v-bind:is_section_view="true" />
 
   </div>
 </template>
@@ -79,7 +101,8 @@
         section: {},
         instructor: {},
         course: {},
-        students: []
+        students: [],
+        new_students: []
       }
     },
     created() {
@@ -92,6 +115,7 @@
         this.section = response.data
         this.getCurrentSectionInstructor()
         this.getCurrentSectionCourse()
+        this.getCurrentSectionStudents()
       },
       async getCurrentSectionInstructor(){
         const response = await SectionAPI.getInstructor(this.section._id)
@@ -103,7 +127,8 @@
       },
       async getCurrentSectionStudents(){
         const response = await SectionAPI.getStudents(this.section._id)
-        this.course = response.data
+        this.students = response.data
+        console.log("Students (len: " + this.students.length + ") " + this.students )
       },
       selectCourse(course){
         this.course = course
@@ -111,11 +136,18 @@
       selectInstructor(instructor){
         this.instructor = instructor
       },
+      addNewStudent(student){
+        if(!this.new_students.includes(student) && !this.students.includes(student))
+          this.new_students.push(student)
+      },
+      removeNewStudent(student){
+        this.new_students.splice(this.new_students.indexOf(student),1)
+      },
       async updateSection() {
         let section_id = this.$route.params.id
         this.section.instructor = this.instructor
         this.section.course = this.course
-        this.section.students = this.students
+        this.section.students = this.students.concat(this.new_students)
         const response = await SectionAPI.updateSection(section_id, this.section)
         this.$router.push({name: 'section'})
       }
