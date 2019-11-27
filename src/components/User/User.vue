@@ -1,30 +1,5 @@
 <template>
-  <!-- ADDING USER -->
   <div>
-    <h2>Create A User</h2>
-    <form @submit.prevent="addUser">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>first_name:</label>
-            <input type="text" class="form-control" v-model="user.first_name">
-          </div>
-        </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>last_name:</label>
-              <input class="form-control" v-model="user.last_name">
-            </div>
-          </div>
-        </div><br />
-        <div class="form-group">
-          <button class="btn btn-primary">Create</button>
-        </div>
-    </form>
-
-  <!-- SHOWING USERS -->
     <h2>Users</h2>
       <table class="table table-hover">
           <thead>
@@ -66,12 +41,6 @@
       async loadUsers () {
         const response = await UserAPI.getUsers();
         this.users = response.data;
-      },
-      async addUser(evt){
-        evt.preventDefault(); // prevents the form's default action from redirecting the page
-        const response = await UserAPI.addUser(this.user);
-        this.users.push(response.data);
-        this.user = {}; // clear the input field
       },
       async deleteUser(id){
         const response = await UserAPI.deleteUser(id);
