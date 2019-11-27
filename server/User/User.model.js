@@ -14,10 +14,6 @@ let User = new Schema({
 		type: Boolean,
 		default: false
 	},
-	is_ta: {
-		type: Boolean,
-		default: false
-	},
 	courses: [{
 		course: {
 			type: mongoose.Schema.Types.ObjectId,

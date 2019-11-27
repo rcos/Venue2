@@ -11,6 +11,7 @@ import EditCourse from './components/Course/EditCourse.vue';
 import Courses from './components/Course/Courses.vue'; 
 import Section from './components/Section/Section.vue';
 import EditSection from './components/Section/EditSection.vue';
+import NewUser from './components/User/NewUser.vue';
 
 const routes = [
     { 
@@ -28,6 +29,11 @@ const routes = [
     { 
     	path: '/Grades', 
     	component: Grades 
+    },
+    {  
+        name: 'new_user',
+        path: '/new_user', 
+        component: NewUser 
     },
     {  
     	name: 'user',
