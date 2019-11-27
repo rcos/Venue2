@@ -47,6 +47,7 @@
               <td>{{ student.last_name }}</td>
               <td>{{ student.is_instructor }}</td>
               <td>{{ student.is_ta }}</td>
+              <td><button class="btn btn-danger" @click.prevent="removeStudent(student)">Remove</button></td>
               <!-- <td v-if="is_section_view"><button class="btn btn-secondary" @click.prevent="$emit('select-student', student)">Select</button></td> -->
             </tr>
         </tbody>
@@ -142,6 +143,9 @@
       },
       removeNewStudent(student){
         this.new_students.splice(this.new_students.indexOf(student),1)
+      },
+      removeStudent(student){
+        this.students.splice(this.students.indexOf(student),1)
       },
       async updateSection() {
         let section_id = this.$route.params.id
