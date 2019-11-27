@@ -40,6 +40,7 @@ sectionRoutes.route('/edit/:id').get(function (req, res) {
 sectionRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
   let new_section = req.body.section;
+  console.log("New instructor: " + new_section.instructor)
   Section.findByIdAndUpdate(id, 
     {
       course: new_section.course,
@@ -102,15 +103,40 @@ sectionRoutes.route('/getInstructor/:id').get(function (req, res) {
 sectionRoutes.route('/getCourse/:id').get(function (req, res) {
   let id = req.params.id;
   Section.findById(id, function (err, section){
-      if(err) {
-        res.json(err);
-      }
-      let course_id = section.course;
-      Course.findById(course_id, function(error, course){
-        if(error)
-          res.json(error);
-        res.json(course);
+    if(err) {
+      res.json(err);
+    }
+    let course_id = section.course;
+    Course.findById(course_id, function(error, course){
+      if(error)
+        res.json(error);
+      res.json(course);
+    });
+  });
+});
+
+sectionRoutes.route('/getStudents/:id').get(function (req, res) {
+  let id = req.params.id;
+  Section.findById(id, function (err, section){
+    if(err) {
+      res.json(err);
+    }
+    let student_ids = section.students;
+    let students = [];
+    let num_iterations = 0;
+    console.log("student_ids: " + student_ids);
+    student_ids.forEach(student_id => {
+      User.findById(student_id, function(err, student) {
+        if(err)
+          res.json(err);
+        console.log("student: " + student);
+        students.push(student);
+        console.log("STUDENTS " + students);
+        num_iterations++;
+        if(num_iterations === student_ids.length)
+          res.json(students);
       });
+    });
   });
 });
 
