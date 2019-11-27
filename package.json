@@ -13,6 +13,7 @@
     "buefy": "^0.8.5",
     "core-js": "^2.6.5",
     "jquery": "^3.4.1",
+    "mongoose-schema-extend": "^0.2.2",
     "node-sass": "^4.12.0",
     "popper.js": "^1.15.0",
     "vue": "^2.6.10",

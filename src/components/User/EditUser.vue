@@ -17,8 +17,10 @@
               <input class="form-control" v-model="user.last_name" rows="5">
             </div>
           </div>
-        </div><br />
-        is_instructor: <input type="checkbox" v-model="user.is_instructor">
+        </div>
+        <div>
+          is_instructor: <input type="checkbox" v-model="user.is_instructor">
+        </div><br/>
         <div class="form-group">
           <button class="btn btn-primary">Update</button>
         </div>
