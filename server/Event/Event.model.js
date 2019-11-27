@@ -5,7 +5,7 @@ let Section = require('../Section/Section.model');
 let Submission = require('../Submission/Submission.model');
 
 //Define collection and schema for User
-let Event = new Schema({
+let EventSchema = new Schema({
 	title: String,
 	section: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -21,4 +21,4 @@ let Event = new Schema({
 	}]
 });
 
-module.exports = mongoose.model('Event', Event);
+module.exports = mongoose.model('Event', EventSchema);

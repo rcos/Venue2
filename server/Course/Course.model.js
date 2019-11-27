@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 let User = require('../User/User.model');
 
 //Define collection and schema for User
-let Course = new Schema({
+let CourseSchema = new Schema({
 	name: String,
 	dept: String,
 	course_number: Number,
@@ -20,4 +20,4 @@ let Course = new Schema({
 	}
 });
 
-module.exports = mongoose.model('Course', Course);
+module.exports = mongoose.model('Course', CourseSchema);
