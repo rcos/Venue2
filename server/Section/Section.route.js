@@ -55,26 +55,6 @@ sectionRoutes.route('/update/:id').post(function (req, res) {
       res.json(section);    
     }
   );
-
-
-  // Section.findById(id, function(err, section) {
-  //   if (!section)
-  //     res.status(404).send("data is not found");
-  //   else {
-  //       section.course = req.body.course;
-  //       section.instructor = req.body.instructor;
-  //       section.section_number = req.body.section_number;
-  //       section.students = req.body.students;
-  //       section.teaching_assistants = req.body.teaching_assistants;
-  //       section.events = req.body.events;
-  //       section.save().then(() => {
-  //         res.json('Update complete');
-  //     })
-  //     .catch(() => {
-  //           res.status(400).send("unable to update section in the database");
-  //     });
-  //   }
-  // });
 });
 
 sectionRoutes.route('/delete/:id').delete(function (req, res) {

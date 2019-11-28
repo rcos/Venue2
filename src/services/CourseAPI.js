@@ -14,10 +14,7 @@ export default {
   },
   updateCourse(id, course){
     return API().post('courses/update/' + id, {
-      name: course.name,
-      dept: course.dept,
-      course_number: course.course_number,
-      instructor: course.instructor
+      updated_course: course
     })
   },
   deleteCourse (id) {

@@ -15,7 +15,7 @@
               <td>{{ course.name }}</td>
               <td>{{ course.dept }}</td>
               <td>{{ course.course_number }}</td>
-              <td>{{ course.instructor.first_name }} {{ course.instructor.last_name }}</td>
+              <td v-if="course.instructor">{{ course.instructor.first_name }} {{ course.instructor.last_name }}</td>
               <div v-if="is_course_view">
                 <td><router-link :to="{name: 'editCourse', params: { id: course._id }}" class="btn btn-primary">Edit</router-link></td>
                 <td><button class="btn btn-danger" @click.prevent="deleteCourse(course._id)">Delete</button></td>
@@ -55,6 +55,7 @@
       },
     },
     async deleteCourse(id){
+      console.log("in delete course")
       const response = await CourseAPI.deleteCourse(id);
       this.courses.splice(this.courses.findIndex(i => i._id == id), 1);
     }
