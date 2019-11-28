@@ -47,40 +47,48 @@ userRoutes.route('/edit/:id').get(function (req, res) {
 userRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
   let updated_user = req.body.updated_user;
-  User.findByIdAndUpdate(id, 
-    {
-      first_name: updated_user.first_name,
-      last_name: updated_user.last_name,
-      email: updated_user.email,
-      password: updated_user.password,
-      is_instructor: updated_user.is_instructor,
-      courses: updated_user.courses,
-      ta_sections: updated_user.ta_sections,
-      submissions: updated_user.submissions
-    },
-    function(err, user) {
-      if (!user)
-        res.status(404).send("user not found");
-      res.json(user);    
-    }
-  );
+  console.log("courses outside: " + updated_user.courses);
 
-  // User.findById(id, function(err, user) {
-  //   if (!user)
-  //     res.status(404).send("data is not found");
-  //   else {
-  //       user.first_name = req.body.first_name;
-  //       user.last_name = req.body.last_name;
-  //       user.is_instructor = req.body.is_instructor;
-  //       user.is_ta = req.body.is_ta;
-  //       user.save().then(() => {
-  //         res.json('Update complete');
-  //     })
-  //     .catch(() => {
-  //           res.status(400).send("unable to update user in the database");
-  //     });
-  //   }
-  // });
+  if(updated_user.is_instructor){
+  console.log("courses inside: " + updated_user.courses);
+
+    Instructor.findByIdAndUpdate(id, 
+      {
+        first_name: updated_user.first_name,
+        last_name: updated_user.last_name,
+        email: updated_user.email,
+        password: updated_user.password,
+        is_instructor: updated_user.is_instructor,
+        courses: updated_user.courses,
+      },
+      function(err, user) {
+        if (!user)
+          res.status(404).send("user not found");
+        res.json(user);    
+      }
+    );
+
+  }else{
+
+    Student.findByIdAndUpdate(id, 
+      {
+        first_name: updated_user.first_name,
+        last_name: updated_user.last_name,
+        email: updated_user.email,
+        password: updated_user.password,
+        is_instructor: updated_user.is_instructor,
+        courses: updated_user.courses,
+        ta_sections: updated_user.ta_sections,
+        submissions: updated_user.submissions
+      },
+      function(err, user) {
+        if (!user)
+          res.status(404).send("user not found");
+        res.json(user);    
+      }
+    );
+
+  }
 });
 
 userRoutes.route('/delete/:id').delete(function (req, res) {

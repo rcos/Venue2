@@ -44,9 +44,6 @@
   <!-- Showing Instructors -->
   <Instructors v-on:select-instructor="selectInstructor" />
 
-  <!-- SHOWING Courses -->
-  <Courses v-bind:is_course_view="true" />
-
   </div>
 </template>
 
@@ -54,13 +51,11 @@
   import CourseAPI from '@/services/CourseAPI.js';
   import UserAPI from '@/services/UserAPI.js';
   import Instructors from '../User/Instructors'
-  import Courses from './Courses'
 
   export default {
-    name: 'Course',
+    name: 'NewCourse',
     components: {
       Instructors,
-      Courses
     },
     data(){
       return {
@@ -79,15 +74,12 @@
       },
       async addCourse(evt){
         evt.preventDefault(); // prevents the form's default action from redirecting the page
-        this.course.instructor = this.instructor;
-        console.log("About to add course with instructor: " + this.course.instructor.first_name + " " + 
-        	this.course.instructor.last_name);
+        if(typeof this.instructor.first_name !== 'undefined'){
+          console.log("I SHOULDN'T BE PRINTING THIS: " + this.instructor)
+          this.course.instructor = this.instructor;
+        }
         const response = await CourseAPI.addCourse(this.course);
-        this.courses.push(response.data);
-        let new_course = this.courses[this.courses.length - 1]
-        console.log("new course: " + new_course.instructor.first_name + " " + new_course.instructor.last_name)
-        this.course = {}; // clear the input field
-        this.instructor = {};
+        this.$router.push({name: 'courses'});
       },
       selectInstructor(instructor){
         this.instructor = instructor

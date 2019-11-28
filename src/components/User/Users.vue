@@ -26,6 +26,7 @@
   import UserAPI from '@/services/UserAPI.js';
 
   export default {
+    name: "Users",
     data(){
       return {
         user:{},

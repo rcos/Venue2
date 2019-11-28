@@ -2,11 +2,11 @@ import Dashboard from './components/Dashboard.vue';
 import Account from './components/Account.vue';
 import Grades from './components/Grades.vue';
 import Home from './components/Home.vue';
-import User from './components/User/User.vue';
+import Users from './components/User/Users.vue';
 import EditUser from './components/User/EditUser.vue';
 import Instructors from './components/User/Instructors.vue';
 import Students from './components/User/Students.vue';
-import Course from './components/Course/Course.vue';
+import NewCourse from './components/Course/NewCourse.vue';
 import EditCourse from './components/Course/EditCourse.vue';
 import Courses from './components/Course/Courses.vue'; 
 import Section from './components/Section/Section.vue';
@@ -36,9 +36,9 @@ const routes = [
         component: NewUser 
     },
     {  
-    	name: 'user',
-    	path: '/User', 
-    	component: User 
+    	name: 'users',
+    	path: '/users', 
+    	component: Users 
     },
     {  
     	name: 'editUser',
@@ -56,9 +56,9 @@ const routes = [
         component: Students
     },  
     {
-        name: 'course',
-        path: '/Course',
-        component: Course
+        name: 'new_course',
+        path: '/new_course',
+        component: NewCourse
     },
     {
         name: 'editCourse',
