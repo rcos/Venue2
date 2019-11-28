@@ -61,7 +61,6 @@
       return {
         course:{},
         instructor: {},
-        instructors: []
       }
     },
     created() {
