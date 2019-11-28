@@ -20,7 +20,7 @@
                 <td><router-link :to="{name: 'editCourse', params: { id: course._id }}" class="btn btn-primary">Edit</router-link></td>
                 <td><button class="btn btn-danger" @click.prevent="deleteCourse(course._id)">Delete</button></td>
               </div>
-              <td v-if="!is_course_view"><button class="btn btn-secondary" @click.prevent="$emit('select-course', course)">Select</button></td>
+              <td v-else><button class="btn btn-secondary" @click.prevent="$emit('select-course', course)">Select</button></td>
             </tr>
         </tbody>
     </table>
@@ -32,14 +32,15 @@
 
   export default {
     name: 'Courses',
-    props: ["is_course_view"],
     data(){
       return {
-        courses: []
+        courses: [],
+        is_course_view: Boolean
       }
     },
     created() {
       this.loadCourses()
+      this.setCourseView()
     },
     methods: {
       async loadCourses () {
@@ -52,12 +53,18 @@
           const response = await CourseAPI.getInstructor(course._id)
           course.instructor = response.data
         })
+      },  
+      setCourseView() {
+        if(this.$router.currentRoute.path.toLowerCase() === "/courses")
+          this.is_course_view = true
+        else
+          this.is_course_view = false
       },
-    },
-    async deleteCourse(id){
-      console.log("in delete course")
-      const response = await CourseAPI.deleteCourse(id);
-      this.courses.splice(this.courses.findIndex(i => i._id == id), 1);
+      async deleteCourse(id){
+        console.log("in delete course")
+        const response = await CourseAPI.deleteCourse(id);
+        this.courses.splice(this.courses.findIndex(i => i._id == id), 1);
+      }
     }
   }
 </script>

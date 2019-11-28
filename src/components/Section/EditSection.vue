@@ -75,7 +75,7 @@
         </tbody>
     </table>
 
-    <Courses v-bind:is_course_view="false" v-on:select-course="selectCourse" />
+    <Courses v-on:select-course="selectCourse" />
 
     <Instructors v-on:select-instructor="selectInstructor" />
 
