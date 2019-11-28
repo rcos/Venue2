@@ -5,6 +5,7 @@ let user_models = require('./User.model');
 let User = user_models.User;
 let Student = user_models.Student;
 let Instructor = user_models.Instructor;
+let Course = require('../Course/Course.model');
 
 userRoutes.route('/add').post(function (req, res) {
   let new_user = req.body.user;
@@ -125,6 +126,27 @@ userRoutes.route('/students').get(function (req, res) {
       });
       res.json(students);
     }
+  });
+});
+
+userRoutes.route('/getCourses/:id').get(function (req, res) {
+  let id = req.params.id;
+  User.findById(id, function (err, user){
+    if(err)
+      res.json(err)
+    let course_ids = user.courses;
+    let courses = [];
+    let num_iterations = 0;
+    course_ids.forEach(course_id => {
+      Course.findById(course_id, function(error, course) {
+        if(error)
+          res.json(err);
+        courses.push(course);
+        num_iterations++;
+        if(num_iterations === course_ids.length)
+          res.json(courses);
+      });
+    });
   });
 });
 
