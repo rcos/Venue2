@@ -88,17 +88,17 @@
         let user_id = this.$route.params.id
         const response = await UserAPI.getUser(user_id)
         this.user = response.data
-        // this.getCurrentUserCourses()
+        this.getCurrentUserCourses()
       },
       async updateUser() {
         let user_id = this.$route.params.id
         const response = await UserAPI.updateUser(user_id, this.user)
         this.$router.push({name: 'users'})
       },
-      // async getCurrentUserCourses(){
-      //   const response = await UserAPI.getCourses(this.section._id)
-      //   this.user.courses = response.data
-      // },
+      async getCurrentUserCourses(){
+        const response = await UserAPI.getCourses(this.user._id)
+        this.user.courses = response.data
+      },
       addCourse(course) {
         if(!this.user.courses.includes(course))
           this.user.courses.push(course)
