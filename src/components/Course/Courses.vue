@@ -20,7 +20,7 @@
                 <td><router-link :to="{name: 'editCourse', params: { id: course._id }}" class="btn btn-primary">Edit</router-link></td>
                 <td><button class="btn btn-danger" @click.prevent="deleteCourse(course._id)">Delete</button></td>
               </div>
-              <td v-if="!is_course_view"><button class="btn btn-secondary" @click.prevent="$emit('select-course', course)">Select</button></td>
+              <td v-else><button class="btn btn-secondary" @click.prevent="$emit('select-course', course)">Select</button></td>
             </tr>
         </tbody>
     </table>
@@ -32,14 +32,15 @@
 
   export default {
     name: 'Courses',
-    props: ["is_course_view"],
     data(){
       return {
-        courses: []
+        courses: [],
+        is_course_view: Boolean
       }
     },
     created() {
       this.loadCourses()
+      this.setIsCourseView()
     },
     methods: {
       async loadCourses () {
@@ -53,10 +54,13 @@
           course.instructor = response.data
         })
       },
-    },
-    async deleteCourse(id){
-      const response = await CourseAPI.deleteCourse(id);
-      this.courses.splice(this.courses.findIndex(i => i._id == id), 1);
+      async deleteCourse(id){
+        const response = await CourseAPI.deleteCourse(id);
+        this.courses.splice(this.courses.findIndex(i => i._id == id), 1)
+      },
+      setIsCourseView() {
+        this.is_course_view = this.$router.currentRoute.name === "courses"
+      }
     }
   }
 </script>
