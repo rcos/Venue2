@@ -11,10 +11,10 @@ let Section = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Course'
 	},
-	instructor: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'User'
-	},
+	// instructor: {
+	// 	type: mongoose.Schema.Types.ObjectId,
+	// 	ref: 'User'
+	// },
 	number: Number,
 	students: [{
 		student: {
