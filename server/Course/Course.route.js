@@ -6,28 +6,13 @@ let User = require('../User/User.model');
 
 courseRoutes.route('/add').post(function (req, res) {
   let course = new Course(req.body.course);
-  let instructor_id = course.instructor._id;
-  console.log("About to add course:");
-  console.log(" name: " + course.name);
-  console.log(" dept: " + course.dept);
-  console.log(" course_number: " + course.course_number);
-  console.log(" instructor: " + course.instructor.first_name + " " + course.instructor.last_name +
-    " id: " + instructor_id);
-  User.findById(instructor_id, function (err, instructor){
-      if(err) {
-        res.json(err);
-      }
-      course.instructor = instructor;
-      console.log(" instructor: " + course.instructor.first_name + " " + course.instructor.last_name +
-    " id: " + instructor_id);
-      course.save()
-        .then(() => {
-          res.status(200).json(course);
-        })
-        .catch(() => {
-          res.status(400).send("unable to save course to database");
-        });
-  });
+  course.save()
+    .then(() => {
+      res.status(200).json(course);
+    })
+    .catch(() => {
+      res.status(400).send("unable to save course to database");
+    });
 });
 
 courseRoutes.route('/').get(function (req, res) {
@@ -53,22 +38,20 @@ courseRoutes.route('/edit/:id').get(function (req, res) {
 
 courseRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
-  Course.findById(id, function(err, course) {
-    if (!course)
-      res.status(404).send("data is not found");
-    else {
-        course.name = req.body.name;
-        course.dept = req.body.dept;
-        course.course_number = req.body.course_number;
-        course.instructor = req.body.instructor;
-        course.save().then(() => {
-          res.json('Update complete');
-      })
-      .catch(() => {
-            res.status(400).send("unable to update course in the database");
-      });
+  let updated_course = req.body.updated_course;
+  Course.findByIdAndUpdate(id, 
+    {
+      name: updated_course.name,
+      dept: updated_course.dept,
+      course_number: updated_course.course_number,
+      instructor: updated_course.instructor
+    },
+    function(err, course) {
+      if (!course)
+        res.status(404).send("section not found");
+      res.json(course);    
     }
-  });
+  );
 });
 
 courseRoutes.route('/delete/:id').delete(function (req, res) {
