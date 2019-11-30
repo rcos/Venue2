@@ -45,7 +45,6 @@ userRoutes.route('/update/:id').post(function (req, res) {
       email: updated_user.email,
       password: updated_user.password,
       is_instructor: updated_user.is_instructor,
-      courses: updated_user.courses,
       ta_sections: updated_user.ta_sections,
       submissions: updated_user.submissions
     },
@@ -55,23 +54,6 @@ userRoutes.route('/update/:id').post(function (req, res) {
       res.json(user);    
     }
   );
-
-  // User.findById(id, function(err, user) {
-  //   if (!user)
-  //     res.status(404).send("data is not found");
-  //   else {
-  //       user.first_name = req.body.first_name;
-  //       user.last_name = req.body.last_name;
-  //       user.is_instructor = req.body.is_instructor;
-  //       user.is_ta = req.body.is_ta;
-  //       user.save().then(() => {
-  //         res.json('Update complete');
-  //     })
-  //     .catch(() => {
-  //           res.status(400).send("unable to update user in the database");
-  //     });
-  //   }
-  // });
 });
 
 userRoutes.route('/delete/:id').delete(function (req, res) {

@@ -14,12 +14,6 @@ let User = new Schema({
 		type: Boolean,
 		default: false
 	},
-	// courses: [{
-	// 	course: {
-	// 		type: mongoose.Schema.Types.ObjectId,
-	// 		ref: 'Course'
-	// 	}
-	// }],
 	ta_sections: [{
 		section: {
 			type: mongoose.Schema.Types.ObjectId,
