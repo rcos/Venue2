@@ -1,10 +1,6 @@
 const express = require('express');
 const userRoutes = express.Router();
-
-let user_models = require('./User.model');
-let User = user_models.User;
-let Student = user_models.Student;
-let Instructor = user_models.Instructor;
+let User = require('./User.model');
 let Course = require('../Course/Course.model');
 
 userRoutes.route('/add').post(function (req, res) {
@@ -48,48 +44,22 @@ userRoutes.route('/edit/:id').get(function (req, res) {
 userRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
   let updated_user = req.body.updated_user;
-  console.log("courses outside: " + updated_user.courses);
-
-  if(updated_user.is_instructor){
-  console.log("courses inside: " + updated_user.courses);
-
-    Instructor.findByIdAndUpdate(id, 
-      {
-        first_name: updated_user.first_name,
-        last_name: updated_user.last_name,
-        email: updated_user.email,
-        password: updated_user.password,
-        is_instructor: updated_user.is_instructor,
-        courses: updated_user.courses,
-      },
-      function(err, user) {
-        if (!user)
-          res.status(404).send("user not found");
-        res.json(user);    
-      }
-    );
-
-  }else{
-
-    Student.findByIdAndUpdate(id, 
-      {
-        first_name: updated_user.first_name,
-        last_name: updated_user.last_name,
-        email: updated_user.email,
-        password: updated_user.password,
-        is_instructor: updated_user.is_instructor,
-        courses: updated_user.courses,
-        ta_sections: updated_user.ta_sections,
-        submissions: updated_user.submissions
-      },
-      function(err, user) {
-        if (!user)
-          res.status(404).send("user not found");
-        res.json(user);    
-      }
-    );
-
-  }
+  User.findByIdAndUpdate(id, 
+    {
+      first_name: updated_user.first_name,
+      last_name: updated_user.last_name,
+      email: updated_user.email,
+      password: updated_user.password,
+      is_instructor: updated_user.is_instructor,
+      ta_sections: updated_user.ta_sections,
+      submissions: updated_user.submissions
+    },
+    function(err, user) {
+      if (!user)
+        res.status(404).send("user not found");
+      res.json(user);    
+    }
+  );
 });
 
 userRoutes.route('/delete/:id').delete(function (req, res) {
@@ -129,24 +99,18 @@ userRoutes.route('/students').get(function (req, res) {
   });
 });
 
-userRoutes.route('/getCourses/:id').get(function (req, res) {
-  let id = req.params.id;
-  User.findById(id, function (err, user){
+userRoutes.route('/instructor_courses/:id').get(function (req, res) {
+  let instructor_id = req.params.id;
+  console.log("instructor_id: " + instructor_id);
+  Course.find(function(err, courses){
     if(err)
-      res.json(err)
-    let course_ids = user.courses;
-    let courses = [];
-    let num_iterations = 0;
-    course_ids.forEach(course_id => {
-      Course.findById(course_id, function(error, course) {
-        if(error)
-          res.json(err);
-        courses.push(course);
-        num_iterations++;
-        if(num_iterations === course_ids.length)
-          res.json(courses);
-      });
+      res.json(err);
+    let instructor_courses = []
+    courses.forEach((course) => {
+      if(typeof course.instructor !== 'undefined' && course.instructor._id == instructor_id)
+        instructor_courses.push(course);
     });
+    res.json(instructor_courses);
   });
 });
 

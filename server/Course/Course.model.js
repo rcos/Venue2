@@ -8,12 +8,6 @@ let CourseSchema = new Schema({
 	name: String,
 	dept: String,
 	course_number: Number,
-	sections: [{
-		section: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Section'
-		}
-	}],
 	instructor: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
