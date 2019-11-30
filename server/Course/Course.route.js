@@ -12,7 +12,7 @@ courseRoutes.route('/add').post(function (req, res) {
     })
     .catch(() => {
       res.status(400).send("unable to save course to database");
-    });
+  });
 });
 
 courseRoutes.route('/').get(function (req, res) {
