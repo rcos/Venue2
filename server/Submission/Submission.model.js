@@ -6,10 +6,10 @@ let Section = require('../Section/Section.model');
 
 //Define collection and schema for User
 let Submission = new Schema({
-	event: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Event'	
-	},
+	// event: {
+	// 	type: mongoose.Schema.Types.ObjectId,
+	// 	ref: 'Event'	
+	// },
 	section: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Section'
