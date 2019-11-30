@@ -2,6 +2,7 @@ const express = require('express');
 const userRoutes = express.Router();
 
 let User = require('./User.model');
+let Course = require('../Course/Course.model');
 
 userRoutes.route('/add').post(function (req, res) {
   let user = new User(req.body.user);
@@ -90,6 +91,21 @@ userRoutes.route('/students').get(function (req, res) {
       });
       res.json(students);
     }
+  });
+});
+
+userRoutes.route('/instructor_courses/:id').get(function (req, res) {
+  let instructor_id = req.params.id;
+  console.log("instructor_id: " + instructor_id);
+  Course.find(function(err, courses){
+    if(err)
+      res.json(err);
+    let instructor_courses = []
+    courses.forEach((course) => {
+      if(typeof course.instructor !== 'undefined' && course.instructor._id == instructor_id)
+        instructor_courses.push(course);
+    });
+    res.json(instructor_courses);
   });
 });
 
