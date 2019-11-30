@@ -15,10 +15,18 @@ let UserSchema = new Schema({
 		type: Boolean,
 		default: false
 	},
-},
-{ 
-	collection : 'users', 
-	discriminatorKey : '_type' 
+	ta_sections: [{
+		section: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Section'
+		}
+	}],
+	submissions: [{
+		submission: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Submission'
+		}
+	}]
 });
 
 //Instructor - Inherits from User

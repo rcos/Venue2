@@ -42,18 +42,13 @@
               <th>name</th>
               <th>dept</th>
               <th>course_number</th>
-              <th>instructor</th>
             </tr>
             </thead>
             <tbody>
-                <tr v-for="course in user.courses" :key="course._id">
+                <tr v-for="course in instructor_courses" :key="course._id">
                   <td>{{ course.name }}</td>
                   <td>{{ course.dept }}</td>
                   <td>{{ course.course_number }}</td>
-                  <td v-if="course.instructor">{{ course.instructor.first_name }} {{ course.instructor.last_name }}</td>
-                  <div>
-                    <td><button class="btn btn-danger" @click.prevent="removeCourse(course)">Remove</button></td>
-                  </div>
                 </tr>
             </tbody>
         </table>
@@ -77,34 +72,29 @@
     },
     data() {
       return {
-        user: {}
+        user: {},
+        instructor_courses: []
       }
     },
     created() {
-      this.getCurrentUser();
+      this.getCurrentUser()
+      this.getInstructorCourses()
     },
     methods: {
       async getCurrentUser() {
         let user_id = this.$route.params.id
         const response = await UserAPI.getUser(user_id)
         this.user = response.data
-        this.getCurrentUserCourses()
       },
       async updateUser() {
         let user_id = this.$route.params.id
         const response = await UserAPI.updateUser(user_id, this.user)
         this.$router.push({name: 'users'})
       },
-      async getCurrentUserCourses(){
-        const response = await UserAPI.getCourses(this.user._id)
-        this.user.courses = response.data
-      },
-      addCourse(course) {
-        if(!this.user.courses.includes(course))
-          this.user.courses.push(course)
-      },
-      removeCourse(course) {
-        this.user.courses.splice(this.user.courses.indexOf(course),1)
+      async getInstructorCourses() {
+        let user_id = this.$route.params.id
+        const response = await UserAPI.getInstructorCourses(user_id)
+        this.instructor_courses = response.data
       }
     }
   }

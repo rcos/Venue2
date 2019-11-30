@@ -43,7 +43,6 @@ sectionRoutes.route('/update/:id').post(function (req, res) {
   Section.findByIdAndUpdate(id, 
     {
       course: updated_section.course,
-      instructor: updated_section.instructor,
       number: updated_section.number,
       students: updated_section.students,
       teaching_assistants: updated_section.teaching_assistants,

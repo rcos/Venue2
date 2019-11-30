@@ -11,13 +11,12 @@ courseRoutes.route('/add').post(function (req, res) {
   let course = new Course(req.body.course);
   course.save()
     .then(() => {
-      console.log("saved course: " + course);
+
       res.status(200).json(course);
     })
-    .catch((err) => {
-      console.log(err);
+    .catch(() => {
       res.status(400).send("unable to save course to database");
-  });
+    });
 });
 
 courseRoutes.route('/').get(function (req, res) {
@@ -49,7 +48,6 @@ courseRoutes.route('/update/:id').post(function (req, res) {
       name: updated_course.name,
       dept: updated_course.dept,
       course_number: updated_course.course_number,
-      sections: updated_course.sections,
       instructor: updated_course.instructor
     },
     function(err, course) {
