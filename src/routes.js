@@ -2,7 +2,7 @@ import Dashboard from './components/Dashboard.vue';
 import Account from './components/Account.vue';
 import Grades from './components/Grades.vue';
 import Home from './components/Home.vue';
-import User from './components/User/User.vue';
+import Users from './components/User/Users.vue';
 import EditUser from './components/User/EditUser.vue';
 import Instructors from './components/User/Instructors.vue';
 import Students from './components/User/Students.vue';
@@ -36,9 +36,9 @@ const routes = [
         component: NewUser 
     },
     {  
-    	name: 'user',
-    	path: '/User', 
-    	component: User 
+    	name: 'users',
+    	path: '/users', 
+    	component: Users 
     },
     {  
     	name: 'editUser',
