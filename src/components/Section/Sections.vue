@@ -10,14 +10,17 @@
           <th>section number</th>
         </tr>
         </thead>
-        <tbody>
-            <tr v-for="section in sections" :key="section._id">
-              <td>{{ section.course.name }}</td>
-              <td>{{ section.instructor.first_name }} {{ section.instructor.last_name }}</td>
-              <td>{{ section.number }}</td>
-              <td><router-link :to="{name: 'editSection', params: { id: section._id }}" class="btn btn-primary">Edit</router-link></td>
-              <td><button class="btn btn-danger" @click.prevent="deleteSection(section._id)">Delete</button></td>
-            </tr>
+        <div class="spinner-border" role="status" v-if="!instructors_have_loaded">
+          <span class="sr-only">Loading...</span>
+        </div>
+        <tbody v-else>
+          <tr v-for="section in sections" :key="section._id">
+            <td>{{ section.course.name }}</td>
+            <td>{{ section.instructor.first_name }} {{ section.instructor.last_name }}</td>
+            <td>{{ section.number }}</td>
+            <td><router-link :to="{name: 'editSection', params: { id: section._id }}" class="btn btn-primary">Edit</router-link></td>
+            <td><button class="btn btn-danger" @click.prevent="deleteSection(section._id)">Delete</button></td>
+          </tr>
         </tbody>
     </table>
   </div>
@@ -30,7 +33,8 @@
     name: 'Sections',
     data(){
       return {
-        sections: []
+        sections: [],
+        instructors_have_loaded: false
       }
     },
     created() {
@@ -40,13 +44,17 @@
       async loadSections () {
         const response = await SectionAPI.getSections()
         this.sections = response.data
-        this.getInstructorsForSections()
+        this.getInstructorForSections()
         this.getCourseForSections()
       },
-      async getInstructorsForSections(){
+      async getInstructorForSections(){
+        let counter = 0
         this.sections.forEach(async section => {
             const response = await SectionAPI.getInstructor(section._id)
             section.instructor = response.data
+            counter++
+            if(counter == this.sections.length)
+              this.instructors_have_loaded = true
         })
       },
       async getCourseForSections(){
