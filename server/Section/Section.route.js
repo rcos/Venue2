@@ -69,11 +69,17 @@ sectionRoutes.route('/getInstructor/:id').get(function (req, res) {
       if(err) {
         res.json(err);
       }
-      let instructor_id = section.instructor;
-      User.findById(instructor_id, function(error, instructor){
+      let course_id = section.course;
+      Course.findById(course_id, function(error, course){
         if(error)
           res.json(error);
-        res.json(instructor);
+        let instructor_id = course.instructor;
+        User.findById(instructor_id, function(error, instructor){
+          if(error)
+            res.json(error);
+          res.json(instructor);
+          console.log("Found instructor: " + instructor);
+        });
       });
   });
 });
