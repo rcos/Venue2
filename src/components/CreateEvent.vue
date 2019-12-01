@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h2 class="text-center">Current Events</h2>
+    <h2 class="text-center">Create Event</h2>
+    <br />
 
     <div class="event-form">
       <div class="">
@@ -51,11 +52,7 @@
         <router-link to="/Dashboard" class="nav-link">Create Event</router-link>
       </button>
 
-
-
-
     </div>
-
   </div>
 
 </template>
