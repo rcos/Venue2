@@ -10,8 +10,9 @@ import Course from './components/Course/Course.vue';
 import EditCourse from './components/Course/EditCourse.vue';
 import NewCourse from './components/Course/NewCourse.vue';
 import Courses from './components/Course/Courses.vue'; 
-import Section from './components/Section/Section.vue';
+import Sections from './components/Section/Sections.vue';
 import EditSection from './components/Section/EditSection.vue';
+import NewSection from './components/Section/NewSection.vue';
 import NewUser from './components/User/NewUser.vue';
 
 const routes = [
@@ -77,14 +78,19 @@ const routes = [
         component: Courses
     },
     {
-        name: 'section',
-        path: '/Section',
-        component: Section
+        name: 'sections',
+        path: '/sections',
+        component: Sections
     },
     {
         name: 'editSection',
         path: '/editSection/:id',
         component: EditSection
+    },
+    {
+        name: 'new_section',
+        path: '/new_section',
+        component: NewSection
     }
 ];
 
