@@ -28,8 +28,8 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>instructor</label>
-              <input class="form-control" v-model="instructor.first_name" rows="5" readonly>
-              <input class="form-control" v-model="instructor.last_name" rows="5" readonly>
+                <input class="form-control" v-model="instructor.first_name" rows="5" readonly>
+                <input class="form-control" v-model="instructor.last_name" rows="5" readonly>
             </div>
           </div>
         </div>
@@ -55,13 +55,11 @@
     data() {
       return {
         course: {},
-        instructor: {},
-        instructors: []
+        instructor: {}
       }
     },
     created() {
       this.getCurrentCourse()
-      this.loadInstructors()
     },
     methods: {
       async getCurrentCourse() {
@@ -70,23 +68,26 @@
         this.course = response.data
         this.getCurrentCourseInstructor()
       },
-      async loadInstructors(){
-        const response = await UserAPI.getInstructors()
-        this.instructors = response.data
-      },
       async getCurrentCourseInstructor(){
         const response = await CourseAPI.getInstructor(this.course._id)
-        this.instructor = response.data
+        console.log("in getCurrentCourseInstructor")
+        if(response.data)
+          this.instructor = response.data
       },
       async updateCourse() {
         let course_id = this.$route.params.id
+        this.course.instructor = this.instructor
         const response = await CourseAPI.updateCourse(course_id, this.course)
-        this.$router.push({name: 'course'})
+        this.$router.push({name: 'courses'})
       }, 
       selectInstructor(instructor){
         this.instructor = instructor
         this.course.instructor = instructor
       },
+      instructorIsNull(){
+        console.log("I was called. instructor: " + this.instructor)
+        return this.instructor == null
+      }
     }
   }
 </script>
