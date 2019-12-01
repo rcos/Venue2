@@ -58,7 +58,28 @@
           </div>
         </div>
         <div v-else>
-          <h3>Student Courses</h3>
+          <h3>Student Sections</h3>
+          <div class="spinner-border" role="status" v-if="!section_instructors_have_loaded && !section_courses_have_loaded">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <table class="table table-hover" v-else>
+              <thead>
+              <tr>
+                <th>course</th>
+                <th>instructor</th>
+                <th>section number</th>
+              </tr>
+              </thead>
+              <tbody>
+                <tr v-for="section in sections" :key="section._id">
+                  <td>{{ section.course.name }}</td>
+                  <td>{{ section.instructor.first_name }} {{ section.instructor.last_name }}</td>
+                  <td>{{ section.number }}</td>
+                  <td><router-link :to="{name: 'editSection', params: { id: section._id }}" class="btn btn-primary">Edit</router-link></td>
+                  <td><button class="btn btn-danger" @click.prevent="deleteSection(section._id)">Delete</button></td>
+                </tr>
+              </tbody>
+          </table>
           <h3>TA Sections</h3>
           <h3>Submissions</h3>
         </div>
@@ -68,6 +89,7 @@
 
 <script>
   import UserAPI from '@/services/UserAPI.js';
+  import SectionAPI from '@/services/SectionAPI.js';
   import Courses from '../Course/Courses';
 
   export default {
@@ -78,7 +100,10 @@
     data() {
       return {
         user: {},
-        instructor_courses: []
+        instructor_courses: [],
+        sections: [],
+        section_instructors_have_loaded: false,
+        section_courses_have_loaded: false
       }
     },
     created() {
@@ -90,6 +115,35 @@
         let user_id = this.$route.params.id
         const response = await UserAPI.getUser(user_id)
         this.user = response.data
+        if(!this.user.is_instructor)
+          this.getSections()
+      },
+      async getSections() {
+        let user_id = this.$route.params.id
+        const response = await UserAPI.getStudentSections(user_id)
+        this.sections = response.data
+        this.getInstructorForSections()
+        this.getCourseForSections()
+      },
+      async getInstructorForSections(){
+        let counter = 0
+        this.sections.forEach(async section => {
+            const response = await SectionAPI.getInstructor(section._id)
+            section.instructor = response.data
+            counter++
+            if(counter == this.sections.length)
+              this.section_instructors_have_loaded = true
+        })
+      },
+      async getCourseForSections(){
+        let counter = 0
+        this.sections.forEach(async section => {
+            const response = await SectionAPI.getCourse(section._id)
+            section.course = response.data
+            counter++
+            if(counter == this.sections.length)
+              this.section_courses_have_loaded = true
+        })
       },
       async updateUser() {
         let user_id = this.$route.params.id

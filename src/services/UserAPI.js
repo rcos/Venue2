@@ -28,5 +28,8 @@ export default {
   },
   getInstructorCourses(id) {
     return API().get('users/instructor_courses/' + id)
+  },
+  getStudentSections(id) {
+    return API().get('users/student_sections/' + id)
   }
 }
