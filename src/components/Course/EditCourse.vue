@@ -70,7 +70,6 @@
       },
       async getCurrentCourseInstructor(){
         const response = await CourseAPI.getInstructor(this.course._id)
-        console.log("in getCurrentCourseInstructor")
         if(response.data)
           this.instructor = response.data
       },
