@@ -13,11 +13,11 @@
           <div class="col-md">
 
             <div class="form-group">
-              <label>First Name</label>
+              <label>First Name, Last Name</label>
             </div>
 
             <div class="form-group">
-              <label>Last Name</label>
+              <label>Major</label>
             </div>
 
             <div class="form-group">
