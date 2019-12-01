@@ -35,25 +35,32 @@
             </div>
           </div>
         </div>
-        <h3>Instructor courses</h3>
-        <table class="table table-hover">
-            <thead>
-            <tr>
-              <th>name</th>
-              <th>dept</th>
-              <th>course_number</th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr v-for="course in instructor_courses" :key="course._id">
-                  <td>{{ course.name }}</td>
-                  <td>{{ course.dept }}</td>
-                  <td>{{ course.course_number }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="form-group">
-          <button class="btn btn-primary">Update</button>
+        <div v-if="user.is_instructor">
+          <h3>Instructor courses</h3>
+          <table class="table table-hover">
+              <thead>
+              <tr>
+                <th>name</th>
+                <th>dept</th>
+                <th>course_number</th>
+              </tr>
+              </thead>
+              <tbody>
+                  <tr v-for="course in instructor_courses" :key="course._id">
+                    <td>{{ course.name }}</td>
+                    <td>{{ course.dept }}</td>
+                    <td>{{ course.course_number }}</td>
+                  </tr>
+              </tbody>
+          </table>
+          <div class="form-group">
+            <button class="btn btn-primary">Update</button>
+          </div>
+        </div>
+        <div v-else>
+          <h3>Student Courses</h3>
+          <h3>TA Sections</h3>
+          <h3>Submissions</h3>
         </div>
     </form>
   </div>
