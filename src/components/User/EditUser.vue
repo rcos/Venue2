@@ -76,7 +76,6 @@
                   <td>{{ section.instructor.first_name }} {{ section.instructor.last_name }}</td>
                   <td>{{ section.number }}</td>
                   <td><router-link :to="{name: 'editSection', params: { id: section._id }}" class="btn btn-primary">Edit</router-link></td>
-                  <td><button class="btn btn-danger" @click.prevent="deleteSection(section._id)">Delete</button></td>
                 </tr>
               </tbody>
           </table>

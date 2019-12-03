@@ -23,13 +23,7 @@ let Section = new Schema({
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User'
 		}
-	}],
-	events: [{
-		event: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Event'
-		}
-	}],
+	}]
 });
 
 module.exports = mongoose.model('Section', Section);

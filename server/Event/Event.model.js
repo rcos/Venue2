@@ -13,12 +13,6 @@ let Event = new Schema({
 	},
 	//implement location
 	//implement submission_window
-	submissions: [{
-		submission: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Submission'
-		}
-	}]
 });
 
 module.exports = mongoose.model('Event', Event);
