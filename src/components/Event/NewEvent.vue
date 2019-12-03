@@ -13,9 +13,15 @@
         </div>
         <div class="row">
           <div class="col-md-6">
-            <div class="form-group">
+            <div class="form-group" v-if="section.course">
               <label>Section:</label>
-              <input class="form-control" v-model="section" readonly>
+              <input class="form-control" v-model="section.course.name" readonly>
+              <input class="form-control" v-model="section.number" readonly>
+            </div>
+            <div v-else>
+              <label>Section:</label>
+              <input class="form-control" readonly>
+              <input class="form-control" readonly>
             </div>
           </div>
         </div><br />
@@ -48,7 +54,13 @@
     },
     methods: {
       selectSection(section) {
-        
+        this.section = section
+      },
+      async addEvent(evt){
+        evt.preventDefault();
+        this.event.section = this.section
+        const response = await EventAPI.addEvent(this.event);
+        this.$router.push({name: 'events'});
       }
     }
   }

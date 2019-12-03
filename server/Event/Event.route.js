@@ -1,7 +1,7 @@
 const express = require('express');
 const eventRoutes = express.Router();
 
-let Evemnt = require('./Event.model');
+let Event = require('./Event.model');
 let Section = require('../Section/Section.model');
 
 eventRoutes.route('/add').post(function (req, res) {
