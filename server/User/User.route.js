@@ -125,19 +125,12 @@ userRoutes.route('/instructor_courses/:id').get(function (req, res) {
 });
 
 userRoutes.route('/student_sections/:id').get(function (req, res) {
-  console.log("I'M HERE");
   let student_id = req.params.id;
   Section.find(function(err, sections){
     if(err)
       res.json(err);
     let student_sections = []
     sections.forEach((section) => {
-      // if(section.students.includes(student_id)){
-      //   console.log("Found section for student: " + section);
-      //   student_sections.push(section);
-      // }else{
-      //   console.log("Student id: " + student_id + " was not in section students: " + section.students)
-      // }
       section.students.forEach((section_student) => {
         if(section_student._id == student_id){
           student_sections.push(section);

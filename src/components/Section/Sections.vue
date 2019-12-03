@@ -18,8 +18,11 @@
             <td>{{ section.course.name }}</td>
             <td>{{ section.instructor.first_name }} {{ section.instructor.last_name }}</td>
             <td>{{ section.number }}</td>
-            <td><router-link :to="{name: 'editSection', params: { id: section._id }}" class="btn btn-primary">Edit</router-link></td>
-            <td><button class="btn btn-danger" @click.prevent="deleteSection(section._id)">Delete</button></td>
+            <div v-if="is_section_view">
+              <td><router-link :to="{name: 'editSection', params: { id: section._id }}" class="btn btn-primary">Edit</router-link></td>
+              <td><button class="btn btn-danger" @click.prevent="deleteSection(section._id)">Delete</button></td>
+            </div>
+            <td v-else><button class="btn btn-secondary" @click.prevent="$emit('select-section', section)">Select</button></td>
           </tr>
         </tbody>
     </table>
@@ -34,11 +37,13 @@
     data(){
       return {
         sections: [],
-        instructors_have_loaded: false
+        instructors_have_loaded: false,
+        is_section_view: Boolean
       }
     },
     created() {
-      this.loadSections()
+      this.loadSections(),
+      this.setIsSectionView()
     },
     methods: {
       async loadSections () {
@@ -66,7 +71,10 @@
       async deleteSection(id){
         const response = await SectionAPI.deleteSection(id);
         this.sections.splice(this.sections.findIndex(i => i._id == id), 1);
-      },      
+      }, 
+      setIsSectionView() {
+        this.is_section_view = this.$router.currentRoute.name === "sections"
+      }     
     }
   }
 </script>
