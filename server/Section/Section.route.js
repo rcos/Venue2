@@ -78,7 +78,6 @@ sectionRoutes.route('/getInstructor/:id').get(function (req, res) {
           if(error)
             res.json(error);
           res.json(instructor);
-          console.log("Found instructor: " + instructor);
         });
       });
   });
@@ -113,9 +112,7 @@ sectionRoutes.route('/getStudents/:id').get(function (req, res) {
       User.findById(student_id, function(err, student) {
         if(err)
           res.json(err);
-        console.log("student: " + student);
         students.push(student);
-        console.log("STUDENTS " + students);
         num_iterations++;
         if(num_iterations === student_ids.length)
           res.json(students);
