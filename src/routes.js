@@ -18,6 +18,7 @@ import NewEvent from './components/Event/NewEvent.vue';
 import Events from './components/Event/Events.vue';
 import EditEvent from './components/Event/EditEvent.vue';
 import NewSubmission from './components/Submission/NewSubmission.vue';
+import Submissions from './components/Submission/Submissions.vue';
 
 const routes = [
     { 
@@ -115,8 +116,12 @@ const routes = [
         name: 'new_submission',
         path: '/new_submission',
         component: NewSubmission
+    },
+    {
+        name: 'submissions',
+        path: '/submissions',
+        component: Submissions
     }
-
 ];
 
 export default routes;

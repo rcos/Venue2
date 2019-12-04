@@ -26,9 +26,12 @@ eventRoutes.route('/').get(function (req, res) {
 eventRoutes.route('/edit/:id').get(function (req, res) {
   let id = req.params.id;
   Event.findById(id, function (err, event){
-      if(err)
+      if(err){
+        console.log(err);
         res.json(err);
-      res.json(event);
+      }else{
+        res.json(event);        
+      }
   });
 });
 
