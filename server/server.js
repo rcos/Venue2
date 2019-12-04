@@ -9,6 +9,7 @@ const userRoute = require('./User/User.route')
 const courseRoute = require('./Course/Course.route')
 const sectionRoute = require('./Section/Section.route')
 const eventRoute = require('./Event/Event.route')
+const submissionRoute = require('./Submission/Submission.route')
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -24,6 +25,7 @@ app.use('/users', userRoute);
 app.use('/courses', courseRoute);
 app.use('/sections', sectionRoute);
 app.use('/events', eventRoute);
+app.use('/submissions', submissionRoute);
 
 app.listen(PORT, function(){
   console.log('Server is running on Port:',PORT);
