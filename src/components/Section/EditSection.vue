@@ -85,6 +85,7 @@
       this.getCurrentSection()
     },
     methods: {
+      //TODO: Change to getSection
       async getCurrentSection(){
         let section_id = this.$route.params.id
         const response = await SectionAPI.getSection(section_id)

@@ -26,9 +26,8 @@ eventRoutes.route('/').get(function (req, res) {
 eventRoutes.route('/edit/:id').get(function (req, res) {
   let id = req.params.id;
   Event.findById(id, function (err, event){
-      if(err) {
+      if(err)
         res.json(err);
-      }
       res.json(event);
   });
 });
@@ -54,6 +53,15 @@ eventRoutes.route('/delete/:id').delete(function (req, res) {
         if(err) res.json(err);
         else res.json('Successfully removed');
     });
+});
+
+eventRoutes.route('/getSection/:id').get(function (req, res) {
+  let id = req.params.id;
+  Event.findById(id, function (err, event){
+      if(err)
+        res.json(err);
+
+  });
 });
 
 module.exports = eventRoutes;
