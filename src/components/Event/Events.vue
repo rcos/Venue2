@@ -15,10 +15,11 @@
           <tr v-for="event in events" :key="event._id">
             <td>{{ event.title }}</td>
             <td> {{ event.section.course.name }} {{ event.section.number }}</td>
-            <div>
+            <div v-if="is_event_view">
               <td><router-link :to="{name: 'edit_event', params: { id: event._id }}" class="btn btn-primary">Edit</router-link></td>
               <td><button class="btn btn-danger" @click.prevent="deleteEvent(event._id)">Delete</button></td>
             </div>
+            <td v-else><button class="btn btn-secondary" @click.prevent="$emit('select-event', event)">Select</button></td>
           </tr>
         </tbody>
     </table>
@@ -42,7 +43,7 @@
     },
     created() {
       this.loadEvents()
-      // this.setIsCourseView()
+      this.setEventView()
     },
     methods: {
       async loadEvents () {
@@ -65,10 +66,10 @@
           if(counter == this.events.length)
             this.sections_have_loaded = true
         })
+      },
+      setEventView() {
+        this.is_event_view = this.$router.currentRoute.name === "events"
       }
-      // setIsCourseView() {
-      //   this.is_course_view = this.$router.currentRoute.name === "courses"
-      // }
     }
   }
 </script>
