@@ -61,6 +61,9 @@ courseRoutes.route('/delete/:id').delete(function (req, res) {
     });
 });
 
+//Todo: change the id being passed to just be the instructor id
+//and search for the instructor or remove this function entirely and use
+//the userapis get user function
 courseRoutes.route('/getInstructor/:id').get(function (req, res) {
   let id = req.params.id;
   Course.findById(id, function (err, course){

@@ -17,12 +17,9 @@ eventRoutes.route('/add').post(function (req, res) {
 
 eventRoutes.route('/').get(function (req, res) {
     Event.find(function(err, events){
-    if(err){
+    if(err)
       res.json(err);
-    }
-    else {
-      res.json(events);
-    }
+    res.json(events);
   });
 });
 
