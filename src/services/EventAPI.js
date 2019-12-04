@@ -19,8 +19,5 @@ export default {
   },
   deleteEvent(id) {
     return API().delete('events/delete/' + id)
-  },
-  getSection(id) {
-    return API().get('events/getSection/' +id)
   }
 }

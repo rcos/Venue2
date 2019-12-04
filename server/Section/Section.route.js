@@ -31,9 +31,11 @@ sectionRoutes.route('/edit/:id').get(function (req, res) {
   let id = req.params.id;
   Section.findById(id, function (err, section){
       if(err) {
+        console.log(err);
         res.json(err);
+      }else{
+        res.json(section);
       }
-      res.json(section);
   });
 });
 

@@ -51,7 +51,7 @@
         this.getSectionsForEvents()
       },
       async deleteEvent(id){
-        const response = await EventAPI.deleteEvet(id);
+        const response = await EventAPI.deleteEvent(id);
         this.events.splice(this.events.findIndex(i => i._id == id), 1)
       },
       async getSectionsForEvents(){
