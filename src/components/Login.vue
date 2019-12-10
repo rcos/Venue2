@@ -1,7 +1,7 @@
 <template>
   <div>
     <form class="text-center border border-light p-5 login" @submit.prevent="login">
-        <p class="h4 mb-4">Sign in</p>
+        <h1 align="center" class="mb-4">Login</h1>
 
         <!-- Email -->
         <input require v-model="email" type="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail">
