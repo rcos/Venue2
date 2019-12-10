@@ -1,7 +1,7 @@
 <template>
   <div>
     <form class="text-center border border-light p-5 login" @submit.prevent="login">
-        <p class="h4 mb-4">Sign up</p>
+        <h1 align="center" class="mb-4">Register Account</h1>
         <div class="form-row mb-4">
             <div class="col">
                 <!-- First name -->
