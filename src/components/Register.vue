@@ -24,7 +24,7 @@
 
         <!-- Require Password -->
         <input required v-model="confirmPassword" type="password" id="defaultRegisterFormConfirmPassword" class="form-control" placeholder="Confirm password" aria-describedby="defaultRegisterFormConfirmPasswordHelpBlock">
-
+        <br />
         <!-- Sign up button -->
         <button>
           <router-link to="/Dashboard" class="btn btn-primary">Create Account</router-link>
