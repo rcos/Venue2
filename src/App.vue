@@ -25,7 +25,7 @@ export default {
   //do not load the navbar for the home page
   watch: {
     '$route': function(){
-      if(this.$route.fullPath === '/'){
+      if(this.$route.fullPath === '/' || this.$route.fullPath === '/Login'){
         console.log("homepage");
         this.displayNav = false
       }
