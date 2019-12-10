@@ -20,7 +20,11 @@
         </div>
 
         <!-- Sign in button -->
-        <button class="btn btn-info btn-block my-4" type="submit">Sign in</button>
+
+        <button>
+          <router-link to="/Dashboard" class="btn btn-primary">Sign in</router-link>
+        </button>
+        <!-- <button class="btn btn-info btn-block my-4" type="submit">Sign in</button> -->
 
         <!-- Register -->
         <div class="d-flex justify-content-around">
