@@ -3,6 +3,8 @@ import Account from './components/Account.vue';
 import Grades from './components/Grades.vue';
 import Home from './components/Home.vue';
 import CreateEvent from './components/CreateEvent.vue';
+import Register from './components/Register.vue';
+import Login from './components/Login.vue';
 
 const routes = [
     { path: '/', component: Home },
@@ -10,6 +12,8 @@ const routes = [
     { path: '/Dashboard', component: Dashboard },
     { path: '/Grades', component: Grades },
     { path: '/CreateEvent', component: CreateEvent},
+    { path: '/Register', component: Register},
+    { path: '/Login', component: Login},
 ];
 
 export default routes;

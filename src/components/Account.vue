@@ -1,44 +1,37 @@
 <template>
   <div class="container">
+    <br />
     <h1>Your Profile</h1>
-    <div class="row">
-      <div class="col-md">
-        <div class="row">
-          <div class="col-md">
-            <div class="img-update">
-              <img alt="Profile_Image" src="../assets/venuelogo.svg">
-            </div>
-            <!-- <hr> -->
-          </div>
-          <div class="col-md">
+    <br />
 
-            <div class="form-group">
-              <label>First Name, Last Name</label>
-            </div>
+    <h2>First Name, Last Name</h2>
+    <br />
 
-            <div class="form-group">
-              <label>Major</label>
-            </div>
+    <div class="ProfileImg">
+      <img alt="Profile_Image" src="../assets/accountimg.jpeg">
+    </div>
+    <br />
 
-            <div class="form-group">
-              <label>Email</label>
-            </div>
+    <div>
+      Major: Computer Science
+    </div>
+    <div>
+      Class Year: 2021
+    </div>
 
-            <div class="dropdown">
-             <button class="dropbtn">Your Classes
-               <i class="fa fa-caret-down"></i>
-             </button>
-             <div class="dropdown-content">
-               <div>Class 1</div>
-               <div>Class 2</div>
-               <div>Class 3</div>
-               <div>Class 4</div>
-             </div>
-           </div>
+    <div class="dropdown">
+     <button class="dropbtn">Your Classes
+       <i class="fa fa-caret-down"></i>
+     </button>
+     <div class="dropdown-content">
+       <div>Class 1</div>
+       <div>Class 2</div>
+       <div>Class 3</div>
+       <div>Class 4</div>
+     </div>
+   </div>
 
-          </div>
-        </div>
-      </div>
+
     </div>
   </div>
 
@@ -50,6 +43,7 @@ export default {
 </script>
 
 <style>
+
 /* Style The Dropdown Button */
 .dropbtn {
   background-color: #4CAF50;
