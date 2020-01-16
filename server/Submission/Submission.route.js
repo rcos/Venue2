@@ -55,4 +55,21 @@ submissionRoutes.route('/delete/:id').delete(function (req, res) {
     });
 });
 
+submissionRoutes.route('/event_submissions/:event_id').get(function (req, res) {
+  console.log("I'm here!!!!");
+  let event_id = req.params.event_id;
+  Submission.find(function(err, submissions){
+    if(err){
+      console.log(err);
+      res.json(err);
+    }
+    let event_submissions = [];
+    submissions.forEach(submission => {
+      if(submission.event == event_id)
+        event_submissions.push(submission);
+    });
+    res.json(event_submissions);
+  });
+});
+
 module.exports = submissionRoutes;
