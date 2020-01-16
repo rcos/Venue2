@@ -19,5 +19,8 @@ export default {
   },
   deleteSubmission(id) {
     return API().delete('submissions/delete/' + id)
+  },
+  getSubmissionsForEvent(event_id){
+    return API().get('submissions/event_submissions/' + event_id)
   }
 }
