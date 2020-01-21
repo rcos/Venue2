@@ -9,9 +9,11 @@
       or
       <div class="btn-group">
         <button type="button" class="btn btn-primary">
-          <router-link to="/Dashboard" class="nav-link">Login</router-link>
+          <router-link to="/Login" class="nav-link">Login</router-link>
         </button>
-        <button type="button" class="btn btn-secondary btn-second">Sign Up</button>
+        <button type="button" class="btn btn-danger">
+          <router-link to="/Register" class="nav-link">Register</router-link>
+        </button>
       </div>
     </div>
     <hr>
