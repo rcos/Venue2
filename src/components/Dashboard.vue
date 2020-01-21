@@ -1,196 +1,66 @@
 <template>
   <div>
-    <div class="section-header">
-      Recent Submissions
-    </div>
 
-    <div class="group">
-      <div class ="scrolling-wrapper">
-        <div class="card valid">
-          <div class="card-header">
-            Class name
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">CSCI XXXX</h5>
-            <p class="card-text">Time: 12pm - 2pm</p>
-          </div>
+    <div class="container-fluid py-3">
+      <h2 class="text-center">Current Events</h2>
+      <div class="card-columns">
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
         </div>
-
-        <div class="card valid">
-          <div class="card-header">
-            Class name
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">CSCI XXXX</h5>
-            <p class="card-text">Time: 12pm - 2pm</p>
-          </div>
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
         </div>
-
-        <div class="card invalid">
-          <div class="card-header">
-            Class name
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">CSCI XXXX</h5>
-            <p class="card-text">Time: 12pm - 2pm</p>
-          </div>
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
         </div>
-
-        <div class="card invalid">
-          <div class="card-header">
-            Class name
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">CSCI XXXX</h5>
-            <p class="card-text">Time: 12pm - 2pm</p>
-          </div>
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
         </div>
-
-        <div class="card pending">
-          <div class="card-header">
-            Class name
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">CSCI XXXX</h5>
-            <p class="card-text">Time: 12pm - 2pm</p>
-          </div>
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
         </div>
-
-        <div class="card pending">
-          <div class="card-header">
-            Class name
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">CSCI XXXX</h5>
-            <p class="card-text">Time: 12pm - 2pm</p>
-          </div>
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
         </div>
-
-
-
-
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
+        </div>
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
+        </div>
       </div>
     </div>
 
-    <div class="section-header">
-      Current Events
-    </div>
-
-    <ul class="nav nav-pills">
-      <li class="nav-item">
-        <a class = "nav-link active">CSCI</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link">MATH</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link">COMM</a>
-      </li>
-    </ul>
-
-    <div class="group">
-      <div class ="scrolling-wrapper">
-        <div class="card">
-          <div class="card-header">
-            Class name
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">CSCI XXXX</h5>
-            <p class="card-text">Time: 12pm - 2pm</p>
-            <a href="#" class="btn btn-primary">Create Submission</a>
-          </div>
+    <div class="container-fluid">
+      <h2 class="text-center">Recent Submissions</h2>
+      <div class="card-columns">
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
         </div>
-
-        <div class="card">
-          <div class="card-header">
-            Class name
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">CSCI XXXX</h5>
-            <p class="card-text">Time: 12pm - 2pm</p>
-            <a href="#" class="btn btn-primary">Create Submission</a>
-          </div>
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
         </div>
-
-        <div class="card">
-          <div class="card-header">
-            Class name
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">CSCI XXXX</h5>
-            <p class="card-text">Time: 12pm - 2pm</p>
-            <a href="#" class="btn btn-primary">Create Submission</a>
-          </div>
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
         </div>
-
-        <div class="card">
-          <div class="card-header">
-            Class name
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">CSCI XXXX</h5>
-            <p class="card-text">Time: 12pm - 2pm</p>
-            <a href="#" class="btn btn-primary">Create Submission</a>
-          </div>
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
         </div>
-
-        <div class="card">
-          <div class="card-header">
-            Class name
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">CSCI XXXX</h5>
-            <p class="card-text">Time: 12pm - 2pm</p>
-            <a href="#" class="btn btn-primary">Create Submission</a>
-          </div>
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
         </div>
-
-        <div class="card">
-          <div class="card-header">
-            Class name
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">CSCI XXXX</h5>
-            <p class="card-text">Time: 12pm - 2pm</p>
-            <a href="#" class="btn btn-primary">Create Submission</a>
-          </div>
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
         </div>
-
-        <div class="card">
-          <div class="card-header">
-            Class name
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">CSCI XXXX</h5>
-            <p class="card-text">Time: 12pm - 2pm</p>
-            <a href="#" class="btn btn-primary">Create Submission</a>
-          </div>
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
         </div>
-
-        <div class="card">
-          <div class="card-header">
-            Class name
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">CSCI XXXX</h5>
-            <p class="card-text">Time: 12pm - 2pm</p>
-            <a href="#" class="btn btn-primary">Create Submission</a>
-          </div>
+        <div class = "card">
+          <img class="card-img-top img-fluid" src="//placehold.it/350x350/" alt="Card image cap">
         </div>
-
-        <div class="card">
-          <div class="card-header">
-            Class name
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">CSCI XXXX</h5>
-            <p class="card-text">Time: 12pm - 2pm</p>
-            <a href="#" class="btn btn-primary">Create Submission</a>
-          </div>
-        </div>
-
       </div>
     </div>
+
   </div>
 
 </template>
@@ -201,47 +71,41 @@ export default {
 </script>
 
 <style scoped>
-.section-header{
-  text-align: center;
-  font-size: 28px;
-  padding-top: 20px;
-  padding-bottom: 10px;
-}
-.group{
-  padding-left: 55px;
-  padding-right: 55px;
-}
-.scrolling-wrapper {
-  overflow-x: scroll;
-  overflow-y: hidden;
-  white-space: nowrap;
-}
-.card{
-  display: inline-block;
-  margin: 0 0 0 5px;
-}
-.card.valid{
-  border-color:green;
-  border-width: 3px;
-}
-.card.invalid{
-  border-color:red;
-  border-width: 3px;
-}
-.card.pending{
-  border-color:gray;
-  border-width: 3px;
-}
-.classes{
-  text-align: center;
-}
-.nav-pills {
-  padding-left: 60px;
-  padding-bottom: 5px;
-}
-.nav-link:hover{
-  background: rgb(230,230,230);
-}
 
-
+/* xs only */
+@media(max-width: 767px) {
+  .card-columns {
+    column-count: 2;
+  }
+}
+/* small and up */
+@media(min-width: 768px) {
+  .card-columns {
+    column-count: 2;
+  }
+}
+/* sm only */
+@media(min-width: 768px) and (max-width: 991px) {
+  .card-columns {
+    column-count: 4;
+  }
+}
+/* md and up */
+@media(min-width: 992px) {
+  .card-columns {
+    column-count: 4;
+  }
+}
+/* md only */
+@media(min-width: 992px) and (max-width: 1199px) {
+  .card-columns {
+    column-count: 4;
+  }
+}
+/* lg and up */
+@media(min-width: 1200px) {
+  .card-columns {
+    column-count: 8;
+  }
+}
 </style>
