@@ -1,40 +1,40 @@
 <template>
   <div id="app">
-    <NavBar v-if="displayNav"></NavBar>
+    <!-- <NavBar v-if="displayNav"></NavBar> -->
     <!-- Renders correct component for the given path -->
     <router-view />
   </div>
 </template>
 <script>
 
-import NavBar from "./components/NavBar.vue";
+// import NavBar from "./components/NavBar.vue";
 // import Footer from "./components/Footer.vue";
 
 export default {
-  components: {
-    NavBar,
-    // Footer
-  },
+  // components: {
+  //   // NavBar,
+  //   // Footer
+  // },
   //initially displayNav is false because the first page loaded is the homepage
-  data: function () {
-    return {
-      displayNav: false
-    }
-  },
+  // data: function () {
+  //   return {
+  //     displayNav: false
+  //   }
+  // },
   //watches for routing changes
   //do not load the navbar for the home page
-  watch: {
-    '$route': function(){
-      if(this.$route.fullPath === '/' || this.$route.fullPath === '/Login' || this.$route.fullPath === '/Register'){
-        console.log("homepage");
-        this.displayNav = false
-      }
-      else {
-        console.log("not homepage");
-        this.displayNav = true
-      }
-    }
-  }
+  // watch: {
+  //   '$route': function(){
+  //     if(this.$route.fullPath === '/' || this.$route.fullPath === '/Login' || this.$route.fullPath === '/Register'){
+  //       console.log("homepage");
+  //       this.displayNav = false
+  //     }
+  //     else {
+  //       console.log("not homepage");
+  //       this.displayNav = true
+  //     }
+  //   }
+  // }
 }
 </script>
 
