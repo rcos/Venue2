@@ -19,11 +19,12 @@ import Events from './components/Event/Events.vue';
 import EditEvent from './components/Event/EditEvent.vue';
 import NewSubmission from './components/Submission/NewSubmission.vue';
 import Submissions from './components/Submission/Submissions.vue';
+import LandingPage from './components/LandingPage.vue';
 
 const routes = [
     { 
     	path: '/', 
-    	component: Home 
+    	component: LandingPage
     },
     { 
     	path: '/Account', 
