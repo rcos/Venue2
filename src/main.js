@@ -16,7 +16,14 @@ Vue.use(VueAxios, axios);
 import routes from './routes.js'
 
 import 'bootstrap'
+import 'vue-datetime/dist/vue-datetime.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'buefy/dist/buefy.css'
+
+Vue.use(Buefy)
+Vue.use(VueRouter);
+Vue.use(Datetime);
+Vue.use(LoadScript);
 
 Vue.config.productionTip = false;
 
