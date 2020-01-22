@@ -1,20 +1,21 @@
 <template>
   <div>
     <LandingInfo />
-
+    <LoginSignupButtons />
   </div>
 </template>
 
 <script>
   import LandingInfo from './LandingInfo.vue'
+  import LoginSignupButtons from './LoginSignupButtons.vue'
 
   export default {
     components: {
-      LandingInfo
+      LandingInfo,
+      LoginSignupButtons
     },
     data() {
       return {
-        user: {}
       }
     },
     created() {
