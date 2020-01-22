@@ -2,6 +2,7 @@
   <div class="container" style="padding:2rem;">
     <button type="button" class="btn button shadow" id="login">Cas Login</button>
     <button type="button" class="btn button shadow" id="signup">Venue Login</button>
+    <div style="margin-top:2rem;">or <span class="signup">Sign Up</span> </div>
   </div>
 </template>
 
@@ -39,5 +40,14 @@
 #login:hover {
   border: #007bff solid;
   color: #007bff;
+}
+
+.signup {
+  cursor: pointer;
+  color: #6610f2;
+}
+
+.signup:hover {
+  color:#4300b0;
 }
 </style>
