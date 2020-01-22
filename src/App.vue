@@ -3,18 +3,19 @@
     <!-- <NavBar v-if="displayNav"></NavBar> -->
     <!-- Renders correct component for the given path -->
     <router-view />
+    <Footer />
   </div>
 </template>
 <script>
 
 // import NavBar from "./components/NavBar.vue";
-// import Footer from "./components/Footer.vue";
+import Footer from "./components/Footer.vue";
 
 export default {
-  // components: {
-  //   // NavBar,
-  //   // Footer
-  // },
+  components: {
+    // NavBar,
+    Footer
+  },
   //initially displayNav is false because the first page loaded is the homepage
   // data: function () {
   //   return {
