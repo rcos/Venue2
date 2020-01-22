@@ -28,10 +28,16 @@
   margin-left: 2rem;
   width: 8rem;
   margin-top: 1.5rem;
+  border: white solid;
 }
 
-/*#login {
+#signup:hover {
+  border: #e83e8c solid;
+  color: #e83e8c;
+}
+
+#login:hover {
   border: #007bff solid;
   color: #007bff;
-}*/
+}
 </style>

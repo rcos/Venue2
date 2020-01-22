@@ -20,7 +20,7 @@ export default {
 	bottom: 0;
 	width: 100%;
 	height: 2rem;
-	border-top: #e0e0e0 solid 2px;
+	border-top: #e0e0e0 solid thin;
 }
 
 .github-mark {
