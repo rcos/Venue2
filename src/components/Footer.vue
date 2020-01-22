@@ -1,5 +1,10 @@
 <template>
-    <footer>
+    <footer class="footer">
+    	© 2020 Venue v2.0 | 
+    	<a href="https://github.com/tdurkin18/Venue2" target="_blank">
+    		<img class="github-mark" src="../assets/github_mark.png" />
+    	</a>
+    	| An RCOS project
     </footer>
 </template>
 
@@ -10,5 +15,16 @@ export default {
 </script>
 
 <style>
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 2rem;
+	border-top: #e0e0e0 solid 2px;
+}
 
+.github-mark {
+	width: 1rem;
+	cursor: pointer;
+}
 </style>
