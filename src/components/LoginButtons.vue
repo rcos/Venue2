@@ -1,14 +1,13 @@
 <template>
   <div class="container" style="padding:2rem;">
-    <button type="button" class="btn button shadow" id="login" 
-    @click="$emit('show-login-buttons')">Login</button>
-    <button type="button" class="btn button shadow" id="signup">Sign Up</button>
+    <button type="button" class="btn button shadow" id="login">Cas Login</button>
+    <button type="button" class="btn button shadow" id="signup">Venue Login</button>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'LoginSignupButtons',
+    name: 'LoginButtons',
     data() {
       return {
       }
@@ -27,7 +26,7 @@
   font-size: 1.5rem;
   margin-right: 2rem;
   margin-left: 2rem;
-  width: 8rem;
+  width: 12rem;
   margin-top: 1.5rem;
   border: white solid;
 }
