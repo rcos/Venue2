@@ -1,7 +1,7 @@
 <template>
   <div class="container" style="padding:2rem;">
-    <button type="button" class="btn button">Login</button>
-    <button type="button" class="btn button">Sign Up</button>
+    <button type="button" class="btn button shadow" id="login">Login</button>
+    <button type="button" class="btn button shadow" id="signup">Sign Up</button>
   </div>
 </template>
 
@@ -23,12 +23,15 @@
 .button {
   background-color: white;
   border-radius: 0%;
-  border: black solid;
-  color: black;
   font-size: 1.5rem;
-  margin-right: 1rem;
-  margin-left: 1rem;
+  margin-right: 2rem;
+  margin-left: 2rem;
   width: 8rem;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
+
+/*#login {
+  border: #007bff solid;
+  color: #007bff;
+}*/
 </style>
