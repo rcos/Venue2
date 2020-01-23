@@ -3,6 +3,7 @@
     <LandingInfo />
 <!--     <LoginSignupButtons v-if="show_login_signup_buttons" v-on:show-login-buttons="showLoginButtons" />
     <LoginButtons v-else /> -->
+    <!-- <LandingInfoSM /> -->
     <LoginForm />
   </div>
 </template>
@@ -12,13 +13,15 @@
   import LoginSignupButtons from './LoginSignupButtons.vue'
   import LoginButtons from './LoginButtons.vue'
   import LoginForm from './Forms/LoginForm.vue'
+  import LandingInfoSM from './LandingInfoSM.vue'
 
   export default {
     components: {
       LandingInfo,
       LoginSignupButtons,
       LoginButtons,
-      LoginForm
+      LoginForm,
+      LandingInfoSM
     },
     data() {
       return {
