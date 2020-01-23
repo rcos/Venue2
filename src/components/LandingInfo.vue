@@ -13,7 +13,6 @@
     name: 'LandingInfo',
     data() {
       return {
-        user: {}
       }
     },
     created() {
