@@ -9,9 +9,9 @@
       v-on:show-instructor-signup-form="showInstructorSignupForm"
       v-on:show-login-buttons="showLoginButtons" />
     <LandingInfoSM v-if="show_login_form || show_student_signup_form || show_instructor_signup_form" />
-    <LoginForm v-if="show_login_form" />
-    <StudentSignupForm v-if="show_student_signup_form" />
-    <InstructorSignupForm v-if="show_instructor_signup_form" />
+    <LoginForm v-if="show_login_form" v-on:show-login-buttons="showLoginButtons" />
+    <StudentSignupForm v-if="show_student_signup_form" v-on:show-signup-buttons="showSignupButtons" />
+    <InstructorSignupForm v-if="show_instructor_signup_form" v-on:show-signup-buttons="showSignupButtons" />
   </div>
 </template>
 
