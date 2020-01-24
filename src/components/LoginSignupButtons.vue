@@ -3,7 +3,7 @@
     <button type="button" class="btn button shadow" id="login" 
       @click="$emit('show-login-buttons')">Login</button>
     <button type="button" class="btn button shadow" id="signup"
-      @click="$emit('show-signup-form')">Sign Up</button>
+      @click="$emit('show-signup-buttons')">Sign Up</button>
   </div>
 </template>
 
