@@ -3,9 +3,11 @@
     <LandingInfo v-if="!show_login_form && !show_student_signup_form && !show_instructor_signup_form" />
     <LoginSignupButtons v-if="show_login_signup_buttons" 
     v-on:show-login-buttons="showLoginButtons" v-on:show-signup-buttons="showSignupButtons" />
-    <LoginButtons v-if="show_login_buttons" v-on:show-login-form="showLoginForm" />
+    <LoginButtons v-if="show_login_buttons" v-on:show-login-form="showLoginForm" 
+      v-on:show-signup-buttons="showSignupButtons"/>
     <SignupButtons v-if="show_signup_buttons" v-on:show-student-signup-form="showStudentSignupForm"
-      v-on:show-instructor-signup-form="showInstructorSignupForm" />
+      v-on:show-instructor-signup-form="showInstructorSignupForm"
+      v-on:show-login-buttons="showLoginButtons" />
     <LandingInfoSM v-if="show_login_form || show_student_signup_form || show_instructor_signup_form" />
     <LoginForm v-if="show_login_form" />
     <StudentSignupForm v-if="show_student_signup_form" />

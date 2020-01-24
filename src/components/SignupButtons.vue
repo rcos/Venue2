@@ -4,7 +4,9 @@
       @click="$emit('show-student-signup-form')">Student Sign Up</button>
     <button type="button" class="btn button shadow" id="signup"
       @click="$emit('show-instructor-signup-form')">Instructor Sign Up</button>
-    <div style="margin-top:2rem;">or <span class="signup">Login</span> </div>
+    <div @click="$emit('show-login-buttons')" style="margin-top:2rem;">
+      or <span class="signup">Login</span> 
+    </div>
   </div>
 </template>
 
