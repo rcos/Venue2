@@ -1,6 +1,6 @@
 <template>
   <div class="container shadow" style="border:#ededed solid thin; width:25rem; margin-top:1rem;">
-    <div class="back-arrow">←</div>
+    <div @click="$emit('show-signup-buttons')" class="back-arrow">←</div>
     <form style=" padding-top:1rem; padding-bottom:1rem;">
       <div class="form-group">
         <input type="text" class="form-control login-form" placeholder="First Name">

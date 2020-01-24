@@ -1,6 +1,6 @@
 <template>
   <div class="container shadow" style="border:#ededed solid thin; width:25rem; margin-top:1rem;">
-    <div class="back-arrow">←</div>
+    <div @click="$emit('show-login-buttons')" class="back-arrow">←</div>
     <form style=" padding-top:1rem; padding-bottom:1rem;">
       <div class="form-group">
         <input type="email" class="form-control login-form" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email">
