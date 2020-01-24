@@ -8,7 +8,8 @@
     <LoginForm v-if="show_login_form" />
     <SignupForm v-if="show_signup_form" /> -->
     <!-- <StudentSignupForm /> -->
-    <InstructorSignupForm />
+    <!-- <InstructorSignupForm /> -->
+    <SignupButtons />
   </div>
 </template>
 
@@ -16,6 +17,7 @@
   import LandingInfo from './LandingInfo.vue'
   import LoginSignupButtons from './LoginSignupButtons.vue'
   import LoginButtons from './LoginButtons.vue'
+  import SignupButtons from './SignupButtons.vue'
   import LoginForm from './Forms/LoginForm.vue'
   import LandingInfoSM from './LandingInfoSM.vue'
   import StudentSignupForm from './Forms/StudentSignupForm.vue'
@@ -26,6 +28,7 @@
       LandingInfo,
       LoginSignupButtons,
       LoginButtons,
+      SignupButtons,
       LoginForm,
       LandingInfoSM,
       StudentSignupForm,
