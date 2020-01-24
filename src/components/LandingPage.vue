@@ -4,7 +4,8 @@
 <!--     <LoginSignupButtons v-if="show_login_signup_buttons" v-on:show-login-buttons="showLoginButtons" />
     <LoginButtons v-else /> -->
     <LandingInfoSM />
-    <LoginForm />
+    <!-- <LoginForm /> -->
+    <SignupForm />
   </div>
 </template>
 
@@ -14,6 +15,7 @@
   import LoginButtons from './LoginButtons.vue'
   import LoginForm from './Forms/LoginForm.vue'
   import LandingInfoSM from './LandingInfoSM.vue'
+  import SignupForm from './Forms/SignupForm.vue'
 
   export default {
     components: {
@@ -21,7 +23,8 @@
       LoginSignupButtons,
       LoginButtons,
       LoginForm,
-      LandingInfoSM
+      LandingInfoSM,
+      SignupForm
     },
     data() {
       return {
