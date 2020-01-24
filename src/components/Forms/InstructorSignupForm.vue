@@ -9,9 +9,6 @@
         <input type="text" class="form-control login-form" placeholder="Last Name">
       </div>
       <div class="form-group">
-        <input type="number" class="form-control login-form" placeholder="RIN">
-      </div>
-      <div class="form-group">
         <input type="email" class="form-control login-form" placeholder="Email">
       </div>
       <div class="form-group">
@@ -24,7 +21,7 @@
 
 <script>
   export default {
-    name: 'LoginForm',
+    name: 'InstructorSignupForm',
     data() {
       return {
       }

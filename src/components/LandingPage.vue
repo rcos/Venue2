@@ -1,12 +1,14 @@
 <template>
   <div>
-    <LandingInfo v-if="!show_login_form && !show_signup_form" />
+<!--     <LandingInfo v-if="!show_login_form && !show_signup_form" />
     <LoginSignupButtons v-if="show_login_signup_buttons" 
     v-on:show-login-buttons="showLoginButtons" v-on:show-signup-buttons="showSignupButtons" />
     <LoginButtons v-if="show_login_buttons" v-on:show-login-form="showLoginForm" />
     <LandingInfoSM v-if="show_login_form || show_signup_form" />
     <LoginForm v-if="show_login_form" />
-    <SignupForm v-if="show_signup_form" />
+    <SignupForm v-if="show_signup_form" /> -->
+    <!-- <StudentSignupForm /> -->
+    <InstructorSignupForm />
   </div>
 </template>
 
@@ -16,7 +18,8 @@
   import LoginButtons from './LoginButtons.vue'
   import LoginForm from './Forms/LoginForm.vue'
   import LandingInfoSM from './LandingInfoSM.vue'
-  import SignupForm from './Forms/SignupForm.vue'
+  import StudentSignupForm from './Forms/StudentSignupForm.vue'
+  import InstructorSignupForm from './Forms/InstructorSignupForm.vue'
 
   export default {
     components: {
@@ -25,7 +28,8 @@
       LoginButtons,
       LoginForm,
       LandingInfoSM,
-      SignupForm
+      StudentSignupForm,
+      InstructorSignupForm
     },
     data() {
       return {
