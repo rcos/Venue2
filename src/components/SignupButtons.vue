@@ -1,8 +1,9 @@
 <template>
   <div class="container" style="padding:2rem;">
-    <button type="button" class="btn button shadow" id="login">Student Sign Up</button>
+    <button type="button" class="btn button shadow" id="login"
+      @click="$emit('show-student-signup-form')">Student Sign Up</button>
     <button type="button" class="btn button shadow" id="signup"
-      @click="$emit('show-login-form')">Instructor Sign Up</button>
+      @click="$emit('show-instructor-signup-form')">Instructor Sign Up</button>
     <div style="margin-top:2rem;">or <span class="signup">Login</span> </div>
   </div>
 </template>
