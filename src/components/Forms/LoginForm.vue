@@ -1,5 +1,5 @@
 <template>
-  <div class="container shadow" style="border:#ededed solid thin; width:25rem;">
+  <div class="container shadow" style="border:#ededed solid thin; width:25rem; margin-top:1rem;">
     <div class="back-arrow">←</div>
     <form style=" padding-top:1rem; padding-bottom:1rem;">
       <div class="form-group">

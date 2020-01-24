@@ -1,9 +1,9 @@
 <template>
   <div>
-    <LandingInfo />
+    <!-- <LandingInfo /> -->
 <!--     <LoginSignupButtons v-if="show_login_signup_buttons" v-on:show-login-buttons="showLoginButtons" />
     <LoginButtons v-else /> -->
-    <!-- <LandingInfoSM /> -->
+    <LandingInfoSM />
     <LoginForm />
   </div>
 </template>
