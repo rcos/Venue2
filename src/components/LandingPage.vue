@@ -1,6 +1,13 @@
 <template>
   <div>
-    <LandingInfo v-if="!show_login_form && !show_student_signup_form && !show_instructor_signup_form" />
+    <LandingInfo v-if="!show_login_form" />
+    <LandingInfoSM v-if="show_login_form" />
+    <LoginButton v-if="show_login_button" 
+    v-on:show-login-form="showLoginForm"/>
+    <LoginForm v-if="show_login_form" v-on:show-login-button="showLoginButton" />
+
+    <!-- For sign up form feature -->
+<!--     <LandingInfo v-if="!show_login_form && !show_student_signup_form && !show_instructor_signup_form" />
     <LoginSignupButtons v-if="show_login_signup_buttons" 
     v-on:show-login-buttons="showLoginButtons" v-on:show-signup-buttons="showSignupButtons" />
     <LoginButtons v-if="show_login_buttons" v-on:show-login-form="showLoginForm" 
@@ -11,13 +18,13 @@
     <LandingInfoSM v-if="show_login_form || show_student_signup_form || show_instructor_signup_form" />
     <LoginForm v-if="show_login_form" v-on:show-login-buttons="showLoginButtons" />
     <StudentSignupForm v-if="show_student_signup_form" v-on:show-signup-buttons="showSignupButtons" />
-    <InstructorSignupForm v-if="show_instructor_signup_form" v-on:show-signup-buttons="showSignupButtons" />
+    <InstructorSignupForm v-if="show_instructor_signup_form" v-on:show-signup-buttons="showSignupButtons" /> -->
   </div>
 </template>
 
 <script>
   import LandingInfo from './LandingInfo.vue'
-  import LoginSignupButtons from './LoginSignupButtons.vue'
+  import LoginButton from './LoginButton.vue'
   import LoginButtons from './LoginButtons.vue'
   import SignupButtons from './SignupButtons.vue'
   import LoginForm from './Forms/LoginForm.vue'
@@ -28,7 +35,7 @@
   export default {
     components: {
       LandingInfo,
-      LoginSignupButtons,
+      LoginButton,
       LoginButtons,
       SignupButtons,
       LoginForm,
@@ -38,45 +45,55 @@
     },
     data() {
       return {
-        show_login_signup_buttons: true,
-        show_login_buttons: false,
-        show_signup_buttons: false,
-        show_login_form: false,
-        show_student_signup_form: false,
-        show_instructor_signup_form: false
+        show_login_button: true,
+        show_login_form: false
+        // show_login_signup_buttons: true,
+        // show_login_buttons: false,
+        // show_signup_buttons: false,
+        // show_login_form: false,
+        // show_student_signup_form: false,
+        // show_instructor_signup_form: false
       }
     },
     created() {
     },
     methods: {
-      showLoginButtons() {
-        this.setVisibilityFlagsToFalse()
-        this.show_login_buttons = true
-      },
-      showSignupButtons() {
-        this.setVisibilityFlagsToFalse()
-        this.show_signup_buttons = true
+      showLoginButton() {
+        this.show_login_button = true
+        this.show_login_form = false
       },
       showLoginForm() {
-        this.setVisibilityFlagsToFalse()
         this.show_login_form = true
-      },
-      showStudentSignupForm() {
-        this.setVisibilityFlagsToFalse()
-        this.show_student_signup_form = true
-      },
-      showInstructorSignupForm() {
-        this.setVisibilityFlagsToFalse()
-        this.show_instructor_signup_form = true
-      },
-      setVisibilityFlagsToFalse() {
-        this.show_login_signup_buttons = false
-        this.show_login_buttons = false
-        this.show_signup_buttons = false
-        this.show_login_form = false
-        this.show_student_signup_form = false
-        this.show_instructor_signup_form = false
+        this.show_login_button = false
       }
+      // showLoginButtons() {
+      //   this.setVisibilityFlagsToFalse()
+      //   this.show_login_buttons = true
+      // },
+      // showSignupButtons() {
+      //   this.setVisibilityFlagsToFalse()
+      //   this.show_signup_buttons = true
+      // },
+      // showLoginForm() {
+      //   this.setVisibilityFlagsToFalse()
+      //   this.show_login_form = true
+      // },
+      // showStudentSignupForm() {
+      //   this.setVisibilityFlagsToFalse()
+      //   this.show_student_signup_form = true
+      // },
+      // showInstructorSignupForm() {
+      //   this.setVisibilityFlagsToFalse()
+      //   this.show_instructor_signup_form = true
+      // },
+      // setVisibilityFlagsToFalse() {
+      //   this.show_login_signup_buttons = false
+      //   this.show_login_buttons = false
+      //   this.show_signup_buttons = false
+      //   this.show_login_form = false
+      //   this.show_student_signup_form = false
+      //   this.show_instructor_signup_form = false
+      // }
     }
   }
 </script>

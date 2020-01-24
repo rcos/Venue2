@@ -3,8 +3,8 @@
     <button type="button" class="btn button shadow" id="login">Cas Login</button>
     <button type="button" class="btn button shadow" id="signup"
       @click="$emit('show-login-form')">Venue Login</button>
-    <div @click="$emit('show-signup-buttons')" style="margin-top:2rem;">
-      or <span class="signup">Sign Up</span>
+<!--     <div @click="$emit('show-signup-buttons')" style="margin-top:2rem;">
+      or <span class="signup">Sign Up</span> -->
     </div>
   </div>
 </template>
