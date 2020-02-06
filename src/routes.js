@@ -20,6 +20,7 @@ import EditEvent from './components/Event/EditEvent.vue';
 import NewSubmission from './components/Submission/NewSubmission.vue';
 import Submissions from './components/Submission/Submissions.vue';
 import LandingPage from './components/LandingPage.vue';
+import Signup from './components/Signup.vue';
 
 const routes = [
     { 
@@ -122,6 +123,11 @@ const routes = [
         name: 'submissions',
         path: '/submissions',
         component: Submissions
+    },
+    {
+        name: 'signup',
+        path: '/signup',
+        component: Signup
     }
 ];
 
