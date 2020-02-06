@@ -1,6 +1,11 @@
 import API from '@/services/API'
 
 export default {
+  signUp(user) {
+    return API().post('users/signup', {
+      user: user // add our data to the request body
+    })
+  },
   getUsers() {
     return API().get('users')
   },
