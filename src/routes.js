@@ -1,4 +1,3 @@
-import Dashboard from './components/Dashboard.vue';
 import Account from './components/Account.vue';
 import Grades from './components/Grades.vue';
 import Home from './components/Home.vue';
@@ -21,6 +20,7 @@ import NewSubmission from './components/Submission/NewSubmission.vue';
 import Submissions from './components/Submission/Submissions.vue';
 import LandingPage from './components/LandingPage.vue';
 import Signup from './components/Signup.vue';
+import Dashboard from './components/Dashboard.vue';
 
 const routes = [
     { 
@@ -30,10 +30,6 @@ const routes = [
     { 
     	path: '/Account', 
     	component: Account 
-    },
-    { 
-    	path: '/Dashboard', 
-    	component: Dashboard 
     },
     { 
     	path: '/Grades', 
@@ -128,6 +124,11 @@ const routes = [
         name: 'signup',
         path: '/signup',
         component: Signup
+    },
+    {
+        name: 'dashboard',
+        path: '/dashboard',
+        component: Dashboard
     }
 ];
 
