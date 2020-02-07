@@ -24,6 +24,7 @@ import Dashboard from './components/Dashboard.vue';
 
 const routes = [
     { 
+        name: 'landing_page',
     	path: '/', 
     	component: LandingPage
     },
