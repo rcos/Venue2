@@ -23,6 +23,31 @@ userRoutes.route('/signup').post(function (req, res) {
     });
 });
 
+userRoutes.route('/login').post(function (req, res) {
+  console.log("Entered login route")
+  let user = req.body.user
+  console.log("Received user: " + user)
+  if(user){
+    console.log("User was passed to request body")
+    User.find({ email: user.email, password: user.password }, function(error, current_user) {
+      if(error)
+        console.log("Error unable to find user: " + user)
+      else {
+        console.log("Async call fetched user: " + current_user)
+        const token = jwt.sign({ current_user }, 'the_secret_key')
+        console.log("After signing, here is the user: " + current_user +
+          " with email " + current_user.email + " with password: " + current_user.password)
+        console.log("Sending back user with email: " + current_user.email +
+          " and password " + current_user.password + " with token: " + token)
+        res.json({token, user})
+      }
+    })
+  }else{
+    console.log("Entered error block")
+    res.status(400).json({ error: 'Invalid login. Please try again.' })
+  }
+});
+
 userRoutes.route('/add').post(function (req, res) {
   let user = new User(req.body.user);
   user.save()

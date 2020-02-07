@@ -4,10 +4,10 @@
         <h1 align="center" class="mb-4">Login</h1>
 
         <!-- Email -->
-        <input require v-model="email" type="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail">
+        <input require v-model="user.email" type="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail">
 
         <!-- Password -->
-        <input require v-model="password" type="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Password">
+        <input require v-model="user.password" type="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Password">
 
         <div class="d-flex justify-content-around">
             <div>
@@ -40,18 +40,17 @@
 export default {
   data() {
     return {
-      email: "",
-      password: ""
+      user: {
+        email: '',
+        password: ''
+      }
     };
   },
   methods: {
-    login: function() {
-      let email = this.email;
-      let password = this.password;
-      this.$store
-        .dispatch("login", { email, password })
-        .then(() => this.$router.push("/"))
-        .catch(err => console.log(err));
+    login() {
+      console.log("Login function was called")
+      this.$store.dispatch('login', this.user)
+        .then(() => this.$router.push({name: 'dashboard'}))
     }
   }
 };

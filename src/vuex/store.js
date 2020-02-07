@@ -34,18 +34,20 @@ export default new Vuex.Store({
         .then(({data}) => {
           commit('SET_USER_DATA', data)
         })
+    },
+    login({ commit }, user) {
+      return UserAPI.login(user)
+        .then(({data}) => {
+          console.log("Got back data: " + data)
+          console.log("token: " + Object.keys(user)[0])
+          console.log("user: " + Object.keys(user)[1])
+          commit('SET_USER_DATA', data)
+        })
       // return axios
-      //   .post('//localhost:3000/register', credentials)
+      //   .post('//localhost:3000/login', credentials)
       //   .then(({ data }) => {
       //     commit('SET_USER_DATA', data)
       //   })
-    },
-    login({ commit }, credentials) {
-      return axios
-        .post('//localhost:3000/login', credentials)
-        .then(({ data }) => {
-          commit('SET_USER_DATA', data)
-        })
     },
     logout({ commit }) {
       commit('CLEAR_USER_DATA')

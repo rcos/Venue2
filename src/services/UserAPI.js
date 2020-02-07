@@ -6,6 +6,11 @@ export default {
       user: user // add our data to the request body
     })
   },
+  login(user) {
+    return API().post('users/login', {
+      user: user // add our data to the request body
+    })
+  },
   getUsers() {
     return API().get('users')
   },
