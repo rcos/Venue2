@@ -64,10 +64,10 @@
       //   this.$router.push({name: 'users'});
       // },
       signUp() {
+        console.log("Creating user with fn: " + this.user.first_name + " ln: " + this.user.last_name)
+        console.log("email: " + this.user.email + " password: " + this.user.password)
         this.$store
-          .dispatch('signup', {
-            user: this.user
-          })
+          .dispatch('signup', this.user)
           .then(() => {
             this.$router.push({name: 'dashboard'})
           })
