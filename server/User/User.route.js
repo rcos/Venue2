@@ -59,16 +59,22 @@ userRoutes.route('/add').post(function (req, res) {
     });
 });
 
-userRoutes.route('/').get(function (req, res) {
-    User.find(function(err, users){
-    if(err){
-      res.json(err);
+userRoutes.get('/', verifyToken, (req, res) => {
+  jwt.verify(req.token, 'the_secret_key', err => {
+    if(err) {
+      console.log("Entered error block. req.token: " + req.token + " The error is:" + error)
+      res.sendStatus(401).send("Unauthorized access")
+    } else {
+      User.find(function(err, users){
+        if(err){
+          res.json(err);
+        }else {
+          res.json(users);
+        }
+      })
     }
-    else {
-      res.json(users);
-    }
-  });
-});
+  })
+})
 
 userRoutes.route('/edit/:id').get(function (req, res) {
   let id = req.params.id;
@@ -187,5 +193,17 @@ userRoutes.route('/student_sections/:id').get(function (req, res) {
   });
 });
 
+function verifyToken (req, res, next) {
+  const bearerHeader = req.headers['authorization']
+
+  if (typeof bearerHeader !== 'undefined') {
+    const bearer = bearerHeader.split(' ')
+    const bearerToken = bearer[1]
+    req.token = bearerToken
+    next()
+  } else {
+    res.sendStatus(401)
+  }
+}
 
 module.exports = userRoutes;
