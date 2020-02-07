@@ -1,9 +1,27 @@
 const express = require('express');
 const userRoutes = express.Router();
+const jwt = require('jsonwebtoken')
 
 let User = require('./User.model');
 let Course = require('../Course/Course.model');
 let Section = require('../Section/Section.model');
+
+userRoutes.route('/signup').post(function (req, res) {
+  console.log("Made it into the signup route")
+  console.log("Creating user with email: " + req.body.user.email + " password: " + req.body.user.password)
+  let user = new User(req.body.user);
+  user.save()
+    .then(() => {
+      console.log("Entered then block")
+      const token = jwt.sign({ user }, 'the_secret_key')
+      console.log("just signed token in then block: " + token)
+      res.status(200).json({token, user});
+    })
+    .catch(() => {
+      console.log("Entered catch block")
+      res.status(400).send("unable to save user to database");
+    });
+});
 
 userRoutes.route('/add').post(function (req, res) {
   let user = new User(req.body.user);

@@ -68,6 +68,9 @@
           .dispatch('signup', {
             user: this.user
           })
+          .then(() => {
+            this.$router.push({name: 'dashboard'})
+          })
       }
     }
   }
