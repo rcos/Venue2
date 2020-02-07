@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>Dashboard</h2>
+    <button type="submit" class="btn btn-primary" @click="logOut">Logout</button>
     <Users />
   </div>
 </template>
@@ -22,11 +23,9 @@
     created() {
     },
     methods: {
-      async signUp(evt){
-        evt.preventDefault(); // prevents the form's default action from redirecting the page
-        const response = await UserAPI.addUser(this.user);
-        this.$router.push({name: 'users'});
-      },
+      logOut() {
+        this.$store.dispatch('logout')
+      }
     }
   }
 </script>
