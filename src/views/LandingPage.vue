@@ -23,25 +23,25 @@
 </template>
 
 <script>
-  import LandingInfo from './LandingInfo.vue'
-  import LoginButton from './LoginButton.vue'
-  import LoginButtons from './LoginButtons.vue'
-  import SignupButtons from './SignupButtons.vue'
-  import LoginForm from './Forms/LoginForm.vue'
-  import LandingInfoSM from './LandingInfoSM.vue'
-  import StudentSignupForm from './Forms/StudentSignupForm.vue'
-  import InstructorSignupForm from './Forms/InstructorSignupForm.vue'
+  import LandingInfo from '@/components/LandingInfo.vue'
+  import LandingInfoSM from '@/components/LandingInfoSM.vue'
+  import LoginButton from '@/components/LoginButton.vue'
+  import LoginForm from '@/Forms/LoginForm.vue'
+  // import LoginButtons from './LoginButtons.vue'
+  // import SignupButtons from './SignupButtons.vue'
+  // import StudentSignupForm from './Forms/StudentSignupForm.vue'
+  // import InstructorSignupForm from './Forms/InstructorSignupForm.vue'
 
   export default {
     components: {
       LandingInfo,
-      LoginButton,
-      LoginButtons,
-      SignupButtons,
-      LoginForm,
       LandingInfoSM,
-      StudentSignupForm,
-      InstructorSignupForm
+      LoginButton,
+      LoginForm
+      // LoginButtons,
+      // SignupButtons,
+      // StudentSignupForm,
+      // InstructorSignupForm
     },
     data() {
       return {
