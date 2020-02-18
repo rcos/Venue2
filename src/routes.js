@@ -22,7 +22,7 @@ import NewSubmission from './components/Submission/NewSubmission.vue';
 import Submissions from './components/Submission/Submissions.vue';
 import LandingPage from './views/LandingPage.vue';
 import Signup from './components/Signup.vue';
-import Dashboard from './components/Dashboard.vue';
+import Dashboard from './views/Dashboard.vue';
 
 Vue.use(VueRouter);
 

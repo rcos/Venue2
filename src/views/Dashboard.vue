@@ -10,7 +10,7 @@
 
 <script>
   import UserAPI from '@/services/UserAPI.js';
-  import Users from './User/Users'
+  import Users from '@/components/User/Users'
   import { authComputed } from '../vuex/helpers.js'
 
   export default {
