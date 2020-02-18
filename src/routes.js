@@ -1,3 +1,5 @@
+import Vue from 'vue'
+import VueRouter from 'vue-router';
 import Account from './components/Account.vue';
 import Grades from './components/Grades.vue';
 import Home from './components/Home.vue';
@@ -22,7 +24,11 @@ import LandingPage from './components/LandingPage.vue';
 import Signup from './components/Signup.vue';
 import Dashboard from './components/Dashboard.vue';
 
-const routes = [
+Vue.use(VueRouter);
+
+const router = new VueRouter({
+  mode: 'history',
+  routes: [
     { 
         name: 'landing_page',
     	path: '/', 
@@ -131,6 +137,7 @@ const routes = [
         path: '/dashboard',
         component: Dashboard
     }
-];
+  ]
+})
 
-export default routes;
+export default router
