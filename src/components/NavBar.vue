@@ -5,7 +5,12 @@
         <img src="@/assets/venuelogo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
         Venue
       </a>
+      <div class="float-right">
+        <p class="d-inline-block mr-2">Numfor Tiapo</p>
+        <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="">
+      </div>
     </nav>
+
   </div>
 </template>
 
@@ -40,6 +45,16 @@
   .venue-nav {
     border-style: none none solid none;
     border-bottom: #e0e0e0 solid thin;
-    padding-left: 1.5rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
+
+  .settings {
+    cursor: pointer;
+  }
+
+/*  .user-name {
+    position: relative;
+    float: right;
+  }*/
 </style>
