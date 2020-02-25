@@ -11,6 +11,10 @@ let Event = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Section'
 	},
+	is_active: {
+		type: Boolean,
+		default: false
+	}
 	//implement location
 	//implement submission_window
 });
