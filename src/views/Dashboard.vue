@@ -1,6 +1,8 @@
 <template>
   <div>
-    
+    <InfoSection active_section/>
+    <InfoSection courses_section/>
+    <InfoSection upcoming_section/>
   </div>
 </template>
 
@@ -19,6 +21,7 @@
 <script>
   import UserAPI from '@/services/UserAPI.js';
   import Users from '@/components/User/Users'
+  import InfoSection from '@/components/InfoSection'
   import { authComputed } from '../vuex/helpers.js'
 
   export default {
@@ -27,7 +30,8 @@
       ...authComputed
     },
     components: {
-      Users
+      Users,
+      InfoSection
     },
     data(){
       return {
