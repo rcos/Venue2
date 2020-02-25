@@ -95,6 +95,7 @@ body {
   max-width: 70%;
   margin: auto;
   cursor: pointer;
+  outline: none;
 }
 
 /* InputField Styles */
@@ -329,4 +330,20 @@ a:active {
   top: 0;
   bottom: 0;
   background-color: white;
+}
+
+.forgot-password-container {
+  text-align: right;
+  width: 60%;
+  margin: 0 auto;
+  position: relative;
+  font-size: 12px;
+  top: -8px;
+}
+
+.fixed-button-area {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 100px;
 }
