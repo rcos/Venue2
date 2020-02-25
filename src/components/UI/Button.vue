@@ -24,8 +24,13 @@ export default {
   methods: {
     clickFunction: (href, callback) => {
 
-      if (href != undefined) window.location.replace (href);
-      else if (callback != undefined) callback ();
+      if (href != undefined) {
+        window.location.replace (href);
+      }
+      else if (callback != undefined) {
+        console.log (callback);
+        callback ();
+      }
 
     }
   }

@@ -20,8 +20,24 @@
     <StudentSignupForm v-if="show_student_signup_form" v-on:show-signup-buttons="showSignupButtons" />
     <InstructorSignupForm v-if="show_instructor_signup_form" v-on:show-signup-buttons="showSignupButtons" /> -->
     <div :style="{maxWidth: '500px', margin: '0 auto'}">
-      <Logo :scale="3" :textScale="2" :minimized="false" :style="{marginBottom: '0px', marginTop: '150px'}"/>
-      <Button value="Get Started" :onClick="()=>{ alert('Clicked!'); }" :style="{marginTop: '150px'}" />
+
+
+      <Logo v-if="!login_button_clicked" :scale="3" :textScale="2" :minimized="false" :style="{marginBottom: '0px', marginTop: '150px'}"/>
+
+
+      <Logo v-if="login_button_clicked" :scale="2" :textScale="1" :minimized="false" :style="{marginBottom: '0px', marginTop: '150px'}"/>
+      <form v-if="login_button_clicked">
+        <InputField label="username" />
+        <InputField type="password" label="password" />
+        <div class='forgot-password-container'><a href="#">Forgot password?</a></div>
+      </form>
+
+      <div class='fixed-button-area'>
+        <div :style="{maxWidth: '500px', margin: '0 auto'}">
+          <Button v-if="!login_button_clicked" value="Get Started" :onClick="()=>{ login_button_clicked = true; }" :style="{marginTop: '150px'}" />
+          <Button v-if="login_button_clicked" value="Log In" :onClick="()=>{ console.log('logged in!') }" />
+        </div>
+      </div>
     </div>
 
   </div>
@@ -39,6 +55,7 @@
 
   import Logo from './UI/Logo.vue'
   import Button from './UI/Button.vue'
+  import InputField from './UI/InputField.vue'
 
   export default {
     components: {
@@ -51,12 +68,12 @@
       // StudentSignupForm,
       // InstructorSignupForm
       Logo,
-      Button
+      Button,
+      InputField
     },
     data() {
       return {
-        show_login_button: true,
-        show_login_form: false
+        login_button_clicked: false
         // show_login_signup_buttons: true,
         // show_login_buttons: false,
         // show_signup_buttons: false,
