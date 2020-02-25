@@ -1,0 +1,329 @@
+/* Global Style */
+input:focus,
+button:focus {
+  outline: none;
+}
+
+body {
+  background: #FCFEFF;
+    font-family: "Ubuntu Mono";
+    font-weight: normal;
+}
+
+/* Venue Fonts */
+@font-face {
+  font-family: "Exo";
+  src: url("../assets/fonts/Exo/Exo-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Exo";
+  src: url("../assets/fonts/Exo/Exo-Bold.ttf");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "Exo";
+  src: url("../assets/fonts/Exo/Exo-Italic.ttf");
+  font-weight: italic;
+}
+
+@font-face {
+  font-family: "Exo";
+  src: url("../assets/fonts/Exo/Exo-Light.ttf");
+  font-weight: lighter;
+}
+
+@font-face {
+  font-family: "Ubuntu Mono";
+  src: url("../assets/fonts/Ubuntu/UbuntuMono-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Ubuntu Mono";
+  src: url("../assets/fonts/Ubuntu/UbuntuMono-Bold.ttf");
+  font-weight: bold;
+}
+
+/* Logo Styles */
+.logo-container {
+  cursor: pointer;
+  width: 200px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.logo-container .logo-secure,
+.logo-container .logo-attendance {
+  font-size: 12px;
+}
+
+.logo-container .logo-secure {
+  color: #1DAEEB;
+}
+
+.logo-container .logo-attendance {
+  color: #FC5D60;
+}
+
+.logo-text {
+  font-family: "Exo";
+  font-weight: bold;
+  font-size: 25px;
+  position: relative;
+  top: -7px;
+}
+
+.sub-logo {
+  position: relative;
+  top: -24px;
+}
+
+/* Button Style */
+.centered-container {
+  text-align: center !important;
+}
+
+.btn-container {
+  margin: 30px 0px;
+}
+
+.venue-button {
+  width: 80%;
+  background-color: #FC5D60;
+  border: none;
+  font-weight: bold;
+  color: white;
+  border-radius: 5px;
+  font-size: 13px;
+  height: 32px;
+  display: block;
+  max-width: 70%;
+  margin: auto;
+  cursor: pointer;
+}
+
+/* InputField Styles */
+.input-field-container {
+  position: relative;
+  padding: 20px 0px;
+}
+
+.input-field-container .input-field {
+  width: 60%;
+  margin: 0 auto;
+  position: relative;
+}
+
+.input-field-container .input-label {
+  position: absolute;
+  background-color: #FCFEFF;
+  font-size: 12px;
+  padding: 0px 8px;
+  top: -10px;
+  left: 5px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.input-field-container .input-field input {
+  width: 100%;
+  height: 35px;
+  line-height: 35px;
+  padding: 0px 15px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid #D2D2D2;
+  color: rgba(0, 0, 0, 0.7);
+  background-color: #FCFEFF;
+  transition: all 0.25s;
+}
+
+.input-field-container .input-field input:focus {
+  border: 1px solid #919191;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+/* Link Styles */
+a {
+  color: #5597EE;
+}
+
+a:hover {
+  color: #2c70c9;
+  text-decoration: none;
+}
+
+a:active {
+  text-decoration: none;
+}
+
+/* Class Style */
+.class-list {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.class-list ul {
+  margin: 0 auto;
+  padding: 0px;
+}
+
+.class-list li {
+  list-style: none;
+  margin-bottom: 20px;
+  height: 40px;
+  line-height: 40px;
+  box-shadow: 0px 3px 4px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 0px 15px;
+  position: relative;
+}
+
+.class-list .icon-identifier {
+  width: 17px;
+  height: 17px;
+  background-color: #5D68FC;
+  border-radius: 5px;
+  position: relative;
+  top: 3px;
+  position: absolute;
+  top: 11.5px;
+}
+
+.class-list .icon-identifier,
+.class-list .course-code,
+.class-list .course-name {
+  display: inline-block;
+}
+
+.class-list .course-code {
+  width: 90px;
+  font-size: 12px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.class-list .course-name {
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 14px;
+}
+
+/* DailyClasLog style */
+.log-list {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.list-vertical {
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  right: 10px;
+  z-index: 0;
+}
+
+.log-list .identifier-area,
+.log-list .info-area,
+.log-list .time-stamp,
+.log-list .identifier {
+  display: inline-block;
+}
+
+.log-list ul {
+  padding: 0;
+}
+
+.log-list li {
+  list-style: none;
+  height: 45px;
+  line-height: 45px;
+  margin-bottom: 15px;
+}
+
+.log-list li.active {
+  position: relative;
+  left: -40px;
+}
+
+.log-list li.active .identifier-area {
+  left: 40px;
+  z-index: 1;
+}
+
+.log-list .identifier-area {
+  width: 15%;
+  text-align: left;
+}
+
+.log-list .identifier-area {
+  text-align: right;
+  position: relative;
+  left: 0px;
+}
+
+.log-list .identifier-area .time-stamp {
+  font-size: 10px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-right: 5px;
+}
+
+.log-list .identifier {
+  width: 20px;
+  height: 20px;
+  background-color: #80E3A1;
+  vertical-align: middle;
+  border-radius: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.log-list .info-area {
+  width: 75%;
+  margin-left: 20px;
+  text-align: left;
+  height: 40px;
+  line-height: 40px;
+  margin-top: 2.5px;
+  box-shadow: 0px 3px 5px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  position: relative;
+  z-index: 5;
+  background-color: white;
+  cursor: pointer;
+}
+
+.log-list li.active .info-area {
+  box-sizing: border-box;
+  height: 45px;
+  line-height: 45px;
+  top: -2.5px;
+  padding-left: 20px;
+}
+
+.log-list .info-area .class-code,
+.log-list .info-area .class-name {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.log-list .info-area .class-code {
+  font-size: 10px;
+  color: #1591C5;
+  width: 30%;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.log-list .info-area .class-name {
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 14px;
+  width: 70%;
+}
+
+.log-list li.active .info-area .class-code {
+  color: #6BD3FF;
+}
+
+.log-list li.active .info-area .class-name {
+  color: white;
+}
