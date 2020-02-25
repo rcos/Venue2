@@ -53,11 +53,6 @@ body {
   margin: 0 auto;
 }
 
-.logo-container .logo-secure,
-.logo-container .logo-attendance {
-  font-size: 12px;
-}
-
 .logo-container .logo-secure {
   color: #1DAEEB;
 }
@@ -69,14 +64,13 @@ body {
 .logo-text {
   font-family: "Exo";
   font-weight: bold;
-  font-size: 25px;
   position: relative;
   top: -7px;
 }
 
 .sub-logo {
   position: relative;
-  top: -24px;
+  top: -20px;
 }
 
 /* Button Style */
@@ -326,4 +320,13 @@ a:active {
 
 .log-list li.active .info-area .class-name {
   color: white;
+}
+
+.page-overlap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: white;
 }
