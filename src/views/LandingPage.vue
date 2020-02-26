@@ -19,10 +19,10 @@
     <LoginForm v-if="show_login_form" v-on:show-login-buttons="showLoginButtons" />
     <StudentSignupForm v-if="show_student_signup_form" v-on:show-signup-buttons="showSignupButtons" />
     <InstructorSignupForm v-if="show_instructor_signup_form" v-on:show-signup-buttons="showSignupButtons" /> -->
-    <div :style="{maxWidth: '500px', margin: '0 auto'}">
+    <div :style="{maxWidth: '700px', margin: '0 auto'}">
 
 
-      <Logo v-if="!login_button_clicked" :scale="3" :textScale="2" :minimized="false" :style="{marginBottom: '0px', marginTop: '150px'}"/>
+      <Logo v-if="!login_button_clicked" :scale="4" :textScale="3" :minimized="false" :style="{marginBottom: '0px', marginTop: '150px'}"/>
 
 
       <Logo v-if="login_button_clicked" :scale="2" :textScale="1" :minimized="false" :style="{marginBottom: '0px', marginTop: '150px'}"/>
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+
   // import LandingInfo from './LandingInfo.vue'
   // import LoginButton from './LoginButton.vue'
   // import LoginButtons from './LoginButtons.vue'
@@ -53,9 +54,9 @@
   // import StudentSignupForm from './Forms/StudentSignupForm.vue'
   // import InstructorSignupForm from './Forms/InstructorSignupForm.vue'
 
-  import Logo from './UI/Logo.vue'
-  import Button from './UI/Button.vue'
-  import InputField from './UI/InputField.vue'
+  import Logo from '../components/UI/Logo.vue'
+  import Button from '../components/UI/Button.vue'
+  import InputField from '../components/UI/InputField.vue'
 
   export default {
     components: {
