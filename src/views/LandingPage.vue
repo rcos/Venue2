@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Logo v-if="!show_login_form" />
+    <Logo />
     <LoginButton v-if="show_login_button" 
     v-on:show-login-form="showLoginForm"/>
     <LoginForm v-if="show_login_form" v-on:show-login-button="showLoginButton" />
