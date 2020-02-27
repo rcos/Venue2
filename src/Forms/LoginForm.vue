@@ -1,5 +1,5 @@
 <template>
-  <div class="container shadow" style="border:#ededed solid thin; width:25rem; margin-top:1rem;">
+<!--   <div class="container shadow" style="border:#ededed solid thin; width:25rem; margin-top:1rem;">
     <div @click="$emit('show-login-button')" class="back-arrow">←</div>
     <form style=" padding-top:1rem; padding-bottom:1rem;" @submit.prevent="login">
       <div class="form-group">
@@ -10,12 +10,24 @@
       </div>
       <button type="submit" class="btn shadow-sm login-btn">Login</button>
     </form>
+  </div> -->
+  <div>
+    <form class="login-form">
+      <InputField label="username" />
+      <InputField type="password" label="password" />
+      <div class='forgot-password-container'><a href="#">Forgot password?</a></div>
+    </form>
   </div>
 </template>
 
 <script>
+  import InputField from '@/components/InputField.vue'
+
   export default {
     name: 'LoginForm',
+    components: {
+      InputField
+    },
     data() {
       return {
         user: {
@@ -36,8 +48,23 @@
   }
 </script>
 
-<style scoped>
-  .back-arrow {
+<style>
+/* Login Form */
+.login-form {
+  /*border: black solid;*/
+  padding-top: 30px;
+  position: relative;
+  margin: auto; 
+  width: 28rem;
+}
+
+
+/*  .login-form {
+    border: black solid; 
+    margin: auto; 
+    width: 40rem;
+  }*/
+/*  .back-arrow {
     text-align: left; 
     cursor: pointer;
     font-size: 1.5rem;
@@ -65,5 +92,5 @@
   .login-btn:hover {
     border: #00b818 solid;
     color: #00b818;
-  }
+  }*/
 </style>

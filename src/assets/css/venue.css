@@ -36,6 +36,7 @@ html,body {
 @media (max-width: 575.98px) {
   html,body { font-size: 13px; }
   .venue-logo { margin-top: 8rem; }
+  /*.login-form { width: 100%; }*/
 }
 
 
