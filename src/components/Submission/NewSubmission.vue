@@ -55,7 +55,7 @@
         evt.preventDefault() // prevents the form's default action from redirecting the page
         this.submission.event = this.event
         this.submission.submitter = this.submitter
-        // const response = await SubmissionAPI.addSubmission(this.submission)
+        const response = await SubmissionAPI.addSubmission(this.submission)
         this.$router.push({name: 'submissions'})
       },
       selectEvent(event){
