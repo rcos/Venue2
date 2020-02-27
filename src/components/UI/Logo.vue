@@ -29,13 +29,11 @@ export default {
     renderSize: (x) => {
       switch (x) {
         case 1:
-          return "50rem"
+          return "50px"
         case 2:
-          return "80rem"
+          return "80px"
         case 3:
-          return "120rem"
-        case 4:
-          return "250rem"
+          return "120px"
         default:
           return "50px"
       }
@@ -43,23 +41,19 @@ export default {
     renderLogoFontSize: (x) => {
       switch(x) {
         case 1:
-          return '2rem'
+          return '25px'
         case 2:
-          return '3.5rem'
-        case 3:
-          return '5rem'
+          return '32px'
         default:
-          return '25rem'
+          return '25px'
       }
     },
     renderSublogoFontSize: (x) => {
         switch(x) {
           case 1:
-            return '1rem'
+            return '12px'
           case 2:
-            return '1.3rem'
-          case 3:
-            return '1.8rem'
+            return '15px'
           default:
             return '25px'
         }

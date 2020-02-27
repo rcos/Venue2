@@ -48,8 +48,7 @@ body {
 /* Logo Styles */
 .logo-container {
   cursor: pointer;
-  min-width: 200px;
-  max-width: 500px;
+  width: 200px;
   text-align: center;
   margin: 0 auto;
 }
@@ -91,7 +90,7 @@ body {
   color: white;
   border-radius: 5px;
   font-size: 13px;
-  height: 2.5rem;
+  height: 32px;
   display: block;
   max-width: 70%;
   margin: auto;
@@ -330,7 +329,7 @@ a:active {
   right: 0;
   top: 0;
   bottom: 0;
-  background-color: #FCFEFF;
+  background-color: white;
 }
 
 .forgot-password-container {
