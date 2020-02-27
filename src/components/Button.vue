@@ -1,15 +1,13 @@
 <template>
   <div class="container" style="padding:2rem;">
-    <button type="button" class="btn button shadow" id="login" 
+    <button type="button" class="btn button shadow" id="venue-btn" 
       @click="$emit('show-login-form')">Get Started</button>
-<!--     <button type="button" class="btn button shadow" id="signup"
-      @click="$emit('show-signup-buttons')">Sign Up</button> -->
   </div>
 </template>
 
 <script>
   export default {
-    name: 'LoginButton',
+    name: 'Button',
     data() {
       return {
       }
@@ -32,13 +30,8 @@
   border-radius: 5px;
 }
 
-#login:hover {
+#venue-btn:hover {
   background-color: #007bff;
   color: white;
-}
-
-#signup:hover {
-  border: #e83e8c solid;
-  color: #e83e8c;
 }
 </style>
