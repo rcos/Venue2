@@ -14,14 +14,12 @@
 
 <script>
   import Logo from '@/components/Logo.vue'
-  import LandingInfoSM from '@/components/LandingInfoSM.vue'
   import Button from '@/components/Button.vue'
   import LoginForm from '@/Forms/LoginForm.vue'
 
   export default {
     components: {
       Logo,
-      LandingInfoSM,
       Button,
       LoginForm
     },

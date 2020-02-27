@@ -20,7 +20,6 @@
 
 <script>
   import UserAPI from '@/services/UserAPI.js';
-  import Users from '@/components/User/Users'
   import InfoSection from '@/components/InfoSection'
   import { authComputed } from '../vuex/helpers.js'
 
@@ -30,7 +29,6 @@
       ...authComputed
     },
     components: {
-      Users,
       InfoSection
     },
     data(){

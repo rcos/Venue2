@@ -1,25 +1,23 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router';
-import Account from './components/Account.vue';
-import Grades from './components/Grades.vue';
 import Home from './components/Home.vue';
-import Users from './components/User/Users.vue';
-import EditUser from './components/User/EditUser.vue';
-import Instructors from './components/User/Instructors.vue';
-import Students from './components/User/Students.vue';
-import Course from './components/Course/Course.vue';
-import EditCourse from './components/Course/EditCourse.vue';
-import NewCourse from './components/Course/NewCourse.vue';
-import Courses from './components/Course/Courses.vue'; 
-import Sections from './components/Section/Sections.vue';
-import EditSection from './components/Section/EditSection.vue';
-import NewSection from './components/Section/NewSection.vue';
-import NewUser from './components/User/NewUser.vue';
-import NewEvent from './components/Event/NewEvent.vue';
-import Events from './components/Event/Events.vue';
-import EditEvent from './components/Event/EditEvent.vue';
-import NewSubmission from './components/Submission/NewSubmission.vue';
-import Submissions from './components/Submission/Submissions.vue';
+import Users from './components/admin/User/Users.vue';
+import EditUser from './components/admin/User/EditUser.vue';
+import Instructors from './components/admin/User/Instructors.vue';
+import Students from './components/admin/User/Students.vue';
+import Course from './components/admin/Course/Course.vue';
+import EditCourse from './components/admin/Course/EditCourse.vue';
+import NewCourse from './components/admin/Course/NewCourse.vue';
+import Courses from './components/admin/Course/Courses.vue'; 
+import Sections from './components/admin/Section/Sections.vue';
+import EditSection from './components/admin/Section/EditSection.vue';
+import NewSection from './components/admin/Section/NewSection.vue';
+import NewUser from './components/admin/User/NewUser.vue';
+import NewEvent from './components/admin/Event/NewEvent.vue';
+import Events from './components/admin/Event/Events.vue';
+import EditEvent from './components/admin/Event/EditEvent.vue';
+import NewSubmission from './components/admin/Submission/NewSubmission.vue';
+import Submissions from './components/admin/Submission/Submissions.vue';
 import LandingPage from './views/LandingPage.vue';
 import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
@@ -33,14 +31,6 @@ const router = new VueRouter({
         name: 'landing_page',
     	path: '/', 
     	component: LandingPage
-    },
-    { 
-    	path: '/Account', 
-    	component: Account 
-    },
-    { 
-    	path: '/Grades', 
-    	component: Grades 
     },
     {  
         name: 'new_user',
