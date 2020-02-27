@@ -1,14 +1,39 @@
 /* Global Style */
+
 input:focus,
 button:focus {
   outline: none;
 }
 
-body {
+html,body {
   background: #FCFEFF;
-    font-family: "Ubuntu Mono";
-    font-weight: normal;
+  font-family: "Ubuntu Mono";
+  font-weight: normal;
+  /*font-size: 16px;*/
 }
+
+/* Change font size with screen size */
+
+/*Extra large devices (large desktops, 1200px and up)*/
+@media (max-width: 1199.98px) { 
+  html,body { font-size: 17px; }
+}
+
+/*Large devices (desktops, 992px and up)*/
+@media (max-width: 991.98px) { 
+  html,body { font-size: 16px; }
+}
+
+/*Medium devices (tablets, 768px and up)*/
+@media (max-width: 767.98px) { 
+  html, body { font-size: 15px; }
+}
+
+/*Small devices (landscape phones, 576px and up)*/
+@media (max-width: 575.98px) {
+  html,body { font-size: 13px; }
+}
+
 
 /* Venue Fonts */
 @font-face {
@@ -69,14 +94,14 @@ body {
 .logo-text {
   font-family: "Exo";
   font-weight: bold;
-  font-size: 25px;
+  /*font-size: 25px;*/
   position: relative;
   top: -7px;
 }
 
 .sub-logo {
   position: relative;
-  top: -24px;
+  /*top: -24px;*/
 }
 
 /* Button Style */
