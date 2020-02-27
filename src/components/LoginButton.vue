@@ -24,22 +24,21 @@
 <style scoped>
 .button {
   background-color: white;
-  border-radius: 0%;
   font-size: 1.5rem;
-/*  margin-right: 2rem;
-  margin-left: 2rem;*/
   width: 8rem;
   margin-top: 1.5rem;
-  border: white solid;
+  border: #007bff solid;
+  color: #007bff;
+  border-radius: 5px;
+}
+
+#login:hover {
+  background-color: #007bff;
+  color: white;
 }
 
 #signup:hover {
   border: #e83e8c solid;
   color: #e83e8c;
-}
-
-#login:hover {
-  border: #007bff solid;
-  color: #007bff;
 }
 </style>
