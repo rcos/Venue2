@@ -17,6 +17,7 @@ html,body {
 /*Extra large devices (large desktops, 1200px and up)*/
 @media (min-width: 1199.98px) { 
   html,body { font-size: 17px; }
+  .venue-logo { margin-top: 2rem; }
 }
 
 /*Large devices (desktops, 992px and up)*/
@@ -99,11 +100,12 @@ html,body {
   font-weight: bold;
   /*font-size: 25px;*/
   position: relative;
-  top: -7px;
+  margin-top: -20px;
 }
 
 .sub-logo {
   position: relative;
+  margin-top: -20px;
   /*top: -24px;*/
 }
 
