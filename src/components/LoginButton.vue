@@ -1,7 +1,7 @@
 <template>
   <div class="container" style="padding:2rem;">
     <button type="button" class="btn button shadow" id="login" 
-      @click="$emit('show-login-form')">Login</button>
+      @click="$emit('show-login-form')">Get Started</button>
 <!--     <button type="button" class="btn button shadow" id="signup"
       @click="$emit('show-signup-buttons')">Sign Up</button> -->
   </div>
@@ -25,7 +25,7 @@
 .button {
   background-color: white;
   font-size: 1.5rem;
-  width: 8rem;
+  width: 12rem;
   margin-top: 1.5rem;
   border: #007bff solid;
   color: #007bff;
