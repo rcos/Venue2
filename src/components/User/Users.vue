@@ -19,6 +19,8 @@
               </tr>
           </tbody>
       </table>
+
+      <button @click="logout">Log out</button>
   </div>
 </template>
 
@@ -43,6 +45,11 @@
       async deleteUser(id){
         const response = await UserAPI.deleteUser(id);
         this.users.splice(this.users.findIndex(i => i._id == id), 1);
+      },
+      logout () {
+        console.log("Log out!")
+        this.$store.dispatch('logout')
+          .then(() => this.$router.push({name: 'dashboard'}))
       }
     }
   }
