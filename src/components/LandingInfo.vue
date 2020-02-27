@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <img src="../assets/venuelogo.svg" style="width:15rem; padding-top:2rem;" />
+    <img src="@/assets/venue-logo.svg" style="width:15rem; padding-top:2rem;" />
     <div style="font-size:8rem; color:black;">Venue</div>
     <div style="font-size:1.5rem; font-style:italic;">
       <span style="color:#e83e8c">secure </span> 
