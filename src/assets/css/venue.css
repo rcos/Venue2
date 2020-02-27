@@ -74,10 +74,6 @@ html,body {
 }
 
 /* Logo Styles */
-.venue-logo {
-  width:15rem; 
-}
-
 .logo-container {
   cursor: pointer;
   width: 200px;

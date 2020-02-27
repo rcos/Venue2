@@ -1,9 +1,14 @@
 <template>
   <div>
-    <Logo />
-    <Button v-if="show_login_button" 
-    v-on:show-login-form="showLoginForm"/>
-    <LoginForm v-if="show_login_form" v-on:show-login-button="showLoginButton" />
+    <div v-if="!show_login_form">
+      <Logo v-bind:show_large_logo="true" />
+      <Button v-bind:btn_str="'Get Started'" v-on:show-login-form="showLoginForm"/>
+    </div>
+    <div v-else>
+      <Logo v-bind:show_large_logo="false" />
+      <LoginForm />
+      <Button v-bind:btn_str="'Login'"/>
+    </div>
   </div>
 </template>
 
@@ -22,20 +27,14 @@
     },
     data() {
       return {
-        show_login_button: true,
         show_login_form: false
       }
     },
     created() {
     },
     methods: {
-      showLoginButton() {
-        this.show_login_button = true
-        this.show_login_form = false
-      },
       showLoginForm() {
         this.show_login_form = true
-        this.show_login_button = false
       }
     }
   }
