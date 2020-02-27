@@ -17,21 +17,25 @@ html,body {
 /*Extra large devices (large desktops, 1200px and up)*/
 @media (max-width: 1199.98px) { 
   html,body { font-size: 17px; }
+  .venue-logo { margin-top: 2rem; }
 }
 
 /*Large devices (desktops, 992px and up)*/
 @media (max-width: 991.98px) { 
   html,body { font-size: 16px; }
+  .venue-logo { margin-top: 4rem; }
 }
 
 /*Medium devices (tablets, 768px and up)*/
 @media (max-width: 767.98px) { 
   html, body { font-size: 15px; }
+  .venue-logo { margin-top: 6rem; }
 }
 
 /*Small devices (landscape phones, 576px and up)*/
 @media (max-width: 575.98px) {
   html,body { font-size: 13px; }
+  .venue-logo { margin-top: 8rem; }
 }
 
 
@@ -71,6 +75,10 @@ html,body {
 }
 
 /* Logo Styles */
+.venue-logo {
+  width:15rem; 
+}
+
 .logo-container {
   cursor: pointer;
   width: 200px;
