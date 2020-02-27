@@ -10,7 +10,7 @@
 
 <script>
   export default {
-    name: 'LandingInfo',
+    name: 'Logo',
     data() {
       return {
       }

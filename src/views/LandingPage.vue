@@ -1,7 +1,7 @@
 <template>
   <div>
-    <LandingInfo v-if="!show_login_form" />
-    <LandingInfoSM v-if="show_login_form" />
+    <Logo v-if="!show_login_form" />
+    <!-- <LandingInfoSM v-if="show_login_form" /> -->
     <LoginButton v-if="show_login_button" 
     v-on:show-login-form="showLoginForm"/>
     <LoginForm v-if="show_login_form" v-on:show-login-button="showLoginButton" />
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-  import LandingInfo from '@/components/LandingInfo.vue'
+  import Logo from '@/components/Logo.vue'
   import LandingInfoSM from '@/components/LandingInfoSM.vue'
   import LoginButton from '@/components/LoginButton.vue'
   import LoginForm from '@/Forms/LoginForm.vue'
@@ -34,7 +34,7 @@
 
   export default {
     components: {
-      LandingInfo,
+      Logo,
       LandingInfoSM,
       LoginButton,
       LoginForm
