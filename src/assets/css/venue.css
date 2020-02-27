@@ -15,9 +15,8 @@ html,body {
 /* Change font size with screen size */
 
 /*Extra large devices (large desktops, 1200px and up)*/
-@media (max-width: 1199.98px) { 
+@media (min-width: 1199.98px) { 
   html,body { font-size: 17px; }
-  .venue-logo { margin-top: 2rem; }
 }
 
 /*Large devices (desktops, 992px and up)*/
