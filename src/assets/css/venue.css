@@ -13,35 +13,35 @@ body {
 /* Venue Fonts */
 @font-face {
   font-family: "Exo";
-  src: url("../assets/fonts/Exo/Exo-Regular.ttf");
+  src: url("../fonts/Exo/Exo-Regular.ttf");
 }
 
 @font-face {
   font-family: "Exo";
-  src: url("../assets/fonts/Exo/Exo-Bold.ttf");
+  src: url("../fonts/Exo/Exo-Bold.ttf");
   font-weight: bold;
 }
 
 @font-face {
   font-family: "Exo";
-  src: url("../assets/fonts/Exo/Exo-Italic.ttf");
+  src: url("../fonts/Exo/Exo-Italic.ttf");
   font-weight: italic;
 }
 
 @font-face {
   font-family: "Exo";
-  src: url("../assets/fonts/Exo/Exo-Light.ttf");
+  src: url("../fonts/Exo/Exo-Light.ttf");
   font-weight: lighter;
 }
 
 @font-face {
   font-family: "Ubuntu Mono";
-  src: url("../assets/fonts/Ubuntu/UbuntuMono-Regular.ttf");
+  src: url("../fonts/Ubuntu/UbuntuMono-Regular.ttf");
 }
 
 @font-face {
   font-family: "Ubuntu Mono";
-  src: url("../assets/fonts/Ubuntu/UbuntuMono-Bold.ttf");
+  src: url("../fonts/Ubuntu/UbuntuMono-Bold.ttf");
   font-weight: bold;
 }
 
