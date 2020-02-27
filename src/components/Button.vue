@@ -1,13 +1,16 @@
 <template>
   <div class="container" style="padding:2rem;">
     <button type="button" class="btn button shadow" id="venue-btn" 
-      @click="$emit('show-login-form')">Get Started</button>
+      @click="$emit('show-login-form')">{{ btn_str }}</button>
   </div>
 </template>
 
 <script>
   export default {
     name: 'Button',
+    props: {
+      btn_str: String
+    },
     data() {
       return {
       }
