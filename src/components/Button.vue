@@ -1,7 +1,7 @@
 <template>
   <div class="container" style="padding:2rem;">
     <button type="button" class="btn button shadow" id="venue-btn" 
-      @click="$emit('show-login-form')">{{ btn_str }}</button>
+      @click="$emit('button-clicked')">{{ btn_str }}</button>
   </div>
 </template>
 

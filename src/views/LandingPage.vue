@@ -2,12 +2,12 @@
   <div>
     <div v-if="!show_login_form">
       <Logo v-bind:show_large_logo="true" />
-      <Button v-bind:btn_str="'Get Started'" v-on:show-login-form="showLoginForm"/>
+      <Button v-bind:btn_str="'Get Started'" v-on:button-clicked="showLoginForm"/>
     </div>
     <div v-else>
       <Logo v-bind:show_large_logo="false" />
-      <LoginForm />
-      <Button v-bind:btn_str="'Login'"/>
+      <LoginForm ref="LoginForm" />
+      <Button v-bind:btn_str="'Login'" v-on:button-clicked="login"/>
     </div>
   </div>
 </template>
@@ -35,6 +35,10 @@
     methods: {
       showLoginForm() {
         this.show_login_form = true
+      },
+      login() {
+        console.log("Login was called")
+        this.$refs.LoginForm.login()
       }
     }
   }
