@@ -5,8 +5,8 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <a class="navbar-brand" :href="'/dashboard'">
-        <img src="@/assets/venuelogo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
-        Venue
+        <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+        <!-- <div class="logo-text">Venue</div> -->
       </a>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mx-auto">
