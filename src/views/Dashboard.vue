@@ -1,8 +1,8 @@
 <template>
   <div>
-    <InfoSection active_section/>
-    <InfoSection courses_section/>
-    <InfoSection upcoming_section/>
+    <DashboardSection active_section/>
+    <DashboardSection courses_section/>
+    <DashboardSection upcoming_section/>
   </div>
 </template>
 
@@ -20,7 +20,7 @@
 
 <script>
   import UserAPI from '@/services/UserAPI.js';
-  import InfoSection from '@/components/InfoSection'
+  import DashboardSection from '@/components/DashboardSection'
   import { authComputed } from '../vuex/helpers.js'
 
   export default {
@@ -29,7 +29,7 @@
       ...authComputed
     },
     components: {
-      InfoSection
+      DashboardSection
     },
     data(){
       return {
