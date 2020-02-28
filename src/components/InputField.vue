@@ -1,7 +1,8 @@
 <template>
   <div class="input-field-container">
     <div class="input-field">
-      <div class="input-label">{{label}}</div><input :type="type">
+      <div class="input-label">{{label}}</div>
+      <input v-model="input_value" :type="type">
     </div>
   </div>
 </template>
@@ -17,6 +18,19 @@
       label: {
         type: String,
         default: "<empty>"
+      },
+    },
+    data() {
+      return {
+        input_value: {
+          type: String,
+          default: ""
+        }
+      }
+    },
+    methods: {
+      emitInputValue() {
+        this.$emit('set-input-value', this.input_value)
       }
     }
   }

@@ -14,6 +14,8 @@
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.last_name }}</td>
                 <td>{{ user.is_instructor }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.password }}</td>
                 <td><router-link :to="{name: 'edit_user', params: { id: user._id }}" class="btn btn-primary">Edit</router-link></td>
                 <td><button class="btn btn-danger" @click.prevent="deleteUser(user._id)">Delete</button></td>
               </tr>
