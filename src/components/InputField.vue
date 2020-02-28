@@ -22,10 +22,7 @@
     },
     data() {
       return {
-        input_value: {
-          type: String,
-          default: ""
-        }
+        input_value: ""
       }
     },
     methods: {

@@ -14,7 +14,7 @@
   <div>
     <form class="login-form">
       <InputField ref="email_field" v-on:set-input-value="setEmail" label="username" />
-      <InputField ref="password_field" v-on:set-input-value="setPassword" type="password" label="password" />
+      <InputField ref="password_field" v-on:set-input-value="setPassword" label="password" type="password" />
       <div class='forgot-password-container'><a href="#">Forgot password?</a></div>
     </form>
   </div>

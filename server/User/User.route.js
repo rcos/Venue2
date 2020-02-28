@@ -41,7 +41,7 @@ userRoutes.route('/login').post(function (req, res) {
         const token = jwt.sign({ current_user }, 'the_secret_key')
         console.log("After signing, here is the user: " + current_user +
           " with email " + current_user.email + " with password: " + current_user.password)
-        console.log("Sending back user with email: " + current_user.email +
+        console.log("Sending back user " + current_user + " with email: " + current_user.email +
           " and password " + current_user.password + " with token: " + token)
         res.json({token, user})
       }
