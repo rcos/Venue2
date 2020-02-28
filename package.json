@@ -17,6 +17,7 @@
     "luxon": "^1.21.2",
     "node-sass": "^4.12.0",
     "popper.js": "^1.15.0",
+    "react-device-detect": "^1.11.14",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.5",
     "vue-breakpoints": "^1.1.0",
