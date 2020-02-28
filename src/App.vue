@@ -1,19 +1,19 @@
 <template>
   <div id="app">
-    <NavBarNew v-if="this.$route.name != 'landing_page'" />
+    <NavBar v-if="this.$route.name != 'landing_page'"></NavBar>
     <router-view />
     <Footer />
   </div>
 </template>
 <script>
 
-import NavBarNew from "./components/NavBarNew.vue";
+import NavBar from "./components/NavBar.vue";
 import Footer from "./components/Footer.vue";
 import '@/assets/css/venue.css'
 
 export default {
   components: {
-    NavBarNew,
+    NavBar,
     Footer
   }
   //initially displayNav is false because the first page loaded is the homepage

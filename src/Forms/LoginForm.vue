@@ -45,7 +45,7 @@
         //   + this.$refs.password_field.input_value)
         this.$refs.email_field.emitInputValue()
         this.$refs.password_field.emitInputValue()
-        console.log("Current User: " + this.user + " email: " + this.user.email +
+        console.log("Current User: " + this.user + " email: " + this.user.email + 
           " password: " + this.user.password)
         this.$store.dispatch('login', this.user)
           .then(() => this.$router.push({name: 'dashboard'}))
@@ -68,17 +68,43 @@
   /*border: black solid;*/
   padding-top: 30px;
   position: relative;
-  margin: auto;
+  margin: auto; 
   width: 28rem;
 }
 
-.forgot-password-container {
-  font-size: 14px;
-  display: block;
-  width: 260px;
-  margin: 0 auto;
-  text-align: right;
-  position: relative;
-  top: -10px;
-}
+
+/*  .login-form {
+    border: black solid; 
+    margin: auto; 
+    width: 40rem;
+  }*/
+/*  .back-arrow {
+    text-align: left; 
+    cursor: pointer;
+    font-size: 1.5rem;
+  }
+
+  .login-form {
+    border-style: none none solid none;
+    border-radius: 0px;
+  }
+
+  .login-form:focus {
+      outline:none !important;
+      outline-width: 0 !important;
+      box-shadow: none;
+      -moz-box-shadow: none;
+      -webkit-box-shadow: none;
+      border-bottom:1px solid #00b818;
+  }
+
+  .login-btn {
+    border-radius: 0px;
+    border: white solid;
+  }
+
+  .login-btn:hover {
+    border: #00b818 solid;
+    color: #00b818;
+  }*/
 </style>
