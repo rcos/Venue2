@@ -43,7 +43,7 @@ userRoutes.route('/login').post(function (req, res) {
           " with email " + current_user.email + " with password: " + current_user.password)
         console.log("Sending back user " + current_user + " with email: " + current_user.email +
           " and password " + current_user.password + " with token: " + token)
-        res.json({token, user})
+        res.json({token, current_user})
       }
     })
   }else{

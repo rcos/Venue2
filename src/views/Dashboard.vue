@@ -37,8 +37,15 @@
       }
     },
     created() {
+      this.getCurrentUser()
     },
     methods: {
+      getCurrentUser() {
+        const user_string = localStorage.getItem('user')
+        const user_data = JSON.parse(user_string)
+        this.user = user_data.current_user[0]
+        console.log("user_data: " + this.user.first_name)
+      },
       logOut() {
         this.$store.dispatch('logout')
       }
