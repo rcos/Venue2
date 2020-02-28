@@ -25,11 +25,19 @@
             <a v-if="this.$route.name === 'grading'" class="nav-link active" href="#">Grading</a>
             <a v-else class="nav-link" href="#">Grading</a>
           </li>
+          <show-at breakpoint="small">
+            <li class="nav-item">
+              <a v-if="this.$route.name === 'settings'" class="nav-link active" href="#">Settings</a>
+              <a v-else class="nav-link" href="#">Settings</a>
+            </li>
+          </show-at>
         </ul>
       </div>
       <div class="float-right">
         <p class="d-inline-block mr-2">Numfor Tiapo</p>
-        <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="">
+        <hide-at breakpoint="small">
+          <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="">
+        </hide-at>
       </div>
     </nav>
 
