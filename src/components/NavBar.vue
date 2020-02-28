@@ -15,10 +15,6 @@
             <a v-else class="nav-link" href="#">Dashboard</a>
           </li>
           <li class="nav-item">
-            <a v-if="this.$route.name === 'courses'" class="nav-link active" href="#">Courses</a>
-            <a v-else class="nav-link" href="#">Courses</a>
-          </li>
-          <li class="nav-item">
             <a v-if="this.$route.name === 'events'" class="nav-link active" href="#">Events</a>
             <a v-else class="nav-link" href="#">Events</a>
           </li>
