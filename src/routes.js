@@ -30,7 +30,8 @@ const router = new VueRouter({
     { 
         name: 'landing_page',
     	path: '/', 
-    	component: LandingPage
+    	component: LandingPage,
+        meta: { requiresNoLogin: true }
     },
     {  
         name: 'new_user',
@@ -135,6 +136,8 @@ router.beforeEach((to, from, next) => {
   const loggedIn = localStorage.getItem('user')
   if (to.matched.some(record => record.meta.requiresAuth) && !loggedIn) {
     next('/')
+  } else if(to.matched.some(record => record.meta.requiresNoLogin) && loggedIn) {
+    next('/dashboard')
   } else {
     next()
   }
