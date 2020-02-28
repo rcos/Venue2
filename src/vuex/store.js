@@ -36,6 +36,8 @@ export default new Vuex.Store({
         })
     },
     login({ commit }, user) {
+      console.log("In login action! Passing user: " + user + " with email: " + 
+        user.email + " and password: " + user.password)
       return UserAPI.login(user)
         .then(({data}) => {
           console.log(data)

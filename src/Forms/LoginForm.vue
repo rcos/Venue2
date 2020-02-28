@@ -13,8 +13,8 @@
   </div> -->
   <div>
     <form class="login-form">
-      <InputField label="username" />
-      <InputField type="password" label="password" />
+      <InputField ref="email_field" v-on:set-input-value="setEmail" label="username" />
+      <InputField ref="password_field" v-on:set-input-value="setPassword" type="password" label="password" />
       <div class='forgot-password-container'><a href="#">Forgot password?</a></div>
     </form>
   </div>
@@ -40,9 +40,23 @@
     },
     methods: {
       login() {
-        console.log("Login function was called")
+        console.log("Login function was called.")
+        // console.log("Email: " + this.$refs.email_field.input_value + " Password: "
+        //   + this.$refs.password_field.input_value)
+        this.$refs.email_field.emitInputValue()
+        this.$refs.password_field.emitInputValue()
+        console.log("Current User: " + this.user + " email: " + this.user.email + 
+          " password: " + this.user.password)
         this.$store.dispatch('login', this.user)
           .then(() => this.$router.push({name: 'dashboard'}))
+      },
+      setEmail(email) {
+        console.log("Received email: " + email)
+        this.user.email = email
+      },
+      setPassword(password) {
+        console.log("Received password: " + password)
+        this.user.password = password
       }
     }
   }

@@ -27,13 +27,17 @@ userRoutes.route('/login').post(function (req, res) {
   console.log("Entered login route")
   let user = req.body.user
   console.log("Received user: " + user)
+  console.log("Outside if statement. User was passed to request body with email: " 
+    + user.email + " password: " + user.password)
   if(user){
-    console.log("User was passed to request body")
+    console.log("Inside if statement. Searching for user with email: " + user.email
+     + " password: " + user.password)
     User.find({ email: user.email, password: user.password }, function(error, current_user) {
       if(error)
         console.log("Error unable to find user: " + user)
       else {
-        console.log("Async call fetched user: " + current_user)
+        console.log("Async call fetched user: " + current_user + " with email: " + current_user.email
+          + " and password: " + current_user.password)
         const token = jwt.sign({ current_user }, 'the_secret_key')
         console.log("After signing, here is the user: " + current_user +
           " with email " + current_user.email + " with password: " + current_user.password)
