@@ -36,7 +36,9 @@
       },
       login() {
         console.log("Login was called")
+
         this.$refs.LoginForm.login()
+
       }
     }
   }
