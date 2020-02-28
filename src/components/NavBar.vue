@@ -13,7 +13,7 @@
       </show-at>
       <show-at breakpoint="mediumAndBelow">
         <div class="float-right">
-          <p class="d-inline-block mr-2">Numfor Tiapo</p>
+          <p class="d-inline-block mr-2">{{ current_user.first_name }} {{ current_user.last_name }}</p>
         </div>
       </show-at>
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -40,7 +40,7 @@
       </div>
       <hide-at breakpoint="mediumAndBelow">
         <div class="float-right">
-          <p class="d-inline-block mr-2">Numfor Tiapo</p>
+          <p class="d-inline-block mr-2">{{ current_user.first_name }} {{ current_user.last_name }}</p>
           <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="">
         </div>
       </hide-at>
@@ -64,17 +64,17 @@
     },
     data(){
       return {
+        current_user: {}
       }
     },
     created() {
       this.getCurrentUser()
     },
     methods: {
-      // Get user from localstorage
       getCurrentUser() {
-        const userString = localStorage.getItem('user')
-        const userData = JSON.parse(userString)
-        console.log("user: " + userData)
+        const user_string = localStorage.getItem('user')
+        const user_data = JSON.parse(user_string)
+        this.current_user = user_data.current_user[0]
       }
     }
   }
