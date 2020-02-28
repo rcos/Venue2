@@ -74,7 +74,7 @@
       getCurrentUser() {
         const user_string = localStorage.getItem('user')
         const user_data = JSON.parse(user_string)
-        this.current_user = user_data.current_user[0]
+        this.current_user = user_data.current_user
       }
     }
   }
