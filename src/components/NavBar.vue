@@ -1,13 +1,16 @@
 <template>
   <div>
     <nav class="navbar navbar-light venue-nav navbar-expand-lg">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <a class="navbar-brand" :href="'/dashboard'">
-        <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
-        <!-- <div class="logo-text">Venue</div> -->
-      </a>
+      <hide-at breakpoint="small">
+        <a class="navbar-brand navbar-logo" :href="'/dashboard'">
+          <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+        </a>
+      </hide-at>
+      <show-at breakpoint="small">
+        <a class="navbar-brand navbar-logo" style="border:none;" data-toggle="collapse" data-target="#navbarNav">
+          <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+        </a>
+      </show-at>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mx-auto">
           <li class="nav-item">
@@ -34,6 +37,7 @@
 </template>
 
 <script>
+  import {showAt, hideAt} from 'vue-breakpoints'
   import UserAPI from '@/services/UserAPI.js';
 
   export default {
@@ -41,6 +45,8 @@
     computed: {
     },
     components: {
+      hideAt,
+      showAt
     },
     data(){
       return {
