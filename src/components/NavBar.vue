@@ -11,6 +11,12 @@
           <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
         </a>
       </show-at>
+      <div class="float-right">
+        <p class="d-inline-block mr-2">Numfor Tiapo</p>
+        <hide-at breakpoint="small">
+          <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="">
+        </hide-at>
+      </div>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mx-auto">
           <li class="nav-item">
@@ -33,12 +39,7 @@
           </show-at>
         </ul>
       </div>
-      <div class="float-right">
-        <p class="d-inline-block mr-2">Numfor Tiapo</p>
-        <hide-at breakpoint="small">
-          <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="">
-        </hide-at>
-      </div>
+
     </nav>
 
   </div>
