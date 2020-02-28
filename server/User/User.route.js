@@ -32,9 +32,11 @@ userRoutes.route('/login').post(function (req, res) {
   if(user){
     console.log("Inside if statement. Searching for user with email: " + user.email
      + " password: " + user.password)
-    User.find({ email: user.email, password: user.password }, function(error, current_user) {
-      if(error)
+    User.findOne({ email: user.email, password: user.password }, function(error, current_user) {
+      if(error || !current_user){
         console.log("Error unable to find user: " + user)
+        res.status(404).json({ error: 'Invalid Login Credentials. Please try again' })
+      }
       else {
         console.log("Async call fetched user: " + current_user + " with email: " + current_user.email
           + " and password: " + current_user.password)
