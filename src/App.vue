@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- <NavBar v-if="this.$route.name != 'landing_page'"></NavBar> -->
-    <div :style="{marginTop: '145px'}">
+    <div v-if="this.$route.name != 'landing_page'" :style="{marginTop: '145px'}">
       <div v-if="!mobileView()"><DesktopNavbar /></div>
       <div v-if="mobileView()"><MobileNavbar /></div>
     </div>

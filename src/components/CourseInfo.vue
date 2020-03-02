@@ -26,6 +26,16 @@
             <div class="title">Attendance History</div>
               <div v-for="month_key of Object.keys(course_data.attendance_history)">
                 <div class="subtitle">{{intToMonth(month_key)}}</div>
+
+                <div class="attendance-pill-area">
+
+                  <div class="attendance-pill" v-for="day_key of Object.keys(course_data.attendance_history[month_key])">
+                    <div :class="course_data.attendance_history[month_key][day_key] == true ? 'day-area present' : 'day-area absent'">{{day_key}}</div>
+                    <div class="attend-area">{{course_data.attendance_history[month_key][day_key] == true ? "Present" : "Absent"}}</div>
+                  </div>
+
+                </div>
+
               </div>
           </div>
 
@@ -283,7 +293,6 @@ background-color: #E36064;
 }
 
 .desktop-course-info-container .attendance-history-section {
-
 }
 
 .desktop-course-info-container .attendance-history-section .title {
@@ -294,7 +303,7 @@ background-color: #E36064;
 
 .desktop-course-info-container .attendance-history-section .subtitle {
   color: rgba(0, 0, 0, 0.7);
-  margin: 10px 0 10px 20px;
+  margin: 30px 0 10px 20px;
   font-size: 17px;
 }
 
@@ -303,7 +312,10 @@ background-color: #E36064;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 120px;
+  height: 150px;
+  background-color: white;
+  box-sizing: border-box;
+  padding-top: 30px;
 }
 
 .desktop-course-info-container .attend-button-section .attend-button {
@@ -315,5 +327,56 @@ background-color: #E36064;
   color: #FC5D60;
   cursor: no-drop;
   font-weight: bold;
+}
+
+.desktop-course-info-container .attendance-history-section .attendance-pill-area {
+  width: 90%;
+}
+
+.desktop-course-info-container .attendance-history-section .attendance-pill-area .attendance-pill {
+  width: 180px;
+  height: 60px;
+  box-sizing: border-box;
+  display: inline-block;
+}
+
+.desktop-course-info-container .attendance-history-section .attendance-pill-area .attendance-pill .attend-area,
+.desktop-course-info-container .attendance-history-section .attendance-pill-area .attendance-pill .day-area {
+   display: inline-block;
+   vertical-align: top;
+}
+
+.desktop-course-info-container .attendance-history-section .attendance-pill-area .attendance-pill .day-area {
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  position: relative;
+  top: 12.5px;
+  margin: 0 10px;
+  border-radius: 3px;
+  color: white;
+  font-size: 18px;
+  text-align: center;
+}
+
+.desktop-course-info-container .attendance-history-section .attendance-pill-area .attendance-pill .day-area.present {
+  background-color: #58DE85;
+}
+
+.desktop-course-info-container .attendance-history-section .attendance-pill-area .attendance-pill .day-area.absent {
+  background-color: #E36064;
+}
+
+.desktop-course-info-container .attendance-history-section .attendance-pill-area .attendance-pill .attend-area {
+  background-color: white;
+  box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.07);
+  width: 60%;
+  height: 42px;
+  border-radius: 5px;
+  line-height: 42px;
+  position: relative;
+  top: 9px;
+  text-align: center;
+
 }
 </style>

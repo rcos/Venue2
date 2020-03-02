@@ -71,6 +71,15 @@
   width: 28rem;
 }
 
+.forgot-password-container {
+  font-size: 12px;
+  width: 60%;
+  margin: 0 auto;
+  text-align: right;
+  position: relative;
+  top: -5px;
+}
+
 
 /*  .login-form {
     border: black solid;
