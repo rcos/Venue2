@@ -1,6 +1,6 @@
-import {isMobile, isIE} from 'react-device-detect'
-
-export default PlatformAPI = {
-  isMobile: () => isMobile,
-  isIE: () => isIE
+let mobileMode = () => {
+  console.log("Inner width: ", window.innerWidth)
+  return true
 }
+
+export default { mobileMode }

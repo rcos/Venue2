@@ -15,19 +15,19 @@ html,body {
 /* Change font size with screen size */
 
 /*Extra large devices (large desktops, 1200px and up)*/
-@media (min-width: 1199.98px) { 
+@media (min-width: 1199.98px) {
   html,body { font-size: 17px; }
   .venue-logo { margin-top: 2rem; }
 }
 
 /*Large devices (desktops, 992px and up)*/
-@media (max-width: 991.98px) { 
+@media (max-width: 991.98px) {
   html,body { font-size: 16px; }
   .venue-logo { margin-top: 4rem; }
 }
 
 /*Medium devices (tablets, 768px and up)*/
-@media (max-width: 767.98px) { 
+@media (max-width: 767.98px) {
   html, body { font-size: 15px; }
   .venue-logo { margin-top: 6rem; }
 }
@@ -363,4 +363,60 @@ a:active {
 
 .log-list li.active .info-area .class-name {
   color: white;
+}
+
+.universal-centered-view {
+  min-width: 300px;
+  max-width: 600px;
+  box-sizing: border-box;
+  padding: 5rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.venue-button-two {
+  position: relative;
+  min-width: 300px;
+  max-width: 500px;
+  margin: 0px;
+  padding: 0px;
+  cursor: pointer;
+}
+
+.venue-button-two-fg {
+  content: "";
+  background-color: #6EA0BF;
+  width: 100%;
+  height: 45px;
+  line-height: 45px;
+  z-index: 1;
+  width: 100%;
+  border-radius: 5px;
+  font-weight: bold;
+  color: white;
+  position: relative;
+  z-index: 2;
+  transition: background 0.25s;
+}
+
+.venue-button-two-bg {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  background-color: #8ABBD9;
+  width: 104%;
+  left: -2%;
+  border-radius: 3px;
+  top: 2.5px;
+  height: 40px;
+  z-index: 1;
+  transition: background 0.25s;
+}
+
+.venue-button-two:hover .venue-button-two-fg {
+  background-color: #5488a8;
+}
+
+.venue-button-two:hover .venue-button-two-bg {
+  background-color: #67a7cf;
 }

@@ -1,6 +1,15 @@
 <template>
   <div>
-    <nav class="navbar navbar-light venue-nav navbar-expand-lg">
+    <div class="logo-area">
+
+        <img src="@/assets/venue-logo.svg" width="35px" height="35px" class="d-inline-block align-top" alt="" />
+    </div>
+    <div class="navlinks">
+    <a href="#" class="nav-link">Courses</a>
+      <a href="#" class="nav-link active">Dashboard</a>
+      <a href="#" class="nav-link">Settings</a>
+    </div>
+    <!-- <nav class="navbar navbar-light venue-nav navbar-expand-lg">
       <hide-at breakpoint="mediumAndBelow">
         <a class="navbar-brand navbar-logo" :href="'/dashboard'">
           <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -22,14 +31,6 @@
             <a v-if="this.$route.name === 'dashboard'" class="nav-link active" href="#">Dashboard</a>
             <a v-else class="nav-link" href="#">Dashboard</a>
           </li>
-          <li class="nav-item">
-            <a v-if="this.$route.name === 'events'" class="nav-link active" href="#">Events</a>
-            <a v-else class="nav-link" href="#">Events</a>
-          </li>
-          <li class="nav-item">
-            <a v-if="this.$route.name === 'grading'" class="nav-link active" href="#">Grading</a>
-            <a v-else class="nav-link" href="#">Grading</a>
-          </li>
           <show-at breakpoint="mediumAndBelow">
             <li class="nav-item">
               <a v-if="this.$route.name === 'settings'" class="nav-link active" href="#">Settings</a>
@@ -45,22 +46,21 @@
         </div>
       </hide-at>
 
-    </nav>
+    </nav> -->
+
 
   </div>
 </template>
 
 <script>
-  import {showAt, hideAt} from 'vue-breakpoints'
-  import UserAPI from '@/services/UserAPI.js';
+  // import {showAt, hideAt} from 'vue-breakpoints'
+  // import UserAPI from '@/services/UserAPI.js';
 
   export default {
     name: 'NavBar',
     computed: {
     },
     components: {
-      hideAt,
-      showAt
     },
     data(){
       return {
@@ -79,21 +79,3 @@
     }
   }
 </script>
-
-<style scoped>
-  .venue-nav {
-    border-style: none none solid none;
-    border-bottom: #e0e0e0 solid thin;
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-
-  .settings {
-    cursor: pointer;
-  }
-
-/*  .user-name {
-    position: relative;
-    float: right;
-  }*/
-</style>
