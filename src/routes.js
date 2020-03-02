@@ -8,7 +8,7 @@ import Students from './components/admin/User/Students.vue';
 import Course from './components/admin/Course/Course.vue';
 import EditCourse from './components/admin/Course/EditCourse.vue';
 import NewCourse from './components/admin/Course/NewCourse.vue';
-import Courses from './components/admin/Course/Courses.vue'; 
+import Courses from './components/admin/Course/Courses.vue';
 import Sections from './components/admin/Section/Sections.vue';
 import EditSection from './components/admin/Section/EditSection.vue';
 import NewSection from './components/admin/Section/NewSection.vue';
@@ -21,43 +21,49 @@ import Submissions from './components/admin/Submission/Submissions.vue';
 import LandingPage from './views/LandingPage.vue';
 import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
+import CourseInfo from './components/CourseInfo.vue'
 
 Vue.use(VueRouter);
 
 const router = new VueRouter({
   mode: 'history',
   routes: [
-    { 
+    {
         name: 'landing_page',
-    	path: '/', 
+    	path: '/',
     	component: LandingPage,
         meta: { requiresNoLogin: true }
     },
-    {  
+    {
+      name: 'course_info',
+      path: '/course_info',
+      component: CourseInfo
+    },
+    {
         name: 'new_user',
-        path: '/new_user', 
-        component: NewUser 
+        path: '/new_user',
+        component: NewUser
     },
-    {  
+    {
     	name: 'users',
-    	path: '/users', 
-    	component: Users 
+    	path: '/users',
+    	component: Users
     },
-    {  
+    {
     	name: 'edit_user',
-    	path: '/edit_user/:id', 
+    	path: '/edit_user/:id',
     	component: EditUser
     },
-    {  
+    {
         name: 'instructors',
-        path: '/instructors', 
+        path: '/instructors',
         component: Instructors
     },
-    {  
+    {
         name: 'students',
-        path: '/students', 
+        path: '/students',
         component: Students
-    },  
+    },
     {
         name: 'new_course',
         path: '/new_course',
@@ -97,7 +103,7 @@ const router = new VueRouter({
         name: 'new_event',
         path: '/new_event',
         component: NewEvent
-    },   
+    },
     {
         name: 'events',
         path: '/events',

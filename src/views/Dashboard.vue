@@ -35,11 +35,13 @@
 
               <div class="mobile-content-bounds">
                 <!-- Mobile Dashboard Section -->
-                <Section title="Active">
-                  <ActiveClassModal
-                    :class_info="getActive()"
-                  />
-                </Section>
+                <div v-if="getActive() != null">
+                  <Section title="Active">
+                    <ActiveClassModal
+                      :class_info="getActive()"
+                    />
+                  </Section>
+                </div>
                 <div :style="{marginTop: '60px'}">
                   <Section title="Today's Events">
                     <TodayEventScheduleMobile
@@ -245,8 +247,4 @@
   bottom: 0;
 }
 
-.mobile-content-bounds {
-  box-sizing: border-box;
-  padding: 0 4rem;
-}
 </style>

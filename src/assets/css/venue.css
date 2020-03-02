@@ -420,3 +420,14 @@ a:active {
 .venue-button-two:hover .venue-button-two-bg {
   background-color: #67a7cf;
 }
+
+.mobile-content-bounds {
+  box-sizing: border-box;
+  padding: 0 4rem;
+}
+
+
+.mobile-content-bounds-strong {
+  box-sizing: border-box;
+  padding: 0 8rem;
+}

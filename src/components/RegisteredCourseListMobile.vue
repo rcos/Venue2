@@ -1,14 +1,16 @@
 <template>
   <div>
-    <div class="registered-course-mobile" v-for="course of course_info">
-      <div class="tablet">
-        <div class="color-identifier-area">
-          <div class="color-identifier"></div>
+    <a :href="'/courses/' + course.name" v-for="course of course_info">
+      <div class="registered-course-mobile">
+        <div class="tablet">
+          <div class="color-identifier-area">
+            <div class="color-identifier"></div>
+          </div>
+          <div class="course-code">{{course.course_code}}</div>
+          <div class="course-name">{{course.name}}</div>
         </div>
-        <div class="course-code">{{course.course_code}}</div>
-        <div class="course-name">{{course.name}}</div>
       </div>
-    </div>
+    </a>
   </div>
 </template>
 
