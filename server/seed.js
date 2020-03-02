@@ -4,9 +4,13 @@ const db = "mongodb://localhost:27017/Venue2";
 
 seeder.connect(db, function () {
 	seeder.loadModels([
-		"./Course/Course.model"
+		"./Course/Course.model",
+		"./User/User.model",
+		"./Section/Section.model",
+		"./Event/Event.model",
+		"./Submission/Submission.model"
 	]);
-	seeder.clearModels(['Course']);
+	seeder.clearModels(['Course', 'User', 'Section', 'Event', 'Submission']);
 	seeder.populateModels(data, function (err, done) {
 		if (err) {
 			return console.log("seed err", err)
@@ -41,4 +45,14 @@ const data = [{
 			"course_number": 3
 		}
 	]
+}, {
+	'model': 'User',
+	'documents': [{
+		"_id": "5e5ca470deaa662f1ce87bc5",
+		"first_name": "Admin",
+		"last_name": "Admin",
+		"email": "admin@gmail.com",
+		"password": "nimda",
+		"is_instructor": true
+	}]
 }];
