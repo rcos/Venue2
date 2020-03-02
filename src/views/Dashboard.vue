@@ -236,7 +236,7 @@
 
 .desktop-body {
   box-sizing: border-box;
-  padding: 0px 18%;
+  padding-left: 15%;
 }
 
 #mobile-dashboard, #mobile-courses {

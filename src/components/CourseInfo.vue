@@ -1,8 +1,46 @@
 <template>
 
   <div>
-    <div v-if="!mobileView()">DesktopView</div>
+    <div class="desktop-body" v-if="!mobileView()">
+      <!-- Desktop View -->
+      <Section title="Course Info">
+        <div class="desktop-course-info-container">
+          <!-- Course Name Section -->
+          <div class="course-title-data">
+            <div class="course-name">{{course_data.name}}</div>
+            <div class="below-course-name">
+              <div class="course-code">{{course_data.course_code}}</div>
+              <div class="course-time">3:00pm-3:50pm</div>
+            </div>
+          </div>
+          <!-- Time Remaining Section -->
+          <div class="course-time-remaining-section">
+            <div class="timer-box"></div>
+            <div class="timer-info">
+              <div>35m</div>
+              <div>remaining</div>
+            </div>
+          </div>
+
+          <div class="attendance-history-section">
+            <div class="title">Attendance History</div>
+              <div v-for="month_key of Object.keys(course_data.attendance_history)">
+                <div class="subtitle">{{intToMonth(month_key)}}</div>
+              </div>
+          </div>
+
+          <div class="attend-button-section">
+            <div :style="{width: '60%', margin: '0 auto'}">
+              <div class="attend-button">Access Mobile Device to Attend</div>
+            </div>
+          </div>
+
+        </div>
+      </Section>
+
+    </div>
     <div v-if="mobileView()">
+      <!-- Mobile View -->
       <div class="course-info-container mobile-content-bounds">
         <Section title="Course Info">
           <div class="course-name">{{course_data.name}}</div>
@@ -186,5 +224,96 @@ background-color: #E36064;
   height: 40px;
   line-height: 40px;
   border-radius: 5px;
+}
+
+.desktop-course-info-container .course-name {
+  font-size: 37px;
+}
+
+.desktop-course-info-container .course-code,
+.desktop-course-info-container .course-time {
+  display: inline-block;
+}
+
+.desktop-course-info-container .course-code {
+  background-color: #393939;
+  color: white;
+  box-sizing: border-box;
+  padding: 0 10px;
+  height: 26px;
+  line-height: 26px;
+  border-radius: 3px;
+}
+
+.desktop-course-info-container .course-time {
+  margin: 0 20px;
+  height: 26px;
+  line-height: 26px;
+}
+
+.desktop-course-info-container .course-time-remaining-section,
+.desktop-course-info-container .course-title-data{
+    display: inline-block;
+    vertical-align: top;
+}
+
+.desktop-course-info-container .course-time-remaining-section {
+  margin-left: 30px;
+}
+
+.desktop-course-info-container .course-time-remaining-section .timer-box,
+.desktop-course-info-container .course-time-remaining-section .timer-info {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.desktop-course-info-container .course-time-remaining-section .timer-box {
+  background-color: #FC5D60;
+  width: 80px;
+  height: 80px;
+  border-radius: 5px;
+}
+
+.desktop-course-info-container .course-time-remaining-section .timer-info {
+  margin-left: 20px;
+  font-size: 25px;
+  line-height: 20px;
+  position: relative;
+  top: 15px;
+}
+
+.desktop-course-info-container .attendance-history-section {
+
+}
+
+.desktop-course-info-container .attendance-history-section .title {
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 20px;
+  margin: 30px 0px 10px 0px;
+}
+
+.desktop-course-info-container .attendance-history-section .subtitle {
+  color: rgba(0, 0, 0, 0.7);
+  margin: 10px 0 10px 20px;
+  font-size: 17px;
+}
+
+.desktop-course-info-container .attend-button-section {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+}
+
+.desktop-course-info-container .attend-button-section .attend-button {
+  border: 2px solid #FB181D;
+  border-radius: 3px;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  color: #FC5D60;
+  cursor: no-drop;
+  font-weight: bold;
 }
 </style>
