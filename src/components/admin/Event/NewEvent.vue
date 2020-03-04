@@ -24,6 +24,10 @@
               <input class="form-control" readonly>
             </div>
           </div>
+          <label>Start Time: </label>
+          <datetime type="datetime" use12-hour title="Event Start" v-model="event.start_time"></datetime>
+          <label>End Time: </label>
+          <datetime type="datetime" use12-hour title="Event End" v-model="event.end_time"></datetime>
         </div><br />
         <div class="form-group">
           <button class="btn btn-primary">Create</button>
@@ -38,11 +42,14 @@
 <script>
   import EventAPI from '@/services/EventAPI.js';
   import Sections from '../Section/Sections';
+  import { Datetime } from 'vue-datetime';
+  import 'vue-datetime/dist/vue-datetime.css'
 
   export default {
     name: 'NewEvent',
     components: {
-      Sections
+      Sections,
+      datetime: Datetime
     },
     data(){
       return {
@@ -59,6 +66,7 @@
       async addEvent(evt){
         evt.preventDefault();
         this.event.section = this.section
+        console.log("saving event with start_date " + this.event.start_date)
         const response = await EventAPI.addEvent(this.event);
         this.$router.push({name: 'events'});
       }
