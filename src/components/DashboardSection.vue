@@ -2,6 +2,7 @@
   <div id="infosection">
     <h1 v-if="active_section" class="section-title">Active</h1>
     <h1 v-else-if="courses_section" class="section-title">Courses</h1>
+
     <h1 v-else-if="upcoming_section" class="section-title">Upcoming</h1>
     
 <!--     <div class='course-modal-temp'>
@@ -14,6 +15,7 @@
 </template>
 
 <script>
+  import SectionAPI from '@/services/SectionAPI.js'
 
   export default {
     name: 'DashboardSection',
@@ -28,12 +30,23 @@
     },
     data(){
       return {
+        courses: []
       }
     },
     created() {
+      this.current_user = this.$store.state.user.current_user
+      this.getSectionsWithCourses()
     },
     methods: {
-
+      async getSectionsWithCourses() {
+        let current_user = this.$store.state.user.current_user
+        let response = await SectionAPI.getSectionsWithCoursesForUser(this.current_user._id)
+        let sections = response.data
+        console.log("sections: " + sections)
+        sections.forEach((section) => {
+          console.log("section " + section.number + " for course " + section.course)
+        })
+      }
     }
   }
 </script>
