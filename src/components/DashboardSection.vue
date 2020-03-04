@@ -5,7 +5,7 @@
     </div>
     <div v-else-if="courses_section">
       <h1 class="section-title">Courses</h1>
-      <InfoContainer v-for="section in sections" course_info v-bind:section="section" />
+      <InfoContainer v-for="section in sections" v-bind:key="section._id" course_info v-bind:section="section" />
     </div>
     <div v-else-if="upcoming_section">
       <h1 class="section-title">Upcoming</h1>
