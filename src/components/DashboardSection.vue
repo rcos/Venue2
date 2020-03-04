@@ -1,21 +1,21 @@
 <template>
   <div id="infosection">
-    <h1 v-if="active_section" class="section-title">Active</h1>
-    <h1 v-else-if="courses_section" class="section-title">Courses</h1>
-
-    <h1 v-else-if="upcoming_section" class="section-title">Upcoming</h1>
-    
-<!--     <div class='course-modal-temp'>
-      <div class="title">Intro to AI</div>
-      <div class="course-code">CSCI 4200</div>
-      <div class='time-left'>Time Remaining: 42m</div>
+    <div v-if="active_section">
+      <h1 class="section-title">Active</h1>
     </div>
- -->
+    <div v-else-if="courses_section">
+      <h1 class="section-title">Courses</h1>
+      <InfoContainer v-for="section in sections" course_info v-bind:section="section" />
+    </div>
+    <div v-else-if="upcoming_section">
+      <h1 class="section-title">Upcoming</h1>
+    </div>
   </div>
 </template>
 
 <script>
   import SectionAPI from '@/services/SectionAPI.js'
+  import InfoContainer from '@/components/InfoContainer.vue'
 
   export default {
     name: 'DashboardSection',
@@ -27,10 +27,11 @@
     computed: {
     },
     components: {
+      InfoContainer
     },
     data(){
       return {
-        courses: []
+        sections: []
       }
     },
     created() {
@@ -41,11 +42,8 @@
       async getSectionsWithCourses() {
         let current_user = this.$store.state.user.current_user
         let response = await SectionAPI.getSectionsWithCoursesForUser(this.current_user._id)
-        let sections = response.data
-        console.log("sections: " + sections)
-        sections.forEach((section) => {
-          console.log("section " + section.number + " for course " + section.course)
-        })
+        this.sections = response.data
+        console.log("sections: " + this.sections)
       }
     }
   }
