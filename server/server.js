@@ -14,11 +14,11 @@ const submissionRoute = require('./Submission/Submission.route')
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
   () => { console.log('Database is connected') },
-  err => { console.log('Can not connect to the database'+ err)}
+  err => { console.log('Can not connect to the database' + err) }
 );
 
 app.use(cors());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/users', userRoute);
@@ -27,6 +27,6 @@ app.use('/sections', sectionRoute);
 app.use('/events', eventRoute);
 app.use('/submissions', submissionRoute);
 
-app.listen(PORT, function(){
-  console.log('Server is running on Port:',PORT);
+app.listen(PORT, function () {
+  console.log('Server is running on Port:', PORT);
 });
