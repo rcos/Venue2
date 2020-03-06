@@ -41,7 +41,7 @@
     methods: {
       async getSectionsWithCourses() {
         let current_user = this.$store.state.user.current_user
-        let response = await SectionAPI.getSectionsWithCoursesForUser(this.current_user._id)
+        let response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
         this.sections = response.data
         console.log("sections: " + this.sections)
       }

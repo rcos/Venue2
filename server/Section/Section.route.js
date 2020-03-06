@@ -137,7 +137,7 @@ sectionRoutes.route('/getStudents/:id').get(function (req, res) {
   });
 });
 
-sectionRoutes.get('/get_with_courses_for_user/:user_id', verifyToken, (req, res) => {
+sectionRoutes.get('/get_with_courses_for_student/:user_id', verifyToken, (req, res) => {
   let user_id = req.params.user_id
   jwt.verify(req.token, 'the_secret_key', err => {
     if(err) {
