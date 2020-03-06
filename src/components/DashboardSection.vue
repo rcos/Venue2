@@ -15,6 +15,7 @@
 
 <script>
   import SectionAPI from '@/services/SectionAPI.js'
+  import CourseAPI from '@/services/CourseAPI.js'
   import InfoContainer from '@/components/InfoContainer.vue'
 
   export default {
@@ -31,19 +32,28 @@
     },
     data(){
       return {
-        sections: []
+        sections: [],
+        courses: []
       }
     },
     created() {
-      this.current_user = this.$store.state.user.current_user
-      this.getSectionsWithCourses()
+      if(this.courses_section) {
+        this.current_user = this.$store.state.user.current_user
+        if(this.current_user.is_instructor)
+          this.getInstructorCourses()
+        else
+          this.getSectionsWithCourses()
+      }
     },
     methods: {
+      async getInstructorCourses() {
+        let response = await CourseAPI.getInstructorCourses(this.current_user._id)
+        this.courses = response.data
+        console.log(this.courses)
+      },
       async getSectionsWithCourses() {
-        let current_user = this.$store.state.user.current_user
         let response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
         this.sections = response.data
-        console.log("sections: " + this.sections)
       }
     }
   }
