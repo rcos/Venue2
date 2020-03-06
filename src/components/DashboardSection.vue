@@ -5,7 +5,12 @@
     </div>
     <div v-else-if="courses_section">
       <h1 class="section-title">Courses</h1>
-      <InfoContainer v-for="section in sections" v-bind:key="section._id" course_info v-bind:section="section" />
+      <div v-if="is_instructor">
+        <h3 v-for="course in courses">{{ course.name }}</h3>
+      </div>
+      <div v-else>
+        <InfoContainer v-for="section in sections" v-bind:key="section._id" course_info v-bind:section="section" />
+      </div>
     </div>
     <div v-else-if="upcoming_section">
       <h1 class="section-title">Upcoming</h1>
@@ -33,13 +38,15 @@
     data(){
       return {
         sections: [],
-        courses: []
+        courses: [],
+        is_instructor: Boolean
       }
     },
     created() {
+      this.current_user = this.$store.state.user.current_user
+      this.is_instructor = this.current_user.is_instructor
       if(this.courses_section) {
-        this.current_user = this.$store.state.user.current_user
-        if(this.current_user.is_instructor)
+        if(this.is_instructor)
           this.getInstructorCourses()
         else
           this.getSectionsWithCourses()
