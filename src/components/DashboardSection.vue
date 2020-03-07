@@ -2,6 +2,7 @@
   <div id="infosection">
     <div v-if="active_section">
       <h1 class="section-title">Active</h1>
+      <h3 v-for="event in active_events">{{ event.title }}</h3>
     </div>
     <div v-else-if="courses_section">
       <h1 class="section-title">Courses</h1>
@@ -21,6 +22,7 @@
 <script>
   import SectionAPI from '@/services/SectionAPI.js'
   import CourseAPI from '@/services/CourseAPI.js'
+  import EventAPI from '@/services/EventAPI.js'
   import InfoContainer from '@/components/InfoContainer.vue'
 
   export default {
@@ -39,6 +41,7 @@
       return {
         sections: [],
         courses: [],
+        active_events: [],
         is_instructor: Boolean
       }
     },
@@ -50,17 +53,26 @@
           this.getInstructorCourses()
         else
           this.getSectionsWithCourses()
+      } else if(this.active_section) {
+        console.log("Active section")
+        this.getActiveEvents()
       }
     },
     methods: {
       async getInstructorCourses() {
         let response = await CourseAPI.getInstructorCourses(this.current_user._id)
         this.courses = response.data
-        console.log(this.courses)
       },
       async getSectionsWithCourses() {
         let response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
         this.sections = response.data
+      },
+      async getActiveEvents() {
+        console.log("In function")
+        let response = await EventAPI.getActiveEventsForUser(this.current_user._id)
+        console.log("After call")
+        this.active_events = response.data
+        console.log("active_events: " + this.active_events)
       }
     }
   }

@@ -19,5 +19,8 @@ export default {
   },
   deleteEvent(id) {
     return API().delete('events/delete/' + id)
+  },
+  getActiveEventsForUser(user_id) {
+    return API().get('events/active_events/' + user_id)
   }
 }
