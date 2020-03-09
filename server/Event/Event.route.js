@@ -70,6 +70,7 @@ eventRoutes.route('/getSection/:id').get(function (req, res) {
 });
 
 eventRoutes.get('/active_events/:user_id', (req, res) => {
+  console.log("API call was made")
   let user_id = req.params.user_id
   User.findById(user_id, function(error, user) {
     if(error) {
@@ -103,10 +104,15 @@ eventRoutes.get('/active_events/:user_id', (req, res) => {
                   res.json(event_err)
                 } else {
                   events.forEach(event => {
-                    if(current_time >= event.start_time &&
-                      current_time <= event.end_time) {
-                      active_events.push(event)
-                    }
+                    //check if the current event is in one of the instructor's sections
+                    instructor_sections.forEach(instructor_section => {
+                      if(instructor_section._id.equals(event.section)) {
+                        if(current_time >= event.start_time &&
+                          current_time <= event.end_time) {
+                          active_events.push(event)
+                        }
+                      }
+                    })
                   })
                   res.json(active_events)
                 }
@@ -117,6 +123,18 @@ eventRoutes.get('/active_events/:user_id', (req, res) => {
       })
 
     } else {
+
+      user_sections = []
+      Section.find((error, sections) => {
+        sections.forEach((section) => {
+          section.students.forEach((student) => {
+            if(student._id == user_id)
+              user_sections.push(section)
+          })
+        })
+        let counter = 0
+
+      })
 
     }
   })
