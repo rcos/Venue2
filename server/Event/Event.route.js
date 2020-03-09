@@ -69,8 +69,9 @@ eventRoutes.route('/getSection/:id').get(function (req, res) {
   });
 });
 
-eventRoutes.get('/active_events/:user_id', (req, res) => {
+eventRoutes.get('/active_or_todays_events/:user_id/:is_active', (req, res) => {
   let user_id = req.params.user_id
+  let is_active = (req.params.is_active == 'true');
   User.findById(user_id, function(error, user) {
     if(error) {
       console.log(error)
@@ -78,9 +79,7 @@ eventRoutes.get('/active_events/:user_id', (req, res) => {
     } else if(user.is_instructor) {
 
       let instructor_sections = []
-      let active_events = []
-      let current_time = new Date()
-
+      let requested_events = []
       //Get the sections where this user an instructor
       Section.find(function(err, sections) {
         let counter = 0
@@ -106,14 +105,18 @@ eventRoutes.get('/active_events/:user_id', (req, res) => {
                     //check if the current event is in one of the instructor's sections
                     instructor_sections.forEach(instructor_section => {
                       if(instructor_section._id.equals(event.section)) {
-                        if(current_time >= event.start_time &&
-                          current_time <= event.end_time) {
-                          active_events.push(event)
+                        //Get Active Events or Get today's events
+                        if(is_active) {
+                          if(isActive(event)) 
+                            requested_events.push(event)
+                        } else {
+                          if(isToday(event.start_time) && !isActive(event)) 
+                            requested_events.push(event)
                         }
                       }
                     })
                   })
-                  res.json(active_events)
+                  res.json(requested_events)
                 }
               })
             }
@@ -156,5 +159,18 @@ eventRoutes.get('/active_events/:user_id', (req, res) => {
 
   })
 });
+
+function isActive(event) {
+  let current_time = new Date()
+  return current_time >= event.start_time &&
+    current_time <= event.end_time 
+}
+
+function isToday(time) {
+  let current_time = new Date()
+  return current_time.getFullYear() === time.getFullYear() &&
+    current_time.getMonth() === time.getMonth() &&
+    current_time.getDate() === time.getDate()
+}
 
 module.exports = eventRoutes;

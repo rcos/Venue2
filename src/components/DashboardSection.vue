@@ -13,8 +13,9 @@
         <InfoContainer v-for="section in sections" v-bind:key="section._id" course_info v-bind:section="section" />
       </div>
     </div>
-    <div v-else-if="upcoming_section">
-      <h1 class="section-title">Upcoming</h1>
+    <div v-else-if="today_section">
+      <h1 class="section-title">Today's Events</h1>
+      <h3 v-for="event in todays_events">{{ event.title }}</h3>
     </div>
   </div>
 </template>
@@ -30,7 +31,7 @@
     props: {
       active_section: Boolean,
       courses_section: Boolean,
-      upcoming_section: Boolean
+      today_section: Boolean
     },
     computed: {
     },
@@ -42,6 +43,7 @@
         sections: [],
         courses: [],
         active_events: [],
+        todays_events: [],
         is_instructor: Boolean
       }
     },
@@ -54,8 +56,9 @@
         else
           this.getSectionsWithCourses()
       } else if(this.active_section) {
-        console.log("Active section")
         this.getActiveEvents()
+      } else if(this.today_section) {
+        this.getTodaysEvents()
       }
     },
     methods: {
@@ -68,11 +71,12 @@
         this.sections = response.data
       },
       async getActiveEvents() {
-        console.log("In function")
-        let response = await EventAPI.getActiveEventsForUser(this.current_user._id)
-        console.log("After call")
+        let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
         this.active_events = response.data
-        console.log("active_events: " + this.active_events)
+      },
+      async getTodaysEvents() {
+        let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
+        this.todays_events = response.data
       }
     }
   }

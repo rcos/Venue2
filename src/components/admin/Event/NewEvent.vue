@@ -25,9 +25,9 @@
             </div>
           </div>
           <label>Start Time: </label>
-          <datetime type="datetime" use12-hour title="Event Start" v-model="event.start_time"></datetime>
+          <datetime type="datetime" use12-hour value-zone="local" title="Event Start" v-model="event.start_time"></datetime>
           <label>End Time: </label>
-          <datetime type="datetime" use12-hour title="Event End" v-model="event.end_time"></datetime>
+          <datetime type="datetime" use12-hour value-zone="local" title="Event End" v-model="event.end_time"></datetime>
         </div><br />
         <div class="form-group">
           <button class="btn btn-primary">Create</button>
