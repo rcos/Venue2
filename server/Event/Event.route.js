@@ -123,7 +123,9 @@ eventRoutes.get('/active_events/:user_id', (req, res) => {
 
     } else {
 
-      user_sections = []
+      let user_sections = []
+      let active_events = []
+      let current_time = new Date()
       Section.find((error, sections) => {
         sections.forEach((section) => {
           section.students.forEach((student) => {
@@ -131,11 +133,27 @@ eventRoutes.get('/active_events/:user_id', (req, res) => {
               user_sections.push(section)
           })
         })
-        let counter = 0
-
+        Event.find(function(err, events){
+          if(err) {
+            console.log(err)
+            res.json(err)
+          } else {
+            events.forEach(event => {
+              user_sections.forEach(user_section => {
+                if(user_section._id.equals(event.section)) {
+                  if(current_time >= event.start_time &&
+                    current_time <= event.end_time) {
+                    active_events.push(event)
+                  }
+                }
+              })
+            })
+            res.json(active_events)
+          }
+        })
       })
-
     }
+
   })
 });
 
