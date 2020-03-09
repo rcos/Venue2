@@ -14,6 +14,10 @@ let Event = new Schema({
 	is_active: {
 		type: Boolean,
 		default: false
+	},
+	code: {
+		type: String,
+		default: ""
 	}
 	//implement location
 	//implement submission_window
