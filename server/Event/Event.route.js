@@ -70,7 +70,6 @@ eventRoutes.route('/getSection/:id').get(function (req, res) {
 });
 
 eventRoutes.get('/active_events/:user_id', (req, res) => {
-  console.log("API call was made")
   let user_id = req.params.user_id
   User.findById(user_id, function(error, user) {
     if(error) {
