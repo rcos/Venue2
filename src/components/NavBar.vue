@@ -1,18 +1,28 @@
 <template>
   <div>
     <nav id="venue-nav">
-
+      <!-- Logo -->
       <a id="nav-logo" href="#">
         <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
       </a>
-
+      <!-- Nav Links -->
       <div id="venue-nav-links">
-        <a v-if="this.$route.name === 'dashboard'" class="venue-nav-link active-link" href="#">Dashboard</a>
-        <a v-else class="venue-nav-link" href="#">Dashboard</a>
-        <a v-if="this.$route.name === 'attendance'" class="venue-nav-link active-link" href="#">Attendance</a>
-        <a v-else class="venue-nav-link" href="#">Attendance</a>
+        <div class="venue-nav-link-container" v-if="this.$route.name === 'dashboard'">
+          <a class="venue-nav-link active-link" href="#">Dashboard</a>
+          <div class="active-link-underline"></div>
+        </div>
+        <div v-else class="venue-nav-link-container">
+          <a class="venue-nav-link" href="#">Dashboard</a>
+        </div>
+        <div v-if="this.$route.name === 'attendance'" class="venue-nav-link-container">
+          <a class="venue-nav-link active-link" href="#">Attendance</a>
+          <div class="active-link-underline"></div>
+        </div>
+        <div v-else class="venue-nav-link-container">
+          <a class="venue-nav-link" href="#">Attendance</a>
+        </div>
       </div>
-
+      <!-- Name -->
     </nav>
   </div>
 </template>
@@ -61,14 +71,17 @@
   }
 
   #venue-nav-links {
-    margin-top: 0.35rem;
-    /*border: black solid;*/
+    margin-top: 7px;
     float: left;
     /*padding: 1px;*/
   }
 
+  .venue-nav-link-container {
+    margin-left: 1.5rem;
+    display: inline-block;
+  }
+
   .venue-nav-link{
-    margin-left: 45px;
     text-decoration: none;
     color: #858585;
     font-weight: bold;
@@ -76,6 +89,13 @@
 
   .active-link {
     color: #466D85;
+  }
+
+  .active-link-underline {
+    height: 3px;
+    width: 80%;
+    background-color: #466D85;
+    margin: auto;
   }
 
   #user-name {
@@ -89,8 +109,6 @@
     position: relative;
     float: left;
   }
-
-
 
 
   .settings {
