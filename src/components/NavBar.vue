@@ -23,6 +23,17 @@
         </div>
       </div>
       <!-- Name -->
+      <hide-at breakpoint="mediumAndBelow">
+        <div class="user-name float-right">
+          <p class="d-inline-block mr-2">{{ current_user.first_name }} {{ current_user.last_name }}</p>
+          <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="">
+        </div>
+      </hide-at>
+      <show-at breakpoint="mediumAndBelow">
+        <div class="user-name float-right">
+          <p class="d-inline-block mr-2">{{ current_user.first_name }}</p>
+        </div>
+      </show-at>
     </nav>
   </div>
 </template>
@@ -61,7 +72,7 @@
     border-bottom: #e0e0e0 solid thin;
     padding-left: 2rem;
     padding-right: 2rem;
-    padding-top: 0.25rem;
+    padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     overflow: hidden;
   }
@@ -71,7 +82,7 @@
   }
 
   #venue-nav-links {
-    margin-top: 7px;
+    margin-top: 5px;
     float: left;
     /*padding: 1px;*/
   }
@@ -98,25 +109,13 @@
     margin: auto;
   }
 
-  #user-name {
-    position: relative;
-    display: inline-block;
-    float: right;
+  .user-name {
+    margin-top: 5px;
+    font-weight: bold;
   }
-
-  .navbar-links {
-    border: black solid;
-    position: relative;
-    float: left;
-  }
-
 
   .settings {
     cursor: pointer;
+    margin-top: 2px;
   }
-
-/*  .user-name {
-    position: relative;
-    float: right;
-  }*/
 </style>
