@@ -68,11 +68,11 @@
 
 <style scoped>
   #venue-nav {
-    border-style: none none solid none;
-    border-bottom: #e0e0e0 solid thin;
+    /*border-style: none none solid none;*/
+    /*border-bottom: #e0e0e0 solid thin;*/
     padding-left: 2rem;
     padding-right: 2rem;
-    padding-top: 0.5rem;
+    padding-top: 1rem;
     padding-bottom: 0.5rem;
     overflow: hidden;
   }
