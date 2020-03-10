@@ -7,8 +7,10 @@
       </a>
 
       <div id="venue-nav-links">
-        <a class="venue-nav-link active-link" href="#">Dashboard</a>
-        <a class="venue-nav-link" href="#">Attendance</a>
+        <a v-if="this.$route.name === 'dashboard'" class="venue-nav-link active-link" href="#">Dashboard</a>
+        <a v-else class="venue-nav-link" href="#">Dashboard</a>
+        <a v-if="this.$route.name === 'attendance'" class="venue-nav-link active-link" href="#">Attendance</a>
+        <a v-else class="venue-nav-link" href="#">Attendance</a>
       </div>
 
     </nav>
