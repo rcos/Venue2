@@ -35,3 +35,9 @@
     }
   }
 </script>
+
+<style>
+  .venue-logo {
+    transition: width 0.75s;
+  }
+</style>
