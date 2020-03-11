@@ -72,9 +72,23 @@
     /*border-bottom: #e0e0e0 solid thin;*/
     padding-left: 2rem;
     padding-right: 2rem;
-    padding-top: 1rem;
+    /*padding-top: 1rem;*/
     padding-bottom: 0.5rem;
     overflow: hidden;
+  }
+
+  /*Extra large devices (large desktops, 1200px and up)*/
+  @media (min-width: 1199.98px) { 
+    #venue-nav{
+      padding-top: 1rem;
+    }
+  }
+
+  /*Small devices (landscape phones, 576px and up)*/
+  @media (max-width: 575.98px) {
+    #venue-nav {
+      padding-top: 1.5rem;
+    }
   }
 
   #nav-logo {
