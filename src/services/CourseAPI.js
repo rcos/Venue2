@@ -22,5 +22,8 @@ export default {
   },
   getInstructor (course_id) {
     return API().get('courses/getInstructor/' + course_id)
-  }
+  },
+  getInstructorCourses (user_id) {
+    return API().get('courses/get_instructor_courses/' + user_id)
+  },
 }

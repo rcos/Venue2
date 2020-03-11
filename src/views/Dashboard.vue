@@ -2,7 +2,7 @@
   <div>
     <DashboardSection active_section/>
     <DashboardSection courses_section/>
-    <DashboardSection upcoming_section/>
+    <DashboardSection today_section/>
   </div>
 </template>
 

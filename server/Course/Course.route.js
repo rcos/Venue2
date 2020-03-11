@@ -79,4 +79,15 @@ courseRoutes.route('/getInstructor/:id').get(function (req, res) {
   });
 });
 
+courseRoutes.route('/get_instructor_courses/:user_id').get(function (req, res) {
+  let user_id = req.params.user_id;
+  Course.find({instructor: user_id}, function(err, instructor_courses) {
+    if(err) {
+      res.json(err)
+    } else {
+      res.json(instructor_courses)
+    }
+  })
+});
+
 module.exports = courseRoutes;
