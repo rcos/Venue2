@@ -77,8 +77,7 @@
     overflow: hidden;
   }
 
-  /*Extra large devices (large desktops, 1200px and up)*/
-  @media (min-width: 1199.98px) { 
+  @media (min-width: 577px) { 
     #venue-nav{
       padding-top: 1rem;
     }

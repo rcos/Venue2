@@ -132,6 +132,21 @@
   text-align: left;
 }
 
+/*Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 577px) { 
+  .dashboard-section {
+    /*padding-top: 1rem;*/
+  }
+}
+
+/*Small devices (landscape phones, 576px and up)*/
+@media (max-width: 575.98px) {
+  .dashboard-section {
+    width: 100%;
+  }
+}
+
+
 .section-title {
 /*  border: black solid;
   text-align: left;*/
