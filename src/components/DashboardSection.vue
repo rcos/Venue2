@@ -1,22 +1,45 @@
 <template>
   <div class="dashboard-section" v-bind:class="{'active-section':active_section, 'today-section':today_section,
     'courses-section':courses_section}">
+    <!-- Active Section -->
     <div v-if="active_section">
       <h1 class="section-title">Active</h1>
-      <!-- <h3 v-for="event in active_events">{{ event.title }}</h3> -->
-    </div>
-    <div v-else-if="today_section">
-      <h1 class="section-title">Today's Events</h1>
-      <!-- <h3 v-for="event in todays_events">{{ event.title }}</h3> -->
-    </div>
-    <div v-else-if="courses_section">
-      <h1 class="section-title">Courses</h1>
-<!--       <div v-if="is_instructor">
-        <h3 v-for="course in courses">{{ course.name }}</h3>
+      <div v-if="active_events.length > 0">
+        <h3 v-for="event in active_events">{{ event.title }}</h3>
       </div>
       <div v-else>
-        <InfoContainer v-for="section in sections" v-bind:key="section._id" course_info v-bind:section="section" />
-      </div> -->
+        <p class="no-container" id="no-active">No active events</p>
+      </div>
+    </div>
+    <!-- Today Section -->
+    <div v-else-if="today_section">
+      <h1 class="section-title">Today's Events</h1>
+      <div v-if="todays_events.length > 0">
+        <h3 v-for="event in todays_events">{{ event.title }}</h3>
+      </div>
+      <div v-else>
+        <p class="no-container" id="no-today">No events today</p>
+      </div>
+    </div>
+    <!-- Courses Section -->
+    <div v-else-if="courses_section">
+      <h1 class="section-title">Courses</h1>
+      <div v-if="is_instructor">
+        <div v-if="courses.length > 0">
+          <h3 v-for="course in courses">{{ course.name }}</h3>
+        </div>
+        <div v-else>
+          <p class="no-container" id="no-courses">No courses</p>
+        </div>
+      </div>
+      <div v-else>
+        <div v-if="sections.length > 0">
+          <InfoContainer v-for="section in sections" v-bind:key="section._id" course_info v-bind:section="section" />
+        </div>
+        <div v-else>
+          <p class="no-container" id="no-courses">No courses</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -70,6 +93,7 @@
       async getSectionsWithCourses() {
         let response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
         this.sections = response.data
+        this.sections = []
       },
       async getActiveEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
@@ -85,8 +109,8 @@
 
 <style scoped>
 .dashboard-section {
-  border: red solid;
-  margin-top: 2rem;
+  /*border: red solid;*/
+  margin-top: 4rem;
   /*padding: 1rem;*/
   display: inline-block;
   vertical-align: top;
@@ -94,7 +118,7 @@
 
 .active-section {
   float: left;
-  margin-left: 5rem;
+  margin-left: 3rem;
 }
 
 .today-section {
@@ -103,9 +127,35 @@
 
 .courses-section {
   display: block;
+  margin-left: 6rem;
+  margin-top: 10rem;
+  text-align: left;
 }
 
 .section-title {
-
+/*  border: black solid;
+  text-align: left;*/
+  /*font-weight: bold;*/
 }
+
+.no-container {
+  /*border: black solid;*/
+  margin-top: 2rem;
+  text-align: left;
+  font-weight: bold;
+  color: #add5ff;
+}
+
+#no-active {
+  margin-left: 5rem;
+}
+
+#no-today {
+  margin-left: 3rem;
+}
+
+#no-courses {
+  margin-left: 3rem;
+}
+
 </style>
