@@ -29,9 +29,6 @@
             <div v-if="event.code">
               <input class="form-control" v-model="event.code" readonly />
             </div>
-            <div v-else>
-              <p>{{event_attendance_code}}</p>
-            </div>
           </div>
         </div>
         <div class="col-md-6">
@@ -78,8 +75,7 @@ export default {
       event: {},
       event_submissions: [],
       section_has_loaded: false,
-      event_submissions_have_loaded: false,
-      event_attendance_code: ""
+      event_submissions_have_loaded: false
     };
   },
   created() {
@@ -131,7 +127,7 @@ export default {
       for (var i = 4296; i > 0; --i) {
         result += alnums[Math.floor(Math.random() * alnums.length)];
       }
-      this.event_attendance_code = result;
+      this.event.code = result;
     }
   }
 };
