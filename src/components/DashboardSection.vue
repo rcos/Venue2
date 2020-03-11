@@ -23,23 +23,27 @@
     </div>
     <!-- Courses Section -->
     <div v-else-if="courses_section">
-      <h2 class="section-title">Courses</h2>
-      <div v-if="is_instructor">
-        <div v-if="courses.length > 0">
-          <h3 v-for="course in courses">{{ course.name }}</h3>
+      <hide-at breakpoint="small">
+        <h2 class="section-title">Courses</h2>
+      </hide-at>
+      <hide-at breakpoint="small">
+        <div v-if="is_instructor">
+          <div v-if="courses.length > 0">
+            <h3 v-for="course in courses">{{ course.name }}</h3>
+          </div>
+          <div v-else>
+            <p class="no-container" id="no-courses">No courses</p>
+          </div>
         </div>
         <div v-else>
-          <p class="no-container" id="no-courses">No courses</p>
+          <div v-if="sections.length > 0">
+            <InfoContainer v-for="section in sections" v-bind:key="section._id" course_info v-bind:section="section" />
+          </div>
+          <div v-else>
+            <p class="no-container" id="no-courses">No courses</p>
+          </div>
         </div>
-      </div>
-      <div v-else>
-        <div v-if="sections.length > 0">
-          <InfoContainer v-for="section in sections" v-bind:key="section._id" course_info v-bind:section="section" />
-        </div>
-        <div v-else>
-          <p class="no-container" id="no-courses">No courses</p>
-        </div>
-      </div>
+      </hide-at>
     </div>
   </div>
 </template>
@@ -49,6 +53,7 @@
   import CourseAPI from '@/services/CourseAPI.js'
   import EventAPI from '@/services/EventAPI.js'
   import InfoContainer from '@/components/InfoContainer.vue'
+  import {showAt, hideAt} from 'vue-breakpoints'
 
   export default {
     name: 'DashboardSection',
@@ -60,7 +65,9 @@
     computed: {
     },
     components: {
-      InfoContainer
+      InfoContainer,
+      hideAt,
+      showAt
     },
     data(){
       return {
