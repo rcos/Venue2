@@ -15,17 +15,17 @@ seeder.connect(db, function () {
 		"./Event/Event.model",
 		"./Submission/Submission.model"
 	]);
-	seeder.clearModels(['Course', 'User', 'Section', 'Event', 'Submission']);
-
-	seeder.populateModels(data, function (err, done) {
-		if (err) {
-			return console.log("seed err", err)
-		}
-		if (done) {
-			return console.log("seed finished", done)
-		}
-		seeder.disconnect()
-	})
+	seeder.clearModels(['Course', 'User', 'Section', 'Event', 'Submission'], function () {
+		seeder.populateModels(data, function (err, done) {
+			if (err) {
+				return console.log("seed err", err)
+			}
+			if (done) {
+				return console.log("seed finished", done)
+			}
+			seeder.disconnect()
+		})
+	});
 });
 
 var u0 = new User({

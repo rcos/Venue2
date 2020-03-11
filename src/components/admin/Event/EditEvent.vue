@@ -33,6 +33,7 @@
         </div>
         <div class="col-md-6">
           <button
+            type="button"
             class="btn btn-primary"
             v-on:click="generateAttendanceCode()"
           >Generate New Attendance Code</button>
