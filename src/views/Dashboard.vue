@@ -1,8 +1,8 @@
 <template>
   <div>
     <DashboardSection active_section/>
-    <DashboardSection courses_section/>
     <DashboardSection today_section/>
+    <DashboardSection courses_section/>
   </div>
 </template>
 
