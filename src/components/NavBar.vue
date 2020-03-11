@@ -1,52 +1,40 @@
 <template>
   <div>
-    <nav class="navbar navbar-light venue-nav navbar-expand-lg">
-      <hide-at breakpoint="mediumAndBelow">
-        <a class="navbar-brand navbar-logo" :href="'/dashboard'">
-          <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
-        </a>
-      </hide-at>
-      <show-at breakpoint="mediumAndBelow">
-        <a class="navbar-brand navbar-logo" style="border:none;" data-toggle="collapse" data-target="#navbarNav">
-          <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
-        </a>
-      </show-at>
-      <show-at breakpoint="mediumAndBelow">
-        <div class="float-right">
-          <p class="d-inline-block mr-2">{{ current_user.first_name }} {{ current_user.last_name }}</p>
+    <nav id="venue-nav">
+      <!-- Logo -->
+      <a id="nav-logo" href="#">
+        <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+      </a>
+      <!-- Nav Links -->
+      <div id="venue-nav-links">
+        <div class="venue-nav-link-container" v-if="this.$route.name === 'dashboard'">
+          <a class="venue-nav-link active-link" href="#">Dashboard</a>
+          <div class="active-link-underline"></div>
         </div>
-      </show-at>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mx-auto">
-          <li class="nav-item">
-            <a v-if="this.$route.name === 'dashboard'" class="nav-link active" href="#">Dashboard</a>
-            <a v-else class="nav-link" href="#">Dashboard</a>
-          </li>
-          <li class="nav-item">
-            <a v-if="this.$route.name === 'events'" class="nav-link active" href="#">Events</a>
-            <a v-else class="nav-link" href="#">Events</a>
-          </li>
-          <li class="nav-item">
-            <a v-if="this.$route.name === 'grading'" class="nav-link active" href="#">Grading</a>
-            <a v-else class="nav-link" href="#">Grading</a>
-          </li>
-          <show-at breakpoint="mediumAndBelow">
-            <li class="nav-item">
-              <a v-if="this.$route.name === 'settings'" class="nav-link active" href="#">Settings</a>
-              <a v-else class="nav-link" href="#">Settings</a>
-            </li>
-          </show-at>
-        </ul>
+        <div v-else class="venue-nav-link-container">
+          <a class="venue-nav-link" href="#">Dashboard</a>
+        </div>
+        <div v-if="this.$route.name === 'attendance'" class="venue-nav-link-container">
+          <a class="venue-nav-link active-link" href="#">Attendance</a>
+          <div class="active-link-underline"></div>
+        </div>
+        <div v-else class="venue-nav-link-container">
+          <a class="venue-nav-link" href="#">Attendance</a>
+        </div>
       </div>
+      <!-- Name -->
       <hide-at breakpoint="mediumAndBelow">
-        <div class="float-right">
+        <div class="user-name float-right">
           <p class="d-inline-block mr-2">{{ current_user.first_name }} {{ current_user.last_name }}</p>
           <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="">
         </div>
       </hide-at>
-
+      <show-at breakpoint="mediumAndBelow">
+        <div class="user-name float-right">
+          <p class="d-inline-block mr-2">{{ current_user.first_name }}</p>
+        </div>
+      </show-at>
     </nav>
-
   </div>
 </template>
 
@@ -79,19 +67,55 @@
 </script>
 
 <style scoped>
-  .venue-nav {
+  #venue-nav {
     border-style: none none solid none;
     border-bottom: #e0e0e0 solid thin;
     padding-left: 2rem;
     padding-right: 2rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    overflow: hidden;
+  }
+
+  #nav-logo {
+    float: left;
+  }
+
+  #venue-nav-links {
+    margin-top: 5px;
+    float: left;
+    /*padding: 1px;*/
+  }
+
+  .venue-nav-link-container {
+    margin-left: 1.5rem;
+    display: inline-block;
+  }
+
+  .venue-nav-link{
+    text-decoration: none;
+    color: #858585;
+    font-weight: bold;
+  }
+
+  .active-link {
+    color: #466D85;
+  }
+
+  .active-link-underline {
+    height: 3px;
+    width: 80%;
+    background-color: #466D85;
+    margin: auto;
+  }
+
+  .user-name {
+    margin-top: 5px;
+    font-weight: bold;
   }
 
   .settings {
     cursor: pointer;
+    margin-top: 2px;
   }
-
-/*  .user-name {
-    position: relative;
-    float: right;
-  }*/
 </style>

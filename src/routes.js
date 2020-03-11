@@ -96,7 +96,11 @@ const router = new VueRouter({
     {
         name: 'new_event',
         path: '/new_event',
-        component: NewEvent
+        component: NewEvent,
+        meta: { 
+          requiresAuth: true,
+          requiresInstructor: true 
+        }
     },   
     {
         name: 'events',
@@ -134,13 +138,48 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const loggedIn = localStorage.getItem('user')
-  if (to.matched.some(record => record.meta.requiresAuth) && !loggedIn) {
-    next('/')
-  } else if(to.matched.some(record => record.meta.requiresNoLogin) && loggedIn) {
-    next('/dashboard')
+
+  if(to.matched.some(record => record.meta.requiresAuth)) {
+
+    if(loggedIn) {
+
+      if(to.matched.some(record => record.meta.requiresInstructor)) {
+
+        const user_data = JSON.parse(loggedIn)
+        if(user_data.current_user.is_instructor) {
+          next()
+        } else {
+          next('/dashboard')
+        }
+
+      } else {
+        next()
+      }
+
+    } else {
+      next('/')
+    }
+
+  } else if(to.matched.some(record => record.meta.requiresNoLogin)) {
+
+    if(loggedIn) {
+      next('/dashboard')
+    } else {
+      next()
+    }
+
   } else {
     next()
   }
+
+
+  // if (to.matched.some(record => record.meta.requiresAuth) && !loggedIn) {
+  //   next('/')
+  // } else if(to.matched.some(record => record.meta.requiresNoLogin) && loggedIn) {
+  //   next('/dashboard')
+  // } else {
+  //   next()
+  // }
 })
 
 export default router

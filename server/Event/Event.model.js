@@ -18,9 +18,10 @@ let Event = new Schema({
 	code: {
 		type: String,
 		default: ""
-	}
+	},
 	//implement location
-	//implement submission_window
+	start_time: Date,
+	end_time: Date
 });
 
 module.exports = mongoose.model('Event', Event);
