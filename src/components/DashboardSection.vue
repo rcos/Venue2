@@ -132,21 +132,6 @@
   text-align: left;
 }
 
-/*Extra large devices (large desktops, 1200px and up)*/
-@media (min-width: 577px) { 
-  .dashboard-section {
-    /*padding-top: 1rem;*/
-  }
-}
-
-/*Small devices (landscape phones, 576px and up)*/
-@media (max-width: 575.98px) {
-  .dashboard-section {
-    width: 100%;
-  }
-}
-
-
 .section-title {
 /*  border: black solid;
   text-align: left;*/
@@ -171,6 +156,23 @@
 
 #no-courses {
   margin-left: 3rem;
+}
+
+/*Small devices (landscape phones, 576px and up)*/
+@media (max-width: 575.98px) {
+  .dashboard-section {
+    text-align: left;
+    padding-left: 5rem;
+  }
+  .active-section {
+    margin-left: 0;
+  }
+  .dashboard-section {
+    width: 100%;
+  }
+  #no-active {
+    margin-left: 2rem;
+  }
 }
 
 </style>
