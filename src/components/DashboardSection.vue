@@ -161,8 +161,9 @@
 /*Small devices (landscape phones, 576px and up)*/
 @media (max-width: 575.98px) {
   .dashboard-section {
-    text-align: left;
-    padding-left: 5rem;
+    text-align: center;
+    /*text-align: left;*/
+    /*padding-left: 8rem;*/
   }
   .active-section {
     margin-left: 0;
@@ -170,8 +171,14 @@
   .dashboard-section {
     width: 100%;
   }
+  .no-container {
+    text-align: center;
+  }
   #no-active {
-    margin-left: 2rem;
+    margin-left: auto;
+  }
+  #no-today {
+    margin-left: auto;
   }
 }
 
