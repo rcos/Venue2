@@ -9,20 +9,20 @@
       <div id="venue-nav-links">
         <!-- Dashboard -->
         <div class="venue-nav-link-container" v-if="this.$route.name === 'dashboard'">
-          <a class="venue-nav-link active-link" href="#">Dashboard</a>
+          <a class="venue-nav-link active-link" href="/dashboard">Dashboard</a>
           <div class="active-link-underline"></div>
         </div>
         <div v-else class="venue-nav-link-container">
-          <a class="venue-nav-link" href="#">Dashboard</a>
+          <a class="venue-nav-link" href="/dashboard">Dashboard</a>
         </div>
         <!-- Courses -->
         <show-at breakpoint="small">
           <div v-if="this.$route.name === 'courses'" class="venue-nav-link-container">
-            <a class="venue-nav-link active-link" href="#">Courses</a>
+            <a class="venue-nav-link active-link" href="/user_courses">Courses</a>
             <div class="active-link-underline"></div>
           </div>
           <div v-else class="venue-nav-link-container">
-            <a class="venue-nav-link" href="#">Courses</a>
+            <a class="venue-nav-link" href="/user_courses">Courses</a>
           </div>
         </show-at>
         <!-- Attendance -->
