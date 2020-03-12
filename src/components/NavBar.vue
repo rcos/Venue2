@@ -26,13 +26,15 @@
           </div>
         </show-at>
         <!-- Attendance -->
-        <div v-if="this.$route.name === 'attendance'" class="venue-nav-link-container">
-          <a class="venue-nav-link active-link" href="#">Attendance</a>
-          <div class="active-link-underline"></div>
-        </div>
-        <div v-else class="venue-nav-link-container">
-          <a class="venue-nav-link" href="#">Attendance</a>
-        </div>
+        <hide-at breakpoint="small">
+          <div v-if="this.$route.name === 'attendance'" class="venue-nav-link-container">
+            <a class="venue-nav-link active-link" href="#">Attendance</a>
+            <div class="active-link-underline"></div>
+          </div>
+          <div v-else class="venue-nav-link-container">
+            <a class="venue-nav-link" href="#">Attendance</a>
+          </div>
+        </hide-at>
       </div>
       <!-- Name -->
       <hide-at breakpoint="mediumAndBelow">
