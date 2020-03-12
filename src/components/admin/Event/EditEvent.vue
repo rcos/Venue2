@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary">Update</button>
+        <button type="button" class="btn btn-primary" v-on:click="updateEvent()">Update</button>
       </div>
     </form>
 
