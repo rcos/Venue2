@@ -2,7 +2,7 @@
   <div>
     <DashboardSection active_section/>
     <DashboardSection today_section/>
-    <hide-at breakpoint="small">
+    <hide-at breakpoint="mediumAndBelow">
       <DashboardSection courses_section/>
     </hide-at>
   </div>
