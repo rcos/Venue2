@@ -16,7 +16,7 @@
           <a class="venue-nav-link" href="/dashboard">Dashboard</a>
         </div>
         <!-- Courses -->
-        <show-at breakpoint="small">
+        <show-at breakpoint="mediumAndBelow">
           <div v-if="this.$route.name === 'courses'" class="venue-nav-link-container">
             <a class="venue-nav-link active-link" href="/user_courses">Courses</a>
             <div class="active-link-underline"></div>

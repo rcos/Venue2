@@ -165,8 +165,8 @@
   margin-left: 3rem;
 }
 
-/*Small devices (landscape phones, 576px and up)*/
-@media (max-width: 575.98px) {
+/*Medium devices (tablets, 768px and up)*/
+@media (max-width: 1128px) {
   .dashboard-section {
     text-align: center;
     height: auto;
