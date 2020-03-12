@@ -2,7 +2,9 @@
   <div>
     <DashboardSection active_section/>
     <DashboardSection today_section/>
-    <DashboardSection courses_section/>
+    <hide-at breakpoint="small">
+      <DashboardSection courses_section/>
+    </hide-at>
   </div>
 </template>
 
@@ -10,6 +12,7 @@
   import UserAPI from '@/services/UserAPI.js';
   import DashboardSection from '@/components/DashboardSection'
   import { authComputed } from '../vuex/helpers.js'
+  import {showAt, hideAt} from 'vue-breakpoints'
 
   export default {
     name: 'Dashboard',
@@ -17,7 +20,9 @@
       ...authComputed
     },
     components: {
-      DashboardSection
+      DashboardSection,
+      hideAt,
+      showAt
     },
     data(){
       return {

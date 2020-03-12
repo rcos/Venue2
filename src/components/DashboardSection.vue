@@ -23,27 +23,23 @@
     </div>
     <!-- Courses Section -->
     <div v-else-if="courses_section">
-      <hide-at breakpoint="small">
-        <h2 class="section-title">Courses</h2>
-      </hide-at>
-      <hide-at breakpoint="small">
-        <div v-if="is_instructor">
-          <div v-if="courses.length > 0">
-            <h3 v-for="course in courses">{{ course.name }}</h3>
-          </div>
-          <div v-else>
-            <p class="no-container" id="no-courses">No courses</p>
-          </div>
+      <h2 class="section-title">Courses</h2>
+      <div v-if="is_instructor">
+        <div v-if="courses.length > 0">
+          <h3 v-for="course in courses">{{ course.name }}</h3>
         </div>
         <div v-else>
-          <div v-if="sections.length > 0">
-            <InfoContainer v-for="section in sections" v-bind:key="section._id" course_info v-bind:section="section" />
-          </div>
-          <div v-else>
-            <p class="no-container" id="no-courses">No courses</p>
-          </div>
+          <p class="no-container" id="no-courses">No courses</p>
         </div>
-      </hide-at>
+      </div>
+      <div v-else>
+        <div v-if="sections.length > 0">
+          <InfoContainer v-for="section in sections" v-bind:key="section._id" course_info v-bind:section="section" />
+        </div>
+        <div v-else>
+          <p class="no-container" id="no-courses">No courses</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -105,10 +101,12 @@
       async getActiveEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
         this.active_events = response.data
+        this.active_events = []
       },
       async getTodaysEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
         this.todays_events = response.data
+        this.todays_events = []
       }
     }
   }
@@ -117,26 +115,28 @@
 <style scoped>
 .dashboard-section {
   /*border: red solid;*/
+  text-align: left;
   margin-top: 4rem;
   /*padding: 1rem;*/
   display: inline-block;
   vertical-align: top;
+  height: 15rem;
 }
 
 .active-section {
   float: left;
-  margin-left: 3rem;
+  margin-left: 8rem;
+  width: 30rem;
 }
 
 .today-section {
-
+  width: 30rem;
 }
 
 .courses-section {
   display: block;
-  margin-left: 6rem;
-  margin-top: 10rem;
-  text-align: left;
+  margin-left: 8rem;
+  margin-top: 2rem;
 }
 
 .section-title {
@@ -154,7 +154,7 @@
 }
 
 #no-active {
-  margin-left: 5rem;
+  margin-left: 3rem;
 }
 
 #no-today {
@@ -169,11 +169,11 @@
 @media (max-width: 575.98px) {
   .dashboard-section {
     text-align: center;
-    /*text-align: left;*/
-    /*padding-left: 8rem;*/
+    /*height: auto;*/
   }
   .active-section {
     margin-left: 0;
+    width: 100%;
   }
   .dashboard-section {
     width: 100%;
