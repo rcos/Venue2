@@ -5,7 +5,10 @@
     <div v-if="active_section">
       <h2 class="section-title">Active</h2>
       <div v-if="active_events.length > 0">
-        <h3 v-for="event in active_events">{{ event.title }}</h3>
+        <!-- <h3 v-for="event in active_events">{{ event.title }}</h3> -->
+        <div class="active-event-card-container">
+          <ActiveEventCard />
+        </div>
       </div>
       <div v-else>
         <p class="no-container" id="no-active">No active events</p>
@@ -50,6 +53,7 @@
   import EventAPI from '@/services/EventAPI.js'
   import InfoContainer from '@/components/InfoContainer.vue'
   import {showAt, hideAt} from 'vue-breakpoints'
+  import ActiveEventCard from '@/components/ActiveEventCard.vue'
 
   export default {
     name: 'DashboardSection',
@@ -63,7 +67,8 @@
     components: {
       InfoContainer,
       hideAt,
-      showAt
+      showAt,
+      ActiveEventCard
     },
     data(){
       return {
@@ -101,12 +106,12 @@
       async getActiveEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
         this.active_events = response.data
-        this.active_events = []
+        // this.active_events = []
       },
       async getTodaysEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
         this.todays_events = response.data
-        this.todays_events = []
+        // this.todays_events = []
       }
     }
   }
@@ -163,6 +168,10 @@
 
 #no-courses {
   margin-left: 3rem;
+}
+
+.active-event-card-container {
+  margin-top: 1rem;
 }
 
 /*Medium devices (tablets, 768px and up)*/
