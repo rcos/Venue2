@@ -169,7 +169,7 @@
 @media (max-width: 575.98px) {
   .dashboard-section {
     text-align: center;
-    /*height: auto;*/
+    height: auto;
   }
   .active-section {
     margin-left: 0;
