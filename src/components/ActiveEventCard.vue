@@ -9,6 +9,7 @@
       <div class="event-location">DCC 308</div>
     </div>
     <div class="event-card-section" id="time-section">
+      <img src="@/assets/clock.svg" class="clock">
       <div class="time-remaining">35m</div>
     </div>
   </div>
@@ -48,18 +49,22 @@ export default {
 
 <style scoped>
 .active-event-card {
+  position: absolute;
   background-color: white;
-  width: 95%;
+  width: 98%;
   border-radius: 5px;
-  margin: auto;
-  margin-top: 0.1rem;
-  padding: 12px 15px 5px 15px;
+  /*margin: auto;*/
+  margin-top: 0.2rem;
+  margin-left: 0.2rem;
+  padding: 12px 15px 10px 15px;
+  box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.1);
   /*font-size: 2rem;*/
 }
 
 .event-card-section {
   /*border: blue solid;*/
-  width: 33%;
+  margin-left: 0.5rem;
+  width: 31%;
   display: inline-block;
   vertical-align: top;
   height: 100%;
@@ -86,9 +91,19 @@ export default {
   font-size: 0.75rem;
 }
 
+#time-section {
+  padding-left: 2.5rem;
+}
+
+.clock {
+  height: 1rem;
+}
+
 .time-remaining {
+  display: inline-block;
   padding-top: 0.25rem;
-  text-align: right;
+  /*text-align: center;*/
+  margin-left: 0.5rem;
   font-size: 0.9rem;
   color: #FF7B7B;
 }

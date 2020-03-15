@@ -119,7 +119,7 @@
 
 <style scoped>
 .dashboard-section {
-  border: red solid;
+  /*border: red solid;*/
   text-align: left;
   margin-top: 4rem;
   /*padding: 1rem;*/
@@ -171,16 +171,17 @@
 }
 
 .active-event-card-container {
+  position: relative;
   width: 80%;
-  margin: auto;
+  height: 3.5rem;
+  margin-left: 2rem;
   margin-top: 1rem;
   border: #FC5D60 solid;
   border-radius: 5px;
   background-color: #FC5D60;
-
+  /*padding-bottom: -5rem;*/
 }
 
-/*Medium devices (tablets, 768px and up)*/
 @media (max-width: 1128px) {
   .dashboard-section {
     text-align: center;
@@ -201,6 +202,10 @@
   }
   #no-today {
     margin-left: auto;
+  }
+
+  .active-event-card-container {
+    margin: auto;
   }
 }
 
