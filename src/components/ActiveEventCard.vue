@@ -114,10 +114,10 @@ export default {
 .time-remaining {
   display: inline-block;
   padding-top: 0.25rem;
-  /*text-align: center;*/
   margin-left: 0.5rem;
   font-size: 0.7rem;
   color: #FF7B7B;
+  font-weight: bold;
 }
 
 .desktop-active-class-modal {
