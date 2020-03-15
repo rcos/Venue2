@@ -64,14 +64,19 @@ export default {
 .event-card-section {
   /*border: blue solid;*/
   margin-left: 0.5rem;
-  width: 31%;
   display: inline-block;
   vertical-align: top;
   height: 100%;
 }
 
+#course-section {
+  width: 30%;
+}
+
 .course-name {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  color: #466D85;
+  font-weight: bold;
 }
 
 .course-title {
@@ -80,22 +85,29 @@ export default {
 }
 
 #event-section {
-  text-align: center;
+  width: 40%;
+  /*text-align: center;*/
 }
 
 .event-name {
   font-size: 0.9rem;
+  font-weight: bold;
 }
 
 .event-location {
+  /*text-align: center;*/
   font-size: 0.75rem;
+  color: #524e0a;
 }
 
 #time-section {
-  padding-left: 2.5rem;
+  width: 20%;
+  text-align: center;
+  padding-top: 0.25rem;
 }
 
 .clock {
+  display: inline-block;
   height: 1rem;
 }
 
@@ -104,7 +116,7 @@ export default {
   padding-top: 0.25rem;
   /*text-align: center;*/
   margin-left: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   color: #FF7B7B;
 }
 
