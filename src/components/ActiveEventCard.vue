@@ -1,28 +1,98 @@
 <template>
-<div class="desktop-active-class-modal">
+  <div class="active-event-card">
+    <div class="event-card-section" id="course-section">
+      <div class="course-name">Intro to AI</div>
+      <div class="course-title">CSCI 4200-02</div>
+    </div>
+    <div class="event-card-section" id="event-section">
+      <div class="event-name">Class 10/12/18</div>
+      <div class="event-location">DCC 308</div>
+    </div>
+    <div class="event-card-section" id="time-section">
+      <div class="time-remaining">35m</div>
+    </div>
+  </div>
+<!-- <div class="desktop-active-class-modal">
   <div class="bg"></div>
   <div class="fg">
     <div class="class-info">
-      <div class="class-name">Event Name</div>
+      <div class="class-name">Intro to AI</div>
       <div class="class-code">CSCI 1200</div>
     </div>
     <div class="time-remaining">
       35m
     </div>
   </div>
-</div>
+</div> -->
 </template>
 
 <script>
 export default {
   name: 'ActiveEventCard',
   props: {
-    class_info: Object
+  },
+  computed: {
+  },
+  components: {
+  },
+  data(){
+    return {
+    }
+  },
+  created() {
+  },
+  methods: {
   }
 }
 </script>
 
-<style>
+<style scoped>
+.active-event-card {
+  background-color: white;
+  width: 95%;
+  border-radius: 5px;
+  margin: auto;
+  margin-top: 0.1rem;
+  padding: 12px 15px 5px 15px;
+  /*font-size: 2rem;*/
+}
+
+.event-card-section {
+  /*border: blue solid;*/
+  width: 33%;
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+}
+
+.course-name {
+  font-size: 0.9rem;
+}
+
+.course-title {
+  font-size: 0.75rem;
+  color: #1591C5;
+}
+
+#event-section {
+  text-align: center;
+}
+
+.event-name {
+  font-size: 0.9rem;
+}
+
+.event-location {
+  font-size: 0.75rem;
+}
+
+.time-remaining {
+  padding-top: 0.25rem;
+  text-align: right;
+  font-size: 0.9rem;
+  color: #FF7B7B;
+}
+
 .desktop-active-class-modal {
   width: 90%;
   margin: 0 auto;

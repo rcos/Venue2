@@ -119,7 +119,7 @@
 
 <style scoped>
 .dashboard-section {
-  /*border: red solid;*/
+  border: red solid;
   text-align: left;
   margin-top: 4rem;
   /*padding: 1rem;*/
@@ -171,7 +171,13 @@
 }
 
 .active-event-card-container {
+  width: 80%;
+  margin: auto;
   margin-top: 1rem;
+  border: #FC5D60 solid;
+  border-radius: 5px;
+  background-color: #FC5D60;
+
 }
 
 /*Medium devices (tablets, 768px and up)*/
