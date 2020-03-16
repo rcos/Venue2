@@ -56,14 +56,14 @@ export default {
   /*margin: auto;*/
   margin-top: 0.2rem;
   margin-left: 0.2rem;
-  padding: 12px 15px 10px 15px;
+  padding: 0.8rem 0.4rem 0.7rem 0.4rem;
   box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.1);
   /*font-size: 2rem;*/
 }
 
 .event-card-section {
   /*border: blue solid;*/
-  margin-left: 0.5rem;
+  /*margin-left: 0.5rem;*/
   display: inline-block;
   vertical-align: top;
   height: 100%;
@@ -71,6 +71,7 @@ export default {
 
 #course-section {
   width: 30%;
+  margin-left: 0.5rem;
 }
 
 .course-name {
@@ -86,7 +87,8 @@ export default {
 
 #event-section {
   width: 40%;
-  /*text-align: center;*/
+  text-align: center;
+  margin:auto;
 }
 
 .event-name {
@@ -102,6 +104,7 @@ export default {
 
 #time-section {
   width: 20%;
+  margin-left: 1rem;
   text-align: center;
   padding-top: 0.25rem;
 }
@@ -118,6 +121,23 @@ export default {
   font-size: 0.7rem;
   color: #FF7B7B;
   font-weight: bold;
+}
+
+/*Medium devices (tablets and below)*/
+@media (max-width: 1128px) {
+  #course-section {
+    width: 23%;
+  }
+}
+
+/*Small devices (phones and below)*/
+@media (max-width: 575.98px) {
+  .active-event-card {
+    padding-left: 0;
+  }
+  #course-section {
+    width: 30%;
+  }
 }
 
 .desktop-active-class-modal {
