@@ -124,7 +124,9 @@
   display: inline-block;
   vertical-align: top;
   height: 15rem;
+  overflow-y: auto;
 }
+
 
 .active-section {
   float: left;
