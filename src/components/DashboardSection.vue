@@ -194,7 +194,13 @@ background-color: #F5F5F5;
   border-radius: 5px;
   background-color: #FC5D60;
   cursor: pointer;
+  transition: background-color, border, 0.25s;
   /*padding-bottom: -5rem;*/
+}
+
+.active-event-card-container:hover {
+  background-color: #cf4c4f;
+  border: #cf4c4f solid;
 }
 
 /*Medium devices (tablets and below)*/

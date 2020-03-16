@@ -83,7 +83,12 @@ export default {
   margin-left: 0.2rem;
   padding: 0.8rem 0.4rem 0.7rem 0.4rem;
   box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.1);
-  /*font-size: 2rem;*/
+  transition: background-color, box-shadow 0.25s;
+}
+
+.active-event-card:hover {
+  background-color: #e8e8e8;
+  box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.3);
 }
 
 .event-card-section {
