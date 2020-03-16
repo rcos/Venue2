@@ -127,6 +127,15 @@
   overflow-y: auto;
 }
 
+.dashboard-section::-webkit-scrollbar {
+  width: 12px;
+}
+
+.dashboard-section::-webkit-scrollbar-thumb {
+border-radius: 10px;
+-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+background-color: #F5F5F5; 
+}
 
 .active-section {
   float: left;
