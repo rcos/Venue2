@@ -53,6 +53,13 @@ export default {
       const response = await SectionAPI.getSectionWithCourse(this.event.section)
       this.section = response.data
       this.course = this.section.course
+      this.adjustCourseNameForViewing()
+    },
+    adjustCourseNameForViewing() {
+      if(this.course.name.length > 18){
+        this.course.name = this.course.name.slice(0,11)
+        this.course.name += "..."
+      }
     }
   }
 }
@@ -83,9 +90,11 @@ export default {
 #course-section {
   width: 30%;
   margin-left: 0.5rem;
+  /*text-align: center;*/
 }
 
 .course-name {
+  /*font-size: 0.8rem;*/
   font-size: 0.8rem;
   color: #466D85;
   font-weight: bold;
