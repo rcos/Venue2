@@ -1,11 +1,11 @@
 <template>
   <div class="active-event-card">
     <div class="event-card-section" id="course-section">
-      <div class="course-name">Intro to AI</div>
-      <div class="course-title">CSCI 4200-02</div>
+      <div class="course-name">{{ course.name }}</div>
+      <div class="course-title">{{ course.dept }} {{ course.course_number }}-{{ section.number }}</div>
     </div>
     <div class="event-card-section" id="event-section">
-      <div class="event-name">Class 10/12/18</div>
+      <div class="event-name">{{ event.title }}</div>
       <div class="event-location">DCC 308</div>
     </div>
     <div class="event-card-section" id="time-section">
@@ -28,9 +28,12 @@
 </template>
 
 <script>
+  import SectionAPI from '@/services/SectionAPI.js'
+
 export default {
   name: 'ActiveEventCard',
   props: {
+    event: {}
   },
   computed: {
   },
@@ -38,11 +41,19 @@ export default {
   },
   data(){
     return {
+      section: {},
+      course: {}
     }
   },
   created() {
+    this.getEventSectionWithCourse()
   },
   methods: {
+    async getEventSectionWithCourse() {
+      const response = await SectionAPI.getSectionWithCourse(this.event.section)
+      this.section = response.data
+      this.course = this.section.course
+    }
   }
 }
 </script>

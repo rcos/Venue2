@@ -5,9 +5,8 @@
     <div v-if="active_section">
       <h4 class="section-title">Active</h4>
       <div v-if="active_events.length > 0">
-        <!-- <h3 v-for="event in active_events">{{ event.title }}</h3> -->
-        <div class="active-event-card-container">
-          <ActiveEventCard />
+        <div v-for="event in active_events" class="active-event-card-container">
+          <ActiveEventCard v-bind:event="event" />
         </div>
       </div>
       <div v-else>
@@ -106,7 +105,6 @@
       async getActiveEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
         this.active_events = response.data
-        // this.active_events = []
       },
       async getTodaysEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
