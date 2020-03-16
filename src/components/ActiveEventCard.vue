@@ -11,7 +11,7 @@
     <div class="event-card-section" id="time-section">
       <img src="@/assets/clock.svg" class="clock">
       <div class="time-remaining">
-        <!-- <span>3d </span> -->
+        <span v-if="remaining_days > 0">{{ remaining_days }}d </span>
         <span v-if="remaining_hours > 0">{{ remaining_hours }}h </span>
         <span v-if="remaining_mins > 0">{{ remaining_mins }}m</span>
       </div>
@@ -35,6 +35,7 @@ export default {
     return {
       section: {},
       course: {},
+      remaining_days: Number,
       remaining_hours: Number,
       remaining_mins: Number
     }
@@ -62,8 +63,8 @@ export default {
       let diff_milliseconds = Math.abs(event_end_time - current_time);
       let diff_hours = Math.floor((diff_milliseconds % 86400000) / 3600000); // hours
       let diff_mins = Math.round(((diff_milliseconds % 86400000) % 3600000) / 60000); // minutes
-      console.log(diff_hours)
-      console.log(diff_mins)
+      let diff_days = Math.floor(diff_milliseconds / 86400000); // days
+      this.remaining_days = diff_days
       this.remaining_hours = diff_hours
       this.remaining_mins = diff_mins
     }
