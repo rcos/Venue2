@@ -173,7 +173,7 @@
   width: 75%;
   height: 3.5rem;
   margin-left: 2rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
   border: #FC5D60 solid;
   border-radius: 5px;
   background-color: #FC5D60;
@@ -205,6 +205,7 @@
   }
   .active-event-card-container {
     margin: auto;
+    margin-top: 2rem;
     width: 50%;
   }
 }
