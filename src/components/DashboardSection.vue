@@ -3,7 +3,7 @@
     'courses-section':courses_section}">
     <!-- Active Section -->
     <div v-if="active_section">
-      <h3 class="section-title">Active</h3>
+      <h4 class="section-title">Active</h4>
       <div v-if="active_events.length > 0">
         <!-- <h3 v-for="event in active_events">{{ event.title }}</h3> -->
         <div class="active-event-card-container">
@@ -16,7 +16,7 @@
     </div>
     <!-- Today Section -->
     <div v-else-if="today_section">
-      <h3 class="section-title">Today's Events</h3>
+      <h4 class="section-title">Today's Events</h4>
       <div v-if="todays_events.length > 0">
         <h3 v-for="event in todays_events">{{ event.title }}</h3>
       </div>
@@ -26,7 +26,7 @@
     </div>
     <!-- Courses Section -->
     <div v-else-if="courses_section">
-      <h3 class="section-title">Courses</h3>
+      <h4 class="section-title">Courses</h4>
       <div v-if="is_instructor">
         <div v-if="courses.length > 0">
           <h3 v-for="course in courses">{{ course.name }}</h3>
