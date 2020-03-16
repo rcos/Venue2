@@ -4,7 +4,7 @@
     <!-- Active Section -->
     <div v-if="active_section">
       <h4 class="section-title">Active</h4>
-      <div v-if="active_events.length > 0">
+      <div class="dashboard-section-content" v-if="active_events.length > 0">
         <div v-for="event in active_events" class="active-event-card-container">
           <ActiveEventCard v-bind:event="event" />
         </div>
@@ -124,14 +124,18 @@
   display: inline-block;
   vertical-align: top;
   height: 15rem;
+}
+
+.dashboard-section-content {
+  height: 12.5rem;
   overflow-y: auto;
 }
 
-.dashboard-section::-webkit-scrollbar {
+.dashboard-section-content::-webkit-scrollbar {
   width: 12px;
 }
 
-.dashboard-section::-webkit-scrollbar-thumb {
+.dashboard-section-content::-webkit-scrollbar-thumb {
 border-radius: 10px;
 -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
 background-color: #F5F5F5; 
@@ -157,6 +161,7 @@ background-color: #F5F5F5;
 /*  border: black solid;
   text-align: left;*/
   font-weight: bold;
+  /*position: fixed;*/
 }
 
 .no-container {
