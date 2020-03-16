@@ -183,7 +183,7 @@
   /*padding-bottom: -5rem;*/
 }
 
-/*Medium devices (tablets, 768px and below)*/
+/*Medium devices (tablets and below)*/
 @media (max-width: 1128px) {
   .dashboard-section {
     text-align: center;
@@ -205,10 +205,18 @@
   #no-today {
     margin-left: auto;
   }
-
   .active-event-card-container {
     margin: auto;
+    width: 50%;
   }
 }
+
+/*Small devices (phones and below)*/
+@media (max-width: 575.98px) {
+  .active-event-card-container {
+    width: 80%;
+  }
+}
+
 
 </style>
