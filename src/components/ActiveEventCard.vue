@@ -11,6 +11,7 @@
     <div class="event-card-section" id="time-section">
       <img src="@/assets/clock.svg" class="clock">
       <div class="time-remaining">
+        <!-- <span>3d </span> -->
         <span v-if="remaining_hours > 0">{{ remaining_hours }}h </span>
         <span v-if="remaining_mins > 0">{{ remaining_mins }}m</span>
       </div>
@@ -128,8 +129,7 @@ export default {
 }
 
 #time-section {
-  width: 20%;
-  margin-left: 1rem;
+  width: 26%;
   text-align: center;
   padding-top: 0.25rem;
 }

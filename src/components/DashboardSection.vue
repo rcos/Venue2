@@ -170,7 +170,7 @@
 
 .active-event-card-container {
   position: relative;
-  width: 70%;
+  width: 75%;
   height: 3.5rem;
   margin-left: 2rem;
   margin-top: 1rem;
