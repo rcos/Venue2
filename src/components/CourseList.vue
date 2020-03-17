@@ -1,6 +1,6 @@
 <<template>
   <div class="course-list">
-    <CourseCard v-for="course in courses" />
+    <CourseCard v-for="course in courses" v-bind:course="course" />
   </div>
 </template>
 

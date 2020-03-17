@@ -2,8 +2,9 @@
   <div class="course-card">
   	<div class="color-box"></div>
     <div class="course-info">
-      <div class="course-title">CSCI 1200</div>
-      <div class="course-name">Data Structures</div>
+      <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
+      <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>
+      <div v-else class="course-name">{{ course.name }}</div>
     </div>
   </div>
 </template>
@@ -13,7 +14,7 @@
   export default {
     name: 'CourseCard',
     props: {
-
+      course: Object
     },
     computed: {
     },
@@ -39,7 +40,8 @@
 	display: inline-block;
 	margin-left: 2rem;
   margin-top: 1rem;
-	width: 16rem;
+	/*width: 16rem;*/
+  width: 20rem;
 	height: 3rem;
   padding-top: 0.7rem;
   box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.07);
