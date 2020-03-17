@@ -79,10 +79,8 @@
 
 <style scoped>
 .dashboard-section {
-  /*border: red solid;*/
   text-align: left;
   margin-top: 4rem;
-  /*padding: 1rem;*/
   display: inline-block;
   vertical-align: top;
   height: 15rem;
@@ -120,18 +118,7 @@ background-color: #F5F5F5;
 }
 
 .section-title {
-/*  border: black solid;
-  text-align: left;*/
   font-weight: bold;
-  /*position: fixed;*/
-}
-
-.no-container {
-  /*border: black solid;*/
-  margin-top: 2rem;
-  text-align: left;
-  font-weight: bold;
-  color: #add5ff;
 }
 
 #no-active {

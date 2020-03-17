@@ -364,3 +364,10 @@ a:active {
 .log-list li.active .info-area .class-name {
   color: white;
 }
+
+.no-container {
+  margin-top: 2rem;
+  text-align: left;
+  font-weight: bold;
+  color: #add5ff;
+}
