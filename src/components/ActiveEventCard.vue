@@ -1,19 +1,21 @@
 <template>
-  <div class="active-event-card">
-    <div class="event-card-section" id="course-section">
-      <div class="course-name">{{ course.name }}</div>
-      <div class="course-title">{{ course.dept }} {{ course.course_number }}-{{ section.number }}</div>
-    </div>
-    <div class="event-card-section" id="event-section">
-      <div class="event-name">{{ event.title }}</div>
-      <div class="event-location">DCC 308</div>
-    </div>
-    <div class="event-card-section" id="time-section">
-      <img src="@/assets/clock.svg" class="clock">
-      <div class="time-remaining">
-        <span v-if="remaining_days > 0">{{ remaining_days }}d </span>
-        <span v-if="remaining_hours > 0">{{ remaining_hours }}h </span>
-        <span v-if="remaining_mins > 0">{{ remaining_mins }}m</span>
+  <div class="active-event-card-container">
+    <div class="active-event-card">
+      <div class="event-card-section" id="course-section">
+        <div class="course-name">{{ course.name }}</div>
+        <div class="course-title">{{ course.dept }} {{ course.course_number }}-{{ section.number }}</div>
+      </div>
+      <div class="event-card-section" id="event-section">
+        <div class="event-name">{{ event.title }}</div>
+        <div class="event-location">DCC 308</div>
+      </div>
+      <div class="event-card-section" id="time-section">
+        <img src="@/assets/clock.svg" class="clock">
+        <div class="time-remaining">
+          <span v-if="remaining_days > 0">{{ remaining_days }}d </span>
+          <span v-if="remaining_hours > 0">{{ remaining_hours }}h </span>
+          <span v-if="remaining_mins > 0">{{ remaining_mins }}m</span>
+        </div>
       </div>
     </div>
   </div>
@@ -73,6 +75,24 @@ export default {
 </script>
 
 <style scoped>
+.active-event-card-container {
+  position: relative;
+  width: 75%;
+  height: 3.5rem;
+  margin-left: 2rem;
+  margin-top: 2rem;
+  border: #FC5D60 solid;
+  border-radius: 5px;
+  background-color: #FC5D60;
+  cursor: pointer;
+  transition: background-color, border, width, 0.25s;
+}
+
+.active-event-card-container:hover {
+  background-color: #cf4c4f;
+  border: #cf4c4f solid;
+}
+
 .active-event-card {
   position: absolute;
   background-color: white;
@@ -92,8 +112,6 @@ export default {
 }
 
 .event-card-section {
-  /*border: blue solid;*/
-  /*margin-left: 0.5rem;*/
   display: inline-block;
   vertical-align: top;
   height: 100%;
@@ -129,7 +147,6 @@ export default {
 }
 
 .event-location {
-  /*text-align: center;*/
   font-size: 0.75rem;
   color: #524e0a;
 }
@@ -154,8 +171,13 @@ export default {
   font-weight: bold;
 }
 
-/*Medium devices (tablets and below)*/
+/*Large devices (Laptops and above)*/
 @media (max-width: 1128px) {
+  .active-event-card-container {
+    margin: auto;
+    margin-top: 2rem;
+    width: 50%;
+  }
   #course-section {
     width: 23%;
   }
@@ -163,6 +185,9 @@ export default {
 
 /*Small devices (phones and below)*/
 @media (max-width: 575.98px) {
+  .active-event-card-container {
+    width: 80%;
+  }
   .active-event-card {
     padding-left: 0;
   }
