@@ -1,27 +1,18 @@
 <template>
   <div>
     <DashboardSection active_section/>
-    <DashboardSection courses_section/>
-    <DashboardSection upcoming_section/>
+    <DashboardSection today_section/>
+    <hide-at breakpoint="mediumAndBelow">
+      <DashboardSection courses_section/>
+    </hide-at>
   </div>
 </template>
-
-
-<!-- For testing -->
-<!-- <template>
-  <div>
-    <h2>Dashboard</h2>
-    <button type="submit" class="btn btn-primary" @click="logOut">Logout</button>
-    <Users />
-    <h2 v-if="loggedIn">I'm logged in</h2>
-    <h2 v-else>Not logged in</h2>
-  </div>
-</template> -->
 
 <script>
   import UserAPI from '@/services/UserAPI.js';
   import DashboardSection from '@/components/DashboardSection'
   import { authComputed } from '../vuex/helpers.js'
+  import {showAt, hideAt} from 'vue-breakpoints'
 
   export default {
     name: 'Dashboard',
@@ -29,7 +20,9 @@
       ...authComputed
     },
     components: {
-      DashboardSection
+      DashboardSection,
+      hideAt,
+      showAt
     },
     data(){
       return {
@@ -41,9 +34,7 @@
     },
     methods: {
       getCurrentUser() {
-        const user_string = localStorage.getItem('user')
-        const user_data = JSON.parse(user_string)
-        this.current_user = user_data.current_user
+        this.current_user = this.$store.state.user.current_user
       },
       logOut() {
         this.$store.dispatch('logout')

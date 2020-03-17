@@ -29,4 +29,10 @@ export default {
   getStudents (section_id) {
     return API().get('sections/getStudents/' + section_id)
   },  
+  getSectionsWithCoursesForStudent(user_id) {
+    return API().get('sections/get_with_courses_for_student/' + user_id)
+  },
+  getSectionWithCourse(section_id) {
+    return API().get('sections/get_with_course/' + section_id)
+  }
 }

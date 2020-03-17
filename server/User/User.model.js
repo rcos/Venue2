@@ -10,6 +10,10 @@ let User = new Schema({
 	last_name: String,
 	email: String,
 	password: String,
+	is_admin: {
+		type: Boolean,
+		default: false
+	},
 	is_instructor: {
 		type: Boolean,
 		default: false
