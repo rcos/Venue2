@@ -28,7 +28,7 @@
       <h4 class="section-title">Courses</h4>
       <div v-if="is_instructor">
         <div v-if="courses.length > 0">
-          <Courses v-bind:courses="courses" />
+          <CourseList v-bind:courses="courses" />
         </div>
         <div v-else>
           <p class="no-container" id="no-courses">No courses</p>
@@ -53,7 +53,7 @@
   import InfoContainer from '@/components/InfoContainer.vue'
   import {showAt, hideAt} from 'vue-breakpoints'
   import ActiveEventCard from '@/components/ActiveEventCard.vue'
-  import Courses from '@/components/Courses.vue'
+  import CourseList from '@/components/CourseList.vue'
 
   export default {
     name: 'DashboardSection',
@@ -69,7 +69,7 @@
       hideAt,
       showAt,
       ActiveEventCard,
-      Courses
+      CourseList
     },
     data(){
       return {

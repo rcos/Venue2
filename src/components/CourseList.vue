@@ -1,5 +1,5 @@
 <<template>
-  <div>
+  <div class="course-list">
     <CourseCard v-for="course in courses" />
   </div>
 </template>
@@ -8,7 +8,7 @@
   import CourseCard from '@/components/CourseCard.vue'
 
   export default {
-    name: 'Courses',
+    name: 'CourseList',
     props: {
       courses: Array
     },
