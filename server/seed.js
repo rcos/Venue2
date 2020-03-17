@@ -120,7 +120,7 @@ var s2 = new Section({
 var e0 = new Event({
 	title: "Large Group",
 	section: s0._id,
-	is_active: false,
+	is_active: true,
 	start_time: Date()
 	// location: null,
 	// time_range: null
