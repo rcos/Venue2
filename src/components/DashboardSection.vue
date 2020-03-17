@@ -1,21 +1,48 @@
 <template>
-  <div id="infosection">
+  <div class="dashboard-section" v-bind:class="{'active-section':active_section, 'today-section':today_section,
+    'courses-section':courses_section}">
+    <!-- Active Section -->
     <div v-if="active_section">
-      <h1 class="section-title">Active</h1>
-      <h3 v-for="event in active_events">{{ event.title }}</h3>
-    </div>
-    <div v-else-if="courses_section">
-      <h1 class="section-title">Courses</h1>
-      <div v-if="is_instructor">
-        <h3 v-for="course in courses">{{ course.name }}</h3>
+      <h4 class="section-title">Active</h4>
+      <div class="dashboard-section-content" v-if="active_events.length > 0">
+        <div v-for="event in active_events" class="active-event-card-container">
+          <ActiveEventCard v-bind:event="event" />
+        </div>
       </div>
       <div v-else>
-        <InfoContainer v-for="section in sections" v-bind:key="section._id" course_info v-bind:section="section" />
+        <p class="no-container" id="no-active">No active events</p>
       </div>
     </div>
+    <!-- Today Section -->
     <div v-else-if="today_section">
-      <h1 class="section-title">Today's Events</h1>
-      <h3 v-for="event in todays_events">{{ event.title }}</h3>
+      <h4 class="section-title">Today's Events</h4>
+      <div v-if="todays_events.length > 0">
+        <h3 v-for="event in todays_events">{{ event.title }}</h3>
+      </div>
+      <div v-else>
+        <p class="no-container" id="no-today">No events today</p>
+      </div>
+    </div>
+    <!-- Courses Section -->
+    <div v-else-if="courses_section">
+      <h4 class="section-title">Courses</h4>
+      <div v-if="is_instructor">
+        <div v-if="courses.length > 0">
+          <CourseCard v-for="course in courses" />
+          <!-- <RegisteredCourseList /> -->
+        </div>
+        <div v-else>
+          <p class="no-container" id="no-courses">No courses</p>
+        </div>
+      </div>
+      <div v-else>
+        <div v-if="sections.length > 0">
+          <InfoContainer v-for="section in sections" v-bind:key="section._id" course_info v-bind:section="section" />
+        </div>
+        <div v-else>
+          <p class="no-container" id="no-courses">No courses</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -25,6 +52,10 @@
   import CourseAPI from '@/services/CourseAPI.js'
   import EventAPI from '@/services/EventAPI.js'
   import InfoContainer from '@/components/InfoContainer.vue'
+  import {showAt, hideAt} from 'vue-breakpoints'
+  import ActiveEventCard from '@/components/ActiveEventCard.vue'
+  import CourseCard from '@/components/CourseCard.vue'
+  import RegisteredCourseList from '@/components/RegisteredCourseList.vue'
 
   export default {
     name: 'DashboardSection',
@@ -36,7 +67,12 @@
     computed: {
     },
     components: {
-      InfoContainer
+      InfoContainer,
+      hideAt,
+      showAt,
+      ActiveEventCard,
+      CourseCard,
+      RegisteredCourseList
     },
     data(){
       return {
@@ -69,6 +105,7 @@
       async getSectionsWithCourses() {
         let response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
         this.sections = response.data
+        this.sections = []
       },
       async getActiveEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
@@ -77,54 +114,142 @@
       async getTodaysEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
         this.todays_events = response.data
+        // this.todays_events = []
       }
     }
   }
 </script>
 
 <style scoped>
-#infosection {
-  border: red solid;
-  margin-top: 2rem;
+.dashboard-section {
+  /*border: red solid;*/
   text-align: left;
-  padding: 1rem;
-  padding-left: 2rem;
+  margin-top: 4rem;
+  /*padding: 1rem;*/
+  display: inline-block;
+  vertical-align: top;
+  height: 15rem;
+}
+
+.dashboard-section-content {
+  height: 12.5rem;
+  overflow-y: auto;
+}
+
+.dashboard-section-content::-webkit-scrollbar {
+  width: 12px;
+}
+
+.dashboard-section-content::-webkit-scrollbar-thumb {
+border-radius: 10px;
+-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+background-color: #F5F5F5; 
+}
+
+.active-section {
+  float: left;
+  margin-left: 8rem;
+  width: 30rem;
+}
+
+.today-section {
+  width: 30rem;
+}
+
+.courses-section {
+  display: block;
+  margin-left: 8rem;
+  margin-top: 2rem;
 }
 
 .section-title {
-
+/*  border: black solid;
+  text-align: left;*/
+  font-weight: bold;
+  /*position: fixed;*/
 }
-/*
-.course-modal-temp {
-  width: 200px; height: 100px;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  box-sizing: border-box;
+
+.no-container {
+  /*border: black solid;*/
+  margin-top: 2rem;
+  text-align: left;
+  font-weight: bold;
+  color: #add5ff;
+}
+
+#no-active {
+  margin-left: 3rem;
+}
+
+#no-today {
+  margin-left: 3rem;
+}
+
+#no-courses {
+  margin-left: 3rem;
+}
+
+.active-event-card-container {
+  position: relative;
+  width: 75%;
+  height: 3.5rem;
+  margin-left: 2rem;
+  margin-top: 2rem;
+  border: #FC5D60 solid;
   border-radius: 5px;
-  padding: 10px 20px;
+  background-color: #FC5D60;
   cursor: pointer;
-  transition: border 0.25s;
-  display: inline-block;
-  vertical-align: top;
-  margin: 10px;
+  transition: background-color, border, width, 0.25s;
+  /*padding-bottom: -5rem;*/
 }
 
-.course-modal-temp:hover {
-  border: 1px solid rgba(0, 0, 0, 0.6);
+.active-event-card-container:hover {
+  background-color: #cf4c4f;
+  border: #cf4c4f solid;
 }
 
-.course-modal-temp .time-left {
-  font-size: 12px;
-  color: #b54545;
-  font-weight: bold;
+/*Desktop*/
+@media (min-width: 1200px) {
+  .active-event-card-container:hover {
+    width: 78%;
+  }
 }
 
-.course-modal-temp .title {
-  font-size: 20px;
+/*Medium devices (tablets and below)*/
+@media (max-width: 1128px) {
+  .dashboard-section {
+    text-align: center;
+    height: auto;
+  }
+  .active-section {
+    margin-left: 0;
+    width: 100%;
+  }
+  .dashboard-section {
+    width: 100%;
+  }
+  .no-container {
+    text-align: center;
+  }
+  #no-active {
+    margin-left: auto;
+  }
+  #no-today {
+    margin-left: auto;
+  }
+  .active-event-card-container {
+    margin: auto;
+    margin-top: 2rem;
+    width: 50%;
+  }
 }
 
-.course-modal-temp .course-code {
-  font-size: 14px;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.6);
-}*/
+/*Small devices (phones and below)*/
+@media (max-width: 575.98px) {
+  .active-event-card-container {
+    width: 80%;
+  }
+}
+
+
 </style>

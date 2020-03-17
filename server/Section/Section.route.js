@@ -170,4 +170,30 @@ sectionRoutes.get('/get_with_courses_for_student/:user_id', verifyToken, (req, r
   })
 })
 
+sectionRoutes.get('/get_with_course/:section_id', verifyToken, (req, res) => {
+  let section_id = req.params.section_id
+  jwt.verify(req.token, 'the_secret_key', err => {
+    if(err) {
+      res.sendStatus(401).send("Unauthorized access")
+    } else {
+
+      Section.findById(section_id, function (err, section){
+        if(err) {
+          res.json(err);
+        }else {
+          Course.findById(section.course, function(error, course) {
+            if(error) {
+              res.json(error)
+            } else {
+              section.course = course
+              res.json(section)
+            }
+          })
+        }
+      });
+
+    }
+  })
+})
+
 module.exports = sectionRoutes;
