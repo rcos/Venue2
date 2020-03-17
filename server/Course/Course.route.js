@@ -12,12 +12,12 @@ courseRoutes.route('/add').post(function (req, res) {
     })
     .catch(() => {
       res.status(400).send("unable to save course to database");
-  });
+    });
 });
 
 courseRoutes.route('/').get(function (req, res) {
-    Course.find(function(err, courses){
-    if(err){
+  Course.find(function (err, courses) {
+    if (err) {
       res.json(err);
     }
     else {
@@ -28,37 +28,37 @@ courseRoutes.route('/').get(function (req, res) {
 
 courseRoutes.route('/edit/:id').get(function (req, res) {
   let id = req.params.id;
-  Course.findById(id, function (err, course){
-      if(err) {
-        res.json(err);
-      }
-      res.json(course);
+  Course.findById(id, function (err, course) {
+    if (err) {
+      res.json(err);
+    }
+    res.json(course);
   });
 });
 
 courseRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
   let updated_course = req.body.updated_course;
-  Course.findByIdAndUpdate(id, 
+  Course.findByIdAndUpdate(id,
     {
       name: updated_course.name,
       dept: updated_course.dept,
       course_number: updated_course.course_number,
       instructor: updated_course.instructor
     },
-    function(err, course) {
+    function (err, course) {
       if (!course)
         res.status(404).send("section not found");
-      res.json(course);    
+      res.json(course);
     }
   );
 });
 
 courseRoutes.route('/delete/:id').delete(function (req, res) {
-    Course.findByIdAndRemove({_id: req.params.id}, function(err){
-        if(err) res.json(err);
-        else res.json('Successfully removed');
-    });
+  Course.findByIdAndRemove({ _id: req.params.id }, function (err) {
+    if (err) res.json(err);
+    else res.json('Successfully removed');
+  });
 });
 
 //Todo: change the id being passed to just be the instructor id
@@ -66,16 +66,16 @@ courseRoutes.route('/delete/:id').delete(function (req, res) {
 //the userapis get user function
 courseRoutes.route('/getInstructor/:id').get(function (req, res) {
   let id = req.params.id;
-  Course.findById(id, function (err, course){
-      if(err) {
-        res.json(err);
-      }
-      let instructor_id = course.instructor;
-      User.findById(instructor_id, function(error, instructor){
-        if(error)
-          res.json(error);
-        res.json(instructor);
-      });
+  Course.findById(id, function (err, course) {
+    if (err) {
+      res.json(err);
+    }
+    let instructor_id = course.instructor;
+    User.findById(instructor_id, function (error, instructor) {
+      if (error)
+        res.json(error);
+      res.json(instructor);
+    });
   });
 });
 
