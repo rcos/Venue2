@@ -77,10 +77,7 @@
   display: inline-block;
   font-size: 0.7rem;
   vertical-align: middle;
-  /*color: #1591C5;*/
   color: #1591C5;
-
-  /*font-weight: bold;*/
 }
 
 .course-name {
@@ -102,6 +99,18 @@
   .course-card {
     width: 20rem;
     margin-top: 2.5rem;
+  }
+
+  .course-info {
+    margin-left: 0;
+  }
+
+  .course-title {
+    margin-left: -2rem;
+  }
+
+  .course-name {
+    margin-left: 2rem;
   }
 }
 
