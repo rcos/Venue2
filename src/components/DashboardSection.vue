@@ -29,6 +29,7 @@
       <div v-if="is_instructor">
         <div v-if="courses.length > 0">
           <h3 v-for="course in courses">{{ course.name }}</h3>
+          <CourseCard v-for="course in courses" />
         </div>
         <div v-else>
           <p class="no-container" id="no-courses">No courses</p>
@@ -53,6 +54,7 @@
   import InfoContainer from '@/components/InfoContainer.vue'
   import {showAt, hideAt} from 'vue-breakpoints'
   import ActiveEventCard from '@/components/ActiveEventCard.vue'
+  import CourseCard from '@/components/CourseCard.vue'
 
   export default {
     name: 'DashboardSection',
@@ -67,7 +69,8 @@
       InfoContainer,
       hideAt,
       showAt,
-      ActiveEventCard
+      ActiveEventCard,
+      CourseCard
     },
     data(){
       return {
