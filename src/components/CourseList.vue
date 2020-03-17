@@ -33,6 +33,5 @@
 
 <style scoped>
   .course-list {
-    border: black solid;
   }
 </style>

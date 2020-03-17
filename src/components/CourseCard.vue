@@ -45,7 +45,7 @@
   box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.07);
   border-radius: 3px;
   cursor: pointer;
-  transition: background-color, box-shadow, width, height, 0.25s;
+  transition: background-color, box-shadow, width, 0.25s;
 }
 
 .course-card:hover {
@@ -93,8 +93,7 @@
 /*Desktop*/
 @media (min-width: 1200px) {
   .course-card:hover {
-    /*width: 17rem;*/
-    height: 3.25rem;
+    width: 17rem;
   }
 }
 
