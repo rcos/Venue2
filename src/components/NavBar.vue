@@ -7,20 +7,34 @@
       </a>
       <!-- Nav Links -->
       <div id="venue-nav-links">
+        <!-- Dashboard -->
         <div class="venue-nav-link-container" v-if="this.$route.name === 'dashboard'">
-          <a class="venue-nav-link active-link" href="#">Dashboard</a>
+          <a class="venue-nav-link active-link" href="/dashboard">Dashboard</a>
           <div class="active-link-underline"></div>
         </div>
         <div v-else class="venue-nav-link-container">
-          <a class="venue-nav-link" href="#">Dashboard</a>
+          <a class="venue-nav-link" href="/dashboard">Dashboard</a>
         </div>
-        <div v-if="this.$route.name === 'attendance'" class="venue-nav-link-container">
-          <a class="venue-nav-link active-link" href="#">Attendance</a>
-          <div class="active-link-underline"></div>
-        </div>
-        <div v-else class="venue-nav-link-container">
-          <a class="venue-nav-link" href="#">Attendance</a>
-        </div>
+        <!-- Courses -->
+        <show-at breakpoint="mediumAndBelow">
+          <div v-if="this.$route.name === 'courses'" class="venue-nav-link-container">
+            <a class="venue-nav-link active-link" href="/user_courses">Courses</a>
+            <div class="active-link-underline"></div>
+          </div>
+          <div v-else class="venue-nav-link-container">
+            <a class="venue-nav-link" href="/user_courses">Courses</a>
+          </div>
+        </show-at>
+        <!-- Attendance -->
+        <hide-at breakpoint="small">
+          <div v-if="this.$route.name === 'attendance'" class="venue-nav-link-container">
+            <a class="venue-nav-link active-link" href="#">Attendance</a>
+            <div class="active-link-underline"></div>
+          </div>
+          <div v-else class="venue-nav-link-container">
+            <a class="venue-nav-link" href="#">Attendance</a>
+          </div>
+        </hide-at>
       </div>
       <!-- Name -->
       <hide-at breakpoint="mediumAndBelow">
@@ -68,13 +82,26 @@
 
 <style scoped>
   #venue-nav {
-    border-style: none none solid none;
-    border-bottom: #e0e0e0 solid thin;
+    /*border-style: none none solid none;*/
+    /*border-bottom: #e0e0e0 solid thin;*/
     padding-left: 2rem;
     padding-right: 2rem;
-    padding-top: 0.5rem;
+    /*padding-top: 1rem;*/
     padding-bottom: 0.5rem;
     overflow: hidden;
+  }
+
+  @media (min-width: 577px) { 
+    #venue-nav{
+      padding-top: 1rem;
+    }
+  }
+
+  /*Small devices (landscape phones, 576px and up)*/
+  @media (max-width: 575.98px) {
+    #venue-nav {
+      padding-top: 1.5rem;
+    }
   }
 
   #nav-logo {

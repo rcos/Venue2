@@ -74,6 +74,7 @@ eventRoutes.get('/active_or_todays_events/:user_id/:is_active', (req, res) => {
   let user_id = req.params.user_id
   let is_active = (req.params.is_active == 'true');
   let requested_events = []
+  let active_events = []
   User.findById(user_id, function (error, user) {
     if (error) {
       console.log(error)
@@ -109,7 +110,7 @@ eventRoutes.get('/active_or_todays_events/:user_id/:is_active', (req, res) => {
                         //Get Active Events or Get today's events
                         if (is_active) {
                           if (isActive(event))
-                            requested_events.push(event)
+                            active_events.push(event)
                         } else {
                           if (isToday(event.start_time))
                             requested_events.push(event)
@@ -117,7 +118,13 @@ eventRoutes.get('/active_or_todays_events/:user_id/:is_active', (req, res) => {
                       }
                     })
                   })
-                  res.json(requested_events)
+                  if (is_active) {
+                    console.log("returning active events")
+                    res.json(active_events)
+                  } else {
+                    console.log("returning today's events")
+                    res.json(requested_events)
+                  }
                 }
               })
             }
@@ -147,7 +154,7 @@ eventRoutes.get('/active_or_todays_events/:user_id/:is_active', (req, res) => {
                   //Get Active Events or Get today's events
                   if (is_active) {
                     if (isActive(event))
-                      requested_events.push(event)
+                      active_events.push(event)
                   } else {
                     if (isToday(event.start_time))
                       requested_events.push(event)
@@ -155,7 +162,13 @@ eventRoutes.get('/active_or_todays_events/:user_id/:is_active', (req, res) => {
                 }
               })
             })
-            res.json(requested_events)
+            if (is_active) {
+              console.log("returning active events")
+              res.json(active_events)
+            } else {
+              console.log("returning today's events")
+              res.json(requested_events)
+            }
           }
         })
       })
@@ -165,9 +178,7 @@ eventRoutes.get('/active_or_todays_events/:user_id/:is_active', (req, res) => {
 });
 
 function isActive(event) {
-  let current_time = new Date()
-  return current_time >= event.start_time &&
-    current_time <= event.end_time
+  return event.is_active
 }
 
 function isToday(time) {

@@ -120,7 +120,9 @@ var s2 = new Section({
 var e0 = new Event({
 	title: "Large Group",
 	section: s0._id,
-	is_active: false,
+	is_active: true,
+	start_time: Date(),
+	end_time: Date() + (2 * 60 * 60 * 1000)
 	// location: null,
 	// time_range: null
 })
@@ -129,6 +131,8 @@ var e1 = new Event({
 	title: "Small Group",
 	section: s0._id,
 	is_active: false,
+	start_time: Date(),
+	end_time: Date() + (2 * 60 * 60 * 1000)
 	// location: null,
 	// time_range: null
 })
@@ -137,6 +141,8 @@ var e2 = new Event({
 	title: "Small Group",
 	section: s0._id,
 	is_active: false,
+	start_time: Date(),
+	end_time: Date() + (2 * 60 * 60 * 1000)
 	// location: null,
 	// time_range: null
 })
@@ -145,118 +151,22 @@ var e3 = new Event({
 	title: "Small Group",
 	section: s0._id,
 	is_active: false,
+	start_time: Date(),
+	end_time: Date() + (2 * 60 * 60 * 1000)
 	// location: null,
 	// time_range: null
 })
 
 const data = [{
 	"model": "User",
-	"documents": [{
-		"_id": u0._id,
-		"first_name": u0.first_name,
-		"last_name": u0.last_name,
-		"email": u0.email,
-		"password": u0.password,
-		"is_instructor": u0.is_instructor,
-		"ta_sections": u0.ta_sections,
-		"submissions": u0.submissions
-	}, {
-		"_id": u1._id,
-		"first_name": u1.first_name,
-		"last_name": u1.last_name,
-		"email": u1.email,
-		"password": u1.password,
-		"is_instructor": u1.is_instructor,
-		"ta_sections": u1.ta_sections,
-		"submissions": u1.submissions
-	}, {
-		"_id": u2._id,
-		"first_name": u2.first_name,
-		"last_name": u2.last_name,
-		"email": u2.email,
-		"password": u2.password,
-		"is_instructor": u2.is_instructor,
-		"ta_sections": u2.ta_sections,
-		"submissions": u2.submissions
-	}, {
-		"_id": u3._id,
-		"first_name": u3.first_name,
-		"last_name": u3.last_name,
-		"email": u3.email,
-		"password": u3.password,
-		"is_instructor": u3.is_instructor,
-		"ta_sections": u3.ta_sections,
-		"submissions": u3.submissions
-	}]
+	"documents": [u0, u1, u2, u3]
 }, {
 	"model": "Course",
-	"documents": [{
-		"_id": c0._id,
-		"name": c0.name,
-		"dept": c0.dept,
-		"course_number": c0.course_number,
-		"instructor": c0.instructor
-	}, {
-		"_id": c1._id,
-		"name": c1.name,
-		"dept": c1.dept,
-		"course_number": c1.course_number,
-		"instructor": c1.instructor
-	}, {
-		"_id": c2._id,
-		"name": c2.name,
-		"dept": c2.dept,
-		"course_number": c2.course_number,
-		"instructor": c2.instructor
-	}, {
-		"_id": c3._id,
-		"name": c3.name,
-		"dept": c3.dept,
-		"course_number": c3.course_number,
-		"instructor": c3.instructor
-	}]
+	"documents": [c0, c1, c2, c3]
 }, {
 	"model": "Section",
-	"documents": [{
-		"_id": s0._id,
-		"course": s0.course,
-		"number": s0.number,
-		"students": s0.students,
-		"teaching_assistants": s0.teaching_assistants
-	}, {
-		"_id": s1._id,
-		"course": s1.course,
-		"number": s1.number,
-		"students": s1.students,
-		"teaching_assistants": s1.teaching_assistants
-	}, {
-		"_id": s2._id,
-		"course": s2.course,
-		"number": s2.number,
-		"students": s2.students,
-		"teaching_assistants": s2.teaching_assistants
-	}]
+	"documents": [s0, s1, s2]
 }, {
 	"model": "Event",
-	"documents": [{
-		"_id": e0._id,
-		"title": e0.title,
-		"section": e0.section,
-		"is_active": e0.is_active
-	}, {
-		"_id": e1._id,
-		"title": e1.title,
-		"section": e1.section,
-		"is_active": e1.is_active
-	}, {
-		"_id": e2._id,
-		"title": e2.title,
-		"section": e2.section,
-		"is_active": e2.is_active
-	}, {
-		"_id": e3._id,
-		"title": e3.title,
-		"section": e3.section,
-		"is_active": e3.is_active
-	}]
+	"documents": [e0, e1, e2, e3]
 }]
