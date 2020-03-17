@@ -144,10 +144,11 @@ export default {
     },
     showQR(qr_data) {
       var canvas = document.getElementById("qr_render_area");
-
-      QRCode.toCanvas(canvas, qr_data, function(error) {
-        if (error) console.error(error);
-      });
+      if (qr_data) {
+        QRCode.toCanvas(canvas, qr_data, function(error) {
+          if (error) console.error(error);
+        });
+      }
     }
   }
 };
