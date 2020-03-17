@@ -2,7 +2,7 @@
   <div>
     <nav id="venue-nav">
       <!-- Logo -->
-      <a id="nav-logo" href="#">
+      <a id="nav-logo" href="/dashboard">
         <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
       </a>
       <!-- Nav Links -->
