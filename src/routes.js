@@ -21,6 +21,7 @@ import Submissions from './components/admin/Submission/Submissions.vue';
 import LandingPage from './views/LandingPage.vue';
 import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
+import CourseList from './components/CourseList.vue';
 
 Vue.use(VueRouter);
 
@@ -132,6 +133,11 @@ const router = new VueRouter({
         path: '/dashboard',
         component: Dashboard,
         meta: { requiresAuth: true }
+    },
+    {
+        name: 'user_courses',
+        path: '/user_courses',
+        component: CourseList
     }
   ]
 })

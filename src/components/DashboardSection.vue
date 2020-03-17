@@ -28,7 +28,7 @@
       <h4 class="section-title">Courses</h4>
       <div v-if="is_instructor">
         <div v-if="courses.length > 0">
-          <CourseList v-bind:courses="courses" />
+          <CourseList />
         </div>
         <div v-else>
           <p class="no-container" id="no-courses">No courses</p>
