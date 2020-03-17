@@ -58,10 +58,28 @@
 </script>
 
 <style scoped>
+.course-list {
+  height: 12.5rem;
+  overflow-y: auto;
+  width: 90%;
+}
+
+.course-list::-webkit-scrollbar {
+  width: 12px;
+}
+
+.course-list::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  background-color: #F5F5F5; 
+}
+
 /*Medium devices (tablets and below)*/
 @media (max-width: 1128px) {
   .course-list {
     margin-top: 1rem;
+    height: auto;
+    width: auto;
   }
 }
 </style>
