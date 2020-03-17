@@ -1,10 +1,15 @@
 <<template>
   <div class="course-card">
   	<div class="color-box"></div>
-    <div class="course-info">
+    <div v-if="is_instructor" class="course-info">
       <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
       <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>
       <div v-else class="course-name">{{ course.name }}</div>
+    </div>
+    <div v-else class="course-info">
+      <div class="course-title">{{ section.course.dept }} {{ section.course.course_number }}-{{ section.number }}</div>
+      <div v-if="section.course.name.length > 21" class="course-name">{{ section.course.name.substring(0,18) + "..." }}</div>
+      <div v-else class="course-name">{{ section.course.name }}</div>
     </div>
   </div>
 </template>
@@ -14,7 +19,8 @@
   export default {
     name: 'CourseCard',
     props: {
-      course: Object
+      course: Object,
+      section: Object
     },
     computed: {
     },
@@ -23,15 +29,14 @@
     },
     data(){
       return {
-
+        is_instructor: Boolean
       }
     },
     created() {
-
+      this.is_instructor = this.$store.state.user.current_user.is_instructor
     },
     methods: {
     }
-
   }
 </script>
 

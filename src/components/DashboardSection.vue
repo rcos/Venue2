@@ -26,31 +26,13 @@
     <!-- Courses Section -->
     <div v-else-if="courses_section">
       <h4 class="section-title">Courses</h4>
-      <div v-if="is_instructor">
-        <div v-if="courses.length > 0">
-          <CourseList />
-        </div>
-        <div v-else>
-          <p class="no-container" id="no-courses">No courses</p>
-        </div>
-      </div>
-      <div v-else>
-        <div v-if="sections.length > 0">
-          <InfoContainer v-for="section in sections" v-bind:key="section._id" course_info v-bind:section="section" />
-        </div>
-        <div v-else>
-          <p class="no-container" id="no-courses">No courses</p>
-        </div>
-      </div>
+      <CourseList />
     </div>
   </div>
 </template>
 
 <script>
-  import SectionAPI from '@/services/SectionAPI.js'
-  import CourseAPI from '@/services/CourseAPI.js'
   import EventAPI from '@/services/EventAPI.js'
-  import InfoContainer from '@/components/InfoContainer.vue'
   import {showAt, hideAt} from 'vue-breakpoints'
   import ActiveEventCard from '@/components/ActiveEventCard.vue'
   import CourseList from '@/components/CourseList.vue'
@@ -65,7 +47,6 @@
     computed: {
     },
     components: {
-      InfoContainer,
       hideAt,
       showAt,
       ActiveEventCard,
@@ -83,35 +64,14 @@
     created() {
       this.current_user = this.$store.state.user.current_user
       this.is_instructor = this.current_user.is_instructor
-      if(this.courses_section) {
-        if(this.is_instructor)
-          this.getInstructorCourses()
-        else
-          this.getSectionsWithCourses()
-      } else if(this.active_section) {
+      if(this.active_section) {
         this.getActiveEvents()
-      } else if(this.today_section) {
-        this.getTodaysEvents()
       }
     },
     methods: {
-      async getInstructorCourses() {
-        let response = await CourseAPI.getInstructorCourses(this.current_user._id)
-        this.courses = response.data
-      },
-      async getSectionsWithCourses() {
-        let response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
-        this.sections = response.data
-        this.sections = []
-      },
       async getActiveEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
         this.active_events = response.data
-      },
-      async getTodaysEvents() {
-        let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
-        this.todays_events = response.data
-        // this.todays_events = []
       }
     }
   }
