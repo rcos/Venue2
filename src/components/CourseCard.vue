@@ -97,4 +97,19 @@
   }
 }
 
+/*Medium devices (tablets and below)*/
+@media (max-width: 1128px) {
+  .course-card {
+    width: 20rem;
+    margin-top: 2.5rem;
+  }
+}
+
+/*Small devices (phones and below)*/
+@media (max-width: 575.98px) {
+  .course-card {
+    margin: auto;
+    margin-top: 2.5rem;
+  }
+}
 </style>

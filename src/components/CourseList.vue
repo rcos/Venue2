@@ -32,6 +32,10 @@
 </script>
 
 <style scoped>
+/*Medium devices (tablets and below)*/
+@media (max-width: 1128px) {
   .course-list {
+    margin-top: 1rem;
   }
+}
 </style>
