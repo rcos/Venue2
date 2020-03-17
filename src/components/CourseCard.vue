@@ -92,7 +92,7 @@
 /*Desktop*/
 @media (min-width: 1200px) {
   .course-card:hover {
-    width: 17rem;
+    width: 22rem;
   }
 }
 
