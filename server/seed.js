@@ -121,6 +121,7 @@ var e0 = new Event({
 	title: "Large Group",
 	section: s0._id,
 	is_active: false,
+	start_time: Date()
 	// location: null,
 	// time_range: null
 })
@@ -129,6 +130,7 @@ var e1 = new Event({
 	title: "Small Group",
 	section: s0._id,
 	is_active: false,
+	start_time: Date()
 	// location: null,
 	// time_range: null
 })
@@ -137,6 +139,7 @@ var e2 = new Event({
 	title: "Small Group",
 	section: s0._id,
 	is_active: false,
+	start_time: Date()
 	// location: null,
 	// time_range: null
 })
@@ -145,6 +148,7 @@ var e3 = new Event({
 	title: "Small Group",
 	section: s0._id,
 	is_active: false,
+	start_time: Date()
 	// location: null,
 	// time_range: null
 })
