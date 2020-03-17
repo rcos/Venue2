@@ -61,14 +61,12 @@
 	border-radius: 3px;
 	width: 1.5rem;
 	height: 1.5rem;
-	/*margin-top: 0.5rem;*/
 	margin-left: 0.5rem;
   display: inline-block;
   vertical-align: top;
 }
 
 .course-info {
-  /*border: blue solid;*/
   display: inline-block;
   width: 80%;
   height: 1.5rem;
@@ -76,14 +74,15 @@
 }
 
 .course-title {
+  float: left;
   display: inline-block;
   font-size: 0.7rem;
   vertical-align: middle;
   color: #1591C5;
+  margin-top: 0.3rem;
 }
 
 .course-name {
-  /*border: yellow solid;*/
   display: inline-block;
   vertical-align: middle;
   margin-left: 0.85rem;
@@ -99,20 +98,8 @@
 /*Medium devices (tablets and below)*/
 @media (max-width: 1128px) {
   .course-card {
-    width: 20rem;
+    width: 21rem;
     margin-top: 2.5rem;
-  }
-
-  .course-info {
-    margin-left: 0;
-  }
-
-  .course-title {
-    margin-left: -2rem;
-  }
-
-  .course-name {
-    margin-left: 2rem;
   }
 }
 
