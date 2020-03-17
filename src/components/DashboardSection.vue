@@ -29,7 +29,7 @@
       <div v-if="is_instructor">
         <div v-if="courses.length > 0">
           <CourseCard v-for="course in courses" />
-          <RegisteredCourseList />
+          <!-- <RegisteredCourseList /> -->
         </div>
         <div v-else>
           <p class="no-container" id="no-courses">No courses</p>
@@ -122,7 +122,7 @@
 
 <style scoped>
 .dashboard-section {
-  border: red solid;
+  /*border: red solid;*/
   text-align: left;
   margin-top: 4rem;
   /*padding: 1rem;*/
