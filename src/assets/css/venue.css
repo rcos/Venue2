@@ -364,3 +364,17 @@ a:active {
 .log-list li.active .info-area .class-name {
   color: white;
 }
+
+.no-container {
+  margin-top: 2rem;
+  text-align: left;
+  font-weight: bold;
+  color: #add5ff;
+}
+
+/*Medium devices (tablets and below)*/
+@media (max-width: 1128px) {
+  .no-container {
+    text-align: center;
+  }
+}

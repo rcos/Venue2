@@ -2,7 +2,7 @@
   <div>
     <nav id="venue-nav">
       <!-- Logo -->
-      <a id="nav-logo" href="#">
+      <a id="nav-logo" href="/dashboard">
         <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
       </a>
       <!-- Nav Links -->
@@ -17,7 +17,7 @@
         </div>
         <!-- Courses -->
         <show-at breakpoint="mediumAndBelow">
-          <div v-if="this.$route.name === 'courses'" class="venue-nav-link-container">
+          <div v-if="this.$route.name === 'user_courses'" class="venue-nav-link-container">
             <a class="venue-nav-link active-link" href="/user_courses">Courses</a>
             <div class="active-link-underline"></div>
           </div>
