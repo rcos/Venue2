@@ -44,6 +44,7 @@ eventRoutes.route('/update/:id').post(function (req, res) {
     {
       title: updated_event.title,
       section: updated_event.section,
+      code: updated_event.code
     },
     function (err, event) {
       if (!event)
