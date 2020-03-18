@@ -45,7 +45,7 @@ var u1 = new User({
 	password: "password",
 	is_instructor: false,
 	ta_sections: [],
-	submissions: []
+	submissions: [b0._id]
 })
 
 var u2 = new User({
@@ -55,7 +55,7 @@ var u2 = new User({
 	password: "password",
 	is_instructor: false,
 	ta_sections: [],
-	submissions: []
+	submissions: [b1._id]
 })
 
 var u3 = new User({
@@ -160,7 +160,15 @@ var e3 = new Event({
 var b0 = new Submission({
 	event: e0._id,
 	submitter: u1._id,
+	time: Date(),
 	is_verified: false
+})
+
+var b1 = new Submission({
+	event: e0._id,
+	submitter: u2._id,
+	time: Date(),
+	is_verified: true
 })
 
 const data = [{
@@ -177,5 +185,5 @@ const data = [{
 	"documents": [e0, e1, e2, e3]
 }, {
 	"model": "Submission",
-	"documents": [b0]
+	"documents": [b0, b1]
 }]
