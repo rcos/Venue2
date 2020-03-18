@@ -39,14 +39,14 @@
                 class="btn btn-primary"
                 v-on:click="generateAttendanceCode()"
               >Generate New Attendance Code</button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                v-on:click="closeAttendance()"
+              >Close Attendance</button>
             </div>
           </div>
-          <div class="form-group">
-            <label>Section:</label>
-            <input class="form-control" v-model="event.section.course.name" readonly />
-            <input class="form-control" v-model="event.section.number" readonly />
-            <button class="btn btn-primary" v-on:click="updateEvent()">Update</button>
-          </div>
+          <button class="btn btn-primary" v-on:click="updateEvent()">Update</button>
         </form>
       </div>
       <div class="col-md-6">
@@ -147,6 +147,10 @@ export default {
         result += alnums[Math.floor(Math.random() * alnums.length)];
       }
       this.event.code = result;
+      this.showQR(this.event.code);
+    },
+    closeAttendance() {
+      this.event.code = "";
       this.showQR(this.event.code);
     },
     showQR(qr_data) {
