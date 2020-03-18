@@ -15,6 +15,10 @@ let Event = new Schema({
 		type: Boolean,
 		default: false
 	},
+	code: {
+		type: String,
+		default: ""
+	},
 	//implement location
 	start_time: Date,
 	end_time: Date
