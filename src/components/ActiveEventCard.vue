@@ -1,6 +1,6 @@
 <template>
   <div class="active-event-card-container">
-    <div class="active-event-card">
+    <a class="active-event-card" href="/new_submission">
       <div class="event-card-section" id="course-section">
         <div class="course-name">{{ course.name }}</div>
         <div class="course-title">{{ course.dept }} {{ course.course_number }}-{{ section.number }}</div>
@@ -10,68 +10,70 @@
         <div class="event-location">DCC 308</div>
       </div>
       <div class="event-card-section" id="time-section">
-        <img src="@/assets/clock.svg" class="clock">
+        <img src="@/assets/clock.svg" class="clock" />
         <div class="time-remaining">
-          <span v-if="remaining_days > 0">{{ remaining_days }}d </span>
-          <span v-if="remaining_hours > 0">{{ remaining_hours }}h </span>
+          <span v-if="remaining_days > 0">{{ remaining_days }}d</span>
+          <span v-if="remaining_hours > 0">{{ remaining_hours }}h</span>
           <span v-if="remaining_mins > 0">{{ remaining_mins }}m</span>
         </div>
       </div>
-    </div>
+    </a>
   </div>
 </template>
 
 <script>
-  import SectionAPI from '@/services/SectionAPI.js'
+import SectionAPI from "@/services/SectionAPI.js";
 
 export default {
-  name: 'ActiveEventCard',
+  name: "ActiveEventCard",
   props: {
     event: {}
   },
-  computed: {
-  },
-  components: {
-  },
-  data(){
+  computed: {},
+  components: {},
+  data() {
     return {
       section: {},
       course: {},
       remaining_days: Number,
       remaining_hours: Number,
       remaining_mins: Number
-    }
+    };
   },
   created() {
-    this.getEventSectionWithCourse()
+    this.getEventSectionWithCourse();
   },
   methods: {
     async getEventSectionWithCourse() {
-      const response = await SectionAPI.getSectionWithCourse(this.event.section)
-      this.section = response.data
-      this.course = this.section.course
-      this.adjustCourseNameForViewing()
-      this.getRemainingTime()
+      const response = await SectionAPI.getSectionWithCourse(
+        this.event.section
+      );
+      this.section = response.data;
+      this.course = this.section.course;
+      this.adjustCourseNameForViewing();
+      this.getRemainingTime();
     },
     adjustCourseNameForViewing() {
-      if(this.course.name.length > 18){
-        this.course.name = this.course.name.slice(0,11)
-        this.course.name += "..."
+      if (this.course.name.length > 18) {
+        this.course.name = this.course.name.slice(0, 11);
+        this.course.name += "...";
       }
     },
     getRemainingTime() {
-      let current_time = new Date()
-      let event_end_time = new Date(this.event.end_time)
+      let current_time = new Date();
+      let event_end_time = new Date(this.event.end_time);
       let diff_milliseconds = Math.abs(event_end_time - current_time);
       let diff_hours = Math.floor((diff_milliseconds % 86400000) / 3600000); // hours
-      let diff_mins = Math.round(((diff_milliseconds % 86400000) % 3600000) / 60000); // minutes
+      let diff_mins = Math.round(
+        ((diff_milliseconds % 86400000) % 3600000) / 60000
+      ); // minutes
       let diff_days = Math.floor(diff_milliseconds / 86400000); // days
-      this.remaining_days = diff_days
-      this.remaining_hours = diff_hours
-      this.remaining_mins = diff_mins
+      this.remaining_days = diff_days;
+      this.remaining_hours = diff_hours;
+      this.remaining_mins = diff_mins;
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -81,9 +83,9 @@ export default {
   height: 3.5rem;
   margin-left: 2rem;
   margin-top: 2rem;
-  border: #FC5D60 solid;
+  border: #fc5d60 solid;
   border-radius: 5px;
-  background-color: #FC5D60;
+  background-color: #fc5d60;
   cursor: pointer;
   transition: background-color, border, width, 0.25s;
 }
@@ -126,19 +128,19 @@ export default {
 .course-name {
   /*font-size: 0.8rem;*/
   font-size: 0.8rem;
-  color: #466D85;
+  color: #466d85;
   font-weight: bold;
 }
 
 .course-title {
   font-size: 0.75rem;
-  color: #1591C5;
+  color: #1591c5;
 }
 
 #event-section {
   width: 40%;
   text-align: center;
-  margin:auto;
+  margin: auto;
 }
 
 .event-name {
@@ -167,7 +169,7 @@ export default {
   padding-top: 0.25rem;
   margin-left: 0.5rem;
   font-size: 0.7rem;
-  color: #FF7B7B;
+  color: #ff7b7b;
   font-weight: bold;
 }
 
@@ -195,5 +197,4 @@ export default {
     width: 30%;
   }
 }
-
 </style>

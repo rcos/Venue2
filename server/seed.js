@@ -45,7 +45,7 @@ var u1 = new User({
 	password: "password",
 	is_instructor: false,
 	ta_sections: [],
-	submissions: [b0._id]
+	submissions: []
 })
 
 var u2 = new User({
@@ -55,7 +55,7 @@ var u2 = new User({
 	password: "password",
 	is_instructor: false,
 	ta_sections: [],
-	submissions: [b1._id]
+	submissions: []
 })
 
 var u3 = new User({
