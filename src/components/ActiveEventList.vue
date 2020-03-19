@@ -28,12 +28,24 @@
     methods: {
       async getActiveEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
-        let temp_active_events = response.data
-        // temp_active_events.forEach((event) => {
-        //   event.is_pending = "yup"
-        //   console.log(event.is)
-        // })
-        this.active_events = response.data
+        let events = response.data
+        this.updateSubmissionWindowStatuses(events)
+      },
+      updateSubmissionWindowStatuses(events){
+        let current_time = new Date()
+        events.forEach(event => {
+          let submission_start_time = new Date(event.submission_start_time)
+          let submission_end_time = new Date(event.submission_end_time)
+          if(current_time < submission_start_time)
+            event.submission_window_status.is_pending = true
+          else if(current_time >= submission_start_time && current_time <= submission_end_time){
+            event.submission_window_status.is_ongoing = true
+          }
+          else
+            event.submission_window_status.is_ended = true
+        })
+        this.active_events = events
+        console.log(this.active_events)
       }
     }
   }
