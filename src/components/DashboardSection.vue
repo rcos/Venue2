@@ -61,6 +61,7 @@
 
 <style scoped>
 .dashboard-section {
+  border: red solid;
   text-align: left;
   margin-top: 4rem;
   display: inline-block;
