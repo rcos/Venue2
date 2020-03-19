@@ -1,5 +1,7 @@
 <template>
-  <div class="active-event-card-container">
+  <div class="active-event-card-container" v-bind:class="{'pending-container':submission_window_status.is_pending, 
+  'ongoing-container':submission_window_status.is_ongoing, 
+  'ended-container':submission_window_status.is_ended}" >
     <div class="active-event-card">
       <div class="event-card-section" id="course-section">
         <div class="course-name">{{ course.name }}</div>
@@ -13,14 +15,13 @@
         <div>
           <img src="@/assets/clock.svg" class="clock">
           <div class="time-remaining">
-            <div v-if="submission_window_is_open">
-              <span class="window-status-text">pending</span>
-            </div>
-            <div v-else>
+            <span v-if="submission_window_status.is_pending" class="pending-text">pending</span>
+            <div v-else-if="submission_window_status.is_ongoing">
               <span class="time-remaining-text" v-if="remaining_days > 0">{{ remaining_days }}d </span>
               <span class="time-remaining-text" v-if="remaining_hours > 0">{{ remaining_hours }}h </span>
               <span class="time-remaining-text" v-if="remaining_mins > 0">{{ remaining_mins }}m</span>
             </div>
+            <span v-else class="ended-text">ended</span>
           </div>
         </div>
       </div>
@@ -47,7 +48,11 @@ export default {
       remaining_days: Number,
       remaining_hours: Number,
       remaining_mins: Number,
-      submission_window_is_open: Boolean
+      submission_window_status: {
+        is_pending: false,
+        is_ongoing: false,
+        is_ended: false
+      }
     }
   },
   created() {
@@ -83,9 +88,13 @@ export default {
       let current_time = new Date()
       let submission_start_time = new Date(this.event.submission_start_time)
       let submission_end_time = new Date(this.event.submission_end_time)
-      this.submission_window_is_open = (current_time >= submission_start_time && 
-        current_time <= submission_end_time)
-      console.log(this.submission_window_is_open)
+      if(current_time < submission_start_time)
+        this.submission_window_status.is_pending = true
+      else if(current_time >= submission_start_time && current_time <= submission_end_time)
+        this.submission_window_status.is_ongoing = true
+      else
+        this.submission_window_status.is_ended = true
+      console.log(this.submission_window_status)
     }
   }
 }
@@ -98,13 +107,24 @@ export default {
   height: 3.5rem;
   margin-left: 2rem;
   margin-top: 2rem;
-/*  background-color: #22a800;
-  border: #22a800 solid;*/
-  border: #FC5D60 solid;
   border-radius: 5px;
-  background-color: #FC5D60;
   cursor: pointer;
   transition: background-color, border, width, 0.25s;
+}
+
+.pending-container {
+  border: #FC5D60 solid;
+  background-color: #FC5D60;
+}
+
+.ongoing-container {
+  border: #22a800 solid;
+  background-color: #22a800;
+}
+
+.ended-container {
+  border: #919191 solid;
+  background-color: #919191;
 }
 
 .active-event-card-container:hover {
@@ -189,13 +209,16 @@ export default {
   font-weight: bold;
 }
 
-.time-remaining-text {
-  color: #FF7B7B;
+.pending-text {
+  color: #FC5D60;
 }
 
-.window-status-text {
-  /*color: #919191;*/
+.time-remaining-text {
   color: #22a800;
+}
+
+.ended-text {
+  color: #919191;
 }
 
 /*Large devices (Laptops and above)*/
