@@ -1,7 +1,8 @@
 <template>
-  <div class="active-event-card-container" v-bind:class="{'pending-container':submission_window_status.is_pending, 
-  'ongoing-container':submission_window_status.is_ongoing, 
-  'ended-container':submission_window_status.is_ended}" >
+  <div class="active-event-card-container" v-bind:class="{
+  'pending-container':event.submission_window_status.is_pending, 
+  'ongoing-container':event.submission_window_status.is_ongoing, 
+  'ended-container':event.submission_window_status.is_ended}" >
     <div class="active-event-card">
       <div class="event-card-section" id="course-section">
         <div class="course-name">{{ course.name }}</div>
@@ -15,8 +16,8 @@
         <div>
           <img src="@/assets/clock.svg" class="clock">
           <div class="time-remaining">
-            <span v-if="submission_window_status.is_pending" class="pending-text">pending</span>
-            <div v-else-if="submission_window_status.is_ongoing">
+            <span v-if="event.submission_window_status.is_pending" class="pending-text">pending</span>
+            <div v-else-if="event.submission_window_status.is_ongoing">
               <span class="time-remaining-text" v-if="remaining_days > 0">{{ remaining_days }}d </span>
               <span class="time-remaining-text" v-if="remaining_hours > 0">{{ remaining_hours }}h </span>
               <span class="time-remaining-text" v-if="remaining_mins > 0">{{ remaining_mins }}m</span>
@@ -48,17 +49,12 @@ export default {
       remaining_days: Number,
       remaining_hours: Number,
       remaining_mins: Number,
-      submission_window_status: {
-        is_pending: false,
-        is_ongoing: false,
-        is_ended: false
-      }
     }
   },
   created() {
-    // console.log(event.rand_obj.rand_var)
     this.getEventSectionWithCourse()
-    this.checkSubmissionWindow()
+    if(this.event.submission_window_status.is_ongoing)
+      this.getRemainingTime()
   },
   methods: {
     async getEventSectionWithCourse() {
@@ -83,20 +79,20 @@ export default {
       this.remaining_days = diff_days
       this.remaining_hours = diff_hours
       this.remaining_mins = diff_mins
-    },
-    checkSubmissionWindow() {
-      let current_time = new Date()
-      let submission_start_time = new Date(this.event.submission_start_time)
-      let submission_end_time = new Date(this.event.submission_end_time)
-      if(current_time < submission_start_time)
-        this.submission_window_status.is_pending = true
-      else if(current_time >= submission_start_time && current_time <= submission_end_time){
-        this.submission_window_status.is_ongoing = true
-        this.getRemainingTime()
-      }
-      else
-        this.submission_window_status.is_ended = true
     }
+    // checkSubmissionWindow() {
+    //   let current_time = new Date()
+    //   let submission_start_time = new Date(this.event.submission_start_time)
+    //   let submission_end_time = new Date(this.event.submission_end_time)
+    //   if(current_time < submission_start_time)
+    //     this.submission_window_status.is_pending = true
+    //   else if(current_time >= submission_start_time && current_time <= submission_end_time){
+    //     this.submission_window_status.is_ongoing = true
+    //     this.getRemainingTime()
+    //   }
+    //   else
+    //     this.submission_window_status.is_ended = true
+    // }
   }
 }
 </script>
