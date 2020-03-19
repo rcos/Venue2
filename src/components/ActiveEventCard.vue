@@ -56,7 +56,9 @@ export default {
     }
   },
   created() {
+    // console.log(event.rand_obj.rand_var)
     this.getEventSectionWithCourse()
+    this.checkSubmissionWindow()
   },
   methods: {
     async getEventSectionWithCourse() {
@@ -64,7 +66,6 @@ export default {
       this.section = response.data
       this.course = this.section.course
       this.adjustCourseNameForViewing()
-      this.checkSubmissionWindow()
     },
     adjustCourseNameForViewing() {
       if(this.course.name.length > 18){

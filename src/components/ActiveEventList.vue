@@ -28,6 +28,11 @@
     methods: {
       async getActiveEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
+        let temp_active_events = response.data
+        // temp_active_events.forEach((event) => {
+        //   event.is_pending = "yup"
+        //   console.log(event.is)
+        // })
         this.active_events = response.data
       }
     }
