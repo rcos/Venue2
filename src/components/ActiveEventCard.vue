@@ -111,11 +111,6 @@ export default {
   background-color: #919191;
 }
 
-.active-event-card-container:hover {
-  background-color: #cf4c4f;
-  border: #cf4c4f solid;
-}
-
 .active-event-card {
   position: absolute;
   background-color: white;
