@@ -102,8 +102,8 @@ export default {
 }
 
 .ongoing-container {
-  border: #22a800 solid;
-  background-color: #22a800;
+  border: #4bcc69 solid;
+  background-color: #4bcc69;
 }
 
 .ended-container {
@@ -193,7 +193,7 @@ export default {
 }
 
 .time-remaining-text {
-  color: #22a800;
+  color: #4bcc69;
 }
 
 .ended-text {
