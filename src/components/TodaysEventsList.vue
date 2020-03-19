@@ -1,7 +1,8 @@
 <<template>
   <div class="todays-events-list">
     <div v-if="todays_events.length > 0">
-      <h3 v-for="event in todays_events">{{ event.title }}</h3>
+      <TodaysEventsSection />
+      <TodaysEventsSection />
     </div>
     <div v-else>
       <p class="no-container" id="no-today">No events today</p>
@@ -11,10 +12,12 @@
 
 <script>
   import EventAPI from '@/services/EventAPI.js'
+  import TodaysEventsSection from '@/components/TodaysEventsSection.vue'
 
   export default {
     name: 'TodaysEventsList',
     components: {
+      TodaysEventsSection
     },
     data(){
       return {
@@ -29,6 +32,7 @@
       async getTodaysEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
         this.todays_events = response.data
+        console.log(this.todays_events)
       }
     }
   }
