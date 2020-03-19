@@ -57,7 +57,8 @@
     },
     data(){
       return {
-        event: {},
+        event: {
+        },
         section: {}
       }
     },

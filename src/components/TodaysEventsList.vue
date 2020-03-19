@@ -32,7 +32,7 @@
       async getTodaysEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
         this.todays_events = response.data
-        console.log(this.todays_events)
+        // console.log(this.todays_events)
       }
     }
   }
