@@ -57,7 +57,6 @@ export default {
   },
   created() {
     this.getEventSectionWithCourse()
-    this.checkSubmissionWindow()
   },
   methods: {
     async getEventSectionWithCourse() {
@@ -65,7 +64,7 @@ export default {
       this.section = response.data
       this.course = this.section.course
       this.adjustCourseNameForViewing()
-      this.getRemainingTime()
+      this.checkSubmissionWindow()
     },
     adjustCourseNameForViewing() {
       if(this.course.name.length > 18){
@@ -75,8 +74,8 @@ export default {
     },
     getRemainingTime() {
       let current_time = new Date()
-      let event_end_time = new Date(this.event.end_time)
-      let diff_milliseconds = Math.abs(event_end_time - current_time);
+      let submission_end_time = new Date(this.event.submission_end_time)
+      let diff_milliseconds = Math.abs(submission_end_time - current_time);
       let diff_hours = Math.floor((diff_milliseconds % 86400000) / 3600000); // hours
       let diff_mins = Math.round(((diff_milliseconds % 86400000) % 3600000) / 60000); // minutes
       let diff_days = Math.floor(diff_milliseconds / 86400000); // days
@@ -90,11 +89,12 @@ export default {
       let submission_end_time = new Date(this.event.submission_end_time)
       if(current_time < submission_start_time)
         this.submission_window_status.is_pending = true
-      else if(current_time >= submission_start_time && current_time <= submission_end_time)
+      else if(current_time >= submission_start_time && current_time <= submission_end_time){
         this.submission_window_status.is_ongoing = true
+        this.getRemainingTime()
+      }
       else
         this.submission_window_status.is_ended = true
-      console.log(this.submission_window_status)
     }
   }
 }
