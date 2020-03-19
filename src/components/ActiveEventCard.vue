@@ -10,11 +10,18 @@
         <div class="event-location">DCC 308</div>
       </div>
       <div class="event-card-section" id="time-section">
-        <img src="@/assets/clock.svg" class="clock">
-        <div class="time-remaining">
-          <span v-if="remaining_days > 0">{{ remaining_days }}d </span>
-          <span v-if="remaining_hours > 0">{{ remaining_hours }}h </span>
-          <span v-if="remaining_mins > 0">{{ remaining_mins }}m</span>
+        <div>
+          <img src="@/assets/clock.svg" class="clock">
+          <div class="time-remaining">
+            <div v-if="submission_window_is_open">
+              <span class="window-status-text">pending</span>
+            </div>
+            <div v-else>
+              <span class="time-remaining-text" v-if="remaining_days > 0">{{ remaining_days }}d </span>
+              <span class="time-remaining-text" v-if="remaining_hours > 0">{{ remaining_hours }}h </span>
+              <span class="time-remaining-text" v-if="remaining_mins > 0">{{ remaining_mins }}m</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -39,11 +46,13 @@ export default {
       course: {},
       remaining_days: Number,
       remaining_hours: Number,
-      remaining_mins: Number
+      remaining_mins: Number,
+      submission_window_is_open: Boolean
     }
   },
   created() {
     this.getEventSectionWithCourse()
+    this.checkSubmissionWindow()
   },
   methods: {
     async getEventSectionWithCourse() {
@@ -69,6 +78,14 @@ export default {
       this.remaining_days = diff_days
       this.remaining_hours = diff_hours
       this.remaining_mins = diff_mins
+    },
+    checkSubmissionWindow() {
+      let current_time = new Date()
+      let submission_start_time = new Date(this.event.submission_start_time)
+      let submission_end_time = new Date(this.event.submission_end_time)
+      this.submission_window_is_open = (current_time >= submission_start_time && 
+        current_time <= submission_end_time)
+      console.log(this.submission_window_is_open)
     }
   }
 }
@@ -81,6 +98,8 @@ export default {
   height: 3.5rem;
   margin-left: 2rem;
   margin-top: 2rem;
+/*  background-color: #22a800;
+  border: #22a800 solid;*/
   border: #FC5D60 solid;
   border-radius: 5px;
   background-color: #FC5D60;
@@ -167,8 +186,16 @@ export default {
   padding-top: 0.25rem;
   margin-left: 0.5rem;
   font-size: 0.7rem;
-  color: #FF7B7B;
   font-weight: bold;
+}
+
+.time-remaining-text {
+  color: #FF7B7B;
+}
+
+.window-status-text {
+  /*color: #919191;*/
+  color: #22a800;
 }
 
 /*Large devices (Laptops and above)*/
