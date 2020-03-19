@@ -30,8 +30,9 @@
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
         let events = response.data
         this.updateSubmissionWindowStatuses(events)
+        this.active_events = this.sortEventsbySubmissionWindowStatus(events)
       },
-      updateSubmissionWindowStatuses(events){
+      updateSubmissionWindowStatuses(events) {
         let current_time = new Date()
         events.forEach(event => {
           let submission_start_time = new Date(event.submission_start_time)
@@ -44,8 +45,22 @@
           else
             event.submission_window_status.is_ended = true
         })
-        this.active_events = events
-        console.log(this.active_events)
+      },
+      sortEventsbySubmissionWindowStatus(events) {
+        let ongoing_events = []
+        let pending_events = []
+        let ended_events = []
+        events.forEach(event => {
+          if(event.submission_window_status.is_ongoing)
+            ongoing_events.push(event)
+          else if(event.submission_window_status.is_pending)
+            pending_events.push(event)
+          else
+            ended_events.push(event)
+        })
+        events = ongoing_events.concat(pending_events)
+        events = events.concat(ended_events)
+        return events
       }
     }
   }
