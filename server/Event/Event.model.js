@@ -17,7 +17,9 @@ let Event = new Schema({
 	},
 	//implement location
 	start_time: Date,
-	end_time: Date
+	end_time: Date,
+	submission_start_time: Date,
+	submission_end_time: Date
 });
 
 module.exports = mongoose.model('Event', Event);
