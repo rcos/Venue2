@@ -19,10 +19,10 @@
           <tr v-for="event in events" :key="event._id">
             <td>{{ event.title }}</td>
             <td> {{ event.section.course.name }} {{ event.section.number }}</td>
-            <td> {{ event.start_time }}</td>
-            <td> {{ event.end_time }}</td>
-            <td> {{ event.submission_start_time }}</td>
-            <td> {{ event.submission_end_time }}</td>
+            <td> {{ new Date(event.start_time) }}</td>
+            <td> {{ new Date(event.end_time) }}</td>
+            <td> {{ new Date(event.submission_start_time) }}</td>
+            <td> {{ new Date(event.submission_end_time) }}</td>
             <div v-if="is_event_view">
               <td><router-link :to="{name: 'edit_event', params: { id: event._id }}" class="btn btn-primary">Edit</router-link></td>
               <td><button class="btn btn-danger" @click.prevent="deleteEvent(event._id)">Delete</button></td>
