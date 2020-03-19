@@ -80,19 +80,6 @@ export default {
       this.remaining_hours = diff_hours
       this.remaining_mins = diff_mins
     }
-    // checkSubmissionWindow() {
-    //   let current_time = new Date()
-    //   let submission_start_time = new Date(this.event.submission_start_time)
-    //   let submission_end_time = new Date(this.event.submission_end_time)
-    //   if(current_time < submission_start_time)
-    //     this.submission_window_status.is_pending = true
-    //   else if(current_time >= submission_start_time && current_time <= submission_end_time){
-    //     this.submission_window_status.is_ongoing = true
-    //     this.getRemainingTime()
-    //   }
-    //   else
-    //     this.submission_window_status.is_ended = true
-    // }
   }
 }
 </script>
