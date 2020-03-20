@@ -103,6 +103,7 @@
     margin-top: 1rem;
     height: auto;
     width: auto;
+    padding-bottom: 10px;
   }
 }
 </style>
