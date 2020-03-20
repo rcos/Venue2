@@ -1,6 +1,11 @@
 <<template>
   <div class="course-card">
-  	<div class="color-box"></div>
+  	<div class="color-box" v-bind:class="{
+      'blue-box':box_color == 'blue', 
+      'red-box':box_color == 'red', 
+      'orange-box':box_color == 'orange',
+      'green-box':box_color == 'green',
+      'purple-box':box_color == 'purple'}"></div>
     <div v-if="is_instructor" class="course-info">
       <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
       <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>
@@ -20,7 +25,8 @@
     name: 'CourseCard',
     props: {
       course: Object,
-      section: Object
+      section: Object,
+      box_color: String
     },
     computed: {
     },
@@ -62,13 +68,32 @@
 
 
 .color-box {
-	background-color: #B77DC2;
 	border-radius: 3px;
 	width: 1.5rem;
 	height: 1.5rem;
 	margin-left: 0.5rem;
   display: inline-block;
   vertical-align: top;
+}
+
+.blue-box {
+  background-color: #2f4fde;
+}
+
+.green-box {
+  background-color: #4bcc69;
+}
+
+.red-box {
+  background-color: #FC5D60;
+}
+
+.purple-box {
+  background-color: #B77DC2;
+}
+
+.orange-box {
+  background-color: #f29f33;
 }
 
 .course-info {
