@@ -10,7 +10,7 @@
     </div>
     <div v-else>
       <div v-if="sections.length > 0">
-        <CourseCard v-for="section in sections" v-bind:section="section" />
+        <CourseCard v-for="section in sections" v-bind:section="section" v-bind:box_color="section.box_color"/>
       </div>
       <div v-else>
         <p class="no-container" id="no-courses">No courses</p>
@@ -58,18 +58,20 @@
       async getInstructorCourses() {
         let response = await CourseAPI.getInstructorCourses(this.current_user._id)
         let courses = response.data
-        this.assignBoxColorsToCourses(courses)
+        this.assignBoxColorsToClassObjects(courses)
         this.courses = courses
         console.log(this.courses)
       },
       async getSectionsWithCourses() {
         let response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
-        this.sections = response.data
+        let sections = response.data
+        this.assignBoxColorsToClassObjects(sections)
+        this.sections = sections
       },
-      assignBoxColorsToCourses(courses) {
+      assignBoxColorsToClassObjects(class_objects) {
         let box_color_index = 0
-        courses.forEach(course => {
-          course.box_color = this.box_colors[box_color_index]
+         class_objects.forEach( class_object => {
+           class_object.box_color = this.box_colors[box_color_index]
           if(box_color_index == this.box_colors.length)
             box_color_index = 0
           else
