@@ -8,7 +8,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: null
+    user: null,
+    course_card_color_index: 0
   },
   mutations: {
     // Store the user in our vuex state, add their token to 
@@ -24,6 +25,12 @@ export default new Vuex.Store({
     CLEAR_USER_DATA() {
       localStorage.removeItem('user')
       location.reload()
+    },
+    UPDATE_COLOR_INDEX(state, box_colors) {
+      if(state.course_card_color_index == box_colors.length)
+        state.course_card_color_index = 0
+      else
+        state.course_card_color_index++
     }
   },
   actions: {
@@ -46,6 +53,9 @@ export default new Vuex.Store({
     },
     logout({ commit }) {
       commit('CLEAR_USER_DATA')
+    },
+    updateColorIndex({commit}, box_colors) {
+      commit('UPDATE_COLOR_INDEX',box_colors)
     }
   },
   getters: {
