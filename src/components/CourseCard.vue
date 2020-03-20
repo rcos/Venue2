@@ -66,7 +66,6 @@
   box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.3);
 }
 
-
 .color-box {
 	border-radius: 3px;
 	width: 1.5rem;
@@ -77,7 +76,7 @@
 }
 
 .blue-box {
-  background-color: #2f4fde;
+  background-color: #516ded;
 }
 
 .green-box {
