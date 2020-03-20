@@ -2,7 +2,7 @@
   <div class="course-list">
     <div v-if="is_instructor">
       <div v-if="courses.length > 0">
-        <CourseCard v-for="course in courses" v-bind:course="course" v-bind:box_color="getBoxColor()" />
+        <CourseCard v-for="course in courses" v-bind:course="course" v-bind:box_color="course.box_color"/>
       </div>
       <div v-else>
         <p class="no-container" id="no-courses">No courses</p>
@@ -47,7 +47,6 @@
     computed: {
     },
     created() {
-      this.box_color_index = 0
       this.current_user = this.$store.state.user.current_user
       this.is_instructor = this.current_user.is_instructor
       if(this.is_instructor)
@@ -58,24 +57,24 @@
     methods: {
       async getInstructorCourses() {
         let response = await CourseAPI.getInstructorCourses(this.current_user._id)
-        this.courses = response.data
+        let courses = response.data
+        this.assignBoxColorsToCourses(courses)
+        this.courses = courses
+        console.log(this.courses)
       },
       async getSectionsWithCourses() {
         let response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
         this.sections = response.data
       },
-      // Get the box color for the course card
-      // that will be passed as a prop
-      getBoxColor() {
-        let color_index = this.$store.state.course_card_color_index
-        let box_color = this.box_colors[color_index]
-        this.$store.dispatch('updateColorIndex', this.box_colors)
-        // Update box_color_index
-        // if(this.box_color_index == this.courses.length)
-        //   this.box_color_index = 0
-        // else
-        //   this.box_color_index++
-        return box_color
+      assignBoxColorsToCourses(courses) {
+        let box_color_index = 0
+        courses.forEach(course => {
+          course.box_color = this.box_colors[box_color_index]
+          if(box_color_index == this.box_colors.length)
+            box_color_index = 0
+          else
+            box_color_index++
+        })
       }
     }
   }
