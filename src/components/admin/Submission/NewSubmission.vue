@@ -19,15 +19,6 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-6">
-          <CaptureModal />
-          <div class="form-group">
-            <label>code:</label>
-            <input type="text" class="form-control" v-model="code" />
-          </div>
-        </div>
-      </div>
       <div class="form-group">
         <button class="btn btn-primary">Create</button>
       </div>
@@ -42,21 +33,18 @@
 import SubmissionAPI from "@/services/SubmissionAPI.js";
 import Events from "../Event/Events";
 import Students from "../User/Students";
-import CaptureModal from "../../CaptureModal";
 
 export default {
   name: "Submission",
   components: {
     Events,
-    Students,
-    CaptureModal
+    Students
   },
   data() {
     return {
       submission: {},
       event: {},
-      submitter: {},
-      code: ""
+      submitter: {}
     };
   },
   created() {},

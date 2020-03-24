@@ -1,6 +1,6 @@
 <template>
   <div class="active-event-card-container">
-    <a class="active-event-card" href="/new_submission">
+    <a class="active-event-card" v-on:click="scanQR()">
       <div class="event-card-section" id="course-section">
         <div class="course-name">{{ course.name }}</div>
         <div class="course-title">{{ course.dept }} {{ course.course_number }}-{{ section.number }}</div>
@@ -23,6 +23,7 @@
 
 <script>
 import SectionAPI from "@/services/SectionAPI.js";
+import QRScanner from "qr-code-scanner";
 
 export default {
   name: "ActiveEventCard",
@@ -71,6 +72,14 @@ export default {
       this.remaining_days = diff_days;
       this.remaining_hours = diff_hours;
       this.remaining_mins = diff_mins;
+    },
+    scanQR() {
+      QRScanner.initiate({
+        onResult: result => {
+          console.log("ATTENDANCE CODE FOUND:", result);
+        },
+        timeout: 10000
+      });
     }
   }
 };
