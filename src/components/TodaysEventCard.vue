@@ -1,6 +1,9 @@
 <<template>
   <div class="todays-event-card-container">
-    <div class="todays-event-card"></div>
+    <div class="todays-event-card">
+      <div class="event-title">Class 3/25</div>
+      <div class="course-title">CSCI 1200-01</div>
+    </div>
   </div>
 </template>
 
@@ -39,5 +42,17 @@
     margin-top: 0.4rem;
     margin-left: 0.4rem;
     box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  .event-title {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    font-weight: bold;
+  }
+
+  .course-title {
+    font-size: 0.6rem;
+    color: #1591C5;
   }
 </style>

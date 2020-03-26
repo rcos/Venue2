@@ -2,7 +2,7 @@
   <div class="todays-events-list">
     <div v-if="todays_events.length > 0">
       <TodaysEventsSection />
-      <TodaysEventsSection />
+      <!-- <TodaysEventsSection /> -->
     </div>
     <div v-else>
       <p class="no-container" id="no-today">No events today</p>
