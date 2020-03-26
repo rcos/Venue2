@@ -2,8 +2,12 @@
   <div class="todays-events-section">
     <div class="time-line">
     </div>
-    <div class="todays-event-container">
-      <div class="todays-event-time">10am</div>
+    <div class="todays-event-container" style="margin-left:1rem;">
+      <div class="todays-event-time">10a</div>
+      <TodaysEventCard />
+    </div>
+    <div class="todays-event-container" style="margin-left:4rem;">
+      <div class="todays-event-time">12p</div>
       <TodaysEventCard />
     </div>
   </div>
@@ -44,8 +48,9 @@
   /*border: red solid;*/
   height: 5rem;
   width: 10rem;
-  margin-left: 1rem;
   margin-top: -2rem;
+  display: inline-block;
+  vertical-align: top;
 }
 
 .todays-event-time {
@@ -53,6 +58,6 @@
   text-align: center;
   font-size: 0.75rem;
   margin-top: 0.5rem;
-  color: #4d4d4d;
+  color: #757575;
 }
 </style>
