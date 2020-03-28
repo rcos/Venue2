@@ -60,7 +60,6 @@
         let courses = response.data
         this.assignBoxColorsToClassObjects(courses)
         this.courses = courses
-        console.log(this.courses)
       },
       async getSectionsWithCourses() {
         let response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
