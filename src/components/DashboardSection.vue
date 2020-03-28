@@ -115,6 +115,9 @@
   .dashboard-section {
     width: 100%;
   }
+  .today-section {
+    margin-left: 0;
+  }
   #no-active {
     margin-left: auto;
   }
