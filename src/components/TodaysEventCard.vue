@@ -43,6 +43,12 @@
     margin-left: 0.4rem;
     box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
+    transition: background-color, box-shadow 0.25s;
+  }
+
+  .todays-event-card:hover {
+    background-color: #e8e8e8;
+    box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.3);
   }
 
   .event-title {
