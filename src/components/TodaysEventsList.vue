@@ -1,8 +1,21 @@
 <<template>
   <div class="todays-events-list">
     <div v-if="todays_events.length > 0">
-      <TodaysEventsSection />
-      <!-- <TodaysEventsSection /> -->
+      <div class="todays-events-section">
+        <div class="todays-event-container" style="margin-left:1rem;">
+          <div class="todays-event-time">10a</div>
+          <TodaysEventCard />
+        </div>
+        <div class="todays-event-container" style="margin-left:4rem;">
+          <div class="todays-event-time">12p</div>
+          <TodaysEventCard />
+        </div>
+        <div class="todays-event-container" style="margin-left:4rem;">
+          <div class="todays-event-time">2p</div>
+          <TodaysEventCard />
+        </div>
+      </div>
+      <div class="time-line"></div>
     </div>
     <div v-else>
       <p class="no-container" id="no-today">No events today</p>
@@ -12,12 +25,12 @@
 
 <script>
   import EventAPI from '@/services/EventAPI.js'
-  import TodaysEventsSection from '@/components/TodaysEventsSection.vue'
+  import TodaysEventCard from '@/components/TodaysEventCard.vue'
 
   export default {
     name: 'TodaysEventsList',
     components: {
-      TodaysEventsSection
+      TodaysEventCard
     },
     data(){
       return {
@@ -39,22 +52,43 @@
 </script>
 
 <style scoped>
-.todays-events-list {
-
+.todays-events-section {
+  /*border: blue solid;*/
+  height: 9.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
 }
 
-/*.active-event-list {
-  height: 12.5rem;
-  overflow-y: auto;
-}
-
-.active-event-list::-webkit-scrollbar {
+.todays-events-section::-webkit-scrollbar {
   width: 12px;
 }
 
-.active-event-list::-webkit-scrollbar-thumb {
+.todays-events-section::-webkit-scrollbar-thumb {
 border-radius: 10px;
 -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
 background-color: #F5F5F5; 
-}*/
+}
+
+.time-line {
+  border: #f0f0f0 solid 2px;
+  background-color: #f0f0f0;
+  margin-top: -7.7em;
+}
+
+.todays-event-container {
+  /*border: red solid;*/
+  height: 5rem;
+  width: 10rem;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.todays-event-time {
+  /*border: blue solid;*/
+  text-align: center;
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+  color: #757575;
+}
 </style>
