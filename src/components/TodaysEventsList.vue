@@ -37,14 +37,18 @@
       async getTodaysEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
         this.todays_events = response.data
+        //order events by start time
+        this.todays_events.sort(function(a,b){
+          return new Date(a.start_time) - new Date(b.start_time); 
+        });
       },
       convertTimeToHourMinuteFormat(time){
         let time_string = time.toLocaleTimeString('en-US')
         //remove all ':00's from the string
         time_string = time_string.replace(/:00/g,"")
         //replace 'PM' with 'p' and 'AM' with a
-        time_string = time_string.replace("PM","pm")
-        time_string = time_string.replace("AM","am")
+        // time_string = time_string.replace("PM","pm")
+        // time_string = time_string.replace("AM","am")
         return time_string
       }
     }
