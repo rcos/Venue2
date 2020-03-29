@@ -4,20 +4,8 @@
       <div class="todays-events-section">
         <div v-for="(event, index) in todays_events" class="todays-event-container" v-bind:class="{'mleft-one':index===0, 'mleft-four':index!==0}">
           <div class="todays-event-time">{{ convertTimeToHourMinuteFormat(new Date(event.start_time)) }}</div>
-          <TodaysEventCard />
+          <TodaysEventCard v-bind:event="event" />
         </div>
-<!--         <div class="todays-event-container" style="margin-left:1rem;">
-          <div class="todays-event-time">10a</div>
-          <TodaysEventCard />
-        </div>
-        <div class="todays-event-container" style="margin-left:4rem;">
-          <div class="todays-event-time">12p</div>
-          <TodaysEventCard />
-        </div>
-        <div class="todays-event-container" style="margin-left:4rem;">
-          <div class="todays-event-time">2p</div>
-          <TodaysEventCard />
-        </div> -->
       </div>
       <div class="time-line"></div>
     </div>
@@ -49,7 +37,6 @@
       async getTodaysEvents() {
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
         this.todays_events = response.data
-        // console.log(this.todays_events)
       },
       convertTimeToHourMinuteFormat(time){
         let time_string = time.toLocaleTimeString('en-US')
