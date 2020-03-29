@@ -79,6 +79,7 @@
     margin: auto;
     margin-top: 0.5rem;
     font-weight: bold;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 85%;

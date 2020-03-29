@@ -162,6 +162,10 @@ export default {
 .event-name {
   font-size: 0.9rem;
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 1.6rem;
 }
 
 .event-location {
