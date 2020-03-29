@@ -1,24 +1,41 @@
 <<template>
   <div class="todays-event-card-container">
     <div class="todays-event-card">
-      <div class="event-title">Class 3/25</div>
-      <div class="course-title">CSCI 1200-01</div>
+      <div class="spinner-border event-card-spinner" role="status" v-if="!section_has_loaded">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div v-else>
+        <div class="event-title">{{ event.title }}</div>
+        <div class="course-title">{{ event.section.course.dept }} {{ event.section.course.course_number }}-{{ event.section.number}}</div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import SectionAPI from '@/services/SectionAPI.js'
+
   export default {
     name: 'TodaysEventCard',
     components: {
     },
+    props: {
+      event: Object
+    },
     data(){
       return {
+        section_has_loaded: false
       }
     },
     created() {
+      this.getEventSectionWithCourse()
     },
     methods: {
+      async getEventSectionWithCourse() {
+        const response = await SectionAPI.getSectionWithCourse(this.event.section)
+        this.event.section = response.data
+        this.section_has_loaded = true
+      }
     }
   }
 </script>
@@ -44,6 +61,12 @@
     box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: background-color, box-shadow 0.25s;
+  }
+
+  .event-card-spinner {
+    height:2rem; 
+    width:2rem; 
+    margin-top:1rem;
   }
 
   .todays-event-card:hover {
