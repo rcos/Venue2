@@ -76,8 +76,12 @@
 
   .event-title {
     font-size: 1rem;
+    margin: auto;
     margin-top: 0.5rem;
     font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 85%;
   }
 
   .course-title {
