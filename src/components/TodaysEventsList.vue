@@ -2,7 +2,7 @@
   <div class="todays-events-list">
     <div v-if="todays_events.length > 0">
       <div class="todays-events-section">
-        <div v-for="event in todays_events" class="todays-event-container">
+        <div v-for="(event, index) in todays_events" class="todays-event-container" v-bind:class="{'mleft-one':index===0, 'mleft-four':index!==0}">
           <div class="todays-event-time">{{ convertTimeToHourMinuteFormat(new Date(event.start_time)) }}</div>
           <TodaysEventCard />
         </div>
@@ -71,6 +71,7 @@
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
+  padding-right: 2rem;
 }
 
 .todays-events-section::-webkit-scrollbar {
@@ -81,6 +82,14 @@
 border-radius: 10px;
 -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
 background-color: #F5F5F5; 
+}
+
+.mleft-one {
+  margin-left: 1rem;
+}
+
+.mleft-four {
+  margin-left: 4rem;
 }
 
 .time-line {
