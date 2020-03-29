@@ -20,7 +20,7 @@ export default {
   deleteEvent(id) {
     return API().delete('events/delete/' + id)
   },
-  getActiveOrTodaysEventsForUser(user_id, is_active) {
-    return API().get('events/active_or_todays_events/' + user_id + '/' + is_active)
+  getActiveOrTodaysEventsForUser(user_id, get_active) {
+    return API().get('events/active_or_todays_events/' + user_id + '/' + get_active)
   },
 }

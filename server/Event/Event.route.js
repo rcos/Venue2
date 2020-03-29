@@ -69,9 +69,9 @@ eventRoutes.route('/getSection/:id').get(function (req, res) {
   });
 });
 
-eventRoutes.get('/active_or_todays_events/:user_id/:is_active', (req, res) => {
+eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
   let user_id = req.params.user_id
-  let is_active = (req.params.is_active == 'true');
+  let get_active = (req.params.get_active == 'true');
   let requested_events = []
   User.findById(user_id, function(error, user) {
     if(error) {
@@ -106,7 +106,7 @@ eventRoutes.get('/active_or_todays_events/:user_id/:is_active', (req, res) => {
                     instructor_sections.forEach(instructor_section => {
                       if(instructor_section._id.equals(event.section)) {
                         //Get Active Events or Get today's events
-                        if(is_active) {
+                        if(get_active) {
                           if(isActive(event)) 
                             requested_events.push(event)
                         } else {
@@ -144,7 +144,7 @@ eventRoutes.get('/active_or_todays_events/:user_id/:is_active', (req, res) => {
               user_sections.forEach(user_section => {
                 if(user_section._id.equals(event.section)) {
                   //Get Active Events or Get today's events
-                  if(is_active) {
+                  if(get_active) {
                     if(isActive(event)) 
                       requested_events.push(event)
                   } else {
