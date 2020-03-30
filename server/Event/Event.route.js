@@ -110,7 +110,7 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
                           if(isActive(event)) 
                             requested_events.push(event)
                         } else {
-                          if(isToday(event.start_time)) 
+                          if(isToday(event.start_time) || isToday(event.end_time) || isActive(event)) 
                             requested_events.push(event)
                         }
                       }
@@ -148,7 +148,7 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
                     if(isActive(event)) 
                       requested_events.push(event)
                   } else {
-                    if(isToday(event.start_time)) 
+                    if(isToday(event.start_time) || isToday(event.end_time) || isActive(event)) 
                       requested_events.push(event)
                   }
                 }
