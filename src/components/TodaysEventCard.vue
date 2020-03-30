@@ -32,7 +32,6 @@
     created() {
       this.getEventSectionWithCourse()
       this.setEventStatus()
-      console.log("is_active: " + this.is_active)
     },
     methods: {
       async getEventSectionWithCourse() {
