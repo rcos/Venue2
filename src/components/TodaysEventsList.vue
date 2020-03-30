@@ -49,8 +49,8 @@
         return time_string
       },
       convertToMonthDayFormat(time) {
-        let month = time.getUTCMonth() + 1; //months from 1-12
-        let day = time.getUTCDate();
+        let month = time.getMonth() + 1; //months from 1-12
+        let day = time.getDate();
         return month + "/" + day
       },
       sortTodaysEventsByStartTime() {
