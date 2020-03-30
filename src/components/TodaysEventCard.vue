@@ -1,5 +1,5 @@
 <<template>
-  <div class="todays-event-card-container">
+  <div class="todays-event-card-container" v-bind:class="{'active-container':is_active, 'over-container':is_over}">
     <div class="todays-event-card">
       <div class="spinner-border event-card-spinner" role="status" v-if="!section_has_loaded">
         <span class="sr-only">Loading...</span>
@@ -25,12 +25,13 @@
     data(){
       return {
         section_has_loaded: false,
-        is_active: Boolean
+        is_active: false,
+        is_over: false
       }
     },
     created() {
       this.getEventSectionWithCourse()
-      this.setIsActive()
+      this.setEventStatus()
       console.log("is_active: " + this.is_active)
     },
     methods: {
@@ -39,10 +40,16 @@
         this.event.section = response.data
         this.section_has_loaded = true
       },
-      setIsActive() {
+      setEventStatus() {
         let current_time = new Date()
-        this.is_active = current_time >= new Date(this.event.start_time) &&
-          current_time <= new Date(this.event.end_time) 
+        let event_start_time = new Date(this.event.start_time)
+        let event_end_time = new Date(this.event.end_time)
+        if(current_time >= event_start_time) {
+          if(current_time <= event_end_time)
+            this.is_active = true
+          else
+            this.is_over = true
+        }
       }
     }
   }
@@ -50,12 +57,20 @@
 
 <style scoped>
   .todays-event-card-container {
-    background-color: #FC895D;
+    background-color: #f29f33;
     height: 3.5rem;
     margin-top: 1rem;
     border-radius: 5px;
     position: relative;
     cursor: pointer;
+  }
+
+  .active-container {
+    background-color: #516ded;
+  }
+
+  .over-container {
+    background-color: #919191;
   }
 
   .todays-event-card {
