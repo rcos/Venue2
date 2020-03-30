@@ -3,7 +3,8 @@
     <div v-if="todays_events.length > 0">
       <div class="todays-events-section">
         <div v-for="(event, index) in todays_events" class="todays-event-container" v-bind:class="{'mleft-one':index===0, 'mleft-four':index!==0}">
-          <div class="todays-event-time">{{ convertTimeToHourMinuteFormat(new Date(event.start_time)) }}</div>
+          <div v-if="event.started_today" class="todays-event-time">{{ convertToHourMinuteFormat(new Date(event.start_time)) }}</div>
+          <div v-else class="todays-event-time">{{ convertToMonthDayFormat(new Date(event.start_time)) }} {{ convertToHourMinuteFormat(new Date(event.start_time)) }}</div>
           <TodaysEventCard v-bind:event="event" />
         </div>
       </div>
@@ -38,18 +39,36 @@
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
         this.todays_events = response.data
         //order events by start time
+        this.sortTodaysEventsByStartTime()
+        this.setEventsStartedStoday()
+      },
+      convertToHourMinuteFormat(time) {
+        let time_string = time.toLocaleTimeString('en-US')
+        //remove all ':00's from the string
+        time_string = time_string.replace(/:00/g,"")
+        return time_string
+      },
+      convertToMonthDayFormat(time) {
+        let month = time.getUTCMonth() + 1; //months from 1-12
+        let day = time.getUTCDate();
+        return month + "/" + day
+      },
+      sortTodaysEventsByStartTime() {
         this.todays_events.sort(function(a,b){
           return new Date(a.start_time) - new Date(b.start_time); 
         });
       },
-      convertTimeToHourMinuteFormat(time){
-        let time_string = time.toLocaleTimeString('en-US')
-        //remove all ':00's from the string
-        time_string = time_string.replace(/:00/g,"")
-        //replace 'PM' with 'p' and 'AM' with a
-        // time_string = time_string.replace("PM","pm")
-        // time_string = time_string.replace("AM","am")
-        return time_string
+      setEventsStartedStoday() {
+        this.todays_events.forEach(event => {
+          if(this.isToday(new Date(event.start_time)))
+            event.started_today = true
+        })
+      },
+      isToday(time) {
+        let current_time = new Date()
+        return current_time.getFullYear() === time.getFullYear() &&
+          current_time.getMonth() === time.getMonth() &&
+          current_time.getDate() === time.getDate()
       }
     }
   }
