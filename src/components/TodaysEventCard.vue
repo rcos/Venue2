@@ -24,17 +24,25 @@
     },
     data(){
       return {
-        section_has_loaded: false
+        section_has_loaded: false,
+        is_active: Boolean
       }
     },
     created() {
       this.getEventSectionWithCourse()
+      this.setIsActive()
+      console.log("is_active: " + this.is_active)
     },
     methods: {
       async getEventSectionWithCourse() {
         const response = await SectionAPI.getSectionWithCourse(this.event.section)
         this.event.section = response.data
         this.section_has_loaded = true
+      },
+      setIsActive() {
+        let current_time = new Date()
+        this.is_active = current_time >= new Date(this.event.start_time) &&
+          current_time <= new Date(this.event.end_time) 
       }
     }
   }
