@@ -86,6 +86,9 @@ export default {
           SubmissionAPI.addSubmission(submission);
           console.log("ATTENDANCE CODE FOUND:", result);
         },
+        onTimeout: () => {
+          console.log("TIMEOUT: Could not find any QRCode");
+        },
         timeout: 10000
       });
     }
