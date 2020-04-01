@@ -61,6 +61,7 @@
   border-radius: 3px;
   cursor: pointer;
   transition: background-color, box-shadow, width, 0.25s;
+  color: black;
 }
 
 .course-card:hover {
