@@ -22,6 +22,7 @@ import LandingPage from './views/LandingPage.vue';
 import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
 import CourseList from './components/CourseList.vue';
+import CourseInfo from './components/CourseInfo.vue';
 
 Vue.use(VueRouter);
 
@@ -138,6 +139,11 @@ const router = new VueRouter({
         name: 'user_courses',
         path: '/user_courses',
         component: CourseList
+    },
+    {
+        name: 'course_info',
+        path: '/course_info',
+        component: CourseInfo
     }
   ]
 })
