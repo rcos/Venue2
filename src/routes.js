@@ -142,7 +142,7 @@ const router = new VueRouter({
     },
     {
         name: 'course_info',
-        path: '/course_info',
+        path: '/course_info/:id',
         component: CourseInfo
     }
   ]

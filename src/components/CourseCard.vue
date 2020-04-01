@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{name: 'course_info', query: { course: course }}">
+  <router-link :to="{name: 'course_info', params: { id: course._id }}">
     <div class="course-card">
     	<div class="color-box" v-bind:class="{
         'blue-box':box_color == 'blue', 
