@@ -4,8 +4,8 @@
     <div class="course-event-container">
       <div class="info-section" id="course-info">
         <h2 class="course-info-header">Course Info</h2>
-        <p class="course-name">Intro to AI</p>
-        <div class="course-title">CSCI 4210</div>
+        <p class="course-name">{{ course.name }}</p>
+        <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
       </div>
       <div class="info-section" id="event-info">
         <button class="new-event-btn">Create new event for CSCI 4210</button>
@@ -57,6 +57,7 @@
 </template>
 
 <script>
+  import CourseAPI from '@/services/CourseAPI.js';
 
 export default {
   name: 'CourseInfo',
@@ -75,9 +76,15 @@ export default {
   created() {
     // this.course = this.$route.params.course
     // console.log(course)
-    console.log(this.$route.query.course)
+    // this.course = this.$route.query.course
+    this.getCourse()
   },
   methods: {
+    async getCourse() {
+      let course_id = this.$route.params.id
+      const response = await CourseAPI.getCourse(course_id)
+      this.course = response.data
+    }
   }
 }
 </script>
@@ -108,6 +115,7 @@ export default {
     display: inline-block;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+    margin-top: 0.5rem;
   }
 
   #event-info {
@@ -124,7 +132,7 @@ export default {
 
   .active-events-container {
     /*border: black solid;*/
-    margin-top: 2.5rem;
+    margin-top: 3rem;
     overflow: hidden;
   }
 
@@ -182,6 +190,7 @@ export default {
   .attendance-month-container {
     /*border: green solid;*/
     overflow: hidden;
+    margin-top: 1rem;
   }
 
   .month {
