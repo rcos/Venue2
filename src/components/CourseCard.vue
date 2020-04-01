@@ -1,22 +1,24 @@
-<<template>
-  <div class="course-card">
-  	<div class="color-box" v-bind:class="{
-      'blue-box':box_color == 'blue', 
-      'red-box':box_color == 'red', 
-      'orange-box':box_color == 'orange',
-      'green-box':box_color == 'green',
-      'purple-box':box_color == 'purple'}"></div>
-    <div v-if="is_instructor" class="course-info">
-      <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
-      <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>
-      <div v-else class="course-name">{{ course.name }}</div>
+<template>
+  <router-link :to="{name: 'course_info', query: { course: course }}">
+    <div class="course-card">
+    	<div class="color-box" v-bind:class="{
+        'blue-box':box_color == 'blue', 
+        'red-box':box_color == 'red', 
+        'orange-box':box_color == 'orange',
+        'green-box':box_color == 'green',
+        'purple-box':box_color == 'purple'}"></div>
+      <div v-if="is_instructor" class="course-info">
+        <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
+        <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>
+        <div v-else class="course-name">{{ course.name }}</div>
+      </div>
+      <div v-else class="course-info">
+        <div class="course-title">{{ section.course.dept }} {{ section.course.course_number }}-{{ section.number }}</div>
+        <div v-if="section.course.name.length > 21" class="course-name">{{ section.course.name.substring(0,18) + "..." }}</div>
+        <div v-else class="course-name">{{ section.course.name }}</div>
+      </div>
     </div>
-    <div v-else class="course-info">
-      <div class="course-title">{{ section.course.dept }} {{ section.course.course_number }}-{{ section.number }}</div>
-      <div v-if="section.course.name.length > 21" class="course-name">{{ section.course.name.substring(0,18) + "..." }}</div>
-      <div v-else class="course-name">{{ section.course.name }}</div>
-    </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
