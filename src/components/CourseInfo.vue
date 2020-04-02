@@ -8,7 +8,7 @@
         <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
       </div>
       <div class="info-section" id="event-info">
-        <button class="new-event-btn">Create new event for CSCI 4210</button>
+        <button class="new-event-btn">Create new event for {{course.dept }} {{ course.course_number }}</button>
         <div class="active-events-container">
           <div class="active-event-pill">
             <p class="active-event-card-section" id="active-event-name">Class 3/9</p>
