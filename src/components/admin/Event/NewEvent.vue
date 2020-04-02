@@ -9,6 +9,10 @@
             <label>title:</label>
             <input type="text" class="form-control" v-model="event.title">
           </div>
+          <div class="form-group">
+            <label>location:</label>
+            <input type="text" class="form-control" v-model="event.location">
+          </div>
         </div>
         </div>
         <div class="row">
