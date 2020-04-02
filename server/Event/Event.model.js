@@ -15,7 +15,8 @@ let Event = new Schema({
 		type: Boolean,
 		default: false
 	},
-	//implement location
+	// implement location as a Geo Object
+	location: String,
 	start_time: Date,
 	end_time: Date,
 	submission_start_time: Date,
