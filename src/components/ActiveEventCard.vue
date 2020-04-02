@@ -10,7 +10,7 @@
       </div>
       <div class="event-card-section" id="event-section">
         <div class="event-name">{{ event.title }}</div>
-        <div class="event-location">DCC 308</div>
+        <div class="event-location">{{ event.location }}</div>
       </div>
       <div class="event-card-section" id="time-section">
         <div>
