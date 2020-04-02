@@ -23,4 +23,7 @@ export default {
   getActiveOrTodaysEventsForUser(user_id, get_active) {
     return API().get('events/active_or_todays_events/' + user_id + '/' + get_active)
   },
+  getActiveEventsForCourse(course_id) {
+    return API().get('events/active_for_course/' + course_id)
+  }
 }

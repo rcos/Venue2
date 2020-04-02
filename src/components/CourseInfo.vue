@@ -58,6 +58,7 @@
 
 <script>
   import CourseAPI from '@/services/CourseAPI.js';
+  import EventAPI from '@/services/EventAPI.js';
 
 export default {
   name: 'CourseInfo',
@@ -70,21 +71,27 @@ export default {
   },
   data(){
     return {
-      course: Object
+      course: Object,
+      active_events: []
     }
   },
   created() {
     // this.course = this.$route.params.course
     // console.log(course)
     // this.course = this.$route.query.course
+    this.course_id = this.$route.params.id
     this.getCourse()
+    this.getActiveEventsForCourse()
   },
   methods: {
     async getCourse() {
-      let course_id = this.$route.params.id
-      const response = await CourseAPI.getCourse(course_id)
+      const response = await CourseAPI.getCourse(this.course_id)
       this.course = response.data
-    }
+    },
+    async getActiveEventsForCourse() {
+      const response = await EventAPI.getActiveEventsForCourse(this.course_id)
+      this.active_events = response.data
+    },
   }
 }
 </script>
