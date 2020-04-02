@@ -10,15 +10,15 @@
       <div class="info-section" id="event-info">
         <button class="new-event-btn">Create new event for {{course.dept }} {{ course.course_number }}</button>
         <div class="active-events-container">
-          <div class="active-event-pill">
-            <p class="active-event-card-section" id="active-event-name">Class 3/9</p>
-            <p class="active-event-card-section" id="active-event-location">DCC 308</p>
-            <p class="active-event-card-section" id="active-event-time-remaining">3m</p>
-          </div>
-          <div class="active-event-pill">
-            <p class="active-event-card-section" id="active-event-name">Art History Tour</p>
-            <p class="active-event-card-section" id="active-event-location">VCC 210</p>
-            <p class="active-event-card-section" id="active-event-time-remaining">12m</p>
+          <div class="active-event-pill" v-for="active_event in active_events">
+            <p class="active-event-card-section" id="active-event-name">{{ active_event.title }}</p>
+            <p class="active-event-card-section" id="active-event-location">{{ active_event.location }}</p>
+            <div class="active-event-card-section" id="active-event-time-remaining">
+              <span v-if="active_event.remaining_days > 0">{{ active_event.remaining_days }}d </span>
+              <span v-if="active_event.remaining_hours > 0">{{ active_event.remaining_hours }}h </span>
+              <span v-if="active_event.remaining_mins > 0">{{ active_event.remaining_mins }}m</span>
+            </div>
+            <!-- <p class="active-event-card-section" id="active-event-time-remaining">3m</p> -->
           </div>
         </div>
       </div>
@@ -91,7 +91,21 @@ export default {
     async getActiveEventsForCourse() {
       const response = await EventAPI.getActiveEventsForCourse(this.course_id)
       this.active_events = response.data
+      this.getRemainingTimeForActiveEvents()
     },
+    getRemainingTimeForActiveEvents() {
+      this.active_events.forEach(active_event => {
+        let current_time = new Date()
+        let submission_end_time = new Date(active_event.submission_end_time)
+        let diff_milliseconds = Math.abs(submission_end_time - current_time);
+        let diff_hours = Math.floor((diff_milliseconds % 86400000) / 3600000); // hours
+        let diff_mins = Math.round(((diff_milliseconds % 86400000) % 3600000) / 60000); // minutes
+        let diff_days = Math.floor(diff_milliseconds / 86400000); // days
+        active_event.remaining_days = diff_days
+        active_event.remaining_hours = diff_hours
+        active_event.remaining_mins = diff_mins
+      })
+    }
   }
 }
 </script>
