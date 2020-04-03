@@ -18,7 +18,6 @@
               <span v-if="active_event.remaining_hours > 0">{{ active_event.remaining_hours }}h </span>
               <span v-if="active_event.remaining_mins > 0">{{ active_event.remaining_mins }}m</span>
             </div>
-            <!-- <p class="active-event-card-section" id="active-event-time-remaining">3m</p> -->
           </div>
         </div>
       </div>
@@ -29,28 +28,7 @@
         <h4 class="attendance-history-header-text">Attendance History (85%)</h4>
         <p class="section-selector">all sections</p>
       </div>
-      <div class="attendance-month-container">
-        <div class="month">February</div>
-        <div class="event-pill">
-          <p class="event-card-section" id="event-name">Class 2/2</p>
-          <p class="event-card-section" id="event-location">DCC 308</p>
-        </div>
-        <div class="event-pill">
-          <p class="event-card-section" id="event-name">Class 2/2</p>
-          <p class="event-card-section" id="event-location">DCC 308</p>
-        </div>
-        <div class="event-pill">
-          <p class="event-card-section" id="event-name">Class 2/2</p>
-          <p class="event-card-section" id="event-location">DCC 308</p>
-        </div>
-        <div class="event-pill">
-          <p class="event-card-section" id="event-name">Class 2/2</p>
-          <p class="event-card-section" id="event-location">DCC 308</p>
-        </div>
-        <div class="event-pill">
-          <p class="event-card-section" id="event-name">Class 2/2</p>
-          <p class="event-card-section" id="event-location">DCC 308</p>
-        </div>
+      <!-- <EventHistoryList v-bind:course="course" /> -->
       </div>
     </div>
   </div>
@@ -59,6 +37,7 @@
 <script>
   import CourseAPI from '@/services/CourseAPI.js';
   import EventAPI from '@/services/EventAPI.js';
+  import EventHistoryList from '@/components/EventHistoryList.vue';
 
 export default {
   name: 'CourseInfo',
@@ -67,7 +46,7 @@ export default {
   computed: {
   },
   components: {
-
+    EventHistoryList
   },
   data(){
     return {
@@ -206,46 +185,5 @@ export default {
     margin-left: 1rem;
     text-decoration: underline;
     cursor: pointer;
-  }
-
-  .attendance-month-container {
-    /*border: green solid;*/
-    overflow: hidden;
-    margin-top: 1rem;
-  }
-
-  .month {
-    float: left;
-    margin-left: 2rem;
-    /*border: red solid;*/
-    width: 100%;
-    text-align: left;
-    padding-left: 1rem;
-  }
-
-  .event-pill {
-    width: 14rem;
-    border: green solid;
-    float: left;
-    margin-left: 2rem;
-    border-radius: 5px;
-    margin-top: 1rem;
-    cursor: pointer;
-  }
-
-  .event-card-section {
-    /*border: purple solid;*/
-    display: inline-block;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    overflow: hidden;
-  }
-
-  #event-name {
-    float: left;
-  }
-
-  #event-location {
-    float: right;
   }
 </style>

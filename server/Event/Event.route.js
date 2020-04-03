@@ -184,7 +184,7 @@ eventRoutes.get('/active_for_course/:course_id', (req, res) => {
         } else {
           let active_course_events = []
           events.forEach(event => {
-            if(course_sections.includes(event.section.toString()))
+            if(isActive(event) && course_sections.includes(event.section.toString()))
               active_course_events.push(event)
           })
           res.json(active_course_events)
@@ -193,6 +193,7 @@ eventRoutes.get('/active_for_course/:course_id', (req, res) => {
     }
   })
 });
+
 
 function isActive(event) {
   let current_time = new Date()
