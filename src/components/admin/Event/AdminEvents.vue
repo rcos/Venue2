@@ -26,7 +26,7 @@
             <td> {{ new Date(event.submission_start_time) }}</td>
             <td> {{ new Date(event.submission_end_time) }}</td>
             <div v-if="is_event_view">
-              <td><router-link :to="{name: 'edit_event', params: { id: event._id }}" class="btn btn-primary">Edit</router-link></td>
+              <td><router-link :to="{name: 'admin_edit_event', params: { id: event._id }}" class="btn btn-primary">Edit</router-link></td>
               <td><button class="btn btn-danger" @click.prevent="deleteEvent(event._id)">Delete</button></td>
             </div>
             <td v-else><button class="btn btn-secondary" @click.prevent="$emit('select-event', event)">Select</button></td>
@@ -43,7 +43,7 @@
 
 
   export default {
-    name: 'Events',
+    name: 'AdminEvents',
     data(){
       return {
         events: [],
@@ -81,7 +81,7 @@
         })
       },
       setEventView() {
-        this.is_event_view = this.$router.currentRoute.name === "events"
+        this.is_event_view = this.$router.currentRoute.name === "admin_events"
       }
     }
   }

@@ -13,9 +13,9 @@ import Sections from './components/admin/Section/Sections.vue';
 import EditSection from './components/admin/Section/EditSection.vue';
 import NewSection from './components/admin/Section/NewSection.vue';
 import NewUser from './components/admin/User/NewUser.vue';
-import NewEvent from './components/admin/Event/NewEvent.vue';
-import Events from './components/admin/Event/Events.vue';
-import EditEvent from './components/admin/Event/EditEvent.vue';
+import AdminNewEvent from './components/admin/Event/AdminNewEvent.vue';
+import AdminEvents from './components/admin/Event/AdminEvents.vue';
+import AdminEditEvent from './components/admin/Event/AdminEditEvent.vue';
 import NewSubmission from './components/admin/Submission/NewSubmission.vue';
 import Submissions from './components/admin/Submission/Submissions.vue';
 import LandingPage from './views/LandingPage.vue';
@@ -96,23 +96,23 @@ const router = new VueRouter({
         component: NewSection
     },
     {
-        name: 'new_event',
-        path: '/new_event',
-        component: NewEvent,
+        name: 'admin_new_event',
+        path: '/admin/new_event',
+        component: AdminNewEvent,
         meta: { 
           requiresAuth: true,
           requiresInstructor: true 
         }
     },   
     {
-        name: 'events',
-        path: '/events',
-        component: Events
+        name: 'admin_events',
+        path: '/admin/events',
+        component: AdminEvents
     },
     {
-        name: 'edit_event',
-        path: '/edit_event/:id',
-        component: EditEvent
+        name: 'admin_edit_event',
+        path: '/admin_edit_event/:id',
+        component: AdminEditEvent
     },
     {
         name: 'new_submission',
