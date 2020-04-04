@@ -2,25 +2,11 @@
   <div class="event-history-list">
     <div class="attendance-month-container">
       <div class="month">February</div>
-      <div class="event-pill">
-        <p class="event-card-section" id="event-name">Class 2/2</p>
-        <p class="event-card-section" id="event-location">DCC 308</p>
-      </div>
-      <div class="event-pill">
-        <p class="event-card-section" id="event-name">Class 2/2</p>
-        <p class="event-card-section" id="event-location">DCC 308</p>
-      </div>
-      <div class="event-pill">
-        <p class="event-card-section" id="event-name">Class 2/2</p>
-        <p class="event-card-section" id="event-location">DCC 308</p>
-      </div>
-      <div class="event-pill">
-        <p class="event-card-section" id="event-name">Class 2/2</p>
-        <p class="event-card-section" id="event-location">DCC 308</p>
-      </div>
-      <div class="event-pill">
-        <p class="event-card-section" id="event-name">Class 2/2</p>
-        <p class="event-card-section" id="event-location">DCC 308</p>
+      <div v-for="event in event_history">
+        <div class="event-pill">
+          <p class="event-card-section" id="event-name">{{ event.title }}</p>
+          <p class="event-card-section" id="event-location">{{ event.location }}</p>
+        </div>
       </div>
     </div>
   </div>
