@@ -54,7 +54,7 @@
   import 'vue-datetime/dist/vue-datetime.css'
 
   export default {
-    name: 'NewEvent',
+    name: 'AdminNewEvent',
     components: {
       Sections,
       datetime: Datetime
@@ -77,7 +77,7 @@
         this.event.section = this.section
         console.log("saving event with start_date " + this.event.start_date)
         const response = await EventAPI.addEvent(this.event);
-        this.$router.push({name: 'events'});
+        this.$router.push({name: 'admin_events'});
       }
     }
   }

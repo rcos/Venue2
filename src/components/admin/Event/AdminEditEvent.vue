@@ -54,7 +54,7 @@
   import UserAPI from '@/services/UserAPI.js';
 
   export default {
-    name: 'EditEvent',
+    name: 'AdminEditEvent',
     data(){
       return {
         event: {},
@@ -84,7 +84,7 @@
       async updateEvent() {
         let event_id = this.$route.params.id
         const response = await EventAPI.updateEvent(event_id, this.event)
-        this.$router.push({name: 'events'})
+        this.$router.push({name: 'admin_events'})
       },
       async getSubmissionsForEvent() {
         let event_id = this.$route.params.id

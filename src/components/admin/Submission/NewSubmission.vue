@@ -32,7 +32,7 @@
 
 <script>
   import SubmissionAPI from '@/services/SubmissionAPI.js';
-  import Events from '../Event/Events'
+  import Events from '../Event/AdminEvents'
   import Students from '../User/Students'
 
   export default {
