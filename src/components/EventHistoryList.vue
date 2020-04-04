@@ -60,7 +60,7 @@
   }
 
   .event-pill {
-    width: 14rem;
+    width: 16rem;
     border: green solid;
     float: left;
     margin-left: 2rem;
@@ -74,14 +74,22 @@
     display: inline-block;
     padding-left: 1rem;
     padding-right: 1rem;
-    overflow: hidden;
   }
 
   #event-name {
     float: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 45%;
+
   }
 
   #event-location {
     float: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 55%;
   }
 </style>
