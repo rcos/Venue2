@@ -59,9 +59,6 @@ export default {
     }
   },
   created() {
-    // this.course = this.$route.params.course
-    // console.log(course)
-    // this.course = this.$route.query.course
     this.course_id = this.$route.params.id
     this.getCourse()
     this.getActiveEventsForCourse()
