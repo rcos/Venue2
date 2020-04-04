@@ -1,37 +1,41 @@
 <template>
-  <div class="course-info-container">
-    <!-- Course and event container -->
-    <div class="course-event-container">
-      <div class="info-section" id="course-info">
-        <h2 class="course-info-header">Course Info</h2>
-        <p class="course-name">{{ course.name }}</p>
-        <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
-      </div>
-      <div class="info-section" id="event-info">
-        <button class="new-event-btn">Create new event for {{course.dept }} {{ course.course_number }}</button>
-        <div class="active-events-container">
-          <div class="active-event-pill" v-for="active_event in active_events">
-            <p class="active-event-card-section" id="active-event-name">{{ active_event.title }}</p>
-            <p class="active-event-card-section" id="active-event-location">{{ active_event.location }}</p>
-            <div class="active-event-card-section" id="active-event-time-remaining">
-              <span v-if="active_event.remaining_days > 0">{{ active_event.remaining_days }}d </span>
-              <span v-if="active_event.remaining_hours > 0">{{ active_event.remaining_hours }}h </span>
-              <span v-if="active_event.remaining_mins > 0">{{ active_event.remaining_mins }}m</span>
+  <div>
+    <div class="spinner-border event-card-spinner" role="status" v-if="!course_has_loaded">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="course-info-container" v-else>
+      <!-- Course and event container -->
+      <div class="course-event-container">
+        <div class="info-section" id="course-info">
+          <h2 class="course-info-header">Course Info</h2>
+          <p class="course-name">{{ course.name }}</p>
+          <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
+        </div>
+        <div class="info-section" id="event-info">
+          <router-link :to="{name: 'new_event', params: { course_id: course._id }}">
+            <button class="new-event-btn">Create new event for {{course.dept }} {{ course.course_number }}</button>
+          </router-link>
+          <div class="active-events-container">
+            <div class="active-event-pill" v-for="active_event in active_events">
+              <p class="active-event-card-section" id="active-event-name">{{ active_event.title }}</p>
+              <p class="active-event-card-section" id="active-event-location">{{ active_event.location }}</p>
+              <div class="active-event-card-section" id="active-event-time-remaining">
+                <span v-if="active_event.remaining_days > 0">{{ active_event.remaining_days }}d </span>
+                <span v-if="active_event.remaining_hours > 0">{{ active_event.remaining_hours }}h </span>
+                <span v-if="active_event.remaining_mins > 0">{{ active_event.remaining_mins }}m</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- Attendance history -->
-    <div class="attendance-history-container">
-      <div class="attendance-history-header">
-        <h4 class="attendance-history-header-text">Attendance History (85%)</h4>
-        <p class="section-selector">all sections</p>
-      </div>
-      <div class="spinner-border event-card-spinner" role="status" v-if="!course_has_loaded">
-        <span class="sr-only">Loading...</span>
-      </div>
-      <EventHistoryList v-else v-bind:course="course" />
+      <!-- Attendance history -->
+      <div class="attendance-history-container">
+        <div class="attendance-history-header">
+          <h4 class="attendance-history-header-text">Attendance History (85%)</h4>
+          <p class="section-selector">all sections</p>
+        </div>
+        <EventHistoryList v-bind:course="course" />
+        </div>
       </div>
     </div>
   </div>

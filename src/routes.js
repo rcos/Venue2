@@ -23,6 +23,7 @@ import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
 import CourseList from './components/CourseList.vue';
 import CourseInfo from './views/CourseInfo.vue';
+import NewEvent from './views/NewEvent.vue';
 
 Vue.use(VueRouter);
 
@@ -144,6 +145,11 @@ const router = new VueRouter({
         name: 'course_info',
         path: '/course_info/:id',
         component: CourseInfo
+    },
+    {
+        name: 'new_event',
+        path: '/new_event/:course_id',
+        component: NewEvent
     }
   ]
 })
