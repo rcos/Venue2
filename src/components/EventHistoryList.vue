@@ -60,8 +60,6 @@
             this.event_history_by_month[this.event_history_by_month.length-1].push(event)
           }
         })
-        console.log(this.event_months)
-        console.log(this.event_history_by_month)
       }
     }
   }

@@ -22,7 +22,7 @@ import LandingPage from './views/LandingPage.vue';
 import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
 import CourseList from './components/CourseList.vue';
-import CourseInfo from './components/CourseInfo.vue';
+import CourseInfo from './views/CourseInfo.vue';
 
 Vue.use(VueRouter);
 
