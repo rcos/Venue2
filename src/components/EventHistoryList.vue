@@ -49,8 +49,9 @@
     },
     methods: {
       async getEventHistoryForCourse() {
-        // const response = EventAPI.getEventHistoryForCourse(this.course._id)
-        // this.event_history = response.data
+        const response = await EventAPI.getEventHistoryForCourse(this.course._id)
+        this.event_history = response.data
+        console.log(this.event_history)
       }
     }
   }

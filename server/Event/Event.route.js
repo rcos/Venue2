@@ -206,17 +206,18 @@ eventRoutes.get('/history_for_course/:course_id', (req, res) => {
           course_sections.push(section._id.toString())
       })
 
-      // Get the events for this section and check if they are active
+      // Get all events for the courses sections
       Event.find((error, events) => {
         if(error) {
           res.json(error)
         } else {
-          let active_course_events = []
+          let course_events = []
           events.forEach(event => {
             if(course_sections.includes(event.section.toString()))
-              active_course_events.push(event)
+              course_events.push(event)
           })
-          res.json(active_course_events)
+          console.log("Sending event history: " + course_events)
+          res.json(course_events)
         }
       })
     }
