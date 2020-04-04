@@ -37,8 +37,13 @@
       async getEventHistoryForCourse() {
         const response = await EventAPI.getEventHistoryForCourse(this.course._id)
         this.event_history = response.data
-        console.log(this.event_history)
-      }
+        this.sortEventsByStartTime()
+      },
+      sortEventsByStartTime() {
+        this.event_history.sort(function(a,b){
+          return new Date(b.start_time) - new Date(a.start_time); 
+        });
+      },
     }
   }
 </script>
