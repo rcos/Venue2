@@ -28,7 +28,10 @@
         <h4 class="attendance-history-header-text">Attendance History (85%)</h4>
         <p class="section-selector">all sections</p>
       </div>
-      <!-- <EventHistoryList v-bind:course="course" /> -->
+      <div class="spinner-border event-card-spinner" role="status" v-if="!course_has_loaded">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <EventHistoryList v-else v-bind:course="course" />
       </div>
     </div>
   </div>
@@ -51,7 +54,8 @@ export default {
   data(){
     return {
       course: Object,
-      active_events: []
+      active_events: [],
+      course_has_loaded: false
     }
   },
   created() {
@@ -66,6 +70,7 @@ export default {
     async getCourse() {
       const response = await CourseAPI.getCourse(this.course_id)
       this.course = response.data
+      this.course_has_loaded = true
     },
     async getActiveEventsForCourse() {
       const response = await EventAPI.getActiveEventsForCourse(this.course_id)

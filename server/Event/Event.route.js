@@ -194,6 +194,34 @@ eventRoutes.get('/active_for_course/:course_id', (req, res) => {
   })
 });
 
+eventRoutes.get('/history_for_course/:course_id', (req, res) => {
+  let course_id = req.params.course_id
+  Section.find((err, sections) => {
+    if(err) {
+      res.json(err)
+    } else {
+      let course_sections = []
+      sections.forEach(section => {
+        if(section.course == course_id)
+          course_sections.push(section._id.toString())
+      })
+
+      // Get the events for this section and check if they are active
+      Event.find((error, events) => {
+        if(error) {
+          res.json(error)
+        } else {
+          let active_course_events = []
+          events.forEach(event => {
+            if(course_sections.includes(event.section.toString()))
+              active_course_events.push(event)
+          })
+          res.json(active_course_events)
+        }
+      })
+    }
+  })
+});
 
 function isActive(event) {
   let current_time = new Date()
