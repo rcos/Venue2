@@ -1,8 +1,8 @@
 <template>
   <div class="event-history-list">
-    <div class="attendance-month-container">
-      <div class="month">February</div>
-      <div v-for="event in event_history">
+    <div class="attendance-month-container" v-for="month in event_months">
+      <div class="month">{{ month_names[month] }}</div>
+      <div v-for="event in event_history_by_month[month - 1]">
         <div class="event-pill">
           <p class="event-card-section" id="event-name">{{ event.title }}</p>
           <p class="event-card-section" id="event-location">{{ event.location }}</p>
@@ -27,7 +27,12 @@
     },
     data(){
       return {
-        event_history: []
+        event_history: [],
+        event_months: [],
+        event_history_by_month: [],
+        month_names: ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ]
       }
     },
     created() {
@@ -38,12 +43,26 @@
         const response = await EventAPI.getEventHistoryForCourse(this.course._id)
         this.event_history = response.data
         this.sortEventsByStartTime()
+        this.separateEventsByMonth()
       },
       sortEventsByStartTime() {
         this.event_history.sort(function(a,b){
           return new Date(b.start_time) - new Date(a.start_time); 
         });
       },
+      separateEventsByMonth() {
+        this.event_history.forEach(event => {
+          let start_time = new Date(event.start_time) 
+          if(!this.event_months.includes(start_time.getMonth())){
+            this.event_months.push(start_time.getMonth())
+            this.event_history_by_month.push([event])
+          } else {
+            this.event_history_by_month[this.event_history_by_month.length-1].push(event)
+          }
+        })
+        console.log(this.event_months)
+        console.log(this.event_history_by_month)
+      }
     }
   }
 </script>
