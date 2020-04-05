@@ -216,7 +216,6 @@ eventRoutes.get('/history_for_course/:course_id', (req, res) => {
             if(course_sections.includes(event.section.toString()))
               course_events.push(event)
           })
-          console.log("Sending event history: " + course_events)
           res.json(course_events)
         }
       })

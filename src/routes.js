@@ -149,7 +149,11 @@ const router = new VueRouter({
     {
         name: 'new_event',
         path: '/new_event/:course_id',
-        component: NewEvent
+        component: NewEvent,
+        meta: { 
+          requiresAuth: true,
+          requiresInstructor: true 
+        }
     }
   ]
 })
