@@ -69,7 +69,7 @@
         </div> -->
     </form>
 
-    <!-- <Sections v-on:select-section="selectSection" /> -->
+    <!-- <Sections v-bind:sections="" v-on:select-section="selectSection" /> -->
 
   </div>
 </template>
@@ -77,30 +77,33 @@
 <script>
   import EventAPI from '@/services/EventAPI.js';
   import CourseAPI from '@/services/CourseAPI.js';
-  // import Sections from '../Section/Sections';
+  import SectionAPI from '@/services/SectionAPI.js';
+  import Sections from '@/components/Sections';
   import { Datetime } from 'vue-datetime';
   import 'vue-datetime/dist/vue-datetime.css'
 
   export default {
-    name: 'AdminNewEvent',
+    name: 'NewEvent',
     components: {
-      // Sections,
+      Sections,
       datetime: Datetime
     },
     data(){
       return {
         course: {},
         event: {},
-        section: {}
+        section: {},
+        sections: []
       }
     },
     created() {
+      this.course_id = this.$route.params.course_id
       this.getCourse()
+      this.getSectionsForCourse()
     },
     methods: {
       async getCourse() {
-        let course_id = this.$route.params.course_id
-        const response = await CourseAPI.getCourse(course_id)
+        const response = await CourseAPI.getCourse(this.course_id)
         this.course = response.data
       },
       selectSection(section) {
@@ -112,6 +115,11 @@
         console.log("saving event with start_date " + this.event.start_date)
         const response = await EventAPI.addEvent(this.event);
         this.$router.push({name: 'admin_events'});
+      },
+      async getSectionsForCourse() {
+        const response = await SectionAPI.getSectionsForCourse(this.course_id)
+        this.sections = response.data
+        console.log(this.sections)
       }
     }
   }
