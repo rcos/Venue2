@@ -33,7 +33,7 @@
   import SectionAPI from '@/services/SectionAPI.js';
 
   export default {
-    name: 'Sections',
+    name: 'AdminSections',
     data(){
       return {
         sections: [],
