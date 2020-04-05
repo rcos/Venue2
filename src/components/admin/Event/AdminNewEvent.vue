@@ -42,21 +42,21 @@
         </div>
     </form>
 
-    <Sections v-on:select-section="selectSection" />
+    <AdminSections v-on:select-section="selectSection" />
 
   </div>
 </template>
 
 <script>
   import EventAPI from '@/services/EventAPI.js';
-  import Sections from '../Section/Sections';
+  import AdminSections from '@/components/admin/Section/AdminSections';
   import { Datetime } from 'vue-datetime';
   import 'vue-datetime/dist/vue-datetime.css'
 
   export default {
     name: 'AdminNewEvent',
     components: {
-      Sections,
+      AdminSections,
       datetime: Datetime
     },
     data(){
