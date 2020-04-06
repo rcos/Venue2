@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <NavBar v-if="this.$route.name != 'landing_page'"></NavBar>
-    <router-view />
+    <div id="main-content">
+      <NavBar v-if="this.$route.name != 'landing_page'"></NavBar>
+      <router-view />
+    </div>
     <Footer />
   </div>
 </template>
@@ -29,5 +31,11 @@ export default {
   color: #2c3e50;
   margin: 0 auto;
   padding: 0;
+  min-height: 100%;
+  position: relative;
+}
+
+#main-content {
+  padding-bottom: 3rem;
 }
 </style>
