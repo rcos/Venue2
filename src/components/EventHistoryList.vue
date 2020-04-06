@@ -3,10 +3,12 @@
     <div class="attendance-month-container" v-for="(month,index) in event_months">
       <div class="month">{{ month_names[month] }}</div>
       <div v-for="event in event_history_by_month[index]">
-        <div class="event-pill">
-          <p class="event-card-section" id="event-name">{{ event.title }}</p>
-          <p class="event-card-section" id="event-location">{{ event.location }}</p>
-        </div>
+        <router-link :to="{name: 'event_info', params: { event_id: event._id }}">
+          <div class="event-pill">
+            <p class="event-card-section" id="event-name">{{ event.title }}</p>
+            <p class="event-card-section" id="event-location">{{ event.location }}</p>
+          </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -89,6 +91,7 @@
     border-radius: 5px;
     margin-top: 1rem;
     cursor: pointer;
+    color: black;
   }
 
   .event-card-section {
