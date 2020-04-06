@@ -17,13 +17,15 @@
           </router-link>
           <div class="active-events-container">
             <div class="active-event-pill" v-for="active_event in active_events">
-              <p class="active-event-card-section" id="active-event-name">{{ active_event.title }}</p>
-              <p class="active-event-card-section" id="active-event-location">{{ active_event.location }}</p>
-              <div class="active-event-card-section" id="active-event-time-remaining">
-                <span v-if="active_event.remaining_days > 0">{{ active_event.remaining_days }}d </span>
-                <span v-if="active_event.remaining_hours > 0">{{ active_event.remaining_hours }}h </span>
-                <span v-if="active_event.remaining_mins > 0">{{ active_event.remaining_mins }}m</span>
-              </div>
+              <router-link :to="{name: 'event_info', params: { event_id: active_event._id }}">
+                <p class="active-event-card-section" id="active-event-name">{{ active_event.title }}</p>
+                <p class="active-event-card-section" id="active-event-location">{{ active_event.location }}</p>
+                <div class="active-event-card-section" id="active-event-time-remaining">
+                  <span v-if="active_event.remaining_days > 0">{{ active_event.remaining_days }}d </span>
+                  <span v-if="active_event.remaining_hours > 0">{{ active_event.remaining_hours }}h </span>
+                  <span v-if="active_event.remaining_mins > 0">{{ active_event.remaining_mins }}m</span>
+                </div>
+              </router-link>
             </div>
           </div>
         </div>
@@ -125,7 +127,6 @@ export default {
   }
 
   #event-info {
-    /*border: red solid;*/
     width: 62%;
   }
 
@@ -137,7 +138,6 @@ export default {
   }
 
   .active-events-container {
-    /*border: black solid;*/
     margin-top: 3rem;
     overflow: hidden;
   }
@@ -154,8 +154,8 @@ export default {
   }
 
   .active-event-card-section {
-    /*border: red solid;*/
     display: inline-block;
+    color: black;
   }
 
   #active-event-name {

@@ -24,6 +24,7 @@ import Dashboard from './views/Dashboard.vue';
 import CourseList from './components/CourseList.vue';
 import CourseInfo from './views/CourseInfo.vue';
 import NewEvent from './views/NewEvent.vue';
+import EventInfo from './views/EventInfo.vue';
 
 Vue.use(VueRouter);
 
@@ -153,6 +154,14 @@ const router = new VueRouter({
         meta: { 
           requiresAuth: true,
           requiresInstructor: true 
+        }
+    },
+    {
+        name: 'event_info',
+        path: '/event_info/:event_id',
+        component: EventInfo,
+        meta: { 
+          requiresAuth: true,
         }
     }
   ]
