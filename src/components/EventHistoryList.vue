@@ -1,8 +1,8 @@
 <template>
   <div class="event-history-list">
-    <div class="attendance-month-container" v-for="month in event_months">
+    <div class="attendance-month-container" v-for="(month,index) in event_months">
       <div class="month">{{ month_names[month] }}</div>
-      <div v-for="event in event_history_by_month[month - 1]">
+      <div v-for="event in event_history_by_month[index]">
         <div class="event-pill">
           <p class="event-card-section" id="event-name">{{ event.title }}</p>
           <p class="event-card-section" id="event-location">{{ event.location }}</p>
