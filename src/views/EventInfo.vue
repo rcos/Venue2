@@ -4,11 +4,11 @@
     <h6>{{ event.location }}</h6>
     <h3 class="course-name">{{ event.section.course.name }}</h3>
     <h5 class="section-numbers">Section {{ event.section.number }}</h5>
-    <div>
-      <h4 class="time-info">Start time: </h4>
-      <h4 class="time-info">End time: </h4>
-      <h4 class="time-info">Submission Start time: </h4>
-      <h4 class="time-info">Submission End time: </h4>
+    <div class="time-info-container">
+      <h4 class="time-info">Start time: {{ new Date(event.start_time) }}</h4>
+      <h4 class="time-info">End time: {{ new Date(event.end_time) }}</h4>
+      <h4 class="time-info">Submission Start time: {{ new Date(event.submission_start_time) }}</h4>
+      <h4 class="time-info">Submission End time: {{ new Date(event.submission_end_time) }}</h4>
     </div>
     <div class="submission-status">Submission window status</div>
   </div>
@@ -53,11 +53,15 @@ export default {
     margin-top: 2rem;
   }
 
+  .time-info-container {
+    margin-top: 2rem;
+  }
+
   .time-info {
-    display: inline-block;
+/*    display: inline-block;
     margin-left: 2rem;
     margin-right: 2rem;
-    margin-top: 2rem;
+    margin-top: 2rem;*/
   }
 
   .submission-status {
