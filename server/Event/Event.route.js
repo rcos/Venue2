@@ -223,6 +223,32 @@ eventRoutes.get('/history_for_course/:course_id', (req, res) => {
   })
 });
 
+eventRoutes.route('/section_and_course/:event_id').get(function (req, res) {
+  let event_id = req.params.event_id;
+  Event.findById(event_id, function (err, event){
+      if(err){
+        console.log(err);
+        res.json(err);
+      }else{
+        Section.findById(event.section, (error, section) => {
+          if(error) {
+            res.json(error)
+          } else {
+            event.section = section
+            Course.findById(section.course, (error, course) => {
+              if(error) {
+                res.json(error)
+              } else {
+                event.section.course = course
+                res.json(event)
+              }
+            })
+          }
+        })
+      }
+  });
+});
+
 function isActive(event) {
   let current_time = new Date()
   return current_time >= event.start_time &&
