@@ -2,8 +2,8 @@
   <div>
     <h1 class="event-title">{{ event.title }}</h1>
     <h6>{{ event.location }}</h6>
-    <h3 class="course-name">Course Name</h3>
-    <h5 class="section-numbers">Section 1,2,3,4</h5>
+    <h3 class="course-name">{{ event.section.course.name }}</h3>
+    <h5 class="section-numbers">Section {{ event.section.number }}</h5>
     <div>
       <h4 class="time-info">Start time: </h4>
       <h4 class="time-info">End time: </h4>
@@ -36,7 +36,7 @@ export default {
   methods: {
     async getEvent() {
       let event_id = this.$route.params.event_id
-      const response = await EventAPI.getEvent(event_id)
+      const response = await EventAPI.getEventWithSectionAndCourse(event_id)
       this.event = response.data
       console.log(this.event)
     }

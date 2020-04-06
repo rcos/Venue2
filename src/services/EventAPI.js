@@ -28,5 +28,8 @@ export default {
   },
   getEventHistoryForCourse(course_id) {
     return API().get('events/history_for_course/' + course_id)
+  },
+  getEventWithSectionAndCourse(event_id) {
+    return API().get('events/section_and_course/' + event_id)
   }
 }
