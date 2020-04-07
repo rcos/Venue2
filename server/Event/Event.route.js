@@ -163,7 +163,6 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
   })
 });
 
-
 eventRoutes.get('/active_for_course/:course_id', (req, res) => {
   let course_id = req.params.course_id
   // Get the sections for this course
@@ -190,6 +189,23 @@ eventRoutes.get('/active_for_course/:course_id', (req, res) => {
           res.json(active_course_events)
         }
       })
+    }
+  })
+});
+
+eventRoutes.get('/active_for_section/:section_id', (req, res) => {
+  let section_id = req.params.section_id
+  // Get the sections for this course
+  Event.find((err, events) => {
+    if(err) {
+      res.json(err)
+    } else {
+      let active_events = []
+      events.forEach(event => {
+        if(isActive(event) && event.section == section_id)
+          active_events.push(event)
+      })
+      res.json(active_events)
     }
   })
 });

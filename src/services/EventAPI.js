@@ -26,6 +26,9 @@ export default {
   getActiveEventsForCourse(course_id) {
     return API().get('events/active_for_course/' + course_id)
   },
+  getActiveEventsForSection(section_id) {
+    return API().get('events/active_for_section/' + section_id)
+  },
   getEventHistoryForCourse(course_id) {
     return API().get('events/history_for_course/' + course_id)
   },
