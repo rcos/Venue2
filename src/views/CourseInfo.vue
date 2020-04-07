@@ -45,6 +45,7 @@
 
 <script>
   import CourseAPI from '@/services/CourseAPI.js';
+  import SectionAPI from '@/services/SectionAPI.js';
   import EventAPI from '@/services/EventAPI.js';
   import EventHistoryList from '@/components/EventHistoryList.vue';
 
@@ -60,14 +61,22 @@ export default {
   data(){
     return {
       course: Object,
+      section: Object,
       active_events: [],
       course_has_loaded: false
     }
   },
   created() {
-    this.course_id = this.$route.params.id
-    this.getCourse()
-    this.getActiveEventsForCourse()
+    this.is_instructor = this.$store.state.user.current_user.is_instructor
+    if(this.is_instructor) {
+      this.course_id = this.$route.params.id
+      this.getCourse()
+      this.getActiveEventsForCourse()
+    } else {
+      this.section_id = this.$route.params.id
+      this.getSectionWithCourse()
+      this.getActiveEventsForSection()
+    }
   },
   methods: {
     async getCourse() {
@@ -75,10 +84,21 @@ export default {
       this.course = response.data
       this.course_has_loaded = true
     },
+    async getSectionWithCourse() {
+      const response = await SectionAPI.getSectionWithCourse(this.section_id)
+      this.section = response.data
+      this.course = this.section.course
+      this.course_has_loaded = true
+    },
     async getActiveEventsForCourse() {
       const response = await EventAPI.getActiveEventsForCourse(this.course_id)
       this.active_events = response.data
       this.getRemainingTimeForActiveEvents()
+    },
+    async getActiveEventsForSection() {
+      // const response = await EventAPI.getActiveEventsForCourse(this.course_id)
+      // this.active_events = response.data
+      // this.getRemainingTimeForActiveEvents()
     },
     getRemainingTimeForActiveEvents() {
       this.active_events.forEach(active_event => {
