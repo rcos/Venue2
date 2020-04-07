@@ -239,6 +239,16 @@ eventRoutes.get('/history_for_course/:course_id', (req, res) => {
   })
 });
 
+eventRoutes.get('/history_for_section/:section_id', (req, res) => {
+  let section_id = req.params.section_id
+  Event.find({section: section_id}, (err, section_events) => {
+    if(err) 
+      res.json(err)
+    else 
+      res.json(section_events)
+  })
+});
+
 eventRoutes.route('/section_and_course/:event_id').get(function (req, res) {
   let event_id = req.params.event_id;
   Event.findById(event_id, function (err, event){
