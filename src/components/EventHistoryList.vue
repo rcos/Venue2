@@ -20,7 +20,8 @@
   export default {
     name: 'EventHistoryList',
     props: {
-      course: Object
+      course: Object,
+      section: Object
     },
     computed: {
     },
@@ -38,11 +39,20 @@
       }
     },
     created() {
-      this.getEventHistoryForCourse()
+      if(this.course)
+        this.getEventHistoryForCourse()
+      else
+        this.getEventHistoryForSection()
     },
     methods: {
       async getEventHistoryForCourse() {
         const response = await EventAPI.getEventHistoryForCourse(this.course._id)
+        this.event_history = response.data
+        this.sortEventsByStartTime()
+        this.separateEventsByMonth()
+      },
+      async getEventHistoryForSection() {
+        const response = await EventAPI.getEventHistoryForSection(this.section._id)
         this.event_history = response.data
         this.sortEventsByStartTime()
         this.separateEventsByMonth()
