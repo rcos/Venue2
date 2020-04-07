@@ -96,9 +96,9 @@ export default {
       this.getRemainingTimeForActiveEvents()
     },
     async getActiveEventsForSection() {
-      // const response = await EventAPI.getActiveEventsForCourse(this.course_id)
-      // this.active_events = response.data
-      // this.getRemainingTimeForActiveEvents()
+      const response = await EventAPI.getActiveEventsForSection(this.section_id)
+      this.active_events = response.data
+      this.getRemainingTimeForActiveEvents()
     },
     getRemainingTimeForActiveEvents() {
       this.active_events.forEach(active_event => {
