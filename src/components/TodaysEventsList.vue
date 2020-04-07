@@ -5,7 +5,9 @@
         <div v-for="(event, index) in todays_events" class="todays-event-container" v-bind:class="{'mleft-one':index===0, 'mleft-four':index!==0}">
           <div v-if="event.started_today" class="todays-event-time">{{ convertToHourMinuteFormat(new Date(event.start_time)) }}</div>
           <div v-else class="todays-event-time">{{ convertToMonthDayFormat(new Date(event.start_time)) }} {{ convertToHourMinuteFormat(new Date(event.start_time)) }}</div>
-          <TodaysEventCard v-bind:event="event" />
+          <router-link class="active-event-link" :to="{name: 'event_info', params: { event_id: event._id }}">
+            <TodaysEventCard v-bind:event="event" />
+          </router-link>
         </div>
       </div>
       <div class="time-line"></div>
@@ -122,5 +124,9 @@ background-color: #F5F5F5;
   font-size: 0.75rem;
   margin-top: 0.5rem;
   color: #757575;
+}
+
+.active-event-link {
+  color: #2c3e50;
 }
 </style>
