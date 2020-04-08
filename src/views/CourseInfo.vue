@@ -16,7 +16,7 @@
             <button class="new-event-btn">Create new event for {{course.dept }} {{ course.course_number }}</button>
           </router-link>
           <div class="active-events-container">
-            <router-link class="active-event-pill" v-for="active_event in active_events" :to="{name: 'event_info', params: { event_id: active_event._id }}">
+            <router-link class="active-event-pill" v-for="active_event in active_events" :key="active_event._id" :to="{name: 'event_info', params: { event_id: active_event._id }}">
               <p class="active-event-card-section" id="active-event-name">{{ active_event.title }}</p>
               <p class="active-event-card-section" id="active-event-location">{{ active_event.location }}</p>
               <div class="active-event-card-section" id="active-event-time-remaining">

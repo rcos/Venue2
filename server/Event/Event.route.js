@@ -118,6 +118,7 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
                       }
                     })
                   })
+                  res.json(requested_events)
                 }
               })
             }
@@ -155,6 +156,7 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
                 }
               })
             })
+            res.json(requested_events)
           }
         })
       })
