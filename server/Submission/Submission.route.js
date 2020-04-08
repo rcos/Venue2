@@ -12,12 +12,12 @@ submissionRoutes.route('/add').post(function (req, res) {
     })
     .catch(() => {
       res.status(400).send("unable to save submission to database");
-  });
+    });
 });
 
 submissionRoutes.route('/').get(function (req, res) {
-    Submission.find(function(err, submissions){
-    if(err)
+  Submission.find(function (err, submissions) {
+    if (err)
       res.json(err);
     res.json(submissions);
   });
@@ -25,47 +25,49 @@ submissionRoutes.route('/').get(function (req, res) {
 
 submissionRoutes.route('/edit/:id').get(function (req, res) {
   let id = req.params.id;
-  Submission.findById(id, function (err, submission){
-      if(err)
-        res.json(err);
-      res.json(submission);
+  Submission.findById(id, function (err, submission) {
+    if (err)
+      res.json(err);
+    res.json(submission);
   });
 });
 
 submissionRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
   let updated_submission = req.body.updated_submission;
-  Submission.findByIdAndUpdate(id, 
+  Submission.findByIdAndUpdate(id,
     {
       event: updated_submission.event,
       submitter: updated_submission.submitter,
+      time: updated_submission.time,
+      location: updated_submission.location
     },
-    function(err, submission) {
+    function (err, submission) {
       if (!submission)
         res.status(404).send("submission not found");
-      res.json(submission);    
+      res.json(submission);
     }
   );
 });
 
 submissionRoutes.route('/delete/:id').delete(function (req, res) {
-    Submission.findByIdAndRemove({_id: req.params.id}, function(err){
-        if(err) res.json(err);
-        else res.json('Successfully removed');
-    });
+  Submission.findByIdAndRemove({ _id: req.params.id }, function (err) {
+    if (err) res.json(err);
+    else res.json('Successfully removed');
+  });
 });
 
 submissionRoutes.route('/event_submissions/:event_id').get(function (req, res) {
   console.log("I'm here!!!!");
   let event_id = req.params.event_id;
-  Submission.find(function(err, submissions){
-    if(err){
+  Submission.find(function (err, submissions) {
+    if (err) {
       console.log(err);
       res.json(err);
     }
     let event_submissions = [];
     submissions.forEach(submission => {
-      if(submission.event == event_id)
+      if (submission.event == event_id)
         event_submissions.push(submission);
     });
     res.json(event_submissions);
