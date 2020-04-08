@@ -17,6 +17,11 @@ let Event = new Schema({
 	},
 	// implement location as a Geo Object
 	location: String,
+	code: {
+		type: String,
+		default: ""
+	},
+	//implement location
 	start_time: Date,
 	end_time: Date,
 	submission_start_time: Date,
