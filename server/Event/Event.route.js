@@ -277,8 +277,10 @@ eventRoutes.route('/section_and_course/:event_id').get(function (req, res) {
   });
 });
 
-function isActive(event) {
-  return event.is_active
+function isActive(event) {  
+  let current_time = new Date() 
+  return current_time >= event.start_time &&  
+    current_time <= event.end_time  
 }
 
 function isToday(time) {
