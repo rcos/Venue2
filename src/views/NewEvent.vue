@@ -4,6 +4,7 @@
     <h2>Create An Event For {{ course.name }}</h2>
     <form class="new-event-form" @submit.prevent="addEvent">
       <div class="form-group">
+        <!-- Event Info -->
         <div class="input-wrapper">
           <label>Title</label>
           <input type="text" class="form-control new-event-input" placeholder="e.g. Event 1" v-model="event.title">
@@ -12,6 +13,7 @@
           <label>Location</label>
           <input type="text" class="form-control new-event-input" placeholder="e.g. DCC 308" v-model="event.location">
         </div>
+        <!-- Times -->
         <div class="input-wrapper">
           <label>Start Time</label>
           <datetime class="time-picker" type="datetime" use12-hour value-zone="local" title="Event Start" v-model="event.start_time"></datetime>
@@ -24,6 +26,7 @@
           <label>Submission End Time</label>
           <datetime class="time-picker" type="datetime" use12-hour value-zone="local" title="Submission End" v-model="event.submission_end_time"></datetime>
         </div>
+        <!-- Section -->
         <div class="input-wrapper">
           <label>Section</label>
           <input type="text" class="form-control new-event-input" v-model="section.number" readonly>
@@ -33,7 +36,14 @@
         <span class="sr-only">Loading...</span>
       </div>
       <Sections v-else v-bind:sections="sections" v-on:select-section="selectSection" />
-      <button class="btn btn-primary">Create</button>
+      <!-- QR Code -->
+      <div id="qr-section">
+        <div>
+          <button @click.prevent="generateAttendanceCode()" class="btn btn-secondary">Generate QR Code</button>
+        </div>
+        <canvas id="qr_render_area"></canvas>
+      </div>
+      <button class="btn btn-primary create-event-btn">Create Event</button>
     </form>
 
   </div>
@@ -46,6 +56,7 @@
   import Sections from '@/components/Sections';
   import { Datetime } from 'vue-datetime';
   import 'vue-datetime/dist/vue-datetime.css'
+  let QRCode = require("qrcode");
 
   export default {
     name: 'NewEvent',
@@ -85,6 +96,24 @@
         const response = await SectionAPI.getSectionsForCourse(this.course_id)
         this.sections = response.data
         this.sections_have_loaded = true
+      },
+      generateAttendanceCode() {
+        const alnums =
+          "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var result = "";
+        for (var i = 1000; i > 0; --i) {
+          result += alnums[Math.floor(Math.random() * alnums.length)];
+        }
+        this.event.code = result;
+        this.showQR(this.event.code);
+      },
+      showQR(qr_data) {
+        let canvas = document.getElementById("qr_render_area");
+        if (qr_data) {
+          QRCode.toCanvas(canvas, qr_data, function(error) {
+            if (error) console.error(error);
+          });
+        }
       }
     }
   }
@@ -111,5 +140,13 @@
     display: inline-block;
     margin-left: 1rem;
     margin-right: 1rem;
+  }
+
+  .create-event-btn {
+    margin-top: 2rem;
+  }
+
+  #qr-section {
+    margin-top: 2rem;
   }
 </style>

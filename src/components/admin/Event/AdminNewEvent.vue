@@ -36,7 +36,7 @@
           <datetime type="datetime" use12-hour value-zone="local" title="Event Start" v-model="event.submission_start_time"></datetime>
           <label>Submission End Time: </label>
           <datetime type="datetime" use12-hour value-zone="local" title="Event End" v-model="event.submission_end_time"></datetime>
-        </div><br />
+        </div>
         <div class="form-group">
           <button class="btn btn-primary">Create</button>
         </div>
