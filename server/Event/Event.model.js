@@ -19,7 +19,7 @@ let Event = new Schema({
 		type: String,
 		default: ""
 	},
-	//implement location
+	geofence: [],
 	start_time: Date,
 	end_time: Date
 });

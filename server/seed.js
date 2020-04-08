@@ -122,8 +122,8 @@ var e0 = new Event({
 	section: s0._id,
 	is_active: true,
 	start_time: Date(),
-	end_time: Date() + (2 * 60 * 60 * 1000)
-	// location: null,
+	end_time: Date() + (2 * 60 * 60 * 1000),
+	geofence: []
 	// time_range: null
 })
 
@@ -132,8 +132,8 @@ var e1 = new Event({
 	section: s0._id,
 	is_active: false,
 	start_time: Date(),
-	end_time: Date() + (2 * 60 * 60 * 1000)
-	// location: null,
+	end_time: Date() + (2 * 60 * 60 * 1000),
+	geofence: []
 	// time_range: null
 })
 
@@ -142,8 +142,8 @@ var e2 = new Event({
 	section: s0._id,
 	is_active: false,
 	start_time: Date(),
-	end_time: Date() + (2 * 60 * 60 * 1000)
-	// location: null,
+	end_time: Date() + (2 * 60 * 60 * 1000),
+	geofence: []
 	// time_range: null
 })
 
@@ -152,8 +152,8 @@ var e3 = new Event({
 	section: s0._id,
 	is_active: false,
 	start_time: Date(),
-	end_time: Date() + (2 * 60 * 60 * 1000)
-	// location: null,
+	end_time: Date() + (2 * 60 * 60 * 1000),
+	geofence: []
 	// time_range: null
 })
 

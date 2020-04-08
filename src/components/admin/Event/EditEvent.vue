@@ -41,6 +41,18 @@
               >Generate New Attendance Code</button>
             </div>
           </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Geofence:</label>
+                <div v-if="event.geofence">
+                  <ul>
+                    <li v-for="point in event.geofence" :key="point">{{point.lat}},{{point.lng}}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="form-group">
             <button class="btn btn-primary" v-on:click="updateEvent()">Update</button>
           </div>
@@ -52,6 +64,9 @@
         <!-- </div> -->
       </div>
     </div>
+
+    <a>Note: the most recently drawn polygon will be used</a>
+    <GoogleMap :selected_geofence.sync="selected_geofence" />
 
     <table class="table table-hover">
       <thead>
@@ -77,16 +92,21 @@ import SectionAPI from "@/services/SectionAPI.js";
 import CourseAPI from "@/services/CourseAPI.js";
 import SubmissionAPI from "@/services/SubmissionAPI.js";
 import UserAPI from "@/services/UserAPI.js";
+import GoogleMap from "@/components/GoogleMap.vue";
 var QRCode = require("qrcode");
 
 export default {
   name: "EditEvent",
+  components: {
+    GoogleMap
+  },
   data() {
     return {
       event: {},
       event_submissions: [],
       section_has_loaded: false,
-      event_submissions_have_loaded: false
+      event_submissions_have_loaded: false,
+      selected_geofence: []
     };
   },
   created() {
@@ -110,6 +130,7 @@ export default {
     },
     async updateEvent() {
       let event_id = this.$route.params.id;
+      this.event.geofence = this.selected_geofence;
       const response = await EventAPI.updateEvent(event_id, this.event);
       this.$router.push({ name: "events" });
     },

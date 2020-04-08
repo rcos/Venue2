@@ -44,7 +44,8 @@ eventRoutes.route('/update/:id').post(function (req, res) {
     {
       title: updated_event.title,
       section: updated_event.section,
-      code: updated_event.code
+      code: updated_event.code,
+      geofence: updated_event.geofence
     },
     function (err, event) {
       if (!event)
