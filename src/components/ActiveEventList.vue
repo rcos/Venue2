@@ -1,8 +1,8 @@
 <<template>
   <div class="active-event-list">
     <div v-if="active_events.length > 0">
-      <router-link class="active-event-link" v-for="event in active_events" :to="{name: 'event_info', params: { event_id: event._id }}">
-        <ActiveEventCard v-for="event in active_events" v-bind:event="event" />
+      <router-link class="active-event-link" v-for="event in active_events" :key="event._id" :to="{name: 'event_info', params: { event_id: event._id }}">
+        <ActiveEventCard v-bind:event="event" />
       </router-link>
     </div>
     <p v-else class="no-container" id="no-active">No active events</p>
