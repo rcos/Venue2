@@ -118,13 +118,6 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
                       }
                     })
                   })
-                  if (is_active) {
-                    console.log("returning active events")
-                    res.json(active_events)
-                  } else {
-                    console.log("returning today's events")
-                    res.json(requested_events)
-                  }
                 }
               })
             }
@@ -162,13 +155,6 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
                 }
               })
             })
-            if (is_active) {
-              console.log("returning active events")
-              res.json(active_events)
-            } else {
-              console.log("returning today's events")
-              res.json(requested_events)
-            }
           }
         })
       })
