@@ -87,10 +87,10 @@
         this.section = section
       },
       async addEvent(evt){
-        evt.preventDefault();
+        evt.preventDefault()
         this.event.section = this.section
-        const response = await EventAPI.addEvent(this.event);
-        this.$router.push({name: 'course_info', params: { id: this.course_id }});
+        const response = await EventAPI.addEvent(this.event)
+        this.$router.push({name: 'course_info', params: { id: this.course_id }})
       },
       async getSectionsForCourse() {
         const response = await SectionAPI.getSectionsForCourse(this.course_id)
@@ -98,21 +98,20 @@
         this.sections_have_loaded = true
       },
       generateAttendanceCode() {
-        const alnums =
-          "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        var result = "";
-        for (var i = 1000; i > 0; --i) {
-          result += alnums[Math.floor(Math.random() * alnums.length)];
+        const alnums = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        let result = ""
+        for (let i = 1000; i > 0; --i) {
+          result += alnums[Math.floor(Math.random() * alnums.length)]
         }
-        this.event.code = result;
-        this.showQR(this.event.code);
+        this.event.code = result
+        this.showQR(this.event.code)
       },
       showQR(qr_data) {
-        let canvas = document.getElementById("qr_render_area");
+        let canvas = document.getElementById("qr_render_area")
         if (qr_data) {
           QRCode.toCanvas(canvas, qr_data, function(error) {
-            if (error) console.error(error);
-          });
+            if (error) console.error(error)
+          })
         }
       }
     }
