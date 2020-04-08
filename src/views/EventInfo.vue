@@ -18,7 +18,7 @@
       </div>
       <!-- Submission Info -->
       <div class="submission-status">
-        <div v-if="this.is_instructor">
+        <div v-if="is_instructor">
           <div v-if="is_pending">
             Event not started yet
           </div>
@@ -30,12 +30,18 @@
           </div>
         </div>
       </div>
+      <!-- QR Code -->
+      <div v-if="is_instructor" id="qr-section">
+        <div>QR Code:</div>
+        <canvas id="qr_render_area"></canvas>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import EventAPI from '@/services/EventAPI.js';
+  let QRCode = require("qrcode");
 
 export default {
   name: 'EventInfo',
@@ -57,7 +63,7 @@ export default {
   },
   created() {
     this.getEvent()
-    this.is_instructor = this.$store.state.user.current_user
+    this.is_instructor = this.$store.state.user.current_user.is_instructor
   },
   methods: {
     async getEvent() {
@@ -66,6 +72,11 @@ export default {
       this.event = response.data
       this.event_has_loaded = true
       this.setEventStatus()
+      if(this.is_instructor){
+        this.$nextTick(function() {
+          this.showQR(this.event.code)
+        });
+      }
     },
     setEventStatus() {
       let current_time = new Date()
@@ -77,6 +88,14 @@ export default {
         this.is_active = true
       else
         this.is_over = true
+    },
+    showQR(qr_data) {
+      let canvas = document.getElementById("qr_render_area")
+      if (qr_data) {
+        QRCode.toCanvas(canvas, qr_data, function(error) {
+          if (error) console.error(error)
+        });
+      }
     }
   }
 }
@@ -95,14 +114,11 @@ export default {
     margin-top: 2rem;
   }
 
-  .time-info {
-/*    display: inline-block;
-    margin-left: 2rem;
-    margin-right: 2rem;
-    margin-top: 2rem;*/
-  }
-
   .submission-status {
     margin-top: 3rem;
+  }
+
+  #qr-section {
+    margin-top: 2rem;
   }
 </style>
