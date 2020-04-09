@@ -9,6 +9,10 @@
             <label>title:</label>
             <input type="text" class="form-control" v-model="event.title">
           </div>
+          <div class="form-group">
+            <label>location:</label>
+            <input type="text" class="form-control" v-model="event.location">
+          </div>
         </div>
         </div>
         <div class="row">
@@ -28,32 +32,37 @@
           <datetime type="datetime" use12-hour value-zone="local" title="Event Start" v-model="event.start_time"></datetime>
           <label>End Time: </label>
           <datetime type="datetime" use12-hour value-zone="local" title="Event End" v-model="event.end_time"></datetime>
-        </div><br />
+          <label>Submission Start Time: </label>
+          <datetime type="datetime" use12-hour value-zone="local" title="Event Start" v-model="event.submission_start_time"></datetime>
+          <label>Submission End Time: </label>
+          <datetime type="datetime" use12-hour value-zone="local" title="Event End" v-model="event.submission_end_time"></datetime>
+        </div>
         <div class="form-group">
           <button class="btn btn-primary">Create</button>
         </div>
     </form>
 
-    <Sections v-on:select-section="selectSection" />
+    <AdminSections v-on:select-section="selectSection" />
 
   </div>
 </template>
 
 <script>
   import EventAPI from '@/services/EventAPI.js';
-  import Sections from '../Section/Sections';
+  import AdminSections from '@/components/admin/Section/AdminSections';
   import { Datetime } from 'vue-datetime';
   import 'vue-datetime/dist/vue-datetime.css'
 
   export default {
-    name: 'NewEvent',
+    name: 'AdminNewEvent',
     components: {
-      Sections,
+      AdminSections,
       datetime: Datetime
     },
     data(){
       return {
-        event: {},
+        event: {
+        },
         section: {}
       }
     },
@@ -68,7 +77,7 @@
         this.event.section = this.section
         console.log("saving event with start_date " + this.event.start_date)
         const response = await EventAPI.addEvent(this.event);
-        this.$router.push({name: 'events'});
+        this.$router.push({name: 'admin_events'});
       }
     }
   }

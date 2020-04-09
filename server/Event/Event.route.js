@@ -70,9 +70,9 @@ eventRoutes.route('/getSection/:id').get(function (req, res) {
   });
 });
 
-eventRoutes.get('/active_or_todays_events/:user_id/:is_active', (req, res) => {
+eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
   let user_id = req.params.user_id
-  let is_active = (req.params.is_active == 'true');
+  let get_active = (req.params.get_active == 'true');
   let requested_events = []
   let active_events = []
   User.findById(user_id, function (error, user) {
@@ -108,23 +108,17 @@ eventRoutes.get('/active_or_todays_events/:user_id/:is_active', (req, res) => {
                     instructor_sections.forEach(instructor_section => {
                       if (instructor_section._id.equals(event.section)) {
                         //Get Active Events or Get today's events
-                        if (is_active) {
-                          if (isActive(event))
-                            active_events.push(event)
+                        if(get_active) {
+                          if(isActive(event)) 
+                            requested_events.push(event)
                         } else {
-                          if (isToday(event.start_time))
+                          if(isToday(event.start_time) || isToday(event.end_time) || isActive(event)) 
                             requested_events.push(event)
                         }
                       }
                     })
                   })
-                  if (is_active) {
-                    console.log("returning active events")
-                    res.json(active_events)
-                  } else {
-                    console.log("returning today's events")
-                    res.json(requested_events)
-                  }
+                  res.json(requested_events)
                 }
               })
             }
@@ -152,23 +146,17 @@ eventRoutes.get('/active_or_todays_events/:user_id/:is_active', (req, res) => {
               user_sections.forEach(user_section => {
                 if (user_section._id.equals(event.section)) {
                   //Get Active Events or Get today's events
-                  if (is_active) {
-                    if (isActive(event))
-                      active_events.push(event)
+                  if(get_active) {
+                    if(isActive(event)) 
+                      requested_events.push(event)
                   } else {
-                    if (isToday(event.start_time))
+                    if(isToday(event.start_time) || isToday(event.end_time) || isActive(event)) 
                       requested_events.push(event)
                   }
                 }
               })
             })
-            if (is_active) {
-              console.log("returning active events")
-              res.json(active_events)
-            } else {
-              console.log("returning today's events")
-              res.json(requested_events)
-            }
+            res.json(requested_events)
           }
         })
       })
@@ -177,8 +165,122 @@ eventRoutes.get('/active_or_todays_events/:user_id/:is_active', (req, res) => {
   })
 });
 
-function isActive(event) {
-  return event.is_active
+eventRoutes.get('/active_for_course/:course_id', (req, res) => {
+  let course_id = req.params.course_id
+  // Get the sections for this course
+  Section.find((err, sections) => {
+    if(err) {
+      res.json(err)
+    } else {
+      let course_sections = []
+      sections.forEach(section => {
+        if(section.course == course_id)
+          course_sections.push(section._id.toString())
+      })
+
+      // Get the events for this section and check if they are active
+      Event.find((error, events) => {
+        if(error) {
+          res.json(error)
+        } else {
+          let active_course_events = []
+          events.forEach(event => {
+            if(isActive(event) && course_sections.includes(event.section.toString()))
+              active_course_events.push(event)
+          })
+          res.json(active_course_events)
+        }
+      })
+    }
+  })
+});
+
+eventRoutes.get('/active_for_section/:section_id', (req, res) => {
+  let section_id = req.params.section_id
+  // Get the sections for this course
+  Event.find((err, events) => {
+    if(err) {
+      res.json(err)
+    } else {
+      let active_events = []
+      events.forEach(event => {
+        if(isActive(event) && event.section == section_id)
+          active_events.push(event)
+      })
+      res.json(active_events)
+    }
+  })
+});
+
+eventRoutes.get('/history_for_course/:course_id', (req, res) => {
+  let course_id = req.params.course_id
+  Section.find((err, sections) => {
+    if(err) {
+      res.json(err)
+    } else {
+      let course_sections = []
+      sections.forEach(section => {
+        if(section.course == course_id)
+          course_sections.push(section._id.toString())
+      })
+
+      // Get all events for the courses sections
+      Event.find((error, events) => {
+        if(error) {
+          res.json(error)
+        } else {
+          let course_events = []
+          events.forEach(event => {
+            if(course_sections.includes(event.section.toString()))
+              course_events.push(event)
+          })
+          res.json(course_events)
+        }
+      })
+    }
+  })
+});
+
+eventRoutes.get('/history_for_section/:section_id', (req, res) => {
+  let section_id = req.params.section_id
+  Event.find({section: section_id}, (err, section_events) => {
+    if(err) 
+      res.json(err)
+    else 
+      res.json(section_events)
+  })
+});
+
+eventRoutes.route('/section_and_course/:event_id').get(function (req, res) {
+  let event_id = req.params.event_id;
+  Event.findById(event_id, function (err, event){
+      if(err){
+        console.log(err);
+        res.json(err);
+      }else{
+        Section.findById(event.section, (error, section) => {
+          if(error) {
+            res.json(error)
+          } else {
+            event.section = section
+            Course.findById(section.course, (error, course) => {
+              if(error) {
+                res.json(error)
+              } else {
+                event.section.course = course
+                res.json(event)
+              }
+            })
+          }
+        })
+      }
+  });
+});
+
+function isActive(event) {  
+  let current_time = new Date() 
+  return current_time >= event.start_time &&  
+    current_time <= event.end_time  
 }
 
 function isToday(time) {

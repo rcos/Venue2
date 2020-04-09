@@ -66,7 +66,7 @@
   import Students from '../User/Students';
 
   export default {
-    name: 'Sections',
+    name: 'AdminEditSection',
     components: {
       Courses,
       Instructors,
