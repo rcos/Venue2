@@ -31,18 +31,17 @@
 </template>
 
 <script>
-  import SectionAPI from '@/services/SectionAPI.js'
+import SectionAPI from "@/services/SectionAPI.js";
+import SubmissionAPI from "@/services/SubmissionAPI.js";
 
 export default {
-  name: 'ActiveEventCard',
+  name: "ActiveEventCard",
   props: {
     event: {}
   },
-  computed: {
-  },
-  components: {
-  },
-  data(){
+  computed: {},
+  components: {},
+  data() {
     return {
       section: {},
       course: {},
@@ -64,9 +63,9 @@ export default {
       this.adjustCourseNameForViewing()
     },
     adjustCourseNameForViewing() {
-      if(this.course.name.length > 18){
-        this.course.name = this.course.name.slice(0,11)
-        this.course.name += "..."
+      if (this.course.name.length > 18) {
+        this.course.name = this.course.name.slice(0, 11);
+        this.course.name += "...";
       }
     },
     getRemainingTime() {
@@ -74,14 +73,16 @@ export default {
       let submission_end_time = new Date(this.event.submission_end_time)
       let diff_milliseconds = Math.abs(submission_end_time - current_time);
       let diff_hours = Math.floor((diff_milliseconds % 86400000) / 3600000); // hours
-      let diff_mins = Math.round(((diff_milliseconds % 86400000) % 3600000) / 60000); // minutes
+      let diff_mins = Math.round(
+        ((diff_milliseconds % 86400000) % 3600000) / 60000
+      ); // minutes
       let diff_days = Math.floor(diff_milliseconds / 86400000); // days
-      this.remaining_days = diff_days
-      this.remaining_hours = diff_hours
-      this.remaining_mins = diff_mins
+      this.remaining_days = diff_days;
+      this.remaining_hours = diff_hours;
+      this.remaining_mins = diff_mins;
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -144,19 +145,19 @@ export default {
 .course-name {
   /*font-size: 0.8rem;*/
   font-size: 0.8rem;
-  color: #466D85;
+  color: #466d85;
   font-weight: bold;
 }
 
 .course-title {
   font-size: 0.75rem;
-  color: #1591C5;
+  color: #1591c5;
 }
 
 #event-section {
   width: 40%;
   text-align: center;
-  margin:auto;
+  margin: auto;
 }
 
 .event-name {
@@ -228,5 +229,4 @@ export default {
     width: 30%;
   }
 }
-
 </style>

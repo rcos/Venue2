@@ -8,13 +8,17 @@ let Section = require('../Section/Section.model');
 let Submission = new Schema({
 	event: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Event'	
+		ref: 'Event'
 	},
 	submitter: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
-	//implement time
+	time: Date,
+	code: {
+		type: String,
+		default: ""
+	},
 	//implement location
 	//implement image
 	is_verified: {

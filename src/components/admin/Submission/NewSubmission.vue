@@ -6,7 +6,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>event:</label>
-            <input type="text" class="form-control" v-model="event.title" readonly>
+            <input type="text" class="form-control" v-model="event.title" readonly />
           </div>
         </div>
       </div>
@@ -14,8 +14,8 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>submitter:</label>
-            <input class="form-control" v-model="submitter.first_name" readonly>
-            <input class="form-control" v-model="submitter.last_name" readonly>
+            <input class="form-control" v-model="submitter.first_name" readonly />
+            <input class="form-control" v-model="submitter.last_name" readonly />
           </div>
         </div>
       </div>
@@ -26,7 +26,6 @@
 
     <Events v-on:select-event="selectEvent" />
     <Students v-on:select-student="selectSubmitter" />
-
   </div>
 </template>
 
@@ -35,35 +34,35 @@
   import Events from '../Event/AdminEvents'
   import Students from '../User/Students'
 
-  export default {
-    name: 'Submission',
-    components: {
-      Events,
-      Students
+export default {
+  name: "Submission",
+  components: {
+    Events,
+    Students
+  },
+  data() {
+    return {
+      submission: {},
+      event: {},
+      submitter: {}
+    };
+  },
+  created() {},
+  methods: {
+    async addSubmission(evt) {
+      evt.preventDefault(); // prevents the form's default action from redirecting the page
+      this.submission.event = this.event;
+      this.submission.submitter = this.submitter;
+      this.submission.code = this.code;
+      const response = await SubmissionAPI.addSubmission(this.submission);
+      this.$router.push({ name: "submissions" });
     },
-    data(){
-      return {
-        submission: {},
-        event: {},
-        submitter: {}
-      }
+    selectEvent(event) {
+      this.event = event;
     },
-    created() {
-    },
-    methods: {
-      async addSubmission(evt){
-        evt.preventDefault() // prevents the form's default action from redirecting the page
-        this.submission.event = this.event
-        this.submission.submitter = this.submitter
-        const response = await SubmissionAPI.addSubmission(this.submission)
-        this.$router.push({name: 'submissions'})
-      },
-      selectEvent(event){
-        this.event = event
-      },
-      selectSubmitter(submitter){
-        this.submitter = submitter
-      }
+    selectSubmitter(submitter) {
+      this.submitter = submitter;
     }
   }
+};
 </script>
