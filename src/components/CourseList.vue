@@ -2,7 +2,7 @@
   <div class="course-list">
     <div v-if="is_instructor">
       <div v-if="courses.length > 0">
-        <CourseCard v-for="course in courses" v-bind:course="course" v-bind:box_color="course.box_color"/>
+        <CourseCard v-for="course in courses" :key="course._id" v-bind:course="course" v-bind:box_color="course.box_color"/>
       </div>
       <div v-else>
         <p class="no-container" id="no-courses">No courses</p>
@@ -10,7 +10,7 @@
     </div>
     <div v-else>
       <div v-if="sections.length > 0">
-        <CourseCard v-for="section in sections" v-bind:section="section" v-bind:box_color="section.box_color"/>
+        <CourseCard v-for="section in sections" :key="section._id" v-bind:section="section" v-bind:box_color="section.box_color"/>
       </div>
       <div v-else>
         <p class="no-container" id="no-courses">No courses</p>
