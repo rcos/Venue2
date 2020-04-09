@@ -32,7 +32,6 @@
 
 <script>
 import SectionAPI from "@/services/SectionAPI.js";
-import QRScanner from "qr-code-scanner";
 import SubmissionAPI from "@/services/SubmissionAPI.js";
 
 export default {
@@ -81,24 +80,6 @@ export default {
       this.remaining_days = diff_days;
       this.remaining_hours = diff_hours;
       this.remaining_mins = diff_mins;
-    },
-    scanQR() {
-      QRScanner.initiate({
-        onResult: result => {
-          let submission = {
-            event: this.event,
-            submitter: this.$store.state.user.current_user,
-            time: Date(),
-            code: result
-          };
-          SubmissionAPI.addSubmission(submission);
-          console.log("ATTENDANCE CODE FOUND:", result);
-        },
-        onTimeout: () => {
-          console.log("TIMEOUT: Could not find any QRCode");
-        },
-        timeout: 10000
-      });
     }
   }
 };
