@@ -1,7 +1,7 @@
 const chalk = require('chalk')
 
 // Console Logger
-module.export = {
+module.exports = {
 
   goodRequest: (function_name, params) => {
     console.log(`\n${chalk.green(`Request received: ${function_name}()`)}`)
