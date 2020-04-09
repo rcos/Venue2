@@ -191,7 +191,28 @@ sectionRoutes.get('/get_with_course/:section_id', verifyToken, (req, res) => {
           })
         }
       });
+    }
+  })
+})
 
+sectionRoutes.get('/get_for_course/:course_id', verifyToken, (req, res) => {
+  let course_id = req.params.course_id
+  jwt.verify(req.token, 'the_secret_key', err => {
+    if(err) {
+      res.sendStatus(401).send("Unauthorized access")
+    } else {
+      Section.find((error, sections) => {
+        if(error) {
+          res.json(error)
+        } else {
+          let course_sections = []
+          sections.forEach(section => {
+            if(section.course == course_id)
+              course_sections.push(section)
+          })
+          res.json(course_sections)
+        }
+      })
     }
   })
 })

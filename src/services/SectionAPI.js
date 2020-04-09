@@ -34,5 +34,8 @@ export default {
   },
   getSectionWithCourse(section_id) {
     return API().get('sections/get_with_course/' + section_id)
+  },
+  getSectionsForCourse(course_id) {
+    return API().get('sections/get_for_course/' + course_id)
   }
 }

@@ -1,23 +1,32 @@
 <template>
-  <div class="active-event-card-container">
-    <a class="active-event-card" v-on:click="scanQR()">
+  <div class="active-event-card-container" v-bind:class="{
+  'pending-container':event.submission_window_status.is_pending, 
+  'ongoing-container':event.submission_window_status.is_ongoing, 
+  'ended-container':event.submission_window_status.is_ended}" >
+    <div class="active-event-card">
       <div class="event-card-section" id="course-section">
         <div class="course-name">{{ course.name }}</div>
         <div class="course-title">{{ course.dept }} {{ course.course_number }}-{{ section.number }}</div>
       </div>
       <div class="event-card-section" id="event-section">
         <div class="event-name">{{ event.title }}</div>
-        <div class="event-location">DCC 308</div>
+        <div class="event-location">{{ event.location }}</div>
       </div>
       <div class="event-card-section" id="time-section">
-        <img src="@/assets/clock.svg" class="clock" />
-        <div class="time-remaining">
-          <span v-if="remaining_days > 0">{{ remaining_days }}d</span>
-          <span v-if="remaining_hours > 0">{{ remaining_hours }}h</span>
-          <span v-if="remaining_mins > 0">{{ remaining_mins }}m</span>
+        <div>
+          <img src="@/assets/clock.svg" class="clock">
+          <div class="time-remaining">
+            <span v-if="event.submission_window_status.is_pending" class="pending-text">pending</span>
+            <div v-else-if="event.submission_window_status.is_ongoing">
+              <span class="time-remaining-text" v-if="remaining_days > 0">{{ remaining_days }}d </span>
+              <span class="time-remaining-text" v-if="remaining_hours > 0">{{ remaining_hours }}h </span>
+              <span class="time-remaining-text" v-if="remaining_mins > 0">{{ remaining_mins }}m</span>
+            </div>
+            <span v-else class="ended-text">ended</span>
+          </div>
         </div>
       </div>
-    </a>
+    </div>
   </div>
 </template>
 
@@ -39,21 +48,20 @@ export default {
       course: {},
       remaining_days: Number,
       remaining_hours: Number,
-      remaining_mins: Number
-    };
+      remaining_mins: Number,
+    }
   },
   created() {
-    this.getEventSectionWithCourse();
+    this.getEventSectionWithCourse()
+    if(this.event.submission_window_status.is_ongoing)
+      this.getRemainingTime()
   },
   methods: {
     async getEventSectionWithCourse() {
-      const response = await SectionAPI.getSectionWithCourse(
-        this.event.section
-      );
-      this.section = response.data;
-      this.course = this.section.course;
-      this.adjustCourseNameForViewing();
-      this.getRemainingTime();
+      const response = await SectionAPI.getSectionWithCourse(this.event.section)
+      this.section = response.data
+      this.course = this.section.course
+      this.adjustCourseNameForViewing()
     },
     adjustCourseNameForViewing() {
       if (this.course.name.length > 18) {
@@ -62,9 +70,9 @@ export default {
       }
     },
     getRemainingTime() {
-      let current_time = new Date();
-      let event_end_time = new Date(this.event.end_time);
-      let diff_milliseconds = Math.abs(event_end_time - current_time);
+      let current_time = new Date()
+      let submission_end_time = new Date(this.event.submission_end_time)
+      let diff_milliseconds = Math.abs(submission_end_time - current_time);
       let diff_hours = Math.floor((diff_milliseconds % 86400000) / 3600000); // hours
       let diff_mins = Math.round(
         ((diff_milliseconds % 86400000) % 3600000) / 60000
@@ -103,16 +111,24 @@ export default {
   height: 3.5rem;
   margin-left: 2rem;
   margin-top: 2rem;
-  border: #fc5d60 solid;
   border-radius: 5px;
-  background-color: #fc5d60;
   cursor: pointer;
   transition: background-color, border, width, 0.25s;
 }
 
-.active-event-card-container:hover {
-  background-color: #cf4c4f;
-  border: #cf4c4f solid;
+.pending-container {
+  border: #FC5D60 solid;
+  background-color: #FC5D60;
+}
+
+.ongoing-container {
+  border: #4bcc69 solid;
+  background-color: #4bcc69;
+}
+
+.ended-container {
+  border: #919191 solid;
+  background-color: #919191;
 }
 
 .active-event-card {
@@ -166,6 +182,10 @@ export default {
 .event-name {
   font-size: 0.9rem;
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 1.6rem;
 }
 
 .event-location {
@@ -189,8 +209,19 @@ export default {
   padding-top: 0.25rem;
   margin-left: 0.5rem;
   font-size: 0.7rem;
-  color: #ff7b7b;
   font-weight: bold;
+}
+
+.pending-text {
+  color: #FC5D60;
+}
+
+.time-remaining-text {
+  color: #4bcc69;
+}
+
+.ended-text {
+  color: #919191;
 }
 
 /*Large devices (Laptops and above)*/

@@ -9,12 +9,13 @@
     <!-- Today Section -->
     <div v-else-if="today_section">
       <h4 class="section-title">Today's Events</h4>
-      <div v-if="todays_events.length > 0">
+      <TodaysEventsList />
+<!--       <div v-if="todays_events.length > 0">
         <h3 v-for="event in todays_events">{{ event.title }}</h3>
       </div>
       <div v-else>
         <p class="no-container" id="no-today">No events today</p>
-      </div>
+      </div> -->
     </div>
     <!-- Courses Section -->
     <div v-else-if="courses_section">
@@ -27,6 +28,7 @@
 <script>
   import {showAt, hideAt} from 'vue-breakpoints'
   import ActiveEventList from '@/components/ActiveEventList.vue'
+  import TodaysEventsList from '@/components/TodaysEventsList.vue'
   import CourseList from '@/components/CourseList.vue'
 
   export default {
@@ -42,17 +44,15 @@
       hideAt,
       showAt,
       ActiveEventList,
+      TodaysEventsList,
       CourseList
     },
     data(){
       return {
-        todays_events: [],
-        is_instructor: Boolean
       }
     },
     created() {
       this.current_user = this.$store.state.user.current_user
-      this.is_instructor = this.current_user.is_instructor
     },
     methods: {
     }
@@ -61,6 +61,7 @@
 
 <style scoped>
 .dashboard-section {
+  /*border: red solid;*/
   text-align: left;
   margin-top: 4rem;
   display: inline-block;
@@ -76,6 +77,7 @@
 
 .today-section {
   width: 30rem;
+  margin-left: -5rem;
 }
 
 .courses-section {
@@ -112,6 +114,9 @@
   }
   .dashboard-section {
     width: 100%;
+  }
+  .today-section {
+    margin-left: 0;
   }
   #no-active {
     margin-left: auto;

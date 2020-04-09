@@ -15,13 +15,22 @@ let Event = new Schema({
 		type: Boolean,
 		default: false
 	},
+	// implement location as a Geo Object
+	location: String,
 	code: {
 		type: String,
 		default: ""
 	},
 	//implement location
 	start_time: Date,
-	end_time: Date
+	end_time: Date,
+	submission_start_time: Date,
+	submission_end_time: Date,
+	submission_window_status: {
+	  is_pending: {type: Boolean, default: false},
+	  is_ongoing: {type: Boolean, default: false},
+	  is_ended: {type: Boolean, default: false}
+	}
 });
 
 module.exports = mongoose.model('Event', Event);

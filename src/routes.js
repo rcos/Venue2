@@ -8,20 +8,23 @@ import Students from './components/admin/User/Students.vue';
 import Course from './components/admin/Course/Course.vue';
 import EditCourse from './components/admin/Course/EditCourse.vue';
 import NewCourse from './components/admin/Course/NewCourse.vue';
-import Courses from './components/admin/Course/Courses.vue';
-import Sections from './components/admin/Section/Sections.vue';
-import EditSection from './components/admin/Section/EditSection.vue';
-import NewSection from './components/admin/Section/NewSection.vue';
+import Courses from './components/admin/Course/Courses.vue'; 
+import AdminSections from './components/admin/Section/AdminSections.vue';
+import AdminEditSection from './components/admin/Section/AdminEditSection.vue';
+import AdminNewSection from './components/admin/Section/AdminNewSection.vue';
 import NewUser from './components/admin/User/NewUser.vue';
-import NewEvent from './components/admin/Event/NewEvent.vue';
-import Events from './components/admin/Event/Events.vue';
-import EditEvent from './components/admin/Event/EditEvent.vue';
+import AdminNewEvent from './components/admin/Event/AdminNewEvent.vue';
+import AdminEvents from './components/admin/Event/AdminEvents.vue';
+import AdminEditEvent from './components/admin/Event/AdminEditEvent.vue';
 import NewSubmission from './components/admin/Submission/NewSubmission.vue';
 import Submissions from './components/admin/Submission/Submissions.vue';
 import LandingPage from './views/LandingPage.vue';
 import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
 import CourseList from './components/CourseList.vue';
+import CourseInfo from './views/CourseInfo.vue';
+import NewEvent from './views/NewEvent.vue';
+import EventInfo from './views/EventInfo.vue';
 
 Vue.use(VueRouter);
 
@@ -80,38 +83,38 @@ const router = new VueRouter({
       component: Courses
     },
     {
-      name: 'sections',
-      path: '/sections',
-      component: Sections
+        name: 'admin_sections',
+        path: '/admin/sections',
+        component: AdminSections
     },
     {
-      name: 'editSection',
-      path: '/editSection/:id',
-      component: EditSection
+        name: 'admin_edit_section',
+        path: '/admin/edit_section/:id',
+        component: AdminEditSection
     },
     {
-      name: 'new_section',
-      path: '/new_section',
-      component: NewSection
+        name: 'admin_new_section',
+        path: '/admin/new_section',
+        component: AdminNewSection
     },
     {
-      name: 'new_event',
-      path: '/new_event',
-      component: NewEvent,
-      meta: {
-        requiresAuth: true,
-        requiresInstructor: true
-      }
+        name: 'admin_new_event',
+        path: '/admin/new_event',
+        component: AdminNewEvent,
+        meta: { 
+          requiresAuth: true,
+          requiresInstructor: true 
+        }
+    },   
+    {
+        name: 'admin_events',
+        path: '/admin/events',
+        component: AdminEvents
     },
     {
-      name: 'events',
-      path: '/events',
-      component: Events
-    },
-    {
-      name: 'edit_event',
-      path: '/edit_event/:id',
-      component: EditEvent
+        name: 'admin_edit_event',
+        path: '/admin_edit_event/:id',
+        component: AdminEditEvent
     },
     {
       name: 'new_submission',
@@ -135,9 +138,31 @@ const router = new VueRouter({
       meta: { requiresAuth: true }
     },
     {
-      name: 'user_courses',
-      path: '/user_courses',
-      component: CourseList
+        name: 'user_courses',
+        path: '/user_courses',
+        component: CourseList
+    },
+    {
+        name: 'course_info',
+        path: '/course_info/:id',
+        component: CourseInfo
+    },
+    {
+        name: 'new_event',
+        path: '/new_event/:course_id',
+        component: NewEvent,
+        meta: { 
+          requiresAuth: true,
+          requiresInstructor: true 
+        }
+    },
+    {
+        name: 'event_info',
+        path: '/event_info/:event_id',
+        component: EventInfo,
+        meta: { 
+          requiresAuth: true,
+        }
     }
   ]
 })
@@ -177,15 +202,6 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
-
-
-  // if (to.matched.some(record => record.meta.requiresAuth) && !loggedIn) {
-  //   next('/')
-  // } else if(to.matched.some(record => record.meta.requiresNoLogin) && loggedIn) {
-  //   next('/dashboard')
-  // } else {
-  //   next()
-  // }
 })
 
 export default router

@@ -30,9 +30,9 @@
 </template>
 
 <script>
-import SubmissionAPI from "@/services/SubmissionAPI.js";
-import Events from "../Event/Events";
-import Students from "../User/Students";
+  import SubmissionAPI from '@/services/SubmissionAPI.js';
+  import Events from '../Event/AdminEvents'
+  import Students from '../User/Students'
 
 export default {
   name: "Submission",
