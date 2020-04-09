@@ -157,6 +157,20 @@ var e3 = new Event({
 	// time_range: null
 })
 
+var b0 = new Submission({
+	event: e0._id,
+	submitter: u1._id,
+	time: Date(),
+	is_verified: false
+})
+
+var b1 = new Submission({
+	event: e0._id,
+	submitter: u2._id,
+	time: Date(),
+	is_verified: true
+})
+
 const data = [{
 	"model": "User",
 	"documents": [u0, u1, u2, u3]
@@ -169,4 +183,7 @@ const data = [{
 }, {
 	"model": "Event",
 	"documents": [e0, e1, e2, e3]
+}, {
+	"model": "Submission",
+	"documents": [b0, b1]
 }]

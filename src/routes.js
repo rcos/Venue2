@@ -31,56 +31,56 @@ Vue.use(VueRouter);
 const router = new VueRouter({
   mode: 'history',
   routes: [
-    { 
-        name: 'landing_page',
-    	path: '/', 
-    	component: LandingPage,
-        meta: { requiresNoLogin: true }
-    },
-    {  
-        name: 'new_user',
-        path: '/new_user', 
-        component: NewUser 
-    },
-    {  
-    	name: 'users',
-    	path: '/users', 
-    	component: Users 
-    },
-    {  
-    	name: 'edit_user',
-    	path: '/edit_user/:id', 
-    	component: EditUser
-    },
-    {  
-        name: 'instructors',
-        path: '/instructors', 
-        component: Instructors
-    },
-    {  
-        name: 'students',
-        path: '/students', 
-        component: Students
-    },  
     {
-        name: 'new_course',
-        path: '/new_course',
-        component: NewCourse
+      name: 'landing_page',
+      path: '/',
+      component: LandingPage,
+      meta: { requiresNoLogin: true }
     },
     {
-        name: 'course',
-        path: '/Course',
-        component: Course
+      name: 'new_user',
+      path: '/new_user',
+      component: NewUser
     },
     {
-        name: 'editCourse',
-        path: '/editCourse/:id',
-        component: EditCourse
+      name: 'users',
+      path: '/users',
+      component: Users
     },
     {
-        name: 'courses',
-        path: '/courses',
-        component: Courses
+      name: 'edit_user',
+      path: '/edit_user/:id',
+      component: EditUser
+    },
+    {
+      name: 'instructors',
+      path: '/instructors',
+      component: Instructors
+    },
+    {
+      name: 'students',
+      path: '/students',
+      component: Students
+    },
+    {
+      name: 'new_course',
+      path: '/new_course',
+      component: NewCourse
+    },
+    {
+      name: 'course',
+      path: '/Course',
+      component: Course
+    },
+    {
+      name: 'editCourse',
+      path: '/editCourse/:id',
+      component: EditCourse
+    },
+    {
+      name: 'courses',
+      path: '/courses',
+      component: Courses
     },
     {
         name: 'admin_sections',
@@ -117,25 +117,25 @@ const router = new VueRouter({
         component: AdminEditEvent
     },
     {
-        name: 'new_submission',
-        path: '/new_submission',
-        component: NewSubmission
+      name: 'new_submission',
+      path: '/new_submission',
+      component: NewSubmission
     },
     {
-        name: 'submissions',
-        path: '/submissions',
-        component: Submissions
+      name: 'submissions',
+      path: '/submissions',
+      component: Submissions
     },
     {
-        name: 'signup',
-        path: '/signup',
-        component: Signup
+      name: 'signup',
+      path: '/signup',
+      component: Signup
     },
     {
-        name: 'dashboard',
-        path: '/dashboard',
-        component: Dashboard,
-        meta: { requiresAuth: true }
+      name: 'dashboard',
+      path: '/dashboard',
+      component: Dashboard,
+      meta: { requiresAuth: true }
     },
     {
         name: 'user_courses',
@@ -170,14 +170,14 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const loggedIn = localStorage.getItem('user')
 
-  if(to.matched.some(record => record.meta.requiresAuth)) {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
 
-    if(loggedIn) {
+    if (loggedIn) {
 
-      if(to.matched.some(record => record.meta.requiresInstructor)) {
+      if (to.matched.some(record => record.meta.requiresInstructor)) {
 
         const user_data = JSON.parse(loggedIn)
-        if(user_data.current_user.is_instructor) {
+        if (user_data.current_user.is_instructor) {
           next()
         } else {
           next('/dashboard')
@@ -191,9 +191,9 @@ router.beforeEach((to, from, next) => {
       next('/')
     }
 
-  } else if(to.matched.some(record => record.meta.requiresNoLogin)) {
+  } else if (to.matched.some(record => record.meta.requiresNoLogin)) {
 
-    if(loggedIn) {
+    if (loggedIn) {
       next('/dashboard')
     } else {
       next()
@@ -202,15 +202,6 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
-
-
-  // if (to.matched.some(record => record.meta.requiresAuth) && !loggedIn) {
-  //   next('/')
-  // } else if(to.matched.some(record => record.meta.requiresNoLogin) && loggedIn) {
-  //   next('/dashboard')
-  // } else {
-  //   next()
-  // }
 })
 
 export default router

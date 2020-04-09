@@ -56,7 +56,7 @@
   import Sections from '@/components/Sections';
   import { Datetime } from 'vue-datetime';
   import 'vue-datetime/dist/vue-datetime.css'
-  let QRCode = require("qrcode");
+  import QRCode from "qrcode";
 
   export default {
     name: 'NewEvent',
