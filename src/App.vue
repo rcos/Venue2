@@ -17,19 +17,6 @@ export default {
   components: {
     NavBar,
     Footer
-  },
-  methods:{
-
-    // check if the user is logged in, if the route is not the landing page
-    checkLoggedIn: () => {
-      if (this.$route.name != 'landing_page ' && this.$store.getters.loggedIn) {
-        // redirect to login page
-        this.$router.push({name: 'landing_page'})
-      }
-    }
-  },
-  mounted(){
-    this.checkLoggedIn()
   }
   //initially displayNav is false because the first page loaded is the homepage
 }

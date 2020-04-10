@@ -1,7 +1,5 @@
 const express = require('express');
 const eventRoutes = express.Router();
-const Logger = require('../Utility/Logger')
-const ObjectID = require('mongoose').Types.ObjectId
 
 let Event = require('./Event.model');
 let Section = require('../Section/Section.model');
@@ -74,29 +72,13 @@ eventRoutes.route('/getSection/:id').get(function (req, res) {
 
 eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
   let user_id = req.params.user_id
-  let get_active = ('get_active' in req.params && req.params.get_active == 'true');
+  let get_active = (req.params.get_active == 'true');
   let requested_events = []
   let active_events = []
-
-  Logger.goodRequest('ActiveOrTodaysEvents')
-
-  // check if the user id is valid
-  if (!ObjectID.isValid(user_id)) {
-    Logger.error('User ID is not a valid ObjectID', `\t`)
-    res.json({
-      success: false,
-      error: 'Invalid User ID'
-    })
-    return;
-  }
-
   User.findById(user_id, function (error, user) {
     if (error) {
-      Logger.error(error)
-      res.json({
-        success: false,
-        error: error
-      })
+      console.log(error)
+      res.json(error)
     } else if (user.is_instructor) {
 
       let instructor_sections = []
@@ -107,11 +89,8 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
           Course.findById(section.course, function (course_err, course) {
             counter++
             if (course_err) {
-              Logger.error(course_err)
-              res.json({
-                success: false,
-                error: course_err
-              })
+              console.log(course_err)
+              res.json(course_err)
             } else {
               if (course.instructor == user_id)
                 instructor_sections.push(section)
@@ -130,10 +109,10 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
                       if (instructor_section._id.equals(event.section)) {
                         //Get Active Events or Get today's events
                         if(get_active) {
-                          if(isActive(event))
+                          if(isActive(event)) 
                             requested_events.push(event)
                         } else {
-                          if(isToday(event.start_time) || isToday(event.end_time) || isActive(event))
+                          if(isToday(event.start_time) || isToday(event.end_time) || isActive(event)) 
                             requested_events.push(event)
                         }
                       }
@@ -168,10 +147,10 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
                 if (user_section._id.equals(event.section)) {
                   //Get Active Events or Get today's events
                   if(get_active) {
-                    if(isActive(event))
+                    if(isActive(event)) 
                       requested_events.push(event)
                   } else {
-                    if(isToday(event.start_time) || isToday(event.end_time) || isActive(event))
+                    if(isToday(event.start_time) || isToday(event.end_time) || isActive(event)) 
                       requested_events.push(event)
                   }
                 }
@@ -265,9 +244,9 @@ eventRoutes.get('/history_for_course/:course_id', (req, res) => {
 eventRoutes.get('/history_for_section/:section_id', (req, res) => {
   let section_id = req.params.section_id
   Event.find({section: section_id}, (err, section_events) => {
-    if(err)
+    if(err) 
       res.json(err)
-    else
+    else 
       res.json(section_events)
   })
 });
@@ -298,10 +277,10 @@ eventRoutes.route('/section_and_course/:event_id').get(function (req, res) {
   });
 });
 
-function isActive(event) {
-  let current_time = new Date()
-  return current_time >= event.start_time &&
-    current_time <= event.end_time
+function isActive(event) {  
+  let current_time = new Date() 
+  return current_time >= event.start_time &&  
+    current_time <= event.end_time  
 }
 
 function isToday(time) {

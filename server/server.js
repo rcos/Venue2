@@ -10,16 +10,11 @@ const courseRoute = require('./Course/Course.route')
 const sectionRoute = require('./Section/Section.route')
 const eventRoute = require('./Event/Event.route')
 const submissionRoute = require('./Submission/Submission.route')
-const chalk = require('chalk')
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.DB, {
-  useNewUrlParser: true,
-  useFindAndModify: true,
-  useUnifiedTopology: true
- }).then(
-  () => { console.log(`${chalk.blue('Database is connected!')}`) },
-  err => { console.log(`${chalk.red(`Can not connect to the database ${err}`)}`) }
+mongoose.connect(config.DB, { useNewUrlParser: true }).then(
+  () => { console.log('Database is connected') },
+  err => { console.log('Can not connect to the database' + err) }
 );
 
 app.use(cors());
@@ -33,5 +28,5 @@ app.use('/events', eventRoute);
 app.use('/submissions', submissionRoute);
 
 app.listen(PORT, function () {
-  console.log(`${chalk.green(`Server is running on port ${PORT}`)}`);
+  console.log('Server is running on Port:', PORT);
 });

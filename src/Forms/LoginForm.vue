@@ -45,7 +45,7 @@
         //   + this.$refs.password_field.input_value)
         this.$refs.email_field.emitInputValue()
         this.$refs.password_field.emitInputValue()
-        console.log("Current User: " + this.user + " email: " + this.user.email +
+        console.log("Current User: " + this.user + " email: " + this.user.email + 
           " password: " + this.user.password)
         this.$store.dispatch('login', this.user)
           .then(() => this.$router.push({name: 'dashboard'}))
@@ -68,18 +68,18 @@
   /*border: black solid;*/
   padding-top: 30px;
   position: relative;
-  margin: auto;
+  margin: auto; 
   width: 28rem;
 }
 
 
 /*  .login-form {
-    border: black solid;
-    margin: auto;
+    border: black solid; 
+    margin: auto; 
     width: 40rem;
   }*/
 /*  .back-arrow {
-    text-align: left;
+    text-align: left; 
     cursor: pointer;
     font-size: 1.5rem;
   }

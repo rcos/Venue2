@@ -29,12 +29,7 @@
     },
     methods: {
       async getActiveEvents() {
-        console.log(`API PARAMS: ${this.current_user._id}, ${true}`)
         let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
-
-        console.log("getActiveEvents()")
-        console.log(response)
-
         let events = response.data
         this.updateSubmissionWindowStatuses(events)
         this.active_events = this.sortEventsbySubmissionWindowStatus(events)
@@ -86,7 +81,7 @@
 .active-event-list::-webkit-scrollbar-thumb {
 border-radius: 10px;
 -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-background-color: #F5F5F5;
+background-color: #F5F5F5; 
 }
 
 .active-event-link {
