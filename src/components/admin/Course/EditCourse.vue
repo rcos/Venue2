@@ -65,20 +65,20 @@
       async getCurrentCourse() {
         let course_id = this.$route.params.id
         const response = await CourseAPI.getCourse(course_id)
-        this.course = response.data
+        this.course = response.data.course
         this.getCurrentCourseInstructor()
       },
       async getCurrentCourseInstructor(){
         const response = await CourseAPI.getInstructor(this.course._id)
-        if(response.data)
-          this.instructor = response.data
+        if(response.data.success)
+          this.instructor = response.data.instructor_data
       },
       async updateCourse() {
         let course_id = this.$route.params.id
         this.course.instructor = this.instructor
         const response = await CourseAPI.updateCourse(course_id, this.course)
         this.$router.push({name: 'courses'})
-      }, 
+      },
       selectInstructor(instructor){
         this.instructor = instructor
         this.course.instructor = instructor

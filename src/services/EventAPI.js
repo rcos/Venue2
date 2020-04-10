@@ -1,8 +1,10 @@
 import API from '@/services/API'
 
 export default {
-  getEvents() {
-    return API().get('events')
+  getEvents(offset, limit) {
+    offset = offset ? offset : 0
+    limit = limit ? limit : 10
+    return API().get(`events/get_events/${offset}/${limit}`)
   },
   addEvent(event) {
     return API().post('events/add_event', {
@@ -10,7 +12,7 @@ export default {
     })
   },
   getEvent(id) {
-    return API().get('events/edit/' + id)
+    return API().get(`events/get_event/${id}`)
   },
   updateEvent(id, event){
     return API().post('events/update/' + id, {
@@ -21,7 +23,7 @@ export default {
     return API().delete('events/delete/' + id)
   },
   getActiveOrTodaysEventsForUser(user_id, get_active) {
-    return API().get('events/active_or_todays_events/' + user_id + '/' + get_active)
+    return API().get(`events/active_or_todays_events/${user_id}/${get_active}`)
   },
   getActiveEventsForCourse(course_id) {
     return API().get('events/active_for_course/' + course_id)

@@ -80,8 +80,10 @@ export default {
   methods: {
     async getCourse() {
       const response = await CourseAPI.getCourse(this.course_id)
-      this.course = response.data
-      this.course_has_loaded = true
+      if (response.data.success) {
+        this.course = response.data.course
+        this.course_has_loaded = true
+      }
     },
     async getSectionWithCourse() {
       const response = await SectionAPI.getSectionWithCourse(this.section_id)
@@ -91,13 +93,17 @@ export default {
     },
     async getActiveEventsForCourse() {
       const response = await EventAPI.getActiveEventsForCourse(this.course_id)
-      this.active_events = response.data
-      this.getRemainingTimeForActiveEvents()
+      if (response.data.success) {
+        this.active_events = response.data.events
+        this.getRemainingTimeForActiveEvents()
+      }
     },
     async getActiveEventsForSection() {
       const response = await EventAPI.getActiveEventsForSection(this.section_id)
-      this.active_events = response.data
-      this.getRemainingTimeForActiveEvents()
+      if (response.data.success) {
+        this.active_events = response.data.events
+        this.getRemainingTimeForActiveEvents()
+      }
     },
     getRemainingTimeForActiveEvents() {
       this.active_events.forEach(active_event => {

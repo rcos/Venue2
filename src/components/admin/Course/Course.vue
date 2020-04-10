@@ -74,20 +74,31 @@
     },
     methods: {
       async loadInstructors(){
-        const response = await UserAPI.getInstructors()
-        this.instructors = response.data
+        UserAPI.getInstructors()
+        .then(response => {
+          this.instructors = response.data
+          console.log("Instructors loaded")
+          console.log(this.instructors)
+        })
+        .catch(err => {
+          console.log ("Error")
+        })
       },
       async addCourse(evt){
         evt.preventDefault(); // prevents the form's default action from redirecting the page
         this.course.instructor = this.instructor;
-        console.log("About to add course with instructor: " + this.course.instructor.first_name + " " + 
+        console.log("About to add course with instructor: " + this.course.instructor.first_name + " " +
         	this.course.instructor.last_name);
+        console.log ("Instructor: ")
+        console.log (this.instructor)
         const response = await CourseAPI.addCourse(this.course);
-        this.courses.push(response.data);
-        let new_course = this.courses[this.courses.length - 1]
-        console.log("new course: " + new_course.instructor.first_name + " " + new_course.instructor.last_name)
-        this.course = {}; // clear the input field
-        this.instructor = {};
+        if (response.success) {
+          this.courses.push(response.data.course);
+          let new_course = this.courses[this.courses.length - 1]
+          console.log("new course: " + new_course.instructor.first_name + " " + new_course.instructor.last_name)
+          this.course = {}; // clear the input field
+          this.instructor = {};
+        }
       },
       selectInstructor(instructor){
         this.instructor = instructor

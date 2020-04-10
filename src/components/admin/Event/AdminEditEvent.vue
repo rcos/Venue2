@@ -97,15 +97,19 @@
       async getEvent(){
         let event_id = this.$route.params.id
         const response = await EventAPI.getEvent(event_id)
-        this.event = response.data
-        this.getSectionForEvent()
+        if (response.data.success) {
+          this.event = response.data.event
+          this.getSectionForEvent()
+        }
       },
       async getSectionForEvent(){
         let response = await SectionAPI.getSection(this.event.section)
         this.event.section = response.data
         response = await CourseAPI.getCourse(this.event.section.course)
-        this.event.section.course = response.data
-        this.section_has_loaded = true
+        if (response.success) {
+          this.event.section.course = response.data.course
+          this.section_has_loaded = true
+        }
       },
       async updateEvent() {
         let event_id = this.$route.params.id

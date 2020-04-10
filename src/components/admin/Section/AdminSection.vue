@@ -77,7 +77,7 @@
       <button class="btn btn-primary">Create</button>
     </div>
 
-    <Sections />    
+    <Sections />
   </div>
 </template>
 
@@ -117,8 +117,10 @@
         this.sections = response.data
       },
       async loadCourses(){
-        const response = await CourseAPI.getCourses()
-        this.courses = response.data
+        const response = await CourseAPI.getCourses(0, 10)
+        if (response.success) {
+          this.courses = response.data.courses
+        }
       },
       async addSection(evt){
         evt.preventDefault() // prevents the form's default action from redirecting the page

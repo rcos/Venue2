@@ -44,8 +44,14 @@
     },
     methods: {
       async loadCourses () {
-        const response = await CourseAPI.getCourses()
-        this.courses = response.data
+        const response = await CourseAPI.getCourses(0, 10)
+        console.log (response.data)
+        if (response.data.success) {
+          this.courses = response.data.courses
+        }
+        else {
+          console.log (response.data.error)
+        }
         this.getInstructorsForCourses()
       },
       async getInstructorsForCourses(){
@@ -55,6 +61,7 @@
         })
       },
       async deleteCourse(id){
+        console.log (`Delete: ${id}`)
         const response = await CourseAPI.deleteCourse(id);
         this.courses.splice(this.courses.findIndex(i => i._id == id), 1)
       },

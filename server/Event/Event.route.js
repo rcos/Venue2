@@ -13,7 +13,6 @@ let Course = require('../Course/Course.model')
 **********************GET************************
 =================================================
 */
-
 eventRoutes.route('/get_events/:offset/:count').get(function (req, res) {
 
   let offset = parseInt(req.params.offset)
@@ -54,7 +53,7 @@ eventRoutes.route('/get_event/:id').get(function (req, res) {
   Logger.goodRequest(`Events::getEvent`, [{key: "ID", value: req.params.id}])
 
   if (!ObjectID.isValid(id)) {
-    Logger.error(`Id of ${id} is not a valid ObjectID`)
+    Logger.error(`Id of ${id} is not a valid ObjectID`, `\t`)
     res.json({
       success: false,
       error: "Invalid id provided"
@@ -345,7 +344,7 @@ eventRoutes.get('/history_for_course/:course_id', (req, res) => {
   let course_id = req.params.course_id
 
   Logger.goodRequest("Events::historyForCourse", [{key: "Course ID", value: course_id}])
-  if (!ObjectId.isValid(course_id)) {
+  if (!ObjectID.isValid(course_id)) {
     Logger.error(`Course id is not a valid object id`, `\t`)
     res.json({
       success: false,
@@ -356,7 +355,7 @@ eventRoutes.get('/history_for_course/:course_id', (req, res) => {
 
   Section.find({course: course_id}, (err, sections) => {
     if(err || sections == null) {
-      Logger.error(`Problem finding sections of course with course id of ${course_id}`)
+      Logger.error(`Problem finding sections of course with course id of ${course_id}`, `\t`)
       res.json({
         success: false,
         error: err
@@ -367,7 +366,7 @@ eventRoutes.get('/history_for_course/:course_id', (req, res) => {
       // are for those sections
       let sections_events = []
       sections.forEach(section => {
-        return new Promise(function(resolve, reject) {
+        sections_events.push(new Promise(function(resolve, reject) {
           Event.find({section: section.id}, (err, evt_doc) => {
 
             if (err || evt_doc == null){
@@ -378,7 +377,7 @@ eventRoutes.get('/history_for_course/:course_id', (req, res) => {
             }
 
           })
-        });
+        }))
       })
 
       // wait for all the promises
@@ -386,7 +385,7 @@ eventRoutes.get('/history_for_course/:course_id', (req, res) => {
       .then(history_ => {
         let full_history = history_.filter(val => val != null)
 
-        Logger.success(`Successfully retrieved event history for course with id ${course_id}`)
+        Logger.success(`Successfully retrieved event history for course with id ${course_id}`, `\t`)
         res.json({
           success: true,
           events: full_history
@@ -399,32 +398,80 @@ eventRoutes.get('/history_for_course/:course_id', (req, res) => {
 
 eventRoutes.get('/history_for_section/:section_id', (req, res) => {
   let section_id = req.params.section_id
+
+  Logger.goodRequest("Events::historyForSection", [{key: "Section ID", value: section_id}])
+  if (!ObjectID.isValid(section_id)) {
+    Logger.error(`Section ID provided is not a valid Object ID`, `\t`)
+    res.json({
+      success: false,
+      error: "Invalid section ID"
+    })
+    return;
+  }
+
   Event.find({section: section_id}, (err, section_events) => {
-    if(err)
-      res.json(err)
-    else
-      res.json(section_events)
+    if(err) {
+      Logger.error(`Problem searching for section id`, `\t`)
+      res.json({
+        successs: false,
+        error: err
+      })
+    }
+    else{
+      Logger.success(`Successfully found events`, `\t`)
+      res.json({
+        success: true,
+        events: section_events
+      })
+    }
   })
 });
 
 eventRoutes.route('/section_and_course/:event_id').get(function (req, res) {
   let event_id = req.params.event_id;
+
+  Logger.goodRequest(`Event::sectionAndCourse`, [{key: "Event ID", value: event_id}])
+
+  if (!ObjectID.isValid(event_id)) {
+    Logger.error("Event id is not a valid Object ID")
+    res.json({
+      success: false,
+      error: "Invalid event id format"
+    })
+    return;
+  }
+
   Event.findById(event_id, function (err, event){
-      if(err){
-        console.log(err);
-        res.json(err);
+      if(err || event == null){
+        Logger.error(`Problem searching for event. ${err}`, `\t`)
+        res.json({
+          success: false,
+          error: err
+        });
       }else{
         Section.findById(event.section, (error, section) => {
           if(error) {
-            res.json(error)
+            Logger.error(`Problem searching for section. ${error}`, `\t`)
+            res.json({
+              success: false,
+              error: error
+            })
           } else {
             event.section = section
-            Course.findById(section.course, (error, course) => {
+            Course.findById(section.course, (error_, course) => {
               if(error) {
-                res.json(error)
+                Logger.error(`Problem searching for course. ${error_}`, `\t`)
+                res.json({
+                  success: false,
+                  error: error_
+                })
               } else {
                 event.section.course = course
-                res.json(event)
+                Logger.success(`Successfully returned Section and course`, `\t`)
+                res.json({
+                  success: true,
+                  event: event
+                })
               }
             })
           }

@@ -57,12 +57,15 @@
     },
     methods: {
       async loadEvents () {
-        const response = await EventAPI.getEvents()
-        this.events = response.data
-        if(this.events.length === 0)
-          this.sections_have_loaded = true
-        else
-          this.getSectionsForEvents()
+        const response = await EventAPI.getEvents(0, 10)
+        console.log (response)
+        if (response.data.success) {
+          this.events = response.data.events
+          if(this.events.length === 0)
+            this.sections_have_loaded = true
+          else
+            this.getSectionsForEvents()
+        }
       },
       async deleteEvent(id){
         const response = await EventAPI.deleteEvent(id);
@@ -74,10 +77,12 @@
           let response = await SectionAPI.getSection(event.section)
           event.section = response.data
           response = await CourseAPI.getCourse(event.section.course)
-          event.section.course = response.data
-          counter++
-          if(counter == this.events.length)
-            this.sections_have_loaded = true
+          if (response.data.success) {
+            event.section.course = response.data.course
+            counter++
+            if(counter == this.events.length)
+              this.sections_have_loaded = true
+          }
         })
       },
       setEventView() {

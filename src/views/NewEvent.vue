@@ -81,7 +81,9 @@
     methods: {
       async getCourse() {
         const response = await CourseAPI.getCourse(this.course_id)
-        this.course = response.data
+        if (response.data.success) {
+          this.course = response.data.course
+        }
       },
       selectSection(section) {
         this.section = section

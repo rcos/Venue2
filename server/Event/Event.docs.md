@@ -35,7 +35,7 @@
 ```
 
 #### Get Event
-`/events/get_events/:id`
+`/events/get_event/:id`
 
 **Description:** Get the event with that id of {id}
 
@@ -162,6 +162,37 @@
 }
 ```
 
+#### Get History For Section
+`/events/history_for_section/:section_id`
+
+**Description:** Get all of the events for a given section
+
+###### Params
+* **section_id:** The id of the section to search for
+
+###### Expected Response
+```
+{
+  success: true,
+  events: { ... }
+}
+```
+```
+{
+  success: false,
+  error: '<Error Message>'
+}
+```
+
+#### Get Section And Course
+`/events/section_and_course/:event_id`
+
+**Description:** Get the section and course for a given event
+
+###### Params
+* **event_id:** The id of the event to search for
+
+
 ## POST
 #### Add Event
 `/events/add_event`
@@ -171,6 +202,7 @@
 ###### Body Fields
 * **{event}:** The details of the new event
 
+###### Expected Response
 ```
 {
   success: true,

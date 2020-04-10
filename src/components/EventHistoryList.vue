@@ -47,24 +47,28 @@
     methods: {
       async getEventHistoryForCourse() {
         const response = await EventAPI.getEventHistoryForCourse(this.course._id)
-        this.event_history = response.data
-        this.sortEventsByStartTime()
-        this.separateEventsByMonth()
+        if (response.data.success) {
+          this.event_history = response.data.events
+          this.sortEventsByStartTime()
+          this.separateEventsByMonth()
+        }
       },
       async getEventHistoryForSection() {
         const response = await EventAPI.getEventHistoryForSection(this.section._id)
-        this.event_history = response.data
-        this.sortEventsByStartTime()
-        this.separateEventsByMonth()
+        if (response.success) {
+          this.event_history = response.data.events
+          this.sortEventsByStartTime()
+          this.separateEventsByMonth()
+        }
       },
       sortEventsByStartTime() {
         this.event_history.sort(function(a,b){
-          return new Date(b.start_time) - new Date(a.start_time); 
+          return new Date(b.start_time) - new Date(a.start_time);
         });
       },
       separateEventsByMonth() {
         this.event_history.forEach(event => {
-          let start_time = new Date(event.start_time) 
+          let start_time = new Date(event.start_time)
           if(!this.event_months.includes(start_time.getMonth())){
             this.event_months.push(start_time.getMonth())
             this.event_history_by_month.push([event])

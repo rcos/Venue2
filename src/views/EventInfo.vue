@@ -90,8 +90,10 @@
       async getEvent() {
         let event_id = this.$route.params.event_id
         const response = await EventAPI.getEventWithSectionAndCourse(event_id)
-        this.event = response.data
-        this.event_has_loaded = true
+        if (response.data.success) {
+          this.event = response.data.event
+          this.event_has_loaded = true
+        }
         this.setEventStatus()
         if(this.is_instructor && this.event_is_active && this.submission_window_ongoing){
           this.$nextTick(function() {
@@ -103,7 +105,7 @@
         let current_time = new Date()
         let event_start_time = new Date(this.event.start_time)
         let event_end_time = new Date(this.event.end_time)
-        if(current_time <= event_start_time) 
+        if(current_time <= event_start_time)
           this.event_is_pending = true
         else if(current_time >= event_start_time && current_time <= event_end_time){
           this.event_is_active = true

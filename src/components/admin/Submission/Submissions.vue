@@ -53,12 +53,14 @@
         let counter = 0
         this.submissions.forEach(async submission => {
           let response = await EventAPI.getEvent(submission.event)
-          submission.event = response.data
-          response = await UserAPI.getUser(submission.submitter)
-          submission.submitter = response.data
-          counter++
-          if(counter == this.submissions.length)
-            this.events_and_users_have_loaded = true
+          if (response.data.success) {
+            submission.event = response.data.event
+            response = await UserAPI.getUser(submission.submitter)
+            submission.submitter = response.data
+            counter++
+            if(counter == this.submissions.length)
+              this.events_and_users_have_loaded = true
+          }
         })
       },
       async deleteSubmission(id){
