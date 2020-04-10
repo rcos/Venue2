@@ -5,8 +5,8 @@ export default {
     return API().get('events')
   },
   addEvent(event) {
-    return API().post('events/add', {
-      event: event 
+    return API().post('events/add_event', {
+      event: event
     })
   },
   getEvent(id) {

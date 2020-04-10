@@ -2,7 +2,7 @@
 -----
 ## GET
 #### Get Courses
-`/courses/getCourses/:offset/:count`
+`/courses/get_courses/:offset/:count`
 
 **Description:** Retrieves {count} courses, offset by {offset}.
 
@@ -88,6 +88,33 @@
 {
   success: false,
 
+  error: "<Error message>"
+}
+```
+
+#### GetCourse
+`/courses/get_course/:id`
+
+**Description:** Get the course that has the id {id}
+
+###### Params
+* **id:** The id of the course to retrieve
+
+###### Expected response
+```
+{
+  success: true,
+  course: {
+    _id: 1909riof904,
+    name: "Course Name",
+    dept: "MATH",
+    course_number: 9040
+  }
+}
+```
+```
+{
+  success: false,
   error: "<Error message>"
 }
 ```
@@ -179,3 +206,21 @@
 
 ## DELETE
 #### Delete Course
+`/courses/delete/:id`
+
+**Description:** Delete a course with the given course id {id}
+
+###### Params
+* **{id}:** The id of the course to delete
+
+###### Expected response
+```
+{
+  success: true
+}
+```
+```
+{
+  success: false
+}
+```

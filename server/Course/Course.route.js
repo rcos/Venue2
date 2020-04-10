@@ -12,7 +12,7 @@ let User = require('../User/User.model');
 **********************GET************************
 =================================================
 */
-courseRoutes.route('/getCourses/:offset/:count').get(function (req, res) {
+courseRoutes.route('/get_courses/:offset/:count').get(function (req, res) {
 
   let offset = parseInt(req.params.offset)
   let count = parseInt(req.params.count)
@@ -171,13 +171,36 @@ courseRoutes.route('/get_instructor_courses/:user_id').get(function (req, res) {
   })
 });
 
-courseRoutes.route('/edit/:id').get(function (req, res) {
+courseRoutes.route('/get_course/:id').get(function (req, res) {
   let id = req.params.id;
+
+  Logger.goodRequest("Courses::getCourse", [{key: 'ID', value: id}])
+  // check if the id is valid
+  if (!ObjectID.isValid(id)) {
+    Logger.error(`Course id is not a valid object ID`, `\t`)
+
+    res.json({
+      success: false,
+      error: "Invalid course id provided"
+    })
+    return;
+  }
+
   Course.findById(id, function (err, course) {
-    if (err) {
-      res.json(err);
+    if (err || course == null) {
+      Logger.error(`Course with id ${id} could not be found`)
+      res.json({
+        success: false,
+        error: err
+      })
     }
-    res.json(course);
+    else {
+      Logger.success(`Course with id ${id} found successfully!`)
+      res.json({
+        success: true,
+        course: course
+      })
+    }
   });
 });
 
