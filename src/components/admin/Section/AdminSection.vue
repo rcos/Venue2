@@ -32,8 +32,52 @@
       </div>
     </form>
 
-    <Courses v-on:select-course="selectCourse" />
+    <Courses v-bind:is_course_view="false" v-on:select-course="selectCourse" />
 
+    <Instructors v-on:select-instructor="selectInstructor" />
+
+    <h2>New Students</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>title</th>
+          <th>section course</th>
+          <th>section number</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr v-for="student in new_students" :key="student._id">
+              <td>{{  }}</td>
+              <td>{{ event.section.course.name }}</td>
+              <td>{{ event.section.section_number }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <h2>Events</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>title</th>
+          <th>section course</th>
+          <th>section number</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr v-for="event in section.events" :key="event._id">
+              <td>{{ event.title }}</td>
+              <td>{{ event.section.course.name }}</td>
+              <td>{{ event.section.section_number }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="form-group">
+      <button class="btn btn-primary">Create</button>
+    </div>
+
+    <Sections />    
   </div>
 </template>
 
@@ -46,7 +90,7 @@
   import Sections from '../Section/Sections';
 
   export default {
-    name: 'Section',
+    name: 'AdminSection',
     components: {
       Instructors,
       Courses,
@@ -55,24 +99,42 @@
     data(){
       return {
         section: {},
+        sections: [],
+        courses: [],
+        students: [],
+        new_students: [],
         course: {},
         instructor: {}
       }
     },
     created() {
+      this.loadSections()
+      this.loadCourses()
     },
     methods: {
+      async loadSections () {
+        const response = await SectionAPI.getSections()
+        this.sections = response.data
+      },
+      async loadCourses(){
+        const response = await CourseAPI.getCourses()
+        this.courses = response.data
+      },
       async addSection(evt){
         evt.preventDefault() // prevents the form's default action from redirecting the page
         this.section.instructor = this.instructor
         this.section.course = this.course
         const response = await SectionAPI.addSection(this.section)
-        this.$router.push({name: 'sections'})
+        this.sections.push(response.data);
+        this.section = {} // clear the input field
+        this.course = {}
+        this.instructor = {}
       },
       selectCourse(course){
         this.course = course
-        if(typeof this.course.instructor !== 'undefined' && this.course.instructor !== null)
-          this.instructor = this.course.instructor
+      },
+      selectInstructor(instructor){
+        this.instructor = instructor
       }
     }
   }

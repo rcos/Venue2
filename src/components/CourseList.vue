@@ -2,7 +2,7 @@
   <div class="course-list">
     <div v-if="is_instructor">
       <div v-if="courses.length > 0">
-        <CourseCard v-for="course in courses" v-bind:course="course" />
+        <CourseCard v-for="course in courses" :key="course._id" v-bind:course="course" v-bind:box_color="course.box_color"/>
       </div>
       <div v-else>
         <p class="no-container" id="no-courses">No courses</p>
@@ -10,7 +10,7 @@
     </div>
     <div v-else>
       <div v-if="sections.length > 0">
-        <CourseCard v-for="section in sections" v-bind:section="section" />
+        <CourseCard v-for="section in sections" :key="section._id" v-bind:section="section" v-bind:box_color="section.box_color"/>
       </div>
       <div v-else>
         <p class="no-container" id="no-courses">No courses</p>
@@ -33,8 +33,18 @@
       return {
         courses: [],
         sections: [],
-        is_instructor: Boolean
+        is_instructor: Boolean,
+        box_color_index: Number,
+        box_colors: [
+          "blue",
+          "orange",
+          "green",
+          "red",
+          "purple"
+        ]
       }
+    },
+    computed: {
     },
     created() {
       this.current_user = this.$store.state.user.current_user
@@ -47,11 +57,25 @@
     methods: {
       async getInstructorCourses() {
         let response = await CourseAPI.getInstructorCourses(this.current_user._id)
-        this.courses = response.data
+        let courses = response.data
+        this.assignBoxColorsToClassObjects(courses)
+        this.courses = courses
       },
       async getSectionsWithCourses() {
         let response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
-        this.sections = response.data
+        let sections = response.data
+        this.assignBoxColorsToClassObjects(sections)
+        this.sections = sections
+      },
+      assignBoxColorsToClassObjects(class_objects) {
+        let box_color_index = 0
+         class_objects.forEach( class_object => {
+           class_object.box_color = this.box_colors[box_color_index]
+          if(box_color_index == this.box_colors.length)
+            box_color_index = 0
+          else
+            box_color_index++
+        })
       }
     }
   }
@@ -80,6 +104,7 @@
     margin-top: 1rem;
     height: auto;
     width: auto;
+    padding-bottom: 10px;
   }
 }
 </style>

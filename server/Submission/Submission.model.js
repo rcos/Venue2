@@ -16,6 +16,11 @@ let Submission = new Schema({
 	},
 	time: Date,
 	location: {},
+	code: {
+		type: String,
+		default: ""
+	},
+	//implement location
 	//implement image
 	is_verified: {
 		type: Boolean,

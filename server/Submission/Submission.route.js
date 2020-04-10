@@ -6,13 +6,23 @@ let Event = require('../Event/Event.model');
 
 submissionRoutes.route('/add').post(function (req, res) {
   let submission = new Submission(req.body.submission);
-  submission.save()
-    .then(() => {
-      res.status(200).json(submission);
-    })
-    .catch(() => {
-      res.status(400).send("unable to save submission to database");
-    });
+  Event.findById(submission.event, function (err, event) {
+    if (err) {
+      res.json(err);
+    } else if (event.code == "") {
+      res.status(400).send("attendance is not open for this event");
+    } else if (submission.code == event.code) {
+      submission.save()
+        .then(() => {
+          res.status(200).json(submission);
+        })
+        .catch(() => {
+          res.status(400).send("unable to save submission to database");
+        });
+    } else {
+      res.status(400).send("invalid attendance code");
+    }
+  })
 });
 
 submissionRoutes.route('/').get(function (req, res) {

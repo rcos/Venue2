@@ -1,17 +1,24 @@
-<<template>
-  <div class="course-card">
-  	<div class="color-box"></div>
-    <div v-if="is_instructor" class="course-info">
-      <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
-      <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>
-      <div v-else class="course-name">{{ course.name }}</div>
+<template>
+  <router-link :to="is_instructor ? {name: 'course_info', params: { id: course._id }} : {name: 'course_info', params: { id: section._id }}">
+    <div class="course-card">
+    	<div class="color-box" v-bind:class="{
+        'blue-box':box_color == 'blue', 
+        'red-box':box_color == 'red', 
+        'orange-box':box_color == 'orange',
+        'green-box':box_color == 'green',
+        'purple-box':box_color == 'purple'}"></div>
+      <div v-if="is_instructor" class="course-info">
+        <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
+        <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>
+        <div v-else class="course-name">{{ course.name }}</div>
+      </div>
+      <div v-else class="course-info">
+        <div class="course-title">{{ section.course.dept }} {{ section.course.course_number }}-{{ section.number }}</div>
+        <div v-if="section.course.name.length > 21" class="course-name">{{ section.course.name.substring(0,18) + "..." }}</div>
+        <div v-else class="course-name">{{ section.course.name }}</div>
+      </div>
     </div>
-    <div v-else class="course-info">
-      <div class="course-title">{{ section.course.dept }} {{ section.course.course_number }}-{{ section.number }}</div>
-      <div v-if="section.course.name.length > 21" class="course-name">{{ section.course.name.substring(0,18) + "..." }}</div>
-      <div v-else class="course-name">{{ section.course.name }}</div>
-    </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -20,7 +27,8 @@
     name: 'CourseCard',
     props: {
       course: Object,
-      section: Object
+      section: Object,
+      box_color: String
     },
     computed: {
     },
@@ -53,6 +61,7 @@
   border-radius: 3px;
   cursor: pointer;
   transition: background-color, box-shadow, width, 0.25s;
+  color: black;
 }
 
 .course-card:hover {
@@ -60,15 +69,33 @@
   box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.3);
 }
 
-
 .color-box {
-	background-color: #B77DC2;
 	border-radius: 3px;
 	width: 1.5rem;
 	height: 1.5rem;
 	margin-left: 0.5rem;
   display: inline-block;
   vertical-align: top;
+}
+
+.blue-box {
+  background-color: #516ded;
+}
+
+.green-box {
+  background-color: #4bcc69;
+}
+
+.red-box {
+  background-color: #FC5D60;
+}
+
+.purple-box {
+  background-color: #B77DC2;
+}
+
+.orange-box {
+  background-color: #f29f33;
 }
 
 .course-info {

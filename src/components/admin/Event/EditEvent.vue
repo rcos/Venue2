@@ -39,6 +39,11 @@
                 class="btn btn-primary"
                 v-on:click="generateAttendanceCode()"
               >Generate New Attendance Code</button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                v-on:click="closeAttendance()"
+              >Close Attendance</button>
             </div>
           </div>
           <div class="row">
@@ -72,6 +77,8 @@
       <thead>
         <tr>
           <th>submitter</th>
+          <th>time</th>
+          <th>verified</th>
         </tr>
       </thead>
       <div class="spinner-border" role="status" v-if="!event_submissions_have_loaded">
@@ -80,6 +87,8 @@
       <tbody v-else>
         <tr v-for="submission in event_submissions" :key="submission._id">
           <td>{{ submission.submitter.first_name }} {{ submission.submitter.last_name }}</td>
+          <td>{{ submission.time }}</td>
+          <td>{{ submission.is_verified }}</td>
         </tr>
       </tbody>
     </table>
@@ -157,10 +166,14 @@ export default {
       const alnums =
         "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
       var result = "";
-      for (var i = 1000; i > 0; --i) {
+      for (var i = 50; i > 0; --i) {
         result += alnums[Math.floor(Math.random() * alnums.length)];
       }
       this.event.code = result;
+      this.showQR(this.event.code);
+    },
+    closeAttendance() {
+      this.event.code = "";
       this.showQR(this.event.code);
     },
     showQR(qr_data) {
