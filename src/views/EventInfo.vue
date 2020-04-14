@@ -16,6 +16,10 @@
         <h4 class="time-info">Submission Start time: {{ new Date(event.submission_start_time) }}</h4>
         <h4 class="time-info">Submission End time: {{ new Date(event.submission_end_time) }}</h4>
       </div>
+      <!-- geo fence -->
+      <div>
+        {{ event.geofence }}
+      </div>
       <!-- Submission Info -->
       <div class="submission-status">
         <!-- Instructor -->
