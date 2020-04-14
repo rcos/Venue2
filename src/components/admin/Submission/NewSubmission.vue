@@ -30,9 +30,9 @@
 </template>
 
 <script>
-  import SubmissionAPI from '@/services/SubmissionAPI.js';
-  import Events from '../Event/AdminEvents'
-  import Students from '../User/Students'
+import SubmissionAPI from "@/services/SubmissionAPI.js";
+import Events from "../Event/AdminEvents";
+import Students from "../User/Students";
 
 export default {
   name: "Submission",
@@ -44,18 +44,57 @@ export default {
     return {
       submission: {},
       event: {},
-      submitter: {}
+      submitter: {},
+      gettingLocation: false,
+      location: null,
+      errorStr: ""
     };
   },
   created() {},
   methods: {
     async addSubmission(evt) {
+      var self = this;
       evt.preventDefault(); // prevents the form's default action from redirecting the page
       this.submission.event = this.event;
       this.submission.submitter = this.submitter;
-      this.submission.code = this.code;
-      const response = await SubmissionAPI.addSubmission(this.submission);
-      this.$router.push({ name: "submissions" });
+
+      console.log("Here1");
+      if (!("geolocation" in navigator)) {
+        this.errorStr = "Geolocation is not available.";
+      } else {
+        this.gettingLocation = true;
+        // get position
+        // console.log("Here2");
+        // // navigator.geolocation.getCurrentPosition(pos => {}, err => {});
+
+        // //Dummy one, which will result in a working next statement.
+        navigator.geolocation.getCurrentPosition(
+          function() {},
+          function() {},
+          {}
+        );
+        //The working next statement.
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            self.gettingLocation = false;
+            self.submission.location = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            self.submission.time = Date(position.timestamp);
+            const response = SubmissionAPI.addSubmission(self.submission);
+            self.$router.push({ name: "submissions" });
+          },
+          function(e) {
+            self.gettingLocation = false;
+            self.errorStr = e.message;
+            console.log(self.errorStr);
+          },
+          {
+            enableHighAccuracy: true
+          }
+        );
+      }
     },
     selectEvent(event) {
       this.event = event;
