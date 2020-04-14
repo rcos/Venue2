@@ -57,6 +57,8 @@ submissionRoutes.route('/update/:id').post(function (req, res) {
     {
       event: updated_submission.event,
       submitter: updated_submission.submitter,
+      time: updated_submission.time,
+      location: updated_submission.location
     },
     function (err, submission) {
       if (!submission)

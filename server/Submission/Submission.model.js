@@ -15,6 +15,7 @@ let Submission = new Schema({
 		ref: 'User'
 	},
 	time: Date,
+	location: {},
 	code: {
 		type: String,
 		default: ""
