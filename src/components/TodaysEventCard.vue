@@ -17,7 +17,7 @@
     <!-- Phones -->
     <show-at breakpoint="small">
       <div style="position: relative;">
-        <div class="mobile-event-card-extending-background"></div>
+        <div class="mobile-event-card-extending-background" v-bind:class="{'active-container':is_active, 'over-container':is_over}"></div>
         <div class="mobile-event-card">
           <div class="spinner-border event-card-spinner" role="status" v-if="!section_has_loaded">
             <span class="sr-only">Loading...</span>
@@ -104,7 +104,6 @@
     width: 19rem;
     border-radius: 5px; 
     margin-top: 1rem;
-    background-color: #f29f33;
     position: relative;
     z-index: 1;
   }
