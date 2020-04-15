@@ -12,14 +12,7 @@ submissionRoutes.route('/add').post(function (req, res) {
     } else if (event.code == "") {
       res.status(400).send("attendance is not open for this event");
     } else if (submission.code == event.code) {
-      //check if location is correct
-      // submission.location is inside event.geofence
-      if (google.maps.geometry.poly.containsLocation(submission.location, new google.maps.Polygon({ paths: event.geofence }))) {
-        console.log("SUBMISSION IS INSIDE THE FENCE")
-      } else {
-        console.log("SUBMISSION IS OUTSIDE THE FENCE")
-      }
-
+      submission.is_verified = true;
       submission.save()
         .then(() => {
           res.status(200).json(submission);
