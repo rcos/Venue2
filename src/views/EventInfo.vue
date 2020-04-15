@@ -39,18 +39,18 @@
           </div>
         </div>
         <!-- Student -->
-        <!-- <div v-else> -->
-        <div v-if="event_is_pending">
-          <p>Event not started yet</p>
+        <div v-else>
+          <div v-if="event_is_pending">
+            <p>Event not started yet</p>
+          </div>
+          <div v-else-if="event_is_active">
+            <p>Event is ongoing.</p>
+            <p v-if="submission_window_pending">Submission Window pending</p>
+            <button v-else-if="submission_window_ongoing" @click="tryAttend">Scan Code</button>
+            <p v-else>Submission window closed</p>
+          </div>
+          <div v-else>Event is over - show submission status</div>
         </div>
-        <div v-else-if="event_is_active">
-          <p>Event is ongoing.</p>
-          <p v-if="submission_window_pending">Submission Window pending</p>
-          <button v-else-if="submission_window_ongoing" @click="tryAttend">Scan Code</button>
-          <p v-else>Submission window closed</p>
-        </div>
-        <div v-else>Event is over - show submission status</div>
-        <!-- </div> -->
       </div>
     </div>
   </div>
