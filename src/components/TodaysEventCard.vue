@@ -16,7 +16,7 @@
     </hide-at>
     <!-- Phones -->
     <show-at breakpoint="small">
-      <div>
+      <div style="position: relative;">
         <div class="mobile-event-card-extending-background"></div>
         <div class="mobile-event-card">
           <div class="spinner-border event-card-spinner" role="status" v-if="!section_has_loaded">
