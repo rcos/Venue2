@@ -147,6 +147,7 @@ background-color: #F5F5F5;
   width: 2px;
   margin-left: 7rem;
   height: 20rem;
+  z-index: 0;
 }
 
 .todays-event-container {

@@ -87,11 +87,6 @@
     cursor: pointer;
   }
 
-  .wrapper {
-    position: relative;
-    z-index: 0;
-  }
-
   .mobile-event-card {
     background-color: white;
     height: 4rem;
@@ -100,6 +95,7 @@
     margin-top: -2rem;
     margin-left: 3rem;
     position: absolute;
+    z-index: 2;
     box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.1);
   }
 
@@ -109,6 +105,8 @@
     border-radius: 5px; 
     margin-top: 1rem;
     background-color: #f29f33;
+    position: relative;
+    z-index: 1;
   }
 
   .active-container {
