@@ -2,6 +2,7 @@
   <div class="todays-events-list">
     <div v-if="todays_events.length > 0">
       <div class="todays-events-section">
+        <div class="horizontal-timeline"></div>
         <div v-for="(event, index) in todays_events" class="todays-event-container" v-bind:class="{'mleft-one':index===0, 'mleft-four':index!==0}">
           <div v-if="event.started_today" class="todays-event-time">{{ convertToHourMinuteFormat(new Date(event.start_time)) }}</div>
           <div v-else class="todays-event-time">{{ convertToMonthDayFormat(new Date(event.start_time)) }} {{ convertToHourMinuteFormat(new Date(event.start_time)) }}</div>
@@ -10,7 +11,6 @@
           </router-link>
         </div>
       </div>
-      <div class="time-line"></div>
     </div>
     <div v-else>
       <p class="no-container" id="no-today">No events today</p>
@@ -104,12 +104,13 @@ background-color: #F5F5F5;
   margin-left: 4rem;
 }
 
-.time-line {
+.horizontal-timeline {
   border: #f0f0f0 solid 2px;
   background-color: #f0f0f0;
-  margin-top: -7.7em;
+  position: absolute;
+  width: 30rem;
+  margin-top: 1.75rem;
 }
-
 .todays-event-container {
   /*border: red solid;*/
   height: 5rem;
