@@ -111,14 +111,18 @@
 }
 
 #vertical-section {
+  /*border: blue solid;*/
   height: 20rem;
+  overflow-y: auto;
 }
 
-.todays-events-section::-webkit-scrollbar {
+#horizontal-section::-webkit-scrollbar,
+#vertical-section::-webkit-scrollbar {
   width: 12px;
 }
 
-.todays-events-section::-webkit-scrollbar-thumb {
+#horizontal-section::-webkit-scrollbar-thumb,
+#vertical-section::-webkit-scrollbar-thumb {
 border-radius: 10px;
 -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
 background-color: #F5F5F5; 
