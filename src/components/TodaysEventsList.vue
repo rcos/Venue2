@@ -38,11 +38,26 @@
     },
     methods: {
       async getTodaysEvents() {
-        let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
-        this.todays_events = response.data
-        //order events by start time
-        this.sortTodaysEventsByStartTime()
-        this.setEventsStartedStoday()
+        EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
+        .then (response => {
+
+          console.log("Today's")
+          console.log(response.data)
+          if (response.data.success) {
+            this.todays_events = response.data.events
+
+            console.log(`${this.todays_events.length} events`)
+            for (let i in this.todays_events) {
+              console.log(this.todays_events[i])
+            }
+
+            this.sortTodaysEventsByStartTime()
+            this.setEventsStartedStoday()
+          }
+        })
+        .catch (err => {
+          console.log("Error retrieving today's events")
+        })
       },
       convertToHourMinuteFormat(time) {
         let time_string = time.toLocaleTimeString('en-US')
@@ -57,7 +72,7 @@
       },
       sortTodaysEventsByStartTime() {
         this.todays_events.sort(function(a,b){
-          return new Date(a.start_time) - new Date(b.start_time); 
+          return new Date(a.start_time) - new Date(b.start_time);
         });
       },
       setEventsStartedStoday() {
@@ -93,7 +108,7 @@
 .todays-events-section::-webkit-scrollbar-thumb {
 border-radius: 10px;
 -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-background-color: #F5F5F5; 
+background-color: #F5F5F5;
 }
 
 .mleft-one {

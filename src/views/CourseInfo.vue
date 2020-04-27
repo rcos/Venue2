@@ -86,24 +86,50 @@ export default {
       }
     },
     async getSectionWithCourse() {
-      const response = await SectionAPI.getSectionWithCourse(this.section_id)
-      this.section = response.data
-      this.course = this.section.course
-      this.course_has_loaded = true
+      SectionAPI.getSectionWithCourse(this.section_id)
+      .then(response => {
+
+        console.log("Get Section With Course")
+        console.log(response.data)
+
+        this.section = response.data
+        this.course = this.section.course
+        this.course_has_loaded = true
+      })
+      .catch(err => {
+        console.log("Error laoding Section w/ Course")
+        console.log(err)
+      })
     },
     async getActiveEventsForCourse() {
-      const response = await EventAPI.getActiveEventsForCourse(this.course_id)
-      if (response.data.success) {
-        this.active_events = response.data.events
-        this.getRemainingTimeForActiveEvents()
-      }
+      EventAPI.getActiveEventsForCourse(this.course_id)
+      .then(response => {
+        console.log("getActiveEventsForCourse()")
+        console.log(response.data)
+        if (response.data.success) {
+          this.active_events = response.data.events
+          this.getRemainingTimeForActiveEvents()
+        }
+      })
+      .catch(err => {
+        console.log("EventAPI returned error")
+        console.log(err)
+      })
     },
     async getActiveEventsForSection() {
-      const response = await EventAPI.getActiveEventsForSection(this.section_id)
-      if (response.data.success) {
-        this.active_events = response.data.events
-        this.getRemainingTimeForActiveEvents()
-      }
+      EventAPI.getActiveEventsForSection(this.section_id)
+      .then(response => {
+        console.log("getActiveEventsForSection()")
+        if (response.data.success) {
+          this.active_events = response.data.events
+          console.log("active events")
+          console.log(this.active_events)
+          this.getRemainingTimeForActiveEvents()
+        }
+      })
+      .catch(err => {
+        console.log("Error in getActiveEventsForSection ()")
+      })
     },
     getRemainingTimeForActiveEvents() {
       this.active_events.forEach(active_event => {

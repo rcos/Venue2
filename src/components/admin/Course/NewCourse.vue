@@ -66,10 +66,13 @@
     methods: {
       async addCourse(evt){
         evt.preventDefault();
-        if(typeof this.instructor.first_name !== 'undefined')
-          this.course.instructor = this.instructor;
-        const response = await CourseAPI.addCourse(this.course);
-        this.$router.push({name: 'courses'});
+        if ('_id' in this.instructor) { // instructor has been selected
+          this.course.instructor = this.instructor._id;
+          console.log(this.course)
+          const response = await CourseAPI.addCourse(this.course);
+          console.log(response)
+          this.$router.push({name: 'courses'});
+        }
       },
       selectInstructor(instructor){
         this.instructor = instructor

@@ -30,14 +30,20 @@
     methods: {
       async getActiveEvents() {
         console.log(`API PARAMS: ${this.current_user._id}, ${true}`)
-        let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
+        EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
+        .then(response => {
+          console.log("getActiveEvents()")
+          console.log(response)
 
-        console.log("getActiveEvents()")
-        console.log(response)
-
-        let events = response.data
-        this.updateSubmissionWindowStatuses(events)
-        this.active_events = this.sortEventsbySubmissionWindowStatus(events)
+          if (response.data.success) {
+            let events = response.data.events
+            this.updateSubmissionWindowStatuses(events)
+            this.active_events = this.sortEventsbySubmissionWindowStatus(events)
+          }
+        })
+        .catch(err => {
+          console.log("Error retrieving active events")
+        })
       },
       updateSubmissionWindowStatuses(events) {
         let current_time = new Date()

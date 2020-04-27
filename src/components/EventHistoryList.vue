@@ -54,12 +54,20 @@
         }
       },
       async getEventHistoryForSection() {
-        const response = await EventAPI.getEventHistoryForSection(this.section._id)
-        if (response.success) {
-          this.event_history = response.data.events
-          this.sortEventsByStartTime()
-          this.separateEventsByMonth()
-        }
+        console.log(`ID!!! ${this.section._id}`)
+        EventAPI.getEventHistoryForSection(this.section._id)
+        .then(response => {
+          console.log("getEventHistoryForSection() func")
+          console.log(response)
+          if (response.data.success) {
+            this.event_history = response.data.events
+            this.sortEventsByStartTime()
+            this.separateEventsByMonth()
+          }
+        })
+        .catch(err => {
+          console.log("Error in getEventHistoryForSection()")
+        })
       },
       sortEventsByStartTime() {
         this.event_history.sort(function(a,b){

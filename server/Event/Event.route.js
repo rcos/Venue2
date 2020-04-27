@@ -130,7 +130,7 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
   let requested_events = []
   let active_events = []
 
-  Logger.goodRequest('ActiveOrTodaysEvents')
+  Logger.goodRequest('Events::ActiveOrTodaysEvents')
 
   // check if the user id is valid
   if (!ObjectID.isValid(user_id)) {
@@ -142,100 +142,98 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
     return;
   }
 
-  User.findById(user_id, function (error, user) {
-    if (error) {
-      Logger.error(error)
+  User.findById(user_id, (error, user) => {
+    if (error || user == null) {
+      Logger.error(`User with id not found.`, `\t`)
       res.json({
         success: false,
-        error: error
-      })
-    } else if (user.is_instructor) {
-
-      let instructor_sections = []
-      //Get the sections where this user an instructor
-      Section.find(function (err, sections) {
-        let counter = 0
-        sections.forEach(section => {
-          Course.findById(section.course, function (course_err, course) {
-            counter++
-            if (course_err) {
-              Logger.error(course_err)
-              res.json({
-                success: false,
-                error: course_err
-              })
-            } else {
-              if (course.instructor == user_id)
-                instructor_sections.push(section)
-            }
-            //Last iteration
-            if (counter === sections.length) {
-              //Get the active events
-              Event.find(function (event_err, events) {
-                if (event_err) {
-                  console.log(event_err)
-                  res.json(event_err)
-                } else {
-                  events.forEach(event => {
-                    //check if the current event is in one of the instructor's sections
-                    instructor_sections.forEach(instructor_section => {
-                      if (instructor_section._id.equals(event.section)) {
-                        //Get Active Events or Get today's events
-                        if(get_active) {
-                          if(isActive(event))
-                            requested_events.push(event)
-                        } else {
-                          if(isToday(event.start_time) || isToday(event.end_time) || isActive(event))
-                            requested_events.push(event)
-                        }
-                      }
-                    })
-                  })
-                  res.json(requested_events)
-                }
-              })
-            }
-          })
-        })
-      })
-
-    } else {
-
-      let user_sections = []
-      let current_time = new Date()
-      Section.find((error, sections) => {
-        sections.forEach((section) => {
-          section.students.forEach((student) => {
-            if (student._id == user_id)
-              user_sections.push(section)
-          })
-        })
-        Event.find(function (err, events) {
-          if (err) {
-            console.log(err)
-            res.json(err)
-          } else {
-            events.forEach(event => {
-              user_sections.forEach(user_section => {
-                if (user_section._id.equals(event.section)) {
-                  //Get Active Events or Get today's events
-                  if(get_active) {
-                    if(isActive(event))
-                      requested_events.push(event)
-                  } else {
-                    if(isToday(event.start_time) || isToday(event.end_time) || isActive(event))
-                      requested_events.push(event)
-                  }
-                }
-              })
-            })
-            res.json(requested_events)
-          }
-        })
+        error: "Invalid user"
       })
     }
+    else {
+      // Find the section that this user is part of
+      // Section.find({students: {"$contains": user._id}}, (err, sections_) => {
+      Logger.success(`(1/2) Looking for section with students arr that contains ${user._id}`, `\t`)
+      Section.find({
+        students: {
+          '$all': [user._id]
+        }
+      }, (err, sections_) => {
 
+        if (err || sections_ == null) {
+          Logger.error(`Problem finding section that contains user ${user._id}.\n\t${err}`, `\t`)
+          res.json({
+            success: false,
+            error: "Problem searching for section"
+          })
+        }
+        else {
+
+          // find all events that has this section
+          let user_events = []
+          // start_time
+          let start_date = new Date();
+          start_date.setHours(0,0,0,0)
+          let end_date = new Date();
+          end_date.setDate(start_date.getDate() + 1)
+
+          Logger.success(`Start: ${start_date}`, `\t`)
+          Logger.success(`End: ${end_date}`, `\t`)
+
+          sections_.forEach(section => {
+            user_events.push(new Promise(function(resolve, reject) {
+              // find the event that has this section
+
+              Event.find({
+                section: section._id,
+                // start_time is between the start of today and start of tomorrow
+                start_time: {
+                  "$gte": start_date,
+                  "$lt": end_date
+                }
+              },
+              (err, evt_doc) => {
+                if (err || evt_doc == null) {
+                  resolve(null)
+                }
+                else resolve(evt_doc)
+              })
+            }))
+          }) // end of forEach
+
+          // Wait for the promises to complete
+          Promise.all(user_events).then(result_events => {
+            let true_events = result_events
+              .filter(result_ => {
+              if (result_ == null) {
+                return false
+              }
+              if (result_.length == 0) {
+                return false
+              }
+              return true
+            })
+
+            let unwrapped_events = []
+            true_events.forEach(evt_lst => {
+              evt_lst.forEach(evt => {
+                unwrapped_events.push(evt)
+              })
+            })
+
+            Logger.success(`(2/2) Successfully retrieved active or today's events`, `\t`)
+
+            res.json({
+              success: true,
+              events: unwrapped_events
+            })
+          })
+        }
+
+      })
+    }
   })
+
 });
 
 eventRoutes.get('/active_for_course/:course_id', async (req, res) => {

@@ -1,6 +1,8 @@
 const express = require('express');
 const sectionRoutes = express.Router();
 const jwt = require('jsonwebtoken')
+const Logger = require('../Utility/Logger')
+const ObjectID = require('mongoose').Types.ObjectId
 
 let Section = require('./Section.model');
 let User = require('../User/User.model');
@@ -56,7 +58,7 @@ sectionRoutes.route('/edit/:id').get(function (req, res) {
 sectionRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
   let updated_section = req.body.updated_section;
-  Section.findByIdAndUpdate(id, 
+  Section.findByIdAndUpdate(id,
     {
       course: updated_section.course,
       number: updated_section.number,
@@ -67,7 +69,7 @@ sectionRoutes.route('/update/:id').post(function (req, res) {
     function(err, section) {
       if (!section)
         res.status(404).send("section not found");
-      res.json(section);    
+      res.json(section);
     }
   );
 });
@@ -139,32 +141,116 @@ sectionRoutes.route('/getStudents/:id').get(function (req, res) {
 
 sectionRoutes.get('/get_with_courses_for_student/:user_id', verifyToken, (req, res) => {
   let user_id = req.params.user_id
+
+  Logger.goodRequest(`Section::getWithCoursesForStudent`)
+  if (!ObjectID.isValid(user_id)) {
+    Logger.error(`Invalid object id provided`, `\t`)
+    res.json({
+      success: false,
+      error: "Invalid id format provided."
+    })
+    return;
+  }
+
   jwt.verify(req.token, 'the_secret_key', err => {
     if(err) {
-      res.sendStatus(401).send("Unauthorized access")
+      Logger.error("Error in get_with_courses_for_student", `\t`)
+      res.sendStatus(401).json({
+        success: false,
+        error: "Unauthorized access"
+      })
     } else {
 
-      user_sections = []
-      Section.find((error, sections) => {
-        sections.forEach((section) => {
-          section.students.forEach((student) => {
-            if(student._id == user_id)
-              user_sections.push(section)
+      Logger.success(`(1/3) Verified token`, `\t`)
+
+      // get the sections that include this user
+      Section.find({
+        students: { "$all": [user_id]}
+      },
+      (err, sections) => {
+        if (err || sections == null) {
+          Logger.error(`Problem searching for sections for student with id ${user_id}`)
+          res.json({
+            success: false,
+            error: "Problem searching for section"
           })
-        })
-        let counter = 0
-        user_sections.forEach((user_section) => {
-          Course.findById(user_section.course, function (course_error, course){
-            if(course_error) 
-              res.json(course_error);
-            else 
-              user_section.course = course
-            counter++
-            if(counter === user_sections.length)
-              res.json(user_sections)
+        }
+        else {
+          // for each of the section found, find the course that corresponds
+          // with this section
+          Logger.success(`(2/3) Found all sections user ${user_id} is in`, `\t`)
+          let user_sections = []
+          sections.forEach(section_ => {
+            user_sections.push(new Promise(function(resolve, reject) {
+
+              return Course.findById(section_.course, (err, course_) => {
+                if (err || course_ == null) resolve(null)
+                else resolve(course_)
+              })
+
+            }))
           })
-        })
+
+          // wait all the data to return
+          Promise.all(user_sections).then(user_courses => {
+
+            Logger.success(`(3/3) Found all courses for the sections the user ${user_id} is in`, `\t`)
+
+            let sections_total = []
+            sections.forEach((section_, i) => {
+              let combined_ = section_
+              combined_.course = user_courses[i]
+
+              sections_total.push(combined_)
+            })
+
+            let unique_course_id = new Set()
+            let true_sections = sections_total.filter(section_info => {
+
+              // don't return courses not found, or repeat courses
+              if (section_info.course == null) {
+                Logger.error(`One of the sections has a null course`, `\t`)
+                return false
+              }
+              if (unique_course_id.has(section_info.course._id.toString())) {
+                Logger.error(`Section is of an already found course`, `\t`)
+                return false
+              }
+              unique_course_id.add(section_info.course._id.toString())
+              return true
+
+            })
+
+
+            res.json({
+              success: true,
+              sections: true_sections
+            })
+          })
+        }
       })
+
+      // user_sections = []
+      // Section.find((error, sections) => {
+      //   sections.forEach((section) => {
+      //     section.students.forEach((student) => {
+      //       if(student._id == user_id)
+      //         user_sections.push(section)
+      //     })
+      //   })
+      //   let counter = 0
+      //   user_sections.forEach((user_section) => {
+      //     Course.findById(user_section.course, function (course_error, course){
+      //       if(course_error)
+      //         res.json(course_error);
+      //       else
+      //         user_section.course = course
+      //       counter++
+      //       if(counter === user_sections.length)
+      //         res.json(user_sections)
+      //     })
+      //   })
+      // })
 
     }
   })
