@@ -1,12 +1,12 @@
 <template>
   <div class="event-history-list">
     <div class="attendance-month-container" v-for="(month,index) in event_months">
-      <div class="month">{{ month_names[month] }}</div>
-      <div v-for="event in event_history_by_month[index]">
+      <div class="month-bar" v-on:click="toggleMonthVisibility(month)" ><span class="month">{{ month_names[month] }}</span></div>
+      <div class="event-pill-list" v-if="monthVisible(month)" v-for="event in event_history_by_month[index]">
         <router-link :to="{name: 'event_info', params: { event_id: event._id }}">
           <div class="event-pill">
-            <p class="event-card-section" id="event-name">{{ event.title }}</p>
-            <p class="event-card-section" id="event-location">{{ event.location }}</p>
+            <div class="event-day">10</div>
+            <div class="event-title">Class 1</div>
           </div>
         </router-link>
       </div>
@@ -32,6 +32,7 @@
       return {
         event_history: [],
         event_months: [],
+        hidden_months: new Set(),
         event_history_by_month: [],
         month_names: ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December"
@@ -50,6 +51,20 @@
         this.event_history = response.data
         this.sortEventsByStartTime()
         this.separateEventsByMonth()
+      },
+      monthVisible (month_index) {
+        return !this.hidden_months.has(month_index)
+      },
+      toggleMonthVisibility (month_index) {
+        // if the month is hidden, show it. Otherwise, hide it.
+        console.log(`Toggling visiblity for month ${this.month_names[month_index]}`)
+        if (this.hidden_months.has(month_index)) {
+          // remove from the set
+          this.hidden_months.delete(month_index)
+        }
+        else this.hidden_months.add(month_index)
+
+        this.$forceUpdate();
       },
       async getEventHistoryForSection() {
         const response = await EventAPI.getEventHistoryForSection(this.section._id)
@@ -72,6 +87,8 @@
             this.event_history_by_month[this.event_history_by_month.length-1].push(event)
           }
         })
+
+        console.log(this.event_history_by_month)
       }
     }
   }
@@ -84,24 +101,73 @@
     margin-top: 1rem;
   }
 
-  .month {
-    float: left;
+  .month-bar {
     margin-left: 2rem;
     /*border: red solid;*/
     width: 100%;
     text-align: left;
     padding-left: 1rem;
+    font-family: "Segoe UI";
+    position: relative;
+    opacity: 0.85;
+    transition: opacity 0.25s;
+  }
+
+  .month-bar:hover {
+    opacity: 1;
+  }
+
+  .month {
+    position: relative;
+    padding-right: 15px;
+    cursor: pointer;
+  }
+
+  .month::after {
+    content: "";
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid rgba(0, 0, 0, 1);
+    position: absolute;
+    top: 10px;
+    right: -5px;
+    transform: rotate(180deg);
+  }
+
+  .event-pill-list {
+    width: 80%;
+    margin-left: 3.3rem;
+    margin-top: 10px;
   }
 
   .event-pill {
-    width: 16rem;
-    border: green solid;
-    float: left;
-    margin-left: 2rem;
-    border-radius: 5px;
-    margin-top: 1rem;
-    cursor: pointer;
-    color: black;
+    border: 1px solid #BBBBBB;
+    text-align: left;
+    height: 38px;
+    line-height: 38px;
+    padding: 0px 10px;
+    transition: border 0.25s;
+  }
+
+  .event-pill:hover {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+  }
+
+  .event-pill .event-day {
+    width: 5%;
+    min-width: 50px;
+    color: #373434;
+    padding-left: 10px;
+    box-sizing: border-box;
+  }
+
+  .event-pill .event-title {
+    color: #373434;
+  }
+
+  .event-pill div {
+    display: inline-block;
   }
 
   .event-card-section {
