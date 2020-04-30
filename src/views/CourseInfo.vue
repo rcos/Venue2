@@ -8,8 +8,15 @@
       <div class="course-event-container">
         <div class="info-section" id="course-info">
           <h2 class="course-info-header">Course Info</h2>
-          <p class="course-name">{{ course.name }}</p>
-          <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
+          <div class="course-info-div">
+            <div>
+              <h3 class="course-name">{{ course.name }}</h3>
+            </div>
+            <div class="dept-and-time-area">
+              <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
+              <div class="time-block">2:00pm-3:50pm</div>
+            </div>
+          </div>
         </div>
         <div class="info-section" id="event-info">
           <router-link v-if="is_instructor" :to="{name: 'new_event', params: { course_id: course._id }}">
@@ -127,22 +134,61 @@ export default {
     padding-left: 6rem;
   }
 
+  .course-info-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: left;
+  }
+
   .info-section {
     display: inline-block;
     margin-top: 2rem;
     float: left;
+    font-family: "Segoe UI";
+  }
+
+  .dept-and-time-area {
+    display: inline-block;
+    text-align: left;
+    width: 100%;
+    margin-top: -3px;
   }
 
   #course-info {
     /*border: black solid;*/
+    margin-top: 50px;
+  }
+
+  .course-info-div {
+    margin-top: 30px;
+    margin-left: 20px;
+  }
+
+  .course-name {
+    font-size: 1.8rem;
+    opacity: 0.8;
+    color: #000;
+    font-weight: normal;
   }
 
   .course-title {
-    border: black solid;
+    width: 40%;
+    background-color: #393939;
+    color: #C1EDFF;
+    text-align: center;
+    border-radius: 3px;
+    height: 28px;
+    cursor: pointer;
+    line-height: 28px;
     display: inline-block;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    margin-top: 0.5rem;
+  }
+
+  .time-block {
+    width: 50%;
+    display: inline-block;
+    padding-left: 15px;
+    box-sizing: border-box;
+    opacity: 0.9;
   }
 
   #event-info {
@@ -202,6 +248,9 @@ export default {
   .attendance-history-header-text {
     display: inline-block;
     /*border: purple solid;*/
+    font-family: "Segoe UI";
+    font-size: 1.2rem;
+    font-weight: normal;
   }
 
   .section-selector {
