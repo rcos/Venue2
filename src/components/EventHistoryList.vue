@@ -1,6 +1,6 @@
 <template>
   <div class="event-history-list">
-    <div class="attendance-month-container" v-for="(month,index) in event_months">
+    <div class="attendance-month-container" v-for="(month,index) in sortedMonths(event_months)">
       <div class="month-bar" v-on:click="toggleMonthVisibility(month)" ><span class="month">{{ month_names[month] }}</span></div>
       <div class="event-pill-list" v-if="monthVisible(month)" v-for="event in event_history_by_month[index]">
         <router-link :to="{name: 'event_info', params: { event_id: event._id }}">
@@ -21,7 +21,8 @@
     name: 'EventHistoryList',
     props: {
       course: Object,
-      section: Object
+      section: Object,
+      sorting: Function
     },
     computed: {
     },
@@ -46,6 +47,18 @@
         this.getEventHistoryForSection()
     },
     methods: {
+      sortedMonths(event_months) {
+        console.log(`Event Months Data`)
+        console.log(event_months)
+        if (this.sorting) {
+          console.log('Sorted months')
+          this.event_months.sort(this.sorting)
+        }
+        else {
+          console.log('Months not sorted')
+        }
+        return event_months
+      },
       async getEventHistoryForCourse() {
         const response = await EventAPI.getEventHistoryForCourse(this.course._id)
         this.event_history = response.data
