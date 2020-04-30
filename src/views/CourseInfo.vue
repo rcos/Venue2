@@ -9,7 +9,7 @@
         <div class="info-section" id="course-info">
           <h2 class="course-info-header">Course Info</h2>
           <div class="course-info-div">
-            <div>
+            <div class="course-name-div">
               <h3 class="course-name">{{ course.name }}</h3>
             </div>
             <div class="dept-and-time-area">
@@ -182,6 +182,11 @@ export default {
   #course-info {
     /*border: black solid;*/
     margin-top: 50px;
+    min-width: 340px;
+  }
+
+  .course-name-div {
+    text-align: left;
   }
 
   .course-info-div {
