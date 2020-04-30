@@ -1,6 +1,11 @@
 <template>
   <div class="event-history-list">
-    <div class="attendance-month-container" v-for="(month,index) in event_months">
+
+    <div v-if="this.event_history_by_month.length == 0" class="empty-history">
+      <p>~ No events ~</p>
+    </div>
+
+    <div v-else class="attendance-month-container" v-for="(month,index) in sortedMonths(event_months)">
       <div class="month-bar" v-on:click="toggleMonthVisibility(month)" ><span class="month">{{ month_names[month] }}</span></div>
       <div class="event-pill-list" v-if="monthVisible(month)" v-for="event in event_history_by_month[index]">
         <router-link :to="{name: 'event_info', params: { event_id: event._id }}">
@@ -21,7 +26,8 @@
     name: 'EventHistoryList',
     props: {
       course: Object,
-      section: Object
+      section: Object,
+      sorting: Function
     },
     computed: {
     },
@@ -46,6 +52,13 @@
         this.getEventHistoryForSection()
     },
     methods: {
+      sortedMonths(event_months) {
+        if (this.sorting) {
+          this.event_months.sort(this.sorting)
+        }
+
+        return event_months
+      },
       async getEventHistoryForCourse() {
         const response = await EventAPI.getEventHistoryForCourse(this.course._id)
         this.event_history = response.data
@@ -111,6 +124,18 @@
     position: relative;
     opacity: 0.85;
     transition: opacity 0.25s;
+  }
+  
+  .empty-history {
+    line-height: 100px;
+    height: 100px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    width: 85%;
+    margin-top: 20px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-family: "Segoe UI";
+    font-weight: italic;
   }
 
   .month-bar:hover {

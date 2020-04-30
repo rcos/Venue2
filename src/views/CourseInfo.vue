@@ -9,7 +9,7 @@
         <div class="info-section" id="course-info">
           <h2 class="course-info-header">Course Info</h2>
           <div class="course-info-div">
-            <div>
+            <div class="course-name-div">
               <h3 class="course-name">{{ course.name }}</h3>
             </div>
             <div class="dept-and-time-area">
@@ -38,11 +38,23 @@
       <!-- Attendance history -->
       <div class="attendance-history-container">
         <div class="attendance-history-header">
-          <h4 class="attendance-history-header-text">Attendance History (85%)</h4>
-          <p class="section-selector">all sections</p>
+          <div>
+            <h4 class="attendance-history-header-text">Attendance History (85%)</h4>
+            <p class="section-selector">all sections</p>
+          </div>
+          <div class="right-function-buttons function-button">
+            <div class="ascending-descending" v-on:click="toggleSortOrder">
+              <img src="@/assets/left-arrow.svg" 
+                v-bind:class="{'focused-image': sort_ascending, 'unfocused-image': !sort_ascending}" 
+                style="position:relative;top:-3px;transform:rotate(90deg);width:0.6rem;" />
+              <img src="@/assets/left-arrow.svg" 
+                v-bind:class="{'focused-image': !sort_ascending, 'unfocused-image': sort_ascending}"
+                style="position:relative;top:3px;transform:rotate(270deg);width:0.6rem;" />
+            </div>
+          </div>
         </div>
-        <EventHistoryList v-if="is_instructor" v-bind:course="course" />
-        <EventHistoryList v-else v-bind:section="section"/>
+        <EventHistoryList v-if="is_instructor" v-bind:course="course" :sorting="event_sorting_fn" />
+        <EventHistoryList v-else v-bind:section="section" :sorting="event_sorting_fn"/>
         </div>
       </div>
     </div>
@@ -69,10 +81,13 @@ export default {
       course: Object,
       section: Object,
       active_events: [],
-      course_has_loaded: false
+      course_has_loaded: false,
+      sort_ascending: true,
+      event_sorting_fn: Function
     }
   },
   created() {
+    this.event_sorting_fn = (a, b) => b - a;
     this.is_instructor = this.$store.state.user.current_user.is_instructor
     if(this.is_instructor) {
       this.course_id = this.$route.params.id
@@ -85,6 +100,16 @@ export default {
     }
   },
   methods: {
+    toggleSortOrder () {
+      this.sort_ascending = !this.sort_ascending;
+      // change the sorting function passed to the EventHistoryList
+      if (this.sort_ascending) {
+        this.event_sorting_fn = (a, b) => b - a;
+      }
+      else {
+        this.event_sorting_fn = (a, b) => a - b;
+      }
+    },
     async getCourse() {
       const response = await CourseAPI.getCourse(this.course_id)
       this.course = response.data
@@ -157,6 +182,11 @@ export default {
   #course-info {
     /*border: black solid;*/
     margin-top: 50px;
+    min-width: 340px;
+  }
+
+  .course-name-div {
+    text-align: left;
   }
 
   .course-info-div {
@@ -243,6 +273,11 @@ export default {
   .attendance-history-header {
     /*border: red solid;*/
     text-align: left;
+    width: 85%;
+  }
+
+  .attendance-history-header div {
+    display: inline-block;
   }
 
   .attendance-history-header-text {
@@ -253,11 +288,38 @@ export default {
     font-weight: normal;
   }
 
+  .right-function-buttons {
+    float: right;
+  }
+
+  .right-function-buttons {
+    border: 1px solid #a8a8a8;
+    box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.05);
+    width: 40px;
+    height: 35px;
+    cursor: pointer;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 5px;
+  }
+  
+  .function-button {
+    display: inline-block;
+  }
+
   .section-selector {
     /*border: orange solid;*/
     display: inline-block;
     margin-left: 1rem;
     text-decoration: underline;
     cursor: pointer;
+  }
+
+  .focused-image {
+    opacity: 0.8;
+  }
+
+  .unfocused-image {
+    opacity: 0.4;
   }
 </style>
