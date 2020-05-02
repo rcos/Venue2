@@ -32,8 +32,12 @@
             <!--<p class="section-selector">all sections</p>-->
           </div>
           <div class="right-function-buttons">
-            <div class="inline btn-group-left group-btn list-style-grid active"></div>
-            <div class="inline btn-group-right group-btn list-style-list"></div>
+            <div class="inline btn-group-left group-btn list-style-grid active">
+              <span class="icon-grid-1"></span>
+            </div>
+            <div class="inline btn-group-right group-btn list-style-list">
+              <span class="icon-list"></span>
+            </div>
           </div>
           <!--<div class="right-function-buttons function-button">
             <div class="ascending-descending" v-on:click="toggleSortOrder">
@@ -79,6 +83,8 @@
   import EventHistoryList from '@/components/EventHistoryList.vue';
   import SquareLoader from '@/components/Loaders/SquareLoader.vue';
   import CourseInfoSummary from '@/components/CourseInfoSummary.vue';
+
+  import '@/assets/icon-font.css'  
 
 export default {
   name: 'CourseInfo',
@@ -262,6 +268,8 @@ export default {
     cursor: pointer;
     width: 35px;
     height: 35px;
+    line-height: 35px;
+    font-size: 0.9rem;
   }
 
   .group-btn.active {

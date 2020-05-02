@@ -12,7 +12,9 @@
                 <div class="inline ongoing-icon-min"></div>
                 <div class="inline">35m remaining</div>
             </div>
-            <div v-on:click="toggleMinimize" class="hide-course-blurb-icon"></div>
+            <div v-on:click="toggleMinimize" class="hide-course-blurb-icon">
+              <span class="icon-down-arrow"></span>
+            </div>
         </div>
         <div v-else>
             <div class="info-section" id="course-info">
@@ -27,7 +29,9 @@
                 </div>
                 </div>
                 <div class="info-section">
-                <div class="ongoing-icon inline"></div>
+                <div class="ongoing-icon inline">
+                  <span class="icon-clock"></span>
+                </div>
                 <div class="remaining-text inline">
                     <div>35m</div>
                     <div>remaining</div>
@@ -50,37 +54,42 @@
                 </div>
                 </div>
                 <div class="info-section">
-                <div v-on:click="toggleMinimize" class="hide-course-blurb-icon"></div>
+                <div v-on:click="toggleMinimize" class="hide-course-blurb-icon">
+                  <span class="icon-up-arrow"></span>
+                </div>
             </div>
         </div>
       </div>
 </template>
 <script>
-    export default {
-        name: 'CourseInfoSUmmary',
-        props: {
-            courseName: {
-                type: String
-            },
-            courseDept: {
-                type: String
-            },
-            courseDeptNumber: {
-                type: Number
-            }
-        },
-        data() {
-            return {
-                minimized: false
-            }
-        },
-        methods: {
-            toggleMinimize () {
-                this.minimized = !this.minimized
-            }
-        }
 
-    }
+  import '@/assets/icon-font.css'  
+
+  export default {
+      name: 'CourseInfoSUmmary',
+      props: {
+          courseName: {
+              type: String
+          },
+          courseDept: {
+              type: String
+          },
+          courseDeptNumber: {
+              type: Number
+          }
+      },
+      data() {
+          return {
+              minimized: false
+          }
+      },
+      methods: {
+          toggleMinimize () {
+              this.minimized = !this.minimized
+          }
+      }
+
+  }
 </script>
 <style>
 .highlight {
@@ -104,6 +113,7 @@
     border: 1px solid rgba(0, 0, 0, 0.5);
     width: 30px;
     height: 30px;
+    line-height: 30px;
     position: absolute;
     right: 20px;
     bottom: 20px;
@@ -111,6 +121,7 @@
     cursor: pointer;
     transition: border 0.25s, box-shadow 0.25s;
     text-align: center;
+    font-size: 0.7rem;
 }
 
 .hide-course-blurb-icon:hover {
@@ -214,16 +225,23 @@
   .ongoing-icon {
     width: 60px;
     height: 60px;
+    line-height: 60px;
     background-color: #FC5D60;
     border-radius: 5px;
+    text-align: center;
+    color: #fff;
+    font-size: 2rem;
   }
 
   .ongoing-icon-min {
     width: 25px;
     height: 25px;
+    line-height: 25px;
     background-color: #FC5D60;
     border-radius: 3px;
     margin-right: 15px;
+    text-align: center;
+    color: #fff;
   }
 
   .inline {
