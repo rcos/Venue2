@@ -18,18 +18,12 @@
 
 <script>
     export default {
-        name: 'SquareLoader',
-        props: {},
-        computed: {},
-        components: {},
-        data(){ return{
-          
-        } }
+        name: 'SquareLoader'
     }
 </script>
 
 <style>
-.self-building-square-spinner, .self-building-square-spinner * {
+  .self-building-square-spinner, .self-building-square-spinner div {
       box-sizing: border-box;
     }
 
