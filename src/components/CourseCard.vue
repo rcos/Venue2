@@ -56,25 +56,29 @@
 	/*width: 16rem;*/
   width: 20rem;
 	height: 3rem;
-  padding-top: 0.7rem;
-  box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.07);
+  line-height: 3rem;
+  box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.04);
   border-radius: 3px;
   cursor: pointer;
-  transition: background-color 0.25s, box-shadow 0.25s, width, 0.25s;
-  color: black;
+  transition: background-color 0.25s, box-shadow 0.25s, width, 0.25s, border 0.25s;
+  color: rgba(0, 0, 0, 0.81);
+  font-family: "Segoe UI";
+  border: 1px solid rgba(107, 163, 195, 0.7);
 }
 
 .course-card:hover {
-  box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(85, 136, 166, 1);
+  box-shadow: 0px 3px 10px 7px rgba(0, 0, 0, 0.04);
 }
 
 .color-box {
 	border-radius: 3px;
-	width: 1.5rem;
-	height: 1.5rem;
-	margin-left: 0.5rem;
+	width: 1rem;
+	height: 1rem;
+	margin-left: 1rem;
   display: inline-block;
-  vertical-align: top;
+  vertical-align: center;
+  margin-right: 0.5rem;
 }
 
 .blue-box {
@@ -105,25 +109,15 @@
 }
 
 .course-title {
-  float: left;
   display: inline-block;
   font-size: 0.7rem;
-  vertical-align: middle;
   color: #1591C5;
-  margin-top: 0.3rem;
 }
 
 .course-name {
   display: inline-block;
-  vertical-align: middle;
   margin-left: 0.85rem;
-}
-
-/*Desktop*/
-@media (min-width: 1200px) {
-  .course-card:hover {
-    width: 22rem;
-  }
+  font-size: 0.9rem;
 }
 
 /*Medium devices (tablets and below)*/
