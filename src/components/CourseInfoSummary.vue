@@ -110,7 +110,7 @@
     padding-bottom: 20px;
   }
 .hide-course-blurb-icon {
-    border: 1px solid rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(64, 98, 120, 0.6);
     width: 30px;
     height: 30px;
     line-height: 30px;
@@ -122,10 +122,11 @@
     transition: border 0.25s, box-shadow 0.25s;
     text-align: center;
     font-size: 0.7rem;
+    color: rgba(64, 98, 120, 0.9);
 }
 
 .hide-course-blurb-icon:hover {
-    border: 1px solid rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(64, 98, 120, 0.9);
     box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.05);
 }
 
