@@ -24,7 +24,7 @@
                 />%</span>
                 <div class="attendance-up-arrow">
                   <div class="actual-up-arrow inline-middle"></div>
-                  <div class="inline-middle attendance-percentage-change-text">+2%</div>
+                  <div class="inline-middle attendance-percentage-change-text">+<ICountUp :endVal="2" />%</div>
                 </div>
                 <div class="attendance-down-arrow">
                   <div class="actual-down-arrow inline-middle"></div>
@@ -267,7 +267,7 @@ export default {
   }
 
   .group-btn {
-    border: 1px solid rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(64, 98, 120, 0.6);
     transition: border 0.25s, box-shadow 0.25s;
     text-align: center;
     cursor: pointer;
@@ -275,20 +275,21 @@ export default {
     height: 35px;
     line-height: 35px;
     font-size: 0.9rem;
+    color: rgba(64, 98, 120, 0.9);
   }
 
   .group-btn.active {
-    border: 1px solid rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(64, 98, 120, 0.9);
     box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.1);
   }
 
   .group-btn.active:hover {
-    border: 1px solid rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(64, 98, 120, 0.9);
     box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.1);
   }
 
   .group-btn:hover {
-    border: 1px solid rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(64, 98, 120, 0.7);
     box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.05);
   }
 
