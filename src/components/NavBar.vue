@@ -42,7 +42,7 @@
     <hide-at breakpoint="mediumAndBelow">
         <router-link :to="{name: 'settings'}">
           <div class="user-name float-right">
-            <div v-on:click="toggleSettings" class="name-box">{{ current_user.first_name }} {{ current_user.last_name }}</div>
+            <div class="name-box">{{ current_user.first_name }} {{ current_user.last_name }}</div>
           </div>
         </router-link>
       </hide-at>

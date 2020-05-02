@@ -21,7 +21,7 @@
     <div v-else-if="courses_section">
       <div class="courses-section-title">
         <div><h4  class="section-title">Courses</h4></div>
-        <div v-if="courses_loaded != 0" class="load-course-size">{{courses_loaded}} courses loaded</div>
+        <div v-if="courses_loaded != 0" class="load-course-size">{{courses_loaded}} {{courses_loaded == 1 ? 'course' : 'courses'}} loaded</div>
       </div>
       <CourseList :sizeCallback="setCourseSize" />
     </div>

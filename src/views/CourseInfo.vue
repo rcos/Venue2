@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="spinner-border event-card-spinner" role="status" v-if="!course_has_loaded">
-      <span class="sr-only">Loading...</span>
+    <div class="loader-box" role="status" v-if="!course_has_loaded">
+      <SquareLoader />
     </div>
-    <div class="course-info-container" v-else>
+    <div v-else class="course-info-container">
       <!-- Course and event container -->
       <div class="course-event-container">
         <div class="info-section" id="course-info">
@@ -66,15 +66,13 @@
   import SectionAPI from '@/services/SectionAPI.js';
   import EventAPI from '@/services/EventAPI.js';
   import EventHistoryList from '@/components/EventHistoryList.vue';
+  import SquareLoader from '@/components/Loaders/SquareLoader.vue'
 
 export default {
   name: 'CourseInfo',
-  props: {
-  },
-  computed: {
-  },
   components: {
-    EventHistoryList
+    EventHistoryList,
+    SquareLoader
   },
   data(){
     return {
@@ -111,25 +109,54 @@ export default {
       }
     },
     async getCourse() {
-      const response = await CourseAPI.getCourse(this.course_id)
-      this.course = response.data
-      this.course_has_loaded = true
+      // const response = await CourseAPI.getCourse(this.course_id)
+      // this.course = response.data
+      // this.course_has_loaded = true
+
+      console.log(`GetCourse(): Getting courses for instructors`)
+      CourseAPI.getCourse(this.course_id)
+      .then(response => {
+
+        console.log(`GetCourse(): Courses recieved`)
+        console.log(response)
+        this.course = response.data
+        this.course_has_loaded = true
+      })
     },
     async getSectionWithCourse() {
-      const response = await SectionAPI.getSectionWithCourse(this.section_id)
-      this.section = response.data
-      this.course = this.section.course
-      this.course_has_loaded = true
+      // const response = await SectionAPI.getSectionWithCourse(this.section_id)
+      // this.section = response.data
+      // this.course = this.section.course
+      // this.course_has_loaded = true
+
+      SectionAPI.getSectionWithCourse(this.section_id)
+      .then(response => {
+        this.section = response.data
+        this.course = this.section.course
+        this.course_has_loaded = true
+      })
     },
     async getActiveEventsForCourse() {
-      const response = await EventAPI.getActiveEventsForCourse(this.course_id)
-      this.active_events = response.data
-      this.getRemainingTimeForActiveEvents()
+      // const response = await EventAPI.getActiveEventsForCourse(this.course_id)
+      // this.active_events = response.data
+      // this.getRemainingTimeForActiveEvents()
+
+      EventAPI.getActiveEventsForCourse(this.course_id)
+      .then(response => {
+        this.active_events = response.data
+        this.getRemainingTimeForActiveEvents()
+      })
     },
     async getActiveEventsForSection() {
-      const response = await EventAPI.getActiveEventsForSection(this.section_id)
-      this.active_events = response.data
-      this.getRemainingTimeForActiveEvents()
+      // const response = await EventAPI.getActiveEventsForSection(this.section_id)
+      // this.active_events = response.data
+      // this.getRemainingTimeForActiveEvents()
+
+      EventAPI.getActiveEventsForSection(this.section_id)
+      .then(response => {
+        this.active_events = response.data
+        this.getRemainingTimeForActiveEvents()
+      })
     },
     getRemainingTimeForActiveEvents() {
       this.active_events.forEach(active_event => {
@@ -177,6 +204,10 @@ export default {
     text-align: left;
     width: 100%;
     margin-top: -3px;
+  }
+
+  .loader-box {
+    margin-top: 100px;
   }
 
   #course-info {
