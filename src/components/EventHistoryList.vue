@@ -5,30 +5,62 @@
       <p>~ No events ~</p>
     </div>
 
-    <div v-else class="attendance-month-container" v-for="(month,index) in sortedMonths(event_months)">
-      <div class="month-bar" v-on:click="toggleMonthVisibility(month)" ><span class="month">{{ month_names[month] }}</span></div>
-      <div class="event-pill-container">
-        <div class="event-pill-list" v-if="monthVisible(month)" v-for="event in event_history_by_month[index]">
-        <router-link :to="{name: 'event_info', params: { event_id: event._id }}">
-          <div class="event-pill">
-            <div class="left-side">
-              <div class="day-of-week">Mon</div>
-              <div class="day-of-month">10</div>
+    <div v-else>
+
+      <show-at breakpoint="mediumAndAbove">    
+
+        <div>
+        
+          <div class="attendance-month-container" v-for="(month,index) in sortedMonths(event_months)">
+            <div class="month-bar" v-on:click="toggleMonthVisibility(month)" ><span class="month">{{ month_names[month] }}</span></div>
+
+            <div class="event-pill-container">
+              <div class="event-pill-list" v-if="monthVisible(month)" v-for="event in event_history_by_month[index]">
+                <router-link :to="{name: 'event_info', params: { event_id: event._id }}">
+                  <div class="event-pill">
+                    <div class="left-side">
+                      <div class="day-of-week">Mon</div>
+                      <div class="day-of-month">10</div>
+                    </div>
+                    <div class="right-side">
+                      <div class="name-of-event">Online Class #1</div>
+                      <div class="location-of-event">WebEx Meeting</div>
+                    </div>
+                  </div>
+                </router-link>
+              </div>
             </div>
-            <div class="right-side">
-              <div class="name-of-event">Online Class #1</div>
-              <div class="location-of-event">WebEx Meeting</div>
-            </div>
+            
           </div>
-        </router-link>
-      </div>
-      </div>
+
+        </div>
+
+      </show-at>
+      <hide-at breakpoint="mediumAndAbove">
+
+        <div>
+          <div class="attendance-month-container" v-for="(month,index) in sortedMonths(event_months)">
+            <div class="month-bar-mobile" v-on:click="toggleMonthVisibility(month)" ><span class="month">{{ month_names[month] }}</span></div>
+
+            <router-link v-for="event in event_history_by_month[index]" :to="{name: 'event_info', params: { event_id: event._id }}">
+            <div class="event-pill-container-mobile">
+              <div class="day-of-week-mobile">Mon</div>
+              <div class="day-of-month-mobile">10</div>
+            </div>
+            </router-link>
+
+          </div>
+        </div>
+
+      </hide-at>
+
     </div>
   </div>
 </template>
 
 <script>
   import EventAPI from '@/services/EventAPI.js';
+  import {showAt, hideAt} from 'vue-breakpoints';
 
   export default {
     name: 'EventHistoryList',
@@ -40,7 +72,8 @@
     computed: {
     },
     components: {
-
+      showAt,
+      hideAt
     },
     data(){
       return {
@@ -122,6 +155,18 @@
     margin-top: 1rem;
   }
 
+  .month-bar-mobile {
+    margin-left: 2rem;
+    /*border: red solid;*/
+    width: 100%;
+    text-align: left;
+    padding-left: 1rem;
+    font-family: "Segoe UI";
+    position: relative;
+    opacity: 0.9;
+    transition: opacity 0.25s;
+  }
+
   .month-bar {
     margin-left: 2rem;
     /*border: red solid;*/
@@ -147,6 +192,35 @@
     color: rgba(0, 0, 0, 0.7);
   }
 
+  .event-pill-container-mobile {
+    display: inline-block;
+    border: 1px solid rgba(29, 209, 90, 0.8);
+    padding: 6px 15px;
+    margin: 15px 15px;
+    border-radius: 7px;
+    box-shadow: 0px 3px 5px 5px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    font-family: "Segoe UI";
+    cursor: pointer;
+    transition: border 0.25s, box-shadow 0.25s;
+  }
+
+  .event-pill-container-mobile:hover {
+    border: 1px solid rgba(29, 209, 90, 1);
+    box-shadow: 0px 3px 5px 5px rgba(0, 0, 0, 0.07);
+  }
+
+  .event-pill-container-mobile .day-of-week-mobile {
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .event-pill-container-mobile .day-of-month-mobile {
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.86);
+  }
+
   .month-bar:hover {
     opacity: 1;
   }
@@ -164,7 +238,7 @@
     border-bottom: 1px dashed black;
   }
 
-  .month::after {
+  .month-bar .month::after {
     content: "";
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
@@ -242,7 +316,7 @@
 
   .event-pill .right-side .location-of-event {
     font-size: 0.8rem;
-    color: rgba(0, 0, 0, 0.6);
+    color: rgba(0, 0, 0, 0.45);
     position: relative;
     top: -5px;
   }
