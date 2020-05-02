@@ -5,36 +5,12 @@
     </div>
     <div v-else class="course-info-container">
       <!-- Course and event container -->
-      <div class="course-event-container">
-        <div class="info-section" id="course-info">
-          <h2 class="course-info-header">Course Info</h2>
-          <div class="course-info-div">
-            <div class="course-name-div">
-              <h3 class="course-name">{{ course.name }}</h3>
-            </div>
-            <div class="dept-and-time-area">
-              <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
-              <div class="time-block">2:00pm-3:50pm</div>
-            </div>
-          </div>
-        </div>
-        <div class="info-section" id="event-info">
-          <router-link v-if="is_instructor" :to="{name: 'new_event', params: { course_id: course._id }}">
-            <button class="new-event-btn">Create new event for {{course.dept }} {{ course.course_number }}</button>
-          </router-link>
-          <div class="active-events-container">
-            <router-link class="active-event-pill" v-for="active_event in active_events" :key="active_event._id" :to="{name: 'event_info', params: { event_id: active_event._id }}">
-              <p class="active-event-card-section" id="active-event-name">{{ active_event.title }}</p>
-              <p class="active-event-card-section" id="active-event-location">{{ active_event.location }}</p>
-              <div class="active-event-card-section" id="active-event-time-remaining">
-                <span v-if="active_event.remaining_days > 0">{{ active_event.remaining_days }}d </span>
-                <span v-if="active_event.remaining_hours > 0">{{ active_event.remaining_hours }}h </span>
-                <span v-if="active_event.remaining_mins > 0">{{ active_event.remaining_mins }}m</span>
-              </div>
-            </router-link>
-          </div>
-        </div>
-      </div>
+      <div class="page-title"><h2 class="course-info-header">Course Info</h2></div>
+      
+      <CourseInfoSummary 
+        :courseName="course.name"
+        :courseDept="course.dept"
+        :courseDeptNumber="course.course_number"/>
       <!-- Attendance history -->
       <div class="attendance-history-container">
         <div class="attendance-history-header">
@@ -62,17 +38,37 @@
 </template>
 
 <script>
+
+  // <div class="info-section" id="event-info">
+  //   <router-link v-if="is_instructor" :to="{name: 'new_event', params: { course_id: course._id }}">
+  //     <button class="new-event-btn">Create new event for {{course.dept }} {{ course.course_number }}</button>
+  //   </router-link>
+  //   <div class="active-events-container">
+  //     <router-link class="active-event-pill" v-for="active_event in active_events" :key="active_event._id" :to="{name: 'event_info', params: { event_id: active_event._id }}">
+  //       <p class="active-event-card-section" id="active-event-name">{{ active_event.title }}</p>
+  //       <p class="active-event-card-section" id="active-event-location">{{ active_event.location }}</p>
+  //       <div class="active-event-card-section" id="active-event-time-remaining">
+  //         <span v-if="active_event.remaining_days > 0">{{ active_event.remaining_days }}d </span>
+  //         <span v-if="active_event.remaining_hours > 0">{{ active_event.remaining_hours }}h </span>
+  //         <span v-if="active_event.remaining_mins > 0">{{ active_event.remaining_mins }}m</span>
+  //       </div>
+  //     </router-link>
+  //   </div>
+  // </div>
+
   import CourseAPI from '@/services/CourseAPI.js';
   import SectionAPI from '@/services/SectionAPI.js';
   import EventAPI from '@/services/EventAPI.js';
   import EventHistoryList from '@/components/EventHistoryList.vue';
-  import SquareLoader from '@/components/Loaders/SquareLoader.vue'
+  import SquareLoader from '@/components/Loaders/SquareLoader.vue';
+  import CourseInfoSummary from '@/components/CourseInfoSummary.vue';
 
 export default {
   name: 'CourseInfo',
   components: {
     EventHistoryList,
-    SquareLoader
+    SquareLoader,
+    CourseInfoSummary
   },
   data(){
     return {
@@ -178,12 +174,19 @@ export default {
 <style scoped>
   .course-info-container {
     /*border: blue solid;*/
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .page-title {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 
   .course-event-container {
     /*border: green solid;*/
     overflow: hidden;
-    padding-left: 6rem;
+    text-align: left;
   }
 
   .course-info-header {
@@ -194,9 +197,28 @@ export default {
 
   .info-section {
     display: inline-block;
-    margin-top: 2rem;
-    float: left;
     font-family: "Segoe UI";
+    margin-left: 0;
+    vertical-align: top;
+  }
+
+  .inline {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .ongoing-icon {
+    width: 60px;
+    height: 60px;
+    background-color: #FC5D60;
+    border-radius: 5px;
+  }
+
+  .remaining-text {
+    font-size: 1.4rem;
+    line-height: 18px;
+    margin-top: 8px;
+    margin-left: 8px;
   }
 
   .dept-and-time-area {
@@ -212,8 +234,8 @@ export default {
 
   #course-info {
     /*border: black solid;*/
-    margin-top: 50px;
     min-width: 340px;
+    width: 32%;
   }
 
   .course-name-div {
@@ -221,7 +243,6 @@ export default {
   }
 
   .course-info-div {
-    margin-top: 30px;
     margin-left: 20px;
   }
 
@@ -230,18 +251,6 @@ export default {
     opacity: 0.8;
     color: #000;
     font-weight: normal;
-  }
-
-  .course-title {
-    width: 40%;
-    background-color: #393939;
-    color: #C1EDFF;
-    text-align: center;
-    border-radius: 3px;
-    height: 28px;
-    cursor: pointer;
-    line-height: 28px;
-    display: inline-block;
   }
 
   .time-block {
@@ -253,7 +262,6 @@ export default {
   }
 
   #event-info {
-    width: 62%;
   }
 
   .new-event-btn {
@@ -296,9 +304,9 @@ export default {
     /*border: blue solid;*/
     /*padding-left: 6rem;*/
     overflow: hidden;
-    margin: auto;
     margin-top: 3rem;
     width: 86%;
+    text-align: left;
   }
 
   .attendance-history-header {
