@@ -23,6 +23,7 @@ import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
 import Settings from './views/Settings.vue';
 import CourseList from './components/CourseList.vue';
+import MobileCourseList from './views/MobileCourseList.vue';
 import CourseInfo from './views/CourseInfo.vue';
 import NewEvent from './views/NewEvent.vue';
 import EventInfo from './views/EventInfo.vue';
@@ -149,7 +150,7 @@ const router = new VueRouter({
     {
         name: 'user_courses',
         path: '/user_courses',
-        component: CourseList
+        component: MobileCourseList
     },
     {
         name: 'course_info',
