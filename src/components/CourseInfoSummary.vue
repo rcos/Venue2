@@ -1,72 +1,106 @@
 <template>
-    <div class="course-event-container">
-        <div v-if="minimized" class="global">
-            <div class="inline">
-                <h3 class="course-name-min">{{courseName}}</h3>
-            </div>
-            <div class="inline">
-                <div class="inline course-title-min">{{courseDept}} {{courseDeptNumber}}</div>
-                <div class="inline time-block-min">2:00pm-3:50pm</div>
-            </div>
-            <div class="inline">
-                <div class="inline ongoing-icon-min"></div>
-                <div class="inline">35m remaining</div>
-            </div>
-            <div v-on:click="toggleMinimize" class="hide-course-blurb-icon">
-              <span class="icon-down-arrow"></span>
-            </div>
+    
+    <div>
+
+      <!-- Desktop / Tablet View -->
+      <show-at breakpoint="mediumAndAbove">
+      
+        <div class="course-event-container">
+          <div v-if="minimized" class="global">
+              <div class="inline">
+                  <h3 class="course-name-min">{{courseName}}</h3>
+              </div>
+              <div class="inline">
+                  <div class="inline course-title-min">{{courseDept}} {{courseDeptNumber}}</div>
+                  <div class="inline time-block-min">2:00pm-3:50pm</div>
+              </div>
+              <div class="inline">
+                  <div class="inline ongoing-icon-min"></div>
+                  <div class="inline">35m remaining</div>
+              </div>
+              <div v-on:click="toggleMinimize" class="hide-course-blurb-icon">
+                <span class="icon-down-arrow"></span>
+              </div>
+          </div>
+          <div v-else>
+              <div class="info-section" id="course-info">
+                  <div class="course-info-div">
+                      <div class="course-name-div">
+                      <h3 class="course-name">{{courseName}}</h3>
+                      </div>
+                      <div class="dept-and-time-area">
+                      <div class="course-title-max">{{courseDept}} {{courseDeptNumber}}</div>
+                      <div class="time-block">2:00pm-3:50pm</div>
+                      </div>
+                  </div>
+                  </div>
+                  <div class="info-section">
+                  <div class="ongoing-icon inline">
+                    <span class="icon-clock"></span>
+                  </div>
+                  <div class="remaining-text inline">
+                      <div>35m</div>
+                      <div>remaining</div>
+                  </div>
+                  </div>
+                  <div class="info-section" id="event-info">
+                  <router-link v-if="is_instructor" :to="{name: 'new_event', params: { course_id: course._id }}">
+                      <button class="new-event-btn">Create new event for {{course.dept }} {{ course.course_number }}</button>
+                  </router-link>
+                  <div class="active-events-container">
+                      <router-link class="active-event-pill" v-for="active_event in active_events" :key="active_event._id" :to="{name: 'event_info', params: { event_id: active_event._id }}">
+                      <p class="active-event-card-section" id="active-event-name">{{ active_event.title }}</p>
+                      <p class="active-event-card-section" id="active-event-location">{{ active_event.location }}</p>
+                      <div class="active-event-card-section" id="active-event-time-remaining">
+                          <span v-if="active_event.remaining_days > 0">{{ active_event.remaining_days }}d </span>
+                          <span v-if="active_event.remaining_hours > 0">{{ active_event.remaining_hours }}h </span>
+                          <span v-if="active_event.remaining_mins > 0">{{ active_event.remaining_mins }}m</span>
+                      </div>
+                      </router-link>
+                  </div>
+                  </div>
+                  <div class="info-section">
+                  <div v-on:click="toggleMinimize" class="hide-course-blurb-icon">
+                    <span class="icon-up-arrow"></span>
+                  </div>
+              </div>
+          </div>
         </div>
-        <div v-else>
-            <div class="info-section" id="course-info">
-                <div class="course-info-div">
-                    <div class="course-name-div">
-                    <h3 class="course-name">{{courseName}}</h3>
-                    </div>
-                    <div class="dept-and-time-area">
-                    <div class="course-title-max">{{courseDept}} {{courseDeptNumber}}</div>
-                    <div class="time-block">2:00pm-3:50pm</div>
-                    </div>
-                </div>
-                </div>
-                <div class="info-section">
-                <div class="ongoing-icon inline">
-                  <span class="icon-clock"></span>
-                </div>
-                <div class="remaining-text inline">
-                    <div>35m</div>
-                    <div>remaining</div>
-                </div>
-                </div>
-                <div class="info-section" id="event-info">
-                <router-link v-if="is_instructor" :to="{name: 'new_event', params: { course_id: course._id }}">
-                    <button class="new-event-btn">Create new event for {{course.dept }} {{ course.course_number }}</button>
-                </router-link>
-                <div class="active-events-container">
-                    <router-link class="active-event-pill" v-for="active_event in active_events" :key="active_event._id" :to="{name: 'event_info', params: { event_id: active_event._id }}">
-                    <p class="active-event-card-section" id="active-event-name">{{ active_event.title }}</p>
-                    <p class="active-event-card-section" id="active-event-location">{{ active_event.location }}</p>
-                    <div class="active-event-card-section" id="active-event-time-remaining">
-                        <span v-if="active_event.remaining_days > 0">{{ active_event.remaining_days }}d </span>
-                        <span v-if="active_event.remaining_hours > 0">{{ active_event.remaining_hours }}h </span>
-                        <span v-if="active_event.remaining_mins > 0">{{ active_event.remaining_mins }}m</span>
-                    </div>
-                    </router-link>
-                </div>
-                </div>
-                <div class="info-section">
-                <div v-on:click="toggleMinimize" class="hide-course-blurb-icon">
-                  <span class="icon-up-arrow"></span>
-                </div>
+
+      </show-at>
+
+      <!-- Mobile View -->
+      <hide-at breakpoint="mediumAndAbove">
+        <div class="course-summary-mobile">
+          <div class="summary-course-name">{{courseName}}</div>
+          <div class="summary-dept-and-time-mobile">
+            <div class="summary-dept">{{courseDept}} {{courseDeptNumber}}</div>
+            <div class="summary-time">2:00p-3:50p</div>
+          </div>
+          <div class="summary-ongoing-mobile">
+            <div class="ongoing-icon-mobile"><span class="icon-clock"></span></div>
+            <div class="ongoing-text-mobile">
+              <div>35m</div>
+              <div>remaining</div>
             </div>
+          </div>
         </div>
-      </div>
+      </hide-at>
+
+    </div>
+
 </template>
 <script>
 
-  import '@/assets/icon-font.css'  
+  import '@/assets/icon-font.css'
+  import {showAt, hideAt} from 'vue-breakpoints'
 
   export default {
       name: 'CourseInfoSUmmary',
+      components: {
+        showAt,
+        hideAt
+      },
       props: {
           courseName: {
               type: String
@@ -92,6 +126,62 @@
   }
 </script>
 <style>
+
+.course-summary-mobile {
+  text-align: left;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  font-family: "Segoe UI";
+}
+
+.course-summary-mobile .summary-course-name {
+  font-size: 2.5rem;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.summary-dept-and-time-mobile .summary-dept,
+.summary-dept-and-time-mobile .summary-time {
+  display: inline-block;
+  font-size: 1rem;
+}
+
+.summary-dept-and-time-mobile .summary-dept {
+  background-color: #393939;
+  border-radius: 3px;
+  color: #C1EDFF;
+  font-size: 0.9rem;
+  padding: 4px 10px;
+  margin-right: 10px;
+}
+
+.summary-ongoing-mobile  {
+  margin-top: 25px;
+}
+
+.summary-ongoing-mobile .ongoing-icon-mobile, .summary-ongoing-mobile .ongoing-text-mobile {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.summary-ongoing-mobile .ongoing-text-mobile {
+  font-size: 1.5rem;
+  line-height: 18px;
+  position: relative;
+  top: 5px;
+}
+
+.summary-ongoing-mobile .ongoing-icon-mobile {
+  width: 4rem;
+  height: 4rem;
+  line-height: 4rem;
+  background-color: #FC5D60;
+  text-align: center;
+  border-radius: 3px;
+  margin-right: 10px;
+  color: white;
+  font-size: 2rem;
+}
+
 .highlight {
     border: 1px solid red;
 }
@@ -215,7 +305,7 @@
   }
 
   .time-block-min {
-    min-width: 250px;
+    min-width: 180px;
     margin-left: 10px;
     display: inline-block;
     padding-left: 15px;
@@ -235,6 +325,7 @@
   }
 
   .ongoing-icon-min {
+    margin-left: 20px;
     width: 25px;
     height: 25px;
     line-height: 25px;
