@@ -1,6 +1,9 @@
 <<template>
   <div class="todays-events-list">
-    <div v-if="todays_events.length > 0">
+    <div v-if="!data_loaded">
+      <SquareLoader />
+    </div>
+    <div v-else-if="todays_events.length > 0">
       <div class="todays-events-section">
         <div v-for="(event, index) in todays_events" class="todays-event-container" v-bind:class="{'mleft-one':index===0, 'mleft-four':index!==0}">
           <div v-if="event.started_today" class="todays-event-time">{{ convertToHourMinuteFormat(new Date(event.start_time)) }}</div>
@@ -21,15 +24,18 @@
 <script>
   import EventAPI from '@/services/EventAPI.js'
   import TodaysEventCard from '@/components/TodaysEventCard.vue'
+  import SquareLoader from '@/components/Loaders/SquareLoader.vue'
 
   export default {
     name: 'TodaysEventsList',
     components: {
-      TodaysEventCard
+      TodaysEventCard,
+      SquareLoader
     },
     data(){
       return {
-        todays_events: []
+        todays_events: [],
+        data_loaded: false
       }
     },
     created() {
@@ -38,11 +44,19 @@
     },
     methods: {
       async getTodaysEvents() {
-        let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
-        this.todays_events = response.data
-        //order events by start time
-        this.sortTodaysEventsByStartTime()
-        this.setEventsStartedStoday()
+
+        EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
+        .then(response => {
+          this.data_loaded = true
+          this.todays_events = response_data
+
+          //order events by start time
+          this.sortTodaysEventsByStartTime()
+          this.setEventsStartedStoday()
+        })
+        .catch(err => {
+          this.data_loaded = true
+        })
       },
       convertToHourMinuteFormat(time) {
         let time_string = time.toLocaleTimeString('en-US')
