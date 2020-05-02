@@ -48,7 +48,7 @@
       </hide-at>
       <show-at breakpoint="mediumAndBelow">
         <router-link :to="{name: 'settings'}">
-          <div class="user-name float-right user-top-right">
+          <div class="user-name-mobile user-top-right">
             <p class="d-inline-block mr-2">{{ current_user.first_name }}</p>
           </div>
         </router-link>
@@ -150,6 +150,14 @@
     top: 10px;
     right: 40px;
     cursor: pointer;
+  }
+
+  .user-name-mobile {
+    position: absolute;
+    top: 25px;
+    right: 40px;
+    font-weight: bold;
+    color: #466D85;
   }
 
   .user-name .name-box {
