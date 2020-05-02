@@ -18,7 +18,10 @@
             <div><h4 class="attendance-history-header-text inline-middle">Attendance History</h4></div>
             <div class="attendance-percentage inline-middle">
               <div class="attendance-percentage-number inline-middle">
-                <span class="attendance-percentage-number-text">80%</span>
+                <span class="attendance-percentage-number-text"><ICountUp 
+                  :delay="0"
+                  :endVal="80"
+                />%</span>
                 <div class="attendance-up-arrow">
                   <div class="actual-up-arrow inline-middle"></div>
                   <div class="inline-middle attendance-percentage-change-text">+2%</div>
@@ -83,6 +86,7 @@
   import EventHistoryList from '@/components/EventHistoryList.vue';
   import SquareLoader from '@/components/Loaders/SquareLoader.vue';
   import CourseInfoSummary from '@/components/CourseInfoSummary.vue';
+  import ICountUp from 'vue-countup-v2';
 
   import '@/assets/icon-font.css'  
 
@@ -91,7 +95,8 @@ export default {
   components: {
     EventHistoryList,
     SquareLoader,
-    CourseInfoSummary
+    CourseInfoSummary,
+    ICountUp
   },
   data(){
     return {
