@@ -22,7 +22,9 @@
         props: {},
         computed: {},
         components: {},
-        data(){ return; }
+        data(){ return{
+          
+        } }
     }
 </script>
 

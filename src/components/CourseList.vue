@@ -67,9 +67,11 @@
     methods: {
       async getInstructorCourses() {
         // let response = await CourseAPI.getInstructorCourses(this.current_user._id)
+        // this.data_loaded = true
         // let courses = response.data
         // this.assignBoxColorsToClassObjects(courses)
         // this.courses = courses
+        // if (this.sizeCallback) this.sizeCallback(this.courses.length)
 
         CourseAPI.getInstructorCourses(this.current_user._id)
         .then(response => {
