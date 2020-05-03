@@ -96,7 +96,7 @@
   import {showAt, hideAt} from 'vue-breakpoints'
 
   export default {
-      name: 'CourseInfoSUmmary',
+      name: 'CourseInfoSummary',
       components: {
         showAt,
         hideAt
@@ -110,6 +110,14 @@
           },
           courseDeptNumber: {
               type: Number
+          },
+          is_instructor: {
+            type: Boolean,
+            default: false
+          },
+          active_events :{
+            type: Array,
+            default: () => []
           }
       },
       data() {

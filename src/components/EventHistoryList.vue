@@ -7,11 +7,32 @@
 
     <div v-else>
 
-      <show-at breakpoint="mediumAndAbove">    
+      <show-at breakpoint="small">
+
+        <div>
+          <div class="attendance-month-container" v-for="(month,index) in event_months">
+            <div class="month-bar-mobile">
+              <span class="month">{{ month_names[month] }}</span>
+            </div>
+
+            <router-link 
+              v-for="event in event_history_by_month[index]" 
+              :to="{name: 'event_info', params: { event_id: event._id }}">
+              <div class="event-pill-container-mobile">
+                <div class="day-of-week-mobile">Mon</div>
+                <div class="day-of-month-mobile">10</div>
+              </div>
+            </router-link>
+
+          </div>
+        </div>
+
+      </show-at>
+      <hide-at breakpoint="small">    
 
         <div>
         
-          <div class="attendance-month-container" v-for="(month,index) in sortedMonths(event_months)">
+          <div class="attendance-month-container" v-for="(month,index) in event_months">
             <div class="month-bar" v-on:click="toggleMonthVisibility(month)" ><span class="month">{{ month_names[month] }}</span></div>
 
             <div class="event-pill-container">
@@ -33,23 +54,6 @@
             
           </div>
 
-        </div>
-
-      </show-at>
-      <hide-at breakpoint="mediumAndAbove">
-
-        <div>
-          <div class="attendance-month-container" v-for="(month,index) in sortedMonths(event_months)">
-            <div class="month-bar-mobile" v-on:click="toggleMonthVisibility(month)" ><span class="month">{{ month_names[month] }}</span></div>
-
-            <router-link v-for="event in event_history_by_month[index]" :to="{name: 'event_info', params: { event_id: event._id }}">
-            <div class="event-pill-container-mobile">
-              <div class="day-of-week-mobile">Mon</div>
-              <div class="day-of-month-mobile">10</div>
-            </div>
-            </router-link>
-
-          </div>
         </div>
 
       </hide-at>
@@ -93,13 +97,6 @@
         this.getEventHistoryForSection()
     },
     methods: {
-      sortedMonths(event_months) {
-        if (this.sorting) {
-          this.event_months.sort(this.sorting)
-        }
-
-        return event_months
-      },
       async getEventHistoryForCourse() {
         const response = await EventAPI.getEventHistoryForCourse(this.course._id)
         this.event_history = response.data
