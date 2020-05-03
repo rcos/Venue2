@@ -13,7 +13,8 @@
         <CourseInfoSummary 
           :courseName="course.name"
           :courseDept="course.dept"
-          :courseDeptNumber="course.course_number"/>
+          :courseDeptNumber="course.course_number"
+        />
         <!-- Attendance history -->
         <div class="attendance-history-container">
           <div class="attendance-history-header">
