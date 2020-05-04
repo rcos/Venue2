@@ -21,31 +21,50 @@
             <div class="attendance-history-toolbar">
               <div><h4 class="attendance-history-header-text inline-middle">Attendance History</h4></div>
               <div class="attendance-percentage inline-middle">
-                <div class="attendance-percentage-number inline-middle">
-                  <span class="attendance-percentage-number-text"><ICountUp 
-                    :delay="0"
-                    :endVal="80"
-                  />%</span>
-                  <div class="attendance-up-arrow">
-                    <div class="actual-up-arrow inline-middle"></div>
-                    <div class="inline-middle attendance-percentage-change-text">+<ICountUp :endVal="2" />%</div>
+                <hide-at breakpoint="small">
+                  <div class="attendance-percentage-number inline-middle">
+                    <span class="attendance-percentage-number-text">
+                    <ICountUp 
+                      :delay="0"
+                      :endVal="80"
+                    />%</span>
+                    <div class="attendance-up-arrow">
+                      <div class="actual-up-arrow inline-middle"></div>
+                      <div class="inline-middle attendance-percentage-change-text">+<ICountUp :endVal="2" />%</div>
+                    </div>
+                    <div class="attendance-down-arrow">
+                      <div class="actual-down-arrow inline-middle"></div>
+                      <div class="inline-middle attendance-percentage-change-text"></div>
+                    </div>
                   </div>
-                  <div class="attendance-down-arrow">
-                    <div class="actual-down-arrow inline-middle"></div>
-                    <div class="inline-middle attendance-percentage-change-text"></div>
+                </hide-at>
+                <show-at breakpoint="small">
+                  <div class="attendance-percentage-number-mobile">
+                    <div class="percentage-number-mobile inline">
+                      <span class="percentage-number">
+                        <ICountUp
+                          :delay="0"
+                          :endVal="80"
+                        />
+                      </span>%
+                    </div>
+                    <div class="percentage-change-arrow-mobile inline"></div>
+                    <div class="percentage-change-number-mobile inline">+<ICountUp :endVal="2" /></div>
                   </div>
-                </div>
+                </show-at>
               </div>
               <!--<p class="section-selector">all sections</p>-->
             </div>
-            <div class="right-function-buttons">
-              <div class="inline btn-group-left group-btn list-style-grid active">
-                <span class="icon-grid-1"></span>
+            <hide-at breakpoint="small">
+              <div class="right-function-buttons">
+                <div v-bind:class="'inline btn-group-left group-btn list-style-grid ' + (grid_view ? 'active' : '')" v-on:click="setGridMode(true)">
+                  <span class="icon-grid-1"></span>
+                </div>
+                <div v-bind:class="'inline btn-group-right group-btn list-style-list ' + (!grid_view ? 'active' : '')" v-on:click="setGridMode(false)">
+                  <span class="icon-list"></span>
+                </div>
               </div>
-              <div class="inline btn-group-right group-btn list-style-list">
-                <span class="icon-list"></span>
-              </div>
-            </div>
+            </hide-at>
             <!--<div class="right-function-buttons function-button">
               <div class="ascending-descending" v-on:click="toggleSortOrder">
                 <img src="@/assets/left-arrow.svg" 
@@ -57,8 +76,8 @@
               </div>
             </div>-->
           </div>
-          <EventHistoryList v-if="is_instructor" v-bind:course="course" :sorting="event_sorting_fn" />
-          <EventHistoryList v-else v-bind:section="section" :sorting="event_sorting_fn"/>
+          <EventHistoryList v-if="is_instructor" v-bind:course="course" :sorting="event_sorting_fn" :grid_mode="grid_view"/>
+          <EventHistoryList v-else v-bind:section="section" :sorting="event_sorting_fn" :grid_mode="grid_view"/>
           </div>
         </div>
       </div>
@@ -114,7 +133,8 @@ export default {
       active_events: [],
       course_has_loaded: false,
       sort_ascending: true,
-      event_sorting_fn: Function
+      event_sorting_fn: Function,
+      grid_view: true
     }
   },
   created() {
@@ -131,6 +151,9 @@ export default {
     }
   },
   methods: {
+    setGridMode (val_) {
+      this.grid_view = val_; 
+    },
     toggleSortOrder () {
       this.sort_ascending = !this.sort_ascending;
       // change the sorting function passed to the EventHistoryList
@@ -224,6 +247,19 @@ export default {
     /*border: green solid;*/
     overflow: hidden;
     text-align: left;
+  }
+
+  .attendance-percentage-number-mobile {
+    font-family: "Segoe UI";
+  }
+
+  .percentage-change-arrow-mobile {
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid #48E57C;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    margin-left: 5px;
+    margin-right: 5px;
   }
 
   .course-info-header {

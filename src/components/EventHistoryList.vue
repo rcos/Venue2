@@ -36,7 +36,8 @@
             <div class="month-bar" v-on:click="toggleMonthVisibility(month)" ><span class="month">{{ month_names[month] }}</span></div>
 
             <div class="event-pill-container">
-              <div class="event-pill-list" v-if="monthVisible(month)" v-for="event in event_history_by_month[index]">
+              <!-- Grid Mode -->
+              <div class="event-pill-list" v-if="monthVisible(month) && grid_mode" v-for="event in event_history_by_month[index]">
                 <router-link :to="{name: 'event_info', params: { event_id: event._id }}">
                   <div class="event-pill">
                     <div class="left-side">
@@ -47,6 +48,17 @@
                       <div class="name-of-event">Online Class #1</div>
                       <div class="location-of-event">WebEx Meeting</div>
                     </div>
+                  </div>
+                </router-link>
+              </div>
+              
+              <!-- List Mode -->
+              <div class="event-pill-list-mode" v-if="monthVisible(month) && !grid_mode" v-for="event in event_history_by_month[index]">
+                <router-link :to="{name: 'event_info', params: {event_id: event._id}}">
+                  <div class="event-pill-list-item">
+                    <div class="event-date-section">Mon 10</div>
+                    <div class="event-name-section">Online Class #1</div>
+                    <div class="event-location-section">WebEx Meeting</div>
                   </div>
                 </router-link>
               </div>
@@ -71,7 +83,11 @@
     props: {
       course: Object,
       section: Object,
-      sorting: Function
+      sorting: Function,
+      grid_mode: {
+        type: Boolean,
+        default: false
+      }
     },
     computed: {
     },
@@ -146,6 +162,45 @@
 </script>
 
 <style scoped>
+
+  .event-pill-list-mode {
+    width: 45%;
+    border: 1px solid #24E565;
+    display: inline-block;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    box-sizing: border-box;
+    margin-top: 0.6rem;
+    font-size: 0.9rem;
+    padding: 0px 10px;
+    border-radius: 5px;
+    box-shadow: 0px 3px 5px 5px rgba(0, 0, 0, 0.065);
+    font-family: "Segoe UI";
+    height: 40px;
+    line-height: 40px;
+  }
+
+  .event-pill-list-item .event-date-section, 
+  .event-pill-list-item .event-name-section, 
+  .event-pill-list-item .event-location-section {
+    display: inline-block;
+  }
+
+  .event-pill-list-item .event-date-section {
+    width: 20%;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .event-pill-list-item .event-name-section {
+    width: 50%;
+    color: rgba(0, 0, 0, 1);
+  }
+
+  .event-pill-list-item .event-location-section {
+    width: 30%;
+    color: rgba(0, 0, 0, 0.5);
+  }
+
   .attendance-month-container {
     /*border: green solid;*/
     overflow: hidden;
@@ -262,7 +317,7 @@
   .event-pill {
     border: 1px solid rgba(35, 217, 96, 0.5);
     width: 250px;
-    height: 70px;
+    height: 60px;
     min-width: 150px;
     border-radius: 5px;
     box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.055);
