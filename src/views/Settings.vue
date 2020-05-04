@@ -11,7 +11,7 @@
         <div class="settings-body">
             <div class="name-area">
                 <div class="name-div">{{ current_user.first_name }} {{ current_user.last_name }}</div>
-                <div class="logout-div"><div class="logout-button">Logout</div></div>
+                <div class="logout-div"><div class="logout-button" v-on:click="logoutUser">Logout</div></div>
             </div>
 
             <div class="setting-option-section">
@@ -65,7 +65,8 @@
       getCurrentUser() {
         this.current_user = this.$store.state.user.current_user
       },
-      logOut() {
+      logoutUser() {
+        console.log('logging out')
         this.$store.dispatch('logout')
       }
     }
@@ -195,6 +196,7 @@
 
     .logout-button {
         background-color: #FC6F71;
+        cursor: pointer;
     }
 
 </style>
