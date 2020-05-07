@@ -1,68 +1,60 @@
 <template>
   <div>
-    
-
-    <div>
-      <div class="loader-box" role="status" v-if="!course_has_loaded">
-        <SquareLoader />
-      </div>
-      <div v-else class="course-info-container">
-        <!-- Course and event container -->
-        <div class="page-title"><h2 class="course-info-header">Course Info</h2></div>
-        
-        <CourseInfoSummary 
-          :courseName="course.name"
-          :courseDept="course.dept"
-          :courseDeptNumber="course.course_number"/>
-        <!-- Attendance history -->
-        <div class="attendance-history-container">
-          <div class="attendance-history-header">
-            <div class="attendance-history-toolbar">
-              <div><h4 class="attendance-history-header-text inline-middle">Attendance History</h4></div>
-              <div class="attendance-percentage inline-middle">
-                <div class="attendance-percentage-number inline-middle">
-                  <span class="attendance-percentage-number-text"><ICountUp 
-                    :delay="0"
-                    :endVal="80"
-                  />%</span>
-                  <div class="attendance-up-arrow">
-                    <div class="actual-up-arrow inline-middle"></div>
-                    <div class="inline-middle attendance-percentage-change-text">+<ICountUp :endVal="2" />%</div>
-                  </div>
-                  <div class="attendance-down-arrow">
-                    <div class="actual-down-arrow inline-middle"></div>
-                    <div class="inline-middle attendance-percentage-change-text"></div>
-                  </div>
+    <div class="loader-box" role="status" v-if="!course_has_loaded">
+      <SquareLoader />
+    </div>
+    <div v-else class="course-info-container">
+      <!-- Course and event container -->
+      <div class="page-title"><h2 class="course-info-header">Course Info</h2></div>
+      
+      <CourseInfoSummary 
+        :courseName="course.name"
+        :courseDept="course.dept"
+        :courseDeptNumber="course.course_number"/>
+      <!-- Attendance history -->
+      <div class="attendance-history-container">
+        <div class="attendance-history-header">
+          <div class="attendance-history-toolbar">
+            <div><h4 class="attendance-history-header-text inline-middle">Attendance History</h4></div>
+            <div class="attendance-percentage inline-middle">
+              <div class="attendance-percentage-number inline-middle">
+                <span class="attendance-percentage-number-text">80%</span>
+                <div class="attendance-up-arrow">
+                  <div class="actual-up-arrow inline-middle"></div>
+                  <div class="inline-middle attendance-percentage-change-text">+2%</div>
+                </div>
+                <div class="attendance-down-arrow">
+                  <div class="actual-down-arrow inline-middle"></div>
+                  <div class="inline-middle attendance-percentage-change-text"></div>
                 </div>
               </div>
-              <!--<p class="section-selector">all sections</p>-->
             </div>
-            <div class="right-function-buttons">
-              <div class="inline btn-group-left group-btn list-style-grid active">
-                <span class="icon-grid-1"></span>
-              </div>
-              <div class="inline btn-group-right group-btn list-style-list">
-                <span class="icon-list"></span>
-              </div>
+            <!--<p class="section-selector">all sections</p>-->
+          </div>
+          <div class="right-function-buttons">
+            <div class="inline btn-group-left group-btn list-style-grid active">
+              <span class="icon-grid-1"></span>
             </div>
-            <!--<div class="right-function-buttons function-button">
-              <div class="ascending-descending" v-on:click="toggleSortOrder">
-                <img src="@/assets/left-arrow.svg" 
-                  v-bind:class="{'focused-image': sort_ascending, 'unfocused-image': !sort_ascending}" 
-                  style="position:relative;top:-3px;transform:rotate(90deg);width:0.6rem;" />
-                <img src="@/assets/left-arrow.svg" 
-                  v-bind:class="{'focused-image': !sort_ascending, 'unfocused-image': sort_ascending}"
-                  style="position:relative;top:3px;transform:rotate(270deg);width:0.6rem;" />
-              </div>
-            </div>-->
+            <div class="inline btn-group-right group-btn list-style-list">
+              <span class="icon-list"></span>
+            </div>
           </div>
-          <EventHistoryList v-if="is_instructor" v-bind:course="course" :sorting="event_sorting_fn" />
-          <EventHistoryList v-else v-bind:section="section" :sorting="event_sorting_fn"/>
-          </div>
+          <!--<div class="right-function-buttons function-button">
+            <div class="ascending-descending" v-on:click="toggleSortOrder">
+              <img src="@/assets/left-arrow.svg" 
+                v-bind:class="{'focused-image': sort_ascending, 'unfocused-image': !sort_ascending}" 
+                style="position:relative;top:-3px;transform:rotate(90deg);width:0.6rem;" />
+              <img src="@/assets/left-arrow.svg" 
+                v-bind:class="{'focused-image': !sort_ascending, 'unfocused-image': sort_ascending}"
+                style="position:relative;top:3px;transform:rotate(270deg);width:0.6rem;" />
+            </div>
+          </div>-->
+        </div>
+        <EventHistoryList v-if="is_instructor" v-bind:course="course" :sorting="event_sorting_fn" />
+        <EventHistoryList v-else v-bind:section="section" :sorting="event_sorting_fn"/>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -91,8 +83,6 @@
   import EventHistoryList from '@/components/EventHistoryList.vue';
   import SquareLoader from '@/components/Loaders/SquareLoader.vue';
   import CourseInfoSummary from '@/components/CourseInfoSummary.vue';
-  import ICountUp from 'vue-countup-v2';
-  import {showAt, hideAt} from 'vue-breakpoints';
 
   import '@/assets/icon-font.css'  
 
@@ -101,10 +91,7 @@ export default {
   components: {
     EventHistoryList,
     SquareLoader,
-    CourseInfoSummary,
-    ICountUp,
-    showAt,
-    hideAt
+    CourseInfoSummary
   },
   data(){
     return {
@@ -275,7 +262,7 @@ export default {
   }
 
   .group-btn {
-    border: 1px solid rgba(64, 98, 120, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.4);
     transition: border 0.25s, box-shadow 0.25s;
     text-align: center;
     cursor: pointer;
@@ -283,21 +270,20 @@ export default {
     height: 35px;
     line-height: 35px;
     font-size: 0.9rem;
-    color: rgba(64, 98, 120, 0.9);
   }
 
   .group-btn.active {
-    border: 1px solid rgba(64, 98, 120, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.9);
     box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.1);
   }
 
   .group-btn.active:hover {
-    border: 1px solid rgba(64, 98, 120, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.9);
     box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.1);
   }
 
   .group-btn:hover {
-    border: 1px solid rgba(64, 98, 120, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.7);
     box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.05);
   }
 
