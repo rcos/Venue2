@@ -137,14 +137,13 @@
   .empty-history {
     line-height: 100px;
     height: 100px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
     width: 85%;
     margin-top: 20px;
     border-radius: 10px;
     font-size: 1.1rem;
     font-family: "Segoe UI";
-    font-style: italic;
-    text-align: center;
-    color: rgba(0, 0, 0, 0.7);
+    font-weight: italic;
   }
 
   .month-bar:hover {

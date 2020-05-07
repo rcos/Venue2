@@ -1,24 +1,6 @@
 <template>
   <router-link :to="is_instructor ? {name: 'course_info', params: { id: course._id }} : {name: 'course_info', params: { id: section._id }}">
-    <div v-if="mobile" class="course-card-mobile">
-    	<div class="color-box" v-bind:class="{
-        'blue-box':box_color == 'blue', 
-        'red-box':box_color == 'red', 
-        'orange-box':box_color == 'orange',
-        'green-box':box_color == 'green',
-        'purple-box':box_color == 'purple'}"></div>
-      <div v-if="is_instructor" class="course-info">
-        <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
-        <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>
-        <div v-else class="course-name">{{ course.name }}</div>
-      </div>
-      <div v-else class="course-info">
-        <div class="course-title">{{ section.course.dept }} {{ section.course.course_number }}-{{ section.number }}</div>
-        <div v-if="section.course.name.length > 21" class="course-name">{{ section.course.name.substring(0,18) + "..." }}</div>
-        <div v-else class="course-name">{{ section.course.name }}</div>
-      </div>
-    </div>
-    <div v-else class="course-card">
+    <div class="course-card">
     	<div class="color-box" v-bind:class="{
         'blue-box':box_color == 'blue', 
         'red-box':box_color == 'red', 
@@ -46,11 +28,7 @@
     props: {
       course: Object,
       section: Object,
-      box_color: String,
-      mobile: {
-        type: Boolean,
-        default: false
-      }
+      box_color: String
     },
     computed: {
     },
@@ -93,45 +71,6 @@
   box-shadow: 0px 3px 10px 7px rgba(0, 0, 0, 0.04);
 }
 
-.course-card-mobile {
-	height: 4rem;
-  line-height: 4rem;
-  width: 80%;
-  margin: 2rem auto;
-  box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.04);
-  border-radius: 3px;
-  cursor: pointer;
-  transition: background-color 0.25s, box-shadow 0.25s, width, 0.25s, border 0.25s;
-  color: rgba(0, 0, 0, 0.81);
-  font-family: "Segoe UI";
-  border: 1px solid rgba(107, 163, 195, 0.7);
-}
-
-.course-card-mobile:hover {
-  border: 1px solid rgba(85, 136, 166, 1);
-  box-shadow: 0px 3px 10px 7px rgba(0, 0, 0, 0.04);
-}
-
-.course-card-mobile .course-title {
-  font-size: 1rem;
-}
-
-.course-card-mobile .course-info {
-  display: inline-block;
-  width: 80%;
-  height: 1.5rem;
-  text-align: left;
-}
-
-.course-card-mobile .course-title {
-  width: 30%;
-  text-align: center;
-}
-
-.course-card-mobile .course-name {
-  font-size: 1.2rem;
-}
-
 .color-box {
 	border-radius: 3px;
 	width: 1rem;
@@ -167,7 +106,6 @@
   width: 80%;
   height: 1.5rem;
   margin-left: 0.5rem;
-  text-align: left;
 }
 
 .course-title {
