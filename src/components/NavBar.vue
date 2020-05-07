@@ -38,19 +38,15 @@
       </div>
       <!-- Name -->
       <hide-at breakpoint="mediumAndBelow">
-        <router-link :to="{name: 'settings'}">
-          <div class="user-name float-right">
-            <p class="d-inline-block mr-2 user-top-right">{{ current_user.first_name }} {{ current_user.last_name }}</p>
-            <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="">
-          </div>
-        </router-link>
+        <div class="user-name float-right">
+          <p class="d-inline-block mr-2">{{ current_user.first_name }} {{ current_user.last_name }}</p>
+          <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="">
+        </div>
       </hide-at>
       <show-at breakpoint="mediumAndBelow">
-        <router-link :to="{name: 'settings'}">
-          <div class="user-name float-right user-top-right">
-            <p class="d-inline-block mr-2">{{ current_user.first_name }}</p>
-          </div>
-        </router-link>
+        <div class="user-name float-right">
+          <p class="d-inline-block mr-2">{{ current_user.first_name }}</p>
+        </div>
       </show-at>
     </nav>
   </div>
@@ -127,10 +123,6 @@
     text-decoration: none;
     color: #858585;
     font-weight: bold;
-  }
-
-  .user-top-right {
-    color: rgba(0, 0, 0, 0.8);
   }
 
   .active-link {
