@@ -108,6 +108,17 @@
     z-index: 1;
   }
 
+  /*Very small phone sizes*/
+  @media (max-width: 321px) {
+    .mobile-event-card {
+      width: 15rem;
+    }
+
+    .mobile-event-card-extending-background {
+      width: 17rem;
+    }
+  }
+
   .active-container {
     background-color: #516ded;
   }
