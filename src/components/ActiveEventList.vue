@@ -1,7 +1,6 @@
 <<template>
   <div class="active-event-list">
-    <div v-if="!data_loaded"><SquareLoader /></div>
-    <div v-else-if="active_events.length > 0">
+    <div v-if="active_events.length > 0">
       <router-link class="active-event-link" v-for="event in active_events" :key="event._id" :to="{name: 'event_info', params: { event_id: event._id }}">
         <ActiveEventCard v-bind:event="event" />
       </router-link>
@@ -13,18 +12,15 @@
 <script>
   import ActiveEventCard from '@/components/ActiveEventCard.vue'
   import EventAPI from '@/services/EventAPI.js'
-  import SquareLoader from '@/components/Loaders/SquareLoader.vue'
 
   export default {
     name: 'ActiveEventList',
     components: {
-      ActiveEventCard,
-      SquareLoader
+      ActiveEventCard
     },
     data(){
       return {
-        active_events: [],
-        data_loaded: false
+        active_events: []
       }
     },
     created() {
@@ -33,23 +29,10 @@
     },
     methods: {
       async getActiveEvents() {
-
-        EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
-        .then(response => {
-          this.data_loaded = true
-
-          let events = response.data
-          this.updateSubmissionWindowStatuses(events)
-          this.active_events = this.sortEventsbySubmissionWindowStatus(events)
-        })
-        .catch(err => {
-          this.data_loaded = true
-        })
-
-        // let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
-        // let events = response.data
-        // this.updateSubmissionWindowStatuses(events)
-        // this.active_events = this.sortEventsbySubmissionWindowStatus(events)
+        let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
+        let events = response.data
+        this.updateSubmissionWindowStatuses(events)
+        this.active_events = this.sortEventsbySubmissionWindowStatus(events)
       },
       updateSubmissionWindowStatuses(events) {
         let current_time = new Date()

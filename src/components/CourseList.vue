@@ -1,23 +1,19 @@
 <<template>
-  <div>
-    <div class="course-list">
-      <div v-if="is_instructor">
-        <div v-if="!data_loaded"><SquareLoader /></div>
-        <div v-else-if="courses.length > 0">
-          <CourseCard v-for="course in courses" :key="course._id" v-bind:course="course" v-bind:box_color="course.box_color"/>
-        </div>
-        <div v-else>
-          <p class="no-container" id="no-courses">No courses</p>
-        </div>
+  <div class="course-list">
+    <div v-if="is_instructor">
+      <div v-if="courses.length > 0">
+        <CourseCard v-for="course in courses" :key="course._id" v-bind:course="course" v-bind:box_color="course.box_color"/>
       </div>
       <div v-else>
-        <div v-if="!data_loaded"><SquareLoader /></div>
-        <div v-else-if="sections.length > 0">
-          <CourseCard v-for="section in sections" :key="section._id" v-bind:section="section" v-bind:box_color="section.box_color"/>
-        </div>
-        <div v-else>
-          <p class="no-container" id="no-courses">No courses</p>
-        </div>
+        <p class="no-container" id="no-courses">No courses</p>
+      </div>
+    </div>
+    <div v-else>
+      <div v-if="sections.length > 0">
+        <CourseCard v-for="section in sections" :key="section._id" v-bind:section="section" v-bind:box_color="section.box_color"/>
+      </div>
+      <div v-else>
+        <p class="no-container" id="no-courses">No courses</p>
       </div>
     </div>
   </div>
@@ -27,21 +23,15 @@
   import CourseCard from '@/components/CourseCard.vue'
   import CourseAPI from '@/services/CourseAPI.js'
   import SectionAPI from '@/services/SectionAPI.js'
-  import SquareLoader from '@/components/Loaders/SquareLoader.vue'
 
   export default {
     name: 'CourseList',
-    props: {
-      sizeCallback: Function
-    },
     components: {
-      CourseCard,
-      SquareLoader
+      CourseCard
     },
     data(){
       return {
         courses: [],
-        data_loaded: false,
         sections: [],
         is_instructor: Boolean,
         box_color_index: Number,
@@ -66,45 +56,16 @@
     },
     methods: {
       async getInstructorCourses() {
-        // let response = await CourseAPI.getInstructorCourses(this.current_user._id)
-        // this.data_loaded = true
-        // let courses = response.data
-        // this.assignBoxColorsToClassObjects(courses)
-        // this.courses = courses
-        // if (this.sizeCallback) this.sizeCallback(this.courses.length)
-
-        CourseAPI.getInstructorCourses(this.current_user._id)
-        .then(response => {
-          this.data_loaded = true
-
-          let courses = response.data
-          this.assignBoxColorsToClassObjects(courses)
-          this.courses = courses
-
-          if (this.sizeCallback) this.sizeCallback(this.courses.length)
-        })
-        .catch(err => {
-          this.data_loaded = true
-        })
+        let response = await CourseAPI.getInstructorCourses(this.current_user._id)
+        let courses = response.data
+        this.assignBoxColorsToClassObjects(courses)
+        this.courses = courses
       },
       async getSectionsWithCourses() {
-        // let response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
-        // let sections = response.data
-        // this.assignBoxColorsToClassObjects(sections)
-        // this.sections = sections
-
-        SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
-        .then(response => {
-          this.data_loaded = true
-          let sections = response.data
-          this.assignBoxColorsToClassObjects(sections)
-          this.sections = sections
-
-          if (this.sizeCallback) this.sizeCallback(this.sections.length)
-        })
-        .catch(err => {
-          data_loaded = true
-        })
+        let response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
+        let sections = response.data
+        this.assignBoxColorsToClassObjects(sections)
+        this.sections = sections
       },
       assignBoxColorsToClassObjects(class_objects) {
         let box_color_index = 0

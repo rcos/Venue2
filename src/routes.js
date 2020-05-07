@@ -136,10 +136,7 @@ const router = new VueRouter({
       name: 'dashboard',
       path: '/dashboard',
       component: Dashboard,
-      meta: { 
-        requiresAuth: true,
-        title: 'Venue / Dashboard'
-      }
+      meta: { requiresAuth: true }
     },{
       name: 'settings',
       path: '/settings',
