@@ -25,6 +25,7 @@ import CourseList from './components/CourseList.vue';
 import CourseInfo from './views/CourseInfo.vue';
 import NewEvent from './views/NewEvent.vue';
 import EventInfo from './views/EventInfo.vue';
+import WebexTest from './views/WebexTest.vue';
 
 Vue.use(VueRouter);
 
@@ -163,6 +164,14 @@ const router = new VueRouter({
         meta: { 
           requiresAuth: true,
         }
+    },
+    {
+      name: 'webex_test',
+      path: '/webex_test',
+      component: WebexTest,
+      meta: { 
+        requiresAuth: true,
+      }
     }
   ]
 })

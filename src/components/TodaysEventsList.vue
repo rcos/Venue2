@@ -1,16 +1,34 @@
 <<template>
   <div class="todays-events-list">
     <div v-if="todays_events.length > 0">
-      <div class="todays-events-section">
-        <div v-for="(event, index) in todays_events" class="todays-event-container" v-bind:class="{'mleft-one':index===0, 'mleft-four':index!==0}">
-          <div v-if="event.started_today" class="todays-event-time">{{ convertToHourMinuteFormat(new Date(event.start_time)) }}</div>
-          <div v-else class="todays-event-time">{{ convertToMonthDayFormat(new Date(event.start_time)) }} {{ convertToHourMinuteFormat(new Date(event.start_time)) }}</div>
-          <router-link class="active-event-link" :to="{name: 'event_info', params: { event_id: event._id }}">
-            <TodaysEventCard v-bind:event="event" />
-          </router-link>
+      <!-- Desktop and tablet -->
+      <hide-at breakpoint="small">
+        <div class="todays-events-section" id="horizontal-section">
+          <div class="horizontal-timeline"></div>
+          <div v-for="(event, index) in todays_events" class="todays-event-container desktop-event-container" v-bind:class="{'mleft-one':index===0, 'mleft-four':index!==0}">
+            <div v-if="event.started_today" class="todays-event-time desktop-event-time">{{ convertToHourMinuteFormat(new Date(event.start_time)) }}</div>
+            <div v-else class="todays-event-time desktop-event-time">{{ convertToMonthDayFormat(new Date(event.start_time)) }} {{ convertToHourMinuteFormat(new Date(event.start_time)) }}</div>
+            <router-link class="active-event-link" :to="{name: 'event_info', params: { event_id: event._id }}">
+              <TodaysEventCard v-bind:event="event" />
+            </router-link>
+          </div>
         </div>
-      </div>
-      <div class="time-line"></div>
+      </hide-at>
+      <!-- Phone -->
+      <show-at breakpoint="small">
+        <div class="todays-events-section" id="vertical-section">
+          <div class="vertical-timeline"></div>
+          <div v-for="(event, index) in todays_events" class="todays-event-container mobile-event-container">
+            <div v-if="event.started_today" class="todays-event-time mobile-event-time">{{ convertToHourMinuteFormat(new Date(event.start_time)) }}</div>
+            <div v-else class="todays-event-time mobile-event-time">{{ convertToMonthDayFormat(new Date(event.start_time)) }} {{ convertToHourMinuteFormat(new Date(event.start_time)) }}</div>
+            <div class="todays-event-card-wrapper">
+              <router-link class="active-event-link" :to="{name: 'event_info', params: { event_id: event._id }}">
+                <TodaysEventCard v-bind:event="event" />
+              </router-link>
+            </div>
+          </div>
+        </div>
+      </show-at>
     </div>
     <div v-else>
       <p class="no-container" id="no-today">No events today</p>
@@ -21,11 +39,14 @@
 <script>
   import EventAPI from '@/services/EventAPI.js'
   import TodaysEventCard from '@/components/TodaysEventCard.vue'
+  import {showAt, hideAt} from 'vue-breakpoints'
 
   export default {
     name: 'TodaysEventsList',
     components: {
-      TodaysEventCard
+      TodaysEventCard,
+      hideAt,
+      showAt
     },
     data(){
       return {
@@ -79,18 +100,29 @@
 <style scoped>
 .todays-events-section {
   /*border: blue solid;*/
-  height: 9.5rem;
-  overflow-x: auto;
-  overflow-y: hidden;
   white-space: nowrap;
   padding-right: 2rem;
 }
 
-.todays-events-section::-webkit-scrollbar {
+#horizontal-section {
+  height: 9.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+#vertical-section {
+  /*border: blue solid;*/
+  height: 20rem;
+  overflow-y: auto;
+}
+
+#horizontal-section::-webkit-scrollbar,
+#vertical-section::-webkit-scrollbar {
   width: 12px;
 }
 
-.todays-events-section::-webkit-scrollbar-thumb {
+#horizontal-section::-webkit-scrollbar-thumb,
+#vertical-section::-webkit-scrollbar-thumb {
 border-radius: 10px;
 -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
 background-color: #F5F5F5; 
@@ -104,18 +136,39 @@ background-color: #F5F5F5;
   margin-left: 4rem;
 }
 
-.time-line {
+.horizontal-timeline {
   border: #f0f0f0 solid 2px;
   background-color: #f0f0f0;
-  margin-top: -7.7em;
+  position: absolute;
+  width: 30rem;
+  margin-top: 1.75rem;
+}
+
+.vertical-timeline {
+  border: #f0f0f0 solid 2px;
+  background-color: #f0f0f0;
+  position: absolute;
+  width: 2px;
+  margin-left: 7rem;
+  height: 20rem;
+  z-index: 0;
 }
 
 .todays-event-container {
   /*border: red solid;*/
   height: 5rem;
-  width: 10rem;
+}
+
+.desktop-event-container {
   display: inline-block;
   vertical-align: top;
+  width: 10rem;
+}
+
+.mobile-event-container {
+  width: 100%;
+  /*margin-left: 2.5rem;*/
+  margin-top: 2rem;
 }
 
 .todays-event-time {
@@ -126,7 +179,37 @@ background-color: #F5F5F5;
   color: #757575;
 }
 
+.desktop-event-time {
+
+}
+
+.mobile-event-time {
+  display: inline-block;
+  margin-top: 1.5rem;
+  float: left;
+  /*border: red solid;*/
+  width: 5.5rem;
+  /*width: 2rem;*/
+}
+
+.todays-event-card-wrapper {
+  display: inline-block;
+  /*width: 21rem;*/
+  width: 18rem;
+  float: left;
+  /*margin-left: 0.5rem;*/
+  height: 100%;
+  /*border: green solid;*/
+}
+
 .active-event-link {
   color: #2c3e50;
+}
+
+/*Small devices*/
+@media (max-width: 575.98px) {
+  .todays-events-section {
+    padding-right: 0;
+  }
 }
 </style>
