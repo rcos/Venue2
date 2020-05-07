@@ -1,60 +1,25 @@
 <<template>
   <div>
-    <show-at breakpoint="mediumAndAbove">
-      <div class="course-list">
-        <div v-if="is_instructor">
-          <div v-if="!data_loaded"><SquareLoader /></div>
-          <div v-else-if="courses.length > 0">
-            <CourseCard v-for="course in courses" :key="course._id" v-bind:course="course" v-bind:box_color="course.box_color"/>
-          </div>
-          <div v-else>
-            <p class="no-container" id="no-courses">No courses</p>
-          </div>
+    <div class="course-list">
+      <div v-if="is_instructor">
+        <div v-if="!data_loaded"><SquareLoader /></div>
+        <div v-else-if="courses.length > 0">
+          <CourseCard v-for="course in courses" :key="course._id" v-bind:course="course" v-bind:box_color="course.box_color"/>
         </div>
         <div v-else>
-          <div v-if="!data_loaded"><SquareLoader /></div>
-          <div v-else-if="sections.length > 0">
-            <CourseCard v-for="section in sections" :key="section._id" v-bind:section="section" v-bind:box_color="section.box_color"/>
-          </div>
-          <div v-else>
-            <p class="no-container" id="no-courses">No courses</p>
-          </div>
+          <p class="no-container" id="no-courses">No courses</p>
         </div>
       </div>
-    </show-at>
-    <show-at breakpoint="small">
-      <div class="mobile-course-list">
-        
-        <div v-if="is_instructor">
-          <div v-if="!data_loaded"><SquareLoader /></div>
-          <div class="mobile-justify-div" v-else-if="courses.length > 0">
-            <CourseCard v-for="course in courses" 
-              :key="course._id" v-bind:course="course" 
-              v-bind:box_color="course.box_color"
-              mobile
-            />
-          </div>
-          <div v-else>
-            <p class="no-container" id="no-courses">No courses</p>
-          </div>
+      <div v-else>
+        <div v-if="!data_loaded"><SquareLoader /></div>
+        <div v-else-if="sections.length > 0">
+          <CourseCard v-for="section in sections" :key="section._id" v-bind:section="section" v-bind:box_color="section.box_color"/>
         </div>
         <div v-else>
-          <div v-if="!data_loaded"><SquareLoader /></div>
-          <div v-else-if="sections.length > 0">
-            <CourseCard v-for="section in sections" 
-              :key="section._id" 
-              v-bind:section="section" 
-              v-bind:box_color="section.box_color"
-              mobile
-            />
-          </div>
-          <div v-else>
-            <p class="no-container" id="no-courses">No courses</p>
-          </div>
+          <p class="no-container" id="no-courses">No courses</p>
         </div>
-
       </div>
-    </show-at>
+    </div>
   </div>
 </template>
 
@@ -63,7 +28,6 @@
   import CourseAPI from '@/services/CourseAPI.js'
   import SectionAPI from '@/services/SectionAPI.js'
   import SquareLoader from '@/components/Loaders/SquareLoader.vue'
-  import {showAt, hideAt} from 'vue-breakpoints'
 
   export default {
     name: 'CourseList',
@@ -72,9 +36,7 @@
     },
     components: {
       CourseCard,
-      SquareLoader,
-      showAt,
-      hideAt
+      SquareLoader
     },
     data(){
       return {
