@@ -60,12 +60,13 @@
   box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.07);
   border-radius: 3px;
   cursor: pointer;
-  transition: background-color 0.25s, box-shadow 0.25s, width, 0.25s;
+  transition: background-color, box-shadow, width, 0.25s;
   color: black;
 }
 
 .course-card:hover {
-  box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.15);
+  background-color: #e8e8e8;
+  box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.3);
 }
 
 .color-box {
