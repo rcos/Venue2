@@ -7,21 +7,13 @@
 
     <div v-else class="attendance-month-container" v-for="(month,index) in sortedMonths(event_months)">
       <div class="month-bar" v-on:click="toggleMonthVisibility(month)" ><span class="month">{{ month_names[month] }}</span></div>
-      <div class="event-pill-container">
-        <div class="event-pill-list" v-if="monthVisible(month)" v-for="event in event_history_by_month[index]">
+      <div class="event-pill-list" v-if="monthVisible(month)" v-for="event in event_history_by_month[index]">
         <router-link :to="{name: 'event_info', params: { event_id: event._id }}">
           <div class="event-pill">
-            <div class="left-side">
-              <div class="day-of-week">Mon</div>
-              <div class="day-of-month">10</div>
-            </div>
-            <div class="right-side">
-              <div class="name-of-event">Online Class #1</div>
-              <div class="location-of-event">WebEx Meeting</div>
-            </div>
+            <div class="event-day">10</div>
+            <div class="event-title">Class 1</div>
           </div>
         </router-link>
-      </div>
       </div>
     </div>
   </div>
@@ -130,7 +122,7 @@
     padding-left: 1rem;
     font-family: "Segoe UI";
     position: relative;
-    opacity: 0.9;
+    opacity: 0.85;
     transition: opacity 0.25s;
   }
   
@@ -154,13 +146,6 @@
     position: relative;
     padding-right: 15px;
     cursor: pointer;
-    color: #2c3e50;
-    border-bottom: 1px dashed transparent;
-    padding-bottom: 3px;
-  }
-
-  .month-bar:hover .month {
-    border-bottom: 1px dashed black;
   }
 
   .month::after {
@@ -175,75 +160,23 @@
     transform: rotate(180deg);
   }
 
-  .event-pill-container {
-    margin-left: 3.3rem;
-    margin-right: 3.3rem;
-  }
-
   .event-pill-list {
+    width: 80%;
+    margin-left: 3.3rem;
     margin-top: 10px;
-    display: inline-block;
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
   }
 
   .event-pill {
-    border: 1px solid rgba(35, 217, 96, 0.5);
-    width: 250px;
-    height: 70px;
-    min-width: 150px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.055);
-    color: rgba(0, 0, 0, 0.85);
-    transition: border 0.25s, box-shadow 0.25s;
+    border: 1px solid #BBBBBB;
+    text-align: left;
+    height: 38px;
+    line-height: 38px;
+    padding: 0px 10px;
+    transition: border 0.25s;
   }
 
   .event-pill:hover {
-    border: 1px solid rgba(35, 217, 96, 1);
-    box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.08);
-  }
-
-  .event-pill .left-side, .event-pill .right-side {
-    display: inline-block;
-    vertical-align: top;
-  }
-
-  .event-pill .left-side .day-of-week, .event-pill .left-side .day-of-month {
-    width: 100%;
-    display: block;
-    text-align: center;
-  }
-
-  .event-pill .left-side .day-of-week {
-    position: relative;
-    top: 8px;
-    font-size: 0.75rem;
-  }
-
-  .event-pill .left-side .day-of-month {
-    font-weight: bold;
-    font-size: 1.55rem;
-  }
-
-  .event-pill .left-side {
-    width: 25%;
-  }
-
-  .event-pill .right-side {
-    width: 70%;
-    position: relative;
-    top: 8px;
-  }
-
-  .event-pill .right-side .name-of-event {
-    font-size: 0.9rem;
-  }
-
-  .event-pill .right-side .location-of-event {
-    font-size: 0.8rem;
-    color: rgba(0, 0, 0, 0.6);
-    position: relative;
-    top: -5px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
   }
 
   .event-pill .event-day {

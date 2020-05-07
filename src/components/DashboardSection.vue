@@ -19,11 +19,8 @@
     </div>
     <!-- Courses Section -->
     <div v-else-if="courses_section">
-      <div class="courses-section-title">
-        <div><h4  class="section-title">Courses</h4></div>
-        <div v-if="courses_loaded != 0" class="load-course-size">{{courses_loaded}} {{courses_loaded == 1 ? 'course' : 'courses'}} loaded</div>
-      </div>
-      <CourseList :sizeCallback="setCourseSize" />
+      <h4 class="section-title">Courses</h4>
+      <CourseList />
     </div>
   </div>
 </template>
@@ -52,17 +49,12 @@
     },
     data(){
       return {
-        courses_loaded: 0
       }
     },
     created() {
       this.current_user = this.$store.state.user.current_user
     },
     methods: {
-      setCourseSize (_size_) {
-        console.log(`Course Size: ${_size_}`)
-        this.courses_loaded = _size_
-      }
     }
   }
 </script>
@@ -88,11 +80,6 @@
   margin-left: -5rem;
 }
 
-.courses-section-title div {
-  display: inline-block;
-  font-family: "Segoe UI";
-}
-
 .courses-section {
   display: block;
   margin-left: 8rem;
@@ -101,12 +88,6 @@
 
 .section-title {
   font-weight: bold;
-}
-
-.load-course-size {
-  font-size: 1.2rem;
-  margin-left: 0.9rem;
-  color: rgba(87, 140, 171, 0.8);
 }
 
 #no-active {

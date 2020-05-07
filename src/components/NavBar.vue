@@ -36,23 +36,23 @@
           </div>
         </hide-at>
       </div>
-    </nav>
-
-    <!-- Name -->
-    <hide-at breakpoint="mediumAndBelow">
+      <!-- Name -->
+      <hide-at breakpoint="mediumAndBelow">
         <router-link :to="{name: 'settings'}">
           <div class="user-name float-right">
-            <div class="name-box">{{ current_user.first_name }} {{ current_user.last_name }}</div>
+            <p class="d-inline-block mr-2 user-top-right">{{ current_user.first_name }} {{ current_user.last_name }}</p>
+            <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="">
           </div>
         </router-link>
       </hide-at>
       <show-at breakpoint="mediumAndBelow">
         <router-link :to="{name: 'settings'}">
-          <div class="user-name-mobile user-top-right">
+          <div class="user-name float-right user-top-right">
             <p class="d-inline-block mr-2">{{ current_user.first_name }}</p>
           </div>
         </router-link>
       </show-at>
+    </nav>
   </div>
 </template>
 
@@ -70,7 +70,7 @@
     },
     data(){
       return {
-        current_user: {},
+        current_user: {}
       }
     },
     created() {
@@ -145,76 +145,8 @@
   }
 
   .user-name {
-    position: absolute;
-    overflow: visible;
-    top: 10px;
-    right: 40px;
-    cursor: pointer;
-  }
-
-  .user-name-mobile {
-    position: absolute;
-    top: 25px;
-    right: 40px;
-    font-weight: bold;
-    color: #466D85;
-  }
-
-  .user-name .name-box {
     margin-top: 5px;
     font-weight: bold;
-    padding: 5px 20px;
-    position: relative;
-    border-radius: 3px;
-    transition: background 0.25s, border 0.25s;
-    overflow: visible;
-    border: 1px solid transparent;
-    color: #466D85;
-    border: 1px solid transparent;
-  }
-
-  .user-name .name-box:hover {
-    border: 1px solid #466D85;
-  }
-
-  .user-name .user-dropdown {
-    position: absolute;
-    height: 70px;
-    top: 55px;
-    width: 150px;
-    right: 0;
-    text-align: center;
-    padding: 0;
-    border-radius: 5px;
-    background-color: white;
-    border: 1px solid #466D85;
-  }
-
-  .user-name .user-dropdown ul {
-    margin: 0;
-    padding: 0;
-    margin-left: 15px;
-    margin-top: 0px;
-  }
-
-  .user-name .user-dropdown .settings-btn, .user-name .user-dropdown .logout-btn {
-    list-style: none;
-    width: 120px;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 5px;
-    font-size: 0.85rem;
-  }
-
-  .user-name .user-dropdown .settings-btn {
-    color: #466D85;
-    margin-bottom: 3px;
-  }
-
-  .user-name .user-dropdown .logout-btn {
-    background-color: #FB5C5C;
-    color: white;
-    border: 1px solid rgba(251, 58, 58, 0.7);
   }
 
   .settings {

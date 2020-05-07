@@ -2,7 +2,6 @@
   <div>
     <DashboardSection active_section/>
     <DashboardSection today_section/>
-    <!--<router-link :to="{name: 'course_info', params: { id: '5e90f007920d965429e5d1a4' }}">Test</router-link>-->
     <hide-at breakpoint="mediumAndBelow">
       <DashboardSection courses_section/>
     </hide-at>
