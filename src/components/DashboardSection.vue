@@ -116,6 +116,7 @@
     width: 100%;
   }
   .today-section {
+    margin-top: 3rem;
     margin-left: 0;
   }
   #no-active {
