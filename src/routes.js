@@ -21,7 +21,6 @@ import Submissions from './components/admin/Submission/Submissions.vue';
 import LandingPage from './views/LandingPage.vue';
 import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
-import Settings from './views/Settings.vue';
 import CourseList from './components/CourseList.vue';
 import CourseInfo from './views/CourseInfo.vue';
 import NewEvent from './views/NewEvent.vue';
@@ -136,11 +135,6 @@ const router = new VueRouter({
       name: 'dashboard',
       path: '/dashboard',
       component: Dashboard,
-      meta: { requiresAuth: true }
-    },{
-      name: 'settings',
-      path: '/settings',
-      component: Settings,
       meta: { requiresAuth: true }
     },
     {
