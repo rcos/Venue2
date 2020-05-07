@@ -166,8 +166,8 @@ background-color: #F5F5F5;
 }
 
 .mobile-event-container {
-  width: 26rem;
-  margin-left: 2.5rem;
+  width: 100%;
+  /*margin-left: 2.5rem;*/
   margin-top: 2rem;
 }
 
@@ -187,18 +187,29 @@ background-color: #F5F5F5;
   display: inline-block;
   margin-top: 1.5rem;
   float: left;
+  /*border: red solid;*/
+  width: 5.5rem;
+  /*width: 2rem;*/
 }
 
 .todays-event-card-wrapper {
   display: inline-block;
-  width: 21rem;
+  /*width: 21rem;*/
+  width: 18rem;
   float: left;
-  margin-left: 0.5rem;
+  /*margin-left: 0.5rem;*/
   height: 100%;
   /*border: green solid;*/
 }
 
 .active-event-link {
   color: #2c3e50;
+}
+
+/*Small devices*/
+@media (max-width: 575.98px) {
+  .todays-events-section {
+    padding-right: 0;
+  }
 }
 </style>
