@@ -11,8 +11,14 @@ let LecturePoll = new Schema({
 	},
 	poll_type: String,
 	question: String,
-	possible_answers: {},
-	correct_answers: {}
+	possible_answers: [{
+		type: String,
+		default: ""
+	}],
+	correct_answers: [{
+		type: String,
+		default: ""
+	}]
 });
 
 module.exports = mongoose.model('LecturePoll', LecturePoll);
