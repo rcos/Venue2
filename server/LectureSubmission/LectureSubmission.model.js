@@ -14,7 +14,10 @@ let LectureSubmission = new Schema({
 		ref: 'User'
 	},
 	video_progress: Number,
-	student_poll_answers: {}
+	student_poll_answers: [{
+		type: String,
+		default: ""
+	}]
 });
 
 module.exports = mongoose.model('LectureSubmission', LectureSubmission);
