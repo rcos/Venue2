@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 let Event = require('../Event/Event.model');
 
-//Define collection and schema for User
+//Define collection and schema for Lecture
 let Lecture = new Schema({
 	event: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -23,8 +23,11 @@ let Lecture = new Schema({
 		is_pending: { type: Boolean, default: false },
 		is_ongoing: { type: Boolean, default: false },
 		is_ended: { type: Boolean, default: false }
+	},
+	video_ref: {
+		type: String,
+		default: ""
 	}
-	//video: {VIDEO OBJECT}
 });
 
 module.exports = mongoose.model('Lecture', Lecture);
