@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-let Section = require('../Section/Section.model');
+let Event = require('../Event/Event.model');
 
 //Define collection and schema for User
 let Lecture = new Schema({
-	section: {
+	event: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Section'
+		ref: 'Event'
 	},
 	title: String,
 	time: Date,

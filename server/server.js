@@ -10,6 +10,7 @@ const courseRoute = require('./Course/Course.route')
 const sectionRoute = require('./Section/Section.route')
 const eventRoute = require('./Event/Event.route')
 const submissionRoute = require('./Submission/Submission.route')
+const fileupload = require('express-fileupload')
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -20,6 +21,7 @@ mongoose.connect(config.DB, { useNewUrlParser: true }).then(
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(fileupload())
 
 app.use('/users', userRoute);
 app.use('/courses', courseRoute);
