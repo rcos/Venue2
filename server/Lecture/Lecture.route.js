@@ -21,3 +21,5 @@ lectureRoutes.route('/').get(function (req, res) {
 		res.json(lectures);
 	});
 });
+
+module.exports = lectureRoutes;

@@ -14,7 +14,7 @@ const courseRouter = require('./Course/Course.route')
 const sectionRouter = require('./Section/Section.route')
 const eventRouter = require('./Event/Event.route')
 const submissionRouter = require('./Submission/Submission.route')
-const lectureRouter = require('./Submission/Submission.route')
+const lectureRouter = require('./Lecture/Lecture.route')
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -22,10 +22,10 @@ mongoose.connect(config.DB, { useNewUrlParser: true }).then(
   err => { console.log('Can not connect to the database' + err) }
 );
 
+// app.use(fileupload())
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(fileupload())
 
 app.use('/users', userRouter);
 app.use('/courses', courseRouter);
