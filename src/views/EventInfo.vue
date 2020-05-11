@@ -38,6 +38,7 @@
           </div>
           <div v-else>
             <p>Event is over - show submission statistics</p>
+            <LectureUploadModal v-bind:event="event" />
           </div>
         </div>
         <!-- Student -->
@@ -64,6 +65,7 @@
   import EventAPI from '@/services/EventAPI.js';
   import QRCode from "qrcode";
   import QRScanner from "qr-code-scanner";
+  import LectureUploadModal from "../components/LectureUploadModal";
 
   export default {
     name: 'EventInfo',
@@ -72,6 +74,7 @@
     computed: {
     },
     components: {
+      LectureUploadModal
     },
     data(){
       return {
