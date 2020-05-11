@@ -3,7 +3,6 @@ const app = express();
 
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const fileupload = require('express-fileupload')
 
 const mongoose = require('mongoose');
 const config = require('./DB.js');
@@ -22,7 +21,6 @@ mongoose.connect(config.DB, { useNewUrlParser: true }).then(
   err => { console.log('Can not connect to the database' + err) }
 );
 
-// app.use(fileupload())
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

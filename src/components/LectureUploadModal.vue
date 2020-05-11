@@ -21,7 +21,7 @@ export default {
   created() {
     this.lecture.event = this.$props.event._id;
     this.lecture.title = this.$props.event.title;
-    this.lecture.video_ref = "/videos/" + this.lecture.event;
+    this.lecture.video_ref = "/videos/" + this.lecture.event + "/";
   },
   mounted() {
     let vid_selector = document.getElementById("video_selector");
@@ -37,7 +37,10 @@ export default {
   },
   methods: {
     async addLecture() {
-      LectureAPI.addLecture(this.lecture);
+      LectureAPI.addLecture(
+        this.lecture,
+        document.getElementById("video_selector").files[0]
+      );
     }
   }
 };
