@@ -37,7 +37,7 @@
           <div v-else>
             <p>Event is over - show submission statistics</p>
             <!-- Upload a lecture video if the event is over, or prerecorded -->
-            <LectureUploadModal />
+            <LectureUploadModal v-bind:event="event" />
           </div>
         </div>
         <!-- Student -->
@@ -63,7 +63,6 @@ import EventAPI from "@/services/EventAPI.js";
 import QRCode from "qrcode";
 import QRScanner from "qr-code-scanner";
 import LectureUploadModal from "../components/LectureUploadModal";
-// accept="video/*"
 
 export default {
   name: "EventInfo",

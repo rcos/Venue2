@@ -4,6 +4,7 @@ const Event = require("./Event/Event.model")
 const Section = require("./Section/Section.model")
 const Submission = require("./Submission/Submission.model")
 const User = require("./User/User.model")
+const Lecture = require("./Lecture/Lecture.model")
 
 const db = "mongodb://localhost:27017/Venue2";
 
@@ -13,9 +14,10 @@ seeder.connect(db, function () {
 		"./User/User.model",
 		"./Section/Section.model",
 		"./Event/Event.model",
-		"./Submission/Submission.model"
+		"./Submission/Submission.model",
+		"./Lecture/Lecture.model"
 	]);
-	seeder.clearModels(['Course', 'User', 'Section', 'Event', 'Submission'], function () {
+	seeder.clearModels(['Course', 'User', 'Section', 'Event', 'Submission', 'Lecture'], function () {
 		seeder.populateModels(data, function (err, done) {
 			if (err) {
 				return console.log("seed err", err)

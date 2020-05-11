@@ -4,9 +4,9 @@ export default {
   getLectures() {
     return API().get('lectures')
   },
-  addLecture(course) {
+  addLecture(lecture) {
     return API().post('lectures/add', {
-      course: course // add our data to the request body
+      lecture: lecture // add our data to the request body
     })
   }
 }
