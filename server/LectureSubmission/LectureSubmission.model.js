@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 let Lecture = require('../Lecture/Lecture.model');
 
-//Define collection and schema for User
+//Define collection and schema for LectureSubmission
 let LectureSubmission = new Schema({
 	lecture: {
 		type: mongoose.Schema.Types.ObjectId,
