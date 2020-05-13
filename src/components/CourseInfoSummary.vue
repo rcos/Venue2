@@ -1,10 +1,10 @@
 <template>
-    
+
     <div>
 
       <!-- Desktop / Tablet View -->
       <show-at breakpoint="mediumAndAbove">
-      
+
         <div class="course-event-container">
           <div v-if="minimized" class="global">
               <div class="inline">
@@ -15,7 +15,8 @@
                   <div class="inline time-block-min">2:00pm-3:50pm</div>
               </div>
               <div class="inline">
-                  <div class="inline ongoing-icon-min"></div>
+                  <div class="inline ongoing-icon-min">
+                    <span class="icon-clock"></span></div>
                   <div class="inline">35m remaining</div>
               </div>
               <div v-on:click="toggleMinimize" class="hide-course-blurb-icon">
