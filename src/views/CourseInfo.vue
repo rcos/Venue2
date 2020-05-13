@@ -92,6 +92,7 @@
 
   import CourseAPI from '@/services/CourseAPI.js';
   import SectionAPI from '@/services/SectionAPI.js';
+  import SubmissionAPI from '@/services/SubmissionAPI.js';
   import EventAPI from '@/services/EventAPI.js';
   import EventHistoryList from '@/components/EventHistoryList.vue';
   import SquareLoader from '@/components/Loaders/SquareLoader.vue';
@@ -137,6 +138,13 @@ export default {
       this.getSectionWithCourse()
       this.getActiveEventsForSection()
     }
+
+    // testing
+    SubmissionAPI.getSubmissionsForSectionByEvent('5ebc327070eb5396e80d1c50')
+    .then(response => {
+      console.log(`Submissions For Section By Event`)
+      console.log(response)
+    })
   },
   methods: {
     setGridMode (val_) {
