@@ -1,6 +1,6 @@
 <template>
   <div>
-    
+
 
     <div>
       <div class="loader-box" role="status" v-if="!course_has_loaded">
@@ -9,75 +9,60 @@
       <div v-else class="course-info-container">
         <!-- Course and event container -->
         <div class="page-title"><h2 class="course-info-header">Course Info</h2></div>
-        
-        <CourseInfoSummary 
+
+        <CourseInfoSummary
           :courseName="course.name"
           :courseDept="course.dept"
           :courseDeptNumber="course.course_number"
         />
         <!-- Attendance history -->
         <div class="attendance-history-container">
-          <div class="attendance-history-header">
-            <div class="attendance-history-toolbar">
-              <div><h4 class="attendance-history-header-text inline-middle">Attendance History</h4></div>
-              <div class="attendance-percentage inline-middle">
-                <hide-at breakpoint="small">
-                  <div class="attendance-percentage-number inline-middle">
-                    <span class="attendance-percentage-number-text">
-                    <ICountUp 
-                      :delay="0"
-                      :endVal="80"
-                    />%</span>
-                    <div class="attendance-up-arrow">
-                      <div class="actual-up-arrow inline-middle"></div>
-                      <div class="inline-middle attendance-percentage-change-text">+<ICountUp :endVal="2" />%</div>
-                    </div>
-                    <div class="attendance-down-arrow">
-                      <div class="actual-down-arrow inline-middle"></div>
-                      <div class="inline-middle attendance-percentage-change-text"></div>
-                    </div>
-                  </div>
-                </hide-at>
-                <show-at breakpoint="small">
-                  <div class="attendance-percentage-number-mobile">
-                    <div class="percentage-number-mobile inline">
-                      <span class="percentage-number">
-                        <ICountUp
-                          :delay="0"
-                          :endVal="80"
-                        />
-                      </span>%
-                    </div>
-                    <div class="percentage-change-arrow-mobile inline"></div>
-                    <div class="percentage-change-number-mobile inline">+<ICountUp :endVal="2" /></div>
-                  </div>
-                </show-at>
-              </div>
-              <!--<p class="section-selector">all sections</p>-->
-            </div>
-            <hide-at breakpoint="small">
-              <div class="right-function-buttons">
-                <div v-bind:class="'inline btn-group-left group-btn list-style-grid ' + (grid_view ? 'active' : '')" v-on:click="setGridMode(true)">
-                  <span class="icon-grid-1"></span>
-                </div>
-                <div v-bind:class="'inline btn-group-right group-btn list-style-list ' + (!grid_view ? 'active' : '')" v-on:click="setGridMode(false)">
-                  <span class="icon-list"></span>
-                </div>
-              </div>
-            </hide-at>
-            <!--<div class="right-function-buttons function-button">
-              <div class="ascending-descending" v-on:click="toggleSortOrder">
-                <img src="@/assets/left-arrow.svg" 
-                  v-bind:class="{'focused-image': sort_ascending, 'unfocused-image': !sort_ascending}" 
-                  style="position:relative;top:-3px;transform:rotate(90deg);width:0.6rem;" />
-                <img src="@/assets/left-arrow.svg" 
-                  v-bind:class="{'focused-image': !sort_ascending, 'unfocused-image': sort_ascending}"
-                  style="position:relative;top:3px;transform:rotate(270deg);width:0.6rem;" />
-              </div>
-            </div>-->
+
+          <div class="attendance-history-tabs">
+            <div :class="`history-tab ` + (subview_section_id == 0 ? 'active' : '')" v-on:click="subview_section_id = 0">Attendance History</div>
+            <div :class="`history-tab ` + (subview_section_id == 1 ? 'active' : '')" v-on:click="subview_section_id = 1">Statistics</div>
           </div>
-          <EventHistoryList v-if="is_instructor" v-bind:course="course" :sorting="event_sorting_fn" :grid_mode="grid_view"/>
-          <EventHistoryList v-else v-bind:section="section" :sorting="event_sorting_fn" :grid_mode="grid_view"/>
+
+          <!-- Attendance History List -->
+          <div v-if="subview_section_id == 0">
+            <EventHistoryList v-if="is_instructor" v-bind:course="course" :sorting="event_sorting_fn" :grid_mode="grid_view"/>
+            <EventHistoryList v-else v-bind:section="section" :sorting="event_sorting_fn" :grid_mode="grid_view"/>
+          </div>
+
+          <!-- Statistics View -->
+          <div v-if="subview_section_id == 1" class="attendance-line-graph-container">
+
+            <div class="line-graph-header">
+              <div class="graph-title">Attendance Percentage by Date</div>
+              <div class="range-dropdown">
+                <select>
+                  <option value="week">7D</option>
+                  <option value="month">30D</option>
+                  <option value="60-days">60D</option>
+                  <option value="entire-semester">Semester</option>
+                </select>
+              </div>
+            </div>
+
+            <AttendanceStatisticsLineGraph
+              class="attendance-line-graph"
+              :options="{maintainAspectRatio: false, borderColor: 'red', legend: {display: false}}"
+              :chartdata="{labels: [1, 2, 3], datasets: [{ label: 'Data 1', borderColor: 'blue', fill: null, pointBackgroundColor: 'blue', data: [5, 10, 2] }, {label: 'Data 2', data: [15, 3, 12]}]}" />
+
+              <!-- Graph Buttons -->
+              <div class="graph-legend">
+                <div class="legend-info-tab active"><div class="legend-data-color"></div><div class="legend-data-label">Section 1</div></div>
+                <div class="legend-info-tab"><div class="legend-data-color"></div><div class="legend-data-label">Section 2</div></div>
+                <div class="legend-info-tab"><div class="legend-data-color"></div><div class="legend-data-label">Section 3</div></div>
+                <div class="legend-info-tab active"><div class="legend-data-color"></div><div class="legend-data-label">Section 4</div></div>
+                <div class="legend-info-tab"><div class="legend-data-color"></div><div class="legend-data-label">Average</div></div>
+              </div>
+              <div class="graph-axis-values">
+                <div class="axis-info-tab active">Attendance By Percentage</div>
+                <div class="axis-info-tab">Attendance By Total Count</div>
+              </div>
+          </div>
+
           </div>
         </div>
       </div>
@@ -113,8 +98,9 @@
   import CourseInfoSummary from '@/components/CourseInfoSummary.vue';
   import ICountUp from 'vue-countup-v2';
   import {showAt, hideAt} from 'vue-breakpoints';
+  import AttendanceStatisticsLineGraph from '@/components/AttendanceStatisticsLineGraph.vue'
 
-  import '@/assets/icon-font.css'  
+  import '@/assets/icon-font.css'
 
 export default {
   name: 'CourseInfo',
@@ -124,7 +110,8 @@ export default {
     CourseInfoSummary,
     ICountUp,
     showAt,
-    hideAt
+    hideAt,
+    AttendanceStatisticsLineGraph
   },
   data(){
     return {
@@ -134,7 +121,8 @@ export default {
       course_has_loaded: false,
       sort_ascending: true,
       event_sorting_fn: Function,
-      grid_view: true
+      grid_view: true,
+      subview_section_id: 0
     }
   },
   created() {
@@ -152,7 +140,7 @@ export default {
   },
   methods: {
     setGridMode (val_) {
-      this.grid_view = val_; 
+      this.grid_view = val_;
     },
     toggleSortOrder () {
       this.sort_ascending = !this.sort_ascending;
@@ -226,6 +214,9 @@ export default {
         active_event.remaining_hours = diff_hours
         active_event.remaining_mins = diff_mins
       })
+    },
+    getDataset () {
+      // Return the dataset for the graph properties
     }
   }
 }
@@ -386,7 +377,7 @@ export default {
 
   .actual-up-arrow {
     margin-right: 5px;
-    
+
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
     border-top: 6px solid transparent;
@@ -401,7 +392,7 @@ export default {
 
   .actual-down-arrow {
     margin-right: 5px;
-    
+
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
     border-top: 6px solid rgba(0, 0, 0, 0.6);
@@ -511,7 +502,7 @@ export default {
     width: 30%;
     text-align: right;
   }
-  
+
   .function-button {
     display: inline-block;
   }
@@ -530,5 +521,125 @@ export default {
 
   .unfocused-image {
     opacity: 0.4;
+  }
+
+  .attendance-history-container .attendance-history-tabs .history-tab {
+    font-family: "Segoe UI";
+    display: inline-block;
+    vertical-align: top;
+    width: 15%;
+    min-width: 180px;
+    cursor: pointer;
+    opacity: 0.8;
+  }
+
+  .attendance-history-container .attendance-history-tabs .history-tab:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+  .attendance-history-container .attendance-history-tabs .history-tab.active {
+    font-weight: bold;
+    opacity: 1;
+    text-decoration: none;
+  }
+
+  .attendance-line-graph {
+    height: 450px;
+    margin-bottom: 20px;
+  }
+
+  .attendance-line-graph-container .graph-legend, .attendance-line-graph-container .graph-axis-values {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .attendance-line-graph-container .graph-legend {
+    width: 40%;
+    margin-left: 1.5rem;
+  }
+
+  .graph-legend .legend-info-tab {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    width: 150px;
+    height: 30px;
+    border-radius: 3px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.7);
+    margin-right: 40px;
+    margin-bottom: 10px;
+  }
+
+  .graph-legend .legend-info-tab:hover {
+    border: 1px solid rgba(0, 0, 0, 0.6);
+  }
+
+  .graph-legend .legend-info-tab.active {
+    border: 1px solid #0084AE;
+  }
+
+  .graph-legend .legend-data-color {
+    width: 17px;
+    height: 17px;
+    background-color: red;
+    margin: 0 10px;
+    border-radius: 3px;
+  }
+
+  .graph-legend .legend-data-color, .graph-legend .legend-data-label {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .graph-axis-values .axis-info-tab {
+    margin-bottom: 10px;
+    color: rgba(0, 0, 0, 0.69);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    width: 300px;
+    height: 30px;
+    line-height: 30px;
+    padding-left: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .graph-axis-values .axis-info-tab.active {
+    border: 1px solid #0084AE;
+  }
+
+  .graph-axis-values .axis-info-tab.active:hover {
+    border: 1px solid #0084AE;
+  }
+
+  .graph-axis-values .axis-info-tab:hover {
+    border: 1px solid rgba(0, 0, 0.5);
+  }
+
+  .line-graph-header {
+    margin-top: 30px;
+  }
+
+  .line-graph-header .graph-title, .line-graph-header .range-dropdown {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .line-graph-header .range-dropdown {
+    float: right;
+  }
+
+  .line-graph-header .range-dropdown select {
+    padding-left: 10px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    background: white;
+    box-sizing: border-box;
+    height: 35px;
+    min-width: 150px;
+  }
+
+  .line-graph-header .graph-title {
+    font-weight: bold;
   }
 </style>

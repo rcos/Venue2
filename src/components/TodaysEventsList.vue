@@ -47,14 +47,16 @@
 
         EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
         .then(response => {
+          console.log(response)
           this.data_loaded = true
-          this.todays_events = response_data
+          this.todays_events = response.data
 
           //order events by start time
           this.sortTodaysEventsByStartTime()
           this.setEventsStartedStoday()
         })
         .catch(err => {
+          console.log(err)
           this.data_loaded = true
         })
       },
@@ -71,7 +73,7 @@
       },
       sortTodaysEventsByStartTime() {
         this.todays_events.sort(function(a,b){
-          return new Date(a.start_time) - new Date(b.start_time); 
+          return new Date(a.start_time) - new Date(b.start_time);
         });
       },
       setEventsStartedStoday() {
@@ -107,7 +109,7 @@
 .todays-events-section::-webkit-scrollbar-thumb {
 border-radius: 10px;
 -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-background-color: #F5F5F5; 
+background-color: #F5F5F5;
 }
 
 .mleft-one {
