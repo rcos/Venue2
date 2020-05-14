@@ -121,7 +121,7 @@ export default {
     async addLecture(evt) {
       evt.preventDefault();
       this.lecture.sections = this.lecture_sections;
-      this.lecture.geofence = this.selected_geofence;
+      this.lecture.allow_live_submissions = this.allow_live_submissions
       const response = await LectureAPI.addLecture(this.lecture);
       this.$router.push({
         name: "course_info",
