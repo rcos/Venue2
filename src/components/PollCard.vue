@@ -11,7 +11,7 @@
 				<input class="answerfield" type="text" v-model.lazy="possible_answers[i]"/>
 			</div>
 			<div class="col-1 answerpart">
-				<input type="checkbox" v-model.lazy="is_correct[i]"/>
+				<input type="checkbox" v-model.lazy="correct_answers[i]"/>
 			</div>
 		</div>
 		<button id="add_answer_btn" class="btn" @click="addAnswer()">+</button>
@@ -31,7 +31,7 @@ export default {
 			question: "",
 			is_mult_coice: true,
 			possible_answers: [],
-			is_correct: [],
+			correct_answers: [],
 			timestamp: 0,
 			lecture: null
 		}
@@ -43,7 +43,7 @@ export default {
 	methods: {
 		addAnswer() {
 			this.possible_answers.push('')
-			this.is_correct.push(false)
+			this.correct_answers.push(false)
 		},
 		savePoll(lecture_id) {
 			this.lecture = lecture_id;
