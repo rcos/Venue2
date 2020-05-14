@@ -43,6 +43,7 @@ export default {
 	methods: {
 		addAnswer() {
 			this.possible_answers.push('')
+			this.is_correct.push(false)
 		},
 		savePoll(lecture_id) {
 			this.lecture = lecture_id;
