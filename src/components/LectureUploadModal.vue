@@ -6,7 +6,7 @@
           <button id="close_lecture_modal" class="btn btn-secondary" @click="showModal = false">X</button>
       </div>
       <input id="video_selector" name="lecturevideo" type="file" accept="video/*" />
-      <button id="video_upload_btn" class="btn btn-secondary" @click="addLecture" disabled>Upload</button>
+      <button id="video_upload_btn" class="btn btn-secondary" @click="addLecture()" disabled>Upload</button>
       <div class="row" id="lecture_container" v-if="file_selected">
         <div class="col-8" id="preview">
           <video
@@ -27,10 +27,10 @@
           </video>
         </div>
         <div class="col">
-          <div v-for="(poll,i) in polls" v-bind:key="i">
-            <PollCard/>
+          <div id="polls">
+            <PollCard v-for="i in n_polls" :key="i" :ref="'pollRef' + i"/>
+            <button id="add_poll_btn" class="btn btn-primary" @click="addPoll()">+</button>
           </div>
-          <button id="add_poll_btn" class="btn btn-primary" @click="polls.push({})">+</button>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@ export default {
       lecture: {},
       file_selected: false,
       showModal: false,
-      polls: []
+      n_polls: 0
     };
   },
   created() {
@@ -67,7 +67,11 @@ export default {
       LectureAPI.addLecture(
         this.lecture,
         document.getElementById("video_selector").files[0]
-      );
+      ).then(res => {
+        for(let i in this.$refs) {
+        this.$refs[i][0].savePoll(res.data._id)
+      }
+      });
     },
     handleShowModal() {
       this.showModal = true
@@ -84,19 +88,11 @@ export default {
             self.polls = [];
             self.file_selected = true;
             self.$nextTick(() => {
-              let vidEl = document.getElementById("video_player")
-              let localURL = URL.createObjectURL(vid_selector.files[0])
-              var localType = vid_selector.files[0].type;
-
               var srcEl = document.createElement("source")
-              srcEl.setAttribute("src",localURL)
-              srcEl.setAttribute("type",localType)
+              srcEl.setAttribute("src",URL.createObjectURL(vid_selector.files[0]))
+              srcEl.setAttribute("type",vid_selector.files[0].type)
               
-              console.log(srcEl)
-              vidEl.prepend(srcEl)
-              console.log(vidEl)
-              // let vid = videojs(vidEl).ready(function() {
-              // }); // Ref to your video el
+              document.getElementById("video_player").prepend(srcEl)
             })
           }
         });
@@ -105,8 +101,8 @@ export default {
     handleHideModal() {
       this.showModal = false
     },
-    handleNewPoll() {
-      
+    addPoll() {
+      this.n_polls++
     }
   }
 };
@@ -142,5 +138,16 @@ export default {
 }
 #add_poll_btn {
   width: 100%;
+}
+.col {
+  padding: 0;
+}
+#polls {
+  position: absolute;
+  padding-right: 5px;
+  top: 0px;
+  bottom: 15px;
+  width: 100%;
+  overflow: auto;
 }
 </style>
