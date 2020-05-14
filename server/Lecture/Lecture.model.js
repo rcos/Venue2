@@ -20,8 +20,8 @@ let Lecture = new Schema({
 	playback_submission_end_time: Date,
 	submission_window_status: {
 		is_pending: { type: Boolean, default: false },
-		is_ongoing: { type: Boolean, default: false },
-		is_ended: { type: Boolean, default: false }
+		is_open: { type: Boolean, default: false },
+		is_closed: { type: Boolean, default: false }
 	},
 	video_ref: {
 		type: String,
