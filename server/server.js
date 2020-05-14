@@ -14,6 +14,7 @@ const sectionRouter = require('./Section/Section.route')
 const eventRouter = require('./Event/Event.route')
 const submissionRouter = require('./Submission/Submission.route')
 const lectureRouter = require('./Lecture/Lecture.route')
+const pollRouter = require('./LecturePoll/LecturePoll.route')
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -31,6 +32,7 @@ app.use('/sections', sectionRouter);
 app.use('/events', eventRouter);
 app.use('/submissions', submissionRouter);
 app.use('/lectures', lectureRouter);
+app.use('/polls', pollRouter);
 
 app.listen(PORT, function () {
   console.log('Server is running on Port:', PORT);

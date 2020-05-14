@@ -1,27 +1,29 @@
 <template>
 	<div class="poll_card">
 		<div class="row questionrow">
-			Question: <input class="question" type="text"/>
+			<p class="questionlabel col-3">Question:</p> <input class="question col" type="text" v-model.lazy="question"/>
 		</div>
-		<div v-for="(possible_answer, i) in possible_answers" v-bind:key="i" class="row">
+		<div v-for="(possible_answer,i) in possible_answers" v-bind:key="i" class="row">
 			<div class="col-1 answerpart">
 				{{i + 1}}
 			</div>
 			<div class="col answerpart">
-				<input class="answerfield" type="text"/>
+				<input class="answerfield" type="text" v-model.lazy="possible_answers[i]"/>
 			</div>
 			<div class="col-1 answerpart">
-				<input type="checkbox"/>
+				<input type="checkbox" v-model.lazy="is_correct[i]"/>
 			</div>
 		</div>
-		<button id="add_answer_btn" class="btn" @click="possible_answers.push('')">+</button>
+		<button id="add_answer_btn" class="btn" @click="addAnswer()">+</button>
 	</div>
 </template>
 
 <script>
+import LecturePollAPI from "../services/LecturePollAPI";
+
 export default {
 	name: "PollCard",
-	props: ["timestamp"],
+	props: {},
 	computed: {},
 	components: {},
 	data() {
@@ -29,14 +31,24 @@ export default {
 			question: "",
 			is_mult_coice: true,
 			possible_answers: [],
-			is_correct: []
-		};
+			is_correct: [],
+			timestamp: 0,
+			lecture: null
+		}
 	},
 	created() {
-		this.timestamp = this.$props.timestamp
 	},
-	mounted() {},
-	methods: {}
+	mounted() {	
+	},
+	methods: {
+		addAnswer() {
+			this.possible_answers.push('')
+		},
+		savePoll(lecture_id) {
+			this.lecture = lecture_id;
+			LecturePollAPI.addPoll(this.$data);
+		}
+	}
 }
 </script>
 
@@ -70,8 +82,14 @@ export default {
 .questionrow {
 	padding-left: 15px;
 }
+.questionlabel {
+	margin: 0;
+}
 .question {
+	position: relative;
+	width: 50%;
 	margin-left: 15px;
+	margin-right: 15px;
 }
 .row {
 	margin-top: 5px;
