@@ -7,8 +7,8 @@ let Section = require('../Section/Section.model');
 let Lecture = new Schema({
 	title: String,
 	sections: [{
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Section'
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Section'
 	}],
 	allow_live_submissions: { type: Boolean, default: false },
 	allow_playback_submissions: { type: Boolean, default: false },

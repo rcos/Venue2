@@ -4,16 +4,15 @@ var fs = require('fs');
 const lectureRoutes = express.Router();
 
 let Lecture = require('../Lecture/Lecture.model')
+let User = require('../User/User.model')
+let Course = require('../Course/Course.model')
+let Section = require('../Section/Section.model')
 
 lectureRoutes.route('/add').post(function (req, res) {
   let lecture = new Lecture(req.body.lecture);
-  console.log("in route")
-  console.log(lecture)
-  console.log(req.body.lecture)
-
   lecture.save()
     .then(() => {
-      res.status(200).json(lecture);
+      res.status(200).json(lectures);
     })
     .catch(() => {
       res.status(400).send("unable to save lecture to database");
@@ -59,5 +58,62 @@ lectureRoutes.route('/').get(function (req, res) {
 		res.json(lectures);
 	});
 });
+
+lectureRoutes.get('/live_for_user/:user_id', (req, res) => {
+	let user_id = req.params.user_id
+	User.findById(user_id, (error, user) => {
+		if(error)
+			res.json(error)
+		else {
+
+			if(user.is_instructor) {
+
+				//get courses instructor teaches
+				Course.find({instructor: user._id}, (error, instructor_courses) => {
+					if(error)
+						res.json(error)
+					else {
+						//get sections for these courses
+						Section.find({course: {$in: instructor_courses}}, (error, instructor_sections) =>{
+							if(error)
+								res.json(error)
+							else {
+								//get lectures in these sections
+								Lecture.find({sections: {$in: instructor_sections}}, (error, instructor_lectures) => {
+									if(error)
+										res.json(error)
+									else {
+										//get live lectures
+										live_lectures = getLiveLectures(instructor_lectures)
+										res.json(live_lectures)
+									}
+								})
+							}
+						})
+					}
+				})
+
+			} else {
+
+			}
+
+		}
+	})
+})
+
+function getLiveLectures(lectures) {
+	live_lectures = []
+	lectures.forEach(lecture => {
+		if(isLive(lecture))
+			live_lectures.push(lecture)
+	})
+	return live_lectures
+}
+
+function isLive(lecture) {  
+  let current_time = new Date() 
+  return current_time >= lecture.start_time &&  
+    current_time <= lecture.end_time  
+}
 
 module.exports = lectureRoutes;

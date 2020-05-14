@@ -4,6 +4,10 @@ export default {
   getLectures() {
     return API().get('lectures')
   },
+  getLiveLecturesForUser(user_id) {
+    return API().get('lectures/live_for_user/' + user_id, {
+    })
+  },
   addLecture(lecture) {
     return API().post('lectures/add', {
       lecture: lecture 
