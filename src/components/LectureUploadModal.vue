@@ -5,7 +5,7 @@
       <div class="row">
           <button id="close_lecture_modal" class="btn btn-secondary" @click="showModal = false">X</button>
       </div>
-      <input id="video_selector" name="lecturevideo" type="file" />
+      <input id="video_selector" name="lecturevideo" type="file" accept="video/*" />
       <button id="video_upload_btn" class="btn btn-secondary" @click="addLecture" disabled>Upload</button>
       <div class="row" id="lecture_container" v-if="file_selected">
         <div class="col-8" id="preview">
@@ -14,11 +14,9 @@
             class="video-js"
             controls
             preload="auto"
-            poster="//vjs.zencdn.net/v/oceans.png"
+            poster=""
             data-setup='{}'>
-            <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4" />
-            <source src="//vjs.zencdn.net/v/oceans.webm" type="video/webm" />
-            <source src="//vjs.zencdn.net/v/oceans.ogv" type="video/ogg" />
+            <!-- <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4" /> -->
             <p class="vjs-no-js">
               To view this video please enable JavaScript, and consider upgrading to a
               web browser that
@@ -42,7 +40,8 @@
 <script>
 import LectureAPI from "../services/LectureAPI";
 import PollCard from "./PollCard";
-// accept="video/*"
+import videojs from "video.js";
+
 export default {
   name: "LectureUploadModal",
   props: ["event"],
@@ -82,7 +81,23 @@ export default {
             self.file_selected = false;
           } else {
             vid_upload_btn.removeAttribute("disabled");
+            self.polls = [];
             self.file_selected = true;
+            self.$nextTick(() => {
+              let vidEl = document.getElementById("video_player")
+              let localURL = URL.createObjectURL(vid_selector.files[0])
+              var localType = vid_selector.files[0].type;
+
+              var srcEl = document.createElement("source")
+              srcEl.setAttribute("src",localURL)
+              srcEl.setAttribute("type",localType)
+              
+              console.log(srcEl)
+              vidEl.prepend(srcEl)
+              console.log(vidEl)
+              // let vid = videojs(vidEl).ready(function() {
+              // }); // Ref to your video el
+            })
           }
         });
       })
