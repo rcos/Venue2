@@ -5,6 +5,7 @@ let Section = require('../Section/Section.model');
 
 //Define collection and schema for Lecture
 let Lecture = new Schema({
+	title: String,
 	section: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Section'
