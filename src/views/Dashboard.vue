@@ -20,6 +20,7 @@
 
 <script>
   import UserAPI from '@/services/UserAPI.js';
+  import LectureAPI from '@/services/LectureAPI.js';
   import DashboardSection from '@/components/DashboardSection'
   import { authComputed } from '../vuex/helpers.js'
   import {showAt, hideAt} from 'vue-breakpoints'
@@ -36,11 +37,13 @@
     },
     data(){
       return {
-        current_user: {}
+        current_user: {},
+        live_lectures: []
       }
     },
     created() {
       this.getCurrentUser()
+      this.getLiveLecturesForUser()
     },
     methods: {
       getCurrentUser() {
@@ -48,6 +51,11 @@
       },
       logOut() {
         this.$store.dispatch('logout')
+      },
+      async getLiveLecturesForUser() {
+        const response = await LectureAPI.getLiveLecturesForUser(this.current_user._id)
+        this.live_lectures = response.data
+        console.log(this.live_lectures)
       }
     }
   }
@@ -73,7 +81,7 @@
     width: 30rem;
     margin-left: -5rem;
   }
-  
+
   .section-title {
     font-weight: bold;
   }
