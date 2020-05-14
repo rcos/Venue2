@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import LecturePollAPI from "../services/LecturePollAPI";
+import PlaybackPollAPI from "../services/PlaybackPollAPI";
 
 export default {
 	name: "PollCard",
@@ -47,7 +47,7 @@ export default {
 		},
 		savePoll(lecture_id) {
 			this.lecture = lecture_id;
-			LecturePollAPI.addPoll(this.$data);
+			PlaybackPollAPI.addPoll(this.$data);
 		}
 	}
 }

@@ -14,7 +14,7 @@ const sectionRouter = require('./Section/Section.route')
 const eventRouter = require('./Event/Event.route')
 const submissionRouter = require('./Submission/Submission.route')
 const lectureRouter = require('./Lecture/Lecture.route')
-const pollRouter = require('./LecturePoll/LecturePoll.route')
+const pollRouter = require('./PlaybackPoll/PlaybackPoll.route')
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
