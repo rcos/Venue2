@@ -69,8 +69,8 @@ export default {
         document.getElementById("video_selector").files[0]
       ).then(res => {
         for(let i in this.$refs) {
-        this.$refs[i][0].savePoll(res.data._id)
-      }
+          this.$refs[i][0].savePoll(res.data._id)
+        }
       });
     },
     handleShowModal() {
