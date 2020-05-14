@@ -12,8 +12,8 @@
           <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
         </div>
         <div class="info-section" id="event-info">
-          <router-link v-if="is_instructor" :to="{name: 'new_event', params: { course_id: course._id }}">
-            <button class="new-event-btn">Create new event for {{course.dept }} {{ course.course_number }}</button>
+          <router-link v-if="is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}">
+            <button class="new-event-btn">Create New Lecture for {{course.dept }} {{ course.course_number }}</button>
           </router-link>
           <div class="active-events-container">
             <router-link class="active-event-pill" v-for="active_event in active_events" :key="active_event._id" :to="{name: 'event_info', params: { event_id: active_event._id }}">
