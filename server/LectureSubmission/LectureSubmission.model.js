@@ -13,13 +13,13 @@ let LectureSubmission = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
-	video_progress: Number,
-	student_poll_answers: [
-		[{
-			type: String,
-			default: ""
-		}]
-	]
+	is_live_submission: { type: Boolean, default: false },
+	video_timestamp: Number,
+	student_poll_answers: {
+		type: Map,
+		of: String
+	},
+	score: Number
 });
 
 module.exports = mongoose.model('LectureSubmission', LectureSubmission);

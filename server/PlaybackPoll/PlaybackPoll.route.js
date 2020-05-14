@@ -1,7 +1,7 @@
 const express = require('express');
 const pollRoutes = express.Router();
 
-let Poll = require('../LecturePoll/LecturePoll.model');
+let Poll = require('../PlaybackPoll/PlaybackPoll.model');
 
 pollRoutes.route('/add').post(function (req, res) {
   let poll = new Poll(req.body.poll);

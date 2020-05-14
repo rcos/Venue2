@@ -4,12 +4,12 @@ const Schema = mongoose.Schema;
 let Lecture = require('../Lecture/Lecture.model');
 
 //Define collection and schema for User
-let LecturePoll = new Schema({
+let PlaybackPoll = new Schema({
 	lecture: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Lecture'
 	},
-	poll_type: String,
+	// poll_type: String,
 	question: String,
 	possible_answers: [{
 		type: String,
@@ -18,7 +18,8 @@ let LecturePoll = new Schema({
 	correct_answers: [{
 		type: String,
 		default: ""
-	}]
+	}],
+	timestamp: Number
 });
 
-module.exports = mongoose.model('LecturePoll', LecturePoll);
+module.exports = mongoose.model('PlaybackPoll', PlaybackPoll);
