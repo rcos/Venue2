@@ -22,9 +22,7 @@ lectureRoutes.route('/add').post(function (req, res) {
 		if (!fs.existsSync(__dirname + fields.video_ref)) {
 			fs.mkdirSync(__dirname + fields.video_ref)
 		}
-		fs.rename(oldpath, newpath, function (err) {
-			console.log(err)
-		});
+		fs.rename(oldpath, newpath, function (err) {});
 		let lecture = new Lecture({
 			event: fields.event,
 			video_ref: fields.video_ref
