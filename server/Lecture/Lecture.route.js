@@ -45,4 +45,21 @@ lectureRoutes.route('/').get(function (req, res) {
 	});
 });
 
+lectureRoutes.route('/:id').get(function (req, res) {
+	Lecture.findById(req.params.id,function (err, lecture) {
+		if (err) {
+			res.json(err);
+		} else {
+			res.json(lecture);
+		}
+	});
+});
+
+lectureRoutes.route('/videos/:folder/:filename').get(function (req, res) {
+	let video_path = __dirname + "/videos/" + req.params.folder + "/" + req.params.filename;
+	console.log(video_path)
+
+    res.send(video_path);
+});
+
 module.exports = lectureRoutes;

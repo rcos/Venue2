@@ -1,10 +1,10 @@
 const express = require('express');
 const pollRoutes = express.Router();
 
-let Poll = require('../LecturePoll/LecturePoll.model');
+let LecturePoll = require('../LecturePoll/LecturePoll.model');
 
 pollRoutes.route('/add').post(function (req, res) {
-  let poll = new Poll(req.body.poll);
+  let poll = new LecturePoll(req.body.poll);
   poll.save()
     .then(() => {
       res.status(200).json(poll);
@@ -15,7 +15,7 @@ pollRoutes.route('/add').post(function (req, res) {
 });
 
 pollRoutes.route('/').get(function (req, res) {
-  Poll.find(function (err, polls) {
+  LecturePoll.find(function (err, polls) {
     if (err)
       res.json(err);
     res.json(polls);
