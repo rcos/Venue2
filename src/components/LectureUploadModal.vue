@@ -57,6 +57,7 @@ export default {
     };
   },
   created() {
+    console.log(this.lecture)
     this.lecture.video_ref = "/videos/" + this.lecture._id + "/";
   },
   mounted() {

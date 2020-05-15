@@ -23,9 +23,8 @@ export default {
     console.log(video)
     let formdata = new FormData()
     formdata.append('video', video);
-    formdata.append("event", lecture.event);
     formdata.append("video_ref", lecture.video_ref);
-    return API().post('lectures/add_playback',
+    return API().post('lectures/add_playback/' + lecture._id,
       formdata,
       {
         headers: {
