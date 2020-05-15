@@ -1,7 +1,58 @@
 <template>
   <div>
-    I'm the lecture info view
-
+    <!-- Lecture Headers -->
+    <div class="spinner-border" role="status" v-if="!lecture_has_loaded">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <!-- Times -->
+    <div v-else>
+      <h1 class="lecture-title">{{ lecture.title }}</h1>
+      <h3 class="course-name">{{ lecture.sections[0].course.name }}</h3>
+      <h5 class="section-numbers" v-for="section in lecture.sections">Section {{ section.number }}</h5>
+      <div class="time-info-container">
+        <h4 class="time-info">Start time: {{ new Date(lecture.start_time) }}</h4>
+        <h4 class="time-info">End time: {{ new Date(lecture.end_time) }}</h4>
+        <h4 class="time-info">Submission Start time: {{ new Date(lecture.submission_start_time) }}</h4>
+        <h4 class="time-info">Submission End time: {{ new Date(lecture.submission_end_time) }}</h4>
+      </div>
+      <!-- Submission Info -->
+      <div class="submission-status">
+        <!-- Instructor -->
+        <div v-if="is_instructor">
+          <div v-if="lecture_is_pending">
+            <p>Lecture not started yet</p>
+          </div>
+          <div v-else-if="lecture_is_live">
+            <p>Lecture is active.</p>
+            <p v-if="submission_window_pending">Submission Window pending</p>
+            <div v-else-if="submission_window_ongoing">
+              <p>QR Code:</p>
+              <canvas id="qr_render_area"></canvas>
+            </div>
+            <p v-else>Submission window closed</p>
+          </div>
+          <div v-else>
+            <p>Lecture is over - show submission statistics</p>
+            <LectureUploadModal v-bind:lecture="lecture" />
+          </div>
+        </div>
+        <!-- Student -->
+        <div v-else>
+          <div v-if="lecture_is_pending">
+            <p>Lecture not started yet</p>
+          </div>
+          <div v-else-if="lecture_is_live">
+            <p>Lecture is ongoing.</p>
+            <p v-if="submission_window_pending">Submission Window pending</p>
+            <button v-else-if="submission_window_ongoing" @click="scanQR">Scan Code</button>
+            <p v-else>Submission window closed</p>
+          </div>
+          <div v-else>
+            Lecture is over - show submission status
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -26,7 +77,7 @@
         is_instructor: Boolean,
         lecture_has_loaded: false,
         lecture_is_pending: false,
-        lecture_is_active: false,
+        lecture_is_live: false,
         lecture_is_over: false,
         submission_window_pending: false,
         submission_window_ongoing: false,
@@ -34,17 +85,19 @@
       }
     },
     created() {
-      // this.getLecture()
+      this.getLecture()
       this.is_instructor = this.$store.state.user.current_user.is_instructor
     },
     methods: {
       async getLecture() {
         let lecture_id = this.$route.params.lecture_id
-        const response = await LectureAPI.getLectureWithSectionAndCourse(lecture_id)
+        console.log("calling func")
+        const response = await LectureAPI.getLectureWithSectionsAndCourse(lecture_id)
         this.lecture = response.data
+        console.log(this.lecture)
         this.lecture_has_loaded = true
         this.setLectureStatus()
-        if(this.is_instructor && this.lecture_is_active && this.submission_window_ongoing){
+        if(this.is_instructor && this.lecture_is_live && this.submission_window_ongoing){
           this.$nextTick(function() {
             this.showQR(this.lecture.code)
           });
@@ -57,7 +110,7 @@
         if(current_time <= lecture_start_time) 
           this.lecture_is_pending = true
         else if(current_time >= lecture_start_time && current_time <= lecture_end_time){
-          this.lecture_is_active = true
+          this.lecture_is_live = true
           this.setSubmissionWindowStatus()
         }
         else
