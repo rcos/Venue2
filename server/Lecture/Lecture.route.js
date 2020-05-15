@@ -19,9 +19,10 @@ lectureRoutes.route('/add').post(function (req, res) {
     });
 });
 
-lectureRoutes.route('/add_playback').post(function (req, res) {
+lectureRoutes.route('/add_playback/:lecture_id').post(function (req, res) {
 
 	const form = formidable({ multiples: true });
+	let lecture_id = req.params.lecture_id
 
 	form.parse(req, (err, fields, files) => {
 		if (err) {
@@ -30,24 +31,29 @@ lectureRoutes.route('/add_playback').post(function (req, res) {
 		}
 		var oldpath = files.video.path;
 		var newpath = __dirname + fields.video_ref + files.video.name;
+		// create the videos directory if it doesn't already exist
 		if (!fs.existsSync(__dirname + "/videos")) {
 			fs.mkdirSync(__dirname + "/videos")
 		}
+		// create the lecture videos folder it it doesn't already exist
 		if (!fs.existsSync(__dirname + fields.video_ref)) {
 			fs.mkdirSync(__dirname + fields.video_ref)
 		}
-		fs.rename(oldpath, newpath, function (err) {});
-		let lecture = new Lecture({
-			event: fields.event,
-			video_ref: fields.video_ref
-		});
-		lecture.save()
-			.then(() => {
-				res.status(200).json(lecture);
-			})
-			.catch(() => {
-				res.status(400).send("unable to save lecture to database");
-			});
+		// save the video to path 'Lecture/videos/lecture_id/video_name'
+		fs.rename(oldpath, newpath, function (err) {})
+
+		// update the lecture with video
+		Lecture.findByIdAndUpdate(lecture_id,
+		  {
+		    video_ref: fields.video_ref,
+		  },
+		  function (err, updated_lecture) {
+		    if (!updated_lecture)
+		      res.status(404).send("lecture not found");
+		    else
+		    	res.json(updated_lecture);
+		  }
+		);
 	});
 });
 
