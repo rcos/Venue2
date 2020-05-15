@@ -31,6 +31,14 @@
       <!-- Attendance history -->
       <div class="attendance-history-container">
         <div class="attendance-history-header">
+          <h4 class="attendance-history-header-text">Live lectures</h4>
+        </div>
+        <div class="lecture-container" v-for="lecture in live_lectures">
+          <p>{{ lecture.title }}</p>
+        </div>
+      </div>
+      <div class="attendance-history-container">
+        <div class="attendance-history-header">
           <h4 class="attendance-history-header-text">Upcoming lectures</h4>
         </div>
         <div class="lecture-container" v-for="lecture in upcoming_lectures">
@@ -75,6 +83,7 @@ export default {
       active_events: [],
       all_lectures: [],
       upcoming_lectures: [],
+      live_lectures: [],
       course_has_loaded: false
     }
   },
@@ -85,6 +94,7 @@ export default {
       this.getCourse()
       this.getAllLecturesForCourse()
       this.getUpcomingLecturesForCourse()
+      this.getLiveLecturesForCourse()
       // this.getActiveEventsForCourse()
     } else {
       // this.section_id = this.$route.params.id
@@ -104,6 +114,10 @@ export default {
       this.course = this.section.course
       this.course_has_loaded = true
     },
+    async getLiveLecturesForCourse() {
+      const response = await LectureAPI.getLecturesForCourse(this.course_id, "live")
+      this.live_lectures = response.data
+    },   
     async getUpcomingLecturesForCourse() {
       const response = await LectureAPI.getLecturesForCourse(this.course_id, "upcoming")
       this.upcoming_lectures = response.data
