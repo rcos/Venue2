@@ -104,7 +104,7 @@ lectureRoutes.get('/live_for_user/:user_id', (req, res) => {
 lectureRoutes.get('/for_course/:course_id/:lecture_type', (req, res) => {
 	let course_id = req.params.course_id
 	let lecture_type = req.params.lecture_type
-	let legal_lecture_types = ["all","live","playback","upcoming","recent"]
+	let legal_lecture_types = ["all","live","playback","upcoming","past"]
 	if(!legal_lecture_types.includes(lecture_type)){
 		res.status(400).send("Illegal lecture type")
 		return
@@ -126,6 +126,8 @@ lectureRoutes.get('/for_course/:course_id/:lecture_type', (req, res) => {
 						res.json(getUpcomingLectures(course_lectures))
 					else if(lecture_type === "live")
 						res.json(getLiveLectures(course_lectures))
+					else if(lecture_type === "past")
+						res.json(getPastLectures(course_lectures))
 				}
 			})
 		}
@@ -134,12 +136,12 @@ lectureRoutes.get('/for_course/:course_id/:lecture_type', (req, res) => {
 
 
 function getLiveLectures(lectures) {
-	live_lectures = []
+	past_lectures = []
 	lectures.forEach(lecture => {
 		if(isLive(lecture))
-			live_lectures.push(lecture)
+			past_lectures.push(lecture)
 	})
-	return live_lectures
+	return past_lectures
 }
 
 function getUpcomingLectures(lectures) {
@@ -151,6 +153,15 @@ function getUpcomingLectures(lectures) {
 	return upcoming_lectures
 }
 
+function getPastLectures(lectures) {
+	past_lectures = []
+	lectures.forEach(lecture => {
+		if(isPast(lecture))
+			past_lectures.push(lecture)
+	})
+	return past_lectures
+}
+
 function isLive(lecture) {  
   let current_time = new Date() 
   return current_time >= lecture.start_time &&  
@@ -159,7 +170,13 @@ function isLive(lecture) {
 
 function isUpcoming(lecture) {  
   let current_time = new Date() 
-  return current_time < lecture.start_time 
+  return current_time < lecture.start_time
 }
 
-module.exports = lectureRoutes;
+function isPast(lecture) {  
+  let current_time = new Date() 
+  return current_time > lecture.end_time ||
+  	current_time > lecture.playback_submission_end_time
+}
+
+module.exports = lectureRoutes
