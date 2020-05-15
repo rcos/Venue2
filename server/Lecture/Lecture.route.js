@@ -170,7 +170,8 @@ function isLive(lecture) {
 
 function isUpcoming(lecture) {  
   let current_time = new Date() 
-  return current_time < lecture.start_time
+  return current_time < lecture.start_time ||
+  	current_time < lecture.playback_submission_start_time
 }
 
 function isPast(lecture) {  
