@@ -101,6 +101,26 @@ lectureRoutes.get('/live_for_user/:user_id', (req, res) => {
 	})
 })
 
+lectureRoutes.get('/all_for_course/:course_id', (req, res) => {
+	let course_id = req.params.course_id
+	// get sections for course
+	Section.find({course: course_id}, (error, course_sections) => {
+		if(error)
+			res.json(error)
+		else {
+			// get lectures for these courses
+			Lecture.find({sections: {$in: course_sections}}, (error,course_lectures) => {
+				if(error)
+					res.json(error)
+				else {
+					res.json(course_lectures)
+				}
+			})
+		}
+	})
+})
+
+
 function getLiveLectures(lectures) {
 	live_lectures = []
 	lectures.forEach(lecture => {
