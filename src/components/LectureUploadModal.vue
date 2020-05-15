@@ -32,6 +32,26 @@
             <button id="add_poll_btn" class="btn btn-primary" @click="addPoll()">+</button>
           </div>
         </div>
+        <div class="input-wrapper" id="submission-time-wrapper">
+          <label>Submission Start Time</label>
+          <datetime
+            class="time-picker"
+            type="datetime"
+            use12-hour
+            value-zone="local"
+            title="Submission Start"
+            v-model="lecture.playback_submission_start_time"
+          ></datetime>
+          <label>Submission End Time</label>
+          <datetime
+            class="time-picker"
+            type="datetime"
+            use12-hour
+            value-zone="local"
+            title="Submission End"
+            v-model="lecture.playback_submission_end_time"
+          ></datetime>
+        </div>
       </div>
     </div>
   </div>
@@ -41,6 +61,7 @@
 import LectureAPI from "../services/LectureAPI";
 import PollCard from "./PollCard";
 import videojs from "video.js";
+import { Datetime } from "vue-datetime";
 
 export default {
   name: "LectureUploadModal",
@@ -48,7 +69,10 @@ export default {
     lecture: Object
   },
   computed: {},
-  components: {PollCard},
+  components: {
+    PollCard,
+    datetime: Datetime,
+  },
   data() {
     return {
       file_selected: false,
@@ -57,7 +81,6 @@ export default {
     };
   },
   created() {
-    console.log(this.lecture)
     this.lecture.video_ref = "/videos/" + this.lecture._id + "/";
   },
   mounted() {
