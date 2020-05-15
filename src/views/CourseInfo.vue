@@ -33,33 +33,41 @@
         <div class="attendance-history-header">
           <h4 class="attendance-history-header-text">Live lectures</h4>
         </div>
-        <div class="lecture-container" v-for="lecture in live_lectures">
-          <p>{{ lecture.title }}</p>
-        </div>
+        <router-link v-for="lecture in live_lectures" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}">
+          <div class="lecture-container">
+            <p>{{ lecture.title }}</p>
+          </div>
+        </router-link>
       </div>
       <div class="attendance-history-container">
         <div class="attendance-history-header">
           <h4 class="attendance-history-header-text">Upcoming lectures</h4>
         </div>
-        <div class="lecture-container" v-for="lecture in upcoming_lectures">
-          <p>{{ lecture.title }}</p>
-        </div>
+        <router-link v-for="lecture in upcoming_lectures" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}">
+          <div class="lecture-container">
+            <p>{{ lecture.title }}</p>
+          </div>
+        </router-link>
       </div>
       <div class="attendance-history-container">
         <div class="attendance-history-header">
           <h4 class="attendance-history-header-text">Past lectures</h4>
         </div>
-        <div class="lecture-container" v-for="lecture in past_lectures">
-          <p>{{ lecture.title }}</p>
-        </div>
+        <router-link v-for="lecture in past_lectures" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}">
+          <div class="lecture-container">
+            <p>{{ lecture.title }}</p>
+          </div>
+        </router-link>
       </div>
       <div class="attendance-history-container">
         <div class="attendance-history-header">
           <h4 class="attendance-history-header-text">All lectures</h4>
         </div>
-        <div class="lecture-container" v-for="lecture in all_lectures">
-          <p>{{ lecture.title }}</p>
-        </div>
+        <router-link v-for="lecture in all_lectures" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}">
+          <div class="lecture-container">
+            <p>{{ lecture.title }}</p>
+          </div>
+        </router-link>
 <!--         <EventHistoryList v-if="is_instructor" v-bind:course="course" />
         <EventHistoryList v-else v-bind:section="section"/> -->
         </div>
