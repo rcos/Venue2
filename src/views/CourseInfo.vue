@@ -31,11 +31,14 @@
       <!-- Attendance history -->
       <div class="attendance-history-container">
         <div class="attendance-history-header">
-          <h4 class="attendance-history-header-text">Attendance History (85%)</h4>
+          <h4 class="attendance-history-header-text">All lectures (85%)</h4>
           <p class="section-selector">all sections</p>
         </div>
-        <EventHistoryList v-if="is_instructor" v-bind:course="course" />
-        <EventHistoryList v-else v-bind:section="section"/>
+        <div class="lecture-container" v-for="lecture in lectures">
+          <p>{{ lecture.title }}</p>
+        </div>
+<!--         <EventHistoryList v-if="is_instructor" v-bind:course="course" />
+        <EventHistoryList v-else v-bind:section="section"/> -->
         </div>
       </div>
     </div>
@@ -46,6 +49,7 @@
   import CourseAPI from '@/services/CourseAPI.js';
   import SectionAPI from '@/services/SectionAPI.js';
   import EventAPI from '@/services/EventAPI.js';
+  import LectureAPI from '@/services/LectureAPI.js';
   import EventHistoryList from '@/components/EventHistoryList.vue';
 
 export default {
@@ -62,6 +66,7 @@ export default {
       course: Object,
       section: Object,
       active_events: [],
+      lectures: [],
       course_has_loaded: false
     }
   },
@@ -70,11 +75,12 @@ export default {
     if(this.is_instructor) {
       this.course_id = this.$route.params.id
       this.getCourse()
-      this.getActiveEventsForCourse()
+      this.getLecturesForCourse()
+      // this.getActiveEventsForCourse()
     } else {
-      this.section_id = this.$route.params.id
-      this.getSectionWithCourse()
-      this.getActiveEventsForSection()
+      // this.section_id = this.$route.params.id
+      // this.getSectionWithCourse()
+      // this.getActiveEventsForSection()
     }
   },
   methods: {
@@ -89,6 +95,10 @@ export default {
       this.course = this.section.course
       this.course_has_loaded = true
     },
+    async getLecturesForCourse() {
+      const response = await LectureAPI.getAllLecturesForCourse(this.course_id)
+      this.lectures = response.data
+    },    
     async getActiveEventsForCourse() {
       const response = await EventAPI.getActiveEventsForCourse(this.course_id)
       this.active_events = response.data
@@ -209,6 +219,18 @@ export default {
     display: inline-block;
     margin-left: 1rem;
     text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .lecture-container {
+    border: blue solid;
+    width: 10rem;
+    height: 3rem;
+    border-radius: 5px;
+    margin-left: 3rem;
+    margin-top: 2rem;
+    display: inline-block;
+    float: left;
     cursor: pointer;
   }
 </style>
