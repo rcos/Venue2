@@ -134,6 +134,35 @@ lectureRoutes.get('/for_course/:course_id/:lecture_type', (req, res) => {
 	})
 })
 
+lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
+	let lecture_id = req.params.lecture_id;
+	// get lecture
+	Lecture.findById(lecture_id, function (error, lecture){
+    if(error)
+      res.json(err)
+    else{
+    	// get the sections for the lecture
+      Section.find({'_id': {$in: lecture.sections}}, (error, lecture_sections) => {
+      	if(error)
+      		res.json(error)
+      	else {
+      		lecture.sections = lecture_sections
+      		// get the course for these sections
+      		Course.findById(lecture_sections[0].course, (error, lecture_course) => {
+      			if(error)
+      				res.json(error)
+      			else {
+      				lecture.sections.forEach(section => {
+      					section.course = lecture_course
+      				})
+      				res.json(lecture)
+      			}
+      		})
+      	}
+      })
+    }
+	});
+})
 
 function getLiveLectures(lectures) {
 	past_lectures = []

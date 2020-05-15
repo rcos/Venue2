@@ -11,6 +11,9 @@ export default {
   getLecturesForCourse(course_id, lecture_type) {
     return API().get('lectures/for_course/' + course_id + '/' + lecture_type)
   },
+  getLectureWithSectionsAndCourse(lecture_id) {
+    return API().get('lectures/with_sections_and_course/' + lecture_id)
+  },
   addLecture(lecture) {
     return API().post('lectures/add', {
       lecture: lecture 
