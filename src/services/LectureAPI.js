@@ -8,9 +8,8 @@ export default {
     return API().get('lectures/live_for_user/' + user_id, {
     })
   },
-  getAllLecturesForCourse(course_id) {
-    return API().get('lectures/all_for_course/' + course_id, {
-    })
+  getLecturesForCourse(course_id, lecture_type) {
+    return API().get('lectures/for_course/' + course_id + '/' + lecture_type)
   },
   addLecture(lecture) {
     return API().post('lectures/add', {

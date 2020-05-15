@@ -12,7 +12,7 @@ lectureRoutes.route('/add').post(function (req, res) {
   let lecture = new Lecture(req.body.lecture);
   lecture.save()
     .then(() => {
-      res.status(200).json(lectures);
+      res.status(200).json(lecture);
     })
     .catch(() => {
       res.status(400).send("unable to save lecture to database");
@@ -101,8 +101,15 @@ lectureRoutes.get('/live_for_user/:user_id', (req, res) => {
 	})
 })
 
-lectureRoutes.get('/all_for_course/:course_id', (req, res) => {
+lectureRoutes.get('/for_course/:course_id/:lecture_type', (req, res) => {
 	let course_id = req.params.course_id
+	let lecture_type = req.params.lecture_type
+	let legal_lecture_types = ["all","upcoming","playback","recent"]
+	if(!legal_lecture_types.includes(lecture_type)){
+		res.status(400).send("Illegal lecture type")
+		return
+	}
+
 	// get sections for course
 	Section.find({course: course_id}, (error, course_sections) => {
 		if(error)
@@ -113,7 +120,10 @@ lectureRoutes.get('/all_for_course/:course_id', (req, res) => {
 				if(error)
 					res.json(error)
 				else {
-					res.json(course_lectures)
+					if(lecture_type === "all")
+						res.json(course_lectures)
+					else if(lecture_type === "upcoming")
+						res.json(getUpcomingLectures(course_lectures))
 				}
 			})
 		}
@@ -130,10 +140,24 @@ function getLiveLectures(lectures) {
 	return live_lectures
 }
 
+function getUpcomingLectures(lectures) {
+	upcoming_lectures = []
+	lectures.forEach(lecture => {
+		if(isUpcoming(lecture))
+			upcoming_lectures.push(lecture)
+	})
+	return upcoming_lectures
+}
+
 function isLive(lecture) {  
   let current_time = new Date() 
   return current_time >= lecture.start_time &&  
     current_time <= lecture.end_time  
+}
+
+function isUpcoming(lecture) {  
+  let current_time = new Date() 
+  return current_time < lecture.start_time 
 }
 
 module.exports = lectureRoutes;
