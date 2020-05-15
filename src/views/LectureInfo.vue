@@ -23,9 +23,9 @@
             <p>Lecture not started yet</p>
           </div>
           <div v-else-if="lecture_is_live">
-            <p>Lecture is active.</p>
+            <p>Lecture is live.</p>
             <p v-if="submission_window_pending">Submission Window pending</p>
-            <div v-else-if="submission_window_ongoing">
+            <div v-else-if="submission_window_open">
               <p>QR Code:</p>
               <canvas id="qr_render_area"></canvas>
             </div>
@@ -44,7 +44,7 @@
           <div v-else-if="lecture_is_live">
             <p>Lecture is ongoing.</p>
             <p v-if="submission_window_pending">Submission Window pending</p>
-            <button v-else-if="submission_window_ongoing" @click="scanQR">Scan Code</button>
+            <button v-else-if="submission_window_open" @click="scanQR">Scan Code</button>
             <p v-else>Submission window closed</p>
           </div>
           <div v-else>
@@ -80,7 +80,7 @@
         lecture_is_live: false,
         lecture_is_over: false,
         submission_window_pending: false,
-        submission_window_ongoing: false,
+        submission_window_open: false,
         submission_window_closed: false
       }
     },
@@ -91,13 +91,11 @@
     methods: {
       async getLecture() {
         let lecture_id = this.$route.params.lecture_id
-        console.log("calling func")
         const response = await LectureAPI.getLectureWithSectionsAndCourse(lecture_id)
         this.lecture = response.data
-        console.log(this.lecture)
         this.lecture_has_loaded = true
         this.setLectureStatus()
-        if(this.is_instructor && this.lecture_is_live && this.submission_window_ongoing){
+        if(this.is_instructor && this.lecture_is_live && this.submission_window_open){
           this.$nextTick(function() {
             this.showQR(this.lecture.code)
           });
@@ -123,7 +121,7 @@
         if(current_time < submission_start_time)
           this.submission_window_pending = true
         else if(current_time >= submission_start_time && current_time <= submission_end_time)
-          this.submission_window_ongoing = true
+          this.submission_window_open = true
         else
           this.submission_window_closed = true
       },

@@ -44,27 +44,26 @@ import videojs from "video.js";
 
 export default {
   name: "LectureUploadModal",
-  props: ["event"],
+  props: {
+    lecture: Object
+  },
   computed: {},
   components: {PollCard},
   data() {
     return {
-      lecture: {},
       file_selected: false,
       showModal: false,
       n_polls: 0
     };
   },
   created() {
-    this.lecture.event = this.$props.event._id;
-    this.lecture.title = this.$props.event.title;
-    this.lecture.video_ref = "/videos/" + this.lecture.event + "/";
+    this.lecture.video_ref = "/videos/" + this.lecture._id + "/";
   },
   mounted() {
   },
   methods: {
     async addLecture() {
-      LectureAPI.addLecture(
+      LectureAPI.addLecturePlayback(
         this.lecture,
         document.getElementById("video_selector").files[0]
       ).then(res => {
