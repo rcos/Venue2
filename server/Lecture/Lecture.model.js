@@ -23,10 +23,8 @@ let Lecture = new Schema({
 		is_open: { type: Boolean, default: false },
 		is_closed: { type: Boolean, default: false }
 	},
-	video_ref: {
-		type: String,
-		default: ""
-	},
+	code: {	type: String, default: "" },
+	video_ref: { type: String, default: "" },
 	num_playback_polls: Number
 });
 

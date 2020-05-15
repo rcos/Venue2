@@ -122,6 +122,7 @@ export default {
       evt.preventDefault();
       this.lecture.sections = this.lecture_sections;
       this.lecture.allow_live_submissions = this.allow_live_submissions
+      this.generateAttendanceCode()
       const response = await LectureAPI.addLecture(this.lecture);
       this.$router.push({
         name: "course_info",
@@ -141,7 +142,7 @@ export default {
         result += alnums[Math.floor(Math.random() * alnums.length)];
       }
       this.lecture.code = result;
-      this.showQR(this.lecture.code);
+      // this.showQR(this.lecture.code);
     },
     showQR(qr_data) {
       let canvas = document.getElementById("qr_render_area");
