@@ -32,8 +32,12 @@
             <p v-else>Submission window closed</p>
           </div>
           <div v-else>
-            <p>Lecture is over - show submission statistics</p>
-            <LectureUploadModal v-bind:lecture="lecture" />
+            <div v-if="lecture.allow_playback_submissions">
+              <p>video_ref: {{ lecture.video_ref }}</p>
+              <p>playback_submission_start_time: {{ new Date(lecture.playback_submission_start_time) }}</p>
+              <p>playback_submission_end_time: {{ new Date(lecture.playback_submission_end_time) }}</p>
+            </div>
+            <LectureUploadModal v-else v-bind:lecture="lecture" />
           </div>
         </div>
         <!-- Student -->
