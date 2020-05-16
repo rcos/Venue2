@@ -128,6 +128,57 @@ submissionRoutes.route(`/section_submissions/:section_id`).get((req, res) => {
 
 })
 
+submissionRoutes.route('/user_submissions_for_section/:user_id/:section_id').get((req, res) => {
+  let user_id = req.params.user_id
+  let section_id = req.params.section_id
+
+  if (!ObjectID.isValid(user_id) || !ObjectID.isValid(section_id)) {
+    res.json({
+      success: false,
+      error: "Invalid object id provided"
+    })
+    return;
+  }
+
+  // (1) find the submissions that are for the user
+  Submission.find({submitter: user_id}, (err, user_submissions) => {
+    if (err || user_submissions == null) {
+      res.json({
+        success: false,
+        error: "problem finding submissions"
+      })
+    }
+    else {
+
+      submission_promises = []
+
+      user_submissions.forEach(_submission_ => {
+        submission_promises.push(new Promise( (resolve, reject) => {
+          // find the event associated with the submission and check that section_id == the event's section id
+          Event.findOne({ id: _submission_.event }, (err, event_doc) => {
+            if (err || event_doc == null) {
+              resolve(null)
+            }
+            else if (event_doc.section.toString() == section_id) {
+              resolve(event_doc)
+            }
+            else resolve(null)
+          })
+        } ))
+      })
+
+      // wait for the promises to finish
+      Promise.all(submission_promises).then(resolved_submissions => {
+
+        let user_section_submissions = user_submissions.filter((_submission_, i) => resolved_submissions[i] != null)
+        res.json(user_section_submissions)
+
+      })
+
+    }
+  })
+})
+
 submissionRoutes.route('/event_submissions/:event_id').get(function (req, res) {
   console.log("I'm here!!!!");
   let event_id = req.params.event_id;

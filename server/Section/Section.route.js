@@ -57,7 +57,7 @@ sectionRoutes.route('/edit/:id').get(function (req, res) {
 sectionRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
   let updated_section = req.body.updated_section;
-  Section.findByIdAndUpdate(id, 
+  Section.findByIdAndUpdate(id,
     {
       course: updated_section.course,
       number: updated_section.number,
@@ -68,7 +68,7 @@ sectionRoutes.route('/update/:id').post(function (req, res) {
     function(err, section) {
       if (!section)
         res.status(404).send("section not found");
-      res.json(section);    
+      res.json(section);
     }
   );
 });
@@ -103,15 +103,20 @@ sectionRoutes.route('/getInstructor/:id').get(function (req, res) {
 sectionRoutes.route('/getCourse/:id').get(function (req, res) {
   let id = req.params.id;
   Section.findById(id, function (err, section){
-    if(err) {
+    if(err || section == null) {
       res.json(err);
     }
-    let course_id = section.course;
-    Course.findById(course_id, function(error, course){
-      if(error)
-        res.json(error);
-      res.json(course);
-    });
+    else {
+      let course_id = section.course;
+      Course.findById(course_id, function(error, course){
+        if(error || course == null) {
+          res.json(error);
+        }
+        else {
+          res.json(course);
+        }
+      });
+    }
   });
 });
 
@@ -121,20 +126,29 @@ sectionRoutes.route('/getStudents/:id').get(function (req, res) {
     if(err) {
       res.json(err);
     }
-    let student_ids = section.students;
-    let students = [];
-    let num_iterations = 0;
-    console.log("student_ids: " + student_ids);
-    student_ids.forEach(student_id => {
-      User.findById(student_id, function(err, student) {
-        if(err)
-          res.json(err);
-        students.push(student);
-        num_iterations++;
-        if(num_iterations === student_ids.length)
-          res.json(students);
-      });
-    });
+
+    let student_promises = []
+
+    section.students.forEach(student_id => {
+
+      student_promises.push(new Promise((resolve, reject) => {
+        User.findById(student_id, (err, student) => {
+          if (err || student == null) resolve (null)
+          else resolve(student)
+        })
+      }))
+
+    })
+
+    Promise.all(student_promises).then(student_results => {
+      student_results = student_results.filter(result_ => result_ != null)
+
+      res.json({
+        student_count: section.students.length,
+        students: student_results
+      })
+    })
+
   });
 });
 
@@ -157,7 +171,7 @@ sectionRoutes.get('/get_with_courses_for_student/:user_id', verifyToken, (req, r
       // Find all sections such that the student is in the array, students, in the section.
       // Then, find the courses that correspond to those sections
       Section.find(
-        
+
         // (1) Find the sections such that the student array of the section contains
         //  the user id.
         {
@@ -223,7 +237,7 @@ sectionRoutes.get('/get_with_courses_for_student/:user_id', verifyToken, (req, r
         }
 
       })
-      
+
 
     }
   })
