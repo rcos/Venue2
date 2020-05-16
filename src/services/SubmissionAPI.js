@@ -1,4 +1,4 @@
-import API from '@/services/API'
+  import API from '@/services/API'
 
 export default {
   getSubmissions() {
@@ -19,6 +19,9 @@ export default {
   },
   deleteSubmission(id) {
     return API().delete('submissions/delete/' + id)
+  },
+  getUserSubmissionsForSection(user_id, section_id) {
+    return API().get(`submissions/user_submissions_for_section/${user_id}/${section_id}`)
   },
   getSubmissionsForEvent(event_id){
     return API().get('submissions/event_submissions/' + event_id)
