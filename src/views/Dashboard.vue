@@ -2,14 +2,21 @@
   <div>
 <!--     <DashboardSection active_section/>
     <DashboardSection today_section/> -->
-    <div class="dashboard-section" id="section-1">
+    <div class="dashboard-section">
+      <h4 class="section-title">All</h4>
+      <div class="lecture-box" v-for="lecture in all_lectures">
+        <p>{{ lecture.title }}</p>
+      </div>
+    </div>
+
+    <div class="dashboard-section">
       <h4 class="section-title">Live</h4>
       <div class="lecture-box" v-for="lecture in live_lectures">
         <p>{{ lecture.title }}</p>
       </div>
     </div>
 
-    <div class="dashboard-section" id="section-2">
+    <div class="dashboard-section">
       <h4 class="section-title">Playback</h4>
       <div class="lecture-box" v-for="lecture in playback_lectures">
         <p>{{ lecture.title }}</p>
@@ -42,6 +49,7 @@
     data(){
       return {
         current_user: {},
+        all_lectures: [],
         live_lectures: [],
         playback_lectures: [],
         recent_lectures: [],
@@ -50,6 +58,7 @@
     },
     created() {
       this.getCurrentUser()
+      this.getAllLecturesForUser()
       this.getLiveLecturesForUser()
       this.getPlaybackLectures()
     },
@@ -59,6 +68,10 @@
       },
       logOut() {
         this.$store.dispatch('logout')
+      },
+      async getAllLecturesForUser() {
+        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "all")
+        this.all_lectures = response.data
       },
       async getLiveLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "live")
@@ -80,6 +93,7 @@
     display: inline-block;
     vertical-align: top;
     height: 15rem;
+    overflow-y: scroll;
   }
 
   #section-1 {
