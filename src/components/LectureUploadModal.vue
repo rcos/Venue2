@@ -33,7 +33,7 @@
           </div>
         </div>
         <div class="input-wrapper" id="submission-time-wrapper">
-          <label>Submission Start Time</label>
+          <label>Playback Submission Start</label>
           <datetime
             class="time-picker"
             type="datetime"
@@ -42,7 +42,7 @@
             title="Submission Start"
             v-model="lecture.playback_submission_start_time"
           ></datetime>
-          <label>Submission End Time</label>
+          <label>Playback Submission End</label>
           <datetime
             class="time-picker"
             type="datetime"
@@ -91,6 +91,8 @@ export default {
         this.lecture,
         document.getElementById("video_selector").files[0]
       ).then(res => {
+        console.log("About to save polls. Refs:")
+        console.log(this.$refs)
         for(let i in this.$refs) {
           this.$refs[i][0].savePoll(res.data._id)
         }
