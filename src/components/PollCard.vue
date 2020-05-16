@@ -3,6 +3,20 @@
 		<div class="row questionrow">
 			<p class="questionlabel col-3">Question:</p> <input class="question col" type="text" v-model.lazy="question"/>
 		</div>
+		<div class="row">
+			<div class="col">
+				<label for="hour">Hour:</label>
+  				<input type="number" id="hour" name="hour" min="0" max="5" v-model.lazy="hour">
+			</div>
+			<div class="col">
+				<label for="min">Minute:</label>
+  				<input type="number" id="min" name="min" min="0" max="59" v-model.lazy="min">
+			</div>
+			<div class="col">
+				<label for="sec">Second:</label>
+  				<input type="number" id="sec" name="sec" min="0" max="59" v-model.lazy="sec">
+			</div>
+		</div>
 		<div v-for="(possible_answer,i) in possible_answers" v-bind:key="i" class="row">
 			<div class="col-1 answerpart">
 				{{i + 1}}
@@ -32,8 +46,10 @@ export default {
 			is_mult_coice: true,
 			possible_answers: [],
 			correct_answers: [],
-			timestamp: 0,
-			lecture: null
+			lecture: null,
+			hour: 0,
+			min: 0,
+			sec: 0
 		}
 	},
 	created() {
@@ -47,7 +63,14 @@ export default {
 		},
 		savePoll(lecture_id) {
 			this.lecture = lecture_id;
-			LecturePollAPI.addPoll(this.$data);
+			LecturePollAPI.addPoll({
+				question: this.question,
+				is_mult_coice: this.is_mult_coice,
+				possible_answers: this.possible_answers,
+				correct_answers: this.correct_answers,
+				timestamp: (parseInt(this.hour)*3600) + (parseInt(this.min)*60) + parseInt(this.sec),
+				lecture: this.lecture
+			});
 		}
 	}
 }
@@ -95,5 +118,10 @@ export default {
 .row {
 	margin-top: 5px;
 	margin-bottom: 5px;
+}
+#hour,
+#min,
+#sec {
+	width: 100%;
 }
 </style>

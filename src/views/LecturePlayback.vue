@@ -7,10 +7,10 @@
 <script>
 import videojs from 'video.js';
 import LectureAPI from "../services/LectureAPI";
-import lectureSubmissionAPI from "../services/LectureSubmissionAPI";
+import LecturePollAPI from '../services/LecturePollAPI';
+import LectureSubmissionAPI from '../services/LectureSubmissionAPI';
 import axios from 'axios';
 import fs from 'fs';
-import LectureSubmissionAPI from '../services/LectureSubmissionAPI';
 
 export default {
 	name: 'LecturePlayback',
@@ -51,27 +51,33 @@ export default {
 					LectureSubmissionAPI.getOrMake(self.lecture._id,self.currentUser._id)
 						.then(res => {
 							self.lectureSubmission = res.data
-							vid.on('timeupdate', function () {
-								let currTime = vid.currentTime()
-								for (let i in self.polls) {
-									if (currTime >= self.polls[i].timestamp && self.lectureSubmission.student_poll_answers[i].length == 0) {
-										//pause the video player
-										//open the poll modal
-									}
-								}
-								if(currTime - self.prevTime < 0.5) {
-									//Considered NOT a jump, video is playing normally
-									if(self.lectureSubmission.video_progress < currTime) {
-										self.lectureSubmission.video_progress = currTime
-									}
-								} else {
-									//Considered a jump forward
-									if(currTime > self.lectureSubmission.video_progress) {
-										vid.currentTime(self.prevTime)
-									}
-								}
-								self.prevTime = vid.currentTime()
-							})
+							LecturePollAPI.getByLecture(self.lecture._id)
+								.then(resp => {
+									self.polls = resp.data
+									console.log(self.polls)
+									vid.on('timeupdate', function () {
+										let currTime = vid.currentTime()
+										// for (let i in self.polls) {
+										// 	if (currTime >= self.polls[i].timestamp && self.lectureSubmission.student_poll_answers[i].length == 0) {
+										// 		//pause the video player
+										// 		//open the poll modal
+										// 	}
+										// }
+										console.log(currTime)
+										if(currTime - self.prevTime < 0.5) {
+											//Considered NOT a jump, video is playing normally
+											if(self.lectureSubmission.video_progress < currTime) {
+												self.lectureSubmission.video_progress = currTime
+											}
+										} else {
+											//Considered a jump forward
+											if(currTime > self.lectureSubmission.video_progress) {
+												vid.currentTime(self.prevTime)
+											}
+										}
+										self.prevTime = vid.currentTime()
+									})
+								})
 						})
 					
 					//TODO handle updating the submission where needed

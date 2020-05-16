@@ -18,7 +18,11 @@ let LecturePoll = new Schema({
 	correct_answers: [{
 		type: String,
 		default: ""
-	}]
+	}],
+	timestamp: {
+		type: Number,
+		default: 0
+	}
 });
 
 module.exports = mongoose.model('LecturePoll', LecturePoll);
