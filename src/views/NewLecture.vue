@@ -24,8 +24,10 @@
         </div>
         <Sections v-else v-bind:sections="course_sections" v-on:select-section="addSection" />
         <div class="input-wrapper">
-          <input type="checkbox" name="live_submission" v-model="allow_live_submissions">
-          <label for="live_submission">Allow Live Submissions</label><br>
+          <input @click="setAllowLiveSubmissions" type="checkbox" name="live_submission" v-model="allow_live_submissions">
+          <label for="live_submission">Live Submissions (can add playback after lecture ends)</label><br>
+          <input @click="setAllowPlaybackSubmissions" type="checkbox" name="playback_submission" v-model="allow_playback_submissions">
+          <label for="playback_submission">Playback Submissions Only</label><br>
         </div>
         <!-- Times -->
         <div v-if="allow_live_submissions">
@@ -70,6 +72,59 @@
             ></datetime>
           </div>
         </div>
+        <!-- Playback video adder -->
+        <div v-if="allow_playback_submissions" id="lecture_modal_viewable">
+          <div class="row">
+              <button id="close_lecture_modal" class="btn btn-secondary" @click="showModal = false">X</button>
+          </div>
+          <input id="video_selector" name="lecturevideo" type="file" accept="video/*" />
+          <div class="row" id="lecture_container" v-if="file_selected">
+            <div class="col-8" id="preview">
+              <video
+                id="video_player"
+                class="video-js"
+                controls
+                preload="auto"
+                poster=""
+                data-setup='{}'>
+                <!-- <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4" /> -->
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider upgrading to a
+                  web browser that
+                  <a href="http://videojs.com/html5-video-support/" target="_blank">
+                    supports HTML5 video
+                  </a>
+                </p>
+              </video>
+            </div>
+            <div class="col">
+              <div id="polls">
+                <PollCard v-for="i in n_polls" :key="i" :ref="'pollRef' + i"/>
+                <button id="add_poll_btn" class="btn btn-primary" @click="addPoll">+</button>
+              </div>
+            </div>
+            <div class="input-wrapper" id="submission-time-wrapper">
+              <label>Playback Submission Start Time</label>
+              <datetime
+                class="time-picker"
+                type="datetime"
+                use12-hour
+                value-zone="local"
+                title="Submission Start"
+                v-model="lecture.playback_submission_start_time"
+              ></datetime>
+              <label>Playback Submission End Time</label>
+              <datetime
+                class="time-picker"
+                type="datetime"
+                use12-hour
+                value-zone="local"
+                title="Submission End"
+                v-model="lecture.playback_submission_end_time"
+              ></datetime>
+            </div>
+          </div>
+        </div>
       </div>
       <button class="btn btn-primary create-lecture-btn">Create Lecture</button>
     </form>
@@ -85,13 +140,15 @@ import { Datetime } from "vue-datetime";
 import "vue-datetime/dist/vue-datetime.css";
 import QRCode from "qrcode";
 import GoogleMap from "@/components/GoogleMap";
+import PollCard from "@/components/PollCard";
 
 export default {
   name: "NewLecture",
   components: {
     Sections,
     datetime: Datetime,
-    GoogleMap
+    GoogleMap,
+    PollCard
   },
   data() {
     return {
@@ -101,7 +158,10 @@ export default {
       course_sections: [],
       course_sections_have_loaded: false,
       selected_geofence: [],
-      allow_live_submissions: false
+      allow_live_submissions: false,
+      allow_playback_submissions: false,
+      file_selected: false,
+      n_polls: 0
     };
   },
   created() {
@@ -122,11 +182,31 @@ export default {
       evt.preventDefault();
       this.lecture.sections = this.lecture_sections;
       this.lecture.allow_live_submissions = this.allow_live_submissions
-      this.generateAttendanceCode()
-      const response = await LectureAPI.addLecture(this.lecture);
-      this.$router.push({
-        name: "course_info",
-        params: { id: this.course_id }
+      this.lecture.allow_playback_submissions = this.allow_playback_submissions
+      // generate attendance codes for live lectures
+      if(this.lecture.allow_live_submissions)
+        this.generateAttendanceCode()
+      let response = await LectureAPI.addLecture(this.lecture);
+      this.lecture = response.data
+      // add video playback for playback lectures
+      if(this.lecture.allow_playback_submissions)
+        this.addPlaybackToLecture()
+    },
+    async addPlaybackToLecture() {
+      this.lecture.video_ref = "/videos/" + this.lecture._id + "/";
+      LectureAPI.addLecturePlayback(
+        this.lecture,
+        document.getElementById("video_selector").files[0]
+      ).then(res => {
+        // save all the polls
+        for(let i in this.$refs) {
+          this.$refs[i][0].savePoll(res.data._id)
+        }
+        // go back to course info
+        this.$router.push({
+          name: "course_info",
+          params: { id: this.course_id }
+        });
       });
     },
     async getSectionsForCourse() {
@@ -151,6 +231,40 @@ export default {
           if (error) console.error(error);
         });
       }
+    },
+    setAllowLiveSubmissions() {
+      this.allow_live_submissions = true
+      this.allow_playback_submissions = false
+    },
+    setAllowPlaybackSubmissions() {
+      this.allow_playback_submissions = true
+      this.allow_live_submissions = false
+      this.handleShowModal()
+    },
+    handleShowModal() {
+      this.$nextTick(() => {
+        let vid_selector = document.getElementById("video_selector");
+        let self = this;
+        vid_selector.addEventListener("change", function() {
+          if (vid_selector.files.length == 0) {
+            self.file_selected = false;
+          } else {
+            self.polls = [];
+            self.file_selected = true;
+            self.$nextTick(() => {
+              var srcEl = document.createElement("source")
+              srcEl.setAttribute("src",URL.createObjectURL(vid_selector.files[0]))
+              srcEl.setAttribute("type",vid_selector.files[0].type)
+              
+              document.getElementById("video_player").prepend(srcEl)
+            })
+          }
+        });
+      })
+    },
+    addPoll(evt) {
+      evt.preventDefault()
+      this.n_polls++
     }
   }
 };
