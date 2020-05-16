@@ -4,8 +4,8 @@ export default {
   getLectures() {
     return API().get('lectures')
   },
-  getLiveLecturesForUser(user_id) {
-    return API().get('lectures/live_for_user/' + user_id, {
+  getLecturesForUser(user_id, lecture_type) {
+    return API().get('lectures/for_user/' + user_id + '/' + lecture_type, {
     })
   },
   getLecturesForCourse(course_id, lecture_type) {
