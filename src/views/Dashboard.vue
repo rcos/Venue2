@@ -24,6 +24,13 @@
     </div>
 
     <div class="dashboard-section">
+      <h4 class="section-title">Recent</h4>
+      <div class="lecture-box" v-for="lecture in recent_lectures">
+        <p>{{ lecture.title }}</p>
+      </div>
+    </div>
+
+    <div class="dashboard-section">
       <h4 class="section-title">Upcoming</h4>
       <div class="lecture-box" v-for="lecture in upcoming_lectures">
         <p>{{ lecture.title }}</p>
@@ -68,6 +75,7 @@
       this.getAllLecturesForUser()
       this.getLiveLecturesForUser()
       this.getPlaybackLectures()
+      this.getRecentLecturesForUser()
       this.getUpcomingLecturesForUser()
     },
     methods: {
@@ -88,6 +96,11 @@
       async getPlaybackLectures() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "active_playback")
         this.playback_lectures = response.data
+      },
+      async getRecentLecturesForUser() {
+        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "past")
+        let past_lectures = response.data
+        this.recent_lectures = past_lectures.slice(0,3)
       },
       async getUpcomingLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "upcoming")
