@@ -71,7 +71,7 @@ lectureRoutes.route('/').get(function (req, res) {
 lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
 	let user_id = req.params.user_id
 	let lecture_type = req.params.lecture_type
-	let legal_lecture_types = ["all","live","upcoming","recent","active_playback"]
+	let legal_lecture_types = ["all","live","upcoming","past","active_playback"]
 	if(!legal_lecture_types.includes(lecture_type)){
 		res.status(400).send("Illegal lecture type")
 		return
@@ -105,6 +105,8 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
 											res.json(getLiveLectures(instructor_lectures))
 										else if(lecture_type === "active_playback")
 											res.json(getActivePlaybacLectures(instructor_lectures))
+										else if(lecture_type === "past")
+											res.json(getPastLectures(instructor_lectures))
 										else if(lecture_type === "upcoming")
 											res.json(getUpcomingLectures(instructor_lectures))
 									}
