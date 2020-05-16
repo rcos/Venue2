@@ -14,5 +14,10 @@ export default {
       lecture_id: lecture_id,
       submitter_id: submitter_id // add our data to the request body
     })
+  },
+  update(lectureSubmission) {
+    return API().post('lecturesubmissions/update', {
+      lectureSubmission: lectureSubmission // add our data to the request body
+    })
   }
 }

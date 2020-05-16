@@ -1,16 +1,29 @@
 <template>
   <div id="lecture_playback">
     <video id="video_player" class="video-js vjs-big-play-centered" controls></video>
+		<div id="polls" class="hide">
+			<!--Poll Modals Start-->
+			<div v-for="(poll,i) in polls" :key="i" class="poll hide" :id="'poll'+(i+1)">
+				<div class="row question">
+					Question {{(i+1)}}: {{poll.question}}
+				</div>
+				<div v-for="(possible_answer,j) in poll.possible_answers" :key="j" class="row question">
+					{{(j+1)}}: {{possible_answer}} <input type="checkbox" :id="'student_answer_'+(i+1)+'_'+(j+1)"/>
+				</div>
+				<button :id="'answer_btn_'+(i+1)" @click="answerPoll(i)">Submit</button>
+			</div>
+			<!--Poll Modals End-->
+		</div>
   </div>
 </template>
 
 <script>
 import videojs from 'video.js';
+import axios from 'axios';
+import fs from 'fs';
 import LectureAPI from "../services/LectureAPI";
 import LecturePollAPI from '../services/LecturePollAPI';
 import LectureSubmissionAPI from '../services/LectureSubmissionAPI';
-import axios from 'axios';
-import fs from 'fs';
 
 export default {
 	name: 'LecturePlayback',
@@ -36,8 +49,6 @@ export default {
 		LectureAPI.getLecture(this.$route.params.id)
 			.then(res => {
 				this.lecture = res.data;
-				// 'http://localhost:9000/videos/sample/sample.mp4'
-				// this.setSource('http://localhost:9000/videos/sample/sample.mp4')
 				let self = this
 				videojs("video_player", {}, function() {
 					self.vjs = this
@@ -55,7 +66,6 @@ export default {
 								.then(resp => {
 									self.polls = resp.data
 									console.log(self.polls)
-									self.polls[0].timestamp = 5;
 									vid.on('timeupdate', function () {
 										let currTime = vid.currentTime()
 										for (let i = 0; i < self.polls.length; i++) {
@@ -64,8 +74,7 @@ export default {
 													//THERE IS NO ANSWER FROM THE STUDENT YET
 													vid.currentTime(self.polls[i].timestamp)
 													vid.pause()
-												//pause the video player
-												//open the poll modal
+													self.startPoll(i)
 												} else {
 
 												}
@@ -85,6 +94,9 @@ export default {
 										}
 										self.prevTime = vid.currentTime()
 									})
+									vid.on('ended', function() {
+										LectureSubmissionAPI.update(self.lectureSubmission)
+									});
 								})
 						})
 					
@@ -93,13 +105,31 @@ export default {
 			})
 	},
 	beforeDestroy() {
-		this.vjs.dispose();
 	},
 	methods: {
-		setSource(src) {
-			var srcEl = document.createElement("source")
-			srcEl.setAttribute("src",src)
-			document.getElementById("video_player").prepend(srcEl)
+		startPoll(i) {
+			let modal = document.getElementById("polls")
+			modal.classList.remove("hide")
+			let poll = document.getElementById("poll"+(i+1))
+			poll.classList.remove("hide")
+		},
+		answerPoll(i) {
+			let student_answers = []
+			for(let j=0;j<this.polls[i].possible_answers.length;j++) {
+				student_answers.push(document.getElementById('student_answer_'+(i+1)+'_'+(j+1)).checked)
+			}
+			if(undefined == this.lectureSubmission.student_poll_answers[i]) {
+				this.lectureSubmission.student_poll_answers.push(student_answers)
+			} else {
+				this.lectureSubmission.student_poll_answers[i] = student_answers
+			}
+
+			LectureSubmissionAPI.update(this.lectureSubmission)
+
+			let modal = document.getElementById("polls")
+			modal.classList.add("hide")
+			let poll = document.getElementById("poll"+(i+1))
+			poll.classList.add("hide")
 		}
 	}
 }
@@ -112,5 +142,18 @@ export default {
 }
 .vjs-tech {
 	position:unset;
+}
+.hide {
+	display: none;
+}
+#polls {
+	position: absolute;
+	top: 25%;
+	bottom: 25%;
+	left: 25%;
+	right: 25%;
+	background: white;
+	z-index: 999;
+	padding: 20px;
 }
 </style>
