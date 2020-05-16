@@ -191,6 +191,13 @@ export default {
       // add video playback for playback lectures
       if(this.lecture.allow_playback_submissions)
         this.addPlaybackToLecture()
+      else {
+        // go back to course info
+        this.$router.push({
+          name: "course_info",
+          params: { id: this.course_id }
+        })
+      }
     },
     async addPlaybackToLecture() {
       this.lecture.video_ref = "/videos/" + this.lecture._id + "/";
@@ -206,8 +213,8 @@ export default {
         this.$router.push({
           name: "course_info",
           params: { id: this.course_id }
-        });
-      });
+        })
+      })
     },
     async getSectionsForCourse() {
       const response = await SectionAPI.getSectionsForCourse(this.course_id);

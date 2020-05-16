@@ -113,7 +113,7 @@ lectureRoutes.get('/live_for_user/:user_id', (req, res) => {
 lectureRoutes.get('/for_course/:course_id/:lecture_type', (req, res) => {
 	let course_id = req.params.course_id
 	let lecture_type = req.params.lecture_type
-	let legal_lecture_types = ["all","live","playback","upcoming","past"]
+	let legal_lecture_types = ["all","live","playback","upcoming","past","active_playback"]
 	if(!legal_lecture_types.includes(lecture_type)){
 		res.status(400).send("Illegal lecture type")
 		return
@@ -137,6 +137,8 @@ lectureRoutes.get('/for_course/:course_id/:lecture_type', (req, res) => {
 						res.json(getLiveLectures(course_lectures))
 					else if(lecture_type === "past")
 						res.json(getPastLectures(course_lectures))
+					else if(lecture_type === "active_playback")
+						res.json(getActivePlaybacLectures(course_lectures))
 				}
 			})
 		}
@@ -200,6 +202,16 @@ function getPastLectures(lectures) {
 	return past_lectures
 }
 
+function getActivePlaybacLectures(lectures) {
+	active_playback_lectures = []
+	lectures.forEach(lecture => {
+		if(isActivePlayback(lecture))
+			active_playback_lectures.push(lecture)
+	})
+	return active_playback_lectures
+}
+
+
 function isLive(lecture) {  
   let current_time = new Date() 
   return current_time >= lecture.start_time &&  
@@ -216,6 +228,12 @@ function isPast(lecture) {
   let current_time = new Date() 
   return current_time > lecture.end_time ||
   	current_time > lecture.playback_submission_end_time
+}
+
+function isActivePlayback(lecture) {  
+  let current_time = new Date() 
+  return current_time >= lecture.playback_submission_start_time &&
+  	current_time <= lecture.playback_submission_end_time
 }
 
 module.exports = lectureRoutes

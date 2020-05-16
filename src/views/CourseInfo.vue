@@ -41,6 +41,16 @@
       </div>
       <div class="attendance-history-container">
         <div class="attendance-history-header">
+          <h4 class="attendance-history-header-text">Playback lectures</h4>
+        </div>
+        <router-link v-for="lecture in plabyack_lectures" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}">
+          <div class="lecture-container">
+            <p>{{ lecture.title }}</p>
+          </div>
+        </router-link>
+      </div>
+      <div class="attendance-history-container">
+        <div class="attendance-history-header">
           <h4 class="attendance-history-header-text">Upcoming lectures</h4>
         </div>
         <router-link v-for="lecture in upcoming_lectures" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}">
@@ -101,6 +111,7 @@ export default {
       upcoming_lectures: [],
       live_lectures: [],
       past_lectures: [],
+      plabyack_lectures: [],
       course_has_loaded: false
     }
   },
@@ -113,6 +124,7 @@ export default {
       this.getUpcomingLecturesForCourse()
       this.getLiveLecturesForCourse()
       this.getPastLecturesForCourse()
+      this.getActivePlaybackLecturesForCourse()
       // this.getActiveEventsForCourse()
     } else {
       // this.section_id = this.$route.params.id
@@ -131,6 +143,10 @@ export default {
       this.section = response.data
       this.course = this.section.course
       this.course_has_loaded = true
+    },
+    async getActivePlaybackLecturesForCourse() {
+      const response = await LectureAPI.getLecturesForCourse(this.course_id, "active_playback")
+      this.plabyack_lectures = response.data
     },
     async getPastLecturesForCourse() {
       const response = await LectureAPI.getLecturesForCourse(this.course_id, "past")
