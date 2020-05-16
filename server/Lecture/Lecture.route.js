@@ -105,6 +105,8 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
 											res.json(getLiveLectures(instructor_lectures))
 										else if(lecture_type === "active_playback")
 											res.json(getActivePlaybacLectures(instructor_lectures))
+										else if(lecture_type === "upcoming")
+											res.json(getUpcomingLectures(instructor_lectures))
 									}
 								})
 							}

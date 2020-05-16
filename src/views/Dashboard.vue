@@ -23,6 +23,13 @@
       </div>
     </div>
 
+    <div class="dashboard-section">
+      <h4 class="section-title">Upcoming</h4>
+      <div class="lecture-box" v-for="lecture in upcoming_lectures">
+        <p>{{ lecture.title }}</p>
+      </div>
+    </div>
+
     <hide-at breakpoint="mediumAndBelow">
       <DashboardSection courses_section/>
     </hide-at>
@@ -61,6 +68,7 @@
       this.getAllLecturesForUser()
       this.getLiveLecturesForUser()
       this.getPlaybackLectures()
+      this.getUpcomingLecturesForUser()
     },
     methods: {
       getCurrentUser() {
@@ -80,6 +88,10 @@
       async getPlaybackLectures() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "active_playback")
         this.playback_lectures = response.data
+      },
+      async getUpcomingLecturesForUser() {
+        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "upcoming")
+        this.upcoming_lectures = response.data
       }
     }
   }
