@@ -15,6 +15,7 @@ const eventRouter = require('./Event/Event.route')
 const submissionRouter = require('./Submission/Submission.route')
 const lectureRouter = require('./Lecture/Lecture.route')
 const pollRouter = require('./LecturePoll/LecturePoll.route')
+const lectureSubmissionRouter = require('./LectureSubmission/LectureSubmission.route')
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -33,6 +34,7 @@ app.use('/events', eventRouter);
 app.use('/submissions', submissionRouter);
 app.use('/lectures', lectureRouter);
 app.use('/polls', pollRouter);
+app.use('/lecturesubmissions',lectureSubmissionRouter);
 
 var fs = require('fs'),
   http = require('http');

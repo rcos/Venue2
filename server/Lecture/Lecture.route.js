@@ -15,12 +15,13 @@ lectureRoutes.route('/add').post(function (req, res) {
 			return;
 		}
 		var oldpath = files.video.path;
-		var newpath = __dirname + fields.video_ref + files.video.name;
-		if (!fs.existsSync(__dirname + "/videos")) {
-			fs.mkdirSync(__dirname + "/videos")
+		var pubDir = __dirname + "/../../public"
+		var newpath = pubDir + fields.video_ref + files.video.name;
+		if (!fs.existsSync(pubDir + "/videos")) {
+			fs.mkdirSync(pubDir + "/videos")
 		}
-		if (!fs.existsSync(__dirname + fields.video_ref)) {
-			fs.mkdirSync(__dirname + fields.video_ref)
+		if (!fs.existsSync(pubDir + fields.video_ref)) {
+			fs.mkdirSync(pubDir + fields.video_ref)
 		}
 		fs.rename(oldpath, newpath, function (err) {});
 		let lecture = new Lecture({
