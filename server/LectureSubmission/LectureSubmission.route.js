@@ -54,12 +54,9 @@ lectureSubmissionRoutes.route('/get_or_make').post(function (req, res) {
   LectureSubmission.find(
     {lecture: lecture_id, submitter: submitter_id},
     function (err, lectureSubmissions) {
-      console.log(err)
-      console.log(lectureSubmissions)
       if (err) {
         res.json(err);
       } else if (lectureSubmissions.length == 0){
-        console.log("No existing lectureSubmission")
         let lectureSubmission = new LectureSubmission({
           lecture: lecture_id,
           submitter: submitter_id,
@@ -74,7 +71,6 @@ lectureSubmissionRoutes.route('/get_or_make').post(function (req, res) {
             res.status(400).send("unable to save lectureSubmission to database");
           });
       } else {
-        console.log("Found an existing lectureSubmission")
         res.status(200).json(lectureSubmissions[0]);
       }
     }
