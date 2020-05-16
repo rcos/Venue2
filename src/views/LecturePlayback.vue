@@ -7,8 +7,10 @@
 <script>
 import videojs from 'video.js';
 import LectureAPI from "../services/LectureAPI";
+import lectureSubmissionAPI from "../services/LectureSubmissionAPI";
 import axios from 'axios';
 import fs from 'fs';
+import LectureSubmissionAPI from '../services/LectureSubmissionAPI';
 
 export default {
 	name: 'LecturePlayback',
@@ -22,7 +24,10 @@ export default {
 		return {
 			lecture: {},
 			vjs: null,
-			prevTime: null
+			prevTime: 0,
+			currentUser: null,
+			lectureSubmission: null,
+			polls: []
 		}
 	},
 	created() {
@@ -38,13 +43,38 @@ export default {
 					self.vjs = this
 					this.src('http://localhost:9000/videos/sample/sample.mp4')
 					this.load()
-					this.on('timeupdate', function () {
-						if(null != self.prevTime) {
-							console.log("Prev:",self.prevTime)
-							console.log("Curr:",this.currentTime())
-						}
-						self.prevTime = this.currentTime()
-					})
+
+					let vid = this;
+
+					self.currentUser = self.$store.state.user.current_user
+
+					LectureSubmissionAPI.getOrMake(self.lecture._id,self.currentUser._id)
+						.then(res => {
+							self.lectureSubmission = res.data
+							vid.on('timeupdate', function () {
+								let currTime = vid.currentTime()
+								for (let i in self.polls) {
+									if (currTime >= self.polls[i].timestamp && self.lectureSubmission.student_poll_answers[i].length == 0) {
+										//pause the video player
+										//open the poll modal
+									}
+								}
+								if(currTime - self.prevTime < 0.5) {
+									//Considered NOT a jump, video is playing normally
+									if(self.lectureSubmission.video_progress < currTime) {
+										self.lectureSubmission.video_progress = currTime
+									}
+								} else {
+									//Considered a jump forward
+									if(currTime > self.lectureSubmission.video_progress) {
+										vid.currentTime(self.prevTime)
+									}
+								}
+								self.prevTime = vid.currentTime()
+							})
+						})
+					
+					//TODO handle updating the submission where needed
 				})
 			})
 	},
