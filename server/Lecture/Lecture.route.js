@@ -68,8 +68,15 @@ lectureRoutes.route('/').get(function (req, res) {
 	});
 });
 
-lectureRoutes.get('/live_for_user/:user_id', (req, res) => {
+lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
 	let user_id = req.params.user_id
+	let lecture_type = req.params.lecture_type
+	let legal_lecture_types = ["all","live","upcoming","recent","active_playback"]
+	if(!legal_lecture_types.includes(lecture_type)){
+		res.status(400).send("Illegal lecture type")
+		return
+	}
+
 	User.findById(user_id, (error, user) => {
 		if(error)
 			res.json(error)
@@ -92,9 +99,10 @@ lectureRoutes.get('/live_for_user/:user_id', (req, res) => {
 									if(error)
 										res.json(error)
 									else {
-										//get live lectures
-										live_lectures = getLiveLectures(instructor_lectures)
-										res.json(live_lectures)
+										if(lecture_type === "live")
+											res.json(getLiveLectures(instructor_lectures))
+										else if(lecture_type === "active_playback")
+											res.json(getActivePlaybacLectures(instructor_lectures))
 									}
 								})
 							}
@@ -113,7 +121,7 @@ lectureRoutes.get('/live_for_user/:user_id', (req, res) => {
 lectureRoutes.get('/for_course/:course_id/:lecture_type', (req, res) => {
 	let course_id = req.params.course_id
 	let lecture_type = req.params.lecture_type
-	let legal_lecture_types = ["all","live","playback","upcoming","past","active_playback"]
+	let legal_lecture_types = ["all","live","upcoming","past","active_playback"]
 	if(!legal_lecture_types.includes(lecture_type)){
 		res.status(400).send("Illegal lecture type")
 		return
