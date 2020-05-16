@@ -65,31 +65,31 @@ export default {
 							LecturePollAPI.getByLecture(self.lecture._id)
 								.then(resp => {
 									self.polls = resp.data
-									console.log(self.polls)
 									vid.on('timeupdate', function () {
 										let currTime = vid.currentTime()
-										for (let i = 0; i < self.polls.length; i++) {
-											if (currTime > self.polls[i].timestamp) {
-												if(undefined == self.lectureSubmission.student_poll_answers[i] || self.lectureSubmission.student_poll_answers[i].length == 0) {
-													//THERE IS NO ANSWER FROM THE STUDENT YET
-													vid.currentTime(self.polls[i].timestamp)
-													vid.pause()
-													self.startPoll(i)
-												} else {
-
-												}
-											}
-										}
-										console.log(currTime)
-										if(currTime - self.prevTime < 0.5) {
-											//Considered NOT a jump, video is playing normally
+										if(currTime - self.prevTime < 0.5 && currTime > self.prevTime) {
+											//Considered NOT a 'seek', video is playing normally
 											if(self.lectureSubmission.video_progress < currTime) {
 												self.lectureSubmission.video_progress = currTime
 											}
+											for (let i = 0; i < self.polls.length; i++) {
+												if (currTime > self.polls[i].timestamp) {
+													if(undefined == self.lectureSubmission.student_poll_answers[i] || self.lectureSubmission.student_poll_answers[i].length == 0) {
+														//THERE IS NO ANSWER FROM THE STUDENT YET
+														vid.currentTime(self.polls[i].timestamp)
+														vid.pause()
+														self.startPoll(i)
+													}
+												}
+											}
 										} else {
-											//Considered a jump forward
+											//Considered a 'seek'
 											if(currTime > self.lectureSubmission.video_progress) {
 												vid.currentTime(self.prevTime)
+											} else if(currTime < self.prevTime) {
+												for (let i = 0; i < self.polls.length; i++) {
+													self.hidePoll(i)
+												}
 											}
 										}
 										self.prevTime = vid.currentTime()
@@ -99,8 +99,6 @@ export default {
 									});
 								})
 						})
-					
-					//TODO handle updating the submission where needed
 				})
 			})
 	},
@@ -112,6 +110,12 @@ export default {
 			modal.classList.remove("hide")
 			let poll = document.getElementById("poll"+(i+1))
 			poll.classList.remove("hide")
+		},
+		hidePoll(i) {
+			let modal = document.getElementById("polls")
+			modal.classList.add("hide")
+			let poll = document.getElementById("poll"+(i+1))
+			poll.classList.add("hide")
 		},
 		answerPoll(i) {
 			let student_answers = []
@@ -126,10 +130,7 @@ export default {
 
 			LectureSubmissionAPI.update(this.lectureSubmission)
 
-			let modal = document.getElementById("polls")
-			modal.classList.add("hide")
-			let poll = document.getElementById("poll"+(i+1))
-			poll.classList.add("hide")
+			this.hidePoll(i)
 		}
 	}
 }
