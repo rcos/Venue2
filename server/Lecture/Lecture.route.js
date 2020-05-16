@@ -1,6 +1,7 @@
 const express = require('express');
 const formidable = require('formidable');
 var fs = require('fs');
+var path = require('path');
 const lectureRoutes = express.Router();
 
 let Lecture = require('../Lecture/Lecture.model')
@@ -15,7 +16,7 @@ lectureRoutes.route('/add').post(function (req, res) {
 			return;
 		}
 		var oldpath = files.video.path;
-		var pubDir = __dirname + "/../../public"
+		var pubDir = path.join(__dirname,'..','..','public')
 		var newpath = pubDir + fields.video_ref + files.video.name;
 		if (!fs.existsSync(pubDir + "/videos")) {
 			fs.mkdirSync(pubDir + "/videos")
@@ -23,6 +24,7 @@ lectureRoutes.route('/add').post(function (req, res) {
 		if (!fs.existsSync(pubDir + fields.video_ref)) {
 			fs.mkdirSync(pubDir + fields.video_ref)
 		}
+		//TODO check if a file already exists there
 		fs.rename(oldpath, newpath, function (err) {});
 		let lecture = new Lecture({
 			event: fields.event,
