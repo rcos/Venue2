@@ -55,14 +55,22 @@ export default {
 								.then(resp => {
 									self.polls = resp.data
 									console.log(self.polls)
+									self.polls[0].timestamp = 5;
 									vid.on('timeupdate', function () {
 										let currTime = vid.currentTime()
-										// for (let i in self.polls) {
-										// 	if (currTime >= self.polls[i].timestamp && self.lectureSubmission.student_poll_answers[i].length == 0) {
-										// 		//pause the video player
-										// 		//open the poll modal
-										// 	}
-										// }
+										for (let i = 0; i < self.polls.length; i++) {
+											if (currTime > self.polls[i].timestamp) {
+												if(undefined == self.lectureSubmission.student_poll_answers[i] || self.lectureSubmission.student_poll_answers[i].length == 0) {
+													//THERE IS NO ANSWER FROM THE STUDENT YET
+													vid.currentTime(self.polls[i].timestamp)
+													vid.pause()
+												//pause the video player
+												//open the poll modal
+												} else {
+
+												}
+											}
+										}
 										console.log(currTime)
 										if(currTime - self.prevTime < 0.5) {
 											//Considered NOT a jump, video is playing normally
