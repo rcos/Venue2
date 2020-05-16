@@ -99,7 +99,9 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
 									if(error)
 										res.json(error)
 									else {
-										if(lecture_type === "live")
+										if(lecture_type === "all")
+											res.json(instructor_lectures)
+										else if(lecture_type === "live")
 											res.json(getLiveLectures(instructor_lectures))
 										else if(lecture_type === "active_playback")
 											res.json(getActivePlaybacLectures(instructor_lectures))
