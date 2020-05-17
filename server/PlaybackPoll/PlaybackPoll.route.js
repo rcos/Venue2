@@ -1,10 +1,10 @@
 const express = require('express');
 const pollRoutes = express.Router();
 
-let Poll = require('../PlaybackPoll/PlaybackPoll.model');
+let PlaybackPoll = require('../PlaybackPoll/PlaybackPoll.model');
 
 pollRoutes.route('/add').post(function (req, res) {
-  let poll = new LecturePoll(req.body.poll);
+  let poll = new PlaybackPoll(req.body.poll);
   console.log(req.body.poll)
   poll.save()
     .then(() => {
@@ -16,7 +16,7 @@ pollRoutes.route('/add').post(function (req, res) {
 });
 
 pollRoutes.route('/').get(function (req, res) {
-  LecturePoll.find(function (err, polls) {
+  PlaybackPoll.find(function (err, polls) {
     if (err)
       res.json(err);
     res.json(polls);
@@ -24,7 +24,7 @@ pollRoutes.route('/').get(function (req, res) {
 });
 
 pollRoutes.route('/by_lecture/:lectureid').get(function (req, res) {
-  LecturePoll.find({lecture: req.params.lectureid},function (err, polls) {
+  PlaybackPoll.find({lecture: req.params.lectureid},function (err, polls) {
     if (err) {
       res.json(err);
     } else {

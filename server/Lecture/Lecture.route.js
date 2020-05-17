@@ -45,7 +45,7 @@ lectureRoutes.route('/add_playback/:lecture_id').post(function (req, res) {
 		// update the lecture with video
 		Lecture.findByIdAndUpdate(lecture_id,
 		  {
-		    video_ref: fields.video_ref,
+		    video_ref: fields.video_ref + files.video.name,
 		    playback_submission_start_time: fields.playback_submission_start_time,
 		    playback_submission_end_time: fields.playback_submission_end_time,
 		    allow_playback_submissions: true

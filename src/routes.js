@@ -177,24 +177,29 @@ const router = new VueRouter({
       }
     },
     {
-        name: 'lectures',
-        path: '/lectures/:id',
-        component: LecturePlayback,
-        name: 'new_lecture',
-        path: '/new_lecture/:course_id',
-        component: NewLecture,
-        meta: { 
-          requiresAuth: true,
-          requiresInstructor: true 
-        }
+      name: 'lectures',
+      path: '/lectures/:id',
+      component: LecturePlayback,
+      meta: { 
+        requiresAuth: true
+      }
     },
     {
-        name: 'lecture_info',
-        path: '/lecture_info/:lecture_id',
-        component: LectureInfo,
-        meta: { 
-          requiresAuth: true,
-        }
+      name: 'new_lecture',
+      path: '/new_lecture/:course_id',
+      component: NewLecture,
+      meta: { 
+        requiresAuth: true,
+        requiresInstructor: true 
+      }
+    },
+    {
+      name: 'lecture_info',
+      path: '/lecture_info/:lecture_id',
+      component: LectureInfo,
+      meta: { 
+        requiresAuth: true,
+      }
     }
   ]
 })
