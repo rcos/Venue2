@@ -62,10 +62,28 @@
         this.courses = courses
       },
       async getSectionsWithCourses() {
-        let response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
-        let sections = response.data
-        this.assignBoxColorsToClassObjects(sections)
-        this.sections = sections
+        // let response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
+        // let sections = response.data
+        // this.assignBoxColorsToClassObjects(sections)
+        // this.sections = sections
+
+        console.log(`Getting sections data`)
+        SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
+        .then(response => {
+
+          console.log(`getSectionsWithCourses () Response:`)
+          console.log(response)
+
+          this.data_loaded = true
+          let sections = response.data
+          this.assignBoxColorsToClassObjects(sections)
+          this.sections = sections
+
+          if (this.sizeCallback) this.sizeCallback(this.sections.length)
+        })
+        .catch(err => {
+          data_loaded = true
+        })
       },
       assignBoxColorsToClassObjects(class_objects) {
         let box_color_index = 0
@@ -95,7 +113,7 @@
 .course-list::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: #F5F5F5; 
+  background-color: #F5F5F5;
 }
 
 /*Medium devices (tablets and below)*/
