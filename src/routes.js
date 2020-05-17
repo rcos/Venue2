@@ -177,11 +177,11 @@ const router = new VueRouter({
       }
     },
     {
-      name: 'lectures',
-      path: '/lectures/:id',
+      name: 'lecture_playback',
+      path: '/lecture_playback/:lecture_id',
       component: LecturePlayback,
       meta: { 
-        requiresAuth: true
+        requiresAuth: true,
       }
     },
     {

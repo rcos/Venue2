@@ -46,7 +46,7 @@ export default {
 	created() {
 	},
 	mounted() {
-		LectureAPI.getLecture(this.$route.params.id)
+		LectureAPI.getLecture(this.$route.params.lecture_id)
 			.then(res => {
 				this.lecture = res.data;
 				let self = this
