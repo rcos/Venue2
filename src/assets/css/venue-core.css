@@ -4,6 +4,11 @@
   font-family: "Segoe UI";
 }
 
+.venue-body-container.is-mobile {
+  margin: 2rem 0;
+  text-align: center;
+}
+
 .venue-body-container .title {
   font-weight: bold;
   font-size: 1.2rem;
@@ -315,4 +320,108 @@
 
 .instructor-attendance .event-pills-area {
   margin-left: 50px;
+}
+
+.line-graph {
+  height: 400px;
+}
+
+.dashboard-section-modal {
+  width: 50%;
+  min-height: 200px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.dashboard-section-modal.is-mobile {
+  width: 330px;
+  margin: 0 auto;
+}
+
+.dashboard-section-modal .sub-section {
+  margin: 1.5rem 2rem;
+}
+
+.dashboard-section-modal .sub-section.is-mobile {
+  margin: 0;
+}
+
+ .dashboard-section-modal .course-pill {
+   width: 420px;
+   height: 80px;
+   position: relative;
+   cursor: pointer;
+   margin-bottom: 20px;
+ }
+
+  .dashboard-section-modal .course-pill.is-mobile {
+    width: 300px;
+  }
+
+.dashboard-section-modal .course-pill .foreground-pillar {
+  border-radius: 5px;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 3;
+  background-color: white;
+  height: 100%;
+}
+
+.course-pill .background-pillar {
+  position: absolute;
+  background-color: red;
+  left: -2.5%;
+  top: -10%;
+  border-radius: 5px;
+  width: 105%;
+  height: 90%;
+  z-index: 1;
+}
+
+.dashboard-section-modal .course-pill .pill-left,
+.dashboard-section-modal .course-pill .pill-right {
+  width: 30%;
+}
+
+.dashboard-section-modal .course-pill .pill-left {
+  text-align: center;
+  padding-top: 18px;
+}
+
+.dashboard-section-modal .course-pill .pill-left .course-name {
+  font-size: 0.8rem;
+  font-family: "Segoe UI";
+  font-weight: bold;
+  color: #53788E;
+}
+
+.dashboard-section-modal .course-pill .pill-left .course-dept {
+  font-size: 0.85rem;
+  color: #2398C8;
+  font-weight: bold;
+}
+
+.dashboard-section-modal .course-pill .pill-center {
+  width: 40%;
+  text-align: center;
+}
+
+.dashboard-section-modal .course-pill .pill-center .single-info {
+  font-size: 1.2rem;
+  line-height: 70px;
+}
+
+.dashboard-section-modal .course-pill .pill-center .double-info.primary {
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.dashboard-section-modal .course-pill .pill-center .double-info.secondary {
+  font-size: 0.8rem;
+}
+
+.dashboard-section-modal .course-pill .pill-right {
+  text-align: center;
+  font-size: 0.8rem;
+  line-height: 80px;
 }

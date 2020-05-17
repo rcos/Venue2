@@ -2,14 +2,13 @@
   <div class="instructor-attendance">
 
     <!-- Individual section view -->
-    <div v-if="selected_section != -1">
-
+    <div v-if="selected_section != null">
       <div
-        v-for="month_index in Object.keys(sections_info[section_number_to_id[selected_section]].events_by_month||{})">
+        v-for="month_index in Object.keys(getEventByMonth())">
           <div class="month-area">{{ STATIC_MONTHS[month_index] }}</div>
 
           <div class="event-pills-area">
-            <div v-for="event in sections_info[section_number_to_id[selected_section]].events_by_month[month_index]" :class="'inline-block instructor-attendance-history-pill ' + getClassByAttendance(getAttendancePercentage(event, section_number_to_id[selected_section]))">
+            <div v-for="event in sections_info[selected_section].events_by_month[month_index]" :class="'inline-block instructor-attendance-history-pill ' + getClassByAttendance(getAttendancePercentage(event, selected_section))">
               <div class="inline-block date-area">
                 <div class="day-of-week">{{ getDayOfWeek(event) }}</div>
                 <div class="day-of-month">{{ getDayOfMonth(event) }}</div>
@@ -18,7 +17,7 @@
                 <div class="event-name">{{ event.title }}</div>
                 <div class="event-location">Event Location</div>
               </div>
-              <div class="inline-block percentage-area">{{ getAttendancePercentage(event, section_number_to_id[selected_section]) }}%</div>
+              <div class="inline-block percentage-area">{{ getAttendancePercentage(event, selected_section) }}%</div>
             </div>
           </div>
 
@@ -51,8 +50,8 @@
       course_id: String,
       informSections: Function,
       selected_section: {
-        type: Number,
-        default: -1 // -1 == all sections
+        type: String,
+        default: null // -1 == all sections
       }
     },
     data () {
@@ -69,6 +68,11 @@
       this.getEventHistoryForCourse ()
     },
     methods: {
+      getEventByMonth () {
+        // sections_info[selected_section].events_by_month
+
+        return this.sections_info[this.selected_section].events_by_month
+      },
       getClassByAttendance (percent) {
         // percent b/w 0 and 100
         if (percent <= 60) return 'bad'
@@ -137,6 +141,7 @@
 
             // now, attach it to the section_info[section_id]
             this.sections_info[section_id].events_by_month = events_by_month
+            this.$forceUpdate ()
 
           })
 
@@ -183,7 +188,7 @@
           .then(results => {
 
             let section_number_arr = Object.keys(this.sections_info).map(section_id => {
-              return this.sections_info[section_id].number
+              return [this.sections_info[section_id].number, section_id]
             })
 
             this.informSections(section_number_arr)
