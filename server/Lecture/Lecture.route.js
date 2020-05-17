@@ -118,8 +118,30 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
 
 			} else {
 
-			}
+				Section.find({'students._id': user_id}, (error, student_sections) => {
+					if(error)
+						res.json(error)
+					else {
+						Lecture.find({sections: {$in: student_sections}}, (error, student_lectures) => {
+							if(error)
+								res.json(error)
+							else {
+								if(lecture_type === "all")
+									res.json(student_lectures)
+								else if(lecture_type === "live")
+									res.json(getLiveLectures(student_lectures))
+								else if(lecture_type === "active_playback")
+									res.json(getActivePlaybacLectures(student_lectures))
+								else if(lecture_type === "past")
+									res.json(getPastLectures(student_lectures))
+								else if(lecture_type === "upcoming")
+									res.json(getUpcomingLectures(student_lectures))
+							}
+						})
+					}
+				})
 
+			}
 		}
 	})
 })
