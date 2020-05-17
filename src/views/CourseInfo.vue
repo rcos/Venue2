@@ -20,16 +20,6 @@
           <option :value="null" selected>All Sections</option>
         </select>
       </div>
-      <!-- Attendance history -->
-      <div class="attendance-history-container">
-        <div class="attendance-history-header">
-          <h4 class="attendance-history-header-text">Attendance History (85%)</h4>
-          <p class="section-selector">all sections</p>
-        </div>
-        <EventHistoryList v-if="is_instructor" v-bind:course="course" />
-        <EventHistoryList v-else v-bind:section="section"/>
-        </div>
-      </div>
     </div>
 
     <!-- Attendance History -->
