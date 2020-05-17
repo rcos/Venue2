@@ -27,6 +27,8 @@ import NewEvent from './views/NewEvent.vue';
 import EventInfo from './views/EventInfo.vue';
 import LecturePlayback from './views/LecturePlayback.vue';
 import WebexTest from './views/WebexTest.vue';
+import NewLecture from './views/NewLecture.vue';
+import LectureInfo from './views/LectureInfo.vue';
 
 Vue.use(VueRouter);
 
@@ -178,6 +180,18 @@ const router = new VueRouter({
         name: 'lectures',
         path: '/lectures/:id',
         component: LecturePlayback,
+        name: 'new_lecture',
+        path: '/new_lecture/:course_id',
+        component: NewLecture,
+        meta: { 
+          requiresAuth: true,
+          requiresInstructor: true 
+        }
+    },
+    {
+        name: 'lecture_info',
+        path: '/lecture_info/:lecture_id',
+        component: LectureInfo,
         meta: { 
           requiresAuth: true,
         }
