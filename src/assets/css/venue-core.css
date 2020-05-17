@@ -1,0 +1,427 @@
+.venue-body-container {
+  margin: 2rem 8rem;
+  text-align: left;
+  font-family: "Segoe UI";
+}
+
+.venue-body-container.is-mobile {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.venue-body-container .title {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.venue-body-container .inline-block {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.venue-body-container .inline-block-center {
+  display: inline-block;
+  vertical-align: center;
+}
+
+.venue-body-container .course-info-title {
+  width: 380px;
+  padding: 40px 30px;
+  margin-left: 20px;
+  box-shadow: 0px 3px 6px rgba(0, 62, 123, 0.2);
+  border-radius: 5px;
+}
+
+.venue-body-container .course-info-title .course-name {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.venue-body-container .course-info-title .course-dept-number {
+  background-color: rgba(0, 0, 0, 0.86);
+  width: 87px;
+  height: 23px;
+  font-size: 0.8rem;
+  text-align: center;
+  color: #C1EDFF;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.venue-body-container .course-info-title .course-time-block {
+  font-size: 0.9rem;
+  margin-left: 10px;
+}
+
+.venue-body-container .weekly-attendance-bar {
+  margin-left: 80px;
+}
+
+.weekly-attendance-bar .title {
+  font-size: 0.8rem;
+  font-weight: normal;
+  margin-bottom: 20px;
+}
+
+.weekly-attendance-bar .graph-container {
+  margin-bottom: 10px;
+}
+
+.weekly-attendance-bar .graph-container .label {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.7);
+  width: 100px;
+  text-align: right;
+  height: 25px;
+  line-height: 25px;
+  margin-right: 10px;
+}
+
+.weekly-attendance-bar .graph-container .bar-area {
+  width: 400px;
+  min-width: 250px;
+}
+
+.weekly-attendance-bar .graph-container .bar-area .bar.primary {
+  background-color: #FFAC92;
+}
+
+.weekly-attendance-bar .graph-container .bar-area .bar {
+  height: 25px;
+  background-color: #E2E2E2;
+  border-radius: 5px;
+}
+
+.course-info-sub-tab {
+  margin-left: 44px;
+  margin-top: 32px;
+}
+
+.course-info-sub-tab .left div {
+  display: inline-block;
+}
+
+.course-info-sub-tab .left, .course-info-sub-tab .right {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.course-info-sub-tab .left .tab {
+  margin-right: 55px;
+  cursor: pointer;
+}
+
+.course-info-sub-tab .left .tab.active {
+  font-weight: bold;
+}
+
+.course-info-sub-tab .right {
+  float: right;
+}
+
+.student-attendance-pill {
+  height: 58px;
+  width: 220px;
+  border: 2px solid grey;
+  border-radius: 5px;
+  background-color: white;
+  font-size: 0.8rem;
+  font-family: "Segoe UI";
+  cursor: pointer;
+  margin-bottom: 40px;
+  margin-right: 20px;
+}
+
+.student-attendance-pill.absent {
+  border: 2px solid #FB5959;
+  box-shadow: 0px 3px 10px rgba(162, 72, 65, 0.16);
+}
+
+.student-attendance-pill.present {
+  border: 2px solid #47E97D;
+  box-shadow: 0px 3px 10px rgba(65, 162, 91, 0.33);
+}
+
+.student-attendance-pill.absent .date-area {
+  background-color: #FB5959;
+}
+
+.student-attendance-pill.present .date-area {
+  background-color: #47E97D;
+}
+
+.student-attendance-pill .date-area {
+  width: 50px;
+  background-color: red;
+  height: 100%;
+  text-align: center;
+  line-height: 20px;
+  color: white;
+}
+
+.student-attendance-pill .date-area .day-of-week {
+  font-size: 0.7rem;
+  margin-top: 3px;
+}
+
+.student-attendance-pill .date-area .day-of-month {
+  font-size: 1.3rem;
+}
+
+.student-attendance-pill .event-info-area {
+  margin-left: 10px;
+  line-height: 17px;
+  position: relative;
+  top: -5px;
+}
+
+.student-attendance-pill .event-info-area .event-name {
+
+}
+
+.student-attendance-pill .event-info-area .event-location {
+  color: rgba(0, 0, 0, 0.59);
+  font-size: 0.7rem;
+}
+
+.history-by-month {
+  margin-left: 50px;
+  margin-top: 25px;
+}
+
+.history-by-month .month-title {
+  margin-bottom: 20px;
+}
+
+.instructor-attendance-history-pill {
+  border: 2px solid red;
+  border-radius: 5px;
+  margin-right: 40px;
+  margin-bottom: 25px;
+  position: relative;
+  width: 340px;
+  height: 65px;
+  cursor: pointer;
+}
+
+.instructor-attendance-history-pill .date-area {
+  width: 20%;
+  background-color: red;
+  height: 100%;
+  text-align: center;
+  color: white;
+  line-height: 22px;
+  margin-right: 15px;
+}
+
+.instructor-attendance-history-pill .date-area .day-of-week {
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+.instructor-attendance-history-pill .date-area .day-of-month {
+  font-size: 1.3rem;
+}
+
+.instructor-attendance-history-pill .name-area {
+  width: 55%;
+  position: relative;
+  top: 5px;
+}
+
+.instructor-attendance-history-pill .name-area .event-name {
+  font-size: 1rem;
+}
+
+.instructor-attendance-history-pill .name-area .event-location {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.7);
+  line-height: 15px;
+}
+
+.instructor-attendance-history-pill .percentage-area {
+  background-color: green;
+  float: right;
+  height: 100%;
+  width: 55px;
+  position: relative;
+  text-align: center;
+  line-height: 55px;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.instructor-attendance-history-pill .percentage-area::before {
+  content: '';
+  position: absolute;
+  border-right: 15px solid green;
+  border-bottom: 31px solid green;
+  border-top: 31px solid transparent;
+  border-left: 15px solid transparent;
+  left: -30px;
+}
+
+
+.instructor-attendance-history-pill.good {
+  border: 2px solid #24E565;
+  box-shadow: 0px 3px 10px rgba(65, 162, 91, 0.33);
+}
+.instructor-attendance-history-pill.good .date-area {
+  background-color: #24E565;
+}
+.instructor-attendance-history-pill.good .percentage-area {
+  background-color: #24E565;
+}
+
+.instructor-attendance-history-pill.good .percentage-area::before {
+  border-right: 15px solid #24E565;
+  border-bottom: 31px solid #24E565;
+}
+
+.instructor-attendance-history-pill.medium {
+  border: 2px solid #E97E47;
+  box-shadow: 0px 3px 10px rgba(233, 126, 71, 0.36);
+}
+.instructor-attendance-history-pill.medium .date-area {
+  background-color: #E97E47;
+}
+.instructor-attendance-history-pill.medium .percentage-area {
+  background-color: #E97E47;
+}
+
+.instructor-attendance-history-pill.medium .percentage-area::before {
+  border-right: 15px solid #E97E47;
+  border-bottom: 31px solid #E97E47;
+}
+
+
+.instructor-attendance-history-pill.bad {
+  border: 2px solid #FF6358;
+  box-shadow: 0px 3px 10px rgba(255, 99, 88, 0.36);
+}
+.instructor-attendance-history-pill.bad .date-area {
+  background-color: #FF6358;
+}
+.instructor-attendance-history-pill.bad .percentage-area {
+  background-color: #FF6358;
+}
+
+.instructor-attendance-history-pill.bad .percentage-area::before {
+  border-right: 15px solid #FF6358;
+  border-bottom: 31px solid #FF6358;
+}
+
+.instructor-attendance .month-area {
+  margin-bottom: 20px;
+  margin-left: 50px;
+  margin-top: 20px;
+}
+
+.instructor-attendance .event-pills-area {
+  margin-left: 50px;
+}
+
+.line-graph {
+  height: 400px;
+}
+
+.dashboard-section-modal {
+  width: 50%;
+  min-height: 200px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.dashboard-section-modal.is-mobile {
+  width: 330px;
+  margin: 0 auto;
+}
+
+.dashboard-section-modal .sub-section {
+  margin: 1.5rem 2rem;
+}
+
+.dashboard-section-modal .sub-section.is-mobile {
+  margin: 0;
+}
+
+ .dashboard-section-modal .course-pill {
+   width: 420px;
+   height: 80px;
+   position: relative;
+   cursor: pointer;
+   margin-bottom: 20px;
+ }
+
+  .dashboard-section-modal .course-pill.is-mobile {
+    width: 300px;
+  }
+
+.dashboard-section-modal .course-pill .foreground-pillar {
+  border-radius: 5px;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 3;
+  background-color: white;
+  height: 100%;
+}
+
+.course-pill .background-pillar {
+  position: absolute;
+  background-color: red;
+  left: -2.5%;
+  top: -10%;
+  border-radius: 5px;
+  width: 105%;
+  height: 90%;
+  z-index: 1;
+}
+
+.dashboard-section-modal .course-pill .pill-left,
+.dashboard-section-modal .course-pill .pill-right {
+  width: 30%;
+}
+
+.dashboard-section-modal .course-pill .pill-left {
+  text-align: center;
+  padding-top: 18px;
+}
+
+.dashboard-section-modal .course-pill .pill-left .course-name {
+  font-size: 0.8rem;
+  font-family: "Segoe UI";
+  font-weight: bold;
+  color: #53788E;
+}
+
+.dashboard-section-modal .course-pill .pill-left .course-dept {
+  font-size: 0.85rem;
+  color: #2398C8;
+  font-weight: bold;
+}
+
+.dashboard-section-modal .course-pill .pill-center {
+  width: 40%;
+  text-align: center;
+}
+
+.dashboard-section-modal .course-pill .pill-center .single-info {
+  font-size: 1.2rem;
+  line-height: 70px;
+}
+
+.dashboard-section-modal .course-pill .pill-center .double-info.primary {
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.dashboard-section-modal .course-pill .pill-center .double-info.secondary {
+  font-size: 0.8rem;
+}
+
+.dashboard-section-modal .course-pill .pill-right {
+  text-align: center;
+  font-size: 0.8rem;
+  line-height: 80px;
+}

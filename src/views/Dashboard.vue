@@ -1,7 +1,26 @@
 <template>
   <div>
-    <DashboardSection active_section/>
-    <DashboardSection today_section/>
+    <!-- <DashboardSection active_section/> -->
+    <!-- <DashboardSection today_section/> -->
+    <!--<router-link :to="{name: 'course_info', params: { id: '5e90f007920d965429e5d1a4' }}">Test</router-link>-->
+
+    <show-at breakpoint="mediumAndAbove">
+      <div class="venue-body-container">
+        <LiveCourses />
+        <PlaybackCourses />
+        <RecentCourses />
+        <UpcomingCourses />
+      </div>
+    </show-at>
+    <hide-at breakpoint="mediumAndAbove">
+      <div class="venue-body-container is-mobile">
+        <LiveCourses mobileMode />
+        <PlaybackCourses mobileMode />
+        <RecentCourses mobileMode />
+        <UpcomingCourses mobileMode />
+      </div>
+    </hide-at>
+
     <hide-at breakpoint="mediumAndBelow">
       <DashboardSection courses_section/>
     </hide-at>
@@ -14,6 +33,14 @@
   import { authComputed } from '../vuex/helpers.js'
   import {showAt, hideAt} from 'vue-breakpoints'
 
+  import LiveCourses from '@/components/LiveCourses.vue'
+  import PlaybackCourses from '@/components/PlaybackCourses.vue'
+  import RecentCourses from '@/components/RecentCourses.vue'
+  import UpcomingCourses from '@/components/UpcomingCourses'
+
+  import '@/assets/css/venue-core.css'
+  import '@/assets/css/venue.css'
+
   export default {
     name: 'Dashboard',
     computed: {
@@ -22,7 +49,11 @@
     components: {
       DashboardSection,
       hideAt,
-      showAt
+      showAt,
+      LiveCourses,
+      PlaybackCourses,
+      RecentCourses,
+      UpcomingCourses
     },
     data(){
       return {
