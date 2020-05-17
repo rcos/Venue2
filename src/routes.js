@@ -25,6 +25,7 @@ import CourseList from './components/CourseList.vue';
 import CourseInfo from './views/CourseInfo.vue';
 import NewEvent from './views/NewEvent.vue';
 import EventInfo from './views/EventInfo.vue';
+import LecturePlayback from './views/LecturePlayback.vue';
 import WebexTest from './views/WebexTest.vue';
 import NewLecture from './views/NewLecture.vue';
 import LectureInfo from './views/LectureInfo.vue';
@@ -176,21 +177,29 @@ const router = new VueRouter({
       }
     },
     {
-        name: 'new_lecture',
-        path: '/new_lecture/:course_id',
-        component: NewLecture,
-        meta: { 
-          requiresAuth: true,
-          requiresInstructor: true 
-        }
+      name: 'lecture_playback',
+      path: '/lecture_playback/:lecture_id',
+      component: LecturePlayback,
+      meta: { 
+        requiresAuth: true,
+      }
     },
     {
-        name: 'lecture_info',
-        path: '/lecture_info/:lecture_id',
-        component: LectureInfo,
-        meta: { 
-          requiresAuth: true,
-        }
+      name: 'new_lecture',
+      path: '/new_lecture/:course_id',
+      component: NewLecture,
+      meta: { 
+        requiresAuth: true,
+        requiresInstructor: true 
+      }
+    },
+    {
+      name: 'lecture_info',
+      path: '/lecture_info/:lecture_id',
+      component: LectureInfo,
+      meta: { 
+        requiresAuth: true,
+      }
     }
   ]
 })

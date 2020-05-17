@@ -1,6 +1,7 @@
 const express = require('express');
 const formidable = require('formidable');
 var fs = require('fs');
+var path = require('path');
 const lectureRoutes = express.Router();
 
 let Lecture = require('../Lecture/Lecture.model')
@@ -30,22 +31,21 @@ lectureRoutes.route('/add_playback/:lecture_id').post(function (req, res) {
 			return;
 		}
 		var oldpath = files.video.path;
-		var newpath = __dirname + fields.video_ref + files.video.name;
-		// create the videos directory if it doesn't already exist
-		if (!fs.existsSync(__dirname + "/videos")) {
-			fs.mkdirSync(__dirname + "/videos")
+		var pubDir = path.join(__dirname,'..','..','public')
+		var newpath = pubDir + fields.video_ref + files.video.name;
+		if (!fs.existsSync(pubDir + "/videos")) {
+			fs.mkdirSync(pubDir + "/videos")
 		}
-		// create the lecture videos folder it it doesn't already exist
-		if (!fs.existsSync(__dirname + fields.video_ref)) {
-			fs.mkdirSync(__dirname + fields.video_ref)
+		if (!fs.existsSync(pubDir + fields.video_ref)) {
+			fs.mkdirSync(pubDir + fields.video_ref)
 		}
-		// save the video to path 'Lecture/videos/lecture_id/video_name'
-		fs.rename(oldpath, newpath, function (err) {})
+		//TODO check if a file already exists there
+		fs.rename(oldpath, newpath, function (err) {});
 
 		// update the lecture with video
 		Lecture.findByIdAndUpdate(lecture_id,
 		  {
-		    video_ref: fields.video_ref,
+		    video_ref: fields.video_ref + files.video.name,
 		    playback_submission_start_time: fields.playback_submission_start_time,
 		    playback_submission_end_time: fields.playback_submission_end_time,
 		    allow_playback_submissions: true
@@ -66,6 +66,23 @@ lectureRoutes.route('/').get(function (req, res) {
 			res.json(err);
 		res.json(lectures);
 	});
+});
+
+lectureRoutes.route('/:id').get(function (req, res) {
+	Lecture.findById(req.params.id,function (err, lecture) {
+		if (err) {
+			res.json(err);
+		} else {
+			res.json(lecture);
+		}
+	});
+});
+
+lectureRoutes.route('/videos/:folder/:filename').get(function (req, res) {
+	let video_path = __dirname + "/videos/" + req.params.folder + "/" + req.params.filename;
+	console.log(video_path)
+
+    res.send(video_path);
 });
 
 lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
