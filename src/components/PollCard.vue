@@ -14,7 +14,7 @@
 				<input type="checkbox" v-model.lazy="correct_answers[i]"/>
 			</div>
 		</div>
-		<button id="add_answer_btn" class="btn" @click="addAnswer()">+</button>
+		<button id="add_answer_btn" class="btn" @click="addAnswer">+</button>
 	</div>
 </template>
 
@@ -41,7 +41,8 @@ export default {
 	mounted() {	
 	},
 	methods: {
-		addAnswer() {
+		addAnswer(evt) {
+      evt.preventDefault();
 			this.possible_answers.push('')
 			this.correct_answers.push(false)
 		},
