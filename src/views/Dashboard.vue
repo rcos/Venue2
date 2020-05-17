@@ -4,7 +4,7 @@
     <!-- <DashboardSection today_section/> -->
     <!--<router-link :to="{name: 'course_info', params: { id: '5e90f007920d965429e5d1a4' }}">Test</router-link>-->
 
-    <show-at breakpoint="mediumAndAbove">
+    <show-at breakpoint="large">
       <div class="venue-body-container">
         <LiveCourses />
         <PlaybackCourses />
@@ -12,7 +12,7 @@
         <UpcomingCourses />
       </div>
     </show-at>
-    <hide-at breakpoint="mediumAndAbove">
+    <hide-at breakpoint="large">
       <div class="venue-body-container is-mobile">
         <LiveCourses mobileMode />
         <PlaybackCourses mobileMode />
