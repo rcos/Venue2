@@ -9,7 +9,9 @@
         <div class="info-section" id="course-info">
           <h2 class="course-info-header">Course Info</h2>
           <p class="course-name">{{ course.name }}</p>
-          <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
+          <div class="course-title">{{ course.dept }} {{ course.course_number }}
+            <span v-if="!is_instructor">- {{ section.number }}</span>
+          </div>
         </div>
         <div class="info-section" id="event-info">
           <router-link v-if="is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}">
@@ -125,11 +127,14 @@ export default {
       this.getLiveLecturesForCourse()
       this.getPastLecturesForCourse()
       this.getActivePlaybackLecturesForCourse()
-      // this.getActiveEventsForCourse()
     } else {
-      // this.section_id = this.$route.params.id
-      // this.getSectionWithCourse()
-      // this.getActiveEventsForSection()
+      this.section_id = this.$route.params.id
+      this.getSectionWithCourse()
+      this.getAllLecturesForSection()
+      this.getUpcomingLecturesForSection()
+      this.getLiveLecturesForSection()
+      this.getPastLecturesForSection()
+      this.getActivePlaybackLecturesForSection()
     }
   },
   methods: {
@@ -162,6 +167,26 @@ export default {
     },    
     async getAllLecturesForCourse() {
       const response = await LectureAPI.getLecturesForCourse(this.course_id, "all")
+      this.all_lectures = response.data
+    },  
+    async getActivePlaybackLecturesForSection() {
+      const response = await LectureAPI.getLecturesForSection(this.section_id, "active_playback")
+      this.plabyack_lectures = response.data
+    },
+    async getPastLecturesForSection() {
+      const response = await LectureAPI.getLecturesForSection(this.section_id, "past")
+      this.past_lectures = response.data
+    },
+    async getLiveLecturesForSection() {
+      const response = await LectureAPI.getLecturesForSection(this.section_id, "live")
+      this.live_lectures = response.data
+    },   
+    async getUpcomingLecturesForSection() {
+      const response = await LectureAPI.getLecturesForSection(this.section_id, "upcoming")
+      this.upcoming_lectures = response.data
+    },    
+    async getAllLecturesForSection() {
+      const response = await LectureAPI.getLecturesForSection(this.section_id, "all")
       this.all_lectures = response.data
     },    
     async getActiveEventsForCourse() {
