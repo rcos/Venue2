@@ -159,6 +159,33 @@ lectureRoutes.get('/for_course/:course_id/:lecture_type', (req, res) => {
 	})
 })
 
+lectureRoutes.get('/for_section/:section_id/:lecture_type', (req, res) => {
+	let section_id = req.params.section_id
+	let lecture_type = req.params.lecture_type
+	let legal_lecture_types = ["all","live","upcoming","past","active_playback"]
+	if(!legal_lecture_types.includes(lecture_type)){
+		res.status(400).send("Illegal lecture type")
+		return
+	}
+
+	Lecture.find({sections: section_id}, (error, section_lectures) => {
+		if(error)
+			res.json(error)
+		else {
+			if(lecture_type === "all")
+				res.json(section_lectures)
+			else if(lecture_type === "upcoming")
+				res.json(getUpcomingLectures(section_lectures))
+			else if(lecture_type === "live")
+				res.json(getLiveLectures(section_lectures))
+			else if(lecture_type === "past")
+				res.json(getPastLectures(section_lectures))
+			else if(lecture_type === "active_playback")
+				res.json(getActivePlaybacLectures(section_lectures))
+		}
+	}) 
+})
+
 lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
 	let lecture_id = req.params.lecture_id;
 	// get lecture
