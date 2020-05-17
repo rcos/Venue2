@@ -19,8 +19,8 @@
       <div class="submission-status">
         <!-- Instructor -->
         <div v-if="is_instructor">
-          <div v-if="lecture_is_pending">
-            <p>Lecture not started yet</p>
+          <div v-if="lecture_is_upcoming">
+            <p>Lecture is upcoming</p>
           </div>
           <div v-else-if="lecture_is_live">
             <p>Lecture is live.</p>
@@ -32,6 +32,8 @@
             <p v-else>Submission window closed</p>
           </div>
           <div v-else>
+            <p v-if="lecture.allow_live_submissions">Lecture was live</p>
+            <p v-else>Lecture was never live</p>
             <div v-if="lecture.allow_playback_submissions">
               <p>video_ref: {{ lecture.video_ref }}</p>
               <p>playback_submission_start_time: {{ new Date(lecture.playback_submission_start_time) }}</p>
@@ -42,8 +44,8 @@
         </div>
         <!-- Student -->
         <div v-else>
-          <div v-if="lecture_is_pending">
-            <p>Lecture not started yet</p>
+          <div v-if="lecture_is_upcoming">
+            <p>Lecture is upcoming</p>
           </div>
           <div v-else-if="lecture_is_live">
             <p>Lecture is ongoing.</p>
@@ -52,7 +54,14 @@
             <p v-else>Submission window closed</p>
           </div>
           <div v-else>
-            Lecture is over - show submission status
+            <p v-if="lecture.allow_live_submissions">Lecture was live</p>
+            <p v-else>Lecture was never live</p>
+            <div v-if="lecture.allow_playback_submissions">
+              <p>video_ref: {{ lecture.video_ref }}</p>
+              <p>playback_submission_start_time: {{ new Date(lecture.playback_submission_start_time) }}</p>
+              <p>playback_submission_end_time: {{ new Date(lecture.playback_submission_end_time) }}</p>
+            </div>
+            <p>No lecture playback</p>
           </div>
         </div>
       </div>
@@ -80,7 +89,7 @@
         lecture: {},
         is_instructor: Boolean,
         lecture_has_loaded: false,
-        lecture_is_pending: false,
+        lecture_is_upcoming: false,
         lecture_is_live: false,
         lecture_is_over: false,
         submission_window_pending: false,
@@ -109,8 +118,10 @@
         let current_time = new Date()
         let lecture_start_time = new Date(this.lecture.start_time)
         let lecture_end_time = new Date(this.lecture.end_time)
-        if(current_time <= lecture_start_time) 
-          this.lecture_is_pending = true
+        let lecture_playback_submission_start_time = new Date(this.lecture.playback_submission_start_time)
+        let lecture_playback_submission_end_time = new Date(this.lecture.playback_submission_end_time)
+        if(current_time < lecture_start_time || current_time < lecture_playback_submission_start_time) 
+          this.lecture_is_upcoming = true
         else if(current_time >= lecture_start_time && current_time <= lecture_end_time){
           this.lecture_is_live = true
           this.setSubmissionWindowStatus()
