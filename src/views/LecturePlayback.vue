@@ -52,7 +52,7 @@ export default {
 				let self = this
 				videojs("video_player", {}, function() {
 					self.vjs = this
-					this.src('http://localhost:9000/videos/sample/sample.mp4')
+					this.src('http://localhost:9000' + self.lecture.video_ref)
 					this.load()
 
 					let vid = this;

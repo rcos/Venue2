@@ -28,7 +28,7 @@ lectureRoutes.route('/add').post(function (req, res) {
 		fs.rename(oldpath, newpath, function (err) {});
 		let lecture = new Lecture({
 			event: fields.event,
-			video_ref: fields.video_ref
+			video_ref: fields.video_ref + files.video.name
 		});
 		lecture.save()
 			.then(() => {
