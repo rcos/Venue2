@@ -88,6 +88,7 @@
       async getAllLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "all")
         this.all_lectures = response.data
+        console.log(this.all_lectures)
       },
       async getLiveLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "live")
@@ -100,6 +101,7 @@
       async getRecentLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "past")
         let past_lectures = response.data
+        console.log(past_lectures)
         this.recent_lectures = past_lectures.slice(0,3)
       },
       async getUpcomingLecturesForUser() {
