@@ -190,7 +190,6 @@ const router = new VueRouter({
         component: LectureInfo,
         meta: { 
           requiresAuth: true,
-          requiresInstructor: true 
         }
     }
   ]
