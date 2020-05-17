@@ -19,7 +19,8 @@ let LectureSubmission = new Schema({
 			type: Boolean,
 			default: ""
 		}]
-	]
+	],
+	is_live_submission: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model('LectureSubmission', LectureSubmission);

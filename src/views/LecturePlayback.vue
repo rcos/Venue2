@@ -22,7 +22,7 @@ import videojs from 'video.js';
 import axios from 'axios';
 import fs from 'fs';
 import LectureAPI from "../services/LectureAPI";
-import LecturePollAPI from '../services/LecturePollAPI';
+import PlaybackPollAPI from "../services/PlaybackPollAPI";
 import LectureSubmissionAPI from '../services/LectureSubmissionAPI';
 
 export default {
@@ -62,7 +62,7 @@ export default {
 					LectureSubmissionAPI.getOrMake(self.lecture._id,self.currentUser._id)
 						.then(res => {
 							self.lectureSubmission = res.data
-							LecturePollAPI.getByLecture(self.lecture._id)
+							PlaybackPollAPI.getByLecture(self.lecture._id)
 								.then(resp => {
 									self.polls = resp.data
 									vid.on('timeupdate', function () {
