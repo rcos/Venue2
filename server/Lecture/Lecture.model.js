@@ -6,10 +6,10 @@ let Section = require('../Section/Section.model');
 //Define collection and schema for Lecture
 let Lecture = new Schema({
 	title: String,
-	section: {
+	sections: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Section'
-	},
+	}],
 	allow_live_submissions: { type: Boolean, default: false },
 	allow_playback_submissions: { type: Boolean, default: false },
 	start_time: Date,
@@ -23,10 +23,8 @@ let Lecture = new Schema({
 		is_open: { type: Boolean, default: false },
 		is_closed: { type: Boolean, default: false }
 	},
-	video_ref: {
-		type: String,
-		default: ""
-	},
+	code: {	type: String, default: "" },
+	video_ref: { type: String, default: "" },
 	num_playback_polls: Number
 });
 
