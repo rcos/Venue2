@@ -14,6 +14,7 @@ const sectionRouter = require('./Section/Section.route')
 const eventRouter = require('./Event/Event.route')
 const submissionRouter = require('./Submission/Submission.route')
 const lectureRouter = require('./Lecture/Lecture.route')
+const lectureSubmissionRouter = require('./LectureSubmission/LectureSubmission.route')
 const pollRouter = require('./PlaybackPoll/PlaybackPoll.route')
 
 mongoose.Promise = global.Promise;
@@ -33,6 +34,22 @@ app.use('/events', eventRouter);
 app.use('/submissions', submissionRouter);
 app.use('/lectures', lectureRouter);
 app.use('/polls', pollRouter);
+app.use('/lecturesubmissions',lectureSubmissionRouter);
+
+var fs = require('fs'),
+  http = require('http');
+
+http.createServer(function (req, res) {
+ fs.readFile(__dirname + '/../public' + req.url, function (err,data) {
+    if (err) {
+      res.writeHead(404);
+      res.end(JSON.stringify(err));
+      return;
+    }
+    res.writeHead(200);
+    res.end(data);
+  });
+}).listen(9000);
 
 app.listen(PORT, function () {
   console.log('Server is running on Port:', PORT);

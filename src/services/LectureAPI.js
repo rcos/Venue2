@@ -37,5 +37,8 @@ export default {
         }
       }
     )
+  },
+  getLecture(id) {
+    return API().get('lectures/' + id)
   }
 }

@@ -38,6 +38,9 @@
               <p>video_ref: {{ lecture.video_ref }}</p>
               <p>playback_submission_start_time: {{ new Date(lecture.playback_submission_start_time) }}</p>
               <p>playback_submission_end_time: {{ new Date(lecture.playback_submission_end_time) }}</p>
+              <router-link :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+                <button>Video Playback</button>
+              </router-link>
             </div>
             <LectureUploadModal v-else v-bind:lecture="lecture" />
           </div>
@@ -57,9 +60,13 @@
             <p v-if="lecture.allow_live_submissions">Lecture was live</p>
             <p v-else>Lecture was never live</p>
             <div v-if="lecture.allow_playback_submissions">
+              <!-- TODO: Prevent students from viewing playback outside of the plabyack time -->
               <p>video_ref: {{ lecture.video_ref }}</p>
               <p>playback_submission_start_time: {{ new Date(lecture.playback_submission_start_time) }}</p>
               <p>playback_submission_end_time: {{ new Date(lecture.playback_submission_end_time) }}</p>
+              <router-link :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+                <button>Video Playback</button>
+              </router-link>
             </div>
             <p>No lecture playback</p>
           </div>

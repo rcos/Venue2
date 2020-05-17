@@ -19,7 +19,10 @@ let PlaybackPoll = new Schema({
 		type: String,
 		default: ""
 	}],
-	timestamp: Number
+	timestamp: {
+		type: Number,
+		default: 0
+	}
 });
 
 module.exports = mongoose.model('PlaybackPoll', PlaybackPoll);
