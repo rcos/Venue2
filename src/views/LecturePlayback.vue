@@ -58,47 +58,48 @@ export default {
 					let vid = this;
 
 					self.currentUser = self.$store.state.user.current_user
-
-					LectureSubmissionAPI.getOrMake(self.lecture._id,self.currentUser._id)
-						.then(res => {
-							self.lectureSubmission = res.data
-							PlaybackPollAPI.getByLecture(self.lecture._id)
-								.then(resp => {
-									self.polls = resp.data
-									vid.on('timeupdate', function () {
-										let currTime = vid.currentTime()
-										if(currTime - self.prevTime < 0.5 && currTime > self.prevTime) {
-											//Considered NOT a 'seek', video is playing normally
-											if(self.lectureSubmission.video_progress < currTime) {
-												self.lectureSubmission.video_progress = currTime
-											}
-											for (let i = 0; i < self.polls.length; i++) {
-												if (currTime > self.polls[i].timestamp) {
-													if(undefined == self.lectureSubmission.student_poll_answers[i] || self.lectureSubmission.student_poll_answers[i].length == 0) {
-														//THERE IS NO ANSWER FROM THE STUDENT YET
-														vid.currentTime(self.polls[i].timestamp)
-														vid.pause()
-														self.startPoll(i)
+					if(!self.currentUser.is_instructor) {
+						LectureSubmissionAPI.getOrMake(self.lecture._id,self.currentUser._id)
+							.then(res => {
+								self.lectureSubmission = res.data
+								PlaybackPollAPI.getByLecture(self.lecture._id)
+									.then(resp => {
+										self.polls = resp.data
+										vid.on('timeupdate', function () {
+											let currTime = vid.currentTime()
+											if(currTime - self.prevTime < 0.5 && currTime > self.prevTime) {
+												//Considered NOT a 'seek', video is playing normally
+												if(self.lectureSubmission.video_progress < currTime) {
+													self.lectureSubmission.video_progress = currTime
+												}
+												for (let i = 0; i < self.polls.length; i++) {
+													if (currTime > self.polls[i].timestamp) {
+														if(undefined == self.lectureSubmission.student_poll_answers[i] || self.lectureSubmission.student_poll_answers[i].length == 0) {
+															//THERE IS NO ANSWER FROM THE STUDENT YET
+															vid.currentTime(self.polls[i].timestamp)
+															vid.pause()
+															self.startPoll(i)
+														}
+													}
+												}
+											} else {
+												//Considered a 'seek'
+												if(currTime > self.lectureSubmission.video_progress) {
+													vid.currentTime(self.prevTime)
+												} else if(currTime < self.prevTime) {
+													for (let i = 0; i < self.polls.length; i++) {
+														self.hidePoll(i)
 													}
 												}
 											}
-										} else {
-											//Considered a 'seek'
-											if(currTime > self.lectureSubmission.video_progress) {
-												vid.currentTime(self.prevTime)
-											} else if(currTime < self.prevTime) {
-												for (let i = 0; i < self.polls.length; i++) {
-													self.hidePoll(i)
-												}
-											}
-										}
-										self.prevTime = vid.currentTime()
+											self.prevTime = vid.currentTime()
+										})
+										vid.on('ended', function() {
+											LectureSubmissionAPI.update(self.lectureSubmission)
+										});
 									})
-									vid.on('ended', function() {
-										LectureSubmissionAPI.update(self.lectureSubmission)
-									});
-								})
-						})
+							})
+					}
 				})
 			})
 	},
