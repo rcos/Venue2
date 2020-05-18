@@ -1,41 +1,25 @@
 <template>
   <div>
-<!--     <DashboardSection active_section/>
-    <DashboardSection today_section/> -->
-    <div class="dashboard-section">
-      <h4 class="section-title">All</h4>
-      <div class="lecture-box" v-for="lecture in all_lectures">
-        <p>{{ lecture.title }}</p>
-      </div>
-    </div>
+    <!-- <DashboardSection active_section/> -->
+    <!-- <DashboardSection today_section/> -->
+    <!--<router-link :to="{name: 'course_info', params: { id: '5e90f007920d965429e5d1a4' }}">Test</router-link>-->
 
-    <div class="dashboard-section">
-      <h4 class="section-title">Live</h4>
-      <div class="lecture-box" v-for="lecture in live_lectures">
-        <p>{{ lecture.title }}</p>
+    <show-at breakpoint="large">
+      <div class="venue-body-container">
+        <LiveCourses />
+        <PlaybackCourses />
+        <RecentCourses />
+        <UpcomingCourses />
       </div>
-    </div>
-
-    <div class="dashboard-section">
-      <h4 class="section-title">Playback</h4>
-      <div class="lecture-box" v-for="lecture in playback_lectures">
-        <p>{{ lecture.title }}</p>
+    </show-at>
+    <hide-at breakpoint="large">
+      <div class="venue-body-container is-mobile">
+        <LiveCourses mobileMode />
+        <PlaybackCourses mobileMode />
+        <RecentCourses mobileMode />
+        <UpcomingCourses mobileMode />
       </div>
-    </div>
-
-    <div class="dashboard-section">
-      <h4 class="section-title">Recent</h4>
-      <div class="lecture-box" v-for="lecture in recent_lectures">
-        <p>{{ lecture.title }}</p>
-      </div>
-    </div>
-
-    <div class="dashboard-section">
-      <h4 class="section-title">Upcoming</h4>
-      <div class="lecture-box" v-for="lecture in upcoming_lectures">
-        <p>{{ lecture.title }}</p>
-      </div>
-    </div>
+    </hide-at>
 
     <hide-at breakpoint="mediumAndBelow">
       <DashboardSection courses_section/>
@@ -50,6 +34,14 @@
   import { authComputed } from '../vuex/helpers.js'
   import {showAt, hideAt} from 'vue-breakpoints'
 
+  import LiveCourses from '@/components/LiveCourses.vue'
+  import PlaybackCourses from '@/components/PlaybackCourses.vue'
+  import RecentCourses from '@/components/RecentCourses.vue'
+  import UpcomingCourses from '@/components/UpcomingCourses'
+
+  import '@/assets/css/venue-core.css'
+  import '@/assets/css/venue.css'
+
   export default {
     name: 'Dashboard',
     computed: {
@@ -58,7 +50,11 @@
     components: {
       DashboardSection,
       hideAt,
-      showAt
+      showAt,
+      LiveCourses,
+      PlaybackCourses,
+      RecentCourses,
+      UpcomingCourses
     },
     data(){
       return {

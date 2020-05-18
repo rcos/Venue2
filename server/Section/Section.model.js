@@ -13,10 +13,8 @@ let Section = new Schema({
 	},
 	number: Number,
 	students: [{
-		student: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'User'
-		}
+		type: [mongoose.Schema.Types.ObjectId],
+		ref: 'User'
 	}],
 	teaching_assistants: [{
 		ta: {
