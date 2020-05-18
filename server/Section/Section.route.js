@@ -1,6 +1,7 @@
 const express = require('express');
 const sectionRoutes = express.Router();
 const jwt = require('jsonwebtoken')
+const ObjectID = require(`mongoose`).Types.ObjectId
 
 let Section = require('./Section.model');
 let User = require('../User/User.model');
@@ -56,7 +57,7 @@ sectionRoutes.route('/edit/:id').get(function (req, res) {
 sectionRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
   let updated_section = req.body.updated_section;
-  Section.findByIdAndUpdate(id, 
+  Section.findByIdAndUpdate(id,
     {
       course: updated_section.course,
       number: updated_section.number,
@@ -67,7 +68,7 @@ sectionRoutes.route('/update/:id').post(function (req, res) {
     function(err, section) {
       if (!section)
         res.status(404).send("section not found");
-      res.json(section);    
+      res.json(section);
     }
   );
 });
@@ -102,15 +103,20 @@ sectionRoutes.route('/getInstructor/:id').get(function (req, res) {
 sectionRoutes.route('/getCourse/:id').get(function (req, res) {
   let id = req.params.id;
   Section.findById(id, function (err, section){
-    if(err) {
+    if(err || section == null) {
       res.json(err);
     }
-    let course_id = section.course;
-    Course.findById(course_id, function(error, course){
-      if(error)
-        res.json(error);
-      res.json(course);
-    });
+    else {
+      let course_id = section.course;
+      Course.findById(course_id, function(error, course){
+        if(error || course == null) {
+          res.json(error);
+        }
+        else {
+          res.json(course);
+        }
+      });
+    }
   });
 });
 
@@ -120,51 +126,120 @@ sectionRoutes.route('/getStudents/:id').get(function (req, res) {
     if(err) {
       res.json(err);
     }
-    let student_ids = section.students;
-    let students = [];
-    let num_iterations = 0;
-    console.log("student_ids: " + student_ids);
-    student_ids.forEach(student_id => {
-      User.findById(student_id, function(err, student) {
-        if(err)
-          res.json(err);
-        students.push(student);
-        num_iterations++;
-        if(num_iterations === student_ids.length)
-          res.json(students);
-      });
-    });
+
+    let student_promises = []
+
+    section.students.forEach(student_id => {
+
+      student_promises.push(new Promise((resolve, reject) => {
+        User.findById(student_id, (err, student) => {
+          if (err || student == null) resolve (null)
+          else resolve(student)
+        })
+      }))
+
+    })
+
+    Promise.all(student_promises).then(student_results => {
+      student_results = student_results.filter(result_ => result_ != null)
+
+      res.json({
+        student_count: section.students.length,
+        students: student_results
+      })
+    })
+
   });
 });
 
 sectionRoutes.get('/get_with_courses_for_student/:user_id', verifyToken, (req, res) => {
   let user_id = req.params.user_id
+
+  console.log(`In GetWithCoursesForStudent ${user_id} (${ObjectID.isValid( user_id )})`)
+
+  if (!ObjectID.isValid(user_id)) {
+    res.json({
+      success: false,
+      error: "Invalid ID Format provided"
+    })
+    return;
+  }
+
   jwt.verify(req.token, 'the_secret_key', err => {
     if(err) {
       res.sendStatus(401).send("Unauthorized access")
     } else {
 
-      user_sections = []
-      Section.find((error, sections) => {
-        sections.forEach((section) => {
-          section.students.forEach((student) => {
-            if(student._id == user_id)
-              user_sections.push(section)
+      // Find all sections such that the student is in the array, students, in the section.
+      // Then, find the courses that correspond to those sections
+      Section.find(
+
+        // (1) Find the sections such that the student array of the section contains
+        //  the user id.
+        {
+          'students': {
+            '$elemMatch': {
+              '$eq': ObjectID(user_id)
+            }
+          }
+        }, (err, sections) => {
+
+        // Return error if mongo throws an error
+        if (err || sections == null) {
+          res.json({
+            success: false,
+            error: "Problem finding sections"
           })
-        })
-        let counter = 0
-        user_sections.forEach((user_section) => {
-          Course.findById(user_section.course, function (course_error, course){
-            if(course_error) 
-              res.json(course_error);
-            else 
-              user_section.course = course
-            counter++
-            if(counter === user_sections.length)
-              res.json(user_sections)
+        }
+
+        // Find the courses that associate with the sections
+        else {
+
+          console.log(sections)
+
+          let course_promises = []
+          let user_sections = []
+          sections.forEach(_section_ => {
+
+            // (2) For each section, query to find the course that is associated with
+            // the section
+            user_sections.push(_section_)
+            course_promises.push(new Promise((resolve, reject) => {
+
+              Course.findById(_section_.course, (course_error, section_course) => {
+                if (course_error || section_course == null) {
+                  resolve(null)
+                }
+                else {
+                  resolve(section_course)
+                }
+              })
+
+            }) )
+
           })
-        })
+
+          // course_promises contains all the async course queries that we need to return.
+          // Wait for the async processes to complete then return
+          Promise.all(course_promises).then(_courses_ => {
+
+            // attach the course to the section data
+            _courses_.forEach((course_, i) => {
+
+              user_sections[i].course = course_
+            })
+
+            // filter out the null results (sections with courses that resolved null)
+            let final_sections = user_sections.filter(section_ => section_.course != null)
+
+            res.json(final_sections)
+
+          })
+
+        }
+
       })
+
 
     }
   })

@@ -59,11 +59,21 @@
     },
     methods: {
       async getTodaysEvents() {
-        let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
-        this.todays_events = response.data
-        //order events by start time
-        this.sortTodaysEventsByStartTime()
-        this.setEventsStartedStoday()
+
+        EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
+        .then(response => {
+          console.log(response)
+          this.data_loaded = true
+          this.todays_events = response.data
+
+          //order events by start time
+          this.sortTodaysEventsByStartTime()
+          this.setEventsStartedStoday()
+        })
+        .catch(err => {
+          console.log(err)
+          this.data_loaded = true
+        })
       },
       convertToHourMinuteFormat(time) {
         let time_string = time.toLocaleTimeString('en-US')
@@ -78,7 +88,7 @@
       },
       sortTodaysEventsByStartTime() {
         this.todays_events.sort(function(a,b){
-          return new Date(a.start_time) - new Date(b.start_time); 
+          return new Date(a.start_time) - new Date(b.start_time);
         });
       },
       setEventsStartedStoday() {
@@ -125,7 +135,7 @@
 #vertical-section::-webkit-scrollbar-thumb {
 border-radius: 10px;
 -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-background-color: #F5F5F5; 
+background-color: #F5F5F5;
 }
 
 .mleft-one {
@@ -207,9 +217,9 @@ background-color: #F5F5F5;
 }
 
 /*Small devices*/
-@media (max-width: 575.98px) {
+/* @media (max-width: 575.98px) {
   .todays-events-section {
     padding-right: 0;
   }
-}
+} */
 </style>
