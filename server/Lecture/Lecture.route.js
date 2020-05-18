@@ -32,7 +32,7 @@ lectureRoutes.route('/add_playback/:lecture_id').post(function (req, res) {
 		}
 		var oldpath = files.video.path;
 		var pubDir = path.join(__dirname,'..','..','public')
-		var newpath = pubDir + fields.video_ref + files.video.name;
+		var newpath = (pubDir + fields.video_ref + files.video.name).split(' ').join('_');
 		if (!fs.existsSync(pubDir + "/videos")) {
 			fs.mkdirSync(pubDir + "/videos")
 		}
@@ -45,7 +45,7 @@ lectureRoutes.route('/add_playback/:lecture_id').post(function (req, res) {
 		// update the lecture with video
 		Lecture.findByIdAndUpdate(lecture_id,
 		  {
-		    video_ref: fields.video_ref + files.video.name,
+		    video_ref: (fields.video_ref + files.video.name).split(' ').join('_'),
 		    playback_submission_start_time: fields.playback_submission_start_time,
 		    playback_submission_end_time: fields.playback_submission_end_time,
 		    allow_playback_submissions: true
