@@ -1,83 +1,34 @@
 const express = require('express');
 const userRoutes = express.Router();
-const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 let User = require('./User.model');
 let Course = require('../Course/Course.model');
 let Section = require('../Section/Section.model');
 
-userRoutes.route('/signup').post(function (req, res) {
-  console.log("Made it into the signup route")
-  console.log("Creating user with email: " + req.body.user.email + " password: " + req.body.user.password)
-  let user = new User(req.body.user);
-  user.save()
-    .then(() => {
-      console.log("Entered then block")
-      const token = jwt.sign({ user }, 'the_secret_key')
-      console.log("just signed token in then block: " + token)
-      res.status(200).json({token, user});
-    })
-    .catch(() => {
-      console.log("Entered catch block")
-      res.status(400).send("unable to save user to database");
-    });
-});
-
-userRoutes.route('/login').post(function (req, res) {
-  // console.log("Entered login route")
-  let user = req.body.user
-  // console.log("Received user: " + user)
-  // console.log("Outside if statement. User was passed to request body with email: " 
-  //   + user.email + " password: " + user.password)
-  if(user){
-    // console.log("Inside if statement. Searching for user with email: " + user.email
-    //  + " password: " + user.password)
-    User.findOne({ email: user.email, password: user.password }, function(error, current_user) {
-      if(error || !current_user){
-        console.log("Error unable to find user: " + user)
-        res.status(404).json({ error: 'Invalid Login Credentials. Please try again' })
-      }
-      else {
-        // console.log("Async call fetched user: " + current_user + " with email: " + current_user.email
-        //   + " and password: " + current_user.password)
-        const token = jwt.sign({ current_user }, 'the_secret_key')
-        // console.log("After signing, here is the user: " + current_user +
-        //   " with email " + current_user.email + " with password: " + current_user.password)
-        // console.log("Sending back user " + current_user + " with email: " + current_user.email +
-        //   " and password " + current_user.password + " with token: " + token)
-        res.json({token, current_user})
-      }
-    })
-  }else{
-    // console.log("Entered error block")
-    res.status(400).json({ error: 'Invalid login. Please try again.' })
-  }
-});
-
 userRoutes.route('/add').post(function (req, res) {
   let user = new User(req.body.user);
-  user.save()
-    .then(() => {
-      res.status(200).json(user);
-    })
-    .catch(() => {
-      res.status(400).send("unable to save user to database");
-    });
+  console.log("password before: " + user.password)
+  bcrypt.hash(user.password, saltRounds, (err, hash) => {
+    user.password = hash
+    console.log("password after: " + user.password)
+    user.save()
+      .then(() => {
+        res.status(200).json(user);
+      })
+      .catch(() => {
+        res.status(400).send("unable to save user to database");
+      });
+  });
 });
 
-userRoutes.get('/', verifyToken, (req, res) => {
-  jwt.verify(req.token, 'the_secret_key', err => {
-    if(err) {
-      console.log("Entered error block. req.token: " + req.token + " The error is:" + error)
-      res.sendStatus(401).send("Unauthorized access")
-    } else {
-      User.find(function(err, users){
-        if(err){
-          res.json(err);
-        }else {
-          res.json(users);
-        }
-      })
+userRoutes.get('/', (req, res) => {
+  User.find(function(err, users){
+    if(err){
+      res.json(err);
+    }else {
+      res.json(users);
     }
   })
 })
@@ -198,18 +149,5 @@ userRoutes.route('/student_sections/:id').get(function (req, res) {
     res.json(student_sections);
   });
 });
-
-function verifyToken (req, res, next) {
-  const bearerHeader = req.headers['authorization']
-
-  if (typeof bearerHeader !== 'undefined') {
-    const bearer = bearerHeader.split(' ')
-    const bearerToken = bearer[1]
-    req.token = bearerToken
-    next()
-  } else {
-    res.sendStatus(401)
-  }
-}
 
 module.exports = userRoutes;
