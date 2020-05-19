@@ -2,6 +2,7 @@ const express = require('express');
 const lectureSubmissionRoutes = express.Router();
 
 let LectureSubmission = require('../LectureSubmission/LectureSubmission.model');
+let Lecture = require('../Lecture/Lecture.model');
 
 lectureSubmissionRoutes.route('/add').post(function (req, res) {
   let lectureSubmission = new LectureSubmission(req.body.lectureSubmission);
@@ -76,5 +77,16 @@ lectureSubmissionRoutes.route('/get_or_make').post(function (req, res) {
     }
   );
 });
+
+lectureSubmissionRoutes.get('/by_lecture/:lecture_id', (req, res) => {
+	let lecture_id = req.params.lecture_id;
+  LectureSubmission.find({lecture: lecture_id},function(err,lect_submissions) {
+    if(err) {
+      res.json(err)
+    } else {
+      res.json(lect_submissions)
+    }
+  })
+})
 
 module.exports = lectureSubmissionRoutes;
