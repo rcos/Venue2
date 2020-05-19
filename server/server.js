@@ -36,6 +36,7 @@ if(!process.env.AUTH_KEY){
   return
 }
 
+const authRouter = require('./Auth/Auth.route')
 const userRouter = require('./User/User.route')
 const courseRouter = require('./Course/Course.route')
 const sectionRouter = require('./Section/Section.route')
@@ -56,6 +57,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.use('/auth', authRouter);
 app.use('/users', jwtVerify, userRouter);
 app.use('/courses', jwtVerify, courseRouter);
 app.use('/sections', jwtVerify, sectionRouter);
