@@ -1,50 +1,33 @@
 const express = require('express');
 const userRoutes = express.Router();
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 let User = require('./User.model');
 let Course = require('../Course/Course.model');
 let Section = require('../Section/Section.model');
 
 userRoutes.route('/signup').post(function (req, res) {
-  console.log("Made it into the signup route")
-  console.log("Creating user with email: " + req.body.user.email + " password: " + req.body.user.password)
-  let user = new User(req.body.user);
+  let user = new User(req.body.user)
   user.save()
     .then(() => {
-      console.log("Entered then block")
-      const token = jwt.sign({ user }, 'the_secret_key')
-      console.log("just signed token in then block: " + token)
+      const token = jwt.sign({ user }, process.env.AUTH_KEY)
       res.status(200).json({token, user});
     })
     .catch(() => {
-      console.log("Entered catch block")
       res.status(400).send("unable to save user to database");
     });
 });
 
 userRoutes.route('/login').post(function (req, res) {
-  // console.log("Entered login route")
   let user = req.body.user
-  // console.log("Received user: " + user)
-  // console.log("Outside if statement. User was passed to request body with email: " 
-  //   + user.email + " password: " + user.password)
   if(user){
-    // console.log("Inside if statement. Searching for user with email: " + user.email
-    //  + " password: " + user.password)
     User.findOne({ email: user.email, password: user.password }, function(error, current_user) {
       if(error || !current_user){
         console.log("Error unable to find user: " + user)
         res.status(404).json({ error: 'Invalid Login Credentials. Please try again' })
       }
       else {
-        // console.log("Async call fetched user: " + current_user + " with email: " + current_user.email
-        //   + " and password: " + current_user.password)
-        const token = jwt.sign({ current_user }, 'the_secret_key')
-        // console.log("After signing, here is the user: " + current_user +
-        //   " with email " + current_user.email + " with password: " + current_user.password)
-        // console.log("Sending back user " + current_user + " with email: " + current_user.email +
-        //   " and password " + current_user.password + " with token: " + token)
+        const token = jwt.sign({ current_user }, process.env.AUTH_KEY)
         res.json({token, current_user})
       }
     })
@@ -68,7 +51,6 @@ userRoutes.route('/add').post(function (req, res) {
 userRoutes.get('/', verifyToken, (req, res) => {
   jwt.verify(req.token, 'the_secret_key', err => {
     if(err) {
-      console.log("Entered error block. req.token: " + req.token + " The error is:" + error)
       res.sendStatus(401).send("Unauthorized access")
     } else {
       User.find(function(err, users){

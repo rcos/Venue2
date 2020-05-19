@@ -3,6 +3,7 @@ const app = express();
 
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path')
 
 const mongoose = require('mongoose');
 const config = require('./DB.js');
@@ -16,6 +17,17 @@ const submissionRouter = require('./Submission/Submission.route')
 const lectureRouter = require('./Lecture/Lecture.route')
 const lectureSubmissionRouter = require('./LectureSubmission/LectureSubmission.route')
 const pollRouter = require('./PlaybackPoll/PlaybackPoll.route')
+
+// get environment variabless when not in production
+if (process.env.NODE_ENV !== 'production')
+  require('dotenv').config({ path: path.resolve(__dirname, '../variables.env') })
+
+// ensure auth key is available in environment
+if(!process.env.AUTH_KEY){
+  res.status(500).send("Error")
+  console.log("No auth key")
+  return
+}
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(

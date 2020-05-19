@@ -139,7 +139,7 @@ sectionRoutes.route('/getStudents/:id').get(function (req, res) {
 
 sectionRoutes.get('/get_with_courses_for_student/:user_id', verifyToken, (req, res) => {
   let user_id = req.params.user_id
-  jwt.verify(req.token, 'the_secret_key', err => {
+  jwt.verify(req.token, process.env.AUTH_KEY, err => {
     if(err) {
       res.sendStatus(401).send("Unauthorized access")
     } else {
@@ -172,7 +172,7 @@ sectionRoutes.get('/get_with_courses_for_student/:user_id', verifyToken, (req, r
 
 sectionRoutes.get('/get_with_course/:section_id', verifyToken, (req, res) => {
   let section_id = req.params.section_id
-  jwt.verify(req.token, 'the_secret_key', err => {
+  jwt.verify(req.token, process.env.AUTH_KEY, err => {
     if(err) {
       res.sendStatus(401).send("Unauthorized access")
     } else {
@@ -197,7 +197,7 @@ sectionRoutes.get('/get_with_course/:section_id', verifyToken, (req, res) => {
 
 sectionRoutes.get('/get_for_course/:course_id', verifyToken, (req, res) => {
   let course_id = req.params.course_id
-  jwt.verify(req.token, 'the_secret_key', err => {
+  jwt.verify(req.token, process.env.AUTH_KEY, err => {
     if(err) {
       res.sendStatus(401).send("Unauthorized access")
     } else {
