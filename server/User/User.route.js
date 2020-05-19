@@ -32,7 +32,6 @@ userRoutes.route('/login').post(function (req, res) {
       }
     })
   }else{
-    // console.log("Entered error block")
     res.status(400).json({ error: 'Invalid login. Please try again.' })
   }
 });
@@ -48,18 +47,12 @@ userRoutes.route('/add').post(function (req, res) {
     });
 });
 
-userRoutes.get('/', verifyToken, (req, res) => {
-  jwt.verify(req.token, 'the_secret_key', err => {
-    if(err) {
-      res.sendStatus(401).send("Unauthorized access")
-    } else {
-      User.find(function(err, users){
-        if(err){
-          res.json(err);
-        }else {
-          res.json(users);
-        }
-      })
+userRoutes.get('/', (req, res) => {
+  User.find(function(err, users){
+    if(err){
+      res.json(err);
+    }else {
+      res.json(users);
     }
   })
 })
@@ -180,18 +173,5 @@ userRoutes.route('/student_sections/:id').get(function (req, res) {
     res.json(student_sections);
   });
 });
-
-function verifyToken (req, res, next) {
-  const bearerHeader = req.headers['authorization']
-
-  if (typeof bearerHeader !== 'undefined') {
-    const bearer = bearerHeader.split(' ')
-    const bearerToken = bearer[1]
-    req.token = bearerToken
-    next()
-  } else {
-    res.sendStatus(401)
-  }
-}
 
 module.exports = userRoutes;
