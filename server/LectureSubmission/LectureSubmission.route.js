@@ -16,6 +16,32 @@ lectureSubmissionRoutes.route('/add').post(function (req, res) {
     });
 });
 
+lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
+  let subobj = {
+    lecture: req.body.lecture_id,
+    video_progress: 0,
+    is_live_submission: true
+  }
+  let email = req.body.rcs + "@rpi.edu"
+  User.find({email: email},function(err,users){
+    if(err || users == null) {
+      res.json(err)
+    } else if(users[0]) {
+      subobj.submitter = users[0]._id
+      let lectureSubmission = new LectureSubmission(subobj);
+      lectureSubmission.save()
+        .then(() => {
+          res.status(200).json(lectureSubmission);
+        })
+        .catch(() => {
+          res.status(400).send("unable to save submission to database");
+        });
+    } else {
+      res.status(400).send("no user with that email in database");
+    }
+  })
+});
+
 lectureSubmissionRoutes.route('/').get(function (req, res) {
   LectureSubmission.find(function (err, lectureSubmissions) {
     if (err) {
