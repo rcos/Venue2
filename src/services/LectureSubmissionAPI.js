@@ -19,5 +19,11 @@ export default {
     return API().post('lecturesubmissions/update', {
       lectureSubmission: lectureSubmission // add our data to the request body
     })
+  },
+  getLectureSubmissionsForLecture(lecture_id) {
+    return API().get('lecturesubmissions/for_lecture/' + lecture_id)
+  },
+  getLectureSubmissionForStudent(lecture_id, student_id) {
+    return API().get('lecturesubmissions/for_student/' + lecture_id + '/' + student_id)
   }
 }

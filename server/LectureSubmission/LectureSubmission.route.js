@@ -2,6 +2,8 @@ const express = require('express');
 const lectureSubmissionRoutes = express.Router();
 
 let LectureSubmission = require('../LectureSubmission/LectureSubmission.model');
+let Lecture = require('../Lecture/Lecture.model');
+let User = require('../User/User.model');
 
 lectureSubmissionRoutes.route('/add').post(function (req, res) {
   let lectureSubmission = new LectureSubmission(req.body.lectureSubmission);
@@ -76,5 +78,37 @@ lectureSubmissionRoutes.route('/get_or_make').post(function (req, res) {
     }
   );
 });
+
+lectureSubmissionRoutes.get('/for_lecture/:lecture_id', (req, res) => {
+	let lecture_id = req.params.lecture_id;
+  LectureSubmission.find({lecture: lecture_id},function(err,lect_submissions) {
+    if(err)
+      res.json(err)
+    else {
+      User.findById({'_id': lect_submissions[0].submitter}, (error, submitter) => {
+        if(error)
+          res.json(error)
+        else {
+          lect_submissions.forEach(submission => {
+            submission.submitter = submitter
+          })
+          res.json(lect_submissions)
+        }
+      })
+    }
+  })
+})
+
+lectureSubmissionRoutes.get('/for_student/:lecture_id/:student_id', (req, res) => {
+  let lecture_id = req.params.lecture_id
+  let student_id = req.params.student_id
+  LectureSubmission.findOne({lecture: lecture_id, submitter: student_id},function(err,lect_submission) {
+    if(err)
+      res.json(err)
+    else {
+      res.json(lect_submission)
+    }
+  })
+})
 
 module.exports = lectureSubmissionRoutes;

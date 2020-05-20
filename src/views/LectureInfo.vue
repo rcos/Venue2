@@ -28,8 +28,12 @@
             <div v-else-if="submission_window_open">
               <p>QR Code:</p>
               <canvas id="qr_render_area"></canvas>
+              <LectureSubmissionsList v-bind:lecture_id="lecture_id" />
             </div>
-            <p v-else>Submission window closed</p>
+            <div v-else>
+              <p>Submission window closed</p>
+              <LectureSubmissionsList v-bind:lecture_id="lecture_id" />
+            </div>
           </div>
           <div v-else>
             <p v-if="lecture.allow_live_submissions">Lecture was live</p>
@@ -41,6 +45,7 @@
               <router-link :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
                 <button>Video Playback</button>
               </router-link>
+              <LectureSubmissionsList v-bind:lecture_id="lecture_id" />
             </div>
             <LectureUploadModal v-else v-bind:lecture="lecture" />
           </div>
@@ -55,6 +60,7 @@
             <p v-if="submission_window_pending">Submission Window pending</p>
             <button v-else-if="submission_window_open" @click="scanQR">Scan Code</button>
             <p v-else>Submission window closed</p>
+            <StudentLectureSubmissionCard v-bind:lecture_id="lecture_id" />
           </div>
           <div v-else>
             <p v-if="lecture.allow_live_submissions">Lecture was live</p>
@@ -69,6 +75,7 @@
               </router-link>
             </div>
             <p>No lecture playback</p>
+            <StudentLectureSubmissionCard v-bind:lecture_id="lecture_id" />
           </div>
         </div>
       </div>
@@ -80,7 +87,9 @@
   import LectureAPI from '@/services/LectureAPI.js';
   import QRCode from "qrcode";
   import QRScanner from "qr-code-scanner";
-  import LectureUploadModal from "../components/LectureUploadModal";
+  import LectureUploadModal from "@/components/LectureUploadModal";
+  import LectureSubmissionsList from "@/components/LectureSubmissionsList.vue";
+  import StudentLectureSubmissionCard from "@/components/StudentLectureSubmissionCard.vue";
 
   export default {
     name: 'LectureInfo',
@@ -89,7 +98,9 @@
     computed: {
     },
     components: {
-      LectureUploadModal
+      LectureUploadModal,
+      LectureSubmissionsList,
+      StudentLectureSubmissionCard
     },
     data(){
       return {
@@ -107,6 +118,8 @@
     created() {
       this.getLecture()
       this.is_instructor = this.$store.state.user.current_user.is_instructor
+      this.lecture_id = this.$route.params.lecture_id
+
     },
     methods: {
       async getLecture() {
