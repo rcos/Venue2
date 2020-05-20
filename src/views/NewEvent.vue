@@ -28,43 +28,43 @@
         <!-- Times -->
         <div class="input-wrapper">
           <label>Start Time</label>
-          <datetime
+          <!-- <datetime
             class="time-picker"
             type="datetime"
             use12-hour
             value-zone="local"
             title="Event Start"
             v-model="event.start_time"
-          ></datetime>
+          ></datetime> -->
           <label>End Time</label>
-          <datetime
+          <!-- <datetime
             class="time-picker"
             type="datetime"
             use12-hour
             value-zone="local"
             title="Event End"
             v-model="event.end_time"
-          ></datetime>
+          ></datetime> -->
         </div>
         <div class="input-wrapper" id="submission-time-wrapper">
           <label>Submission Start Time</label>
-          <datetime
+          <!-- <datetime
             class="time-picker"
             type="datetime"
             use12-hour
             value-zone="local"
             title="Submission Start"
             v-model="event.submission_start_time"
-          ></datetime>
+          ></datetime> -->
           <label>Submission End Time</label>
-          <datetime
+          <!-- <datetime
             class="time-picker"
             type="datetime"
             use12-hour
             value-zone="local"
             title="Submission End"
             v-model="event.submission_end_time"
-          ></datetime>
+          ></datetime> -->
         </div>
         <!-- Section -->
         <div class="input-wrapper">
@@ -96,8 +96,6 @@ import EventAPI from "@/services/EventAPI.js";
 import CourseAPI from "@/services/CourseAPI.js";
 import SectionAPI from "@/services/SectionAPI.js";
 import Sections from "@/components/Sections";
-import { Datetime } from "vue-datetime";
-import "vue-datetime/dist/vue-datetime.css";
 import QRCode from "qrcode";
 import GoogleMap from "@/components/GoogleMap";
 
@@ -105,7 +103,6 @@ export default {
   name: "NewEvent",
   components: {
     Sections,
-    datetime: Datetime,
     GoogleMap
   },
   data() {
