@@ -1,12 +1,7 @@
 <template>
   <router-link :to="is_instructor ? {name: 'course_info', params: { id: course._id }} : {name: 'course_info', params: { id: section._id }}">
     <div v-if="mobile" class="course-card-mobile">
-    	<div class="color-box" v-bind:class="{
-        'blue-box':box_color == 'blue', 
-        'red-box':box_color == 'red', 
-        'orange-box':box_color == 'orange',
-        'green-box':box_color == 'green',
-        'purple-box':box_color == 'purple'}"></div>
+    	<div class="color-box"  :style="{backgroundColor: box_color}"></div>
       <div v-if="is_instructor" class="course-info">
         <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
         <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>
@@ -19,12 +14,7 @@
       </div>
     </div>
     <div v-else class="course-card">
-    	<div class="color-box" v-bind:class="{
-        'blue-box':box_color == 'blue', 
-        'red-box':box_color == 'red', 
-        'orange-box':box_color == 'orange',
-        'green-box':box_color == 'green',
-        'purple-box':box_color == 'purple'}"></div>
+    	<div class="color-box" :style="{backgroundColor: box_color}"></div>
       <div v-if="is_instructor" class="course-info">
         <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
         <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>

@@ -55,9 +55,6 @@
         courses_loaded: 0
       }
     },
-    created() {
-      this.current_user = this.$store.state.user.current_user
-    },
     methods: {
       setCourseSize (_size_) {
         console.log(`Course Size: ${_size_}`)
@@ -66,84 +63,3 @@
     }
   }
 </script>
-
-<style scoped>
-.dashboard-section {
-  /*border: red solid;*/
-  text-align: left;
-  margin-top: 4rem;
-  display: inline-block;
-  vertical-align: top;
-  height: 15rem;
-  width: 100%;
-  margin: 0 8rem;
-}
-
-.active-section {
-  float: left;
-  margin-left: 8rem;
-  width: 30rem;
-}
-
-.today-section {
-  width: 30rem;
-  margin-left: -5rem;
-}
-
-.courses-section-title div {
-  display: inline-block;
-  font-family: "Segoe UI";
-}
-
-.courses-section {
-  display: block;
-  margin-top: 2rem;
-}
-
-.section-title {
-  font-weight: bold;
-}
-
-.load-course-size {
-  font-size: 1.2rem;
-  margin-left: 0.9rem;
-  color: rgba(87, 140, 171, 0.8);
-}
-
-#no-active {
-  margin-left: 3rem;
-}
-
-#no-today {
-  margin-left: 3rem;
-}
-
-#no-courses {
-  margin-left: 3rem;
-}
-
-/*Medium devices (tablets and below)*/
-@media (max-width: 1128px) {
-  .dashboard-section {
-    text-align: center;
-    height: auto;
-  }
-  .active-section {
-    margin-left: 0;
-    width: 100%;
-  }
-  .dashboard-section {
-    width: 100%;
-  }
-  .today-section {
-    margin-left: 0;
-  }
-  #no-active {
-    margin-left: auto;
-  }
-  #no-today {
-    margin-left: auto;
-  }
-}
-
-</style>
