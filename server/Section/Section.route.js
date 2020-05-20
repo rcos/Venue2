@@ -1,23 +1,9 @@
 const express = require('express');
 const sectionRoutes = express.Router();
-const jwt = require('jsonwebtoken')
 
 let Section = require('./Section.model');
 let User = require('../User/User.model');
 let Course = require('../Course/Course.model');
-
-function verifyToken (req, res, next) {
-  const bearerHeader = req.headers['authorization']
-
-  if (typeof bearerHeader !== 'undefined') {
-    const bearer = bearerHeader.split(' ')
-    const bearerToken = bearer[1]
-    req.token = bearerToken
-    next()
-  } else {
-    res.sendStatus(401)
-  }
-}
 
 sectionRoutes.route('/add').post(function (req, res) {
   let section = new Section(req.body.section);
@@ -132,87 +118,67 @@ sectionRoutes.route('/getStudents/:id').get(function (req, res) {
         num_iterations++;
         if(num_iterations === student_ids.length)
           res.json(students);
-      });
-    });
-  });
-});
-
-sectionRoutes.get('/get_with_courses_for_student/:user_id', verifyToken, (req, res) => {
-  let user_id = req.params.user_id
-  jwt.verify(req.token, 'the_secret_key', err => {
-    if(err) {
-      res.sendStatus(401).send("Unauthorized access")
-    } else {
-
-      user_sections = []
-      Section.find((error, sections) => {
-        sections.forEach((section) => {
-          section.students.forEach((student) => {
-            if(student._id == user_id)
-              user_sections.push(section)
-          })
-        })
-        let counter = 0
-        user_sections.forEach((user_section) => {
-          Course.findById(user_section.course, function (course_error, course){
-            if(course_error) 
-              res.json(course_error);
-            else 
-              user_section.course = course
-            counter++
-            if(counter === user_sections.length)
-              res.json(user_sections)
-          })
-        })
       })
-
-    }
+    })
   })
 })
 
-sectionRoutes.get('/get_with_course/:section_id', verifyToken, (req, res) => {
-  let section_id = req.params.section_id
-  jwt.verify(req.token, 'the_secret_key', err => {
-    if(err) {
-      res.sendStatus(401).send("Unauthorized access")
-    } else {
-
-      Section.findById(section_id, function (err, section){
-        if(err) {
-          res.json(err);
-        }else {
-          Course.findById(section.course, function(error, course) {
-            if(error) {
-              res.json(error)
-            } else {
-              section.course = course
-              res.json(section)
-            }
-          })
+sectionRoutes.get('/get_with_courses_for_student/:user_id', (req, res) => {
+  let user_id = req.params.user_id
+  user_sections = []
+  Section.find((error, sections) => {
+    sections.forEach((section) => {
+      section.students.forEach((student) => {
+        if(student._id == user_id)
+          user_sections.push(section)
+      })
+    })
+    let counter = 0
+    user_sections.forEach((user_section) => {
+      Course.findById(user_section.course, function (course_error, course){
+        if(course_error) 
+          res.json(course_error);
+        else 
+          user_section.course = course
+        counter++
+        if(counter === user_sections.length){
+          res.json(user_sections)
         }
-      });
-    }
+      })
+    })
   })
 })
 
-sectionRoutes.get('/get_for_course/:course_id', verifyToken, (req, res) => {
-  let course_id = req.params.course_id
-  jwt.verify(req.token, 'the_secret_key', err => {
+sectionRoutes.get('/get_with_course/:section_id', (req, res) => {
+  let section_id = req.params.section_id
+  Section.findById(section_id, function (err, section){
     if(err) {
-      res.sendStatus(401).send("Unauthorized access")
-    } else {
-      Section.find((error, sections) => {
+      res.json(err);
+    }else {
+      Course.findById(section.course, function(error, course) {
         if(error) {
           res.json(error)
         } else {
-          let course_sections = []
-          sections.forEach(section => {
-            if(section.course == course_id)
-              course_sections.push(section)
-          })
-          res.json(course_sections)
+          section.course = course
+          res.json(section)
         }
       })
+    }
+  })
+})
+
+sectionRoutes.get('/get_for_course/:course_id', (req, res) => {
+  let course_id = req.params.course_id
+  Section.find((error, sections) => {
+    if(error) {
+      res.json(error)
+    } else {
+      let course_sections = []
+      sections.forEach(section => {
+        if(section.course == course_id)
+          course_sections.push(section)
+      })
+      res.json(course_sections)
     }
   })
 })

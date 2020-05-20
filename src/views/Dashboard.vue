@@ -88,7 +88,6 @@
       async getAllLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "all")
         this.all_lectures = response.data
-        console.log(this.all_lectures)
       },
       async getLiveLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "live")
