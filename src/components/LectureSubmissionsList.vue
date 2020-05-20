@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <h3>Submissions {{ lecture_submissions.length }}</h3>
+  <div class="lecture-submission-list">
+    <h3>Submissions ({{ lecture_submissions.length }})</h3>
+    <p v-for="submission in lecture_submissions">
+      {{ submission.submitter.first_name }} {{ submission.submitter.last_name }} 
+    </p>
   </div>
 </template>
 
@@ -28,10 +31,14 @@
       async getLectureSubmissionsForLecture() {
         const response = await LectureSubmissionAPI.getLectureSubmissionsForLecture(this.lecture_id)
         this.lecture_submissions = response.data
+        console.log(this.lecture_submissions)
       },
     }
   }
 </script>
 
 <style scoped>
+  .lecture-submission-list {
+    margin-top: 1rem;
+  }
 </style>
