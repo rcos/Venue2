@@ -29,13 +29,13 @@
             </div>
           </div>
           <label>Start Time: </label>
-          <datetime type="datetime" use12-hour value-zone="local" title="Event Start" v-model="event.start_time"></datetime>
+          <!-- <datetime type="datetime" use12-hour value-zone="local" title="Event Start" v-model="event.start_time"></datetime> -->
           <label>End Time: </label>
-          <datetime type="datetime" use12-hour value-zone="local" title="Event End" v-model="event.end_time"></datetime>
+          <!-- <datetime type="datetime" use12-hour value-zone="local" title="Event End" v-model="event.end_time"></datetime> -->
           <label>Submission Start Time: </label>
-          <datetime type="datetime" use12-hour value-zone="local" title="Event Start" v-model="event.submission_start_time"></datetime>
+          <!-- <datetime type="datetime" use12-hour value-zone="local" title="Event Start" v-model="event.submission_start_time"></datetime> -->
           <label>Submission End Time: </label>
-          <datetime type="datetime" use12-hour value-zone="local" title="Event End" v-model="event.submission_end_time"></datetime>
+          <!-- <datetime type="datetime" use12-hour value-zone="local" title="Event End" v-model="event.submission_end_time"></datetime> -->
         </div>
         <div class="form-group">
           <button class="btn btn-primary">Create</button>
@@ -50,14 +50,11 @@
 <script>
   import EventAPI from '@/services/EventAPI.js';
   import AdminSections from '@/components/admin/Section/AdminSections';
-  import { Datetime } from 'vue-datetime';
-  import 'vue-datetime/dist/vue-datetime.css'
 
   export default {
     name: 'AdminNewEvent',
     components: {
-      AdminSections,
-      datetime: Datetime
+      AdminSections
     },
     data(){
       return {
