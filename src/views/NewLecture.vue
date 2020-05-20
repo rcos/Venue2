@@ -17,7 +17,7 @@
         <!-- Section -->
         <div class="input-wrapper">
           <label>Section(s)</label>
-          <input v-for="section in lecture_sections" type="text" class="form-control new-lecture-input" v-model="section.number" readonly />
+          <input v-for="(section,i) in lecture_sections" :key="i" type="text" class="form-control new-lecture-input" v-model="section.number" readonly />
         </div>
         <div class="spinner-border" role="status" v-if="!course_sections_have_loaded">
           <span class="sr-only">Loading...</span>
