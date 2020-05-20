@@ -41,5 +41,8 @@ export default {
   },
   getStudentSections(id) {
     return API().get('users/student_sections/' + id)
+  },
+  getStudentsForCourse(course_id) {
+    return API().get('users/students_for_course/' + course_id)
   }
 }

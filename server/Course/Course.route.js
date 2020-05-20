@@ -91,41 +91,4 @@ courseRoutes.route('/get_instructor_courses/:user_id').get(function (req, res) {
   })
 });
 
-courseRoutes.route('/get_students_for_course/:course_id').get(function (req, res) {
-  let course_id = req.params.course_id;
-  Section.find({course: course_id}, function(err, sections) {
-    if(err) {
-      res.json(err)
-    } else {
-      let students = []
-      sections.forEach(section => {
-        students.push(new Promise((resolve,reject) => {
-          User.find({_id: {$in: section.students}},function(err,studs) {
-            if(err || studs == null) {
-              resolve(null)
-            } else {
-              resolve(studs)
-            }
-          })
-        }))
-      })
-      Promise.all(students)
-      .then(resolved => {
-        resolved = resolved.filter(stud => stud != null)
-        let studs = new Map()
-        let ret = []
-        resolved.forEach(section => {
-          section.forEach(student => {
-            if(!studs[student._id]) {
-              studs[student._id] = student
-              ret.push(student)
-            }
-          })
-        })
-        res.json(ret)
-      })
-    }
-  })
-});
-
 module.exports = courseRoutes;
