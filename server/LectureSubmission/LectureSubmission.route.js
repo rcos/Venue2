@@ -99,4 +99,16 @@ lectureSubmissionRoutes.get('/for_lecture/:lecture_id', (req, res) => {
   })
 })
 
+lectureSubmissionRoutes.get('/for_student/:lecture_id/:student_id', (req, res) => {
+  let lecture_id = req.params.lecture_id
+  let student_id = req.params.student_id
+  LectureSubmission.findOne({lecture: lecture_id, submitter: student_id},function(err,lect_submission) {
+    if(err)
+      res.json(err)
+    else {
+      res.json(lect_submission)
+    }
+  })
+})
+
 module.exports = lectureSubmissionRoutes;
