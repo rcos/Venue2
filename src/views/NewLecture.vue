@@ -227,6 +227,10 @@ export default {
                 minDate: Date.now(),
                 onChange: function(selectedDates, dateStr, instance) {
                   self.lecture.playback_submission_start_time = Date.parse(dateStr)
+                  fp5.set("minDate",self.lecture.playback_submission_start_time)
+                  if(self.lecture.playback_submission_start_time > self.lecture.playback_submission_end_time) {
+                    fp5.setDate(self.lecture.playback_submission_start_time)
+                  }
                 }
               })
               var fp5 = flatpickr(document.getElementById("playback_end"),{
@@ -252,7 +256,10 @@ export default {
         minDate: Date.now(),
         onChange: function(selectedDates, dateStr, instance) {
           self.lecture.start_time = Date.parse(dateStr)
-          fp1.minDate = self.lecture.start_time
+          fp1.set("minDate",self.lecture.start_time)
+          if(self.lecture.start_time > self.lecture.end_time) {
+            fp1.setDate(self.lecture.start_time)
+          }
         }
       })
       var fp1 = flatpickr(document.getElementById("lecture_end"),{
@@ -267,6 +274,10 @@ export default {
         minDate: Date.now(),
         onChange: function(selectedDates, dateStr, instance) {
           self.lecture.submission_start_time = Date.parse(dateStr)
+          fp3.set("minDate",self.lecture.submission_start_time)
+          if(self.lecture.submission_start_time > self.lecture.submission_end_time) {
+            fp3.setDate(self.lecture.submission_start_time)
+          }
         }
       })
       var fp3 = flatpickr(document.getElementById("submission_end"),{

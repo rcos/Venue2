@@ -110,6 +110,10 @@ export default {
                 minDate: Date.now(),
                 onChange: function(selectedDates, dateStr, instance) {
                   self.lecture.playback_submission_start_time = Date.parse(dateStr)
+                  fp1.set("minDate",self.lecture.playback_submission_start_time)
+                  if(self.lecture.playback_submission_start_time > self.lecture.playback_submission_end_time) {
+                    fp1.setDate(self.lecture.playback_submission_start_time)
+                  }
                 }
               })
               var fp1 = flatpickr(document.getElementById("playback_end"),{
