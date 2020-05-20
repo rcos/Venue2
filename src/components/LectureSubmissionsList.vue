@@ -11,7 +11,7 @@
   import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js';
 
   export default {
-    name: 'LectureInfo',
+    name: 'LectureSubmissionList',
     props: {
       lecture_id: String
     },

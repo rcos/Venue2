@@ -60,6 +60,7 @@
             <p v-if="submission_window_pending">Submission Window pending</p>
             <button v-else-if="submission_window_open" @click="scanQR">Scan Code</button>
             <p v-else>Submission window closed</p>
+            <StudentLectureSubmissionCard v-bind:lecture_id="lecture_id" />
           </div>
           <div v-else>
             <p v-if="lecture.allow_live_submissions">Lecture was live</p>
@@ -74,6 +75,7 @@
               </router-link>
             </div>
             <p>No lecture playback</p>
+            <StudentLectureSubmissionCard v-bind:lecture_id="lecture_id" />
           </div>
         </div>
       </div>
@@ -87,6 +89,7 @@
   import QRScanner from "qr-code-scanner";
   import LectureUploadModal from "@/components/LectureUploadModal";
   import LectureSubmissionsList from "@/components/LectureSubmissionsList.vue";
+  import StudentLectureSubmissionCard from "@/components/StudentLectureSubmissionCard.vue";
 
   export default {
     name: 'LectureInfo',
@@ -96,7 +99,8 @@
     },
     components: {
       LectureUploadModal,
-      LectureSubmissionsList
+      LectureSubmissionsList,
+      StudentLectureSubmissionCard
     },
     data(){
       return {
@@ -115,6 +119,7 @@
       this.getLecture()
       this.is_instructor = this.$store.state.user.current_user.is_instructor
       this.lecture_id = this.$route.params.lecture_id
+
     },
     methods: {
       async getLecture() {
