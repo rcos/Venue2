@@ -64,6 +64,7 @@
   import SectionAPI from '@/services/SectionAPI.js'
   import SquareLoader from '@/components/Loaders/SquareLoader.vue'
   import {showAt, hideAt} from 'vue-breakpoints'
+  import Constants from '@/assets/constants.js'
 
   export default {
     name: 'CourseList',
@@ -105,17 +106,15 @@
         this.getSectionsWithCourses()
     },
     methods: {
+      getColors () {
+        if (this.colors) return this.colors;
+        return Constants.colors
+      },
       getColor (course) {
-        if (course.color_index == null || course.color_index == undefined) return 'grey'
-        return this.colors[course.color_index]
+        if (course.color_index == null || course.color_index == undefined) return Constants.colors[ Math.floor(Math.random() * Constants.colors.length) ]
+        return this.getColors()[course.color_index]
       },
       async getInstructorCourses() {
-        // let response = await CourseAPI.getInstructorCourses(this.current_user._id)
-        // this.data_loaded = true
-        // let courses = response.data
-        // this.assignBoxColorsToClassObjects(courses)
-        // this.courses = courses
-        // if (this.sizeCallback) this.sizeCallback(this.courses.length)
 
         CourseAPI.getInstructorCourses(this.current_user._id)
         .then(response => {
@@ -125,7 +124,7 @@
           this.assignBoxColorsToClassObjects(courses)
           this.courses = courses
 
-          this.coursesCallback(courses)
+          if (this.coursesCallback) this.coursesCallback(courses)
 
           if (this.sizeCallback) this.sizeCallback(this.courses.length)
         })
@@ -152,7 +151,7 @@
           this.sections = sections
 
           let courses = this.sections.map(section_ => section_.course)
-          this.coursesCallback(courses)
+          if (this.coursesCallback) this.coursesCallback(courses)
 
           if (this.sizeCallback) this.sizeCallback(this.sections.length)
         })
