@@ -115,6 +115,48 @@ seeder.connect(db, function () {
 			teaching_assistants: [u0._id]
 		})
 
+		let l0 = new Lecture({
+			title: "Example Lecture",
+			sections: [s1._id],
+			allow_live_submissions: true,
+			allow_playback_submissions: true,
+			start_time: Date.now(),
+			end_time: Date.now() + (2*60*60*1000),
+			submission_start_time: Date.now() + (60*1000),
+			submission_start_time: Date.now() + (3*60*1000),
+			playback_submission_start_time: Date.now() + (2*60*60*1000),
+			playback_submission_end_time: Date.now() + (4*60*60*1000),
+			code: "abcdefghijklmnopqrstuvwxyz",
+			video_ref: "/videos/sample/sample.mp4",
+			num_playback_polls: 2
+		})
+
+		let p0 = new PlaybackPoll({
+			lecture: l0._id,
+			question: "Where is my super suit?",
+			possible_answers: [
+				"I, uh, put it away.",
+				"Why do you need to know?"
+			],
+			correct_answers: [
+				"Why do you need to know?"
+			],
+			timestamp: 5
+		})
+
+		let p1 = new PlaybackPoll({
+			lecture: l0._id,
+			question: "Speed of light?",
+			possible_answers: [
+				"Fast",
+				"2Fast"
+			],
+			correct_answers: [
+				"2Fast"
+			],
+			timestamp: 15
+		})
+
 		bcrypt.hash(u0.password, saltRounds, (err, hash) => {
 			u0.password = hash
 			bcrypt.hash(u1.password, saltRounds, (err, hash) => {
@@ -133,6 +175,12 @@ seeder.connect(db, function () {
 						}, {
 							"model": "Section",
 							"documents": [s0, s1, s2]
+						}, {
+							"model": "Lecture",
+							"documents": [l0]
+						}, {
+							"model": "PlaybackPoll",
+							"documents": [p0,p1]
 						}]
 
 						seeder.populateModels(data, function (err, done) {
