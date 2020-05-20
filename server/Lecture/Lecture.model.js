@@ -25,7 +25,8 @@ let Lecture = new Schema({
 	},
 	code: {	type: String, default: "" },
 	video_ref: { type: String, default: "" },
-	num_playback_polls: Number
+	num_playback_polls: Number,
+	email_sent: {type: Boolean, default: false}
 });
 
 module.exports = mongoose.model('Lecture', Lecture);

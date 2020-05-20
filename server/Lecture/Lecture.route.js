@@ -1,8 +1,18 @@
 const express = require('express');
+const lectureRoutes = express.Router();
+
 const formidable = require('formidable');
 var fs = require('fs');
 var path = require('path');
-const lectureRoutes = express.Router();
+var nodemailer = require('nodemailer');
+
+var transporter = nodemailer.createTransport({
+	service: 'gmail',
+	auth: {
+		user: 'venue.do.not.reply@gmail.com',
+		pass: process.env.EMAIL_PASS
+	}
+});
 
 let Lecture = require('../Lecture/Lecture.model')
 let User = require('../User/User.model')
@@ -253,6 +263,42 @@ lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
       })
     }
 	});
+})
+
+lectureRoutes.post('/process_emails', (req,res) => {
+	let lectures = req.body.lectures
+	let toEmail = req.body.toEmail
+	lectures.forEach(lecture => {
+		if(!lecture.email_sent) { //email has not been sent yet
+			Lecture.findByIdAndUpdate(lecture._id, 
+				{
+					email_sent: true //mark email as sent
+				},
+				function(err, lect) {
+					if (err || lect == null) {
+						res.status(404).send("lecture not found");
+					} else {
+						var mailOptions = {
+							from: 'venue.do.not.reply@gmail.com',
+							to: toEmail,
+							subject: 'Venue Lecture Upload Reminder',
+							html: '<p>Click <a href="http://localhost:8080/lecture_info/' + lect._id + '">here</a> to upload your lecture recording</p>'
+						};
+						console.log("About to send email with:",mailOptions)
+						console.log("...")
+						transporter.sendMail(mailOptions, function(error, info){
+							if (error) {
+								console.log(error);
+							} else {
+								console.log('Email sent: ' + info.response);
+							}
+						}); 
+					}
+				}
+			);
+		}
+	})
+	res.json(lectures)
 })
 
 function getLiveLectures(lectures) {
