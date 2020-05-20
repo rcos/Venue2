@@ -95,7 +95,7 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
 	}
 
 	User.findById(user_id, (error, user) => {
-		if(error)
+		if(error || user == null)
 			res.json(error)
 		else {
 
@@ -222,7 +222,7 @@ lectureRoutes.get('/for_section/:section_id/:lecture_type', (req, res) => {
 			else if(lecture_type === "active_playback")
 				res.json(getActivePlaybacLectures(section_lectures))
 		}
-	}) 
+	})
 })
 
 lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
@@ -292,26 +292,26 @@ function getActivePlaybacLectures(lectures) {
 }
 
 
-function isLive(lecture) {  
-  let current_time = new Date() 
-  return current_time >= lecture.start_time &&  
-    current_time <= lecture.end_time  
+function isLive(lecture) {
+  let current_time = new Date()
+  return current_time >= lecture.start_time &&
+    current_time <= lecture.end_time
 }
 
-function isUpcoming(lecture) {  
-  let current_time = new Date() 
+function isUpcoming(lecture) {
+  let current_time = new Date()
   return current_time < lecture.start_time ||
   	current_time < lecture.playback_submission_start_time
 }
 
-function isPast(lecture) {  
-  let current_time = new Date() 
+function isPast(lecture) {
+  let current_time = new Date()
   return current_time > lecture.end_time ||
   	current_time > lecture.playback_submission_end_time
 }
 
-function isActivePlayback(lecture) {  
-  let current_time = new Date() 
+function isActivePlayback(lecture) {
+  let current_time = new Date()
   return current_time >= lecture.playback_submission_start_time &&
   	current_time <= lecture.playback_submission_end_time
 }

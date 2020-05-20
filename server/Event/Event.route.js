@@ -77,7 +77,7 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
   let requested_events = []
   let active_events = []
   User.findById(user_id, function (error, user) {
-    if (error) {
+    if (error || user === null) {
       console.log(error)
       res.json(error)
     } else if (user.is_instructor) {
@@ -110,10 +110,10 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
                       if (instructor_section._id.equals(event.section)) {
                         //Get Active Events or Get today's events
                         if(get_active) {
-                          if(isActive(event)) 
+                          if(isActive(event))
                             requested_events.push(event)
                         } else {
-                          if(isToday(event.start_time) || isToday(event.end_time) || isActive(event)) 
+                          if(isToday(event.start_time) || isToday(event.end_time) || isActive(event))
                             requested_events.push(event)
                         }
                       }
@@ -148,10 +148,10 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
                 if (user_section._id.equals(event.section)) {
                   //Get Active Events or Get today's events
                   if(get_active) {
-                    if(isActive(event)) 
+                    if(isActive(event))
                       requested_events.push(event)
                   } else {
-                    if(isToday(event.start_time) || isToday(event.end_time) || isActive(event)) 
+                    if(isToday(event.start_time) || isToday(event.end_time) || isActive(event))
                       requested_events.push(event)
                   }
                 }
@@ -245,9 +245,9 @@ eventRoutes.get('/history_for_course/:course_id', (req, res) => {
 eventRoutes.get('/history_for_section/:section_id', (req, res) => {
   let section_id = req.params.section_id
   Event.find({section: section_id}, (err, section_events) => {
-    if(err) 
+    if(err)
       res.json(err)
-    else 
+    else
       res.json(section_events)
   })
 });
@@ -278,10 +278,10 @@ eventRoutes.route('/section_and_course/:event_id').get(function (req, res) {
   });
 });
 
-function isActive(event) {  
-  let current_time = new Date() 
-  return current_time >= event.start_time &&  
-    current_time <= event.end_time  
+function isActive(event) {
+  let current_time = new Date()
+  return current_time >= event.start_time &&
+    current_time <= event.end_time
 }
 
 function isToday(time) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-section" v-bind:class="{'active-section':active_section, 'today-section':today_section,
+  <div class="dashboard-section custom-scrollbar" v-bind:class="{'active-section':active_section, 'today-section':today_section,
     'courses-section':courses_section}">
     <!-- Active Section -->
     <div v-if="active_section">
@@ -19,8 +19,11 @@
     </div>
     <!-- Courses Section -->
     <div v-else-if="courses_section">
-      <h4 class="section-title">Courses</h4>
-      <CourseList />
+      <div class="courses-section-title">
+        <div><h4  class="section-title">Courses</h4></div>
+        <div v-if="courses_loaded != 0" class="load-course-size">{{courses_loaded}} {{courses_loaded == 1 ? 'course' : 'courses'}} loaded</div>
+      </div>
+      <CourseList :sizeCallback="setCourseSize" />
     </div>
   </div>
 </template>
@@ -49,82 +52,14 @@
     },
     data(){
       return {
+        courses_loaded: 0
       }
     },
-    created() {
-      this.current_user = this.$store.state.user.current_user
-    },
     methods: {
+      setCourseSize (_size_) {
+        console.log(`Course Size: ${_size_}`)
+        this.courses_loaded = _size_
+      }
     }
   }
 </script>
-
-<style scoped>
-.dashboard-section {
-  /*border: red solid;*/
-  text-align: left;
-  margin-top: 4rem;
-  display: inline-block;
-  vertical-align: top;
-  height: 15rem;
-}
-
-.active-section {
-  float: left;
-  margin-left: 8rem;
-  width: 30rem;
-}
-
-.today-section {
-  width: 30rem;
-  margin-left: -5rem;
-}
-
-.courses-section {
-  display: block;
-  margin-left: 8rem;
-  margin-top: 2rem;
-}
-
-.section-title {
-  font-weight: bold;
-}
-
-#no-active {
-  margin-left: 3rem;
-}
-
-#no-today {
-  margin-left: 3rem;
-}
-
-#no-courses {
-  margin-left: 3rem;
-}
-
-/*Medium devices (tablets and below)*/
-@media (max-width: 1128px) {
-  .dashboard-section {
-    text-align: center;
-    height: auto;
-  }
-  .active-section {
-    margin-left: 0;
-    width: 100%;
-  }
-  .dashboard-section {
-    width: 100%;
-  }
-  .today-section {
-    margin-top: 3rem;
-    margin-left: 0;
-  }
-  #no-active {
-    margin-left: auto;
-  }
-  #no-today {
-    margin-left: auto;
-  }
-}
-
-</style>
