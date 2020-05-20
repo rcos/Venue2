@@ -85,16 +85,20 @@ lectureSubmissionRoutes.get('/for_lecture/:lecture_id', (req, res) => {
     if(err)
       res.json(err)
     else {
-      User.findById({'_id': lect_submissions[0].submitter}, (error, submitter) => {
-        if(error)
-          res.json(error)
-        else {
-          lect_submissions.forEach(submission => {
-            submission.submitter = submitter
-          })
-          res.json(lect_submissions)
-        }
-      })
+      if(lect_submissions.length > 0){
+        User.findById({'_id': lect_submissions[0].submitter}, (error, submitter) => {
+          if(error)
+            res.json(error)
+          else {
+            lect_submissions.forEach(submission => {
+              submission.submitter = submitter
+            })
+            res.json(lect_submissions)
+          }
+        })
+      } else{
+        res.json([])
+      }
     }
   })
 })
