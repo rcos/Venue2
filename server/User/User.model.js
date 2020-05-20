@@ -19,16 +19,12 @@ let User = new Schema({
 		default: false
 	},
 	ta_sections: [{
-		section: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Section'
-		}
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Section'
 	}],
 	submissions: [{
-		submission: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Submission'
-		}
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Submission'
 	}]
 });
 

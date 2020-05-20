@@ -2,6 +2,7 @@ const express = require('express');
 const courseRoutes = express.Router();
 
 let Course = require('./Course.model');
+let Section = require('../Section/Section.model');
 let User = require('../User/User.model');
 
 courseRoutes.route('/add').post(function (req, res) {

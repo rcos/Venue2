@@ -30,6 +30,11 @@
           </div>
         </div>
       </div>
+      <!-- Students -->
+      <div v-if="is_instructor" class="student-container">
+        <h3>Course Students</h3>
+        <p v-for="student in course_students" style="display:inline-block; margin-left:1rem; margin-right:1rem;"> {{ student.first_name }} {{ student.last_name }} </p>
+      </div>
       <!-- Attendance history -->
       <div class="attendance-history-container">
         <div class="attendance-history-header">
@@ -90,6 +95,7 @@
 
 <script>
   import CourseAPI from '@/services/CourseAPI.js';
+  import UserAPI from '@/services/UserAPI.js';
   import SectionAPI from '@/services/SectionAPI.js';
   import EventAPI from '@/services/EventAPI.js';
   import LectureAPI from '@/services/LectureAPI.js';
@@ -114,6 +120,7 @@ export default {
       live_lectures: [],
       past_lectures: [],
       plabyack_lectures: [],
+      course_students: [],
       course_has_loaded: false
     }
   },
@@ -122,6 +129,7 @@ export default {
     if(this.is_instructor) {
       this.course_id = this.$route.params.id
       this.getCourse()
+      this.getStudentsForCourse()
       this.getAllLecturesForCourse()
       this.getUpcomingLecturesForCourse()
       this.getLiveLecturesForCourse()
@@ -142,6 +150,10 @@ export default {
       const response = await CourseAPI.getCourse(this.course_id)
       this.course = response.data
       this.course_has_loaded = true
+    },
+    async getStudentsForCourse() {
+      const response = await UserAPI.getStudentsForCourse(this.course_id)
+      this.course_students = response.data
     },
     async getSectionWithCourse() {
       const response = await SectionAPI.getSectionWithCourse(this.section_id)
