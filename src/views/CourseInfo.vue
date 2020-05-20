@@ -1,105 +1,77 @@
 <template>
-  <div>
-    <div class="spinner-border event-card-spinner" role="status" v-if="!course_has_loaded">
-      <span class="sr-only">Loading...</span>
+  <div class="venue-body-container">
+
+    <!-- Title -->
+    <div class="title">
+      <div class="inline-block">Course Info</div>
+      <router-link v-if="this.current_user.is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}">
+        <div class="inline-block big-button" :style="{float: 'right'}">Create New Lecture for {{ course.dept }} {{ course.course_number }}</div>
+    </router-link>
     </div>
-    <div class="course-info-container" v-else>
-      <!-- Course and event container -->
-      <div class="course-event-container">
-        <div class="info-section" id="course-info">
-          <h2 class="course-info-header">Course Info</h2>
-          <p class="course-name">{{ course.name }}</p>
-          <div class="course-title">{{ course.dept }} {{ course.course_number }}
-            <span v-if="!is_instructor">- {{ section.number }}</span>
-          </div>
-        </div>
-        <div class="info-section" id="event-info">
-          <router-link v-if="is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}">
-            <button class="new-event-btn">Create New Lecture for {{course.dept }} {{ course.course_number }}</button>
-          </router-link>
-          <div class="active-events-container">
-            <router-link class="active-event-pill" v-for="active_event in active_events" :key="active_event._id" :to="{name: 'event_info', params: { event_id: active_event._id }}">
-              <p class="active-event-card-section" id="active-event-name">{{ active_event.title }}</p>
-              <p class="active-event-card-section" id="active-event-location">{{ active_event.location }}</p>
-              <div class="active-event-card-section" id="active-event-time-remaining">
-                <span v-if="active_event.remaining_days > 0">{{ active_event.remaining_days }}d </span>
-                <span v-if="active_event.remaining_hours > 0">{{ active_event.remaining_hours }}h </span>
-                <span v-if="active_event.remaining_mins > 0">{{ active_event.remaining_mins }}m</span>
-              </div>
-            </router-link>
-          </div>
-        </div>
+    <div>
+      <CourseInfoTitle :course="course" class="inline-block" />
+      <AverageWeeklyAttendanceBar class="inline-block" />
+    </div>
+
+    <!-- Attendance History Tab Button / Statistics Tab Button Bar -->
+    <div class="course-info-sub-tab">
+      <div class="left">
+        <div v-on:click="subview_section_id = 0" :class="'tab ' + (subview_section_id == 0 ? 'active' : '')">Attendance History</div>
+        <div v-if="data_to_show" v-on:click="subview_section_id = 1" :class="'tab ' + (subview_section_id == 1 ? 'active' : '')">Statistics</div>
       </div>
-      <!-- Students -->
-      <div v-if="is_instructor" class="student-container">
-        <h3>Course Students</h3>
-        <p v-for="student in course_students" style="display:inline-block; margin-left:1rem; margin-right:1rem;"> {{ student.first_name }} {{ student.last_name }} </p>
-      </div>
-      <!-- Attendance history -->
-      <div class="attendance-history-container">
-        <div class="attendance-history-header">
-          <h4 class="attendance-history-header-text">Live lectures</h4>
-        </div>
-        <router-link v-for="lecture in live_lectures" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}">
-          <div class="lecture-container">
-            <p>{{ lecture.title }}</p>
-          </div>
-        </router-link>
-      </div>
-      <div class="attendance-history-container">
-        <div class="attendance-history-header">
-          <h4 class="attendance-history-header-text">Playback lectures</h4>
-        </div>
-        <router-link v-for="lecture in plabyack_lectures" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}">
-          <div class="lecture-container">
-            <p>{{ lecture.title }}</p>
-          </div>
-        </router-link>
-      </div>
-      <div class="attendance-history-container">
-        <div class="attendance-history-header">
-          <h4 class="attendance-history-header-text">Upcoming lectures</h4>
-        </div>
-        <router-link v-for="lecture in upcoming_lectures" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}">
-          <div class="lecture-container">
-            <p>{{ lecture.title }}</p>
-          </div>
-        </router-link>
-      </div>
-      <div class="attendance-history-container">
-        <div class="attendance-history-header">
-          <h4 class="attendance-history-header-text">Past lectures</h4>
-        </div>
-        <router-link v-for="lecture in past_lectures" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}">
-          <div class="lecture-container">
-            <p>{{ lecture.title }}</p>
-          </div>
-        </router-link>
-      </div>
-      <div class="attendance-history-container">
-        <div class="attendance-history-header">
-          <h4 class="attendance-history-header-text">All lectures</h4>
-        </div>
-        <router-link v-for="lecture in all_lectures" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}">
-          <div class="lecture-container">
-            <p>{{ lecture.title }}</p>
-          </div>
-        </router-link>
-<!--         <EventHistoryList v-if="is_instructor" v-bind:course="course" />
-        <EventHistoryList v-else v-bind:section="section"/> -->
-        </div>
+      <div v-if="this.current_user.is_instructor" class="right">
+        <select v-model="selected_section">
+          <option v-for="section_ in section_arr" :value="section_[1]">Section {{ section_[0] }}</option>
+          <option :value="null" selected>All Sections</option>
+        </select>
       </div>
     </div>
+
+    <!-- Attendance History -->
+    <div v-if="subview_section_id == 0">
+
+      <InstructorAttendanceHistory
+        :informSections="this.informSections"
+        :course_id="course_id"
+        :selected_section="selected_section"
+        :showData="showData"
+        v-if="this.current_user.is_instructor" />
+      <StudentAttendanceHistory :section_id="section_id" :showData="showData" v-else />
+
+    </div>
+    <div v-else-if="subview_section_id == 1" :style="{marginTop: `20px`}">
+      <SectionAttendanceGraph v-if="this.current_user.is_instructor && selected_section != null" :section_id="selected_section" />
+      <SectionAttendanceGraph v-else-if="this.current_user.is_instructor && selected_section == null" :section_id="null" />
+
+      <StudentAttendanceGraph v-else
+        :student_id="this.current_user._id"
+        :section_id="section_id"
+      />
+    </div>
+
   </div>
 </template>
 
 <script>
+
   import CourseAPI from '@/services/CourseAPI.js';
   import UserAPI from '@/services/UserAPI.js';
   import SectionAPI from '@/services/SectionAPI.js';
+  import SubmissionAPI from '@/services/SubmissionAPI.js';
   import EventAPI from '@/services/EventAPI.js';
+  import {showAt, hideAt} from 'vue-breakpoints';
   import LectureAPI from '@/services/LectureAPI.js';
+
+  import CourseInfoTitle from '@/components/CourseInfoTitle.vue'
+  import AverageWeeklyAttendanceBar from '@/components/AverageWeeklyAttendanceBar.vue'
   import EventHistoryList from '@/components/EventHistoryList.vue';
+  import InstructorAttendanceHistory from '@/components/InstructorAttendanceHistory.vue'
+  import StudentAttendanceHistory from '@/components/StudentAttendanceHistory.vue'
+  import SectionAttendanceGraph from '@/components/SectionAttendanceGraph.vue'
+  import StudentAttendanceGraph from '@/components/StudentAttendanceGraph.vue'
+
+  import '@/assets/css/venue-core.css'
+  import '@/assets/icon-font.css'
 
 export default {
   name: 'CourseInfo',
@@ -108,10 +80,19 @@ export default {
   computed: {
   },
   components: {
-    EventHistoryList
+    EventHistoryList,
+    showAt,
+    hideAt,
+    CourseInfoTitle,
+    AverageWeeklyAttendanceBar,
+    StudentAttendanceHistory,
+    InstructorAttendanceHistory,
+    SectionAttendanceGraph,
+    StudentAttendanceGraph
   },
   data(){
     return {
+      data_to_show: Boolean,
       course: Object,
       section: Object,
       active_events: [],
@@ -120,13 +101,25 @@ export default {
       live_lectures: [],
       past_lectures: [],
       plabyack_lectures: [],
+
       course_students: [],
-      course_has_loaded: false
+      course_has_loaded: false,
+      sort_ascending: true,
+      event_sorting_fn: Function,
+      grid_view: true,
+      subview_section_id: 0,
+      section_arr: [],
+      selected_section: String
     }
   },
   created() {
-    this.is_instructor = this.$store.state.user.current_user.is_instructor
-    if(this.is_instructor) {
+    // when the component is created/loaded
+    this.data_to_show = false
+    this.selected_section = null
+    this.section_arr = []
+    this.getCurrentUser ()
+
+    if (this.current_user.is_instructor) {
       this.course_id = this.$route.params.id
       this.getCourse()
       this.getStudentsForCourse()
@@ -135,8 +128,13 @@ export default {
       this.getLiveLecturesForCourse()
       this.getPastLecturesForCourse()
       this.getActivePlaybackLecturesForCourse()
-    } else {
+    }
+    else {
+
       this.section_id = this.$route.params.id
+      this.getCourse ()
+      this.getCourseFromSection ()
+
       this.getSectionWithCourse()
       this.getAllLecturesForSection()
       this.getUpcomingLecturesForSection()
@@ -146,10 +144,8 @@ export default {
     }
   },
   methods: {
-    async getCourse() {
-      const response = await CourseAPI.getCourse(this.course_id)
-      this.course = response.data
-      this.course_has_loaded = true
+    showData (new_val) {
+      this.data_to_show = new_val
     },
     async getStudentsForCourse() {
       const response = await UserAPI.getStudentsForCourse(this.course_id)
@@ -161,68 +157,96 @@ export default {
       this.course = this.section.course
       this.course_has_loaded = true
     },
+    getCurrentUser() {
+      this.current_user = this.$store.state.user.current_user
+    },
     async getActivePlaybackLecturesForCourse() {
-      const response = await LectureAPI.getLecturesForCourse(this.course_id, "active_playback")
-      this.plabyack_lectures = response.data
+
+      LectureAPI.getLecturesForCourse(this.course_id, "active_playback")
+      .then(response => { this.playback_lectures = response.data })
     },
     async getPastLecturesForCourse() {
-      const response = await LectureAPI.getLecturesForCourse(this.course_id, "past")
-      this.past_lectures = response.data
+
+      LectureAPI.getLecturesForCourse(this.course_id, "past")
+      .then(response => { this.past_lectures = response.data })
     },
     async getLiveLecturesForCourse() {
-      const response = await LectureAPI.getLecturesForCourse(this.course_id, "live")
-      this.live_lectures = response.data
-    },   
+
+      LectureAPI.getLecturesForCourse(this.course_id, "live")
+      .then(response => { this.live_lectures = response.data })
+    },
     async getUpcomingLecturesForCourse() {
-      const response = await LectureAPI.getLecturesForCourse(this.course_id, "upcoming")
-      this.upcoming_lectures = response.data
-    },    
+
+      LectureAPI.getLecturesForCourse(this.course_id, "upcoming")
+      .then(response => { this.upcoming_lectures = response.data })
+    },
     async getAllLecturesForCourse() {
-      const response = await LectureAPI.getLecturesForCourse(this.course_id, "all")
-      this.all_lectures = response.data
-    },  
+
+      LectureAPI.getLecturesForCourse(this.course_id, "all")
+      .then(response => { this.all_lectures = response.data })
+    },
     async getActivePlaybackLecturesForSection() {
-      const response = await LectureAPI.getLecturesForSection(this.section_id, "active_playback")
-      this.plabyack_lectures = response.data
+
+      LectureAPI.getLecturesForSection(this.section_id, "active_playback")
+      .then(response => { this.plabyack_lectures = response.data })
     },
     async getPastLecturesForSection() {
-      const response = await LectureAPI.getLecturesForSection(this.section_id, "past")
-      this.past_lectures = response.data
+
+      LectureAPI.getLecturesForSection(this.section_id, "past")
+      .then(response => { this.past_lectures = response.data })
     },
     async getLiveLecturesForSection() {
-      const response = await LectureAPI.getLecturesForSection(this.section_id, "live")
-      this.live_lectures = response.data
-    },   
+
+      LectureAPI.getLecturesForSection(this.section_id, "live")
+      .then(response => { this.live_lectures = response.data })
+    },
     async getUpcomingLecturesForSection() {
-      const response = await LectureAPI.getLecturesForSection(this.section_id, "upcoming")
-      this.upcoming_lectures = response.data
-    },    
+
+      LectureAPI.getLecturesForSection(this.section_id, "upcoming")
+      .then(response => { this.upcoming_lectures = response.data })
+    },
     async getAllLecturesForSection() {
-      const response = await LectureAPI.getLecturesForSection(this.section_id, "all")
-      this.all_lectures = response.data
-    },    
+
+      LectureAPI.getLecturesForSection(this.section_id, "all")
+      .then(response => { this.all_lectures = response.data })
+    },
     async getActiveEventsForCourse() {
-      const response = await EventAPI.getActiveEventsForCourse(this.course_id)
-      this.active_events = response.data
-      this.getRemainingTimeForActiveEvents()
+
+      EventAPI.getActiveEventsForCourse(this.course_id)
+      .then(response => { this.active_events = response.data; this.getRemainingTimeForActiveEvents(); })
     },
     async getActiveEventsForSection() {
-      const response = await EventAPI.getActiveEventsForSection(this.section_id)
-      this.active_events = response.data
-      this.getRemainingTimeForActiveEvents()
+
+      EventAPI.getActiveEventsForSection(this.section_id)
+      .then(response => { this.active_events = response.data; this.getRemainingTimeForActiveEvents(); })
     },
-    getRemainingTimeForActiveEvents() {
-      this.active_events.forEach(active_event => {
-        let current_time = new Date()
-        let submission_end_time = new Date(active_event.submission_end_time)
-        let diff_milliseconds = Math.abs(submission_end_time - current_time);
-        let diff_hours = Math.floor((diff_milliseconds % 86400000) / 3600000); // hours
-        let diff_mins = Math.round(((diff_milliseconds % 86400000) % 3600000) / 60000); // minutes
-        let diff_days = Math.floor(diff_milliseconds / 86400000); // days
-        active_event.remaining_days = diff_days
-        active_event.remaining_hours = diff_hours
-        active_event.remaining_mins = diff_mins
+    getCourse () {
+
+      CourseAPI.getCourse(this.course_id)
+      .then(response => {
+        this.course = response.data
       })
+      .catch(err => {
+        console.log(`Error getting course from course_id`)
+      })
+    },
+    getCourseFromSection () {
+
+      SectionAPI.getCourse(this.section_id)
+      .then(response => {
+        this.course = response.data
+      })
+      .catch(err => {
+        console.log(`Error getting course from section_id`)
+      })
+    },
+    informSections (section_number_arr) {
+      this.section_arr = section_number_arr
+      // try to select the highest section once loaded
+      if (this.section_arr.length > 0) {
+        this.$set(this, 'selected_section', this.section_arr[0][1])
+        // this.selected_section = this.section_arr[0][0]
+      }
     }
   }
 }

@@ -33,7 +33,7 @@ courseRoutes.route('/edit/:id').get(function (req, res) {
     if (err) {
       res.json(err);
     }
-    res.json(course);
+    else res.json(course);
   });
 });
 

@@ -1,44 +1,34 @@
 <template>
   <div>
-<!--     <DashboardSection active_section/>
-    <DashboardSection today_section/> -->
-    <div class="dashboard-section">
-      <h4 class="section-title">All</h4>
-      <div class="lecture-box" v-for="lecture in all_lectures">
-        <p>{{ lecture.title }}</p>
-      </div>
-    </div>
+    <!-- <DashboardSection active_section/> -->
+    <!-- <DashboardSection today_section/> -->
+    <!--<router-link :to="{name: 'course_info', params: { id: '5e90f007920d965429e5d1a4' }}">Test</router-link>-->
 
-    <div class="dashboard-section">
-      <h4 class="section-title">Live</h4>
-      <div class="lecture-box" v-for="lecture in live_lectures">
-        <p>{{ lecture.title }}</p>
+    <show-at breakpoint="large">
+      <div class="venue-body-container">
+        <LiveCourses :colorCallback="getColor" :loaded="live_lectures_loaded" :data="live_lectures" />
+        <PlaybackCourses :colorCallback="getColor" :loaded="playback_lectures_loaded" :data="playback_lectures" />
+        <RecentCourses :colorCallback="getColor" :loaded="recent_lectures_loaded" :data="recent_lectures" />
+        <UpcomingCourses :colorCallback="getColor" :loaded="upcoming_lectures_loaded" :data="upcoming_lectures" />
       </div>
-    </div>
-
-    <div class="dashboard-section">
-      <h4 class="section-title">Playback</h4>
-      <div class="lecture-box" v-for="lecture in playback_lectures">
-        <p>{{ lecture.title }}</p>
+    </show-at>
+    <hide-at breakpoint="large">
+      <div class="venue-body-container is-mobile">
+        <LiveCourses :colorCallback="getColor" :loaded="live_lectures_loaded" :data="live_lectures" mobileMode />
+        <PlaybackCourses :colorCallback="getColor" :loaded="playback_lectures_loaded" :data="playback_lectures" mobileMode />
+        <RecentCourses :colorCallback="getColor" :loaded="recent_lectures_loaded" :data="recent_lectures" mobileMode />
+        <UpcomingCourses :colorCallback="getColor" :loaded="upcoming_lectures_loaded" :data="upcoming_lectures" mobileMode />
       </div>
-    </div>
-
-    <div class="dashboard-section">
-      <h4 class="section-title">Recent</h4>
-      <div class="lecture-box" v-for="lecture in recent_lectures">
-        <p>{{ lecture.title }}</p>
-      </div>
-    </div>
-
-    <div class="dashboard-section">
-      <h4 class="section-title">Upcoming</h4>
-      <div class="lecture-box" v-for="lecture in upcoming_lectures">
-        <p>{{ lecture.title }}</p>
-      </div>
-    </div>
+    </hide-at>
 
     <hide-at breakpoint="mediumAndBelow">
-      <DashboardSection courses_section/>
+      <div class="venue-body-container">
+        <div class="courses-section-title">
+          <div><h4  class="section-title">Courses</h4></div>
+          <div v-if="courses_loaded != 0" class="load-course-size">{{courses_loaded}} {{courses_loaded == 1 ? 'course' : 'courses'}} loaded</div>
+        </div>
+        <CourseList :colors="STATIC_COURSE_COLORS" :coursesCallback='setCourses' :sizeCallback="setCourseSize" />
+      </div>
     </hide-at>
   </div>
 </template>
@@ -46,9 +36,21 @@
 <script>
   import UserAPI from '@/services/UserAPI.js';
   import LectureAPI from '@/services/LectureAPI.js';
+  import CourseAPI from '@/services/CourseAPI.js';
+  import SectionAPI from '@/services/SectionAPI.js';
   import DashboardSection from '@/components/DashboardSection'
   import { authComputed } from '../vuex/helpers.js'
   import {showAt, hideAt} from 'vue-breakpoints'
+
+  import LiveCourses from '@/components/LiveCourses.vue'
+  import PlaybackCourses from '@/components/PlaybackCourses.vue'
+  import RecentCourses from '@/components/RecentCourses.vue'
+  import UpcomingCourses from '@/components/UpcomingCourses'
+  import CourseList from '@/components/CourseList.vue'
+  import moment from 'moment'
+
+  import '@/assets/css/venue-core.css'
+  import '@/assets/css/venue.css'
 
   export default {
     name: 'Dashboard',
@@ -58,7 +60,12 @@
     components: {
       DashboardSection,
       hideAt,
-      showAt
+      showAt,
+      LiveCourses,
+      PlaybackCourses,
+      RecentCourses,
+      UpcomingCourses,
+      CourseList
     },
     data(){
       return {
@@ -67,10 +74,25 @@
         live_lectures: [],
         playback_lectures: [],
         recent_lectures: [],
-        upcoming_lectures: []
+        upcoming_lectures: [],
+        courses_loaded: Number,
+        courses: Object,
+        STATIC_COURSE_COLORS: Array,
+        live_lectures_loaded: Boolean,
+        upcoming_lectures_loaded: Boolean,
+        recent_lectures_loaded: Boolean,
+        playback_lectures_loaded: Boolean
       }
     },
     created() {
+      this.STATIC_COURSE_COLORS = ['Aquamarine', 'Tomato', 'LightSalmon', 'Cyan', 'MediumTurquoise', 'PaleGreen', 'pink', 'violet', ]
+      this.courses_loaded = 0
+
+      this.live_lectures_loaded = false
+      this.upcoming_lectures_loaded = false
+      this.recent_lectures_loaded = false
+      this.playback_lectures_loaded = false
+
       this.getCurrentUser()
       this.getAllLecturesForUser()
       this.getLiveLecturesForUser()
@@ -79,32 +101,167 @@
       this.getUpcomingLecturesForUser()
     },
     methods: {
+      getColor (course_info) {
+        console.log(`Getting color for ...`)
+        if (course_info == null || course_info._id == null) return 'grey'
+        let color_index = this.courses[ course_info._id ].color_index
+        if (color_index != null && color_index != undefined && color_index >= 0 && color_index < this.STATIC_COURSE_COLORS.length) {
+          return this.STATIC_COURSE_COLORS[color_index]
+        }
+        return 'grey'
+      },
+      setCourses (courses_data) {
+        console.log(`setCourses`)
+        console.log(courses_data)
+
+        let course_dict = {}
+        courses_data.forEach((course_, i) => {
+          if (course_ != null && course_.hasOwnProperty('_id')) {
+            course_dict[course_._id] = course_
+            course_dict[course_._id]["color_index"] = i
+          }
+        })
+        this.courses = course_dict
+
+      },
       getCurrentUser() {
         this.current_user = this.$store.state.user.current_user
       },
       logOut() {
         this.$store.dispatch('logout')
       },
+      setCourseSize (_size_) {
+        console.log(`Course Size: ${_size_}`)
+        this.courses_loaded = _size_
+      },
+      async fillSectionInfo (data_object) {
+        // given an object with a sections field, find the course and store it in the data_object
+        // with the key course_info
+        return new Promise((resolve, reject) => {
+
+          // resolve, with the data_object if success
+          // reject otherwise
+          if (data_object == null || data_object == undefined) { reject("no data object provided.") }
+          if (!data_object.hasOwnProperty( 'sections' )) { reject ("Object has no sections field.") }
+
+          SectionAPI.getCourse(data_object.sections[0])
+          .then(response => {
+            data_object["course_info"] = response.data
+            this.$forceUpdate ()
+            resolve(data_object)
+          })
+          .catch(err => {
+            console.log(`Problem  fetching course data`)
+            reject(err)
+          })
+
+        })
+      },
       async getAllLecturesForUser() {
-        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "all")
-        this.all_lectures = response.data
+
+        LectureAPI.getLecturesForUser(this.current_user._id, "all")
+        .then(response => {
+          this.all_lectures = response.data
+          console.log(this.all_lectures)
+
+          let lecture_promises = []
+          this.all_lectures.forEach((lecture_, i) => {
+
+            lecture_promises.push(this.fillSectionInfo(lecture_))
+
+          }) // end forEach
+
+          Promise.all(lecture_promises)
+          .then(updated_lectures => {
+            console.log(`updated_lectures`)
+            console.log(updated_lectures)
+            this.all_lectures = updated_lectures
+          })
+        })
       },
       async getLiveLecturesForUser() {
-        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "live")
-        this.live_lectures = response.data
+
+        LectureAPI.getLecturesForUser(this.current_user._id, "live")
+        .then(response => {
+          this.live_lectures = response.data
+
+          let lecture_promises = []
+          this.live_lectures.forEach((lecture_, i) => {
+
+            lecture_promises.push(this.fillSectionInfo(lecture_))
+
+          }) // end forEach
+
+          Promise.all(lecture_promises).then(updated_lectures => {
+            this.live_lectures = updated_lectures
+            this.live_lectures_loaded = true
+          })
+        })
       },
       async getPlaybackLectures() {
-        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "active_playback")
-        this.playback_lectures = response.data
+
+        LectureAPI.getLecturesForUser(this.current_user._id, "active_playback")
+        .then(response => {
+          console.log(`In PlaybackLectures()`)
+          console.log(response)
+          this.playback_lectures = response.data
+
+          let lecture_promises = []
+          this.playback_lectures.forEach((lecture_, i) => {
+
+            lecture_promises.push(this.fillSectionInfo(lecture_))
+
+          }) // end forEach
+
+          Promise.all(lecture_promises).then(updated_lectures => {
+            this.playback_lectures = updated_lectures
+            this.playback_lectures_loaded = true
+          })
+
+        })
+        .catch(err => {
+          console.log(`In PlaybackLectures():error`)
+          console.log(err)
+        })
       },
       async getRecentLecturesForUser() {
-        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "past")
-        let past_lectures = response.data
-        this.recent_lectures = past_lectures.slice(0,3)
+
+        LectureAPI.getLecturesForUser(this.current_user._id, "past")
+        .then(response => {
+          let past_lectures = response.data
+          this.recent_lectures = past_lectures.slice(0,3)
+
+          let lecture_promises = []
+          this.recent_lectures.forEach((lecture_, i) => {
+
+            lecture_promises.push(this.fillSectionInfo(lecture_))
+
+          }) // end forEach
+
+          Promise.all(lecture_promises).then(updated_lectures => {
+            this.recent_lectures = updated_lectures
+            this.recent_lectures_loaded = true
+          })
+        })
       },
       async getUpcomingLecturesForUser() {
-        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "upcoming")
-        this.upcoming_lectures = response.data
+
+        LectureAPI.getLecturesForUser(this.current_user._id, "upcoming")
+        .then(response => {
+          this.upcoming_lectures = response.data
+
+          let lecture_promises = []
+          this.upcoming_lectures.forEach((lecture_, i) => {
+
+            lecture_promises.push(this.fillSectionInfo(lecture_))
+
+          }) // end forEach
+
+          Promise.all(lecture_promises).then(updated_lectures => {
+            this.upcoming_lectures = updated_lectures
+            this.upcoming_lectures_loaded = true
+          })
+        })
       }
     }
   }
