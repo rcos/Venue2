@@ -123,7 +123,7 @@ seeder.connect(db, function () {
 			start_time: Date.now(),
 			end_time: Date.now() + (2*60*60*1000),
 			submission_start_time: Date.now() + (60*1000),
-			submission_start_time: Date.now() + (3*60*1000),
+			submission_end_time: Date.now() + (3*60*1000),
 			playback_submission_start_time: Date.now() + (2*60*60*1000),
 			playback_submission_end_time: Date.now() + (4*60*60*1000),
 			code: "abcdefghijklmnopqrstuvwxyz",
