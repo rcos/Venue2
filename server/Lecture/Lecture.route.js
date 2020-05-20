@@ -285,7 +285,6 @@ lectureRoutes.post('/process_emails', (req,res) => {
 							html: '<p>Click <a href="http://localhost:8080/lecture_info/' + lect._id + '">here</a> to upload your lecture recording</p>'
 						};
 						console.log("About to send email with:",mailOptions)
-						console.log("...")
 						transporter.sendMail(mailOptions, function(error, info){
 							if (error) {
 								console.log(error);

@@ -41,8 +41,10 @@ export default {
         })
       LectureAPI.getLecturesForUser(this.$store.state.user.current_user._id,"past")
         .then(res => {
-          this.processEmails(res.data)
+          this.processInstructorEmails(res.data)
         })
+    } else if(this.$store.state.user.current_user) {
+      
     }
   },
   methods: {
@@ -62,7 +64,7 @@ export default {
         window.open('http://localhost:8080/lecture_info/'+lectureid, '_blank');
       }
     },
-    processEmails(lectures) {
+    processInstructorEmails(lectures) {
       LectureAPI.processEmailsForLectures(lectures,this.$store.state.user.current_user.email)
     }
   }
