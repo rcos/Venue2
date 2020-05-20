@@ -1,39 +1,31 @@
 <template>
   <div>
-    
+
     <div class="settings-container">
-        <div class="settings-links">
-            <ul>
-                <li class="active">General</li>
-                <li>Other</li>
-            </ul>
-        </div>
-        <div class="settings-body">
-            <div class="name-area">
-                <div class="name-div">{{ current_user.first_name }} {{ current_user.last_name }}</div>
-                <div class="logout-div"><div class="logout-button" v-on:click="logoutUser">Logout</div></div>
-            </div>
+          <div class="name-area">
+              <div class="name-div">{{ current_user.first_name }} {{ current_user.last_name }}</div>
+              <div class="logout-div"><div class="logout-button" v-on:click="logoutUser">Logout</div></div>
+          </div>
 
-            <div class="setting-option-section">
-                <div class="left">
-                    <div>Current Email: <span class="value-area">{{ current_user.email }}</span></div>
-                    <div class="small-div">The email is used to login to Venue.</div>
-                </div>
-                <div class="right">
-                    <div class="change-button">Change</div>
-                </div>
-            </div>
+          <div class="setting-option-section">
+              <div class="left">
+                  <div>Current Email: <span class="value-area">{{ current_user.email }}</span></div>
+                  <div class="small-div">The email is used to login to Venue.</div>
+              </div>
+              <div class="right">
+                  <!-- <div class="change-button">Change</div> -->
+              </div>
+          </div>
 
-            <div class="setting-option-section">
-                <div class="left">
-                    <div>Current Password: <span class="value-area">*********</span></div>
-                    <div class="small-div">The password is the key to your Venue account.</div>
-                </div>
-                <div class="right">
-                    <div class="change-button">Change</div>
-                </div>
-            </div>
-        </div>
+          <div class="setting-option-section">
+              <div class="left">
+                  <div>Current Password: <span class="value-area">*********</span></div>
+                  <div class="small-div">The password is the key to your Venue account.</div>
+              </div>
+              <div class="right">
+                  <div class="change-button">Change</div>
+              </div>
+          </div>
     </div>
 
   </div>
@@ -75,19 +67,12 @@
 
 <style>
     .settings-container {
-        margin-top: 80px;
-        width: 80%;
+        margin: 80px 6rem 0px 6rem;
         text-align: left;
-        margin-left: 5%;
     }
 
     .settings-links {
         width: 15%;
-    }
-
-    .settings-body {
-        width: 65%;
-        margin-left: 20px;
     }
 
     .settings-links, .settings-body {
@@ -121,11 +106,13 @@
     }
 
     .name-area .name-div {
-        width: 60%;
+        width: 75%;
+        min-width: 300px;
     }
 
     .name-area .logout-div {
-        float: right;
+      text-align: right;
+      width: 24%;
     }
 
     .name-area .logout-div .logout-button {
@@ -133,9 +120,21 @@
         width: 150px;
         text-align: center;
         height: 35px;
-        line-height: 35px;
-        border: 1px solid rgba(0, 0, 0, 0.7);
+        line-height: 30px;
+        border: 3px solid #FC6F71;
         border-radius: 4px;
+        box-shadow: 0px 3px 5px rgba(252, 111, 113, 0.3);
+        background-color: white;
+        transition: background 0.25s, color 0.25s;
+        font-weight: bold;
+        color: #FC6F71;
+        /* background-color: #FC6F71; */
+        cursor: pointer;
+    }
+
+    .name-area .logout-div .logout-button:hover {
+      background-color: #FC6F71;
+      color: white;
     }
 
     .name-area .name-div, .name-area .logout-div {
@@ -173,30 +172,27 @@
     }
 
     .change-button {
-        background-color: rgba(0, 0, 0, 0.0);
-        border: 1px solid rgba(0, 0, 0, 0.5);
+        background-color: white;
+        border: 3px solid rgba(44, 62, 80, 1);
+        color: rgb(44, 62, 80);
+        font-weight: bold;
         display: inline-block;
         width: 100px;
         text-align: center;
         height: 40px;
-        line-height: 40px;
+        line-height: 37px;
         border-radius: 3px;
         cursor: pointer;
         font-family: "Segoe UI";
         transition: background-color 0.25s, color 0.25s, box-shadow 0.25s, border 0.25s;
-        box-shadow: none;
+        box-shadow: 0px 2px 5px rgba(44, 62, 80, 0.1);
     }
 
     .change-button:hover {
         background-color: #FC6F71;
         color: white;
-        box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.05);
-        border: 1px solid rgba(0, 0, 0, 0.8);
-    }
-
-    .logout-button {
-        background-color: #FC6F71;
-        cursor: pointer;
+        box-shadow: 0px 0px 10px 5px rgba(252, 111, 113, 0.2);
+        border: 3px solid rgba(252, 111, 113, 1);
     }
 
 </style>

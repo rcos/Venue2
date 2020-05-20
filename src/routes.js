@@ -29,6 +29,7 @@ import LecturePlayback from './views/LecturePlayback.vue';
 import WebexTest from './views/WebexTest.vue';
 import NewLecture from './views/NewLecture.vue';
 import LectureInfo from './views/LectureInfo.vue';
+import Settings from './views/Settings.vue';
 
 Vue.use(VueRouter);
 
@@ -40,6 +41,12 @@ const router = new VueRouter({
       path: '/',
       component: LandingPage,
       meta: { requiresNoLogin: true }
+    },
+    {
+      name: 'settings',
+      path: '/settings',
+      component: Settings,
+      meta: { requiresAuth: true }
     },
     {
       name: 'new_user',

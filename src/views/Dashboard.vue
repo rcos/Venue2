@@ -104,6 +104,20 @@
       getColor (course_info) {
         console.log(`Getting color for ...`)
         if (course_info == null || course_info._id == null) return 'grey'
+        if (this.courses[ course_info._id ] == null || this.courses[ course_info._id ] == undefined) {
+          // add the course and
+          let next_color_index = 0;
+          Object.keys(this.courses).forEach(course_ => {
+            if (this.courses[course_].hasOwnProperty('color_index')) next_color_index = Math.max(next_color_index, this.courses[course_].color_index)
+          })
+
+          this.courses[course_info._id] = {
+            color_index: next_color_index
+          }
+          return this.STATIC_COURSE_COLORS[next_color_index]
+
+        }
+        if (!this.courses[ course_info._id ].hasOwnProperty('color_index')) return 'grey'
         let color_index = this.courses[ course_info._id ].color_index
         if (color_index != null && color_index != undefined && color_index >= 0 && color_index < this.STATIC_COURSE_COLORS.length) {
           return this.STATIC_COURSE_COLORS[color_index]

@@ -38,15 +38,19 @@
       </div>
       <!-- Name -->
       <hide-at breakpoint="mediumAndBelow">
-        <div class="user-name float-right">
-          <p class="d-inline-block mr-2">{{ current_user.first_name }} {{ current_user.last_name }}</p>
-          <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="">
-        </div>
+        <router-link :to="{name: 'settings'}">
+          <div class="user-name float-right">
+            <p class="d-inline-block mr-2">{{ current_user.first_name }} {{ current_user.last_name }}</p>
+            <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="">
+          </div>
+        </router-link>
       </hide-at>
       <show-at breakpoint="mediumAndBelow">
-        <div class="user-name float-right">
-          <p class="d-inline-block mr-2">{{ current_user.first_name }}</p>
-        </div>
+        <router-link :to="{name: 'settings'}">
+          <div class="user-name float-right">
+            <p class="d-inline-block mr-2">{{ current_user.first_name }}</p>
+          </div>
+        </router-link>
       </show-at>
     </nav>
   </div>
@@ -91,7 +95,7 @@
     overflow: hidden;
   }
 
-  @media (min-width: 577px) { 
+  @media (min-width: 577px) {
     #venue-nav{
       padding-top: 1rem;
     }
