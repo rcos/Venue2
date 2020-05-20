@@ -5,7 +5,7 @@
         <div v-if="is_instructor">
           <div v-if="!data_loaded"><SquareLoader /></div>
           <div v-else-if="courses.length > 0">
-            <CourseCard v-for="course in courses" :key="course._id" v-bind:course="course" v-bind:box_color="course.box_color"/>
+            <CourseCard v-for="course in courses" :key="course._id" v-bind:course="course" v-bind:box_color="getColor(course)"/>
           </div>
           <div v-else>
             <p class="no-container" id="no-courses">No courses</p>
@@ -14,7 +14,7 @@
         <div v-else>
           <div v-if="!data_loaded"><SquareLoader /></div>
           <div v-else-if="sections.length > 0">
-            <CourseCard v-for="section in sections" :key="section._id" v-bind:section="section" v-bind:box_color="section.box_color"/>
+            <CourseCard v-for="section in sections" :key="section._id" v-bind:section="section" v-bind:box_color="getColor(section.course)"/>
           </div>
           <div v-else>
             <p class="no-container" id="no-courses">No courses</p>
@@ -30,7 +30,7 @@
           <div class="mobile-justify-div" v-else-if="courses.length > 0">
             <CourseCard v-for="course in courses"
               :key="course._id" v-bind:course="course"
-              v-bind:box_color="course.box_color"
+              v-bind:box_color="getColor(course)"
               mobile
             />
           </div>
@@ -43,8 +43,8 @@
           <div v-else-if="sections.length > 0">
             <CourseCard v-for="section in sections"
               :key="section._id"
-              v-bind:section="section"
-              v-bind:box_color="section.box_color"
+              :section="section"
+              :box_color="getColor(section.course)"
               mobile
             />
           </div>
@@ -68,7 +68,9 @@
   export default {
     name: 'CourseList',
     props: {
-      sizeCallback: Function
+      sizeCallback: Function,
+      coursesCallback: Function,
+      colors: Array
     },
     components: {
       CourseCard,
@@ -103,6 +105,10 @@
         this.getSectionsWithCourses()
     },
     methods: {
+      getColor (course) {
+        if (course.color_index == null || course.color_index == undefined) return 'grey'
+        return this.colors[course.color_index]
+      },
       async getInstructorCourses() {
         // let response = await CourseAPI.getInstructorCourses(this.current_user._id)
         // this.data_loaded = true
@@ -118,6 +124,8 @@
           let courses = response.data
           this.assignBoxColorsToClassObjects(courses)
           this.courses = courses
+
+          this.coursesCallback(courses)
 
           if (this.sizeCallback) this.sizeCallback(this.courses.length)
         })
@@ -143,10 +151,13 @@
           this.assignBoxColorsToClassObjects(sections)
           this.sections = sections
 
+          let courses = this.sections.map(section_ => section_.course)
+          this.coursesCallback(courses)
+
           if (this.sizeCallback) this.sizeCallback(this.sections.length)
         })
         .catch(err => {
-          data_loaded = true
+          this.data_loaded = true
         })
       },
       assignBoxColorsToClassObjects(class_objects) {
