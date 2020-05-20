@@ -78,7 +78,7 @@ lectureSubmissionRoutes.route('/get_or_make').post(function (req, res) {
   );
 });
 
-lectureSubmissionRoutes.get('/by_lecture/:lecture_id', (req, res) => {
+lectureSubmissionRoutes.get('/for_lecture/:lecture_id', (req, res) => {
 	let lecture_id = req.params.lecture_id;
   LectureSubmission.find({lecture: lecture_id},function(err,lect_submissions) {
     if(err) {
