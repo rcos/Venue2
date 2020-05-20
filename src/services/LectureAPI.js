@@ -19,7 +19,7 @@ export default {
   },
   addLecture(lecture) {
     return API().post('lectures/add', {
-      lecture: lecture 
+      lecture: lecture
     })
   },
   addLecturePlayback(lecture, video) {
