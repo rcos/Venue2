@@ -49,6 +49,10 @@ import PollCard from "./PollCard";
 import videojs from "video.js";
 import flatpickr from "flatpickr";
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+require("flatpickr/dist/themes/material_blue.css");
+// DatePicker themes options:
+// "material_blue","material_green","material_red","material_orange",
+// "dark","airbnb","confetti"
 
 export default {
   name: "LectureUploadModal",
