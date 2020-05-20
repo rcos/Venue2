@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import UserAPI from '@/services/UserAPI.js';
-
+import AuthAPI from '@/services/AuthAPI.js';
 
 Vue.use(Vuex)
 
@@ -38,9 +37,8 @@ export default new Vuex.Store({
     login({ commit }, user) {
       console.log("In login action! Passing user: " + user + " with email: " + 
         user.email + " and password: " + user.password)
-      return UserAPI.login(user)
+      return AuthAPI.login(user)
         .then(({data}) => {
-          console.log(data)
           commit('SET_USER_DATA', data)
         })
     },

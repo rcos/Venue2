@@ -15,7 +15,7 @@
     <form class="login-form">
       <InputField ref="email_field" v-on:set-input-value="setEmail" label="username" />
       <InputField ref="password_field" v-on:set-input-value="setPassword" label="password" type="password" />
-      <div class='forgot-password-container'><a href="#">Forgot password?</a></div>
+      <div v-if="show_invalid_login" id="invalid-login">Invalid username or password</div>
     </form>
   </div>
 </template>
@@ -33,7 +33,8 @@
         user: {
           email: '',
           password: ''
-        }
+        },
+        show_invalid_login: false
       }
     },
     created() {
@@ -49,6 +50,7 @@
           " password: " + this.user.password)
         this.$store.dispatch('login', this.user)
           .then(() => this.$router.push({name: 'dashboard'}))
+          .catch((err) => this.show_invalid_login = true)
       },
       setEmail(email) {
         console.log("Received email: " + email)
@@ -72,39 +74,7 @@
   width: 28rem;
 }
 
-
-/*  .login-form {
-    border: black solid; 
-    margin: auto; 
-    width: 40rem;
-  }*/
-/*  .back-arrow {
-    text-align: left; 
-    cursor: pointer;
-    font-size: 1.5rem;
-  }
-
-  .login-form {
-    border-style: none none solid none;
-    border-radius: 0px;
-  }
-
-  .login-form:focus {
-      outline:none !important;
-      outline-width: 0 !important;
-      box-shadow: none;
-      -moz-box-shadow: none;
-      -webkit-box-shadow: none;
-      border-bottom:1px solid #00b818;
-  }
-
-  .login-btn {
-    border-radius: 0px;
-    border: white solid;
-  }
-
-  .login-btn:hover {
-    border: #00b818 solid;
-    color: #00b818;
-  }*/
+#invalid-login {
+  color: #ff1100;
+}
 </style>
