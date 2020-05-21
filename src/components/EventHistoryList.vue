@@ -156,7 +156,6 @@
     padding: 0px 10px;
     border-radius: 5px;
     box-shadow: 0px 3px 5px 5px rgba(0, 0, 0, 0.065);
-    font-family: "Segoe UI";
     height: 40px;
     line-height: 40px;
   }

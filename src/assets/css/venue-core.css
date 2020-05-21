@@ -1,7 +1,29 @@
+/* Custom Fonts */
+@font-face {
+  font-family: Oxygen;
+  src: url(../fonts/Oxygen/Oxygen-Regular.ttf);
+}
+
+@font-face {
+  font-family: Oxygen;
+  src: url(../fonts/Oxygen/Oxygen-Bold.ttf);
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: Oxygen;
+  src: url(../fonts/Oxygen/Oxygen-Light.ttf);
+  font-weight: lighter;
+}
+
+/* CSS Style */
+body, * {
+  font-family: Oxygen;
+}
+
 .venue-body-container {
   margin: 2rem 8rem;
   text-align: left;
-  font-family: "Segoe UI";
 }
 
 .venue-body-container.is-mobile {
@@ -127,7 +149,6 @@
   border-radius: 5px;
   background-color: white;
   font-size: 0.8rem;
-  font-family: "Segoe UI";
   cursor: pointer;
   margin-bottom: 40px;
   margin-right: 20px;
@@ -398,7 +419,6 @@
 
 .dashboard-section-modal .course-pill .pill-left .course-name {
   font-size: 0.8rem;
-  font-family: "Segoe UI";
   font-weight: bold;
   color: #53788E;
 }

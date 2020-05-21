@@ -7,7 +7,6 @@ button:focus {
 
 html,body {
   background: #FCFEFF;
-  font-family: "Ubuntu Mono";
   font-weight: normal;
   height: 100%;
   /*font-size: 16px;*/
@@ -408,7 +407,6 @@ a:active {
 
 .courses-section-title div {
   display: inline-block;
-  font-family: "Segoe UI";
 }
 
 .courses-section {

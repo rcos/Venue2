@@ -74,7 +74,6 @@
   cursor: pointer;
   transition: background-color 0.25s, box-shadow 0.25s, width, 0.25s, border 0.25s;
   color: rgba(0, 0, 0, 0.81);
-  font-family: "Segoe UI";
   border: 1px solid rgba(107, 163, 195, 0.7);
 }
 
@@ -84,8 +83,8 @@
 }
 
 .course-card-mobile {
-	height: 4rem;
-  line-height: 4rem;
+	height: 50px;
+  vertical-align: top;
   width: 80%;
   margin: 2rem auto;
   box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.04);
@@ -93,7 +92,6 @@
   cursor: pointer;
   transition: background-color 0.25s, box-shadow 0.25s, width, 0.25s, border 0.25s;
   color: rgba(0, 0, 0, 0.81);
-  font-family: "Segoe UI";
   border: 1px solid rgba(107, 163, 195, 0.7);
 }
 
@@ -113,6 +111,12 @@
   text-align: left;
 }
 
+.course-card-mobile .course-info div {
+  vertical-align: top;
+  position: relative;
+  top: 10px;
+}
+
 .course-card-mobile .course-title {
   width: 30%;
   text-align: center;
@@ -128,8 +132,10 @@
 	height: 1rem;
 	margin-left: 1rem;
   display: inline-block;
-  vertical-align: center;
+  vertical-align: top;
   margin-right: 0.5rem;
+  position: relative;
+  top: 20px;
 }
 
 .blue-box {
