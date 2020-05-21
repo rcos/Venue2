@@ -34,23 +34,9 @@
         </div>
         <div class="input-wrapper" id="submission-time-wrapper">
           <label>Playback Submission Start</label>
-          <datetime
-            class="time-picker"
-            type="datetime"
-            use12-hour
-            value-zone="local"
-            title="Submission Start"
-            v-model="lecture.playback_submission_start_time"
-          ></datetime>
+          <input id="playback_start">
           <label>Playback Submission End</label>
-          <datetime
-            class="time-picker"
-            type="datetime"
-            use12-hour
-            value-zone="local"
-            title="Submission End"
-            v-model="lecture.playback_submission_end_time"
-          ></datetime>
+          <input id="playback_end">
         </div>
       </div>
     </div>
@@ -61,7 +47,12 @@
 import LectureAPI from "../services/LectureAPI";
 import PollCard from "./PollCard";
 import videojs from "video.js";
-import { Datetime } from "vue-datetime";
+import flatpickr from "flatpickr";
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+require("flatpickr/dist/themes/material_blue.css");
+// DatePicker themes options:
+// "material_blue","material_green","material_red","material_orange",
+// "dark","airbnb","confetti"
 
 export default {
   name: "LectureUploadModal",
@@ -70,8 +61,7 @@ export default {
   },
   computed: {},
   components: {
-    PollCard,
-    datetime: Datetime,
+    PollCard
   },
   data() {
     return {
@@ -118,6 +108,25 @@ export default {
               srcEl.setAttribute("type",vid_selector.files[0].type)
               
               document.getElementById("video_player").prepend(srcEl)
+
+              var fp0 = flatpickr(document.getElementById("playback_start"),{
+                enableTime: true,
+                minDate: Date.now(),
+                onChange: function(selectedDates, dateStr, instance) {
+                  self.lecture.playback_submission_start_time = Date.parse(dateStr)
+                  fp1.set("minDate",self.lecture.playback_submission_start_time)
+                  if(self.lecture.playback_submission_start_time > self.lecture.playback_submission_end_time) {
+                    fp1.setDate(self.lecture.playback_submission_start_time)
+                  }
+                }
+              })
+              var fp1 = flatpickr(document.getElementById("playback_end"),{
+                enableTime: true,
+                minDate: Date.now(),
+                onChange: function(selectedDates, dateStr, instance) {
+                  self.lecture.playback_submission_end_time = Date.parse(dateStr)
+                }
+              })
             })
           }
         });
