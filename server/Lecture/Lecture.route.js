@@ -14,6 +14,8 @@ var transporter = nodemailer.createTransport({
 	}
 });
 
+const legal_lecture_types = ["all","live","upcoming","past","active_playback"]
+
 let Lecture = require('../Lecture/Lecture.model')
 let User = require('../User/User.model')
 let Course = require('../Course/Course.model')
@@ -62,7 +64,7 @@ lectureRoutes.route('/add_playback/:lecture_id').post(function (req, res) {
 				email_sent: true
 			},
 			function (err, updated_lecture) {
-				if (!updated_lecture) {
+				if (err || updated_lecture == null) {
 					res.status(404).send("lecture not found");
 				} else {
 					let section_itr = 0
@@ -70,37 +72,40 @@ lectureRoutes.route('/add_playback/:lecture_id').post(function (req, res) {
 						Section.findById(section, function (err, section){
 							if(err || section == null) {
 								res.json(err);
-							}
-							let student_ids = section.students;
-							let num_iterations = 0;
-							student_ids.forEach(student_id => {
-								User.findById(student_id, function(err, student) {
-									if(err)
-										res.json(err);
-									//send email
-									var mailOptions = {
-										from: 'venue.do.not.reply@gmail.com',
-										to: student.email,
-										subject: 'Venue - New Lecture Recording Notification',
-										html: '<p>New Lecture available for playback <a href="http://localhost:8080/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
-									};
-									console.log("About to send email with:",mailOptions)
-									transporter.sendMail(mailOptions, function(error, info){
-										if (error) {
-											console.log(error);
+							} else {
+								let student_ids = section.students;
+								let num_iterations = 0;
+								student_ids.forEach(student_id => {
+									User.findById(student_id, function(err, student) {
+										if(err || student == null) {
+											res.json(err);
 										} else {
-											console.log('Email sent: ' + info.response);
+											//send email
+											var mailOptions = {
+												from: 'venue.do.not.reply@gmail.com',
+												to: student.email,
+												subject: 'Venue - New Lecture Recording Notification',
+												html: '<p>New Lecture available for playback <a href="http://localhost:8080/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
+											};
+											console.log("About to send email with:",mailOptions)
+											transporter.sendMail(mailOptions, function(error, info){
+												if (error || info == null) {
+													console.log(error);
+												} else {
+													console.log('Email sent: ' + info.response);
+												}
+											});
+											num_iterations++;
+											if(num_iterations === student_ids.length) {
+												section_itr++;
+												if(section_itr == updated_lecture.sections.length) {
+													res.json(updated_lecture);
+												}
+											}
 										}
-									});
-									num_iterations++;
-									if(num_iterations === student_ids.length) {
-										section_itr++;
-										if(section_itr == updated_lecture.sections.length) {
-											res.json(updated_lecture);
-										}
-									}
+									})
 								})
-							})
+							}
 						})
 					})
 				}
@@ -111,15 +116,17 @@ lectureRoutes.route('/add_playback/:lecture_id').post(function (req, res) {
 
 lectureRoutes.route('/').get(function (req, res) {
 	Lecture.find(function (err, lectures) {
-		if (err)
+		if (err || lectures == null) {
 			res.json(err);
-		res.json(lectures);
+		} else {
+			res.json(lectures);
+		}
 	});
 });
 
 lectureRoutes.route('/:id').get(function (req, res) {
 	Lecture.findById(req.params.id,function (err, lecture) {
-		if (err) {
+		if (err || lecture == null) {
 			res.json(err);
 		} else {
 			res.json(lecture);
@@ -127,44 +134,31 @@ lectureRoutes.route('/:id').get(function (req, res) {
 	});
 });
 
-lectureRoutes.route('/videos/:folder/:filename').get(function (req, res) {
-	let video_path = __dirname + "/videos/" + req.params.folder + "/" + req.params.filename;
-	console.log(video_path)
-
-    res.send(video_path);
-});
-
 lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
 	let user_id = req.params.user_id
 	let lecture_type = req.params.lecture_type
-	let legal_lecture_types = ["all","live","upcoming","past","active_playback"]
 	if(!legal_lecture_types.includes(lecture_type)){
 		res.status(400).send("Illegal lecture type")
-		return
-	}
-
-	User.findById(user_id, (error, user) => {
-		if(error)
-			res.json(error)
-		else {
-
-			if(user.is_instructor) {
-
+	} else {
+		User.findById(user_id, (error, user) => {
+			if(error || user == null) {
+				res.json(error)
+			} else if(user.is_instructor) {
 				//get courses instructor teaches
 				Course.find({instructor: user._id}, (error, instructor_courses) => {
-					if(error)
+					if(error || instructor_courses == null) {
 						res.json(error)
-					else {
+					} else {
 						//get sections for these courses
 						Section.find({course: {$in: instructor_courses}}, (error, instructor_sections) =>{
-							if(error)
+							if(error || instructor_sections == null) {
 								res.json(error)
-							else {
+							} else {
 								//get lectures in these sections
 								Lecture.find({sections: {$in: instructor_sections}}, (error, instructor_lectures) => {
-									if(error)
+									if(error || instructor_lectures == null) {
 										res.json(error)
-									else {
+									} else {
 										if(lecture_type === "all")
 											res.json(instructor_lectures)
 										else if(lecture_type === "live")
@@ -181,17 +175,15 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
 						})
 					}
 				})
-
 			} else {
-
 				Section.find({'students._id': user_id}, (error, student_sections) => {
-					if(error)
+					if(error || student_sections == null) {
 						res.json(error)
-					else {
+					} else {
 						Lecture.find({sections: {$in: student_sections}}, (error, student_lectures) => {
-							if(error)
+							if(error || student_lectures == null) {
 								res.json(error)
-							else {
+							} else {
 								if(lecture_type === "all")
 									res.json(student_lectures)
 								else if(lecture_type === "live")
@@ -206,92 +198,87 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
 						})
 					}
 				})
-
 			}
-		}
-	})
+		})
+	}
 })
 
 lectureRoutes.get('/for_course/:course_id/:lecture_type', (req, res) => {
 	let course_id = req.params.course_id
 	let lecture_type = req.params.lecture_type
-	let legal_lecture_types = ["all","live","upcoming","past","active_playback"]
 	if(!legal_lecture_types.includes(lecture_type)){
 		res.status(400).send("Illegal lecture type")
-		return
+	} else {
+		// get sections for course
+		Section.find({course: course_id}, (error, course_sections) => {
+			if(error || course_sections == null) {
+				res.json(error)
+			} else {
+				// get lectures for these courses
+				Lecture.find({sections: {$in: course_sections}}, (error,course_lectures) => {
+					if(error || course_lectures == null) {
+						res.json(error)
+					} else {
+						if(lecture_type === "all")
+							res.json(course_lectures)
+						else if(lecture_type === "upcoming")
+							res.json(getUpcomingLectures(course_lectures))
+						else if(lecture_type === "live")
+							res.json(getLiveLectures(course_lectures))
+						else if(lecture_type === "past")
+							res.json(getPastLectures(course_lectures))
+						else if(lecture_type === "active_playback")
+							res.json(getActivePlaybacLectures(course_lectures))
+					}
+				})
+			}
+		})
 	}
-
-	// get sections for course
-	Section.find({course: course_id}, (error, course_sections) => {
-		if(error)
-			res.json(error)
-		else {
-			// get lectures for these courses
-			Lecture.find({sections: {$in: course_sections}}, (error,course_lectures) => {
-				if(error)
-					res.json(error)
-				else {
-					if(lecture_type === "all")
-						res.json(course_lectures)
-					else if(lecture_type === "upcoming")
-						res.json(getUpcomingLectures(course_lectures))
-					else if(lecture_type === "live")
-						res.json(getLiveLectures(course_lectures))
-					else if(lecture_type === "past")
-						res.json(getPastLectures(course_lectures))
-					else if(lecture_type === "active_playback")
-						res.json(getActivePlaybacLectures(course_lectures))
-				}
-			})
-		}
-	})
 })
 
 lectureRoutes.get('/for_section/:section_id/:lecture_type', (req, res) => {
 	let section_id = req.params.section_id
 	let lecture_type = req.params.lecture_type
-	let legal_lecture_types = ["all","live","upcoming","past","active_playback"]
 	if(!legal_lecture_types.includes(lecture_type)){
 		res.status(400).send("Illegal lecture type")
-		return
+	} else {
+		Lecture.find({sections: section_id}, (error, section_lectures) => {
+			if(error || section_lectures == null) {
+				res.json(error)
+			} else {
+				if(lecture_type === "all")
+					res.json(section_lectures)
+				else if(lecture_type === "upcoming")
+					res.json(getUpcomingLectures(section_lectures))
+				else if(lecture_type === "live")
+					res.json(getLiveLectures(section_lectures))
+				else if(lecture_type === "past")
+					res.json(getPastLectures(section_lectures))
+				else if(lecture_type === "active_playback")
+					res.json(getActivePlaybacLectures(section_lectures))
+			}
+		})
 	}
-
-	Lecture.find({sections: section_id}, (error, section_lectures) => {
-		if(error)
-			res.json(error)
-		else {
-			if(lecture_type === "all")
-				res.json(section_lectures)
-			else if(lecture_type === "upcoming")
-				res.json(getUpcomingLectures(section_lectures))
-			else if(lecture_type === "live")
-				res.json(getLiveLectures(section_lectures))
-			else if(lecture_type === "past")
-				res.json(getPastLectures(section_lectures))
-			else if(lecture_type === "active_playback")
-				res.json(getActivePlaybacLectures(section_lectures))
-		}
-	}) 
 })
 
 lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
 	let lecture_id = req.params.lecture_id;
 	// get lecture
 	Lecture.findById(lecture_id, function (error, lecture){
-    if(error)
+    if(error || lecture == null) {
       res.json(err)
-    else{
+    } else{
     	// get the sections for the lecture
       Section.find({'_id': {$in: lecture.sections}}, (error, lecture_sections) => {
-      	if(error)
+      	if(error || lecture_sections == null) {
       		res.json(error)
-      	else {
+      	} else {
       		lecture.sections = lecture_sections
       		// get the course for these sections
       		Course.findById(lecture_sections[0].course, (error, lecture_course) => {
-      			if(error)
+      			if(error || lecture_course == null) {
       				res.json(error)
-      			else {
+      			} else {
       				lecture.sections.forEach(section => {
       					section.course = lecture_course
       				})
