@@ -1,4 +1,4 @@
-<<template>
+<template>
   <div>
     <show-at breakpoint="mediumAndAbove">
       <div class="course-list">

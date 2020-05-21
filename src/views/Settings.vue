@@ -101,7 +101,6 @@
 
     .name-area {
         font-size: 2rem;
-        font-family: "Segoe UI";
         margin-bottom: 40px;
     }
 
@@ -144,7 +143,6 @@
 
     .setting-option-section {
         padding: 30px 15px;
-        font-family: "Segoe UI";
     }
 
     .value-area {
@@ -183,7 +181,6 @@
         line-height: 37px;
         border-radius: 3px;
         cursor: pointer;
-        font-family: "Segoe UI";
         transition: background-color 0.25s, color 0.25s, box-shadow 0.25s, border 0.25s;
         box-shadow: 0px 2px 5px rgba(44, 62, 80, 0.1);
     }
