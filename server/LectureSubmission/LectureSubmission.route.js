@@ -17,17 +17,19 @@ lectureSubmissionRoutes.route('/add').post(function (req, res) {
 });
 
 lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
-  let subobj = {
-    lecture: req.body.lecture_id,
-    video_progress: 0,
-    is_live_submission: true
-  }
   let email = req.body.rcs + "@rpi.edu"
   User.find({email: email},function(err,users){
     if(err || users == null) {
       res.json(err)
-    } else if(users[0]) {
-      subobj.submitter = users[0]._id
+    } else if(users.length == 0) {
+      res.status(400).send("no user with that email in database");
+    } else {
+      let subobj = {
+        lecture: req.body.lecture_id,
+        video_progress: 0,
+        is_live_submission: true,
+        submitter: users[0]._id
+      }
       let lectureSubmission = new LectureSubmission(subobj);
       lectureSubmission.save()
         .then(() => {
@@ -36,15 +38,13 @@ lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
         .catch(() => {
           res.status(400).send("unable to save submission to database");
         });
-    } else {
-      res.status(400).send("no user with that email in database");
     }
   })
 });
 
 lectureSubmissionRoutes.route('/').get(function (req, res) {
   LectureSubmission.find(function (err, lectureSubmissions) {
-    if (err) {
+    if (err || lectureSubmissions == null) {
       res.json(err);
     } else {
       res.json(lectureSubmissions);
@@ -54,7 +54,7 @@ lectureSubmissionRoutes.route('/').get(function (req, res) {
 
 lectureSubmissionRoutes.route('/:id').get(function (req, res) {
   LectureSubmission.findById(req.params.id,function (err, lectureSubmission) {
-    if (err) {
+    if (err || lectureSubmission == null) {
       res.json(err);
     } else {
       res.json(lectureSubmission);
@@ -65,24 +65,30 @@ lectureSubmissionRoutes.route('/:id').get(function (req, res) {
 lectureSubmissionRoutes.route('/update').post(function (req, res) {
   let updated = req.body.lectureSubmission
   LectureSubmission.findByIdAndUpdate(updated._id,
-  { video_progress: updated.video_progress ,
-  student_poll_answers: updated.student_poll_answers},
-  function (err, updatedSubmission) {
-    if (err) {
-      res.json(err);
-    } else {
-      res.json(updatedSubmission);
+    {
+      video_progress: updated.video_progress,
+      student_poll_answers: updated.student_poll_answers
+    },
+    function (err, updatedSubmission) {
+      if (err || updatedSubmission == null) {
+        res.json(err);
+      } else {
+        res.json(updatedSubmission);
+      }
     }
-  });
+  );
 });
 
 lectureSubmissionRoutes.route('/get_or_make').post(function (req, res) {
   let lecture_id = req.body.lecture_id
   let submitter_id = req.body.submitter_id
   LectureSubmission.find(
-    {lecture: lecture_id, submitter: submitter_id},
+    {
+      lecture: lecture_id,
+      submitter: submitter_id
+    },
     function (err, lectureSubmissions) {
-      if (err) {
+      if (err || lectureSubmissions == null) {
         res.json(err);
       } else if (lectureSubmissions.length == 0){
         let lectureSubmission = new LectureSubmission({
@@ -107,38 +113,45 @@ lectureSubmissionRoutes.route('/get_or_make').post(function (req, res) {
 
 lectureSubmissionRoutes.get('/for_lecture/:lecture_id', (req, res) => {
 	let lecture_id = req.params.lecture_id;
-  LectureSubmission.find({lecture: lecture_id},function(err,lect_submissions) {
-    if(err)
-      res.json(err)
-    else {
-      if(lect_submissions.length > 0){
+  LectureSubmission.find(
+    {lecture: lecture_id},
+    function(err,lect_submissions) {
+      if(err || lect_submissions == null) {
+        res.json(err)
+      } else if(lect_submissions.length > 0){
         User.findById({'_id': lect_submissions[0].submitter}, (error, submitter) => {
-          if(error)
+          if(error || submitter == null) {
             res.json(error)
-          else {
+          } else {
             lect_submissions.forEach(submission => {
               submission.submitter = submitter
             })
             res.json(lect_submissions)
           }
         })
-      } else{
+      } else {
         res.json([])
       }
     }
-  })
+  )
 })
 
 lectureSubmissionRoutes.get('/for_student/:lecture_id/:student_id', (req, res) => {
   let lecture_id = req.params.lecture_id
   let student_id = req.params.student_id
-  LectureSubmission.findOne({lecture: lecture_id, submitter: student_id},function(err,lect_submission) {
-    if(err)
-      res.json(err)
-    else {
-      res.json(lect_submission)
+  LectureSubmission.findOne(
+    {
+      lecture: lecture_id,
+      submitter: student_id
+    },
+    function(err,lect_submission) {
+      if(err || lect_submission == null)
+        res.json(err)
+      else {
+        res.json(lect_submission)
+      }
     }
-  })
+  )
 })
 
 module.exports = lectureSubmissionRoutes;
