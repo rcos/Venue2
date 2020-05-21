@@ -20,8 +20,8 @@ export default {
     Footer
   },
   created() {
-    if(this.$store.state.user.current_user && this.$store.state.user.current_user.is_instructor) {
-      LectureAPI.getLecturesForUser(this.$store.state.user.current_user._id,"live")
+    if(this.$store.state.user && this.$store.state.user.current_user && this.$store.state.user.current_user.is_instructor) {
+      LectureAPI.getLecturesForUser(this.$store.state.user.current_user._id,"live") 
         .then(res => {
           LectureAPI.getLecturesForUser(this.$store.state.user.current_user._id,"upcoming")
             .then(res2 => {
@@ -43,7 +43,7 @@ export default {
         .then(res => {
           this.processInstructorEmails(res.data)
         })
-    } else if(this.$store.state.user.current_user) {
+    } else if(this.$store.state.user && this.$store.state.user.current_user) {
       
     }
   },
