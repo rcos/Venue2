@@ -59,7 +59,7 @@
 
   export default {
     name: 'InstructorAttendanceHistory',
-    components: {},
+    components: { SquareLoader },
     props: {
       course_id: String,
       informSections: Function,
