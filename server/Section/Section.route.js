@@ -162,7 +162,7 @@ sectionRoutes.get('/get_with_courses_for_student/:user_id', (req, res) => {
   let user_id = req.params.user_id
   user_sections = []
   Section.find((error, sections) => {
-    if(error || secions == null) {
+    if(error || sections == null) {
       console.log("<ERROR> Getting all sections")
       res.json(error)
     } else {
