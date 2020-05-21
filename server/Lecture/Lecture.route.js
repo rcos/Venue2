@@ -1,8 +1,18 @@
 const express = require('express');
+const lectureRoutes = express.Router();
+
 const formidable = require('formidable');
 var fs = require('fs');
 var path = require('path');
-const lectureRoutes = express.Router();
+var nodemailer = require('nodemailer');
+
+var transporter = nodemailer.createTransport({
+	service: 'gmail',
+	auth: {
+		user: 'venue.do.not.reply@gmail.com',
+		pass: process.env.EMAIL_PASS
+	}
+});
 
 let Lecture = require('../Lecture/Lecture.model')
 let User = require('../User/User.model')
@@ -44,18 +54,57 @@ lectureRoutes.route('/add_playback/:lecture_id').post(function (req, res) {
 
 		// update the lecture with video
 		Lecture.findByIdAndUpdate(lecture_id,
-		  {
-		    video_ref: (fields.video_ref + files.video.name).split(' ').join('_'),
-		    playback_submission_start_time: fields.playback_submission_start_time,
-		    playback_submission_end_time: fields.playback_submission_end_time,
-		    allow_playback_submissions: true
-		  },
-		  function (err, updated_lecture) {
-		    if (!updated_lecture)
-		      res.status(404).send("lecture not found");
-		    else
-		    	res.json(updated_lecture);
-		  }
+			{
+				video_ref: (fields.video_ref + files.video.name).split(' ').join('_'),
+				playback_submission_start_time: fields.playback_submission_start_time,
+				playback_submission_end_time: fields.playback_submission_end_time,
+				allow_playback_submissions: true,
+				email_sent: true
+			},
+			function (err, updated_lecture) {
+				if (!updated_lecture) {
+					res.status(404).send("lecture not found");
+				} else {
+					let section_itr = 0
+					updated_lecture.sections.forEach(section => {
+						Section.findById(section, function (err, section){
+							if(err || section == null) {
+								res.json(err);
+							}
+							let student_ids = section.students;
+							let num_iterations = 0;
+							student_ids.forEach(student_id => {
+								User.findById(student_id, function(err, student) {
+									if(err)
+										res.json(err);
+									//send email
+									var mailOptions = {
+										from: 'venue.do.not.reply@gmail.com',
+										to: student.email,
+										subject: 'Venue - New Lecture Recording Notification',
+										html: '<p>New Lecture available for playback <a href="http://localhost:8080/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
+									};
+									console.log("About to send email with:",mailOptions)
+									transporter.sendMail(mailOptions, function(error, info){
+										if (error) {
+											console.log(error);
+										} else {
+											console.log('Email sent: ' + info.response);
+										}
+									});
+									num_iterations++;
+									if(num_iterations === student_ids.length) {
+										section_itr++;
+										if(section_itr == updated_lecture.sections.length) {
+											res.json(updated_lecture);
+										}
+									}
+								})
+							})
+						})
+					})
+				}
+			}
 		);
 	});
 });
@@ -253,6 +302,41 @@ lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
       })
     }
 	});
+})
+
+lectureRoutes.post('/process_emails', (req,res) => {
+	let lectures = req.body.lectures
+	let toEmail = req.body.toEmail
+	lectures.forEach(lecture => {
+		if(!lecture.email_sent) { //email has not been sent yet
+			Lecture.findByIdAndUpdate(lecture._id, 
+				{
+					email_sent: true //mark email as sent
+				},
+				function(err, lect) {
+					if (err || lect == null) {
+						res.status(404).send("lecture not found");
+					} else {
+						var mailOptions = {
+							from: 'venue.do.not.reply@gmail.com',
+							to: toEmail,
+							subject: 'Venue Lecture Upload Reminder',
+							html: '<p>Click <a href="http://localhost:8080/lecture_info/' + lect._id + '">here</a> to upload your lecture recording</p>'
+						};
+						console.log("About to send email with:",mailOptions)
+						transporter.sendMail(mailOptions, function(error, info){
+							if (error) {
+								console.log(error);
+							} else {
+								console.log('Email sent: ' + info.response);
+							}
+						});
+					}
+				}
+			);
+		}
+	})
+	res.json(lectures)
 })
 
 function getLiveLectures(lectures) {
