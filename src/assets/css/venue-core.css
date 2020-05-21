@@ -529,3 +529,70 @@ a {
 a:hover {
   color: inherit;
 }
+
+.lecture-pills-min-container {
+  padding-left: 4rem;
+  box-sizing: border-box;
+  width: 70%;
+}
+
+.lecture-pills-min-container .label {
+  width: 8rem;
+}
+
+.lecture-pill-min {
+  width: 310px;
+  height: 35px;
+  display: inline-block;
+  margin-right: 15px;
+  padding-left: 10px;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.lecture-pill-min.green {
+  background-color: #4ECD4C;
+  box-shadow: 0px 3px 5px rgba(78, 205, 76, 0.3);
+}
+.lecture-pill-min.blue {
+  background-color: #4F6DEA;
+  box-shadow: 0px 3px 5px rgba(79, 109, 234, 0.3);
+}
+.lecture-pill-min.yellow {
+  background-color: #F49F32;
+  box-shadow: 0px 3px 5px rgba(244, 159, 50, 0.4);
+}
+.lecture-pill-min.red {
+  background-color: #F95247;
+  box-shadow: 0px 3px 5px rgba(249, 82, 71, 0.3);
+}
+
+.lecture-pills-min-container .lecture-pill-holder {
+  /* border: 1px solid black; */
+}
+
+.lecture-pill-min .left,
+.lecture-pill-min .middle,
+.lecture-pill-min .right {
+  display: inline-block;
+  position: relative;
+  top: 3px;
+}
+
+.lecture-pill-min .left {
+  width: 50%;
+  font-size: 0.95rem;
+}
+.lecture-pill-min .middle {
+  width: 20%;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.lecture-pill-min .right {
+  width: 30%;
+  text-align: center;
+  font-size: 0.9rem;
+}

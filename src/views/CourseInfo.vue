@@ -12,10 +12,9 @@
       <CourseInfoTitle :course="course" class="inline-block" />
 
       <!-- Lecture Pills -->
-      <div class="lecture-pills-min inline-block">
-        <div>
-          <div class="inline-block">Label:</div><div class="inline-block">x</div>
-        </div>
+      <div class="lecture-pills-min-container inline-block">
+        <LecturePillList label="Live" :lectures="live_lectures" />
+        <LecturePillList label="Playback" :lectures="playback_lectures" />
       </div>
 
     </div>
@@ -76,6 +75,7 @@
   import StudentAttendanceHistory from '@/components/StudentAttendanceHistory.vue'
   import SectionAttendanceGraph from '@/components/SectionAttendanceGraph.vue'
   import StudentAttendanceGraph from '@/components/StudentAttendanceGraph.vue'
+  import LecturePillList from '@/components/LecturePillList.vue'
 
   import '@/assets/css/venue-core.css'
   import '@/assets/icon-font.css'
@@ -95,7 +95,8 @@ export default {
     StudentAttendanceHistory,
     InstructorAttendanceHistory,
     SectionAttendanceGraph,
-    StudentAttendanceGraph
+    StudentAttendanceGraph,
+    LecturePillList
   },
   data(){
     return {
@@ -107,7 +108,7 @@ export default {
       upcoming_lectures: [],
       live_lectures: [],
       past_lectures: [],
-      plabyack_lectures: [],
+      playback_lectures: [],
 
       course_students: [],
       course_has_loaded: false,
