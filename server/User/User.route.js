@@ -11,23 +11,27 @@ userRoutes.route('/add').post(function (req, res) {
   let user = new User(req.body.user);
   console.log("password before: " + user.password)
   bcrypt.hash(user.password, saltRounds, (err, hash) => {
-    user.password = hash
-    console.log("password after: " + user.password)
-    user.save()
-      .then(() => {
-        res.status(200).json(user);
-      })
-      .catch(() => {
-        res.status(400).send("unable to save user to database");
-      });
+    if(err || hash == null) {
+      res.json(err)
+    } else {
+      user.password = hash
+      console.log("password after: " + user.password)
+      user.save()
+        .then(() => {
+          res.status(200).json(user);
+        })
+        .catch(() => {
+          res.status(400).send("unable to save user to database");
+        });
+    }
   });
 });
 
 userRoutes.get('/', (req, res) => {
   User.find(function(err, users){
-    if(err){
+    if(err || users == null) {
       res.json(err);
-    }else {
+    } else {
       res.json(users);
     }
   })
@@ -36,10 +40,11 @@ userRoutes.get('/', (req, res) => {
 userRoutes.route('/edit/:id').get(function (req, res) {
   let id = req.params.id;
   User.findById(id, function (err, user){
-      if(err) {
-        res.json(err);
-      }
+    if(err || user == null) {
+      res.json(err);
+    } else {
       res.json(user);
+    }
   });
 });
 
@@ -57,25 +62,30 @@ userRoutes.route('/update/:id').post(function (req, res) {
       submissions: updated_user.submissions
     },
     function(err, user) {
-      if (!user)
+      if (err || user == null) {
         res.status(404).send("user not found");
-      res.json(user);    
+      } else {
+        res.json(user);
+      }
     }
   );
 });
 
 userRoutes.route('/delete/:id').delete(function (req, res) {
-    User.findByIdAndRemove({_id: req.params.id}, function(err){
-        if(err) res.json(err);
-        else res.json('Successfully removed');
-    });
+  User.findByIdAndRemove({_id: req.params.id}, function(err){
+    if(err) {
+      res.json(err);
+    } else {
+      res.json('Successfully removed');
+    }
+  });
 });
 
 userRoutes.route('/instructors').get(function (req, res) {
-    User.find(function(err, users){
-    if(err){
+  User.find(function(err, users){
+    if(err || users == null) {
       res.json(err);
-    }else {
+    } else {
       let instructors = [];
       users.forEach(user => {
         if(user.is_instructor)
@@ -87,10 +97,10 @@ userRoutes.route('/instructors').get(function (req, res) {
 });
 
 userRoutes.route('/students').get(function (req, res) {
-    User.find(function(err, users){
-    if(err){
+  User.find(function(err, users) {
+    if(err || users == null) {
       res.json(err);
-    }else {
+    } else {
       let students = [];
       users.forEach(user => {
         if(!user.is_instructor)
@@ -105,55 +115,61 @@ userRoutes.route('/instructor_courses/:id').get(function (req, res) {
   let instructor_id = req.params.id;
   console.log("instructor_id: " + instructor_id);
   Course.find(function(err, courses){
-    if(err)
+    if(err || courses == null) {
       res.json(err);
-    let instructor_courses = []
-    courses.forEach((course) => {
-      if(typeof course.instructor !== 'undefined' && course.instructor._id == instructor_id)
-        instructor_courses.push(course);
-    });
-    res.json(instructor_courses);
+    } else {
+      let instructor_courses = []
+      courses.forEach((course) => {
+        if(typeof course.instructor !== 'undefined' && course.instructor._id == instructor_id)
+          instructor_courses.push(course);
+      });
+      res.json(instructor_courses);
+    }
   });
 });
 
 userRoutes.route('/instructor_courses/:id').get(function (req, res) {
   let instructor_id = req.params.id;
-  Course.find(function(err, courses){
-    if(err)
+  Course.find(function(err, courses) {
+    if(err || courses == null) {
       res.json(err);
-    let instructor_courses = []
-    courses.forEach((course) => {
-      if(typeof course.instructor !== 'undefined' && course.instructor._id == instructor_id)
-        instructor_courses.push(course);
-    });
-    res.json(instructor_courses);
+    } else {
+      let instructor_courses = []
+      courses.forEach((course) => {
+        if(typeof course.instructor !== 'undefined' && course.instructor._id == instructor_id)
+          instructor_courses.push(course);
+      });
+      res.json(instructor_courses);
+    }
   });
 });
 
 userRoutes.route('/student_sections/:id').get(function (req, res) {
   let student_id = req.params.id;
   Section.find(function(err, sections){
-    if(err)
+    if(err || sections == null) {
       res.json(err);
-    let student_sections = []
-    sections.forEach((section) => {
-      section.students.forEach((section_student) => {
-        if(section_student._id == student_id){
-          student_sections.push(section);
-        }else{
-          console.log("Section student id: " + section_student._id + " != " + student_id);
-        }
+    } else {
+      let student_sections = []
+      sections.forEach((section) => {
+        section.students.forEach((section_student) => {
+          if(section_student._id == student_id){
+            student_sections.push(section);
+          }else{
+            console.log("Section student id: " + section_student._id + " != " + student_id);
+          }
+        });
       });
-    });
-    console.log("Student sections: " + student_sections);
-    res.json(student_sections);
+      console.log("Student sections: " + student_sections);
+      res.json(student_sections);
+    }
   });
 });
 
 userRoutes.route('/students_for_course/:course_id').get(function (req, res) {
   let course_id = req.params.course_id;
   Section.find({course: course_id}, function(err, sections) {
-    if(err) {
+    if(err || sections == null) {
       res.json(err)
     } else {
       let students = []
