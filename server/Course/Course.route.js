@@ -18,7 +18,7 @@ courseRoutes.route('/add').post(function (req, res) {
 
 courseRoutes.route('/').get(function (req, res) {
   Course.find(function (err, courses) {
-    if (err) {
+    if (err || courses == null) {
       res.json(err);
     }
     else {
@@ -30,7 +30,7 @@ courseRoutes.route('/').get(function (req, res) {
 courseRoutes.route('/edit/:id').get(function (req, res) {
   let id = req.params.id;
   Course.findById(id, function (err, course) {
-    if (err) {
+    if (err || course == null) {
       res.json(err);
     }
     res.json(course);
@@ -48,17 +48,22 @@ courseRoutes.route('/update/:id').post(function (req, res) {
       instructor: updated_course.instructor
     },
     function (err, course) {
-      if (!course)
+      if (err || course == null) {
         res.status(404).send("section not found");
-      res.json(course);
+      } else {
+        res.json(course);
+      }
     }
   );
 });
 
 courseRoutes.route('/delete/:id').delete(function (req, res) {
   Course.findByIdAndRemove({ _id: req.params.id }, function (err) {
-    if (err) res.json(err);
-    else res.json('Successfully removed');
+    if (err) {
+      res.json(err);
+    } else {
+      res.json('Successfully removed');
+    }
   });
 });
 
@@ -68,22 +73,25 @@ courseRoutes.route('/delete/:id').delete(function (req, res) {
 courseRoutes.route('/getInstructor/:id').get(function (req, res) {
   let id = req.params.id;
   Course.findById(id, function (err, course) {
-    if (err) {
+    if (err || course == null) {
       res.json(err);
+    } else {
+      let instructor_id = course.instructor;
+      User.findById(instructor_id, function (error, instructor) {
+        if (error || instructor == null) {
+          res.json(error);
+        } else {
+          res.json(instructor);
+        }
+      });
     }
-    let instructor_id = course.instructor;
-    User.findById(instructor_id, function (error, instructor) {
-      if (error)
-        res.json(error);
-      res.json(instructor);
-    });
   });
 });
 
 courseRoutes.route('/get_instructor_courses/:user_id').get(function (req, res) {
   let user_id = req.params.user_id;
   Course.find({instructor: user_id}, function(err, instructor_courses) {
-    if(err) {
+    if(err || instructor_courses == null) {
       res.json(err)
     } else {
       res.json(instructor_courses)
