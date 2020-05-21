@@ -10,7 +10,14 @@
     </div>
     <div>
       <CourseInfoTitle :course="course" class="inline-block" />
-      <AverageWeeklyAttendanceBar class="inline-block" />
+
+      <!-- Lecture Pills -->
+      <div class="lecture-pills-min inline-block">
+        <div>
+          <div class="inline-block">Label:</div><div class="inline-block">x</div>
+        </div>
+      </div>
+
     </div>
 
     <!-- Attendance History Tab Button / Statistics Tab Button Bar -->

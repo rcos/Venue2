@@ -16,9 +16,28 @@
   font-weight: lighter;
 }
 
+@font-face {
+  font-family: NotoSans;
+  src: url(../fonts/NotoSans/NotoSansJP-Regular.otf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: NotoSans;
+  src: url(../fonts/NotoSans/NotoSansJP-Bold.otf);
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: NotoSans;
+  src: url(../fonts/NotoSans/NotoSansJP-Thin.otf);
+  font-weight: lighter;
+}
+
 /* CSS Style */
 body, * {
-  font-family: Oxygen;
+  font-family: NotoSans;
+  font-weight: normal;
 }
 
 .venue-body-container {
