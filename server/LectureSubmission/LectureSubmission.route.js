@@ -9,9 +9,11 @@ lectureSubmissionRoutes.route('/add').post(function (req, res) {
   let lectureSubmission = new LectureSubmission(req.body.lectureSubmission);
   lectureSubmission.save()
     .then(() => {
+      console.log("<SUCCESS> Adding lecture submission:",lectureSubmission)
       res.status(200).json(lectureSubmission);
     })
     .catch(() => {
+      console.log("<ERROR> Adding lecture submission:",lectureSubmission)
       res.status(400).send("unable to save poll to database");
     });
 });
@@ -20,8 +22,10 @@ lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
   let email = req.body.rcs + "@rpi.edu"
   User.find({email: email},function(err,users){
     if(err || users == null) {
+      console.log("<ERROR> Getting user(s) with email:",email)
       res.json(err)
     } else if(users.length == 0) {
+      console.log("<ERROR> User with email ("+email+") not found")
       res.status(400).send("no user with that email in database");
     } else {
       let subobj = {
@@ -33,9 +37,11 @@ lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
       let lectureSubmission = new LectureSubmission(subobj);
       lectureSubmission.save()
         .then(() => {
+          console.log("<SUCCESS> Adding lecture submission for user with email:",email)
           res.status(200).json(lectureSubmission);
         })
         .catch(() => {
+          console.log("<ERROR> Adding lecture submission for user with email:",email)
           res.status(400).send("unable to save submission to database");
         });
     }
@@ -45,8 +51,10 @@ lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
 lectureSubmissionRoutes.route('/').get(function (req, res) {
   LectureSubmission.find(function (err, lectureSubmissions) {
     if (err || lectureSubmissions == null) {
+      console.log("<ERROR> Getting all lecture submissions")
       res.json(err);
     } else {
+      console.log("<SUCCESS> Getting all lecture submissions")
       res.json(lectureSubmissions);
     }
   });
@@ -55,8 +63,10 @@ lectureSubmissionRoutes.route('/').get(function (req, res) {
 lectureSubmissionRoutes.route('/:id').get(function (req, res) {
   LectureSubmission.findById(req.params.id,function (err, lectureSubmission) {
     if (err || lectureSubmission == null) {
+      console.log("<ERROR> Getting lecture submission with ID:",req.params.id)
       res.json(err);
     } else {
+      console.log("<SUCCESS> Getting lecture submission with ID:",req.params.id)
       res.json(lectureSubmission);
     }
   });
@@ -71,8 +81,10 @@ lectureSubmissionRoutes.route('/update').post(function (req, res) {
     },
     function (err, updatedSubmission) {
       if (err || updatedSubmission == null) {
+        console.log("<ERROR> Updating lecture submission by ID:",updated._id,"with:",updated)
         res.json(err);
       } else {
+        console.log("<SUCCESS> Updating lecture submission by ID:",updated._id,"with:",updated)
         res.json(updatedSubmission);
       }
     }
@@ -89,6 +101,7 @@ lectureSubmissionRoutes.route('/get_or_make').post(function (req, res) {
     },
     function (err, lectureSubmissions) {
       if (err || lectureSubmissions == null) {
+        console.log("<ERROR> Getting lecture submission with lecture ID:",lecture_id,"and submitter ID:",submitter_id)
         res.json(err);
       } else if (lectureSubmissions.length == 0){
         let lectureSubmission = new LectureSubmission({
@@ -99,12 +112,15 @@ lectureSubmissionRoutes.route('/get_or_make').post(function (req, res) {
         });
         lectureSubmission.save()
           .then(() => {
+            console.log("<SUCCESS> Adding lecture submission:",lectureSubmission)
             res.status(200).json(lectureSubmission);
           })
           .catch(() => {
+            console.log("<ERROR> Adding lecture submission:",lectureSubmission)
             res.status(400).send("unable to save lectureSubmission to database");
           });
       } else {
+        console.log("<SUCCESS> Getting lecture submission with lecture ID:",lecture_id,"and submitter ID:",submitter_id)
         res.status(200).json(lectureSubmissions[0]);
       }
     }
@@ -121,15 +137,18 @@ lectureSubmissionRoutes.get('/for_lecture/:lecture_id', (req, res) => {
       } else if(lect_submissions.length > 0){
         User.findById({'_id': lect_submissions[0].submitter}, (error, submitter) => {
           if(error || submitter == null) {
+            console.log("<ERROR> Getting lecture submissions for lecture with ID:",lecture_id)
             res.json(error)
           } else {
             lect_submissions.forEach(submission => {
               submission.submitter = submitter
             })
+            console.log("<SUCCESS> Getting lecture submissions for lecture with ID:",lecture_id)
             res.json(lect_submissions)
           }
         })
       } else {
+        console.log("<SUCCESS> Getting lecture submissions for lecture with ID:",lecture_id)
         res.json([])
       }
     }
@@ -145,9 +164,11 @@ lectureSubmissionRoutes.get('/for_student/:lecture_id/:student_id', (req, res) =
       submitter: student_id
     },
     function(err,lect_submission) {
-      if(err || lect_submission == null)
+      if(err || lect_submission == null) {
+        console.log("<ERROR> Getting lecture submission with lecture ID:",lecture_id,"and student ID:",student_id)
         res.json(err)
-      else {
+      } else {
+        console.log("<SUCCESS> Getting lecture submission with lecture ID:",lecture_id,"and student ID:",student_id)
         res.json(lect_submission)
       }
     }
