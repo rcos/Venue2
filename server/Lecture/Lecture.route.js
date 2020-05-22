@@ -192,7 +192,7 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
 					}
 				})
 			} else {
-				Section.find({'students._id': user_id}, (error, student_sections) => {
+				Section.find({'students': user_id}, (error, student_sections) => {
 					if(error || student_sections == null) {
 						console.log("<ERROR> Getting sections for student:",user_id)
 						res.json(error)
@@ -202,7 +202,6 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
 								console.log("<ERROR> Getting lectures for sections:",student_sections)
 								res.json(error)
 							} else {
-								console.log("<SUCCESS> Getting lectures for student ID:",user_id)
 								if(lecture_type === "all")
 									res.json(student_lectures)
 								else if(lecture_type === "live")
