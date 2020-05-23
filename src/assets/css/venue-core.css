@@ -18,8 +18,7 @@
 
 @font-face {
   font-family: NotoSans;
-  src: url(../fonts/NotoSans/NotoSansJP-Regular.otf);
-  font-weight: normal;
+  src: url(../fonts/NotoSans/NotoSansJP-Medium.otf);
 }
 
 @font-face {
@@ -34,9 +33,27 @@
   font-weight: lighter;
 }
 
+@font-face {
+  font-family: Lato;
+  src: url(../fonts/Lato/Lato-Black.ttf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: Lato;
+  src: url(../fonts/Lato/Lato-Bold.ttf);
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: Lato;
+  src: url(../fonts/Lato/Lato-Light.ttf);
+  font-weight: lighter;
+}
+
 /* CSS Style */
 body, * {
-  font-family: NotoSans;
+  font-family: Arial, NotoSans;
   font-weight: normal;
 }
 
