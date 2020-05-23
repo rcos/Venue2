@@ -26,98 +26,112 @@ seeder.connect(db, function () {
 	]);
 	seeder.clearModels(['Course', 'User', 'Section', 'Event', 'Submission', 'Lecture', 'LectureSubmission', 'PlaybackPoll'], function () {
 
-		let u0 = new User({
-			first_name: "Admin",
-			last_name: "Admin",
-			email: "admin@gmail.com",
+		let u = []
+		let c = []
+		let s = []
+		let l = []
+		let p = []
+
+		u.push(new User({
+			first_name: "Ad",
+			last_name: "Min",
+			email: "venue@rpi.edu",
 			password: "nimda",
 			is_instructor: true,
 			ta_sections: [],
 			submissions: []
-		})
+		}))
 
-		let u1 = new User({
-			first_name: "Student",
-			last_name: "A",
-			email: "studenta@gmail.com",
-			password: "password",
-			is_instructor: false,
-			ta_sections: [],
-			submissions: []
-		})
+		for(let i=0;i<26;i++) {
+			var chr = String.fromCharCode(97 + i);
+			u.push(new User({
+				first_name: "Student",
+				last_name: chr,
+				email: "student"+chr+"@rpi.edu",
+				password: "password",
+				is_instructor: false,
+				ta_sections: [],
+				submissions: []
+			}))
+		}
 
-		let u2 = new User({
-			first_name: "Student",
-			last_name: "B",
-			email: "studentb@gmail.com",
-			password: "password",
-			is_instructor: false,
-			ta_sections: [],
-			submissions: []
-		})
-
-		let u3 = new User({
-			first_name: "Student",
-			last_name: "C",
-			email: "studentc@gmail.com",
-			password: "password",
-			is_instructor: false,
-			ta_sections: [],
-			submissions: []
-		})
-
-		let c0 = new Course({
+		c.push(new Course({
 			name: "RCOS",
-			dept: "Computer Science",
-			course_number: 0,
-			instructor: u0._id
-		})
+			dept: "CSCI",
+			course_number: 2961,
+			instructor: u[0]
+		}))
 
-		let c1 = new Course({
+		c.push(new Course({
 			name: "Data Structures",
-			dept: "Computer Science",
-			course_number: 1,
-			instructor: u0._id
-		})
+			dept: "CSCI",
+			course_number: 1200,
+			instructor: u[0]._id
+		}))
 
-		let c2 = new Course({
+		c.push(new Course({
 			name: "Multiletiable Calculus",
-			dept: "Mathematics",
-			course_number: 2,
-			instructor: u0._id
-		})
+			dept: "MATH",
+			course_number: 2010,
+			instructor: u[0]._id
+		}))
 
-		let c3 = new Course({
+		c.push(new Course({
 			name: "Physics I",
-			dept: "Science",
-			course_number: 3,
-			instructor: u0._id
-		})
+			dept: "PHYS",
+			course_number: 1100,
+			instructor: u[0]._id
+		}))
 
-		let s0 = new Section({
-			course: c0._id,
-			number: 0,
-			students: [u1._id, u3._id],
-			teaching_assistants: [u0._id]
-		})
-
-		let s1 = new Section({
-			course: c1._id,
-			number: 0,
-			students: [u1._id, u2._id],
-			teaching_assistants: [u0._id]
-		})
-
-		let s2 = new Section({
-			course: c1._id,
+		s.push(new Section({
+			course: c[0]._id,
 			number: 1,
-			students: [u1._id, u2._id],
-			teaching_assistants: [u0._id]
-		})
+			students: [
+				u[1]._id,
+				u[2]._id,
+				u[3]._id,
+				u[4]._id,
+				u[5]._id,
+				u[6]._id,
+				u[7]._id,
+				u[8]._id,
+				u[9]._id,
+				u[10]._id,
+				u[11]._id,
+				u[12]._id,
+				u[12]._id,
+				u[14]._id,
+				u[15]._id,
+				u[16]._id,
+				u[17]._id,
+				u[18]._id,
+				u[19]._id,
+				u[20]._id,
+				u[21]._id,
+				u[22]._id,
+				u[23]._id,
+				u[24]._id
+			],
+			teaching_assistants: [u[26]._id,u[25]._id]
+		}))
 
-		let l0 = new Lecture({
+		s.push(new Section({
+			course: c[1]._id,
+			number: 1,
+			students: [u[1]._id, u[2]._id],
+			teaching_assistants: [u[0]._id]
+		}))
+
+		s.push(new Section({
+			course: c[1]._id,
+			number: 2,
+			students: [u[1]._id, u[2]._id],
+			teaching_assistants: [u[0]._id]
+		}))
+
+		l.push(new Lecture({
 			title: "Live Lecture",
-			sections: [s1._id],
+			sections: [s[1]._id],
 			allow_live_submissions: true,
 			allow_playback_submissions: true,
 			start_time: Date.now(),
@@ -127,11 +141,11 @@ seeder.connect(db, function () {
 			code: "abcdefghijklmnopqrstuvwxyz",
 			video_ref: "/videos/sample/sample.mp4",
 			num_playback_polls: 0
-		})
+		}))
 
-		let l1 = new Lecture({
+		l.push(new Lecture({
 			title: "Playback Lecture",
-			sections: [s1._id],
+			sections: [s[1]._id],
 			allow_live_submissions: true,
 			allow_playback_submissions: true,
 			start_time: Date.now()-(60*2000),
@@ -143,22 +157,38 @@ seeder.connect(db, function () {
 			code: "abcdefghijklmnopqrstuvwxyz",
 			video_ref: "/videos/sample/sample.mp4",
 			num_playback_polls: 2
-		})
+		}))
 
-		let l2 = new Lecture({
+		l.push(new Lecture({
 			title: "Upcoming Playback Lecture",
-			sections: [s1._id],
-			allow_live_submissions: true,
+			sections: [s[1]._id],
+			allow_live_submissions: false,
 			allow_playback_submissions: true,
 			playback_submission_start_time: Date.now() + (2*60*1000),
 			playback_submission_end_time: Date.now() + (4*60*1000),
 			video_ref: "/videos/sample/sample.mp4",
 			num_playback_polls: 2
-		})
+		}))
+
+		l.push(new Lecture({
+			title: "How to use Venue",
+			sections: [s[0]._id],
+			allow_live_submissions: true,
+			allow_playback_submissions: true,
+			start_time: Date.now(),
+			end_time: Date.now() + (2*60*60*1000),
+			submission_start_time: Date.now() + (60*1000),
+			submission_end_time: Date.now() + (3*60*1000),
+			playback_submission_start_time: Date.now() + (2*60*60*1000),
+			playback_submission_end_time: Date.now() + (4*60*1000),
+			code: "abcdefghijklmnopqrstuvwxyz",
+			video_ref: "/videos/sample/sample.mp4",
+			num_playback_polls: 2
+		}))
 
 
-		let p0 = new PlaybackPoll({
-			lecture: l1._id,
+		p.push(new PlaybackPoll({
+			lecture: l[1]._id,
 			question: "Where is my super suit?",
 			possible_answers: [
 				"I, uh, put it away.",
@@ -168,10 +198,10 @@ seeder.connect(db, function () {
 				"Why do you need to know?"
 			],
 			timestamp: 5
-		})
+		}))
 
-		let p1 = new PlaybackPoll({
-			lecture: l1._id,
+		p.push(new PlaybackPoll({
+			lecture: l[1]._id,
 			question: "Speed of light?",
 			possible_answers: [
 				"Fast",
@@ -181,10 +211,10 @@ seeder.connect(db, function () {
 				"2Fast"
 			],
 			timestamp: 15
-		})
+		}))
 
-		let p2 = new PlaybackPoll({
-			lecture: l2._id,
+		p.push(new PlaybackPoll({
+			lecture: l[2]._id,
 			question: "What's 9 + 10?",
 			possible_answers: [
 				"19",
@@ -194,10 +224,10 @@ seeder.connect(db, function () {
 				"21"
 			],
 			timestamp: 10
-		})
+		}))
 
-		let p3 = new PlaybackPoll({
-			lecture: l2._id,
+		p.push(new PlaybackPoll({
+			lecture: l[2]._id,
 			question: "Are you smart m8?",
 			possible_answers: [
 				"Yeah",
@@ -208,33 +238,52 @@ seeder.connect(db, function () {
 				"nah"
 			],
 			timestamp: 15
-		})
+		}))
+
+		p.push(new PlaybackPoll({
+			lecture: l[3]._id,
+			question: "What is this planet?",
+			possible_answers: [
+				"Mercury",
+				"Venus",
+				"Earth",
+				"Mars",
+				"Jupiter",
+				"Saturn",
+				"Uranus",
+				"Neptune"
+			],
+			correct_answers: [
+				"Earth"
+			],
+			timestamp: 5
+		}))
 
 
-		bcrypt.hash(u0.password, saltRounds, (err, hash) => {
-			u0.password = hash
-			bcrypt.hash(u1.password, saltRounds, (err, hash) => {
-				u1.password = hash
-				bcrypt.hash(u2.password, saltRounds, (err, hash) => {
-					u2.password = hash
-					bcrypt.hash(u3.password, saltRounds, (err, hash) => {
-						u3.password = hash
+		bcrypt.hash(u[0].password, saltRounds, (err, hash) => {
+			u[0].password = hash
+			bcrypt.hash(u[1].password, saltRounds, (err, hash) => {
+				u[1].password = hash
+				bcrypt.hash(u[2].password, saltRounds, (err, hash) => {
+					u[2].password = hash
+					bcrypt.hash(u[3].password, saltRounds, (err, hash) => {
+						u[3].password = hash
 
 						let data = [{
 							"model": "User",
-							"documents": [u0, u1, u2, u3]
+							"documents": u
 						}, {
 							"model": "Course",
-							"documents": [c0, c1, c2, c3]
+							"documents": c
 						}, {
 							"model": "Section",
-							"documents": [s0, s1, s2]
+							"documents": s
 						}, {
 							"model": "Lecture",
-							"documents": [l0, l1, l2]
+							"documents": l
 						}, {
 							"model": "PlaybackPoll",
-							"documents": [p0, p1, p2, p3]
+							"documents": p
 						}]
 
 						seeder.populateModels(data, function (err, done) {
