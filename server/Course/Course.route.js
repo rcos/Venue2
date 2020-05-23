@@ -9,19 +9,22 @@ courseRoutes.route('/add').post(function (req, res) {
   let course = new Course(req.body.course);
   course.save()
     .then(() => {
+      console.log("<SUCCESS> Adding course:",course)
       res.status(200).json(course);
     })
     .catch(() => {
+      console.log("<ERROR> Adding course:",course)
       res.status(400).send("unable to save course to database");
     });
 });
 
 courseRoutes.route('/').get(function (req, res) {
   Course.find(function (err, courses) {
-    if (err) {
+    if (err || courses == null) {
+      console.log("<ERROR> Getting all courses")
       res.json(err);
-    }
-    else {
+    } else {
+      console.log("<Success> Getting all courses")
       res.json(courses);
     }
   });
@@ -30,10 +33,13 @@ courseRoutes.route('/').get(function (req, res) {
 courseRoutes.route('/edit/:id').get(function (req, res) {
   let id = req.params.id;
   Course.findById(id, function (err, course) {
-    if (err) {
+    if (err || course == null) {
+      console.log("<ERROR> Getting course with ID:",id)
       res.json(err);
+    } else {
+      console.log("<SUCCESS> Getting course with ID:",id)
+      res.json(course);
     }
-    else res.json(course);
   });
 });
 
@@ -48,17 +54,26 @@ courseRoutes.route('/update/:id').post(function (req, res) {
       instructor: updated_course.instructor
     },
     function (err, course) {
-      if (!course)
-        res.status(404).send("section not found");
-      res.json(course);
+      if (err || course == null) {
+        console.log("<ERROR> Updating course by ID:",id,"with:",updated_course)
+        res.status(404).send("course not found");
+      } else {
+        console.log("<SUCCESS> Updating course by ID:",id,"with:",updated_course)
+        res.json(course);
+      }
     }
   );
 });
 
 courseRoutes.route('/delete/:id').delete(function (req, res) {
   Course.findByIdAndRemove({ _id: req.params.id }, function (err) {
-    if (err) res.json(err);
-    else res.json('Successfully removed');
+    if (err) {
+      console.log("<ERROR> Deleting course with ID:",req.params.id)
+      res.json(err);
+    } else {
+      console.log("<SUCCESS> Deleting course with ID:",req.params.id)
+      res.json('Successfully removed');
+    }
   });
 });
 
@@ -68,24 +83,32 @@ courseRoutes.route('/delete/:id').delete(function (req, res) {
 courseRoutes.route('/getInstructor/:id').get(function (req, res) {
   let id = req.params.id;
   Course.findById(id, function (err, course) {
-    if (err) {
+    if (err || course == null) {
+      console.log("<ERROR> Getting course with ID:",id)
       res.json(err);
+    } else {
+      let instructor_id = course.instructor;
+      User.findById(instructor_id, function (error, instructor) {
+        if (error || instructor == null) {
+          console.log("<ERROR> Getting user with ID:",instructor_id)
+          res.json(error);
+        } else {
+          console.log("<SUCCESS> Getting instructor for course with ID:",id)
+          res.json(instructor);
+        }
+      });
     }
-    let instructor_id = course.instructor;
-    User.findById(instructor_id, function (error, instructor) {
-      if (error)
-        res.json(error);
-      res.json(instructor);
-    });
   });
 });
 
 courseRoutes.route('/get_instructor_courses/:user_id').get(function (req, res) {
   let user_id = req.params.user_id;
   Course.find({instructor: user_id}, function(err, instructor_courses) {
-    if(err) {
+    if(err || instructor_courses == null) {
+      console.log("<ERROR> Getting course by instructor with ID:",user_id)
       res.json(err)
     } else {
+      console.log("<SUCCESS> Getting course by instructor with ID:",user_id)
       res.json(instructor_courses)
     }
   })

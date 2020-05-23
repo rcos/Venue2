@@ -172,7 +172,6 @@
         })
       },
       async getAllLecturesForUser() {
-
         LectureAPI.getLecturesForUser(this.current_user._id, "all")
         .then(response => {
           this.all_lectures = response.data

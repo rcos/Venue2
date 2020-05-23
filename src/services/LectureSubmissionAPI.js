@@ -4,9 +4,15 @@ export default {
   getLectureSubmissions() {
     return API().get('lecturesubmissions')
   },
-  addPoll(lectureSubmission) {
+  addLectureSubmission(lectureSubmission) {
     return API().post('lecturesubmissions/add', {
       lectureSubmission: lectureSubmission // add our data to the request body
+    })
+  },
+  addLiveSubmissionByRCS(rcs,lecture_id) {
+    return API().post('lecturesubmissions/add_by_rcs', {
+      rcs: rcs,
+      lecture_id: lecture_id // add our data to the request body
     })
   },
   getOrMake(lecture_id,submitter_id) {

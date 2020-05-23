@@ -17,14 +17,14 @@
         <!-- Section -->
         <div class="input-wrapper">
           <label>Section(s)</label>
-          <input v-for="section in lecture_sections" type="text" class="form-control new-lecture-input" v-model="section.number" readonly />
+          <input v-for="(section,i) in lecture_sections" :key="i" type="text" class="form-control new-lecture-input" v-model="section.number" readonly />
         </div>
         <div class="spinner-border" role="status" v-if="!course_sections_have_loaded">
           <span class="sr-only">Loading...</span>
         </div>
         <Sections v-else v-bind:sections="course_sections" v-on:select-section="addSection" />
         <div class="input-wrapper">
-          <input @click="setAllowLiveSubmissions" type="checkbox" name="live_submission" v-model="allow_live_submissions">
+          <input @click="setAllowLiveSubmissions" type="checkbox" name="live_submission" v-model="allow_live_submissions" @change="handleAllowLive">
           <label for="live_submission">Live Submissions (can add playback after lecture ends)</label><br>
           <input @click="setAllowPlaybackSubmissions" type="checkbox" name="playback_submission" v-model="allow_playback_submissions">
           <label for="playback_submission">Playback Submissions Only</label><br>
@@ -33,43 +33,15 @@
         <div v-if="allow_live_submissions">
           <div class="input-wrapper">
             <label>Start Time</label>
-            <datetime
-              class="time-picker"
-              type="datetime"
-              use12-hour
-              value-zone="local"
-              title="Lecture Start"
-              v-model="lecture.start_time"
-            ></datetime>
+            <input id="lecture_start"/>
             <label>End Time</label>
-            <datetime
-              class="time-picker"
-              type="datetime"
-              use12-hour
-              value-zone="local"
-              title="Lecture End"
-              v-model="lecture.end_time"
-            ></datetime>
+            <input id="lecture_end"/>
           </div>
           <div class="input-wrapper" id="submission-time-wrapper">
             <label>Submission Start Time</label>
-            <datetime
-              class="time-picker"
-              type="datetime"
-              use12-hour
-              value-zone="local"
-              title="Submission Start"
-              v-model="lecture.submission_start_time"
-            ></datetime>
+            <input id="submission_start"/>
             <label>Submission End Time</label>
-            <datetime
-              class="time-picker"
-              type="datetime"
-              use12-hour
-              value-zone="local"
-              title="Submission End"
-              v-model="lecture.submission_end_time"
-            ></datetime>
+            <input id="submission_end"/>
           </div>
         </div>
         <!-- Playback video adder -->
@@ -77,7 +49,7 @@
           <div class="row">
               <button id="close_lecture_modal" class="btn btn-secondary" @click="showModal = false">X</button>
           </div>
-          <input id="video_selector" name="lecturevideo" type="file" accept="video/*" />
+          <input id="video_selector" name="lecturevideo" type="file" accept="video/*"/>
           <div class="row" id="lecture_container" v-if="file_selected">
             <div class="col-8" id="preview">
               <video
@@ -105,23 +77,9 @@
             </div>
             <div class="input-wrapper" id="submission-time-wrapper">
               <label>Playback Submission Start Time</label>
-              <datetime
-                class="time-picker"
-                type="datetime"
-                use12-hour
-                value-zone="local"
-                title="Submission Start"
-                v-model="lecture.playback_submission_start_time"
-              ></datetime>
+              <input id="playback_start"/>
               <label>Playback Submission End Time</label>
-              <datetime
-                class="time-picker"
-                type="datetime"
-                use12-hour
-                value-zone="local"
-                title="Submission End"
-                v-model="lecture.playback_submission_end_time"
-              ></datetime>
+              <input id="playback_end"/>
             </div>
           </div>
         </div>
@@ -136,17 +94,20 @@ import LectureAPI from "@/services/LectureAPI.js";
 import CourseAPI from "@/services/CourseAPI.js";
 import SectionAPI from "@/services/SectionAPI.js";
 import Sections from "@/components/Sections";
-import { Datetime } from "vue-datetime";
-import "vue-datetime/dist/vue-datetime.css";
 import QRCode from "qrcode";
 import GoogleMap from "@/components/GoogleMap";
 import PollCard from "@/components/PollCard";
+import flatpickr from "flatpickr";
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+require("flatpickr/dist/themes/material_blue.css");
+// DatePicker themes options:
+// "material_blue","material_green","material_red","material_orange",
+// "dark","airbnb","confetti"
 
 export default {
   name: "NewLecture",
   components: {
     Sections,
-    datetime: Datetime,
     GoogleMap,
     PollCard
   },
@@ -225,7 +186,7 @@ export default {
       const alnums =
         "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
       let result = "";
-      for (let i = 1000; i > 0; --i) {
+      for (let i = 100; i > 0; --i) {
         result += alnums[Math.floor(Math.random() * alnums.length)];
       }
       this.lecture.code = result;
@@ -264,6 +225,25 @@ export default {
               srcEl.setAttribute("type",vid_selector.files[0].type)
               
               document.getElementById("video_player").prepend(srcEl)
+
+              var fp4 = flatpickr(document.getElementById("playback_start"),{
+                enableTime: true,
+                minDate: Date.now(),
+                onChange: function(selectedDates, dateStr, instance) {
+                  self.lecture.playback_submission_start_time = Date.parse(dateStr)
+                  fp5.set("minDate",self.lecture.playback_submission_start_time)
+                  if(self.lecture.playback_submission_start_time > self.lecture.playback_submission_end_time) {
+                    fp5.setDate(self.lecture.playback_submission_start_time)
+                  }
+                }
+              })
+              var fp5 = flatpickr(document.getElementById("playback_end"),{
+                enableTime: true,
+                minDate: Date.now(),
+                onChange: function(selectedDates, dateStr, instance) {
+                  self.lecture.playback_submission_end_time = Date.parse(dateStr)
+                }
+              })
             })
           }
         });
@@ -272,6 +252,45 @@ export default {
     addPoll(evt) {
       evt.preventDefault()
       this.n_polls++
+    },
+    handleAllowLive() {
+      let self = this
+      var fp0 = flatpickr(document.getElementById("lecture_start"),{
+        enableTime: true,
+        minDate: Date.now(),
+        onChange: function(selectedDates, dateStr, instance) {
+          self.lecture.start_time = Date.parse(dateStr)
+          fp1.set("minDate",self.lecture.start_time)
+          if(self.lecture.start_time > self.lecture.end_time) {
+            fp1.setDate(self.lecture.start_time)
+          }
+        }
+      })
+      var fp1 = flatpickr(document.getElementById("lecture_end"),{
+        enableTime: true,
+        minDate: Date.now(),
+        onChange: function(selectedDates, dateStr, instance) {
+          self.lecture.end_time = Date.parse(dateStr)
+        }
+      })      
+      var fp2 = flatpickr(document.getElementById("submission_start"),{
+        enableTime: true,
+        minDate: Date.now(),
+        onChange: function(selectedDates, dateStr, instance) {
+          self.lecture.submission_start_time = Date.parse(dateStr)
+          fp3.set("minDate",self.lecture.submission_start_time)
+          if(self.lecture.submission_start_time > self.lecture.submission_end_time) {
+            fp3.setDate(self.lecture.submission_start_time)
+          }
+        }
+      })
+      var fp3 = flatpickr(document.getElementById("submission_end"),{
+        enableTime: true,
+        minDate: Date.now(),
+        onChange: function(selectedDates, dateStr, instance) {
+          self.lecture.submission_end_time = Date.parse(dateStr)
+        }
+      })
     }
   }
 };
