@@ -38,6 +38,7 @@ seeder.connect(db, function () {
 			email: "venue@rpi.edu",
 			password: "nimda",
 			is_instructor: true,
+			is_admin: true,
 			ta_sections: [],
 			submissions: []
 		}))
