@@ -49,6 +49,11 @@
             </div>
             <LectureUploadModal v-else v-bind:lecture="lecture" />
           </div>
+          <!-- Give student a live submission -->
+          <div id="attendance_override_section">
+            <label>Mark as attended:</label>
+            <input id="attendance_override" type="text" placeholder="RCS IDs separated by ','"> <button class="btn btn-primary" @click="handleAttendanceOverride">Submit</button>
+          </div>
         </div>
         <!-- Student -->
         <div v-else>
@@ -85,6 +90,7 @@
 
 <script>
   import LectureAPI from '@/services/LectureAPI.js';
+  import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js';
   import QRCode from "qrcode";
   import QRScanner from "qr-code-scanner";
   import LectureUploadModal from "@/components/LectureUploadModal";
@@ -185,6 +191,18 @@
           },
           timeout: 10000
         });
+      },
+      handleAttendanceOverride() {
+        let names = document.getElementById("attendance_override").value.replace(/\s/g,'').split(",")
+        for(let i=0;i<names.length;i++) {
+          let name = names[i]
+          LectureSubmissionAPI.addLiveSubmissionByRCS(name,this.lecture._id)
+            .then(res => {
+              console.log(res.data)
+            }).catch(err => {
+              console.log("Error creating submission for '"+name+"'")
+            })
+        }
       }
     }
   }
@@ -205,5 +223,9 @@
 
   .submission-status {
     margin-top: 3rem;
+  }
+  #attendance_override_section {
+    position: relative;
+    margin-top: 2rem;
   }
 </style>

@@ -19,7 +19,7 @@ export default {
   },
   addLecture(lecture) {
     return API().post('lectures/add', {
-      lecture: lecture 
+      lecture: lecture
     })
   },
   addLecturePlayback(lecture, video) {
@@ -40,5 +40,11 @@ export default {
   },
   getLecture(id) {
     return API().get('lectures/' + id)
-  }
+  },
+  processEmailsForLectures(lectures,toEmail) {
+    return API().post('lectures/process_emails', {
+      lectures: lectures,
+      toEmail: toEmail
+    })
+  },
 }
