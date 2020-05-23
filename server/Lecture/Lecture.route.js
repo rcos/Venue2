@@ -200,14 +200,13 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type/:preference', (req, res) => 
 											res.json(instructor_lectures)
 										else {
 											instructor_lectures.forEach(instructor_lecture => {
-												console.log(instructor_lecture)
 												instructor_lecture.sections.forEach((lecture_section, i) => {
 													instructor_sections.forEach(instructor_section => {
 														if(lecture_section.equals(instructor_section._id)) {
 															// lecture_section = instructor_section
 															instructor_lecture.sections[i] = instructor_section
 															if(preference === "with_sections_and_course")
-																lecture_section.course = instructor_courses[0]
+																instructor_lecture.sections[i].course = instructor_courses[0]
 														}
 													})
 												})

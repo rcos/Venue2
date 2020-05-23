@@ -95,7 +95,7 @@
 
       this.getCurrentUser()
       this.getAllLecturesForUser()
-      // this.getLiveLecturesForUser()
+      this.getLiveLecturesForUser()
       // this.getPlaybackLectures()
       // this.getRecentLecturesForUser()
       // this.getUpcomingLecturesForUser()
@@ -172,48 +172,34 @@
         })
       },
       async getAllLecturesForUser() {
-        // LectureAPI.getLecturesForUser(this.current_user._id, "all")
+        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "all", "with_sections_and_course")
+        this.all_lectures = response.data
+        console.log("All lectures")
+        console.log(this.all_lectures)
+      },
+      async getLiveLecturesForUser() {
+
+        // LectureAPI.getLecturesForUser(this.current_user._id, "live")
         // .then(response => {
-        //   this.all_lectures = response.data
-        //   console.log(this.all_lectures)
+        //   this.live_lectures = response.data
 
         //   let lecture_promises = []
-        //   this.all_lectures.forEach((lecture_, i) => {
+        //   this.live_lectures.forEach((lecture_, i) => {
 
         //     lecture_promises.push(this.fillSectionInfo(lecture_))
 
         //   }) // end forEach
 
-        //   Promise.all(lecture_promises)
-        //   .then(updated_lectures => {
-        //     console.log(`updated_lectures`)
-        //     console.log(updated_lectures)
-        //     this.all_lectures = updated_lectures
+        //   Promise.all(lecture_promises).then(updated_lectures => {
+        //     this.live_lectures = updated_lectures
+        //     this.live_lectures_loaded = true
         //   })
         // })
-        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "all", "with_sections_and_course")
-        this.all_lectures = response.data
-        console.log("All lectures:")
-        console.log(this.all_lectures)
-      },
-      async getLiveLecturesForUser() {
-
-        LectureAPI.getLecturesForUser(this.current_user._id, "live")
-        .then(response => {
-          this.live_lectures = response.data
-
-          let lecture_promises = []
-          this.live_lectures.forEach((lecture_, i) => {
-
-            lecture_promises.push(this.fillSectionInfo(lecture_))
-
-          }) // end forEach
-
-          Promise.all(lecture_promises).then(updated_lectures => {
-            this.live_lectures = updated_lectures
-            this.live_lectures_loaded = true
-          })
-        })
+        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "live", "with_sections_and_course")
+        this.live_lectures = response.data
+        console.log("Live Lectures")
+        console.log(this.live_lectures)
+        this.live_lectures_loaded = true
       },
       async getPlaybackLectures() {
 
