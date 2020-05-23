@@ -1,12 +1,9 @@
 <template>
   <div>
-    <!-- <DashboardSection active_section/> -->
-    <!-- <DashboardSection today_section/> -->
-    <!--<router-link :to="{name: 'course_info', params: { id: '5e90f007920d965429e5d1a4' }}">Test</router-link>-->
-
     <show-at breakpoint="large">
       <div class="venue-body-container">
-        <LiveCourses :colorCallback="getColor" :loaded="live_lectures_loaded" :data="live_lectures" />
+        <!-- <LiveCourses :colorCallback="getColor" :loaded="live_lectures_loaded" :data="live_lectures" /> -->
+        <LiveLectureList :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
         <PlaybackCourses :colorCallback="getColor" :loaded="playback_lectures_loaded" :data="playback_lectures" />
         <RecentCourses :colorCallback="getColor" :loaded="recent_lectures_loaded" :data="recent_lectures" />
         <UpcomingCourses :colorCallback="getColor" :loaded="upcoming_lectures_loaded" :data="upcoming_lectures" />
@@ -14,7 +11,7 @@
     </show-at>
     <hide-at breakpoint="large">
       <div class="venue-body-container is-mobile">
-        <LiveCourses :colorCallback="getColor" :loaded="live_lectures_loaded" :data="live_lectures" mobileMode />
+        <LiveLectureList :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode/>
         <PlaybackCourses :colorCallback="getColor" :loaded="playback_lectures_loaded" :data="playback_lectures" mobileMode />
         <RecentCourses :colorCallback="getColor" :loaded="recent_lectures_loaded" :data="recent_lectures" mobileMode />
         <UpcomingCourses :colorCallback="getColor" :loaded="upcoming_lectures_loaded" :data="upcoming_lectures" mobileMode />
@@ -42,7 +39,7 @@
   import { authComputed } from '../vuex/helpers.js'
   import {showAt, hideAt} from 'vue-breakpoints'
 
-  import LiveCourses from '@/components/LiveCourses.vue'
+  import LiveLectureList from '@/components/LiveLectureList.vue'
   import PlaybackCourses from '@/components/PlaybackCourses.vue'
   import RecentCourses from '@/components/RecentCourses.vue'
   import UpcomingCourses from '@/components/UpcomingCourses'
@@ -61,7 +58,7 @@
       DashboardSection,
       hideAt,
       showAt,
-      LiveCourses,
+      LiveLectureList,
       PlaybackCourses,
       RecentCourses,
       UpcomingCourses,
