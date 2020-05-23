@@ -9,7 +9,7 @@
         <div id="lecture-info-section">
           <h1>{{lecture.title}} Info</h1>
           <div class="row" id="lecture-data">
-            <div class="col">
+            <div class="col main-info">
               <h3>{{lecture.sections[0].course.name}}</h3>
               <h5 class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</h5>
               <h5>Sections: <a class="section-numbers" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></h5>
@@ -45,7 +45,7 @@
           </div>
           <div v-if="selected_tab == 0" id="live_submit" class="tab_section">
             <div v-if="live_submissions.length > 0">
-              <div class="namecard-edging" v-for="(submission,i) in live_submissions" :key="i">
+              <div class="namecard-edging live-color" v-for="(submission,i) in live_submissions" :key="i">
                 <div class="namecard">
                   {{submission.submitter.first_name}} {{submission.submitter.last_name}}
                   {{submission.submitter.email}}
@@ -58,7 +58,7 @@
           </div>
           <div v-if="selected_tab == 1" id="playback_submit" class="tab_section">
             <div v-if="playback_submissions.length > 0">
-              <div class="namecard-edging" v-for="(submission,i) in playback_submissions" :key="i">
+              <div class="namecard-edging playback-color" v-for="(submission,i) in playback_submissions" :key="i">
                 <div class="namecard">
                   {{submission.submitter.first_name}} {{submission.submitter.last_name}}
                   {{submission.submitter.email}}
@@ -71,7 +71,7 @@
           </div>
           <div v-if="selected_tab == 2" id="no_submit" class="tab_section">
             <div v-if="absent.length > 0">
-              <div class="namecard-edging" v-for="(absentee,i) in absent" :key="i">
+              <div class="namecard-edging absent-color" v-for="(absentee,i) in absent" :key="i">
                 <div class="namecard">
                   {{absentee.first_name}} {{absentee.last_name}}
                   {{absentee.email}}
@@ -351,7 +351,7 @@
   #lecture-info-container {
     text-align: left; 
     position: relative;
-    left: 3rem;
+    left: 9rem;
     top: 3rem;
   }
 
@@ -369,7 +369,7 @@
     text-align: center;
     margin-top: 3rem;
     margin-left: 3rem;
-    margin-right: 5rem;
+    margin-right: 15rem;
   }
 
   .show-qr-btn {
@@ -429,10 +429,18 @@
   }
   .namecard-edging {
     display: inline-block;
-    background: green;
     border-radius: .25rem;
     width: 12rem;
     height: 4rem;
+  }
+  .namecard-edging.live-color {
+    background: green;
+  }
+  .namecard-edging.playback-color {
+    background: blueviolet;
+  }
+  .namecard-edging.absent-color {
+    background: red;
   }
   .namecard {
     position: relative;
@@ -443,7 +451,7 @@
     margin-left: 0.5rem;
     width: 11rem;
     height: 4rem;
-    box-shadow: 0 5px 10px -1px black;
+    box-shadow: 0 5px 10px -1px gray;
     padding-top: 0.5rem;
   }
 
@@ -480,6 +488,11 @@
     width: 50%;
   }
 
+  .main-info {
+    border-radius: .5rem;
+    box-shadow: 0 5px 10px -1px gray;
+    padding: 1rem;
+  }
   /* h1 {
     position: relative;
     left: 0;
