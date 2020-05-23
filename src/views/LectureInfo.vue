@@ -4,9 +4,90 @@
     <div class="spinner-border" role="status" v-if="!lecture_has_loaded">
       <span class="sr-only">Loading...</span>
     </div>
-    <!-- Times -->
     <div v-else>
-      <h1 class="lecture-title">{{ lecture.title }}</h1>
+      <div id="lecture-info-container">
+        <div id="lecture-info-section">
+          <h1>{{lecture.title}} Info</h1>
+          <div class="row" id="lecture-data">
+            <div class="col">
+              <h3>{{lecture.sections[0].course.name}}</h3>
+              <h5 class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</h5>
+              <h5>Sections: <a class="section-numbers" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></h5>
+            </div>
+            <div class="col">
+              <h5>Start Time</h5>
+              <h6>{{lecture.start_time}}</h6>
+            </div>
+            <div class="col">
+              <h5>Submission Start Time</h5>
+              <h6>{{lecture.submission_start_time}}</h6>
+            </div>
+            <div class="col">
+              <h5>Submission End Time</h5>
+              <h6>{{lecture.submission_end_time}}</h6>
+            </div>
+            <div class="col">
+              <h5>End Time</h5>
+              <h6>{{lecture.end_time}}</h6>
+            </div>
+          </div>
+        </div>
+        <div id="lecture-attendance-section">
+          <h1>Attendance 
+            <button v-if="lecture.allow_live_submissions" class="btn btn-secondary show-qr-btn">Show QR</button>
+            <button v-else class="btn btn-secondary show-qr-btn" disabled>Show QR</button>
+          </h1>
+          <div class="tabs">
+            <button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)"><h5>Live ({{live_submissions.length}}/{{all_students.length}})</h5></button>
+            <button id="playback_btn" class="tab_btn" @click="selectTab(1)"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
+            <button id="absent_btn" class="tab_btn" @click="selectTab(2)"><h5>Absent ({{absent.length}}/{{all_students.length}})</h5></button>
+            <button id="stats_btn" class="tab_btn" @click="selectTab(3)"><h5>Statistics</h5></button>
+          </div>
+          <div v-if="selected_tab == 0" id="live_submit" class="tab_section">
+            <div v-if="live_submissions.length > 0">
+              <div class="namecard-edging" v-for="(submission,i) in live_submissions" :key="i">
+                <div class="namecard">
+                  {{submission.submitter.first_name}} {{submission.submitter.last_name}}
+                  {{submission.submitter.email}}
+                </div>
+              </div>
+              </div>
+            <div v-else>
+              None
+            </div>
+          </div>
+          <div v-if="selected_tab == 1" id="playback_submit" class="tab_section">
+            <div v-if="playback_submissions.length > 0">
+              <div class="namecard-edging" v-for="(submission,i) in playback_submissions" :key="i">
+                <div class="namecard">
+                  {{submission.submitter.first_name}} {{submission.submitter.last_name}}
+                  {{submission.submitter.email}}
+                </div>
+              </div>
+            </div>
+            <div v-else>
+              None
+            </div>
+          </div>
+          <div v-if="selected_tab == 2" id="no_submit" class="tab_section">
+            <div v-if="absent.length > 0">
+              <div class="namecard-edging" v-for="(absentee,i) in absent" :key="i">
+                <div class="namecard">
+                  {{absentee.first_name}} {{absentee.last_name}}
+                  {{absentee.email}}
+                </div>
+              </div>
+            </div>
+            <div v-else>
+              None
+            </div>
+          </div>
+          <div v-if="selected_tab == 3" id="stats" class="tab_section">
+            Statistics
+          </div>
+        </div>
+      </div>
+      <!-- <h1 class="lecture-title">{{ lecture.title }}</h1>
       <h3 class="course-name">{{ lecture.sections[0].course.name }}</h3>
       <h5 class="section-numbers" v-for="section in lecture.sections">Section {{ section.number }}</h5>
       <div class="time-info-container">
@@ -14,11 +95,11 @@
         <h4 class="time-info">End time: {{ new Date(lecture.end_time) }}</h4>
         <h4 class="time-info">Submission Start time: {{ new Date(lecture.submission_start_time) }}</h4>
         <h4 class="time-info">Submission End time: {{ new Date(lecture.submission_end_time) }}</h4>
-      </div>
+      </div> -->
       <!-- Submission Info -->
-      <div class="submission-status">
+      <!-- <div class="submission-status"> -->
         <!-- Instructor -->
-        <div v-if="is_instructor">
+        <!-- <div v-if="is_instructor">
           <div v-if="lecture_is_upcoming">
             <p>Lecture is upcoming</p>
           </div>
@@ -48,15 +129,15 @@
               <LectureSubmissionsList v-bind:lecture_id="lecture_id" />
             </div>
             <LectureUploadModal v-else v-bind:lecture="lecture" />
-          </div>
+          </div> -->
           <!-- Give student a live submission -->
-          <div id="attendance_override_section">
+          <!-- <div id="attendance_override_section">
             <label>Mark as attended:</label>
             <input id="attendance_override" type="text" placeholder="RCS IDs separated by ','"> <button class="btn btn-primary" @click="handleAttendanceOverride">Submit</button>
           </div>
-        </div>
+        </div> -->
         <!-- Student -->
-        <div v-else>
+        <!-- <div v-else>
           <div v-if="lecture_is_upcoming">
             <p>Lecture is upcoming</p>
           </div>
@@ -70,9 +151,9 @@
           <div v-else>
             <p v-if="lecture.allow_live_submissions">Lecture was live</p>
             <p v-else>Lecture was never live</p>
-            <div v-if="lecture.allow_playback_submissions">
+            <div v-if="lecture.allow_playback_submissions"> -->
               <!-- TODO: Prevent students from viewing playback outside of the plabyack time -->
-              <p>video_ref: {{ lecture.video_ref }}</p>
+              <!-- <p>video_ref: {{ lecture.video_ref }}</p>
               <p>playback_submission_start_time: {{ new Date(lecture.playback_submission_start_time) }}</p>
               <p>playback_submission_end_time: {{ new Date(lecture.playback_submission_end_time) }}</p>
               <router-link :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
@@ -83,7 +164,7 @@
             <StudentLectureSubmissionCard v-bind:lecture_id="lecture_id" />
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -91,6 +172,7 @@
 <script>
   import LectureAPI from '@/services/LectureAPI.js';
   import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js';
+  import UserAPI from '@/services/UserAPI.js';
   import QRCode from "qrcode";
   import QRScanner from "qr-code-scanner";
   import LectureUploadModal from "@/components/LectureUploadModal";
@@ -118,27 +200,59 @@
         lecture_is_over: false,
         submission_window_pending: false,
         submission_window_open: false,
-        submission_window_closed: false
+        submission_window_closed: false,
+        selected_tab: 0,
+        all_students: [],
+        live_submissions: [],
+        playback_submissions: [],
+        absent: []
       }
     },
     created() {
-      this.getLecture()
-      this.is_instructor = this.$store.state.user.current_user.is_instructor
       this.lecture_id = this.$route.params.lecture_id
-
+      this.is_instructor = this.$store.state.user.current_user.is_instructor
+      this.getLecture()
+      this.getStudentsAndCalcAttendance()
     },
     methods: {
       async getLecture() {
-        let lecture_id = this.$route.params.lecture_id
-        const response = await LectureAPI.getLectureWithSectionsAndCourse(lecture_id)
+        const response = await LectureAPI.getLectureWithSectionsAndCourse(this.lecture_id)
         this.lecture = response.data
         this.lecture_has_loaded = true
         this.setLectureStatus()
         if(this.is_instructor && this.lecture_is_live && this.submission_window_open){
           this.$nextTick(function() {
-            this.showQR(this.lecture.code)
+            // this.showQR(this.lecture.code)
           });
         }
+      },
+      async checkAttendance() {
+        const response = await LectureSubmissionAPI.getLectureSubmissionsForLecture(this.lecture_id)
+        let lecture_submissions = response.data
+        console.log(lecture_submissions)
+        console.log(this.all_students)
+        for(let i=0;i<this.all_students.length;i++) {
+          let did_attend = false;
+          for(let j=0;j<lecture_submissions.length;j++) {
+            if(this.all_students[i]._id == lecture_submissions[j].submitter._id) {
+              if(lecture_submissions[j].is_live_submission) {
+                this.live_submissions.push(lecture_submissions[j])
+              } else {
+                this.playback_submissions.push(lecture_submissions[j])
+              }
+              did_attend = true;
+              j = lecture_submissions.length
+            }
+          }
+          if(!did_attend) {
+            this.absent.push(this.all_students[i])
+          }
+        }
+      },
+      async getStudentsAndCalcAttendance() {
+        const response = await UserAPI.getStudentsForLecture(this.lecture_id)
+        this.all_students = response.data
+        this.checkAttendance()
       },
       setLectureStatus() {
         let current_time = new Date()
@@ -203,13 +317,137 @@
               console.log("Error creating submission for '"+name+"'")
             })
         }
+      },
+      selectTab(i) {
+        let btns = [
+          document.getElementById("live_btn"),
+          document.getElementById("playback_btn"),
+          document.getElementById("absent_btn"),
+          document.getElementById("stats_btn")
+        ]
+        for(let j=0;j<btns.length;j++) {
+          if(j==i) {
+            btns[j].classList.add("selected_tab")
+          } else {
+            btns[j].classList.remove("selected_tab")
+          }
+        }
+        this.selected_tab = i
       }
     }
   }
 </script>
 
 <style scoped>
-  .lecture-title {
+
+  /* div {
+    border: 1px solid black;
+  } */
+  #lecture-info-container {
+    text-align: left; 
+    position: relative;
+    left: 3rem;
+    top: 3rem;
+  }
+
+  #lecture-info-section {
+    position: relative;
+  }
+
+  #lecture-attendance-section {
+    position: relative;
+    margin-top: 3rem;
+  }
+
+  #lecture-data {
+    position: relative;
+    text-align: center;
+    margin-top: 3rem;
+    margin-left: 3rem;
+    margin-right: 5rem;
+  }
+
+  .show-qr-btn {
+    margin-left: 2rem;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  h5 {
+    color: black;
+  }
+
+  h6 {
+    color: rgb(110, 110, 110);
+  }
+
+  .dept-and-number {
+    background: black;
+    color: white;
+    border-radius: 1rem;
+  }
+
+  .tabs {
+    margin-top: 3rem;
+    margin-left: 3rem;
+  }
+
+  .col {
+    margin: 0;
+    padding: 0;
+  }
+
+  .tab_btn {
+    background: none;
+    outline: none;
+    border: none;
+    color: gray;
+    margin-right: 3rem;
+  }
+
+  .tab_btn h5 {
+    color: gray;
+  }
+
+  .tab_btn.selected_tab {
+    color: blue;
+    border-bottom: .2rem solid blue;
+  }
+  .tab_btn.selected_tab h5 {
+    color: blue;
+  }
+  .tab_section {
+    margin-top: 3rem;
+    margin-left: 6rem;
+  }
+  .namecard-edging {
+    display: inline-block;
+    background: green;
+    border-radius: .25rem;
+    width: 12rem;
+    height: 4rem;
+  }
+  .namecard {
+    position: relative;
+    background: white;
+    text-align: center;
+    border-radius: .25rem;
+    top: 0.5rem;
+    margin-left: 0.5rem;
+    width: 11rem;
+    height: 4rem;
+    box-shadow: 0 5px 10px -1px black;
+    padding-top: 0.5rem;
+  }
+
+  /* h1 {
+    position: relative;
+    left: 0;
+  } */
+
+  /* .lecture-title {
     margin-top: 1rem;
   }
 
@@ -227,5 +465,5 @@
   #attendance_override_section {
     position: relative;
     margin-top: 2rem;
-  }
+  } */
 </style>
