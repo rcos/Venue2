@@ -260,45 +260,63 @@ seeder.connect(db, function () {
 			timestamp: 5
 		}))
 
+		let promises = []
+		u.forEach(user => {
+			promises.push(new Promise((resolve,reject) => {
+				bcrypt.hash(user.password,saltRounds,(err,hash) => {
+					resolve(hash)
+				})
+			}))
+		})
 
-		bcrypt.hash(u[0].password, saltRounds, (err, hash) => {
-			u[0].password = hash
-			bcrypt.hash(u[1].password, saltRounds, (err, hash) => {
-				u[1].password = hash
-				bcrypt.hash(u[2].password, saltRounds, (err, hash) => {
-					u[2].password = hash
-					bcrypt.hash(u[3].password, saltRounds, (err, hash) => {
-						u[3].password = hash
+		Promise.all(promises)
+			.then(() => {
+				for(i=0;i<u.length;i++){
+					console.log(promises[i])
+					u[i].password = promises[i]
+				}
 
-						let data = [{
-							"model": "User",
-							"documents": u
-						}, {
-							"model": "Course",
-							"documents": c
-						}, {
-							"model": "Section",
-							"documents": s
-						}, {
-							"model": "Lecture",
-							"documents": l
-						}, {
-							"model": "PlaybackPoll",
-							"documents": p
-						}]
+				let data = [{
+					"model": "User",
+					"documents": u
+				}, {
+					"model": "Course",
+					"documents": c
+				}, {
+					"model": "Section",
+					"documents": s
+				}, {
+					"model": "Lecture",
+					"documents": l
+				}, {
+					"model": "PlaybackPoll",
+					"documents": p
+				}]
 
-						seeder.populateModels(data, function (err, done) {
-							if (err) {
-								return console.log("seed err", err)
-							}
-							if (done) {
-								return console.log("seed finished", done)
-							}
-							seeder.disconnect()
-						})
-					});
-				});
-			});
-		});
+				seeder.populateModels(data, function (err, done) {
+					if (err) {
+						return console.log("seed err", err)
+					}
+					if (done) {
+						return console.log("seed finished", done)
+					}
+					seeder.disconnect()
+				})
+			})
+			.catch(err => {
+
+			})
+
+		// 	bcrypt.hash(u[1].password, saltRounds, (err, hash) => {
+		// 		u[1].password = hash
+		// 		bcrypt.hash(u[2].password, saltRounds, (err, hash) => {
+		// 			u[2].password = hash
+		// 			bcrypt.hash(u[3].password, saltRounds, (err, hash) => {
+		// 				u[3].password = hash
+
+		// 			});
+		// 		});
+		// 	});
+		// });
 	});
 });
