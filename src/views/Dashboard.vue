@@ -4,17 +4,17 @@
       <div class="venue-body-container">
         <!-- <LiveCourses :colorCallback="getColor" :loaded="live_lectures_loaded" :data="live_lectures" /> -->
         <LiveLectureList :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
-        <PlaybackCourses :colorCallback="getColor" :loaded="playback_lectures_loaded" :data="playback_lectures" />
-        <RecentCourses :colorCallback="getColor" :loaded="recent_lectures_loaded" :data="recent_lectures" />
-        <UpcomingCourses :colorCallback="getColor" :loaded="upcoming_lectures_loaded" :data="upcoming_lectures" />
+        <PlaybackCourses :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
+        <RecentCourses :loaded="recent_lectures_loaded" :data="recent_lectures" />
+        <UpcomingCourses :loaded="upcoming_lectures_loaded" :data="upcoming_lectures" />
       </div>
     </show-at>
     <hide-at breakpoint="large">
       <div class="venue-body-container is-mobile">
         <LiveLectureList :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode/>
-        <PlaybackCourses :colorCallback="getColor" :loaded="playback_lectures_loaded" :data="playback_lectures" mobileMode />
-        <RecentCourses :colorCallback="getColor" :loaded="recent_lectures_loaded" :data="recent_lectures" mobileMode />
-        <UpcomingCourses :colorCallback="getColor" :loaded="upcoming_lectures_loaded" :data="upcoming_lectures" mobileMode />
+        <PlaybackCourses :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode />
+        <RecentCourses :loaded="recent_lectures_loaded" :data="recent_lectures" mobileMode />
+        <UpcomingCourses :loaded="upcoming_lectures_loaded" :data="upcoming_lectures" mobileMode />
       </div>
     </hide-at>
 
@@ -93,8 +93,8 @@
       this.getCurrentUser()
       this.getAllLecturesForUser()
       this.getLiveLecturesForUser()
-      // this.getPlaybackLectures()
-      // this.getRecentLecturesForUser()
+      this.getPlaybackLectures()
+      this.getRecentLecturesForUser()
       // this.getUpcomingLecturesForUser()
     },
     methods: {
@@ -171,78 +171,22 @@
       async getAllLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "all", "with_sections_and_course")
         this.all_lectures = response.data
-        console.log("All lectures")
-        console.log(this.all_lectures)
       },
       async getLiveLecturesForUser() {
-
-        // LectureAPI.getLecturesForUser(this.current_user._id, "live")
-        // .then(response => {
-        //   this.live_lectures = response.data
-
-        //   let lecture_promises = []
-        //   this.live_lectures.forEach((lecture_, i) => {
-
-        //     lecture_promises.push(this.fillSectionInfo(lecture_))
-
-        //   }) // end forEach
-
-        //   Promise.all(lecture_promises).then(updated_lectures => {
-        //     this.live_lectures = updated_lectures
-        //     this.live_lectures_loaded = true
-        //   })
-        // })
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "live", "with_sections_and_course")
         this.live_lectures = response.data
-        console.log("Live Lectures")
-        console.log(this.live_lectures)
         this.live_lectures_loaded = true
       },
       async getPlaybackLectures() {
-
-        LectureAPI.getLecturesForUser(this.current_user._id, "active_playback")
-        .then(response => {
-          console.log(`In PlaybackLectures()`)
-          console.log(response)
-          this.playback_lectures = response.data
-
-          let lecture_promises = []
-          this.playback_lectures.forEach((lecture_, i) => {
-
-            lecture_promises.push(this.fillSectionInfo(lecture_))
-
-          }) // end forEach
-
-          Promise.all(lecture_promises).then(updated_lectures => {
-            this.playback_lectures = updated_lectures
-            this.playback_lectures_loaded = true
-          })
-
-        })
-        .catch(err => {
-          console.log(`In PlaybackLectures():error`)
-          console.log(err)
-        })
+        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "active_playback", "with_sections_and_course")
+        this.playback_lectures = response.data
+        this.playback_lectures_loaded = true
       },
       async getRecentLecturesForUser() {
-
-        LectureAPI.getLecturesForUser(this.current_user._id, "past")
-        .then(response => {
-          let past_lectures = response.data
-          this.recent_lectures = past_lectures.slice(0,3)
-
-          let lecture_promises = []
-          this.recent_lectures.forEach((lecture_, i) => {
-
-            lecture_promises.push(this.fillSectionInfo(lecture_))
-
-          }) // end forEach
-
-          Promise.all(lecture_promises).then(updated_lectures => {
-            this.recent_lectures = updated_lectures
-            this.recent_lectures_loaded = true
-          })
-        })
+        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "past", "with_sections_and_course")
+        this.recent_lectures = response.data
+        this.recent_lectures = this.recent_lectures.slice(0,3)
+        this.recent_lectures_loaded = true
       },
       async getUpcomingLecturesForUser() {
 
