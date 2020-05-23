@@ -185,6 +185,7 @@
   import LectureUploadModal from "@/components/LectureUploadModal";
   import LectureSubmissionsList from "@/components/LectureSubmissionsList.vue";
   import StudentLectureSubmissionCard from "@/components/StudentLectureSubmissionCard.vue";
+  import {showAt, hideAt} from 'vue-breakpoints';
 
   export default {
     name: 'LectureInfo',
@@ -195,7 +196,9 @@
     components: {
       LectureUploadModal,
       LectureSubmissionsList,
-      StudentLectureSubmissionCard
+      StudentLectureSubmissionCard,
+      showAt,
+      hideAt
     },
     data(){
       return {
@@ -352,9 +355,10 @@
   } */
   #lecture-info-container {
     text-align: left; 
-    position: relative;
+    position: absolute;
     left: 9rem;
-    top: 3rem;
+    right: 9rem;
+    margin-top: 3rem;
   }
 
   #lecture-info-section {
@@ -371,7 +375,6 @@
     text-align: center;
     margin-top: 3rem;
     margin-left: 3rem;
-    margin-right: 15rem;
   }
 
   .show-qr-btn {
@@ -380,6 +383,12 @@
 
   p {
     margin: 0;
+  }
+
+  h1 {
+    /* position: absolute; */
+    left: 0rem;
+    right: 2rem;
   }
 
   h5 {
@@ -428,7 +437,6 @@
   .tab_section {
     margin-top: 3rem;
     margin-left: 6rem;
-    margin-right: 14rem;
     overflow-y: auto;
     height: 17rem;
     padding-bottom: 3rem;
@@ -504,5 +512,13 @@
 
   .hidden {
     display: none;
+  }
+
+  @media only screen and (max-width: 600px) {
+    #lecture-info-container {
+      left: 2rem;
+      right: 2rem;
+      margin-top: 1rem;
+    }
   }
 </style>
