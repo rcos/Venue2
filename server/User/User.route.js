@@ -205,7 +205,6 @@ userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
             let student_ids = section.students;
             let students = [];
             let num_iterations = 0;
-            console.log("student_ids: " + student_ids);
             student_ids.forEach(student_id => {
               User.findById(student_id, function(err, student) {
                 if(err || student == null){

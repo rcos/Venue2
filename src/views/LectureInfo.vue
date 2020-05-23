@@ -35,11 +35,15 @@
         <div id="lecture-attendance-section">
           <h1>Attendance
               <button v-if="lecture.allow_live_submissions && is_instructor" class="btn btn-secondary show-qr-btn" @click="showQR">Show QR</button>
-              <button v-if="lecture.allow_live_submissions && !is_instructor" class="btn btn-secondary scan-qr-btn" @click="scanQR">Attend this lecture</button>
+              <!-- Upload recording -->
+              <button v-else-if="lecture.allow_live_submissions && !is_instructor" class="btn btn-secondary scan-qr-btn" @click="scanQR">Attend this lecture</button>
+              <router-link v-else-if="lecture.allow_playback_submissions && !is_instructor" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+                <button class="btn btn-secondary watch-recording">Watch recording</button>
+              </router-link>
           </h1>
           <div class="tabs">
             <button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)"><h5>Live ({{live_submissions.length}}/{{all_students.length}})</h5></button>
-            <button id="playback_btn" class="tab_btn" @click="selectTab(1)"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
+            <button id="playback_btn" class="tab_btn" @click="selectTab(1)" v-if="is_instructor"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
             <button id="absent_btn" class="tab_btn" @click="selectTab(2)"><h5>Absent ({{absent.length}}/{{all_students.length}})</h5></button>
             <button id="stats_btn" class="tab_btn" @click="selectTab(3)"><h5>Statistics</h5></button>
           </div>
@@ -224,11 +228,6 @@
         this.lecture = response.data
         this.lecture_has_loaded = true
         this.setLectureStatus()
-        if(this.is_instructor && this.lecture_is_live && this.submission_window_open){
-          this.$nextTick(function() {
-            // this.showQR(this.lecture.code)
-          });
-        }
       },
       async checkAttendance() {
         const response = await LectureSubmissionAPI.getLectureSubmissionsForLecture(this.lecture_id)
@@ -264,6 +263,9 @@
         let lecture_end_time = new Date(this.lecture.end_time)
         let lecture_playback_submission_start_time = new Date(this.lecture.playback_submission_start_time)
         let lecture_playback_submission_end_time = new Date(this.lecture.playback_submission_end_time)
+        if(undefined == this.lecture.start_time || undefined == this.lecture.end_time) {
+          this.lecture_is_over = true
+        }
         if(current_time < lecture_start_time || current_time < lecture_playback_submission_start_time) 
           this.lecture_is_upcoming = true
         else if(current_time >= lecture_start_time && current_time <= lecture_end_time){
@@ -308,7 +310,7 @@
           onTimeout: () => {
             console.log("TIMEOUT: Could not find any QRCode");
           },
-          // timeout: 10000,
+          timeout: 10000,
         })
       },
       handleAttendanceOverride() {
@@ -426,12 +428,18 @@
   .tab_section {
     margin-top: 3rem;
     margin-left: 6rem;
+    margin-right: 14rem;
+    overflow-y: auto;
+    height: 17rem;
+    padding-bottom: 3rem;
   }
   .namecard-edging {
     display: inline-block;
     border-radius: .25rem;
     width: 12rem;
     height: 4rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
   }
   .namecard-edging.live-color {
     background: green;
@@ -493,30 +501,6 @@
     box-shadow: 0 5px 10px -1px gray;
     padding: 1rem;
   }
-  /* h1 {
-    position: relative;
-    left: 0;
-  } */
-
-  /* .lecture-title {
-    margin-top: 1rem;
-  }
-
-  .course-name {
-    margin-top: 2rem;
-  }
-
-  .time-info-container {
-    margin-top: 2rem;
-  }
-
-  .submission-status {
-    margin-top: 3rem;
-  }
-  #attendance_override_section {
-    position: relative;
-    margin-top: 2rem;
-  } */
 
   .hidden {
     display: none;
