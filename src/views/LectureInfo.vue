@@ -33,9 +33,9 @@
           </div>
         </div>
         <div id="lecture-attendance-section">
-          <h1>Attendance 
-            <button v-if="lecture.allow_live_submissions" class="btn btn-secondary show-qr-btn">Show QR</button>
-            <button v-else class="btn btn-secondary show-qr-btn" disabled>Show QR</button>
+          <h1>Attendance
+              <button v-if="lecture.allow_live_submissions && is_instructor" class="btn btn-secondary show-qr-btn" @click="showQR">Show QR</button>
+              <button v-if="lecture.allow_live_submissions && !is_instructor" class="btn btn-secondary scan-qr-btn" @click="scanQR">Attend this lecture</button>
           </h1>
           <div class="tabs">
             <button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)"><h5>Live ({{live_submissions.length}}/{{all_students.length}})</h5></button>
@@ -108,7 +108,6 @@
             <p v-if="submission_window_pending">Submission Window pending</p>
             <div v-else-if="submission_window_open">
               <p>QR Code:</p>
-              <canvas id="qr_render_area"></canvas>
               <LectureSubmissionsList v-bind:lecture_id="lecture_id" />
             </div>
             <div v-else>
@@ -166,6 +165,10 @@
         </div>
       </div> -->
     </div>
+    <div id="qr_modal" class="hidden">
+      <canvas id="qr_render_area" width="600px" height="600px"></canvas>
+      <button id="close_qr_btn" @click="hideQR">Hide</button>
+    </div>
   </div>
 </template>
 
@@ -205,7 +208,8 @@
         all_students: [],
         live_submissions: [],
         playback_submissions: [],
-        absent: []
+        absent: [],
+        showing_qr: false
       }
     },
     created() {
@@ -280,13 +284,14 @@
         else
           this.submission_window_closed = true
       },
-      showQR(qr_data) {
-        let canvas = document.getElementById("qr_render_area")
-        if (qr_data) {
-          QRCode.toCanvas(canvas, qr_data, function(error) {
-            if (error) console.error(error)
-          });
-        }
+      showQR() {
+        QRCode.toCanvas(document.getElementById("qr_render_area"), this.lecture.code, function(error) {
+          if (error) console.error(error)
+        });
+        document.getElementById("qr_modal").classList.remove("hidden")
+      },
+      hideQR() {
+        document.getElementById("qr_modal").classList.add("hidden")
       },
       scanQR() {
         QRScanner.initiate({
@@ -303,8 +308,8 @@
           onTimeout: () => {
             console.log("TIMEOUT: Could not find any QRCode");
           },
-          timeout: 10000
-        });
+          // timeout: 10000,
+        })
       },
       handleAttendanceOverride() {
         let names = document.getElementById("attendance_override").value.replace(/\s/g,'').split(",")
@@ -442,6 +447,39 @@
     padding-top: 0.5rem;
   }
 
+  .custom-qr-scanner {
+    margin: 0;
+    position: 'fixed';
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+  }
+
+  #qr_modal {
+    position: fixed;
+    border: 1px solid black;
+    background: white;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    z-index: 100;
+  }
+
+  #qr_render_area {
+    margin-bottom: 1rem;
+  }
+
+  #close_qr_btn {
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    width: 50%;
+  }
+
   /* h1 {
     position: relative;
     left: 0;
@@ -466,4 +504,8 @@
     position: relative;
     margin-top: 2rem;
   } */
+
+  .hidden {
+    display: none;
+  }
 </style>
