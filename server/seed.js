@@ -270,10 +270,9 @@ seeder.connect(db, function () {
 		})
 
 		Promise.all(promises)
-			.then(() => {
+			.then((fulfilled) => {
 				for(i=0;i<u.length;i++){
-					console.log(promises[i])
-					u[i].password = promises[i]
+					u[i].password = fulfilled[i]
 				}
 
 				let data = [{
