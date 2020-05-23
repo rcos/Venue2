@@ -9,14 +9,21 @@
     </div>
     <div v-else :class="'sub-section ' + (mobileMode ? 'is-mobile':'')">
       <router-link v-for="data_ in data" :to="{name: 'lecture_info', params: { id: data_._id }}" >
-        <EventInfoPill
+        <!-- <EventInfoPill
           :courseName="getCourseName(data_)"
           :courseDept="getCourseTitle(data_)"
           :eventLabel="data_.title"
           rightText=""
           :colorHex="colorCallback(data_.course_info)"
           :mobileMode="mobileMode"
-        />
+        /> -->
+        <ActiveEventCard
+          :courseName="getCourseName(data_)"
+          :courseDept="getCourseTitle(data_)"
+          :eventLabel="data_.title"
+          status="ended"
+          :timeFromNow="data_.end_time"
+         />
       </router-link>
     </div>
 
@@ -25,12 +32,14 @@
 <script>
   import EventInfoPill from '@/components/EventInfoPill.vue'
   import SquareLoader from '@/components/Loaders/SquareLoader.vue'
+  import ActiveEventCard from '@/components/ActiveEventCard.vue'
 
   export default {
     name: 'RecentCourses',
     components: {
       EventInfoPill,
-      SquareLoader
+      SquareLoader,
+      ActiveEventCard
     },
     props: {
       mobileMode: Boolean,
