@@ -5,7 +5,7 @@
         <!-- <LiveCourses :colorCallback="getColor" :loaded="live_lectures_loaded" :data="live_lectures" /> -->
         <LiveLectureList :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
         <PlaybackCourses :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
-        <RecentCourses :loaded="recent_lectures_loaded" :data="recent_lectures" />
+        <RecentCourses :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
         <UpcomingCourses :loaded="upcoming_lectures_loaded" :data="upcoming_lectures" />
       </div>
     </show-at>
@@ -13,7 +13,7 @@
       <div class="venue-body-container is-mobile">
         <LiveLectureList :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode/>
         <PlaybackCourses :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode />
-        <RecentCourses :loaded="recent_lectures_loaded" :data="recent_lectures" mobileMode />
+        <RecentCourses :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
         <UpcomingCourses :loaded="upcoming_lectures_loaded" :data="upcoming_lectures" mobileMode />
       </div>
     </hide-at>

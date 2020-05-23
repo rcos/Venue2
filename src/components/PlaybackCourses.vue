@@ -10,8 +10,8 @@
     <div v-else :class="'sub-section ' + (mobileMode ? 'is-mobile':'')">
       <router-link v-for="lecture in playback_lectures" :to="{name: 'lecture_info', params: { id: lecture._id }}" >
       <ActiveEventCard
-        :courseName="lecture.section.course.name"
-        :courseDept="lecture.section.course.dept"
+        :courseName="lecture.sections[0].course.name"
+        :courseDept="lecture.sections[0].course.dept"
         :eventLabel="lecture.title"
         status="static"
         :timeFromNow="lecture.end_time"
