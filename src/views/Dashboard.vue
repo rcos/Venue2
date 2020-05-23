@@ -95,10 +95,10 @@
 
       this.getCurrentUser()
       this.getAllLecturesForUser()
-      this.getLiveLecturesForUser()
-      this.getPlaybackLectures()
-      this.getRecentLecturesForUser()
-      this.getUpcomingLecturesForUser()
+      // this.getLiveLecturesForUser()
+      // this.getPlaybackLectures()
+      // this.getRecentLecturesForUser()
+      // this.getUpcomingLecturesForUser()
     },
     methods: {
       getColor (course_info) {
@@ -172,25 +172,29 @@
         })
       },
       async getAllLecturesForUser() {
-        LectureAPI.getLecturesForUser(this.current_user._id, "all")
-        .then(response => {
-          this.all_lectures = response.data
-          console.log(this.all_lectures)
+        // LectureAPI.getLecturesForUser(this.current_user._id, "all")
+        // .then(response => {
+        //   this.all_lectures = response.data
+        //   console.log(this.all_lectures)
 
-          let lecture_promises = []
-          this.all_lectures.forEach((lecture_, i) => {
+        //   let lecture_promises = []
+        //   this.all_lectures.forEach((lecture_, i) => {
 
-            lecture_promises.push(this.fillSectionInfo(lecture_))
+        //     lecture_promises.push(this.fillSectionInfo(lecture_))
 
-          }) // end forEach
+        //   }) // end forEach
 
-          Promise.all(lecture_promises)
-          .then(updated_lectures => {
-            console.log(`updated_lectures`)
-            console.log(updated_lectures)
-            this.all_lectures = updated_lectures
-          })
-        })
+        //   Promise.all(lecture_promises)
+        //   .then(updated_lectures => {
+        //     console.log(`updated_lectures`)
+        //     console.log(updated_lectures)
+        //     this.all_lectures = updated_lectures
+        //   })
+        // })
+        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "all", "with_sections_and_course")
+        this.all_lectures = response.data
+        console.log("All lectures:")
+        console.log(this.all_lectures)
       },
       async getLiveLecturesForUser() {
 

@@ -15,6 +15,7 @@ var transporter = nodemailer.createTransport({
 });
 
 const legal_lecture_types = ["all","live","upcoming","past","active_playback"]
+const legal_preferences = ["with_sections", "with_sections_and_course", "none"]
 
 let Lecture = require('../Lecture/Lecture.model')
 let User = require('../User/User.model')
@@ -144,12 +145,17 @@ lectureRoutes.route('/:id').get(function (req, res) {
 	});
 });
 
-lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
+lectureRoutes.get('/for_user/:user_id/:lecture_type/:preference', (req, res) => {
 	let user_id = req.params.user_id
 	let lecture_type = req.params.lecture_type
+	let preference = req.params.preference
 	if(!legal_lecture_types.includes(lecture_type)){
 		console.log("<ERROR> Invalid lecture type:",lecture_type)
 		res.status(400).send("Illegal lecture type")
+		return
+	} else if(!legal_preferences.includes(preference)) {
+		console.log("<ERROR> Invalid preference:", preference)
+		res.status(400).send("Illegal preference")
 		return
 	}
 
@@ -177,17 +183,37 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
 										console.log("<ERROR> Getting lectures for sections:",instructor_sections)
 										res.json(error)
 									} else {
-										console.log("<SUCCESS> Getting lectures for instructor ID:",user_id)
-										if(lecture_type === "all")
-											res.json(instructor_lectures)
-										else if(lecture_type === "live")
-											res.json(getLiveLectures(instructor_lectures))
+										console.log("<SUCCESS> Getting lectures for instructor ID: " + user_id +
+											", with lecture type: " + lecture_type + ", with preference: " + preference)
+										// get different lectures based on lecture type
+										if(lecture_type === "live")
+											instructor_lectures = getLiveLectures(instructor_lectures)
 										else if(lecture_type === "active_playback")
-											res.json(getActivePlaybacLectures(instructor_lectures))
+											instructor_lectures = getActivePlaybacLectures(instructor_lectures)
 										else if(lecture_type === "past")
-											res.json(getPastLectures(instructor_lectures))
+											instructor_lectures = getPastLectures(instructor_lectures)
 										else if(lecture_type === "upcoming")
-											res.json(getUpcomingLectures(instructor_lectures))
+											instructor_lectures = getUpcomingLectures(instructor_lectures)
+
+										// attach sections or courses to lectures based on preference
+										if(preference === "none")
+											res.json(instructor_lectures)
+										else {
+											instructor_lectures.forEach(instructor_lecture => {
+												console.log(instructor_lecture)
+												instructor_lecture.sections.forEach((lecture_section, i) => {
+													instructor_sections.forEach(instructor_section => {
+														if(lecture_section.equals(instructor_section._id)) {
+															// lecture_section = instructor_section
+															instructor_lecture.sections[i] = instructor_section
+															if(preference === "with_sections_and_course")
+																lecture_section.course = instructor_courses[0]
+														}
+													})
+												})
+											})
+											res.json(instructor_lectures)
+										}
 									}
 								})
 							}
