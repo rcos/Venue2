@@ -6,7 +6,7 @@
         <LiveLectureList :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
         <PlaybackCourses :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
         <RecentCourses :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
-        <UpcomingCourses :loaded="upcoming_lectures_loaded" :data="upcoming_lectures" />
+        <UpcomingCourses :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
       </div>
     </show-at>
     <hide-at breakpoint="large">
@@ -14,7 +14,7 @@
         <LiveLectureList :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode/>
         <PlaybackCourses :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode />
         <RecentCourses :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
-        <UpcomingCourses :loaded="upcoming_lectures_loaded" :data="upcoming_lectures" mobileMode />
+        <UpcomingCourses :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
       </div>
     </hide-at>
 
@@ -95,7 +95,7 @@
       this.getLiveLecturesForUser()
       this.getPlaybackLectures()
       this.getRecentLecturesForUser()
-      // this.getUpcomingLecturesForUser()
+      this.getUpcomingLecturesForUser()
     },
     methods: {
       getColor (course_info) {
@@ -190,22 +190,25 @@
       },
       async getUpcomingLecturesForUser() {
 
-        LectureAPI.getLecturesForUser(this.current_user._id, "upcoming")
-        .then(response => {
-          this.upcoming_lectures = response.data
+        // LectureAPI.getLecturesForUser(this.current_user._id, "upcoming")
+        // .then(response => {
+        //   this.upcoming_lectures = response.data
 
-          let lecture_promises = []
-          this.upcoming_lectures.forEach((lecture_, i) => {
+        //   let lecture_promises = []
+        //   this.upcoming_lectures.forEach((lecture_, i) => {
 
-            lecture_promises.push(this.fillSectionInfo(lecture_))
+        //     lecture_promises.push(this.fillSectionInfo(lecture_))
 
-          }) // end forEach
+        //   }) // end forEach
 
-          Promise.all(lecture_promises).then(updated_lectures => {
-            this.upcoming_lectures = updated_lectures
-            this.upcoming_lectures_loaded = true
-          })
-        })
+        //   Promise.all(lecture_promises).then(updated_lectures => {
+        //     this.upcoming_lectures = updated_lectures
+        //     this.upcoming_lectures_loaded = true
+        //   })
+        // })
+        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "upcoming", "with_sections_and_course")
+        this.upcoming_lectures = response.data
+        this.upcoming_lectures_loaded = true
       }
     }
   }
