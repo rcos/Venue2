@@ -172,7 +172,7 @@ export default {
 
 .course-title {
   font-size: 0.75rem;
-  color: #1591c5;
+  color: #146c91;
 }
 
 .event-section {
