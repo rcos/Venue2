@@ -4,31 +4,20 @@
     <div class="center-fill-section" v-if="!loaded">
       <SquareLoader />
     </div>
-    <div class="center-fill-section" v-else-if="data == null || data.length == 0">
+    <div class="center-fill-section" v-else-if="playback_lectures == null || playback_lectures.length == 0">
       No data.
     </div>
     <div v-else :class="'sub-section ' + (mobileMode ? 'is-mobile':'')">
-
-      <router-link v-for="data_ in data" :to="{name: 'lecture_info', params: { id: data_._id }}" >
-      <!-- <EventInfoPill
-        :courseName="data_.course_info.name"
-        :courseDept="data_.course_info.dept + ' ' + data_.course_info.course_number"
-        :eventLabel="data_.title"
-        eventSublabel="2d 3h 1m"
-        rightText="87% Submission"
-        colorHex="green"
-        :mobileMode="mobileMode"
-      /> -->
+      <router-link v-for="lecture in playback_lectures" :to="{name: 'lecture_info', params: { id: lecture._id }}" >
       <ActiveEventCard
-        :courseName="getCourseName(data_)"
-        :courseDept="getCourseTitle(data_)"
-        :eventLabel="data_.title"
+        :courseName="lecture.section.course.name"
+        :courseDept="lecture.section.course.dept"
+        :eventLabel="lecture.title"
         status="static"
-        :timeFromNow="data_.end_time"
+        :timeFromNow="lecture.end_time"
        />
       </router-link>
     </div>
-
   </div>
 </template>
 <script>
@@ -45,7 +34,7 @@
     },
     props: {
       mobileMode: Boolean,
-      data: Array,
+      playback_lectures: Array,
       colorCallback: Function,
       loaded: Boolean
     },
