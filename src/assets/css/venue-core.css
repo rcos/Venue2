@@ -112,6 +112,34 @@ body, * {
   margin-left: 10px;
 }
 
+.course-info-title.mobile {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 20px;
+  padding: 2rem 0;
+  border-radius: 5px;
+  box-shadow: 0px 3px 6px rgba(0, 62, 123, 0.2);
+}
+
+.course-info-title.mobile .course-name {
+  font-size: 2rem;
+  margin-bottom: 5px;
+}
+
+.course-info-title.mobile .course-dept-number {
+  background-color: rgba(0, 0, 0, 0.86);
+  width: 130px;
+  height: 23px;
+  line-height: 23px;
+  font-size: 0.8rem;
+  text-align: center;
+  margin: 0 auto;
+  margin-bottom: 5px;
+  color: #C1EDFF;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
 .venue-body-container .weekly-attendance-bar {
   margin-left: 80px;
 }
@@ -154,6 +182,11 @@ body, * {
 .course-info-sub-tab {
   margin-left: 44px;
   margin-top: 32px;
+}
+
+.course-info-sub-tab.mobile {
+  margin: 20px 4rem;
+  text-align: left;
 }
 
 .course-info-sub-tab .left div {
@@ -374,6 +407,11 @@ body, * {
   margin-bottom: 20px;
   margin-left: 50px;
   margin-top: 20px;
+}
+
+.instructor-attendance .month-area.mobile {
+  margin-left: 0rem;
+  margin-right: 0rem;
 }
 
 .instructor-attendance .event-pills-area {
@@ -612,4 +650,41 @@ a:hover {
   width: 30%;
   text-align: center;
   font-size: 0.9rem;
+}
+
+.mobile-event-pill-area .mobile-pill {
+  display: inline-block;
+  border: 3px solid black;
+  width: 60px;
+  height: 60px;
+  margin-right: 15px;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 3px 0px;
+  border-radius: 5px;
+}
+
+.mobile-event-pill-area .mobile-pill.good {
+  border: 3px solid #24E565;
+  box-shadow: 0px 3px 10px rgba(65, 162, 91, 0.33);
+}
+
+.mobile-event-pill-area .mobile-pill.bad {
+  border: 3px solid #FF6358;
+  box-shadow: 0px 3px 10px rgba(255, 99, 88, 0.36);
+
+}
+
+.mobile-event-pill-area .mobile-pill.medium {
+  border: 3px solid #E97E47;
+  box-shadow: 0px 3px 10px rgba(233, 126, 71, 0.36);
+}
+
+.mobile-event-pill-area .mobile-pill .day-of-week {
+  font-size: 0.9rem;
+}
+
+.mobile-event-pill-area .mobile-pill .day-of-month {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
