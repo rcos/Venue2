@@ -8,7 +8,7 @@ import Students from './components/admin/User/Students.vue';
 import Course from './components/admin/Course/Course.vue';
 import EditCourse from './components/admin/Course/EditCourse.vue';
 import NewCourse from './components/admin/Course/NewCourse.vue';
-import Courses from './components/admin/Course/Courses.vue'; 
+import Courses from './components/admin/Course/Courses.vue';
 import AdminSections from './components/admin/Section/AdminSections.vue';
 import AdminEditSection from './components/admin/Section/AdminEditSection.vue';
 import AdminNewSection from './components/admin/Section/AdminNewSection.vue';
@@ -29,6 +29,7 @@ import LecturePlayback from './views/LecturePlayback.vue';
 import WebexTest from './views/WebexTest.vue';
 import NewLecture from './views/NewLecture.vue';
 import LectureInfo from './views/LectureInfo.vue';
+import Settings from './views/Settings.vue';
 
 Vue.use(VueRouter);
 
@@ -40,6 +41,12 @@ const router = new VueRouter({
       path: '/',
       component: LandingPage,
       meta: { requiresNoLogin: true }
+    },
+    {
+      name: 'settings',
+      path: '/settings',
+      component: Settings,
+      meta: { requiresAuth: true }
     },
     {
       name: 'new_user',
@@ -105,11 +112,11 @@ const router = new VueRouter({
         name: 'admin_new_event',
         path: '/admin/new_event',
         component: AdminNewEvent,
-        meta: { 
+        meta: {
           requiresAuth: true,
-          requiresInstructor: true 
+          requiresInstructor: true
         }
-    },   
+    },
     {
         name: 'admin_events',
         path: '/admin/events',
@@ -149,22 +156,23 @@ const router = new VueRouter({
     {
         name: 'course_info',
         path: '/course_info/:id',
-        component: CourseInfo
+        component: CourseInfo,
+        meta: { requiresAuth: true }
     },
     {
         name: 'new_event',
         path: '/new_event/:course_id',
         component: NewEvent,
-        meta: { 
+        meta: {
           requiresAuth: true,
-          requiresInstructor: true 
+          requiresInstructor: true
         }
     },
     {
         name: 'event_info',
         path: '/event_info/:event_id',
         component: EventInfo,
-        meta: { 
+        meta: {
           requiresAuth: true,
         }
     },
@@ -172,7 +180,7 @@ const router = new VueRouter({
       name: 'webex_test',
       path: '/webex_test',
       component: WebexTest,
-      meta: { 
+      meta: {
         requiresAuth: true,
       }
     },
@@ -180,7 +188,7 @@ const router = new VueRouter({
       name: 'lecture_playback',
       path: '/lecture_playback/:lecture_id',
       component: LecturePlayback,
-      meta: { 
+      meta: {
         requiresAuth: true,
       }
     },
@@ -188,16 +196,16 @@ const router = new VueRouter({
       name: 'new_lecture',
       path: '/new_lecture/:course_id',
       component: NewLecture,
-      meta: { 
+      meta: {
         requiresAuth: true,
-        requiresInstructor: true 
+        requiresInstructor: true
       }
     },
     {
       name: 'lecture_info',
       path: '/lecture_info/:lecture_id',
       component: LectureInfo,
-      meta: { 
+      meta: {
         requiresAuth: true,
       }
     }

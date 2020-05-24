@@ -37,12 +37,12 @@
           this.$refs.LoginForm.login()
         else {
           let self = this
-          setTimeout(function(){ 
+          setTimeout(function(){
             self.show_login_form = true
           }, 500)
           let landing_btn = this.$refs.LandingBtn
           landing_btn.fadeOut()
-          setTimeout(function(){ 
+          setTimeout(function(){
             landing_btn.toggleBtnText()
             landing_btn.fadeIn()
           }, 1000)
