@@ -8,29 +8,56 @@
       <div id="lecture-info-container">
         <div id="lecture-info-section">
           <h1>{{lecture.title}} Info</h1>
-          <div class="row" id="lecture-data">
-            <div class="col main-info">
-              <h3>{{lecture.sections[0].course.name}}</h3>
-              <h5 class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</h5>
-              <h5>Sections: <a class="section-numbers" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></h5>
+          <show-at breakpoint="small">
+            <!-- Mobile Start -->
+            <div id="lecture-data">
+              <div class="row main-info">
+                <h3>{{lecture.sections[0].course.name}}</h3>
+                <h5 class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</h5>
+                <h5>Sections: <a class="section-numbers" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></h5>
+              </div>
+              <div class="row">
+                <h5>Start Time:<h6>{{lecture.start_time}}</h6></h5>
+              </div>
+              <div class="row">
+                <h5>Submission Start Time: <h6>{{lecture.submission_start_time}}</h6></h5>
+              </div>
+              <div class="row">
+                <h5>Submission End Time: <h6>{{lecture.submission_end_time}}</h6></h5>
+              </div>
+              <div class="row">
+                <h5>End Time: <h6>{{lecture.end_time}}</h6></h5>
+              </div>
             </div>
-            <div class="col">
-              <h5>Start Time</h5>
-              <h6>{{lecture.start_time}}</h6>
+            <!-- Mobile End -->
+          </show-at>
+          <show-at breakpoint="mediumAndAbove">
+            <!-- Not-mobile Start -->
+            <div class="row" id="lecture-data">
+              <div class="col main-info">
+                <h3>{{lecture.sections[0].course.name}}</h3>
+                <h5 class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</h5>
+                <h5>Sections: <a class="section-numbers" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></h5>
+              </div>
+              <div class="col">
+                <h5>Start Time</h5>
+                <h6>{{lecture.start_time}}</h6>
+              </div>
+              <div class="col">
+                <h5>Submission Start Time</h5>
+                <h6>{{lecture.submission_start_time}}</h6>
+              </div>
+              <div class="col">
+                <h5>Submission End Time</h5>
+                <h6>{{lecture.submission_end_time}}</h6>
+              </div>
+              <div class="col">
+                <h5>End Time</h5>
+                <h6>{{lecture.end_time}}</h6>
+              </div>
             </div>
-            <div class="col">
-              <h5>Submission Start Time</h5>
-              <h6>{{lecture.submission_start_time}}</h6>
-            </div>
-            <div class="col">
-              <h5>Submission End Time</h5>
-              <h6>{{lecture.submission_end_time}}</h6>
-            </div>
-            <div class="col">
-              <h5>End Time</h5>
-              <h6>{{lecture.end_time}}</h6>
-            </div>
-          </div>
+            <!-- Not-mobile End -->
+          </show-at>
         </div>
         <div id="lecture-attendance-section">
           <h1>Attendance
@@ -358,7 +385,8 @@
     position: absolute;
     left: 9rem;
     right: 9rem;
-    margin-top: 3rem;
+    bottom: 3rem;
+    top: 3rem;
   }
 
   #lecture-info-section {
@@ -367,7 +395,8 @@
 
   #lecture-attendance-section {
     position: relative;
-    margin-top: 3rem;
+    top: 3rem;
+    bottom: 0;
   }
 
   #lecture-data {
@@ -375,6 +404,11 @@
     text-align: center;
     margin-top: 3rem;
     margin-left: 3rem;
+  }
+
+  .row {
+    position: relative;
+    right: 1rem;
   }
 
   .show-qr-btn {
@@ -504,10 +538,17 @@
     width: 50%;
   }
 
-  .main-info {
+  .col.main-info {
     border-radius: .5rem;
     box-shadow: 0 5px 10px -1px gray;
     padding: 1rem;
+  }
+
+  .row.main-info {
+    border-radius: .5rem;
+    box-shadow: 0 5px 10px -1px gray;
+    padding: 1rem;
+    margin-right: 1rem;
   }
 
   .hidden {
@@ -519,6 +560,11 @@
       left: 2rem;
       right: 2rem;
       margin-top: 1rem;
+    }
+    #lecture-data {
+      left: 2rem;
+      margin-top: 1rem;
+      padding-right: 2rem;
     }
   }
 </style>
