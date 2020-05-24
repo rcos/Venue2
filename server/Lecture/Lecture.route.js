@@ -189,12 +189,11 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type/:preference', (req, res) => 
 										if(lecture_type === "live")
 											instructor_lectures = getLiveLectures(instructor_lectures)
 										else if(lecture_type === "active_playback")
-											instructor_lectures = getActivePlaybacLectures(instructor_lectures)
+											instructor_lectures = getActivePlaybackLectures(instructor_lectures)
 										else if(lecture_type === "past")
 											instructor_lectures = getPastLectures(instructor_lectures)
 										else if(lecture_type === "upcoming")
 											instructor_lectures = getUpcomingLectures(instructor_lectures)
-
 										// attach sections or courses to lectures based on preference
 										if(preference === "none")
 											res.json(instructor_lectures)
@@ -203,7 +202,6 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type/:preference', (req, res) => 
 												instructor_lecture.sections.forEach((lecture_section, i) => {
 													instructor_sections.forEach(instructor_section => {
 														if(lecture_section.equals(instructor_section._id)) {
-															// lecture_section = instructor_section
 															instructor_lecture.sections[i] = instructor_section
 															if(preference === "with_sections_and_course")
 																instructor_lecture.sections[i].course = instructor_courses[0]
@@ -230,16 +228,42 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type/:preference', (req, res) => 
 								console.log("<ERROR> Getting lectures for sections:",student_sections)
 								res.json(error)
 							} else {
-								if(lecture_type === "all")
-									res.json(student_lectures)
-								else if(lecture_type === "live")
-									res.json(getLiveLectures(student_lectures))
+								console.log("<SUCCESS> Getting lectures for student ID: " + user_id +
+									", with lecture type: " + lecture_type + ", with preference: " + preference)
+								// get different lectures based on lecture type
+								if(lecture_type === "live")
+									student_lectures = getLiveLectures(student_lectures)
 								else if(lecture_type === "active_playback")
-									res.json(getActivePlaybacLectures(student_lectures))
+									student_lectures = getActivePlaybackLectures(student_lectures)
 								else if(lecture_type === "past")
-									res.json(getPastLectures(student_lectures))
+									student_lectures = getPastLectures(student_lectures)
 								else if(lecture_type === "upcoming")
-									res.json(getUpcomingLectures(student_lectures))
+									student_lectures = getUpcomingLectures(student_lectures)
+								// attach sections or courses to lectures based on preference
+								if(preference === "none")
+									res.json(student_lectures)
+								else {
+									student_lectures.forEach(student_lecture => {
+										student_lecture.sections.forEach((lecture_section, i) => {
+											student_sections.forEach(student_section => {
+												if(lecture_section.equals(student_section._id)) {
+													student_lecture.sections[i] = student_section
+													if(preference === "with_sections_and_course"){
+														Course.findById(student_section.course, (error, lecture_course) => {
+															if(error || lecture_course == null) {
+																console.log("<ERROR> Getting course for section:",lecture_section)
+																res.json(error)
+															} else {
+																student_lecture.sections[i].course = lecture_course
+															}
+														})
+													}
+												}
+											})
+										})
+									})
+									res.json(student_lectures)
+								}
 							}
 						})
 					}
@@ -278,7 +302,7 @@ lectureRoutes.get('/for_course/:course_id/:lecture_type', (req, res) => {
 						else if(lecture_type === "past")
 							res.json(getPastLectures(course_lectures))
 						else if(lecture_type === "active_playback")
-							res.json(getActivePlaybacLectures(course_lectures))
+							res.json(getActivePlaybackLectures(course_lectures))
 					}
 				})
 			}
@@ -308,7 +332,7 @@ lectureRoutes.get('/for_section/:section_id/:lecture_type', (req, res) => {
 				else if(lecture_type === "past")
 					res.json(getPastLectures(section_lectures))
 				else if(lecture_type === "active_playback")
-					res.json(getActivePlaybacLectures(section_lectures))
+					res.json(getActivePlaybackLectures(section_lectures))
 			}
 		})
 	}
@@ -326,7 +350,7 @@ lectureRoutes.get('/for_section/:section_id/:lecture_type', (req, res) => {
 			else if(lecture_type === "past")
 				res.json(getPastLectures(section_lectures))
 			else if(lecture_type === "active_playback")
-				res.json(getActivePlaybacLectures(section_lectures))
+				res.json(getActivePlaybackLectures(section_lectures))
 		}
 	})
 })
@@ -429,7 +453,7 @@ function getPastLectures(lectures) {
 	return past_lectures
 }
 
-function getActivePlaybacLectures(lectures) {
+function getActivePlaybackLectures(lectures) {
 	active_playback_lectures = []
 	lectures.forEach(lecture => {
 		if(isActivePlayback(lecture))
