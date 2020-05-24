@@ -61,10 +61,22 @@
         </div>
         <div id="lecture-attendance-section">
           <h1>Attendance
-              <button v-if="lecture.allow_live_submissions && is_instructor" class="btn btn-secondary show-qr-btn" @click="showQR">Show QR</button>
-              <!-- Upload recording -->
-              <button v-else-if="lecture.allow_live_submissions && !is_instructor" class="btn btn-secondary scan-qr-btn" @click="scanQR">Attend this lecture</button>
-              <router-link v-else-if="lecture.allow_playback_submissions && !is_instructor" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+              <button v-if="Date.now() > lecture.submission_start_time
+                            && Date.now() < lecture.submission_end_time
+                            && is_instructor" class="btn btn-secondary show-qr-btn" @click="showQR">
+                Show QR
+              </button>
+              <LectureUploadModal v-else-if="Date.now() > lecture.end_time
+                                            && lecture.video_ref.length==0
+                                            && is_instructor" v-bind:lecture="lecture" />
+              <button v-else-if="Date.now() > lecture.submission_start_time
+                            && Date.now() < lecture.submission_end_time
+                            && !is_instructor" class="btn btn-secondary scan-qr-btn" @click="scanQR">
+                Attend this lecture
+              </button>
+              <router-link v-else-if="Date.now() > lecture.playback_submission_start_time
+                            && Date.now() < lecture.playback_submission_end_time
+                            && !is_instructor" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
                 <button class="btn btn-secondary watch-recording">Watch recording</button>
               </router-link>
           </h1>
@@ -258,6 +270,7 @@
         this.lecture = response.data
         this.lecture_has_loaded = true
         this.setLectureStatus()
+        console.log(this.lecture.video_ref.length)
       },
       async checkAttendance() {
         const response = await LectureSubmissionAPI.getLectureSubmissionsForLecture(this.lecture_id)
