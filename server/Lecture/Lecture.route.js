@@ -15,6 +15,7 @@ var transporter = nodemailer.createTransport({
 });
 
 const legal_lecture_types = ["all","live","upcoming","past","active_playback"]
+const legal_preferences = ["with_sections", "with_sections_and_course", "none"]
 
 let Lecture = require('../Lecture/Lecture.model')
 let User = require('../User/User.model')
@@ -144,18 +145,26 @@ lectureRoutes.route('/:id').get(function (req, res) {
 	});
 });
 
-lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
+lectureRoutes.get('/for_user/:user_id/:lecture_type/:preference', (req, res) => {
 	let user_id = req.params.user_id
 	let lecture_type = req.params.lecture_type
+	let preference = req.params.preference
 	if(!legal_lecture_types.includes(lecture_type)){
 		console.log("<ERROR> Invalid lecture type:",lecture_type)
 		res.status(400).send("Illegal lecture type")
-	} else {
-		User.findById(user_id, (error, user) => {
-			if(error || user == null) {
-				console.log("<ERROR> Getting user with ID:",user_id)
-				res.json(error)
-			} else if(user.is_instructor) {
+		return
+	} else if(!legal_preferences.includes(preference)) {
+		console.log("<ERROR> Invalid preference:", preference)
+		res.status(400).send("Illegal preference")
+		return
+	}
+
+	User.findById(user_id, (error, user) => {
+		if(error || user == null)
+			res.json(error)
+		else {
+
+			if(user.is_instructor) {
 				//get courses instructor teaches
 				Course.find({instructor: user._id}, (error, instructor_courses) => {
 					if(error || instructor_courses == null) {
@@ -174,17 +183,34 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
 										console.log("<ERROR> Getting lectures for sections:",instructor_sections)
 										res.json(error)
 									} else {
-										console.log("<SUCCESS> Getting lectures for instructor ID:",user_id)
-										if(lecture_type === "all")
-											res.json(instructor_lectures)
-										else if(lecture_type === "live")
-											res.json(getLiveLectures(instructor_lectures))
+										console.log("<SUCCESS> Getting lectures for instructor ID: " + user_id +
+											", with lecture type: " + lecture_type + ", with preference: " + preference)
+										// get different lectures based on lecture type
+										if(lecture_type === "live")
+											instructor_lectures = getLiveLectures(instructor_lectures)
 										else if(lecture_type === "active_playback")
-											res.json(getActivePlaybacLectures(instructor_lectures))
+											instructor_lectures = getActivePlaybackLectures(instructor_lectures)
 										else if(lecture_type === "past")
-											res.json(getPastLectures(instructor_lectures))
+											instructor_lectures = getPastLectures(instructor_lectures)
 										else if(lecture_type === "upcoming")
-											res.json(getUpcomingLectures(instructor_lectures))
+											instructor_lectures = getUpcomingLectures(instructor_lectures)
+										// attach sections or courses to lectures based on preference
+										if(preference === "none")
+											res.json(instructor_lectures)
+										else {
+											instructor_lectures.forEach(instructor_lecture => {
+												instructor_lecture.sections.forEach((lecture_section, i) => {
+													instructor_sections.forEach(instructor_section => {
+														if(lecture_section.equals(instructor_section._id)) {
+															instructor_lecture.sections[i] = instructor_section
+															if(preference === "with_sections_and_course")
+																instructor_lecture.sections[i].course = instructor_courses[0]
+														}
+													})
+												})
+											})
+											res.json(instructor_lectures)
+										}
 									}
 								})
 							}
@@ -202,23 +228,49 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type', (req, res) => {
 								console.log("<ERROR> Getting lectures for sections:",student_sections)
 								res.json(error)
 							} else {
-								if(lecture_type === "all")
-									res.json(student_lectures)
-								else if(lecture_type === "live")
-									res.json(getLiveLectures(student_lectures))
+								console.log("<SUCCESS> Getting lectures for student ID: " + user_id +
+									", with lecture type: " + lecture_type + ", with preference: " + preference)
+								// get different lectures based on lecture type
+								if(lecture_type === "live")
+									student_lectures = getLiveLectures(student_lectures)
 								else if(lecture_type === "active_playback")
-									res.json(getActivePlaybacLectures(student_lectures))
+									student_lectures = getActivePlaybackLectures(student_lectures)
 								else if(lecture_type === "past")
-									res.json(getPastLectures(student_lectures))
+									student_lectures = getPastLectures(student_lectures)
 								else if(lecture_type === "upcoming")
-									res.json(getUpcomingLectures(student_lectures))
+									student_lectures = getUpcomingLectures(student_lectures)
+								// attach sections or courses to lectures based on preference
+								if(preference === "none")
+									res.json(student_lectures)
+								else {
+									student_lectures.forEach(student_lecture => {
+										student_lecture.sections.forEach((lecture_section, i) => {
+											student_sections.forEach(student_section => {
+												if(lecture_section.equals(student_section._id)) {
+													student_lecture.sections[i] = student_section
+													if(preference === "with_sections_and_course"){
+														Course.findById(student_section.course, (error, lecture_course) => {
+															if(error || lecture_course == null) {
+																console.log("<ERROR> Getting course for section:",lecture_section)
+																res.json(error)
+															} else {
+																student_lecture.sections[i].course = lecture_course
+															}
+														})
+													}
+												}
+											})
+										})
+									})
+									res.json(student_lectures)
+								}
 							}
 						})
 					}
 				})
 			}
-		})
-	}
+		}
+	})
 })
 
 lectureRoutes.get('/for_course/:course_id/:lecture_type', (req, res) => {
@@ -250,7 +302,7 @@ lectureRoutes.get('/for_course/:course_id/:lecture_type', (req, res) => {
 						else if(lecture_type === "past")
 							res.json(getPastLectures(course_lectures))
 						else if(lecture_type === "active_playback")
-							res.json(getActivePlaybacLectures(course_lectures))
+							res.json(getActivePlaybackLectures(course_lectures))
 					}
 				})
 			}
@@ -280,10 +332,27 @@ lectureRoutes.get('/for_section/:section_id/:lecture_type', (req, res) => {
 				else if(lecture_type === "past")
 					res.json(getPastLectures(section_lectures))
 				else if(lecture_type === "active_playback")
-					res.json(getActivePlaybacLectures(section_lectures))
+					res.json(getActivePlaybackLectures(section_lectures))
 			}
 		})
 	}
+
+	Lecture.find({sections: section_id}, (error, section_lectures) => {
+		if(error)
+			res.json(error)
+		else {
+			if(lecture_type === "all")
+				res.json(section_lectures)
+			else if(lecture_type === "upcoming")
+				res.json(getUpcomingLectures(section_lectures))
+			else if(lecture_type === "live")
+				res.json(getLiveLectures(section_lectures))
+			else if(lecture_type === "past")
+				res.json(getPastLectures(section_lectures))
+			else if(lecture_type === "active_playback")
+				res.json(getActivePlaybackLectures(section_lectures))
+		}
+	})
 })
 
 lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
@@ -384,7 +453,7 @@ function getPastLectures(lectures) {
 	return past_lectures
 }
 
-function getActivePlaybacLectures(lectures) {
+function getActivePlaybackLectures(lectures) {
 	active_playback_lectures = []
 	lectures.forEach(lecture => {
 		if(isActivePlayback(lecture))
@@ -394,26 +463,26 @@ function getActivePlaybacLectures(lectures) {
 }
 
 
-function isLive(lecture) {  
-  let current_time = new Date() 
-  return current_time >= lecture.start_time &&  
-    current_time <= lecture.end_time  
+function isLive(lecture) {
+  let current_time = new Date()
+  return current_time >= lecture.start_time &&
+    current_time <= lecture.end_time
 }
 
-function isUpcoming(lecture) {  
-  let current_time = new Date() 
+function isUpcoming(lecture) {
+  let current_time = new Date()
   return current_time < lecture.start_time ||
   	current_time < lecture.playback_submission_start_time
 }
 
-function isPast(lecture) {  
-  let current_time = new Date() 
+function isPast(lecture) {
+  let current_time = new Date()
   return current_time > lecture.end_time ||
   	current_time > lecture.playback_submission_end_time
 }
 
-function isActivePlayback(lecture) {  
-  let current_time = new Date() 
+function isActivePlayback(lecture) {
+  let current_time = new Date()
   return current_time >= lecture.playback_submission_start_time &&
   	current_time <= lecture.playback_submission_end_time
 }

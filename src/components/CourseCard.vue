@@ -1,12 +1,20 @@
 <template>
   <router-link :to="is_instructor ? {name: 'course_info', params: { id: course._id }} : {name: 'course_info', params: { id: section._id }}">
-    <div class="course-card">
-    	<div class="color-box" v-bind:class="{
-        'blue-box':box_color == 'blue', 
-        'red-box':box_color == 'red', 
-        'orange-box':box_color == 'orange',
-        'green-box':box_color == 'green',
-        'purple-box':box_color == 'purple'}"></div>
+    <div v-if="mobile" class="course-card-mobile">
+    	<div class="color-box"  :style="{backgroundColor: box_color}"></div>
+      <div v-if="is_instructor" class="course-info">
+        <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
+        <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>
+        <div v-else class="course-name">{{ course.name }}</div>
+      </div>
+      <div v-else class="course-info">
+        <div class="course-title">{{ section.course.dept }} {{ section.course.course_number }}-{{ section.number }}</div>
+        <div v-if="section.course.name.length > 21" class="course-name">{{ section.course.name.substring(0,18) + "..." }}</div>
+        <div v-else class="course-name">{{ section.course.name }}</div>
+      </div>
+    </div>
+    <div v-else class="course-card">
+    	<div class="color-box" :style="{backgroundColor: box_color}"></div>
       <div v-if="is_instructor" class="course-info">
         <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
         <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>
@@ -28,7 +36,11 @@
     props: {
       course: Object,
       section: Object,
-      box_color: String
+      box_color: String,
+      mobile: {
+        type: Boolean,
+        default: false
+      }
     },
     computed: {
     },
@@ -56,26 +68,74 @@
 	/*width: 16rem;*/
   width: 20rem;
 	height: 3rem;
-  padding-top: 0.7rem;
-  box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.07);
+  line-height: 3rem;
+  box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.04);
   border-radius: 3px;
   cursor: pointer;
-  transition: background-color, box-shadow, width, 0.25s;
-  color: black;
+  transition: background-color 0.25s, box-shadow 0.25s, width, 0.25s, border 0.25s;
+  color: rgba(0, 0, 0, 0.81);
+  border: 1px solid rgba(107, 163, 195, 0.7);
 }
 
 .course-card:hover {
-  background-color: #e8e8e8;
-  box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(85, 136, 166, 1);
+  box-shadow: 0px 3px 10px 7px rgba(0, 0, 0, 0.04);
+}
+
+.course-card-mobile {
+	height: 50px;
+  vertical-align: top;
+  width: 80%;
+  margin: 2rem auto;
+  box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.04);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.25s, box-shadow 0.25s, width, 0.25s, border 0.25s;
+  color: rgba(0, 0, 0, 0.81);
+  border: 1px solid rgba(107, 163, 195, 0.7);
+}
+
+.course-card-mobile:hover {
+  border: 1px solid rgba(85, 136, 166, 1);
+  box-shadow: 0px 3px 10px 7px rgba(0, 0, 0, 0.04);
+}
+
+.course-card-mobile .course-title {
+  font-size: 1rem;
+}
+
+.course-card-mobile .course-info {
+  display: inline-block;
+  width: 80%;
+  height: 1.5rem;
+  text-align: left;
+}
+
+.course-card-mobile .course-info div {
+  vertical-align: top;
+  position: relative;
+  top: 10px;
+}
+
+.course-card-mobile .course-title {
+  width: 30%;
+  text-align: center;
+}
+
+.course-card-mobile .course-name {
+  font-size: 1.2rem;
 }
 
 .color-box {
 	border-radius: 3px;
-	width: 1.5rem;
-	height: 1.5rem;
-	margin-left: 0.5rem;
+	width: 1rem;
+	height: 1rem;
+	margin-left: 1rem;
   display: inline-block;
   vertical-align: top;
+  margin-right: 0.5rem;
+  position: relative;
+  top: 20px;
 }
 
 .blue-box {
@@ -103,28 +163,19 @@
   width: 80%;
   height: 1.5rem;
   margin-left: 0.5rem;
+  text-align: left;
 }
 
 .course-title {
-  float: left;
   display: inline-block;
   font-size: 0.7rem;
-  vertical-align: middle;
   color: #1591C5;
-  margin-top: 0.3rem;
 }
 
 .course-name {
   display: inline-block;
-  vertical-align: middle;
   margin-left: 0.85rem;
-}
-
-/*Desktop*/
-@media (min-width: 1200px) {
-  .course-card:hover {
-    width: 22rem;
-  }
+  font-size: 0.9rem;
 }
 
 /*Medium devices (tablets and below)*/

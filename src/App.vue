@@ -21,9 +21,9 @@ export default {
   },
   created() {
     if(this.$store.state.user && this.$store.state.user.current_user && this.$store.state.user.current_user.is_instructor) {
-      LectureAPI.getLecturesForUser(this.$store.state.user.current_user._id,"live") 
+      LectureAPI.getLecturesForUser(this.$store.state.user.current_user._id,"live", "none") 
         .then(res => {
-          LectureAPI.getLecturesForUser(this.$store.state.user.current_user._id,"upcoming")
+          LectureAPI.getLecturesForUser(this.$store.state.user.current_user._id,"upcoming", "none")
             .then(res2 => {
               let lectures = res.data.concat(res2.data)
               if (!("Notification" in window)) {
@@ -39,7 +39,7 @@ export default {
               }
             })
         })
-      LectureAPI.getLecturesForUser(this.$store.state.user.current_user._id,"past")
+      LectureAPI.getLecturesForUser(this.$store.state.user.current_user._id,"past", "none")
         .then(res => {
           this.processInstructorEmails(res.data)
         })

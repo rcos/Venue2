@@ -1,5 +1,7 @@
 const express = require('express');
 const sectionRoutes = express.Router();
+const jwt = require('jsonwebtoken')
+const ObjectID = require(`mongoose`).Types.ObjectId
 
 let Section = require('./Section.model');
 let User = require('../User/User.model');
@@ -46,7 +48,7 @@ sectionRoutes.route('/edit/:id').get(function (req, res) {
 sectionRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
   let updated_section = req.body.updated_section;
-  Section.findByIdAndUpdate(id, 
+  Section.findByIdAndUpdate(id,
     {
       course: updated_section.course,
       number: updated_section.number,
