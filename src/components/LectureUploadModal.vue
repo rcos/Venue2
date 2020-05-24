@@ -1,12 +1,13 @@
 <template>
   <div id="lecture-upload-modal">
-    <button class="btn btn-primary" @click="handleShowModal">Upload lecture video</button>
+    <button class="btn btn-primary" @click="handleShowModal">Upload Lecture Video...</button>
     <div v-if="showModal" id="lecture_modal_viewable">
-      <div class="row">
-          <button id="close_lecture_modal" class="btn btn-secondary" @click="showModal = false">X</button>
+      <div class="row titlerow">
+        <h1 id="banner_title">New Lecture Video</h1>
       </div>
-      <input id="video_selector" name="lecturevideo" type="file" accept="video/*" />
-      <button id="video_upload_btn" class="btn btn-secondary" @click="addLecture()" disabled>Upload</button>
+      <div class="row filerow">
+        <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn"/>
+      </div>
       <div class="row" id="lecture_container" v-if="file_selected">
         <div class="col-8" id="preview">
           <video
@@ -32,12 +33,11 @@
             <button id="add_poll_btn" class="btn btn-primary" @click="addPoll()">+</button>
           </div>
         </div>
-        <div class="input-wrapper" id="submission-time-wrapper">
-          <label>Playback Submission Start</label>
-          <input id="playback_start">
-          <label>Playback Submission End</label>
-          <input id="playback_end">
-        </div>
+      </div>
+      <div class="row" id="bottomrow">
+        <input id="playback_start" placeholder="Playback Submission Start"/>
+        <input id="playback_end" placeholder="Playback Submission End"/>
+        <button id="video_upload_btn" class="btn btn-secondary" @click="addLecture()" disabled>Upload</button>
       </div>
     </div>
   </div>
@@ -143,28 +143,46 @@ export default {
 </script>
 
 <style scoped>
+#banner_title {
+  text-align: center;
+  position: relative;
+  top: 6rem;
+  height: 3rem;
+  width: 100%;
+  margin: 0;
+}
+.titlerow {
+  height: 9rem;
+}
+.filerow {
+  height: 6rem;
+}
 #lecture_modal_viewable {
-  position: absolute;
+  position: fixed;
   background: white;
-  border: 1px solid black;
-  top: 100px;
-  bottom: 100px;
-  left: 100px;
-  right: 100px;
+  top: 6%;
+  left: 0rem;
+  right: 0rem;
+  bottom: 0rem;
 }
 #close_lecture_modal {
   position: absolute;
-  width: 30px;
+  width: 2rem;
+  height: 2rem;
+  left: 0;
   margin: 0;
-  margin-left: 15px;
   padding: 0;
 }
+#preview {
+  position: relative;
+}
 #lecture_container {
-  margin: 0;
-  width: 100%;
-  position: absolute;
-  top: 50px;
-  bottom: 0px;
+}
+#video_selector {
+  position: relative;
+  top: 3rem;
+  height: 3rem;
+  margin: 0 auto;
 }
 #video_player {
   width: 100%;
@@ -176,6 +194,20 @@ export default {
 .col {
   padding: 0;
 }
+.row {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+#toprow {
+  height: 4rem;
+}
+#bottomrow {
+  position: absolute;
+  height: 4rem;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
 #polls {
   position: absolute;
   padding-right: 5px;
@@ -183,5 +215,19 @@ export default {
   bottom: 15px;
   width: 100%;
   overflow: auto;
+}
+#playback_start {
+  height: 4rem;
+  width: 40%;
+  font-size: 1.5rem;
+}
+#playback_end {
+  height: 4rem;
+  width: 40%;
+  font-size: 1.5rem;
+}
+#video_upload_btn {
+  height: 4rem;
+  width: 20%;
 }
 </style>
