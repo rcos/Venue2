@@ -17,16 +17,16 @@
                 <h5>Sections: <a class="section-numbers" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></h5>
               </div>
               <div class="row">
-                <h5>Start Time:<h6>{{lecture.start_time}}</h6></h5>
+                <h5>Start Time:<h6>{{new Date(lecture.start_time)}}</h6></h5>
               </div>
               <div class="row">
-                <h5>Submission Start Time: <h6>{{lecture.submission_start_time}}</h6></h5>
+                <h5>Submission Start Time: <h6>{{new Date(lecture.submission_start_time)}}</h6></h5>
               </div>
               <div class="row">
-                <h5>Submission End Time: <h6>{{lecture.submission_end_time}}</h6></h5>
+                <h5>Submission End Time: <h6>{{new Date(lecture.submission_end_time)}}</h6></h5>
               </div>
               <div class="row">
-                <h5>End Time: <h6>{{lecture.end_time}}</h6></h5>
+                <h5>End Time: <h6>{{new Date(lecture.end_time)}}</h6></h5>
               </div>
             </div>
             <!-- Mobile End -->
@@ -41,19 +41,19 @@
               </div>
               <div class="col">
                 <h5>Start Time</h5>
-                <h6>{{lecture.start_time}}</h6>
+                <h6>{{new Date(lecture.start_time)}}</h6>
               </div>
               <div class="col">
                 <h5>Submission Start Time</h5>
-                <h6>{{lecture.submission_start_time}}</h6>
+                <h6>{{new Date(lecture.submission_start_time)}}</h6>
               </div>
               <div class="col">
                 <h5>Submission End Time</h5>
-                <h6>{{lecture.submission_end_time}}</h6>
+                <h6>{{new Date(lecture.submission_end_time)}}</h6>
               </div>
               <div class="col">
                 <h5>End Time</h5>
-                <h6>{{lecture.end_time}}</h6>
+                <h6>{{new Date(lecture.end_time)}}</h6>
               </div>
             </div>
             <!-- Not-mobile End -->
