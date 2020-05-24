@@ -30,7 +30,7 @@
 
 
   export default {
-    name: 'UpcomingCourses',
+    name: 'UpcomingLectures',
     components: {
       EventInfoPill,
       SquareLoader,

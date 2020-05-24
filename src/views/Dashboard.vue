@@ -4,17 +4,17 @@
       <div class="venue-body-container">
         <!-- <LiveCourses :colorCallback="getColor" :loaded="live_lectures_loaded" :data="live_lectures" /> -->
         <LiveLectureList :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
-        <PlaybackCourses :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
-        <RecentCourses :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
-        <UpcomingCourses :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
+        <PlaybackLectures :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
+        <RecentLectures :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
+        <UpcomingLectures :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
       </div>
     </show-at>
     <hide-at breakpoint="large">
       <div class="venue-body-container is-mobile">
         <LiveLectureList :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode/>
-        <PlaybackCourses :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode />
-        <RecentCourses :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
-        <UpcomingCourses :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
+        <PlaybackLectures :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode />
+        <RecentLectures :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
+        <UpcomingLectures :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
       </div>
     </hide-at>
 
@@ -40,9 +40,9 @@
   import {showAt, hideAt} from 'vue-breakpoints'
 
   import LiveLectureList from '@/components/LiveLectureList.vue'
-  import PlaybackCourses from '@/components/PlaybackCourses.vue'
-  import RecentCourses from '@/components/RecentCourses.vue'
-  import UpcomingCourses from '@/components/UpcomingCourses'
+  import PlaybackLectures from '@/components/PlaybackLectures.vue'
+  import RecentLectures from '@/components/RecentLectures.vue'
+  import UpcomingLectures from '@/components/UpcomingLectures.vue'
   import CourseList from '@/components/CourseList.vue'
   import moment from 'moment'
 
@@ -59,9 +59,9 @@
       hideAt,
       showAt,
       LiveLectureList,
-      PlaybackCourses,
-      RecentCourses,
-      UpcomingCourses,
+      PlaybackLectures,
+      RecentLectures,
+      UpcomingLectures,
       CourseList
     },
     data(){
