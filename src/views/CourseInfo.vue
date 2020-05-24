@@ -9,7 +9,23 @@
     </router-link>
     </div>
     <div>
-      <CourseInfoTitle :course="course" class="inline-block" />
+      <!-- <CourseInfoTitle :course="course" class="inline-block" /> -->
+      <div class="course-info-title">
+
+        <!-- Course Name -->
+        <div class="course-name">{{course.name}}</div>
+
+        <div>
+
+          <!-- Course Dept # -->
+          <div class="course-dept-number inline-block">{{course.dept}} {{course.course_number}}</div>
+
+          <!-- Time Block -->
+          <div class="course-time-block inline-block">3:00pm-4:50pm</div>
+
+        </div>
+
+      </div>
 
       <!-- Lecture Pills -->
       <div class="lecture-pills-min-container inline-block">
