@@ -276,7 +276,6 @@ body, * {
 }
 
 .history-by-month {
-  margin-left: 50px;
   margin-top: 25px;
 }
 
@@ -403,13 +402,15 @@ body, * {
   border-bottom: 31px solid #FF6358;
 }
 
-.instructor-attendance .month-area {
+.instructor-attendance .month-area,
+.student-attendance .month-area {
   margin-bottom: 20px;
   margin-left: 50px;
   margin-top: 20px;
 }
 
-.instructor-attendance .month-area.mobile {
+.instructor-attendance .month-area.mobile,
+.student-attendance .month-area.mobile {
   margin-left: 0rem;
   margin-right: 0rem;
 }

@@ -26,7 +26,7 @@
   import LectureCard from '@/components/LectureCard.vue'
 
   export default {
-    name: 'PlaybackCourses',
+    name: 'PlaybackLectures',
     components: {
       EventInfoPill,
       SquareLoader,

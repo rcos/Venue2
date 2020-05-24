@@ -1,29 +1,62 @@
 <template>
-  <div>
+  <div class="student-attendance">
 
     <!-- <div v-if="!history_loaded || !submissions_loaded">DATA LOADING  history: {{this.history_loaded}} submissions: {{this.submissions_loaded}}</div> -->
     <div v-if="data_loaded && data_to_show">
       <div>
         <div class="history-by-month" v-for="month_index in Object.keys(history_data)">
-          <div class="month-title">{{ STATIC_MONTHS[month_index] }}</div>
-          <div class="attendance-history-container">
 
-            <router-link v-for="event_ in history_data[month_index]" :key="event_._id" :to="{name: 'event_info', params: { event_id: event_._id }}">
-              <div
-                :class="'student-attendance-pill inline-block ' + (wasPresent(event_._id) ? 'present' : 'absent')">
-                <!-- Day of Weee + Day of Month -->
-                <div class="inline-block-center date-area">
-                  <div class="day-of-week">{{ getDayOfWeek(event_) }}</div>
-                  <div class="day-of-month">{{ getDayOfMonth(event_) }}</div>
-                </div>
+          <div v-if="mobileMode">
+            <div class="month-area mobile">{{ STATIC_MONTHS[month_index] }}</div>
+            <div class="mobile-event-pill-area">
 
-                <!-- Event Name + Location -->
-                <div class="inline-block-center event-info-area">
-                  <div class="event-name">{{ event_.title }}</div>
-                  <div class="event-location">WebEx Meeting</div>
+
+              <router-link v-for="event in history_data[month_index]" :key="event._id" :to="{name: 'event_info', params: { event_id: event._id }}">
+                <div :class="'mobile-pill ' + getClassByAttendance(80)">
+                  <div class="day-of-week">{{ getDayOfWeek(event) }}</div>
+                  <div class="day-of-month">{{ getDayOfMonth(event) }}</div>
                 </div>
-              </div>
-            </router-link>
+              </router-link>
+
+            </div>
+
+          </div>
+          <div v-else>
+
+            <div class="month-area">{{ STATIC_MONTHS[month_index] }}</div>
+            <div class="attendance-history-container">
+
+              <router-link v-for="event_ in history_data[month_index]" :key="event_._id" :to="{name: 'lecture_info', params: { lecture_id: event_._id }}">
+                <!-- <div
+                  :class="'student-attendance-pill inline-block ' + (wasPresent(event_._id) ? 'present' : 'absent')">
+
+                  <div class="inline-block-center date-area">
+                    <div class="day-of-week">{{ getDayOfWeek(event_) }}</div>
+                    <div class="day-of-month">{{ getDayOfMonth(event_) }}</div>
+                  </div>
+
+
+                  <div class="inline-block-center event-info-area">
+                    <div class="event-name">{{ event_.title }}</div>
+                    <div class="event-location">WebEx Meeting</div>
+                  </div>
+                </div> -->
+
+                <div :class="'inline-block instructor-attendance-history-pill ' + getClassByAttendance(80)">
+                  <div class="inline-block date-area">
+                    <div class="day-of-week">{{ getDayOfWeek(event_) }}</div>
+                    <div class="day-of-month">{{ getDayOfMonth(event_) }}</div>
+                  </div>
+                  <div class="inline-block name-area">
+                    <div class="event-name">{{ event_.title }}</div>
+                    <div class="event-location">Event Location</div>
+                  </div>
+                  <!-- <div class="inline-block percentage-area">{{ getAttendancePercentage(event, selected_section) }}%</div> -->
+                  <div class="inline-block percentage-area">0%</div>
+                </div>
+              </router-link>
+
+            </div>
 
           </div>
         </div>
@@ -52,7 +85,8 @@
         type: String,
         required: true,
       },
-      showData: Function
+      showData: Function,
+      mobileMode: Boolean
     },
     data () {
       return {
@@ -76,12 +110,55 @@
       this.STATIC_DAY_OF_WEEK = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat']
 
       this.getCurrentUser ()
-      this.getHistoryData ()
-      this.getUserCourseSubmissions ()
+      this.populateWithPlaceholderData ()
+      // this.getHistoryData ()
+      // this.getUserCourseSubmissions ()
     },
     methods: {
       getCurrentUser() {
         this.current_user = this.$store.state.user.current_user
+      },
+      getClassByAttendance (percent) {
+        // percent b/w 0 and 100
+        if (percent <= 60) return 'bad'
+        else if (percent <= 75) return 'medium'
+        return 'good'
+      },
+      populateWithPlaceholderData () {
+        // populate history_data with temporary data
+        // Each key in history_data will be a month index pointing at the lecture data for that month.
+
+        this.history_data = [{
+          start_time: '2020-04-20T17:02:38.427+00:00',
+          _id: 1,
+          title: 'Sample Lecture 3',
+        },{
+          start_time: '2020-04-12T17:02:38.427+00:00',
+          _id: 2,
+          title: 'Sample Lecture 4',
+        },{
+          start_time: '2020-04-13T17:02:38.427+00:00',
+          _id: 3,
+          title: 'Sample Lecture 5',
+        },{
+          start_time: '2020-04-14T17:02:38.427+00:00',
+          _id: 4,
+          title: 'Sample Lecture 2',
+        },{
+          start_time: '2020-03-10T17:02:38.427+00:00',
+          _id: 5,
+          title: 'Sample Lecture 1',
+        },{
+          start_time: '2020-03-01T17:02:38.427+00:00',
+          _id: 6,
+          title: 'Sample Lecture 0',
+        }]
+
+        // sort the data by months
+        this.sortHistoryByMonth ()
+        this.data_loaded = true
+        this.data_to_show = Object.keys(this.history_data).length > 0
+        this.showData(this.data_to_show)
       },
       wasPresent(event_id) {
         // return true if the student was present for the event given event id

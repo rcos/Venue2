@@ -27,7 +27,7 @@
   import LectureCard from '@/components/LectureCard.vue'
 
   export default {
-    name: 'RecentCourses',
+    name: 'RecentLectures',
     components: {
       EventInfoPill,
       SquareLoader,
