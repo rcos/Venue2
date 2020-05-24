@@ -1,5 +1,5 @@
 <template>
-  <div class="course-info-title">
+  <div :class="'course-info-title ' + (this.mobileMode ? 'mobile' : '')">
 
     <!-- Course Name -->
     <div class="course-name">{{course.name}}</div>
@@ -25,8 +25,9 @@
     props: {
       course: {
         type: Object,
-        required: true
-      }
+        required: true,
+      },
+      mobileMode: Boolean
     },
     created () {},
     methods: {}
