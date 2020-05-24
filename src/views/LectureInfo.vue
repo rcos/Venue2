@@ -61,22 +61,21 @@
         </div>
         <div id="lecture-attendance-section">
           <h1>Attendance
-              <button v-if="Date.now() > lecture.submission_start_time
-                            && Date.now() < lecture.submission_end_time
+              <button v-if="Date.now() > new Date(lecture.submission_start_time)
+                            && Date.now() < new Date(lecture.submission_end_time)
                             && is_instructor" class="btn btn-secondary show-qr-btn" @click="showQR">
                 Show QR
               </button>
-              <LectureUploadModal v-else-if="Date.now() > lecture.end_time
-                                            && lecture.video_ref.length==0
+              <LectureUploadModal v-else-if="Date.now() > new Date(lecture.end_time)
+                                            && !lecture.video_ref.includes('.')
                                             && is_instructor" v-bind:lecture="lecture" />
-              <button v-else-if="Date.now() > lecture.submission_start_time
-                            && Date.now() < lecture.submission_end_time
+              <button v-else-if="Date.now() > new Date(lecture.submission_start_time)
+                            && Date.now() < new Date(lecture.submission_end_time)
                             && !is_instructor" class="btn btn-secondary scan-qr-btn" @click="scanQR">
                 Attend this lecture
               </button>
-              <router-link v-else-if="Date.now() > lecture.playback_submission_start_time
-                            && Date.now() < lecture.playback_submission_end_time
-                            && !is_instructor" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+              <router-link v-else-if="Date.now() > new Date(lecture.end_time)
+                            && lecture.video_ref.includes('.')" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
                 <button class="btn btn-secondary watch-recording">Watch recording</button>
               </router-link>
           </h1>
@@ -270,13 +269,10 @@
         this.lecture = response.data
         this.lecture_has_loaded = true
         this.setLectureStatus()
-        console.log(this.lecture.video_ref.length)
       },
       async checkAttendance() {
         const response = await LectureSubmissionAPI.getLectureSubmissionsForLecture(this.lecture_id)
         let lecture_submissions = response.data
-        console.log(lecture_submissions)
-        console.log(this.all_students)
         for(let i=0;i<this.all_students.length;i++) {
           let did_attend = false;
           for(let j=0;j<lecture_submissions.length;j++) {
