@@ -189,23 +189,6 @@
         this.recent_lectures_loaded = true
       },
       async getUpcomingLecturesForUser() {
-
-        // LectureAPI.getLecturesForUser(this.current_user._id, "upcoming")
-        // .then(response => {
-        //   this.upcoming_lectures = response.data
-
-        //   let lecture_promises = []
-        //   this.upcoming_lectures.forEach((lecture_, i) => {
-
-        //     lecture_promises.push(this.fillSectionInfo(lecture_))
-
-        //   }) // end forEach
-
-        //   Promise.all(lecture_promises).then(updated_lectures => {
-        //     this.upcoming_lectures = updated_lectures
-        //     this.upcoming_lectures_loaded = true
-        //   })
-        // })
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "upcoming", "with_sections_and_course")
         this.upcoming_lectures = response.data
         this.upcoming_lectures_loaded = true
