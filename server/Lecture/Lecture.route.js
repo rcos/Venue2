@@ -336,23 +336,6 @@ lectureRoutes.get('/for_section/:section_id/:lecture_type', (req, res) => {
 			}
 		})
 	}
-
-	Lecture.find({sections: section_id}, (error, section_lectures) => {
-		if(error)
-			res.json(error)
-		else {
-			if(lecture_type === "all")
-				res.json(section_lectures)
-			else if(lecture_type === "upcoming")
-				res.json(getUpcomingLectures(section_lectures))
-			else if(lecture_type === "live")
-				res.json(getLiveLectures(section_lectures))
-			else if(lecture_type === "past")
-				res.json(getPastLectures(section_lectures))
-			else if(lecture_type === "active_playback")
-				res.json(getActivePlaybackLectures(section_lectures))
-		}
-	})
 })
 
 lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
@@ -394,7 +377,7 @@ lectureRoutes.post('/process_emails', (req,res) => {
 	let toEmail = req.body.toEmail
 	lectures.forEach(lecture => {
 		if(!lecture.email_sent) { //email has not been sent yet
-			Lecture.findByIdAndUpdate(lecture._id, 
+			Lecture.findByIdAndUpdate(lecture._id,
 				{
 					email_sent: true //mark email as sent
 				},
