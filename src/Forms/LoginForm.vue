@@ -3,7 +3,7 @@
     <form class="login-form">
       <InputField ref="user_id_field" v-on:set-input-value="setUserId" label="user id" />
       <InputField ref="password_field" v-on:set-input-value="setPassword" label="password" type="password" />
-      <div v-if="show_invalid_login" id="invalid-login">Invalid username or password</div>
+      <div v-if="show_invalid_login" id="invalid-login">Invalid user id or password</div>
     </form>
   </div>
 </template>
@@ -39,6 +39,11 @@
         this.$store.dispatch('login', this.user)
           .then(() => this.$router.push({name: 'dashboard'}))
           .catch((err) => this.show_invalid_login = true)
+      },
+      signup() {
+        this.$refs.user_id_field.emitInputValue()
+        this.$refs.password_field.emitInputValue()
+        this.$router.push({name: 'set_permanent_password', params: {user_id: 'blank'}})
       },
       setUserId(user_id) {
         this.user.user_id = user_id
