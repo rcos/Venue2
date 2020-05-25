@@ -14,7 +14,7 @@
         :courseDept="lecture.sections[0].course.dept"
         :eventLabel="lecture.title"
         status="static"
-        :timeFromNow="lecture.end_time"
+        :timeFromNow="lecture.playback_submission_end_time"
        />
       </router-link>
     </div>
