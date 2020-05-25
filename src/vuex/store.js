@@ -26,12 +26,6 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    signup({ commit }, user) {
-      return UserAPI.signUp(user)
-        .then(({data}) => {
-          commit('SET_USER_DATA', data)
-        })
-    },
     login({ commit }, user) {
       return AuthAPI.login(user)
         .then(({data}) => {
@@ -40,7 +34,7 @@ export default new Vuex.Store({
     },
     logout({ commit }) {
       commit('CLEAR_USER_DATA')
-    }
+    },
   },
   getters: {
     loggedIn(state) {

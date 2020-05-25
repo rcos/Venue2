@@ -20,6 +20,7 @@ import AdminEditEvent from './components/admin/Event/AdminEditEvent.vue';
 import NewSubmission from './components/admin/Submission/NewSubmission.vue';
 import Submissions from './components/admin/Submission/Submissions.vue';
 import LandingPage from './views/LandingPage.vue';
+import SetPermanentPassword from './views/SetPermanentPassword.vue';
 import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
 import CourseList from './components/CourseList.vue';
@@ -217,6 +218,12 @@ const router = new VueRouter({
       meta: {
         requiresAuth: true,
       }
+    },
+    {
+      name: 'set_permanent_password',
+      path: '/set_permanent_password/:user_id',
+      component: SetPermanentPassword,
+      meta: { requiresNoLogin: true}
     }
   ]
 })
