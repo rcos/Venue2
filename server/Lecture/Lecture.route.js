@@ -511,8 +511,13 @@ function isLive(lecture) {
 
 function isUpcoming(lecture) {
   let current_time = new Date()
-  return current_time < lecture.start_time ||
-  	current_time < lecture.playback_submission_start_time
+  let one_week_from_now = new Date()
+  one_week_from_now.setDate(current_time.getDate() + 7)
+  if(lecture.start_time) {
+  	return lecture.start_time > current_time && lecture.start_time <= one_week_from_now
+  }else{
+  	return lecture.playback_submission_start_time > current_time && lecture.playback_submission_start_time <= one_week_from_now
+  }
 }
 
 function isPast(lecture) {
@@ -533,8 +538,7 @@ function isRecent(lecture) {
   one_week_ago.setDate(current_time.getDate() - 7)
   if(lecture.start_time){
   	return lecture.end_time >= one_week_ago
-  }
-  else{
+  }else{
   	return lecture.playback_submission_end_time >= one_week_ago
   }
 }
