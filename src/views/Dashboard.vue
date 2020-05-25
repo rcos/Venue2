@@ -183,7 +183,7 @@
         this.playback_lectures_loaded = true
       },
       async getRecentLecturesForUser() {
-        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "past", "with_sections_and_course")
+        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "recent", "with_sections_and_course")
         this.recent_lectures = response.data
         this.recent_lectures_loaded = true
       },
