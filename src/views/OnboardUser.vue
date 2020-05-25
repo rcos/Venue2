@@ -53,12 +53,24 @@
       async onboardUser(evt){
         evt.preventDefault(); // prevents the form's default action from redirecting the page
         this.setEmail()
+        this.setTempPassword()
         // const response = await UserAPI.addUser(this.user);
         // this.$router.push({name: 'users'});
       },
       setEmail() {
         this.user.email = this.user.user_id + "@rpi.edu"
-        console.log(this.user.email)
+      },
+      setTempPassword() {
+        this.user.temp_password = this.generateRandomPassword()
+      },
+      generateRandomPassword() {
+        let length = 12,
+            charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            password = "";
+        for (let i = 0, n = charset.length; i < length; ++i) {
+            password += charset.charAt(Math.floor(Math.random() * n))
+        }
+        return password
       }
     }
   }
