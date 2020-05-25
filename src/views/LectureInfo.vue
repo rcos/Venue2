@@ -74,7 +74,7 @@
                             && !is_instructor" class="btn btn-secondary scan-qr-btn" @click="scanQR">
                 Attend this lecture
               </button>
-              <router-link v-else-if="Date.now() > new Date(lecture.end_time)
+              <router-link v-else-if="((Date.now() > new Date(lecture.end_time)) || (undefined == lecture.end_time))
                             && lecture.video_ref.includes('.')" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
                 <button class="btn btn-secondary watch-recording">Watch recording</button>
               </router-link>

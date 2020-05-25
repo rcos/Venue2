@@ -138,7 +138,6 @@ export default {
       })
     },
     async updateLectureFromParent(lect,course_id) {
-      console.log(lect)
       lect.video_ref = "/videos/" + lect._id + "/";
       LectureAPI.addLecturePlayback(
         lect,
