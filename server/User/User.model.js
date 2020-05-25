@@ -20,6 +20,10 @@ let User = new Schema({
 		type: Boolean,
 		default: false
 	},
+	has_permanent_password: {
+		type: Boolean,
+		default: false
+	},
 	ta_sections: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Section'
