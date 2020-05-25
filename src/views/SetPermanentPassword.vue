@@ -48,12 +48,11 @@
       }
     },
     created() {
-      console.log("query",this.$route.query)
       this.user_id = this.$route.params.user_id
       this.user = this.$route.query.user
-      console.log("user id", this.user_id)
-      console.log("user",this.user)
-      // this.getCurrentUser()
+      // prevents page refreshes and hardcoding of user ids
+      if(!this.user.user_id)
+        this.$router.push({name: 'dashboard'})
     },
     methods: {
       async getCurrentUser() {
