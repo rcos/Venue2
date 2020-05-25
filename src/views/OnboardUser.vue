@@ -54,8 +54,8 @@
         evt.preventDefault(); // prevents the form's default action from redirecting the page
         this.setEmail()
         this.setTempPassword()
-        // const response = await UserAPI.addUser(this.user);
-        // this.$router.push({name: 'users'});
+        const response = await UserAPI.onboardUser(this.user);
+        this.$router.push({name: 'users'});
       },
       setEmail() {
         this.user.email = this.user.user_id + "@rpi.edu"
