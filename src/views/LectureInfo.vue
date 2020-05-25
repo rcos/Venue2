@@ -297,7 +297,7 @@
         this.checkAttendance()
       },
       setLectureStatus() {
-        let current_time = new Date()
+        let current_time = Date.now()
         let lecture_start_time = new Date(this.lecture.start_time)
         let lecture_end_time = new Date(this.lecture.end_time)
         let lecture_playback_submission_start_time = new Date(this.lecture.playback_submission_start_time)
