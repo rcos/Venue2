@@ -69,9 +69,13 @@
         current_user: {},
         all_lectures: [],
         live_lectures: [],
+        live_lectures_exist: Boolean,
         playback_lectures: [],
+        playback_lectures_exist: Boolean,
         recent_lectures: [],
+        recent_lectures_exist: Boolean,
         upcoming_lectures: [],
+        upcoming_lectures_exist: Boolean,
         courses_loaded: Number,
         courses: Object,
         STATIC_COURSE_COLORS: Array,
@@ -176,21 +180,25 @@
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "live", "with_sections_and_course")
         this.live_lectures = response.data
         this.live_lectures_loaded = true
+        this.live_lectures_exist = this.live_lectures.length > 0
       },
       async getPlaybackLectures() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "active_playback", "with_sections_and_course")
         this.playback_lectures = response.data
         this.playback_lectures_loaded = true
+        this.playback_lectures_exist = this.playback_lectures.length > 0
       },
       async getRecentLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "recent", "with_sections_and_course")
         this.recent_lectures = response.data
         this.recent_lectures_loaded = true
+        this.recent_lectures_exist = this.recent_lectures.length > 0
       },
       async getUpcomingLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "upcoming", "with_sections_and_course")
         this.upcoming_lectures = response.data
         this.upcoming_lectures_loaded = true
+        this.upcoming_lectures_exist = this.upcoming_lectures.length > 0
       }
     }
   }
