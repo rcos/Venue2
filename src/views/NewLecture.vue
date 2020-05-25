@@ -71,7 +71,7 @@
             </div>
             <div class="col">
               <div id="polls">
-                <PollCard v-for="i in n_polls" :key="i" :ref="'pollRef' + i"/>
+                <!-- <PollCard v-for="i in n_polls" :key="i" :ref="'pollRef' + i"/> -->
                 <button id="add_poll_btn" class="btn btn-primary" @click="addPoll">+</button>
               </div>
             </div>
@@ -96,7 +96,7 @@ import SectionAPI from "@/services/SectionAPI.js";
 import Sections from "@/components/Sections";
 import QRCode from "qrcode";
 import GoogleMap from "@/components/GoogleMap";
-import PollCard from "@/components/PollCard";
+// import PollCard from "@/components/PollCard";
 import flatpickr from "flatpickr";
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 require("flatpickr/dist/themes/material_blue.css");
@@ -109,7 +109,7 @@ export default {
   components: {
     Sections,
     GoogleMap,
-    PollCard
+    // PollCard
   },
   data() {
     return {

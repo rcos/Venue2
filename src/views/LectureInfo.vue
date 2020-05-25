@@ -512,6 +512,7 @@
     height: 4rem;
     box-shadow: 0 5px 10px -1px gray;
     padding-top: 0.5rem;
+    z-index: 100;
   }
 
   .custom-qr-scanner {
