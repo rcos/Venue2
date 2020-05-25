@@ -43,7 +43,6 @@
       return {}
     },
     created () {
-
     },
     methods: {
       getCourseName (data_) {
