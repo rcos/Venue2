@@ -55,22 +55,7 @@
           </div>
         </div>
         <div class="col-5">
-          <video
-            id="video_player"
-            class="video-js"
-            controls
-            preload="auto"
-            poster=""
-            data-setup='{}'>
-            <!-- <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4" /> -->
-            <!-- <p class="vjs-no-js">
-              To view this video please enable JavaScript, and consider upgrading to a
-              web browser that
-              <a href="http://videojs.com/html5-video-support/" target="_blank">
-                supports HTML5 video
-              </a>
-            </p> -->
-          </video>
+          <video id="video_player" class="video-js vjs-big-play-centered" controls></video>
         </div>
       </div>
       <div class="row" id="bottomrow">
@@ -87,6 +72,7 @@
 import LectureAPI from "../services/LectureAPI";
 import PlaybackPollAPI from "../services/PlaybackPollAPI";
 import flatpickr from "flatpickr";
+import videojs from 'video.js';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 require("flatpickr/dist/themes/material_blue.css");
 // DatePicker themes options:
@@ -108,7 +94,8 @@ export default {
       current_answers: [],
       current_is_correct: [],
       polls: [],
-      video_ref: ""
+      video_ref: "",
+      vjs: null
     };
   },
   created() {
@@ -174,13 +161,18 @@ export default {
             vid_upload_btn.removeAttribute("disabled");
             self.polls = [];
             self.file_selected = true;
+            //videojs player implementation
             self.$nextTick(() => {
-              var srcEl = document.createElement("source")
-              srcEl.setAttribute("src",URL.createObjectURL(vid_selector.files[0]))
-              srcEl.setAttribute("type",vid_selector.files[0].type)
-              
-              document.getElementById("video_player").prepend(srcEl)
-
+              if(self.vjs == null) {
+                videojs("video_player", {}, function() {
+                  self.vjs = this
+                  self.vjs.src({ type: vid_selector.files[0].type, src: URL.createObjectURL(vid_selector.files[0]) })
+                  self.vjs.load()
+                })
+              } else {
+                self.vjs.src({ type: vid_selector.files[0].type, src: URL.createObjectURL(vid_selector.files[0]) })
+                self.vjs.load()
+              }
               var fp0 = flatpickr(document.getElementById("playback_start"),{
                 enableTime: true,
                 minDate: Date.now(),
@@ -430,5 +422,8 @@ p {
 }
 .hiddenModal {
   display: none;
+}
+.vjs-tech {
+	position:unset;
 }
 </style>
