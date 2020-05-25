@@ -155,7 +155,7 @@ export default {
         let self = this;
         vid_selector.addEventListener("change", function() {
           if (vid_selector.files.length == 0) {
-            vid_upload_btn.setAttribute("disabled");
+            vid_upload_btn.setAttribute("disabled","true");
             self.file_selected = false;
           } else {
             vid_upload_btn.removeAttribute("disabled");
