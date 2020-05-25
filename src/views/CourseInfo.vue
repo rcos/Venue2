@@ -236,7 +236,7 @@ export default {
     async getActivePlaybackLecturesForSection() {
 
       LectureAPI.getLecturesForSection(this.section_id, "active_playback")
-      .then(response => { this.plabyack_lectures = response.data })
+      .then(response => { this.playback_lectures = response.data })
     },
     async getPastLecturesForSection() {
 
