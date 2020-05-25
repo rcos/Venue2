@@ -42,4 +42,24 @@ authRoutes.route('/login').post(function (req, res) {
   }
 });
 
+authRoutes.route('/check_for_temp_user/:user_id/:temp_password').get(function (req, res) {
+  let user_id = req.params.user_id
+  let temp_password = req.params.temp_password
+  console.log("user_id",user_id,"temp_password",temp_password)
+  if(user_id && temp_password){
+    User.findOne({ user_id: user_id, temp_password: temp_password}, function(error, temp_user) {
+      if(error || !temp_user){
+        console.log("Error unable to find temp user with user_id", user_id, "and temp password", temp_password)
+        res.status(404).json({ error: 'Invalid Login Credentials. Please try again' })
+      } else {
+        console.log("<Success>: Found temp user")
+        res.json(temp_user)
+      }
+    })
+  }else{
+    res.status(400).json({ error: 'Invalid login. Please try again.' })
+  }
+});
+
+
 module.exports = authRoutes;

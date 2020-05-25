@@ -10,6 +10,7 @@
 
 <script>
   import InputField from '@/components/InputField.vue'
+  import AuthAPI from '@/services/AuthAPI.js';
 
   export default {
     name: 'LoginForm',
@@ -43,7 +44,10 @@
       signup() {
         this.$refs.user_id_field.emitInputValue()
         this.$refs.password_field.emitInputValue()
-        this.$router.push({name: 'set_permanent_password', params: {user_id: 'blank'}})
+        AuthAPI.checkForTempUser(this.user.user_id, this.user.password).then(res => {
+          let temp_user = res.data
+          this.$router.push({name: 'set_permanent_password', params: {user_id: temp_user._id}})
+        }).catch(err => { this.show_invalid_login = true})        
       },
       setUserId(user_id) {
         this.user.user_id = user_id
