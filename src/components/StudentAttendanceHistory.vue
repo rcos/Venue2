@@ -48,7 +48,7 @@
                     <div class="day-of-month">{{ getDayOfMonth(event_) }}</div>
                   </div>
                   <div class="inline-block name-area">
-                    <div class="event-name">{{ event_.title }}</div>
+                    <div class="event-name">{{ shortenString(event_.title, 18) }}</div>
                     <div class="event-location">Event Location</div>
                   </div>
                   <!-- <div class="inline-block percentage-area">{{ getAttendancePercentage(event, selected_section) }}%</div> -->
@@ -76,6 +76,7 @@
   import EventAPI from '@/services/EventAPI.js'
   import SubmissionAPI from '@/services/SubmissionAPI.js'
   import SquareLoader from '@/components/Loaders/SquareLoader.vue'
+  import LectureAPI from '@/services/LectureAPI.js'
 
   export default {
     name: 'StudentAttendanceHistory',
@@ -110,11 +111,18 @@
       this.STATIC_DAY_OF_WEEK = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat']
 
       this.getCurrentUser ()
-      this.populateWithPlaceholderData ()
+      // this.populateWithPlaceholderData ()
+      this.getLectureHistoryData ()
       // this.getHistoryData ()
       // this.getUserCourseSubmissions ()
     },
     methods: {
+      shortenString (string, max_length) {
+        if (string.length < max_length) {
+          return string
+        }
+        return string.substring(0, max_length - 3) + "..."
+      },
       getCurrentUser() {
         this.current_user = this.$store.state.user.current_user
       },
@@ -123,6 +131,33 @@
         if (percent <= 60) return 'bad'
         else if (percent <= 75) return 'medium'
         return 'good'
+      },
+      getLectureHistoryData () {
+        // find the lectures for this section
+        LectureAPI.getLecturesForSection(this.section_id, "all")
+        .catch(err => { console.log(`Error retrieving lectures for section.`); console.log(err); })
+        .then(response => {
+
+          this.history_data = response.data
+          this.sortHistoryByMonth ()
+          this.data_loaded = true
+          this.data_to_show = Object.keys(this.history_data).length > 0
+          this.showData(this.data_to_show)
+
+          this.calculateGradeForHistoryData ()
+        })
+      },
+      calculateGradeForHistoryData () {
+        /* for each of the lectures in this section, we determine the grade by:
+         * (1) if the student submitted during the live lecture, they get a 100%
+         * (2) if the student did not attend the live lecture, and has not submitted to the
+         *      playback, regardless of whether the playback is available or not, they get a 0%
+         * (3) if the student does not attend the live lecture, but attends the playback lecture,
+         *      they grade is the percentage of the polls they got correct.
+        */
+
+
+        // TODO
       },
       populateWithPlaceholderData () {
         // populate history_data with temporary data
@@ -202,7 +237,9 @@
         let history_by_month = {}
         this.history_data.forEach(_data_ => {
 
-          let month_ = new Date(_data_.start_time).getMonth ()
+          let _date = new Date(_data_.start_time == undefined ? _data_.playback_submission_start_time : _data_.start_time )
+          let month_ = _date.getMonth ()
+
           if (history_by_month.hasOwnProperty( month_ )) {
             history_by_month[month_].push( _data_ )
           }
@@ -221,11 +258,11 @@
         this.history_loaded = true
       },
       getDayOfWeek (event_info) {
-        let date_ = new Date(event_info.start_time)
+        let date_ = new Date(event_info.start_time == undefined ? event_info.playback_submission_start_time : event_info.start_time)
         return this.STATIC_DAY_OF_WEEK[ date_.getDay() ]
       },
       getDayOfMonth (event_info) {
-        let date_ = new Date(event_info.start_time)
+        let date_ = new Date(event_info.start_time == undefined ? event_info.playback_submission_start_time : event_info.start_time)
         return date_.getDate ()
       }
     }
