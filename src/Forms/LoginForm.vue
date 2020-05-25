@@ -46,7 +46,8 @@
         this.$refs.password_field.emitInputValue()
         AuthAPI.checkForTempUser(this.user.user_id, this.user.password).then(res => {
           let temp_user = res.data
-          this.$router.push({name: 'set_permanent_password', params: {user_id: temp_user._id}})
+          this.$router.push({name: 'set_permanent_password', params: {user_id: temp_user._id},
+            query: {user: temp_user}})
         }).catch(err => { this.show_invalid_login = true})        
       },
       setUserId(user_id) {

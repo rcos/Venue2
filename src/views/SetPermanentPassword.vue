@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Set Password for "input user id here"</h2>
+    <h2>Set Password for {{ user.user_id }}</h2>
     <form @submit.prevent="onboardUser">
       <div class="row">
         <div class="col-md-6">
@@ -48,8 +48,18 @@
       }
     },
     created() {
+      console.log("query",this.$route.query)
+      this.user_id = this.$route.params.user_id
+      this.user = this.$route.query.user
+      console.log("user id", this.user_id)
+      console.log("user",this.user)
+      // this.getCurrentUser()
     },
     methods: {
+      async getCurrentUser() {
+        const response = await UserAPI.getUser(this.user_id)
+        this.user = response.data
+      },
       async onboardUser(evt){
         evt.preventDefault(); // prevents the form's default action from redirecting the page
         this.setEmail()
