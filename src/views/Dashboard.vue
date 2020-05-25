@@ -82,7 +82,9 @@
         live_lectures_loaded: Boolean,
         upcoming_lectures_loaded: Boolean,
         recent_lectures_loaded: Boolean,
-        playback_lectures_loaded: Boolean
+        playback_lectures_loaded: Boolean,
+        section_1: String,
+        section_2: String
       }
     },
     created() {
@@ -100,6 +102,7 @@
       this.getPlaybackLectures()
       this.getRecentLecturesForUser()
       this.getUpcomingLecturesForUser()
+      this.chooseSectionsToDisplay()
     },
     methods: {
       getColor (course_info) {
@@ -199,6 +202,24 @@
         this.upcoming_lectures = response.data
         this.upcoming_lectures_loaded = true
         this.upcoming_lectures_exist = this.upcoming_lectures.length > 0
+      },
+      chooseSectionsToDisplay() {
+        let set_section_1 = false
+        if(this.live_lectures_exist) {
+          this.section_1 = "live"
+          set_section_1 = true
+        }
+        if(this.playback_lectures_exist) {
+          if(set_section_1) {
+            this.section_2 = "playback"
+            return
+          } 
+        }
+        existence_flags = [["live", this.live_lectures_exist], ["playback", this.playback_lectures_exist], ["recent", this.recent_lectures_exist],
+        ["upcoming", this.upcoming_lectures_exist]]
+        existence_flags.forEach(flag => {
+
+        })
       }
     }
   }
