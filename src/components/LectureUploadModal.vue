@@ -1,9 +1,11 @@
 <template>
   <div id="lecture-upload-modal">
-    <button class="btn btn-primary" @click="handleShowModal">Upload Lecture Video...</button>
-    <div v-if="showModal" id="lecture_modal_viewable">
+    <button type="button" class="btn btn-primary" @click="handleShowModal">Upload Lecture Video...</button>
+    <div id="lecture_modal_viewable" class="hiddenModal">
       <div class="row titlerow">
-        <h1 id="banner_title">New Lecture Video <button id="cancel_upload_btn" class="btn btn-secondary" @click="handleHideModal">Cancel</button></h1>
+        <h1 id="banner_title">New Lecture Video <button type="button" v-if="update_lecture" id="cancel_upload_btn" class="btn btn-secondary" @click="handleHideModal">Cancel</button>
+          <button type="button" v-else id="cancel_upload_btn" class="btn btn-secondary" @click="hideModal()">Cancel</button>
+        </h1>
       </div>
       <div class="row filerow">
         <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn"/>
@@ -34,13 +36,13 @@
               <p class="answernumber">{{i + 1}}</p>
               <input class="answerfield" type="text" v-model.lazy="current_answers[i]"/>
               <input class="iscorrectfield" type="checkbox" v-model.lazy="current_is_correct[i]"/>
-              <button class="btn btn-danger removeanswer" @click="current_answers.splice(i,1);current_is_correct.splice(i,1)">X</button>
+              <button type="button" class="btn btn-danger removeanswer" @click="current_answers.splice(i,1);current_is_correct.splice(i,1)">X</button>
             </div>
             <div class="row addanswerrow">
-              <button id="add_answer_btn" class="btn btn-secondary" @click="current_answers.push('');current_is_correct.push(false)">Add Option</button>
+              <button type="button" id="add_answer_btn" class="btn btn-secondary" @click="current_answers.push('');current_is_correct.push(false)">Add Option</button>
             </div>
             <div class="row">
-              <button id="add_poll_btn" class="btn btn-primary" @click="addPoll">Save Poll</button>
+              <button type="button" id="add_poll_btn" class="btn btn-primary" @click="addPoll">Save Poll</button>
             </div>
           </div>
         </div>
@@ -49,7 +51,7 @@
           <div v-for="(poll,i) in polls" :key="i" class="row pollrow">
             <p class="polltimestamp">{{secondsToHHMMSS(poll.timestamp)}}</p>
             <input class="pollquestion" :value="poll.question" readonly/>
-            <button class="removepollbtn btn btn-danger" @click="polls.splice(i,1)">X</button>
+            <button type="button" class="removepollbtn btn btn-danger" @click="polls.splice(i,1)">X</button>
           </div>
         </div>
         <div class="col-5">
@@ -74,7 +76,8 @@
       <div class="row" id="bottomrow">
         <input id="playback_start" placeholder="Playback Submission Start" v-model.lazy="lecture.playback_submission_start_time"/>
         <input id="playback_end" placeholder="Playback Submission End" v-model.lazy="lecture.playback_submission_end_time"/>
-        <button id="video_upload_btn" class="btn btn-secondary" @click="updateLecture()" disabled>Upload</button>
+        <button type="button" v-if="update_lecture" id="video_upload_btn" class="btn btn-secondary" @click="updateLecture()" disabled>Upload</button>
+        <button type="button" v-else id="video_upload_btn" class="btn btn-secondary" @click="hideModal()" disabled>Upload</button>
       </div>
     </div>
   </div>
@@ -102,41 +105,64 @@ export default {
   data() {
     return {
       file_selected: false,
-      showModal: false,
       current_answers: [],
       current_is_correct: [],
-      polls: []
+      polls: [],
+      video_ref: ""
     };
   },
   created() {
-    this.lecture.video_ref = "/videos/" + this.lecture._id + "/";
+    
   },
   mounted() {
   },
   methods: {
     async updateLecture() {
-      if(this.update_lecture) {
-        LectureAPI.addLecturePlayback(
-          this.lecture,
-          document.getElementById("video_selector").files[0]
-        ).then(res => {
-          let n_saved = 0
-          for(let i=0;i<this.polls.length;i++) {
-            PlaybackPollAPI.addPoll(this.polls[i])
-            .then(res => {
-              n_saved++
-              if(n_saved == this.polls.length) {
-                this.polls = []
-                this.handleHideModal()
-                location.reload()
-              }
-            })
-          }
-        })
-      }
+      this.lecture.video_ref = "/videos/" + this.lecture._id + "/";
+      LectureAPI.addLecturePlayback(
+        this.lecture,
+        document.getElementById("video_selector").files[0]
+      ).then(res => {
+        let n_saved = 0
+        for(let i=0;i<this.polls.length;i++) {
+          PlaybackPollAPI.addPoll(this.polls[i])
+          .then(res => {
+            n_saved++
+            if(n_saved == this.polls.length) {
+              this.polls = []
+              this.handleHideModal()
+              location.reload()
+            }
+          })
+        }
+      })
+    },
+    async updateLectureFromParent(lect,course_id) {
+      console.log(lect)
+      lect.video_ref = "/videos/" + lect._id + "/";
+      LectureAPI.addLecturePlayback(
+        lect,
+        document.getElementById("video_selector").files[0]
+      ).then(res => {
+        let n_saved = 0
+        for(let i=0;i<this.polls.length;i++) {
+          PlaybackPollAPI.addPoll(this.polls[i])
+          .then(res => {
+            n_saved++
+            if(n_saved == this.polls.length) {
+              this.polls = []
+              this.handleHideModal()
+              this.$router.push({
+                name: "course_info",
+                params: { id: course_id }
+              })
+            }
+          })
+        }
+      })
     },
     handleShowModal() {
-      this.showModal = true
+      this.showModal()
       this.$nextTick(() => {
         let vid_selector = document.getElementById("video_selector");
         let vid_upload_btn = document.getElementById("video_upload_btn");
@@ -181,7 +207,13 @@ export default {
     },
     handleHideModal() {
       this.file_selected = false;
-      this.showModal = false
+      this.hideModal()
+    },
+    hideModal() {
+      document.getElementById('lecture_modal_viewable').classList.add('hiddenModal')
+    },
+    showModal() {
+      document.getElementById('lecture_modal_viewable').classList.remove('hiddenModal')
     },
     addPoll() {
       let question = document.getElementById("question")
@@ -396,5 +428,8 @@ p {
   margin: 0 auto;
   padding: 0.25rem;
   height: 2rem;
+}
+.hiddenModal {
+  display: none;
 }
 </style>
