@@ -2,19 +2,26 @@
   <div>
     <show-at breakpoint="large">
       <div class="venue-body-container">
-        <!-- <LiveCourses :colorCallback="getColor" :loaded="live_lectures_loaded" :data="live_lectures" /> -->
-        <LiveLectureList :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
-        <PlaybackCourses :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
-        <RecentCourses :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
-        <UpcomingCourses :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
+        <LiveLectureList v-if="section_1 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
+        <PlaybackCourses v-if="section_1 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
+        <RecentCourses v-if="section_1 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
+        <UpcomingCourses v-if="section_1 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
+        <LiveLectureList v-if="section_2 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
+        <PlaybackCourses v-if="section_2 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
+        <RecentCourses v-if="section_2 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
+        <UpcomingCourses v-if="section_2 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
       </div>
     </show-at>
     <hide-at breakpoint="large">
       <div class="venue-body-container is-mobile">
-        <LiveLectureList :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode/>
-        <PlaybackCourses :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode />
-        <RecentCourses :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
-        <UpcomingCourses :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
+        <LiveLectureList v-if="section_1 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode />
+        <PlaybackCourses v-if="section_1 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode/>
+        <RecentCourses v-if="section_1 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
+        <UpcomingCourses v-if="section_1 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
+        <LiveLectureList v-if="section_2 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode />
+        <PlaybackCourses v-if="section_2 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode />
+        <RecentCourses v-if="section_2 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
+        <UpcomingCourses v-if="section_2 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
       </div>
     </hide-at>
 
@@ -79,7 +86,7 @@
         courses_loaded: Number,
         courses: Object,
         STATIC_COURSE_COLORS: Array,
-        live_lectures_loaded: Boolean,
+        live_lectures_loaded: false,
         upcoming_lectures_loaded: Boolean,
         recent_lectures_loaded: Boolean,
         playback_lectures_loaded: Boolean,
@@ -98,11 +105,6 @@
 
       this.getCurrentUser()
       this.getAllLecturesForUser()
-      this.getLiveLecturesForUser()
-      this.getPlaybackLectures()
-      this.getRecentLecturesForUser()
-      this.getUpcomingLecturesForUser()
-      this.chooseSectionsToDisplay()
     },
     methods: {
       getColor (course_info) {
@@ -152,32 +154,12 @@
         console.log(`Course Size: ${_size_}`)
         this.courses_loaded = _size_
       },
-      async fillSectionInfo (data_object) {
-        // given an object with a sections field, find the course and store it in the data_object
-        // with the key course_info
-        return new Promise((resolve, reject) => {
-
-          // resolve, with the data_object if success
-          // reject otherwise
-          if (data_object == null || data_object == undefined) { reject("no data object provided.") }
-          if (!data_object.hasOwnProperty( 'sections' )) { reject ("Object has no sections field.") }
-
-          SectionAPI.getCourse(data_object.sections[0])
-          .then(response => {
-            data_object["course_info"] = response.data
-            this.$forceUpdate ()
-            resolve(data_object)
-          })
-          .catch(err => {
-            console.log(`Problem  fetching course data`)
-            reject(err)
-          })
-
-        })
-      },
       async getAllLecturesForUser() {
-        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "all", "with_sections_and_course")
-        this.all_lectures = response.data
+        await this.getLiveLecturesForUser()
+        await this.getPlaybackLectures()
+        await this.getRecentLecturesForUser()
+        await this.getUpcomingLecturesForUser()
+        this.chooseLecturesToDisplay()
       },
       async getLiveLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "live", "with_sections_and_course")
@@ -203,22 +185,22 @@
         this.upcoming_lectures_loaded = true
         this.upcoming_lectures_exist = this.upcoming_lectures.length > 0
       },
-      chooseSectionsToDisplay() {
-        let set_section_1 = false
-        if(this.live_lectures_exist) {
-          this.section_1 = "live"
-          set_section_1 = true
-        }
-        if(this.playback_lectures_exist) {
-          if(set_section_1) {
-            this.section_2 = "playback"
-            return
-          } 
-        }
-        existence_flags = [["live", this.live_lectures_exist], ["playback", this.playback_lectures_exist], ["recent", this.recent_lectures_exist],
-        ["upcoming", this.upcoming_lectures_exist]]
-        existence_flags.forEach(flag => {
-
+      chooseLecturesToDisplay() {
+        let lecture_existence_pairs = [["live", this.live_lectures_exist], ["playback", this.playback_lectures_exist], 
+          ["recent", this.recent_lectures_exist], ["upcoming", this.upcoming_lectures_exist]]
+        let found_first_type = false
+        lecture_existence_pairs.forEach(pair => {
+          let lecture_type = pair[0]
+          let lecture_existence_status = pair[1]
+          if(lecture_existence_status) {
+            if(!found_first_type) {
+              this.section_1 = lecture_type
+              found_first_type = true
+            } else if(found_first_type) {
+              this.section_2 = lecture_type
+              return
+            } 
+          }
         })
       }
     }
@@ -265,5 +247,4 @@
     text-align: center;
     margin-top: 0.5rem;
   }
-
 </style>
