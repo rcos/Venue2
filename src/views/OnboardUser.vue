@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>Onboard User</h2>
-    <form @submit.prevent="addUser">
+    <form @submit.prevent="onboardUser">
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
@@ -50,11 +50,16 @@
     created() {
     },
     methods: {
-      async addUser(evt){
+      async onboardUser(evt){
         evt.preventDefault(); // prevents the form's default action from redirecting the page
-        const response = await UserAPI.addUser(this.user);
-        this.$router.push({name: 'users'});
+        this.setEmail()
+        // const response = await UserAPI.addUser(this.user);
+        // this.$router.push({name: 'users'});
       },
+      setEmail() {
+        this.user.email = this.user.user_id + "@rpi.edu"
+        console.log(this.user.email)
+      }
     }
   }
 </script>
