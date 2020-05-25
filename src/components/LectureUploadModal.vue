@@ -93,7 +93,8 @@ require("flatpickr/dist/themes/material_blue.css");
 export default {
   name: "LectureUploadModal",
   props: {
-    lecture: Object
+    lecture: Object,
+    update_lecture: Boolean
   },
   computed: {},
   components: {
@@ -114,10 +115,12 @@ export default {
   },
   methods: {
     async updateLecture() {
-      LectureAPI.addLecturePlayback(
-        this.lecture,
-        document.getElementById("video_selector").files[0]
-      )
+      if(this.update_lecture) {
+        LectureAPI.addLecturePlayback(
+          this.lecture,
+          document.getElementById("video_selector").files[0]
+        )
+      }
       let n_saved = 0
       for(let i=0;i<this.polls.length;i++) {
         PlaybackPollAPI.addPoll(this.polls[i])
