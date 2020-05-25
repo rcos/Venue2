@@ -185,12 +185,7 @@
       async getRecentLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "past", "with_sections_and_course")
         this.recent_lectures = response.data
-        console.log("Recent Lectures: ")
-        console.log(this.recent_lectures)
-        // this.recent_lectures = this.recent_lectures.slice(0,3)
         this.recent_lectures_loaded = true
-        console.log("Recent Lectures loaded")
-        console.log(this.recent_lectures_loaded)
       },
       async getUpcomingLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "upcoming", "with_sections_and_course")
