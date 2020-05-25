@@ -1,12 +1,12 @@
 <template>
 
-  <div v-if="lectures != null && lectures.length > 0">
+  <div :style="{marginTop: '20px'}" v-if="lectures != null && lectures.length > 0">
     <div class="inline-block label">{{ label }}</div>
     <div class="inline-block lecture-pill-holder">
       <router-link v-for="lecture in lectures" :to="{name: 'lecture_info', params: { id: lecture._id }}">
         <LecturePill
           :name="lecture.title" middle=""
-          :right="getTime(lecture.start_time == undefined ? lecture.playback_submission_start_time : lecture.start_time)"
+          :right="getTime(lecture.start_time == undefined ? lecture.playback_submission_end_time : lecture.end_time)"
           color="green" />
         </router-link>
       <!-- <LecturePill name="Test Name" middle="75%" right="2d 5h" color="blue" />

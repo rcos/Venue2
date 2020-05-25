@@ -25,6 +25,7 @@
         <div class="course-info-sub-tab">
           <div class="left">
             <div v-on:click="subview_section_id = 0" :class="'tab ' + (subview_section_id == 0 ? 'active' : '')">Attendance History</div>
+            <div v-on:click="subview_section_id = 2" :class="'tab ' + (subview_section_id == 2 ? 'active' : '')">Upcoming</div>
             <div v-if="data_to_show" v-on:click="subview_section_id = 1" :class="'tab ' + (subview_section_id == 1 ? 'active' : '')">Statistics</div>
           </div>
           <div v-if="this.current_user.is_instructor" class="right">
@@ -55,6 +56,10 @@
             :student_id="this.current_user._id"
             :section_id="section_id"
           />
+        </div>
+        <div v-else-if="subview_section_id == 2" :style="{marginTop: '20px'}">
+          <show-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" /></show-at>
+          <hide-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" mobileMode/></hide-at>
         </div>
 
       </div>
@@ -108,6 +113,7 @@
   import SectionAttendanceGraph from '@/components/SectionAttendanceGraph.vue'
   import StudentAttendanceGraph from '@/components/StudentAttendanceGraph.vue'
   import LecturePillList from '@/components/LecturePillList.vue'
+  import UpcomingLecturesList from '@/components/UpcomingLecturesList.vue'
 
   import '@/assets/css/venue-core.css'
   import '@/assets/icon-font.css'
@@ -128,7 +134,8 @@ export default {
     InstructorAttendanceHistory,
     SectionAttendanceGraph,
     StudentAttendanceGraph,
-    LecturePillList
+    LecturePillList,
+    UpcomingLecturesList
   },
   data(){
     return {
@@ -141,7 +148,7 @@ export default {
       live_lectures: [],
       past_lectures: [],
       playback_lectures: [],
-
+      section_id: String,
       course_students: [],
       course_has_loaded: false,
       sort_ascending: true,
@@ -158,6 +165,7 @@ export default {
     this.selected_section = null
     this.section_arr = []
     this.getCurrentUser ()
+    this.section_id = null
 
     if (this.current_user.is_instructor) {
       this.course_id = this.$route.params.id
@@ -203,7 +211,7 @@ export default {
     async getActivePlaybackLecturesForCourse() {
 
       LectureAPI.getLecturesForCourse(this.course_id, "active_playback")
-      .then(response => { this.playback_lectures = response.data })
+      .then(response => { this.playback_lectures = response.data; console.log(`playback lectures`); console.log(response.data); })
     },
     async getPastLecturesForCourse() {
 
@@ -218,7 +226,7 @@ export default {
     async getUpcomingLecturesForCourse() {
 
       LectureAPI.getLecturesForCourse(this.course_id, "upcoming")
-      .then(response => { this.upcoming_lectures = response.data })
+      .then(response => { this.upcoming_lectures = response.data; })
     },
     async getAllLecturesForCourse() {
 
@@ -243,7 +251,8 @@ export default {
     async getUpcomingLecturesForSection() {
 
       LectureAPI.getLecturesForSection(this.section_id, "upcoming")
-      .then(response => { this.upcoming_lectures = response.data })
+      .then(response => { this.upcoming_lectures = response.data; console.log(`Gettting upcoming sections`); console.log(response.data) })
+      .catch(err => { console.log(`Error getting upcoming sections.`); console.log(err); })
     },
     async getAllLecturesForSection() {
 

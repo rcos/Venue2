@@ -32,7 +32,7 @@
                       <div class="day-of-month">{{ getDayOfMonth(event) }}</div>
                     </div>
                     <div class="inline-block name-area">
-                      <div class="event-name">{{ event.title }}</div>
+                      <div class="event-name">{{ shortenString(event.title, 18) }}</div>
                       <div class="event-location">Event Location</div>
                     </div>
                     <!-- <div class="inline-block percentage-area">{{ getAttendancePercentage(event, selected_section) }}%</div> -->
@@ -111,10 +111,16 @@
       this.STATIC_DAY_OF_WEEK = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat']
       this.STATIC_MONTHS = ['Janurary', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
       // this.getEventHistoryForCourse ()
-      // this.getLectureHistoryForCourse ()
-      this.populatePlaceholderLectures ()
+      this.getLectureHistoryForCourse ()
+      // this.populatePlaceholderLectures ()
     },
     methods: {
+      shortenString (string, max_length) {
+        if (string.length < max_length) {
+          return string
+        }
+        return string.substring(0, max_length - 3) + "..."
+      },
       getEventByMonth () {
         // sections_info[selected_section].events_by_month
 
@@ -130,11 +136,11 @@
         return Math.floor((event.submission_count / this.sections_info[section_id].students.length) * 100)
       },
       getDayOfWeek (event) {
-        let _date = new Date(event.start_time)
+        let _date = new Date(event.start_time == undefined ? event.playback_submission_start_time : event.start_time)
         return this.STATIC_DAY_OF_WEEK[ _date.getDay() ]
       },
       getDayOfMonth (event) {
-        let _date = new Date(event.start_time)
+        let _date = new Date(event.start_time == undefined ? event.playback_submission_start_time : event.start_time)
         return _date.getDate ()
       },
       populatePlaceholderLectures () {
@@ -151,28 +157,28 @@
           },{
             title: 'Lecture 2',
             start_time: '2020-04-21T17:02:38.427+00:00',
-            _id: 1
+            _id: 2
           },{
             title: 'Lecture 3',
             start_time: '2020-05-21T17:02:38.427+00:00',
-            _id: 1
+            _id: 3
           }],
           456: [{
             title: 'Lecture 1',
             start_time: '2020-01-21T17:02:38.427+00:00',
-            _id: 1
+            _id: 4
           },{
             title: 'Lecture 3',
             start_time: '2020-02-21T17:02:38.427+00:00',
-            _id: 1
+            _id: 5
           },{
             title: 'Lecture 2',
             start_time: '2020-02-11T17:02:38.427+00:00',
-            _id: 1
+            _id: 6
           },{
             title: 'Lecture 4',
             start_time: '2020-03-21T17:02:38.427+00:00',
-            _id: 1
+            _id: 7
           }]
         }
 
@@ -191,7 +197,7 @@
 
           lectures_.forEach(lecture_ => {
             // get the date for this lecture
-            let lecture_date = new Date(lecture_.start_time)
+            let lecture_date = new Date(lecture_.start_time == undefined ? lecture_.playback_submission_start_time : lecture_.start_time)
             if (+ lecture_date != NaN) {
 
               if (lectures_by_month.hasOwnProperty( lecture_date.getMonth() )) {
@@ -295,23 +301,27 @@
           sections.forEach(section_ => {
             lectures_for_sections.push( new Promise((resolve, reject) => {
               LectureAPI.getLecturesForSection(section_._id, "all")
+              .then(response => { resolve(response.data) })
+              .catch(err => { resolve(null) })
             }) )
           })
 
-          console.log(lectures_for_sections)
-
           Promise.all(lectures_for_sections)
           .then(fulfilled_lectures_for_sections => {
-
-            console.log(fulfilled_lectures_for_sections)
             // add the section info to the object this.sections_info
             fulfilled_lectures_for_sections.forEach((lecture_info, i) => {
+
               // get the section that this lecture belongs to
               let section = sections[i]
               if (section != null && section != undefined) {
                 this.sections_info[ section._id ] = lecture_info
               }
             })
+
+            this.separateSectionsInfoByMonth ()
+            this.data_loaded = true
+            this.data_to_show = Object.keys(this.sections_info).length > 0
+            this.showData(this.data_to_show)
 
           })
 
