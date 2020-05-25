@@ -44,6 +44,7 @@
             :course_id="course_id"
             :selected_section="selected_section"
             :showData="showData"
+            :selected_section_info="all_sections[ selected_section ] == undefined ? null : all_sections[ selected_section ]"
             v-if="this.current_user.is_instructor" />
           <StudentAttendanceHistory :section_id="section_id" :showData="showData" v-else />
 
@@ -84,6 +85,7 @@
               :course_id="course_id"
               :selected_section="selected_section"
               :showData="showData"
+              :selected_section_info="all_sections[ selected_section ] == undefined ? null : all_sections[ selected_section ]"
               v-if="this.current_user.is_instructor"
               mobileMode />
               <StudentAttendanceHistory :section_id="section_id" :showData="showData" mobileMode v-else />
@@ -156,7 +158,8 @@ export default {
       grid_view: true,
       subview_section_id: 0,
       section_arr: [],
-      selected_section: String
+      selected_section: String,
+      all_sections: Object
     }
   },
   created() {
@@ -176,6 +179,7 @@ export default {
       this.getLiveLecturesForCourse()
       this.getPastLecturesForCourse()
       this.getActivePlaybackLecturesForCourse()
+      this.getAllSections()
     }
     else {
 
@@ -192,6 +196,19 @@ export default {
     }
   },
   methods: {
+    getAllSections () {
+      SectionAPI.getSectionsForCourse(this.course_id)
+      .catch(err => { console.log(`Problem getting sections for course ${this.course_id}`); console.log(err);})
+      .then(response => {
+        let all_sections_arr = response.data
+        let sections_obj = {}
+        all_sections_arr.forEach(section_ => {
+          sections_obj[section_._id] = section_
+        })
+
+        this.all_sections = sections_obj
+      })
+    },
     showData (new_val) {
       this.data_to_show = new_val
     },
