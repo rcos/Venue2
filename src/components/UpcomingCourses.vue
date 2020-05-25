@@ -12,6 +12,7 @@
         <LectureCard
           :courseName="lecture.sections[0].course.name"
           :courseDept="lecture.sections[0].course.dept"
+          :courseNumber="lecture.sections[0].course.course_number"
           :eventLabel="lecture.title"
           status="static"
           :timeFromNow="lecture.start_time"
