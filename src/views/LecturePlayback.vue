@@ -73,8 +73,11 @@ export default {
 											let currTime = vid.currentTime()
 											if(currTime - self.prevTime < 0.5 && currTime > self.prevTime) {
 												//Considered NOT a 'seek', video is playing normally
-												if(self.lectureSubmission.video_progress < currTime) {
-													self.lectureSubmission.video_progress = currTime
+												if(self.lectureSubmission.video_progress < Math.floor(currTime)) {
+													self.lectureSubmission.video_progress = Math.floor(currTime)
+													if(self.lectureSubmission.video_progress%5 == 0) {
+														LectureSubmissionAPI.update(self.lectureSubmission)
+													}
 												}
 												for (let i = 0; i < self.polls.length; i++) {
 													if (currTime > self.polls[i].timestamp) {
