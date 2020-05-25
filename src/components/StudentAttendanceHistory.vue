@@ -12,7 +12,7 @@
 
 
               <router-link v-for="event in history_data[month_index]" :key="event._id" :to="{name: 'event_info', params: { event_id: event._id }}">
-                <div :class="'mobile-pill ' + getClassByAttendance(80)">
+                <div :class="'mobile-pill ' + getClassByAttendance(event.percentage == undefined ? 0 : event.percentage)">
                   <div class="day-of-week">{{ getDayOfWeek(event) }}</div>
                   <div class="day-of-month">{{ getDayOfMonth(event) }}</div>
                 </div>
@@ -26,7 +26,7 @@
             <div class="month-area">{{ STATIC_MONTHS[month_index] }}</div>
             <div class="attendance-history-container">
 
-              <router-link v-for="event_ in history_data[month_index]" :key="event_._id" :to="{name: 'lecture_info', params: { lecture_id: event_._id }}">
+              <router-link v-for="event in history_data[month_index]" :key="event._id" :to="{name: 'lecture_info', params: { lecture_id: event._id }}">
                 <!-- <div
                   :class="'student-attendance-pill inline-block ' + (wasPresent(event_._id) ? 'present' : 'absent')">
 
@@ -42,17 +42,17 @@
                   </div>
                 </div> -->
 
-                <div :class="'inline-block instructor-attendance-history-pill ' + getClassByAttendance(80)">
+                <div :class="'inline-block instructor-attendance-history-pill ' + getClassByAttendance(event.percentage == undefined ? 0 : event.percentage)">
                   <div class="inline-block date-area">
-                    <div class="day-of-week">{{ getDayOfWeek(event_) }}</div>
-                    <div class="day-of-month">{{ getDayOfMonth(event_) }}</div>
+                    <div class="day-of-week">{{ getDayOfWeek(event) }}</div>
+                    <div class="day-of-month">{{ getDayOfMonth(event) }}</div>
                   </div>
                   <div class="inline-block name-area">
-                    <div class="event-name">{{ shortenString(event_.title, 18) }}</div>
+                    <div class="event-name">{{ shortenString(event.title, 18) }}</div>
                     <div class="event-location">Event Location</div>
                   </div>
                   <!-- <div class="inline-block percentage-area">{{ getAttendancePercentage(event, selected_section) }}%</div> -->
-                  <div class="inline-block percentage-area">0%</div>
+                  <div class="inline-block percentage-area">{{ event.percentage == undefined ? 40 : event.percentage }}%</div>
                 </div>
               </router-link>
 
@@ -77,6 +77,7 @@
   import SubmissionAPI from '@/services/SubmissionAPI.js'
   import SquareLoader from '@/components/Loaders/SquareLoader.vue'
   import LectureAPI from '@/services/LectureAPI.js'
+  import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
 
   export default {
     name: 'StudentAttendanceHistory',
@@ -91,6 +92,7 @@
     },
     data () {
       return {
+        current_user: Object,
         data_loaded: Boolean,
         data_to_show: Boolean,
         history_data: Object,
@@ -156,8 +158,33 @@
          *      they grade is the percentage of the polls they got correct.
         */
 
+        // First, get all lecture submissions from this student for each individual lecture
+        // If there is not a submission, return 0%
+        // If there is a submission, and is_live_submission == true, return 100%
+        // Otherwise, go through the student's poll answers and grade their poll answers
 
-        // TODO
+        Object.keys(this.history_data).forEach(month_index => {
+
+          this.history_data[month_index].forEach(lecture_data => {
+
+            LectureSubmissionAPI.getLectureSubmissionForStudent(lecture_data._id, this.current_user._id)
+            .catch(err => { console.log(`error retrieving lecture submissions for student ${this.current_user._id}`); console.log(err); })
+            .then(response => {
+
+              // response data is null if there is no submission for this lecture
+              if (response.data == null) {
+                lecture_data.percentage = 0
+              }
+              else {
+                // TODO check if the submission is for live lecture or for playback lecture
+                lecture_data.percentage = 100
+              }
+
+              this.$forceUpdate ()
+            })
+          })
+
+        })
       },
       populateWithPlaceholderData () {
         // populate history_data with temporary data
