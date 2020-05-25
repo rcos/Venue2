@@ -14,7 +14,7 @@ var transporter = nodemailer.createTransport({
 	}
 });
 
-const legal_lecture_types = ["all","live","upcoming","past","active_playback"]
+const legal_lecture_types = ["all","live","upcoming","past","recent","active_playback"]
 const legal_preferences = ["with_sections", "with_sections_and_course", "none"]
 
 let Lecture = require('../Lecture/Lecture.model')
@@ -194,6 +194,8 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type/:preference', (req, res) => 
 											instructor_lectures = getPastLectures(instructor_lectures)
 										else if(lecture_type === "upcoming")
 											instructor_lectures = getUpcomingLectures(instructor_lectures)
+										else if(lecture_type === "recent")
+											instructor_lectures = getRecentLectures(instructor_lectures)
 										// attach sections or courses to lectures based on preference
 										if(preference === "none")
 											res.json(instructor_lectures)
@@ -242,6 +244,8 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type/:preference', (req, res) => 
 								student_lectures = getPastLectures(student_lectures)
 							else if(lecture_type === "upcoming")
 								student_lectures = getUpcomingLectures(student_lectures)
+							else if(lecture_type === "recent")
+								student_lectures = getRecentLectures(student_lectures)
 							// attach sections or courses to lectures based on preference
 							if(preference === "none")
 								res.json(student_lectures)
@@ -326,6 +330,8 @@ lectureRoutes.get('/for_course/:course_id/:lecture_type', (req, res) => {
 							res.json(getPastLectures(course_lectures))
 						else if(lecture_type === "active_playback")
 							res.json(getActivePlaybackLectures(course_lectures))
+						else if(lecture_type === "recent")
+							res.json(getRecentLectures(course_lectures))
 					}
 				})
 			}
@@ -356,6 +362,8 @@ lectureRoutes.get('/for_section/:section_id/:lecture_type', (req, res) => {
 					res.json(getPastLectures(section_lectures))
 				else if(lecture_type === "active_playback")
 					res.json(getActivePlaybackLectures(section_lectures))
+				else if(lecture_type === "recent")
+					res.json(getRecentLectures(section_lectures))
 			}
 		})
 	}
@@ -485,6 +493,15 @@ function getActivePlaybackLectures(lectures) {
 	return active_playback_lectures
 }
 
+function getRecentLectures(lectures) {
+	recent_lectures = []
+	past_lectures = getPastLectures(lectures)
+	past_lectures.forEach(lecture => {
+		if(isRecent(lecture))
+			recent_lectures.push(lecture)
+	})
+	return recent_lectures
+}
 
 function isLive(lecture) {
   let current_time = new Date()
@@ -508,6 +525,18 @@ function isActivePlayback(lecture) {
   let current_time = new Date()
   return current_time >= lecture.playback_submission_start_time &&
   	current_time <= lecture.playback_submission_end_time
+}
+
+function isRecent(lecture) {
+  let current_time = new Date()
+  let one_week_ago = new Date()
+  one_week_ago.setDate(current_time.getDate() - 7)
+  if(lecture.start_time){
+  	return lecture.end_time >= one_week_ago
+  }
+  else{
+  	return lecture.playback_submission_end_time >= one_week_ago
+  }
 }
 
 module.exports = lectureRoutes
