@@ -199,7 +199,8 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type/:preference', (req, res) => 
 											res.json(instructor_lectures)
 										else {
 											instructor_lectures.forEach(instructor_lecture => {
-												instructor_lecture.sections.forEach((lecture_section, i) => {
+												for(let i = 0; i < instructor_lecture.sections.length; i++) {
+													lecture_section = instructor_lecture.sections[i]
 													instructor_sections.forEach(instructor_section => {
 														if(lecture_section.equals(instructor_section._id)) {
 															instructor_lecture.sections[i] = instructor_section
@@ -207,7 +208,7 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type/:preference', (req, res) => 
 																instructor_lecture.sections[i].course = instructor_courses[0]
 														}
 													})
-												})
+												}
 											})
 											res.json(instructor_lectures)
 										}
@@ -227,12 +228,6 @@ lectureRoutes.get('/for_user/:user_id/:lecture_type/:preference', (req, res) => 
 						} else {
 							console.log("<SUCCESS> Getting lectures for student ID: " + user_id +
 								", with lecture type: " + lecture_type + ", with preference: " + preference)
-							// student_lectures.forEach(student_lecture => {
-							// 	student_lecture.sections.forEach(student_section => {
-							// 		if(student_section.course == null)
-							// 			console.log("Student section course is null")
-							// 	})	
-							// })
 							student_sections.forEach(student_section => {
 								if(student_section.course == null)
 									console.log("section course is null")
