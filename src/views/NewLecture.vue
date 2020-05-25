@@ -106,20 +106,19 @@ export default {
       this.lecture.allow_live_submissions = this.allow_live_submissions
       this.lecture.allow_playback_submissions = this.allow_playback_submissions
       // generate attendance codes for live lectures
-      if(this.lecture.allow_live_submissions)
+      if(this.lecture.allow_live_submissions) {
         this.generateAttendanceCode()
-      let response = await LectureAPI.addLecture(this.lecture);
-      this.lecture = response.data
-      // add video playback for playback lectures
-      if(this.lecture.allow_playback_submissions) {
-        this.$refs["uploadmodal"].updateLectureFromParent(this.lecture,this.course_id)
-      }
-      else {
-        // go back to course info
+        let response = await LectureAPI.addLecture(this.lecture);
+        this.lecture = response.data
         this.$router.push({
           name: "course_info",
           params: { id: this.course_id }
         })
+      }
+      else if(this.lecture.allow_playback_submissions && this.$refs["uploadmodal"].isComplete()) {
+        let response = await LectureAPI.addLecture(this.lecture);
+        this.lecture = response.data
+        this.$refs["uploadmodal"].updateLectureFromParent(this.lecture,this.course_id)
       }
     },
     async getSectionsForCourse() {
