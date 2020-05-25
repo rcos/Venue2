@@ -189,7 +189,9 @@
         let lecture_existence_pairs = [["live", this.live_lectures_exist], ["playback", this.playback_lectures_exist], 
           ["recent", this.recent_lectures_exist], ["upcoming", this.upcoming_lectures_exist]]
         let found_first_type = false
-        lecture_existence_pairs.forEach(pair => {
+        console.log("In func. length: " + lecture_existence_pairs.length)
+        for(let i = 0; i < lecture_existence_pairs.length; i++) {
+          let pair = lecture_existence_pairs[i]
           let lecture_type = pair[0]
           let lecture_existence_status = pair[1]
           if(lecture_existence_status) {
@@ -198,10 +200,10 @@
               found_first_type = true
             } else if(found_first_type) {
               this.section_2 = lecture_type
-              return
+              break
             } 
           }
-        })
+        }
       }
     }
   }
