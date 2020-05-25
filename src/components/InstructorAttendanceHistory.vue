@@ -12,7 +12,7 @@
 
 
                 <router-link v-for="event in sections_info[selected_section][month_index]" :key="event._id" :to="{name: 'event_info', params: { event_id: event._id }}">
-                  <div :class="'mobile-pill ' + getClassByAttendance(80)">
+                  <div :class="'mobile-pill ' + getClassByAttendance(event.percentage == undefined ? 0 : event.percentage)">
                     <div class="day-of-week">{{ getDayOfWeek(event) }}</div>
                     <div class="day-of-month">{{ getDayOfMonth(event) }}</div>
                   </div>
@@ -26,7 +26,7 @@
               <div class="event-pills-area">
                 <router-link v-for="event in sections_info[selected_section][month_index]" :key="event._id" :to="{name: 'event_info', params: { event_id: event._id }}">
                   <!-- <div :class="'inline-block instructor-attendance-history-pill ' + getClassByAttendance(getAttendancePercentage(event, selected_section))"> -->
-                  <div :class="'inline-block instructor-attendance-history-pill ' + getClassByAttendance(80)">
+                  <div :class="'inline-block instructor-attendance-history-pill ' + getClassByAttendance(event.percentage == undefined ? 0 : event.percentage)">
                     <div class="inline-block date-area">
                       <div class="day-of-week">{{ getDayOfWeek(event) }}</div>
                       <div class="day-of-month">{{ getDayOfMonth(event) }}</div>
@@ -36,7 +36,7 @@
                       <div class="event-location">Event Location</div>
                     </div>
                     <!-- <div class="inline-block percentage-area">{{ getAttendancePercentage(event, selected_section) }}%</div> -->
-                    <div class="inline-block percentage-area">0%</div>
+                    <div class="inline-block percentage-area">{{event.percentage == undefined ? 0 : event.percentage}}%</div>
                   </div>
                 </router-link>
 
@@ -81,6 +81,7 @@
   import LectureAPI from '@/services/LectureAPI.js'
   import SubmissionAPI from '@/services/SubmissionAPI.js'
   import SquareLoader from '@/components/Loaders/SquareLoader.vue'
+  import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
 
   export default {
     name: 'InstructorAttendanceHistory',
@@ -90,6 +91,7 @@
       informSections: Function,
       showData: Function,
       mobileMode: Boolean,
+      selected_section_info: Object,
       selected_section: {
         type: String,
         default: null // -1 == all sections
@@ -319,6 +321,8 @@
             })
 
             this.separateSectionsInfoByMonth ()
+            this.calculateAttendancePercentages ()
+
             this.data_loaded = true
             this.data_to_show = Object.keys(this.sections_info).length > 0
             this.showData(this.data_to_show)
@@ -327,6 +331,39 @@
 
         })
 
+      },
+      calculateAttendancePercentages () {
+        /*
+        * Calculating attendance percentage for instructor:
+        *
+        * For each attendance event, per section, find the number of students in this section
+        * and find the lecture submissions for a lecture. The percentage for that course is the
+        * number of submissions divided by the student body count then multiplied by 100.
+        */
+
+        console.log(`calculating attendance percentage`)
+        Object.keys(this.sections_info[this.selected_section]).forEach(month_index => {
+          this.sections_info[this.selected_section][month_index].forEach(lecture_ => {
+
+            // get the submission count for this lecture and then divide by the student count
+            let promise_tracker = []
+            promise_tracker.push(
+
+              LectureSubmissionAPI.getLectureSubmissionsForLecture(lecture_._id)
+              .catch(err => { console.log('error retrieving lecture submissions for lecture ' + lecture_._id); console.log(err); })
+              .then(response => {
+                let submission_count = response.data.length == undefined ? 0 : response.data.length
+                let student_count = this.selected_section_info.students.length
+                lecture_.percentage = (submission_count / student_count) * 100
+              })
+            )
+
+            Promise.all(promise_tracker)
+            .then(_ => {
+              this.$forceUpdate ()
+            })
+          })
+        })
       },
       getEventHistoryForCourse () {
         EventAPI.getEventHistoryForCourse(this.course_id)

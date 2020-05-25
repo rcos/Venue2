@@ -52,7 +52,7 @@
                     <div class="event-location">Event Location</div>
                   </div>
                   <!-- <div class="inline-block percentage-area">{{ getAttendancePercentage(event, selected_section) }}%</div> -->
-                  <div class="inline-block percentage-area">{{ event.percentage == undefined ? 40 : event.percentage }}%</div>
+                  <div class="inline-block percentage-area">{{ event.percentage == undefined ? 0 : event.percentage }}%</div>
                 </div>
               </router-link>
 
