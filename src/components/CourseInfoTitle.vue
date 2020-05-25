@@ -11,6 +11,7 @@
 
       <!-- Time Block -->
       <div class="course-time-block inline-block">3:00pm-4:50pm</div>
+      <div v-if="section_number != -1">Section {{ section_number }}</div>
 
     </div>
 
@@ -25,9 +26,10 @@
     props: {
       course: {
         type: Object,
-        required: true,
+        required: true
       },
-      mobileMode: Boolean
+      mobileMode: Boolean,
+      section_number: Number
     },
     created () {},
     methods: {}

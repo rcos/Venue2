@@ -11,7 +11,7 @@
         </router-link>
         </div>
         <div>
-          <CourseInfoTitle :course="course" class="inline-block" />
+          <CourseInfoTitle :course="course" class="inline-block" :section_number="this.current_user.is_instructor ? -1 : section.number" />
 
           <!-- Lecture Pills -->
           <div class="lecture-pills-min-container inline-block">
