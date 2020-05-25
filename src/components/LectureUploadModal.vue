@@ -3,7 +3,7 @@
     <button type="button" class="btn btn-primary" @click="handleShowModal">Upload Lecture Video...</button>
     <div id="lecture_modal_viewable" class="hiddenModal">
       <div class="row titlerow">
-        <h1 id="banner_title">New Lecture Video <button type="button" v-if="update_lecture" id="cancel_upload_btn" class="btn btn-secondary" @click="handleHideModal">Cancel</button>
+        <h1 id="banner_title">New Lecture Video <button type="button" v-if="update_lecture" id="cancel_upload_btn" class="btn btn-secondary" @click="hideModal">Cancel</button>
           <button type="button" v-else id="cancel_upload_btn" class="btn btn-secondary" @click="hideModal()">Cancel</button>
         </h1>
       </div>
@@ -42,7 +42,7 @@
               <button type="button" id="add_answer_btn" class="btn btn-secondary" @click="current_answers.push('');current_is_correct.push(false)">Add Option</button>
             </div>
             <div class="row">
-              <button type="button" id="add_poll_btn" class="btn btn-primary" @click="addPoll">Save Poll</button>
+              <button type="button" id="add_poll_btn" class="btn btn-primary" @click="addPoll()">Save Poll</button>
             </div>
           </div>
         </div>
@@ -95,7 +95,9 @@ export default {
       current_is_correct: [],
       polls: [],
       video_ref: "",
-      vjs: null
+      vjs: null,
+      play_sub_start: null,
+      play_sub_end: null
     };
   },
   created() {
@@ -105,24 +107,31 @@ export default {
   },
   methods: {
     async updateLecture() {
-      this.lecture.video_ref = "/videos/" + this.lecture._id + "/";
-      LectureAPI.addLecturePlayback(
-        this.lecture,
-        document.getElementById("video_selector").files[0]
-      ).then(res => {
-        let n_saved = 0
-        for(let i=0;i<this.polls.length;i++) {
-          PlaybackPollAPI.addPoll(this.polls[i])
-          .then(res => {
-            n_saved++
-            if(n_saved == this.polls.length) {
-              this.polls = []
-              this.handleHideModal()
-              location.reload()
+      if(this.isComplete()) {
+        this.lecture.video_ref = "/videos/" + this.lecture._id + "/";
+        LectureAPI.addLecturePlayback(
+          this.lecture,
+          document.getElementById("video_selector").files[0]
+        ).then(res => {
+          let n_saved = 0
+          if(this.polls.length == 0) {
+            this.hideModal()
+            location.reload()
+          } else {
+            for(let i=0;i<this.polls.length;i++) {
+              PlaybackPollAPI.addPoll(this.polls[i])
+              .then(res => {
+                n_saved++
+                if(n_saved == this.polls.length) {
+                  this.polls = []
+                  this.hideModal()
+                  location.reload()
+                }
+              })
             }
-          })
-        }
-      })
+          }
+        })
+      }
     },
     async updateLectureFromParent(lect,course_id) {
       lect.video_ref = "/videos/" + lect._id + "/";
@@ -131,19 +140,27 @@ export default {
         document.getElementById("video_selector").files[0]
       ).then(res => {
         let n_saved = 0
-        for(let i=0;i<this.polls.length;i++) {
-          PlaybackPollAPI.addPoll(this.polls[i])
-          .then(res => {
-            n_saved++
-            if(n_saved == this.polls.length) {
-              this.polls = []
-              this.handleHideModal()
-              this.$router.push({
-                name: "course_info",
-                params: { id: course_id }
-              })
-            }
+        if(this.polls.length == 0) {
+          this.hideModal()
+          this.$router.push({
+            name: "course_info",
+            params: { id: course_id }
           })
+        } else {
+          for(let i=0;i<this.polls.length;i++) {
+            PlaybackPollAPI.addPoll(this.polls[i])
+            .then(res => {
+              n_saved++
+              if(n_saved == this.polls.length) {
+                this.polls = []
+                this.hideModal()
+                this.$router.push({
+                  name: "course_info",
+                  params: { id: course_id }
+                })
+              }
+            })
+          }
         }
       })
     },
@@ -173,18 +190,18 @@ export default {
                 self.vjs.src({ type: vid_selector.files[0].type, src: URL.createObjectURL(vid_selector.files[0]) })
                 self.vjs.load()
               }
-              var fp0 = flatpickr(document.getElementById("playback_start"),{
+              self.play_sub_start = flatpickr(document.getElementById("playback_start"),{
                 enableTime: true,
                 minDate: Date.now(),
                 onChange: function(selectedDates, dateStr, instance) {
                   self.lecture.playback_submission_start_time = Date.parse(dateStr)
-                  fp1.set("minDate",self.lecture.playback_submission_start_time)
+                  self.play_sub_end.set("minDate",self.lecture.playback_submission_start_time)
                   if(self.lecture.playback_submission_start_time > self.lecture.playback_submission_end_time) {
-                    fp1.setDate(self.lecture.playback_submission_start_time)
+                    self.play_sub_end.setDate(self.lecture.playback_submission_start_time)
                   }
                 }
               })
-              var fp1 = flatpickr(document.getElementById("playback_end"),{
+              self.play_sub_end = flatpickr(document.getElementById("playback_end"),{
                 enableTime: true,
                 minDate: Date.now(),
                 onChange: function(selectedDates, dateStr, instance) {
@@ -195,10 +212,6 @@ export default {
           }
         });
       })
-    },
-    handleHideModal() {
-      this.file_selected = false;
-      this.hideModal()
     },
     hideModal() {
       document.getElementById('lecture_modal_viewable').classList.add('hiddenModal')
@@ -215,12 +228,12 @@ export default {
       let iscorrect = document.getElementsByClassName("iscorrectfield")
       let a = []
       let c = []
+      let found_empty = false
       for(let i=0;i<answers.length;i++) {
-        a.push(answers[i].value)
-      }
-      for(let i=0;i<iscorrect.length;i++) {
-        if(iscorrect[i].checked) {
-          c.push(answers[i].value)
+        if(answers[i].value == "") {
+          found_empty = true
+        } else {
+          a.push(answers[i].value)
         }
       }
       let secs = 0;
@@ -233,21 +246,32 @@ export default {
       if(sec.value) {
         secs += (parseInt(sec.value))
       }
-      this.polls.push({
-        lecture: this.lecture._id,
-        question: question.value,
-        possible_answers: a,
-        correct_answers: c,
-        timestamp: secs
-      })
-      this.polls.sort((a, b) => (a.timestamp > b.timestamp) ? 1 : -1)
+      if(!found_empty && question.value != "" && secs > 0 && secs < this.vjs.duration()) {
+        for(let i=0;i<iscorrect.length;i++) {
+          if(iscorrect[i].checked) {
+            c.push(answers[i].value)
+          }
+        }
+        this.polls.push({
+          lecture: this.lecture._id,
+          question: question.value,
+          possible_answers: a,
+          correct_answers: c,
+          timestamp: secs
+        })
+        this.polls.sort((a, b) => (a.timestamp > b.timestamp) ? 1 : -1)
 
-      this.current_answers = []
-      this.current_is_correct = []
-      question.value = ""
-      hour.value = ""
-      min.value = ""
-      sec.value = ""
+        this.current_answers = []
+        this.current_is_correct = []
+        question.value = ""
+        hour.value = ""
+        min.value = ""
+        sec.value = ""
+      }
+    },
+    isComplete() {
+      console.log(document.getElementById("playback_start").value != "")
+      return (document.getElementById("playback_start").value != "" && document.getElementById("playback_end").value != "")
     },
     secondsToHHMMSS(seconds) {
       return (new Date(seconds * 1000).toISOString().substr(11, 8))
