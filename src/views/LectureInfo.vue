@@ -68,7 +68,7 @@
               </button>
               <LectureUploadModal v-else-if="Date.now() > new Date(lecture.end_time)
                                             && !lecture.video_ref.includes('.')
-                                            && is_instructor" v-bind:lecture="lecture" />
+                                            && is_instructor" v-bind:lecture="lecture" :update_lecture="true"/>
               <button v-else-if="Date.now() > new Date(lecture.submission_start_time)
                             && Date.now() < new Date(lecture.submission_end_time)
                             && !is_instructor" class="btn btn-secondary scan-qr-btn" @click="scanQR">
