@@ -1,7 +1,7 @@
 <template>
   <div>
     <form class="login-form">
-      <InputField ref="email_field" v-on:set-input-value="setEmail" label="username" />
+      <InputField ref="user_id_field" v-on:set-input-value="setUserId" label="user id" />
       <InputField ref="password_field" v-on:set-input-value="setPassword" label="password" type="password" />
       <div v-if="show_invalid_login" id="invalid-login">Invalid username or password</div>
     </form>
@@ -19,7 +19,7 @@
     data() {
       return {
         user: {
-          email: '',
+          user_id: '',
           password: ''
         },
         show_invalid_login: false
@@ -37,17 +37,17 @@
       login() {
         console.log("Login function was called.")
 
-        this.$refs.email_field.emitInputValue()
+        this.$refs.user_id_field.emitInputValue()
         this.$refs.password_field.emitInputValue()
-        console.log("Current User: " + this.user + " email: " + this.user.email +
+        console.log("Current User: " + this.user + " user_id: " + this.user.user_id +
           " password: " + this.user.password)
         this.$store.dispatch('login', this.user)
           .then(() => this.$router.push({name: 'dashboard'}))
           .catch((err) => this.show_invalid_login = true)
       },
-      setEmail(email) {
-        console.log("Received email: " + email)
-        this.user.email = email
+      setUserId(user_id) {
+        console.log("Received user_id: " + user_id)
+        this.user.user_id = user_id
       },
       setPassword(password) {
         console.log("Received password: " + password)

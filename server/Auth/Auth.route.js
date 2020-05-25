@@ -20,7 +20,7 @@ authRoutes.route('/signup').post(function (req, res) {
 authRoutes.route('/login').post(function (req, res) {
   let user = req.body.user
   if(user){
-    User.findOne({ email: user.email }, function(error, current_user) {
+    User.findOne({ user_id: user.user_id }, function(error, current_user) {
       if(error || !current_user){
         console.log("Error unable to find user: " + user)
         res.status(404).json({ error: 'Invalid Login Credentials. Please try again' })
