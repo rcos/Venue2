@@ -344,7 +344,7 @@ lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
 	Lecture.findById(lecture_id, function (error, lecture){
     if(error || lecture == null) {
 			console.log("<ERROR> Getting lecture with ID:",lecture_id)
-      res.json(err)
+      res.json(error)
     } else{
     	// get the sections for the lecture
       Section.find({'_id': {$in: lecture.sections}}, (error, lecture_sections) => {
