@@ -28,29 +28,22 @@
     created() {
       window.addEventListener("keypress", (e) => {
         if (e.key == 'Enter') {
-          console.log(`Attempting login`)
           this.login ()
         }
       })
     },
     methods: {
       login() {
-        console.log("Login function was called.")
-
         this.$refs.user_id_field.emitInputValue()
         this.$refs.password_field.emitInputValue()
-        console.log("Current User: " + this.user + " user_id: " + this.user.user_id +
-          " password: " + this.user.password)
         this.$store.dispatch('login', this.user)
           .then(() => this.$router.push({name: 'dashboard'}))
           .catch((err) => this.show_invalid_login = true)
       },
       setUserId(user_id) {
-        console.log("Received user_id: " + user_id)
         this.user.user_id = user_id
       },
       setPassword(password) {
-        console.log("Received password: " + password)
         this.user.password = password
       }
     }
