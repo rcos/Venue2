@@ -7,24 +7,33 @@
               <div class="logout-div"><div class="logout-button" v-on:click="logoutUser">Logout</div></div>
           </div>
 
-          <div class="setting-option-section">
-              <div class="left">
-                  <div>Current Email: <span class="value-area">{{ current_user.email }}</span></div>
-                  <div class="small-div">The email is used to login to Venue.</div>
-              </div>
-              <div class="right">
-                  <!-- <div class="change-button">Change</div> -->
-              </div>
+          <div v-if="mode == 'setting_options'">
+
+            <div class="setting-option-section">
+                <div class="left">
+                    <div>Current Email: <span class="value-area">{{ current_user.email }}</span></div>
+                    <div class="small-div">The email is used to login to Venue.</div>
+                </div>
+                <div class="right">
+                    <!-- <div class="change-button">Change</div> -->
+                </div>
+            </div>
+
+            <div class="setting-option-section">
+                <div class="left">
+                    <div>Current Password: <span class="value-area">*********</span></div>
+                    <div class="small-div">The password is the key to your Venue account.</div>
+                </div>
+                <div class="right">
+                    <div class="change-button" v-on:click="mode = 'change_password'">Change</div>
+                </div>
+            </div>
+
           </div>
 
-          <div class="setting-option-section">
-              <div class="left">
-                  <div>Current Password: <span class="value-area">*********</span></div>
-                  <div class="small-div">The password is the key to your Venue account.</div>
-              </div>
-              <div class="right">
-                  <div class="change-button">Change</div>
-              </div>
+          <!-- Setting Actions -->
+          <div v-else>
+            <ChangePassword v-if="mode == 'change_password'" :complete="actionComplete" />
           </div>
     </div>
 
@@ -35,6 +44,7 @@
   import UserAPI from '@/services/UserAPI.js';
   import { authComputed } from '../vuex/helpers.js'
   import {showAt, hideAt} from 'vue-breakpoints'
+  import ChangePassword from '@/components/ChangePassword.vue'
 
   export default {
     name: 'Dashboard',
@@ -43,19 +53,25 @@
     },
     components: {
       hideAt,
-      showAt
+      showAt,
+      ChangePassword
     },
     data(){
       return {
-        current_user: {}
+        current_user: {},
+        mode: String
       }
     },
     created() {
+      this.mode = "setting_options"
       this.getCurrentUser()
     },
     methods: {
       getCurrentUser() {
         this.current_user = this.$store.state.user.current_user
+      },
+      actionComplete () {
+        this.mode = "setting_options";
       },
       logoutUser() {
         console.log('logging out')
