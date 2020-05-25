@@ -119,6 +119,7 @@ export default {
             location.reload()
           } else {
             for(let i=0;i<this.polls.length;i++) {
+              this.polls[i].lecture = this.lecture._id
               PlaybackPollAPI.addPoll(this.polls[i])
               .then(res => {
                 n_saved++
@@ -148,6 +149,7 @@ export default {
           })
         } else {
           for(let i=0;i<this.polls.length;i++) {
+            this.polls[i].lecture = lect._id
             PlaybackPollAPI.addPoll(this.polls[i])
             .then(res => {
               n_saved++
