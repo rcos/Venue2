@@ -27,16 +27,12 @@ export default new Vuex.Store({
   },
   actions: {
     signup({ commit }, user) {
-      console.log("vuex recieved user with fn: " + user.first_name + " ln: " + user.last_name)
-      console.log("email: " + user.email + " password: " + user.password)
       return UserAPI.signUp(user)
         .then(({data}) => {
           commit('SET_USER_DATA', data)
         })
     },
     login({ commit }, user) {
-      console.log("In login action! Passing user: " + user + " with email: " + 
-        user.email + " and password: " + user.password)
       return AuthAPI.login(user)
         .then(({data}) => {
           commit('SET_USER_DATA', data)
