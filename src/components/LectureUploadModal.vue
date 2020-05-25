@@ -119,16 +119,18 @@ export default {
         LectureAPI.addLecturePlayback(
           this.lecture,
           document.getElementById("video_selector").files[0]
-        )
-      }
-      let n_saved = 0
-      for(let i=0;i<this.polls.length;i++) {
-        PlaybackPollAPI.addPoll(this.polls[i])
-        .then(res => {
-          n_saved++
-          if(n_saved == this.polls.length) {
-            this.polls = []
-            this.handleHideModal()
+        ).then(res => {
+          let n_saved = 0
+          for(let i=0;i<this.polls.length;i++) {
+            PlaybackPollAPI.addPoll(this.polls[i])
+            .then(res => {
+              n_saved++
+              if(n_saved == this.polls.length) {
+                this.polls = []
+                this.handleHideModal()
+                location.reload()
+              }
+            })
           }
         })
       }
