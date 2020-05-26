@@ -23,7 +23,6 @@ export default {
     })
   },
   addLecturePlayback(lecture, video) {
-    console.log(video)
     let formdata = new FormData()
     formdata.append('video', video)
     formdata.append("video_ref", lecture.video_ref)
