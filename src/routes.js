@@ -52,7 +52,7 @@ const router = new VueRouter({
     },
     {
       name: 'new_user',
-      path: '/new_user',
+      path: '/admin/new_user',
       component: NewUser,
       meta: {
         requiresAuth: true,
@@ -61,7 +61,7 @@ const router = new VueRouter({
     },
     {
       name: 'users',
-      path: '/users',
+      path: '/admin/users',
       component: Users,
       meta: {
         requiresAuth: true,
@@ -70,7 +70,7 @@ const router = new VueRouter({
     },
     {
       name: 'edit_user',
-      path: '/edit_user/:id',
+      path: '/admin/edit_user/:id',
       component: EditUser,
       meta: {
         requiresAuth: true,
@@ -88,7 +88,7 @@ const router = new VueRouter({
     },
     {
       name: 'instructors',
-      path: '/instructors',
+      path: '/admin/instructors',
       component: Instructors,
       meta: {
         requiresAuth: true,
@@ -97,7 +97,7 @@ const router = new VueRouter({
     },
     {
       name: 'students',
-      path: '/students',
+      path: '/admin/students',
       component: Students,
       meta: {
         requiresAuth: true,
@@ -106,7 +106,7 @@ const router = new VueRouter({
     },
     {
       name: 'new_course',
-      path: '/new_course',
+      path: '/admin/new_course',
       component: NewCourse,
       meta: {
         requiresAuth: true,
@@ -133,7 +133,7 @@ const router = new VueRouter({
     },
     {
       name: 'courses',
-      path: '/courses',
+      path: '/admin/courses',
       component: Courses,
       meta: {
         requiresAuth: true,
@@ -205,7 +205,7 @@ const router = new VueRouter({
     },
     {
       name: 'submissions',
-      path: '/submissions',
+      path: '/admin/submissions',
       component: Submissions,
       meta: {
         requiresAuth: true,
