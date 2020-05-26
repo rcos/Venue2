@@ -3,7 +3,7 @@
   <div :style="{marginTop: '20px'}" v-if="lectures != null && lectures.length > 0">
     <div class="inline-block label">{{ label }}</div>
     <div class="inline-block lecture-pill-holder">
-      <router-link v-for="lecture in lectures" :to="{name: 'lecture_info', params: { id: lecture._id }}">
+      <router-link v-for="lecture in lectures" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}">
         <LecturePill
           :name="lecture.title" middle=""
           :right="getTime(lecture.start_time == undefined ? lecture.playback_submission_end_time : lecture.end_time)"
