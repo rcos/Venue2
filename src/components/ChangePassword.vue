@@ -86,10 +86,6 @@
           }
         })
 
-        if (error) {
-          this.error_message = "<Enter error message here>"
-        }
-
       }
     }
   }
