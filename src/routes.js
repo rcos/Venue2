@@ -13,12 +13,14 @@ import AdminSections from './components/admin/Section/AdminSections.vue';
 import AdminEditSection from './components/admin/Section/AdminEditSection.vue';
 import AdminNewSection from './components/admin/Section/AdminNewSection.vue';
 import NewUser from './components/admin/User/NewUser.vue';
+import OnboardUser from './views/OnboardUser.vue';
 import AdminNewEvent from './components/admin/Event/AdminNewEvent.vue';
 import AdminEvents from './components/admin/Event/AdminEvents.vue';
 import AdminEditEvent from './components/admin/Event/AdminEditEvent.vue';
 import NewSubmission from './components/admin/Submission/NewSubmission.vue';
 import Submissions from './components/admin/Submission/Submissions.vue';
 import LandingPage from './views/LandingPage.vue';
+import SetPermanentPassword from './views/SetPermanentPassword.vue';
 import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
 import CourseList from './components/CourseList.vue';
@@ -62,6 +64,14 @@ const router = new VueRouter({
       name: 'edit_user',
       path: '/edit_user/:id',
       component: EditUser
+    },
+    {
+      name: 'onboard_user',
+      path: '/admin/onboard_user',
+      component: OnboardUser,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       name: 'instructors',
@@ -208,6 +218,12 @@ const router = new VueRouter({
       meta: {
         requiresAuth: true,
       }
+    },
+    {
+      name: 'set_permanent_password',
+      path: '/set_permanent_password/:user_id',
+      component: SetPermanentPassword,
+      meta: { requiresNoLogin: true}
     }
   ]
 })

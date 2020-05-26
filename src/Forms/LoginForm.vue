@@ -1,15 +1,16 @@
 <template>
   <div>
     <form class="login-form">
-      <InputField ref="email_field" v-on:set-input-value="setEmail" label="username" />
+      <InputField ref="user_id_field" v-on:set-input-value="setUserId" label="user id" />
       <InputField ref="password_field" v-on:set-input-value="setPassword" label="password" type="password" />
-      <div v-if="show_invalid_login" id="invalid-login">Invalid username or password</div>
+      <div v-if="show_invalid_login" id="invalid-login">Invalid user id or password</div>
     </form>
   </div>
 </template>
 
 <script>
   import InputField from '@/components/InputField.vue'
+  import AuthAPI from '@/services/AuthAPI.js';
 
   export default {
     name: 'LoginForm',
@@ -19,7 +20,7 @@
     data() {
       return {
         user: {
-          email: '',
+          user_id: '',
           password: ''
         },
         show_invalid_login: false
@@ -28,29 +29,31 @@
     created() {
       window.addEventListener("keypress", (e) => {
         if (e.key == 'Enter') {
-          console.log(`Attempting login`)
           this.login ()
         }
       })
     },
     methods: {
       login() {
-        console.log("Login function was called.")
-
-        this.$refs.email_field.emitInputValue()
+        this.$refs.user_id_field.emitInputValue()
         this.$refs.password_field.emitInputValue()
-        console.log("Current User: " + this.user + " email: " + this.user.email +
-          " password: " + this.user.password)
         this.$store.dispatch('login', this.user)
           .then(() => this.$router.push({name: 'dashboard'}))
           .catch((err) => this.show_invalid_login = true)
       },
-      setEmail(email) {
-        console.log("Received email: " + email)
-        this.user.email = email
+      signup() {
+        this.$refs.user_id_field.emitInputValue()
+        this.$refs.password_field.emitInputValue()
+        AuthAPI.checkForTempUser(this.user.user_id, this.user.password).then(res => {
+          let temp_user = res.data
+          this.$router.push({name: 'set_permanent_password', params: {user_id: temp_user._id},
+            query: {user: temp_user}})
+        }).catch(err => { this.show_invalid_login = true})        
+      },
+      setUserId(user_id) {
+        this.user.user_id = user_id
       },
       setPassword(password) {
-        console.log("Received password: " + password)
         this.user.password = password
       }
     }
