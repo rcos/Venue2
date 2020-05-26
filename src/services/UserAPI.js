@@ -26,6 +26,11 @@ export default {
       user: user // add our data to the request body
     })
   },
+  onboardUser(user) {
+    return API().post('users/onboard', {
+      user: user // add our data to the request body
+    })
+  },
   getUser(id) {
     return API().get('users/edit/' + id)
   },

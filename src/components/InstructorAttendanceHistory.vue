@@ -11,7 +11,7 @@
               <div class="mobile-event-pill-area">
 
 
-                <router-link v-for="event in sections_info[selected_section][month_index]" :key="event._id" :to="{name: 'event_info', params: { event_id: event._id }}">
+                <router-link v-for="event in sections_info[selected_section][month_index]" :key="event._id" :to="{name: 'lecture_info', params: { event_id: event._id }}">
                   <div :class="'mobile-pill ' + getClassByAttendance(event.percentage == undefined ? 0 : event.percentage)">
                     <div class="day-of-week">{{ getDayOfWeek(event) }}</div>
                     <div class="day-of-month">{{ getDayOfMonth(event) }}</div>
@@ -24,7 +24,7 @@
             <div v-else>
               <div class="month-area">{{ STATIC_MONTHS[month_index] }}</div>
               <div class="event-pills-area">
-                <router-link v-for="event in sections_info[selected_section][month_index]" :key="event._id" :to="{name: 'event_info', params: { event_id: event._id }}">
+                <router-link v-for="event in sections_info[selected_section][month_index]" :key="event._id" :to="{name: 'lecture_info', params: { event_id: event._id }}">
                   <!-- <div :class="'inline-block instructor-attendance-history-pill ' + getClassByAttendance(getAttendancePercentage(event, selected_section))"> -->
                   <div :class="'inline-block instructor-attendance-history-pill ' + getClassByAttendance(event.percentage == undefined ? 0 : event.percentage)">
                     <div class="inline-block date-area">

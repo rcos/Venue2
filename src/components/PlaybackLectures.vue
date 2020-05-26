@@ -5,13 +5,14 @@
       <SquareLoader />
     </div>
     <div class="center-fill-section" v-else-if="playback_lectures == null || playback_lectures.length == 0">
-      No data.
+      No playback lectures.
     </div>
     <div v-else :class="'sub-section ' + (mobileMode ? 'is-mobile':'')">
       <router-link v-for="lecture in playback_lectures" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}" >
       <LectureCard
         :courseName="lecture.sections[0].course.name"
         :courseDept="lecture.sections[0].course.dept"
+        :courseNumber="lecture.sections[0].course.course_number"
         :eventLabel="lecture.title"
         status="static"
         :timeFromNow="lecture.playback_submission_end_time"

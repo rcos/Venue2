@@ -11,7 +11,7 @@
             <div class="mobile-event-pill-area">
 
 
-              <router-link v-for="event in history_data[month_index]" :key="event._id" :to="{name: 'event_info', params: { event_id: event._id }}">
+              <router-link v-for="event in history_data[month_index]" :key="event._id" :to="{name: 'lecture_info', params: { event_id: event._id }}">
                 <div :class="'mobile-pill ' + getClassByAttendance(event.percentage == undefined ? 0 : event.percentage)">
                   <div class="day-of-week">{{ getDayOfWeek(event) }}</div>
                   <div class="day-of-month">{{ getDayOfMonth(event) }}</div>

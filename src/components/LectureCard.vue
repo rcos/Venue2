@@ -8,7 +8,7 @@
     <div class="active-event-card">
       <div  class="event-card-section" id="course-section">
         <div class="course-name">{{ courseName }}</div>
-        <div class="course-title">{{ courseDept }}</div>
+        <div class="course-title">{{ courseDept }} {{ courseNumber }}</div>
       </div>
       <div v-if="eventSublabel != undefined && eventSublabel != ''" class="event-card-section event-section">
         <div class="event-name">{{ eventLabel }}</div>
@@ -42,6 +42,7 @@ export default {
   props: {
     courseName: String,
     courseDept: String,
+    courseNumber: Number,
     eventLabel: String,
     eventSublabel: String,
     status: String,
@@ -66,7 +67,6 @@ export default {
       let date_ = new Date(time_string)
       let now = new Date ()
 
-      console.log(date_.getTime())
       let timeDiff = Math.abs(date_.getTime() - now.getTime())
 
       let diffDays = timeDiff / (1000 * 3600 * 24)

@@ -2,14 +2,17 @@
   <div>
     <div v-if="!show_login_form">
       <Logo v-bind:show_large_logo="true" />
-      <!-- <Button ref="GetStartedBtn" v-bind:btn_str="'Get Started'" v-on:button-clicked="showLoginForm"/> -->
+      <Button ref="GetStartedBtn" v-bind:btn_text="'Get Started'" v-on:button-clicked="showLoginForm" />
     </div>
     <div v-else>
       <Logo v-bind:show_large_logo="false" />
       <LoginForm ref="LoginForm" />
-      <!-- <Button ref="LoginBtn" v-bind:btn_str="'Login'" v-on:button-clicked="login"/> -->
+      <div id="login-signup-buttons" class="hidden">
+        <Button ref="LoginBtn" v-bind:btn_text="'Login'" v-on:button-clicked="login" />
+        <p style="font-weight:bold;">or</p>
+        <Button ref="SignupBtn" v-bind:btn_text="'Sign Up'" v-on:button-clicked="signup" />
+      </div>
     </div>
-    <Button ref="LandingBtn" v-on:button-clicked="handleBtnClick"/>
   </div>
 </template>
 
@@ -32,25 +35,27 @@
     created() {
     },
     methods: {
-      handleBtnClick() {
-        if(this.show_login_form)
-          this.$refs.LoginForm.login()
-        else {
-          let self = this
-          setTimeout(function(){
-            self.show_login_form = true
-          }, 500)
-          let landing_btn = this.$refs.LandingBtn
-          landing_btn.fadeOut()
-          setTimeout(function(){
-            landing_btn.toggleBtnText()
-            landing_btn.fadeIn()
-          }, 1000)
-
-        }
-      },
       showLoginForm() {
-        this.show_login_form = true
+        let self = this
+        setTimeout(function(){
+          self.show_login_form = true
+        }, 500)
+        this.transitionButtons()
+      },
+      transitionButtons() {
+        let get_started_btn = this.$refs.GetStartedBtn
+        get_started_btn.fadeOut()
+        setTimeout(function(){
+          let login_sign_buttons = document.getElementById("login-signup-buttons")
+          login_sign_buttons.classList.remove("hidden")
+          login_sign_buttons.classList.add("visible")
+        }, 1000)
+      },
+      login() {
+        this.$refs.LoginForm.login()
+      },
+      signup() {
+        this.$refs.LoginForm.signup()
       }
     }
   }
@@ -66,5 +71,18 @@
     visibility: visible;
     opacity: 1;
     transition: visibility 0s linear 0s, opacity 300ms;
+  }
+  #login-signup-buttons {
+    visibility: hidden;
+  }
+  .hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.2s, opacity 0.2s linear;
+  }
+  .visible {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 1s linear;
   }
 </style>
