@@ -133,18 +133,8 @@
         })
       },
       async getSectionsWithCourses() {
-        // let response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
-        // let sections = response.data
-        // this.assignBoxColorsToClassObjects(sections)
-        // this.sections = sections
-
-        console.log(`Getting sections data (${this.current_user._id})`)
         SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
         .then(response => {
-
-          console.log(`getSectionsWithCourses () Response:`)
-          console.log(response)
-
           this.data_loaded = true
           let sections = response.data
           this.assignBoxColorsToClassObjects(sections)

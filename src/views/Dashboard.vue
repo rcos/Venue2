@@ -108,7 +108,6 @@
     },
     methods: {
       getColor (course_info) {
-        console.log(`Getting color for ...`)
         if (course_info == null || course_info._id == null) return 'grey'
         if (this.courses[ course_info._id ] == null || this.courses[ course_info._id ] == undefined) {
           // add the course and
@@ -131,9 +130,6 @@
         return 'grey'
       },
       setCourses (courses_data) {
-        console.log(`setCourses`)
-        console.log(courses_data)
-
         let course_dict = {}
         courses_data.forEach((course_, i) => {
           if (course_ != null && course_.hasOwnProperty('_id')) {
@@ -151,7 +147,6 @@
         this.$store.dispatch('logout')
       },
       setCourseSize (_size_) {
-        console.log(`Course Size: ${_size_}`)
         this.courses_loaded = _size_
       },
       async getAllLecturesForUser() {
@@ -189,7 +184,6 @@
         let lecture_existence_pairs = [["live", this.live_lectures_exist], ["playback", this.playback_lectures_exist], 
           ["recent", this.recent_lectures_exist], ["upcoming", this.upcoming_lectures_exist]]
         let found_first_type = false
-        console.log("In func. length: " + lecture_existence_pairs.length)
         for(let i = 0; i < lecture_existence_pairs.length; i++) {
           let pair = lecture_existence_pairs[i]
           let lecture_type = pair[0]
