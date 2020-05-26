@@ -39,7 +39,6 @@ export default new Vuex.Store({
       return AuthAPI.setPermanentPassword(user)
         .then(({data}) => {
           commit('SET_USER_DATA', data)
-          console.log("Received data",data)
         })
     },
   },
