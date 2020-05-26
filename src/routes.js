@@ -94,38 +94,38 @@ const router = new VueRouter({
       component: Courses
     },
     {
-        name: 'admin_sections',
-        path: '/admin/sections',
-        component: AdminSections
+      name: 'admin_sections',
+      path: '/admin/sections',
+      component: AdminSections
     },
     {
-        name: 'admin_edit_section',
-        path: '/admin/edit_section/:id',
-        component: AdminEditSection
+      name: 'admin_edit_section',
+      path: '/admin/edit_section/:id',
+      component: AdminEditSection
     },
     {
-        name: 'admin_new_section',
-        path: '/admin/new_section',
-        component: AdminNewSection
+      name: 'admin_new_section',
+      path: '/admin/new_section',
+      component: AdminNewSection
     },
     {
-        name: 'admin_new_event',
-        path: '/admin/new_event',
-        component: AdminNewEvent,
-        meta: {
-          requiresAuth: true,
-          requiresInstructor: true
-        }
+      name: 'admin_new_event',
+      path: '/admin/new_event',
+      component: AdminNewEvent,
+      meta: {
+        requiresAuth: true,
+        requiresInstructor: true
+      }
     },
     {
-        name: 'admin_events',
-        path: '/admin/events',
-        component: AdminEvents
+      name: 'admin_events',
+      path: '/admin/events',
+      component: AdminEvents
     },
     {
-        name: 'admin_edit_event',
-        path: '/admin_edit_event/:id',
-        component: AdminEditEvent
+      name: 'admin_edit_event',
+      path: '/admin_edit_event/:id',
+      component: AdminEditEvent
     },
     {
       name: 'new_submission',
@@ -149,32 +149,32 @@ const router = new VueRouter({
       meta: { requiresAuth: true }
     },
     {
-        name: 'user_courses',
-        path: '/user_courses',
-        component: CourseList
+      name: 'user_courses',
+      path: '/user_courses',
+      component: CourseList
     },
     {
-        name: 'course_info',
-        path: '/course_info/:id',
-        component: CourseInfo,
-        meta: { requiresAuth: true }
+      name: 'course_info',
+      path: '/course_info/:id',
+      component: CourseInfo,
+      meta: { requiresAuth: true }
     },
     {
-        name: 'new_event',
-        path: '/new_event/:course_id',
-        component: NewEvent,
-        meta: {
-          requiresAuth: true,
-          requiresInstructor: true
-        }
+      name: 'new_event',
+      path: '/new_event/:course_id',
+      component: NewEvent,
+      meta: {
+        requiresAuth: true,
+        requiresInstructor: true
+      }
     },
     {
-        name: 'event_info',
-        path: '/event_info/:event_id',
-        component: EventInfo,
-        meta: {
-          requiresAuth: true,
-        }
+      name: 'event_info',
+      path: '/event_info/:event_id',
+      component: EventInfo,
+      meta: {
+        requiresAuth: true,
+      }
     },
     {
       name: 'webex_test',
