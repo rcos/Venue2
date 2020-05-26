@@ -69,16 +69,22 @@
         current_user: {},
         all_lectures: [],
         live_lectures: [],
+        live_lectures_exist: Boolean,
         playback_lectures: [],
+        playback_lectures_exist: Boolean,
         recent_lectures: [],
+        recent_lectures_exist: Boolean,
         upcoming_lectures: [],
+        upcoming_lectures_exist: Boolean,
         courses_loaded: Number,
         courses: Object,
         STATIC_COURSE_COLORS: Array,
-        live_lectures_loaded: Boolean,
+        live_lectures_loaded: false,
         upcoming_lectures_loaded: Boolean,
         recent_lectures_loaded: Boolean,
-        playback_lectures_loaded: Boolean
+        playback_lectures_loaded: Boolean,
+        section_1: String,
+        section_2: String
       }
     },
     created() {
@@ -92,14 +98,9 @@
 
       this.getCurrentUser()
       this.getAllLecturesForUser()
-      this.getLiveLecturesForUser()
-      this.getPlaybackLectures()
-      this.getRecentLecturesForUser()
-      this.getUpcomingLecturesForUser()
     },
     methods: {
       getColor (course_info) {
-        console.log(`Getting color for ...`)
         if (course_info == null || course_info._id == null) return 'grey'
         if (this.courses[ course_info._id ] == null || this.courses[ course_info._id ] == undefined) {
           // add the course and
@@ -122,9 +123,6 @@
         return 'grey'
       },
       setCourses (courses_data) {
-        console.log(`setCourses`)
-        console.log(courses_data)
-
         let course_dict = {}
         courses_data.forEach((course_, i) => {
           if (course_ != null && course_.hasOwnProperty('_id')) {
@@ -142,56 +140,57 @@
         this.$store.dispatch('logout')
       },
       setCourseSize (_size_) {
-        console.log(`Course Size: ${_size_}`)
         this.courses_loaded = _size_
       },
-      async fillSectionInfo (data_object) {
-        // given an object with a sections field, find the course and store it in the data_object
-        // with the key course_info
-        return new Promise((resolve, reject) => {
-
-          // resolve, with the data_object if success
-          // reject otherwise
-          if (data_object == null || data_object == undefined) { reject("no data object provided.") }
-          if (!data_object.hasOwnProperty( 'sections' )) { reject ("Object has no sections field.") }
-
-          SectionAPI.getCourse(data_object.sections[0])
-          .then(response => {
-            data_object["course_info"] = response.data
-            this.$forceUpdate ()
-            resolve(data_object)
-          })
-          .catch(err => {
-            console.log(`Problem  fetching course data`)
-            reject(err)
-          })
-
-        })
-      },
       async getAllLecturesForUser() {
-        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "all", "with_sections_and_course")
-        this.all_lectures = response.data
+        await this.getLiveLecturesForUser()
+        await this.getPlaybackLectures()
+        await this.getRecentLecturesForUser()
+        await this.getUpcomingLecturesForUser()
+        this.chooseLecturesToDisplay()
       },
       async getLiveLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "live", "with_sections_and_course")
         this.live_lectures = response.data
         this.live_lectures_loaded = true
+        this.live_lectures_exist = this.live_lectures.length > 0
       },
       async getPlaybackLectures() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "active_playback", "with_sections_and_course")
         this.playback_lectures = response.data
         this.playback_lectures_loaded = true
+        this.playback_lectures_exist = this.playback_lectures.length > 0
       },
       async getRecentLecturesForUser() {
-        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "past", "with_sections_and_course")
+        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "recent", "with_sections_and_course")
         this.recent_lectures = response.data
-        this.recent_lectures = this.recent_lectures.slice(0,3)
         this.recent_lectures_loaded = true
+        this.recent_lectures_exist = this.recent_lectures.length > 0
       },
       async getUpcomingLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "upcoming", "with_sections_and_course")
         this.upcoming_lectures = response.data
         this.upcoming_lectures_loaded = true
+        this.upcoming_lectures_exist = this.upcoming_lectures.length > 0
+      },
+      chooseLecturesToDisplay() {
+        let lecture_existence_pairs = [["live", this.live_lectures_exist], ["playback", this.playback_lectures_exist],
+          ["recent", this.recent_lectures_exist], ["upcoming", this.upcoming_lectures_exist]]
+        let found_first_type = false
+        for(let i = 0; i < lecture_existence_pairs.length; i++) {
+          let pair = lecture_existence_pairs[i]
+          let lecture_type = pair[0]
+          let lecture_existence_status = pair[1]
+          if(lecture_existence_status) {
+            if(!found_first_type) {
+              this.section_1 = lecture_type
+              found_first_type = true
+            } else if(found_first_type) {
+              this.section_2 = lecture_type
+              break
+            }
+          }
+        }
       }
     }
   }
@@ -237,5 +236,4 @@
     text-align: center;
     margin-top: 0.5rem;
   }
-
 </style>

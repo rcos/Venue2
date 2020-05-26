@@ -13,12 +13,14 @@ import AdminSections from './components/admin/Section/AdminSections.vue';
 import AdminEditSection from './components/admin/Section/AdminEditSection.vue';
 import AdminNewSection from './components/admin/Section/AdminNewSection.vue';
 import NewUser from './components/admin/User/NewUser.vue';
+import OnboardUser from './views/OnboardUser.vue';
 import AdminNewEvent from './components/admin/Event/AdminNewEvent.vue';
 import AdminEvents from './components/admin/Event/AdminEvents.vue';
 import AdminEditEvent from './components/admin/Event/AdminEditEvent.vue';
 import NewSubmission from './components/admin/Submission/NewSubmission.vue';
 import Submissions from './components/admin/Submission/Submissions.vue';
 import LandingPage from './views/LandingPage.vue';
+import SetPermanentPassword from './views/SetPermanentPassword.vue';
 import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
 import CourseList from './components/CourseList.vue';
@@ -50,63 +52,120 @@ const router = new VueRouter({
     },
     {
       name: 'new_user',
-      path: '/new_user',
-      component: NewUser
+      path: '/admin/new_user',
+      component: NewUser,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'users',
-      path: '/users',
-      component: Users
+      path: '/admin/users',
+      component: Users,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'edit_user',
-      path: '/edit_user/:id',
-      component: EditUser
+      path: '/admin/edit_user/:id',
+      component: EditUser,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
+    },
+    {
+      name: 'onboard_user',
+      path: '/admin/onboard_user',
+      component: OnboardUser,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'instructors',
-      path: '/instructors',
-      component: Instructors
+      path: '/admin/instructors',
+      component: Instructors,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'students',
-      path: '/students',
-      component: Students
+      path: '/admin/students',
+      component: Students,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'new_course',
-      path: '/new_course',
-      component: NewCourse
+      path: '/admin/new_course',
+      component: NewCourse,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'course',
       path: '/Course',
-      component: Course
+      component: Course,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'editCourse',
       path: '/editCourse/:id',
-      component: EditCourse
+      component: EditCourse,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'courses',
-      path: '/courses',
-      component: Courses
+      path: '/admin/courses',
+      component: Courses,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'admin_sections',
       path: '/admin/sections',
-      component: AdminSections
+      component: AdminSections,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'admin_edit_section',
       path: '/admin/edit_section/:id',
-      component: AdminEditSection
+      component: AdminEditSection,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'admin_new_section',
       path: '/admin/new_section',
-      component: AdminNewSection
+      component: AdminNewSection,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'admin_new_event',
@@ -114,50 +173,77 @@ const router = new VueRouter({
       component: AdminNewEvent,
       meta: {
         requiresAuth: true,
-        requiresInstructor: true
+        requiresAdmin: true
       }
     },
     {
       name: 'admin_events',
       path: '/admin/events',
-      component: AdminEvents
+      component: AdminEvents,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'admin_edit_event',
       path: '/admin_edit_event/:id',
-      component: AdminEditEvent
+      component: AdminEditEvent,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'new_submission',
       path: '/new_submission',
-      component: NewSubmission
+      component: NewSubmission,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'submissions',
-      path: '/submissions',
-      component: Submissions
+      path: '/admin/submissions',
+      component: Submissions,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'signup',
       path: '/signup',
-      component: Signup
+      component: Signup,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       name: 'dashboard',
       path: '/dashboard',
       component: Dashboard,
-      meta: { requiresAuth: true }
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       name: 'user_courses',
       path: '/user_courses',
-      component: CourseList
+      component: CourseList,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       name: 'course_info',
       path: '/course_info/:id',
       component: CourseInfo,
-      meta: { requiresAuth: true }
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       name: 'new_event',
@@ -165,7 +251,7 @@ const router = new VueRouter({
       component: NewEvent,
       meta: {
         requiresAuth: true,
-        requiresInstructor: true
+        requiresAdmin: true
       }
     },
     {
@@ -174,6 +260,7 @@ const router = new VueRouter({
       component: EventInfo,
       meta: {
         requiresAuth: true,
+        requiresAdmin: true
       }
     },
     {
@@ -182,6 +269,7 @@ const router = new VueRouter({
       component: WebexTest,
       meta: {
         requiresAuth: true,
+        requiresAdmin: true
       }
     },
     {
@@ -208,6 +296,14 @@ const router = new VueRouter({
       meta: {
         requiresAuth: true,
       }
+    },
+    {
+      name: 'set_permanent_password',
+      path: '/set_permanent_password/:user_id',
+      component: SetPermanentPassword,
+      meta: {
+        requiresNoLogin: true
+      }
     }
   ]
 })
@@ -219,9 +315,18 @@ router.beforeEach((to, from, next) => {
 
     if (loggedIn) {
 
-      if (to.matched.some(record => record.meta.requiresInstructor)) {
+      const user_data = JSON.parse(loggedIn)
 
-        const user_data = JSON.parse(loggedIn)
+      if(to.matched.some(record => record.meta.requiresAdmin)) {
+
+        if (user_data.current_user.is_admin) {
+          next()
+        } else {
+          next('/dashboard')
+        }
+
+      } else if (to.matched.some(record => record.meta.requiresInstructor)) {
+
         if (user_data.current_user.is_instructor) {
           next()
         } else {

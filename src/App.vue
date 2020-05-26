@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="main-content">
-      <NavBar v-if="this.$route.name != 'landing_page'"></NavBar>
+      <NavBar v-if="this.$route.name != 'landing_page' && this.$route.name != 'set_permanent_password'"></NavBar>
       <router-view />
     </div>
     <Footer />

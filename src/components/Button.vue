@@ -1,12 +1,10 @@
 <template>
   <div class="container" style="padding:2rem;">
     <button @click="$emit('button-clicked')" v-bind:class="{hidden:fade_out, visible:fade_in}" type="button" class="btn button shadow" id="venue-btn">
-      <div v-if="show_login_text">Login</div>
-      <div v-else>Get Started</div>
+      <!-- <div v-if="show_login_text">Login</div> -->
+      <!-- <div v-else>Get Started</div> -->
+      <div>{{ btn_text }}</div>
     </button>
-
-<!--     <button type="button" v-bind:class="{hidden:fade_out, visible:fade_in}" class="btn button shadow" id="venue-btn" 
-      @click="$emit('button-clicked')">{{ btn_str }}</button> -->
   </div>
 </template>
 
@@ -15,6 +13,7 @@
     name: 'Button',
     props: {
       // btn_str: String
+      btn_text: String
     },
     data() {
       return {
@@ -44,7 +43,7 @@
     background-color: white;
     font-size: 1.5rem;
     width: 12rem;
-    margin-top: 1.5rem;
+    /*margin-top: 1rem;*/
     border: #007bff solid;
     color: #007bff;
     border-radius: 5px;

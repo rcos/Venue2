@@ -35,10 +35,23 @@ seeder.connect(db, function () {
 		u.push(new User({
 			first_name: "Ad",
 			last_name: "Min",
+			user_id: "venue",
 			email: "venue@rpi.edu",
 			password: "nimda",
 			is_instructor: true,
 			is_admin: true,
+			ta_sections: [],
+			submissions: []
+		}))
+
+		u.push(new User({
+			first_name: "Kakashi",
+			last_name: "Sensei",
+			user_id: "kakashi",
+			email: "kakashi@rpi.edu",
+			password: "password",
+			is_instructor: true,
+			is_admin: false,
 			ta_sections: [],
 			submissions: []
 		}))
@@ -48,6 +61,7 @@ seeder.connect(db, function () {
 			u.push(new User({
 				first_name: "Student",
 				last_name: chr,
+				user_id: "student" + chr,
 				email: "student"+chr+"@rpi.edu",
 				password: "password",
 				is_instructor: false,
