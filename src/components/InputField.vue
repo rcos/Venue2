@@ -2,7 +2,7 @@
   <div class="input-field-container">
     <div class="input-field">
       <div class="input-label">{{label}}</div>
-      <input v-model="input_value" :type="type">
+      <input v-on:keyup="change" v-on:change="change" v-model="input_value" :type="type">
     </div>
   </div>
 </template>
@@ -11,6 +11,10 @@
   export default {
     name: 'InputField',
     props: {
+      change: {
+        type: Function,
+        default: () => {}
+      },
       type: {
         type: String,
         default: "text"

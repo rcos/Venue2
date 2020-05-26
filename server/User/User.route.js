@@ -78,10 +78,40 @@ userRoutes.route('/edit/:id').get(function (req, res) {
   });
 });
 
+userRoutes.route('/change_password/').post((req, res) => {
+
+  let user_id = req.body.user_id
+  let old_password = req.body.old_password
+  let new_password = req.body.new_password
+
+  User.findOne({_id: user_id}, (err, user) => {
+    if (err || user == null) {
+      console.log(`<ERROR> Error changing password for ${user_id}`)
+      res.json(false)
+    }
+    else {
+      bcrypt.compare(old_password, user.password, (err, result) => {
+        if (result) {
+          // update the password
+          bcrypt.hash(new_password, saltRounds, (err, hash) => {
+            user.password = hash
+            user.save ()
+            res.json(true)
+          })
+        }
+        else {
+          res.json(false)
+        }
+      })
+    }
+  })
+
+})
+
 userRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
   let updated_user = req.body.updated_user;
-  User.findByIdAndUpdate(id, 
+  User.findByIdAndUpdate(id,
     {
       first_name: updated_user.first_name,
       last_name: updated_user.last_name,

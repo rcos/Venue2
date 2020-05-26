@@ -14,6 +14,13 @@ export default {
   getUsers() {
     return API().get('users')
   },
+  changePassword(user_id, old_password, new_password) {
+    return API().post('users/change_password', {
+      user_id: user_id,
+      old_password: old_password,
+      new_password: new_password
+    })
+  },
   addUser(user) {
     return API().post('users/add', {
       user: user // add our data to the request body

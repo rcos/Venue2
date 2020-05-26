@@ -11,14 +11,14 @@ let PlaybackPoll = new Schema({
 	},
 	// poll_type: String,
 	question: String,
-	possible_answers: [{
-		type: String,
+	possible_answers: {
+		type: [String],
 		default: ""
-	}],
-	correct_answers: [{
-		type: String,
+	},
+	correct_answers: {
+		type: [String],
 		default: ""
-	}],
+	},
 	timestamp: {
 		type: Number,
 		default: 0

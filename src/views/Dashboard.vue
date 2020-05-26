@@ -3,25 +3,25 @@
     <show-at breakpoint="large">
       <div class="venue-body-container">
         <LiveLectureList v-if="section_1 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
-        <PlaybackCourses v-if="section_1 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
-        <RecentCourses v-if="section_1 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
-        <UpcomingCourses v-if="section_1 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
+        <PlaybackLectures v-if="section_1 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
+        <RecentLectures v-if="section_1 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
+        <UpcomingLectures v-if="section_1 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
         <LiveLectureList v-if="section_2 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
-        <PlaybackCourses v-if="section_2 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
-        <RecentCourses v-if="section_2 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
-        <UpcomingCourses v-if="section_2 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
+        <PlaybackLectures v-if="section_2 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
+        <RecentLectures v-if="section_2 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
+        <UpcomingLectures v-if="section_2 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
       </div>
     </show-at>
     <hide-at breakpoint="large">
       <div class="venue-body-container is-mobile">
         <LiveLectureList v-if="section_1 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode />
-        <PlaybackCourses v-if="section_1 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode/>
-        <RecentCourses v-if="section_1 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
-        <UpcomingCourses v-if="section_1 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
+        <PlaybackLectures v-if="section_1 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode/>
+        <RecentLectures v-if="section_1 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
+        <UpcomingLectures v-if="section_1 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
         <LiveLectureList v-if="section_2 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode />
-        <PlaybackCourses v-if="section_2 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode />
-        <RecentCourses v-if="section_2 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
-        <UpcomingCourses v-if="section_2 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
+        <PlaybackLectures v-if="section_2 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode />
+        <RecentLectures v-if="section_2 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
+        <UpcomingLectures v-if="section_2 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
       </div>
     </hide-at>
 
@@ -47,9 +47,9 @@
   import {showAt, hideAt} from 'vue-breakpoints'
 
   import LiveLectureList from '@/components/LiveLectureList.vue'
-  import PlaybackCourses from '@/components/PlaybackCourses.vue'
-  import RecentCourses from '@/components/RecentCourses.vue'
-  import UpcomingCourses from '@/components/UpcomingCourses'
+  import PlaybackLectures from '@/components/PlaybackLectures.vue'
+  import RecentLectures from '@/components/RecentLectures.vue'
+  import UpcomingLectures from '@/components/UpcomingLectures.vue'
   import CourseList from '@/components/CourseList.vue'
   import moment from 'moment'
 
@@ -66,9 +66,9 @@
       hideAt,
       showAt,
       LiveLectureList,
-      PlaybackCourses,
-      RecentCourses,
-      UpcomingCourses,
+      PlaybackLectures,
+      RecentLectures,
+      UpcomingLectures,
       CourseList
     },
     data(){
@@ -181,7 +181,7 @@
         this.upcoming_lectures_exist = this.upcoming_lectures.length > 0
       },
       chooseLecturesToDisplay() {
-        let lecture_existence_pairs = [["live", this.live_lectures_exist], ["playback", this.playback_lectures_exist], 
+        let lecture_existence_pairs = [["live", this.live_lectures_exist], ["playback", this.playback_lectures_exist],
           ["recent", this.recent_lectures_exist], ["upcoming", this.upcoming_lectures_exist]]
         let found_first_type = false
         for(let i = 0; i < lecture_existence_pairs.length; i++) {
@@ -195,7 +195,7 @@
             } else if(found_first_type) {
               this.section_2 = lecture_type
               break
-            } 
+            }
           }
         }
       }

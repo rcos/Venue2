@@ -375,7 +375,7 @@ lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
 	Lecture.findById(lecture_id, function (error, lecture){
     if(error || lecture == null) {
 			console.log("<ERROR> Getting lecture with ID:",lecture_id)
-      res.json(err)
+      res.json(error)
     } else{
     	// get the sections for the lecture
       Section.find({'_id': {$in: lecture.sections}}, (error, lecture_sections) => {
@@ -408,7 +408,7 @@ lectureRoutes.post('/process_emails', (req,res) => {
 	let toEmail = req.body.toEmail
 	lectures.forEach(lecture => {
 		if(!lecture.email_sent) { //email has not been sent yet
-			Lecture.findByIdAndUpdate(lecture._id, 
+			Lecture.findByIdAndUpdate(lecture._id,
 				{
 					email_sent: true //mark email as sent
 				},
