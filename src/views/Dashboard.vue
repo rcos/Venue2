@@ -2,19 +2,26 @@
   <div>
     <show-at breakpoint="large">
       <div class="venue-body-container">
-        <!-- <LiveCourses :colorCallback="getColor" :loaded="live_lectures_loaded" :data="live_lectures" /> -->
-        <LiveLectureList :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
-        <PlaybackLectures :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
-        <RecentLectures :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
-        <UpcomingLectures :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
+        <LiveLectureList v-if="section_1 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
+        <PlaybackCourses v-if="section_1 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
+        <RecentCourses v-if="section_1 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
+        <UpcomingCourses v-if="section_1 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
+        <LiveLectureList v-if="section_2 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
+        <PlaybackCourses v-if="section_2 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
+        <RecentCourses v-if="section_2 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
+        <UpcomingCourses v-if="section_2 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
       </div>
     </show-at>
     <hide-at breakpoint="large">
       <div class="venue-body-container is-mobile">
-        <LiveLectureList :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode/>
-        <PlaybackLectures :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode />
-        <RecentLectures :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
-        <UpcomingLectures :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
+        <LiveLectureList v-if="section_1 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode />
+        <PlaybackCourses v-if="section_1 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode/>
+        <RecentCourses v-if="section_1 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
+        <UpcomingCourses v-if="section_1 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
+        <LiveLectureList v-if="section_2 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode />
+        <PlaybackCourses v-if="section_2 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode />
+        <RecentCourses v-if="section_2 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
+        <UpcomingCourses v-if="section_2 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
       </div>
     </hide-at>
 

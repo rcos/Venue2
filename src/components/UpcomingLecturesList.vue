@@ -27,6 +27,9 @@
 
   export default {
     name: 'UpcomingLecturesList',
+    components: {
+      SquareLoader
+    },
     props: {
       mobileMode: Boolean,
       section_id: String,
