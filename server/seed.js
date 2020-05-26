@@ -44,6 +44,18 @@ seeder.connect(db, function () {
 			submissions: []
 		}))
 
+		u.push(new User({
+			first_name: "Kakashi",
+			last_name: "Sensei",
+			user_id: "kakashi",
+			email: "kakashi@rpi.edu",
+			password: "password",
+			is_instructor: true,
+			is_admin: false,
+			ta_sections: [],
+			submissions: []
+		}))
+
 		for(let i=0;i<26;i++) {
 			var chr = String.fromCharCode(97 + i);
 			u.push(new User({
