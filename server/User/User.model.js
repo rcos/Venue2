@@ -8,7 +8,9 @@ let Section = require('../Section/Section.model');
 let User = new Schema({
 	first_name: String,
 	last_name: String,
+	user_id: String,
 	email: String,
+	temp_password: String,
 	password: String,
 	is_admin: {
 		type: Boolean,
