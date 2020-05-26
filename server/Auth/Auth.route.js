@@ -71,7 +71,8 @@ authRoutes.route('/set_permanent_pasword').post(function (req, res) {
         res.json(err)
       } else {
         User.findByIdAndUpdate(user._id, {
-          password: hash
+          password: hash,
+          temp_password: null
         }, 
         (error, updated_user) => {
           if(error || updated_user == null) {
