@@ -1,6 +1,6 @@
 <template>
-  <div id="lecture_playback">
-    <video id="video_player" class="video-js vjs-big-play-centered" controls></video>
+	<div id="lecture_playback">
+		<video id="video_player" class="video-js vjs-big-play-centered" controls></video>
 		<div id="polls" class="hide">
 			<!--Poll Modals Start-->
 			<div v-for="(poll,i) in polls" :key="i" class="poll hide" :id="'poll'+(i+1)">
@@ -14,7 +14,7 @@
 			</div>
 			<!--Poll Modals End-->
 		</div>
-  </div>
+	</div>
 </template>
 
 <script>
