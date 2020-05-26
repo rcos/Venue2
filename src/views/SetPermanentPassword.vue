@@ -1,47 +1,21 @@
 <template>
   <div>
-    <h2>Set Password for {{ user.user_id }}</h2>
-    <form @submit.prevent="onboardUser">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>first_name:</label>
-            <input type="text" class="form-control" v-model="user.first_name">
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>last_name:</label>
-            <input class="form-control" v-model="user.last_name">
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>user_id:</label>
-            <input class="form-control" v-model="user.user_id">
-          </div>
-        </div>
-      </div>
-      <div>
-        is_instructor: <input type="checkbox" v-model="user.is_instructor">
-      </div><br/>
-      <div class="form-group">
-        <button class="btn btn-primary">Onboard</button>
-      </div>
+    <h2 id="set-permanent-header">Set Password for {{ user.user_id }}</h2>
+    <form @submit.prevent="setPermanentPassword">
+      <InputField ref="password_field" label="password" v-on:set-input-value="setPassword" />
+      <button class="btn btn-primary">Set Password</button>
     </form>
-
   </div>
 </template>
 
 <script>
-  import UserAPI from '@/services/UserAPI.js';
+  import InputField from '@/components/InputField.vue'
 
   export default {
     name: 'OnboardUser',
+    components: {
+      InputField
+    },
     data(){
       return {
         user: {}
@@ -51,36 +25,31 @@
       this.user_id = this.$route.params.user_id
       this.user = this.$route.query.user
       // prevents page refreshes and hardcoding of user ids
-      if(!this.user.user_id)
-        this.$router.push({name: 'dashboard'})
+      // if(!this.user.user_id)
+      //   this.$router.push({name: 'landing_page'})
     },
     methods: {
-      async getCurrentUser() {
-        const response = await UserAPI.getUser(this.user_id)
-        this.user = response.data
+      async setPermanentPassword() {
+        this.$refs.password_field.emitInputValue()
+        this.$store.dispatch('setPermanentPassword', this.user)
+          .then((res) => {this.$router.push({name: 'dashboard'})})
+          .catch((err) => console.log("error setting password for user",err))
       },
-      async onboardUser(evt){
-        evt.preventDefault(); // prevents the form's default action from redirecting the page
-        this.setEmail()
-        this.setTempPassword()
-        const response = await UserAPI.onboardUser(this.user);
-        this.$router.push({name: 'users'});
-      },
-      setEmail() {
-        this.user.email = this.user.user_id + "@rpi.edu"
-      },
-      setTempPassword() {
-        this.user.temp_password = this.generateRandomPassword()
-      },
-      generateRandomPassword() {
-        let length = 12,
-            charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-            password = "";
-        for (let i = 0, n = charset.length; i < length; ++i) {
-            password += charset.charAt(Math.floor(Math.random() * n))
-        }
-        return password
+      setPassword(password) {
+        this.user.password = password
       }
     }
   }
 </script>
+
+<style scoped>
+  #set-permanent-header {
+    margin-top: 2rem;
+  }
+  #password-container {
+    margin: auto;
+  }
+  .set-permanent-password-container {
+    margin-top: 2rem;
+  }
+</style>

@@ -35,6 +35,13 @@ export default new Vuex.Store({
     logout({ commit }) {
       commit('CLEAR_USER_DATA')
     },
+    setPermanentPassword({ commit }, user) {
+      return AuthAPI.setPermanentPassword(user)
+        .then(({data}) => {
+          commit('SET_USER_DATA', data)
+          console.log("Received data",data)
+        })
+    },
   },
   getters: {
     loggedIn(state) {

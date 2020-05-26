@@ -2,6 +2,7 @@ const express = require('express');
 const authRoutes = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 let User = require('../User/User.model');
 
@@ -61,5 +62,33 @@ authRoutes.route('/check_for_temp_user/:user_id/:temp_password').get(function (r
   }
 });
 
+authRoutes.route('/set_permanent_pasword').post(function (req, res) {
+  let user = req.body.user
+  if(user){
+    bcrypt.hash(user.password, saltRounds, (err, hash) => {
+      if(err || hash == null) {
+        console.log("<ERROR> Hashing password for user:",user)
+        res.json(err)
+      } else {
+        User.findByIdAndUpdate(user._id, {
+          password: hash
+        }, 
+        (error, updated_user) => {
+          if(error || updated_user == null) {
+            console.log("<ERROR> Setting password for user:",user)
+            res.json(err)
+          } else {
+            console.log("<Success> Setting password for user:",updated_user)
+            const token = jwt.sign({ updated_user }, process.env.AUTH_KEY)
+            let current_user = updated_user
+            res.json({token, current_user})
+          }
+        })
+      }
+    });
+  }else{
+    res.status(400).json({ error: 'Invalid user. Please try again.' })
+  }
+});
 
 module.exports = authRoutes;
