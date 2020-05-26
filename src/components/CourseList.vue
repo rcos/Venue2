@@ -133,6 +133,8 @@
         })
       },
       async getSectionsWithCourses() {
+
+        console.log(`Getting sections data (${this.current_user._id})`)
         SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
         .then(response => {
           this.data_loaded = true
