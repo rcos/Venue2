@@ -68,18 +68,40 @@ app.use('/polls', jwtVerify, pollRouter);
 app.use('/lecturesubmissions', jwtVerify, lectureSubmissionRouter);
 
 var fs = require('fs'),
-  http = require('http');
+  http = require('http'),
+  mime = require('mime-types')
 
 http.createServer(function (req, res) {
- fs.readFile(__dirname + '/../public' + req.url, function (err,data) {
-    if (err) {
-      res.writeHead(404);
-      res.end(JSON.stringify(err));
-      return;
+
+  const mimeType = mime.contentType(path.extname(__dirname + '/../public' + req.url));
+  let data = fs.readFileSync(__dirname + '/../public' + req.url);
+  let stat = fs.statSync(__dirname + '/../public' + req.url)
+  if (req.headers.range) {
+    const range = req.headers.range;
+    const total = stat.size;
+    const [partialstart, partialend] = range.replace(/bytes=/, "").split("-");
+
+    const start = parseInt(partialstart, 10);
+    let end = partialend ? parseInt(partialend, 10) : total;
+    const chunksize = end - start;
+
+    if(end == total) {
+      end = end - 1;
     }
+
+    res.setHeader('Content-Range', `bytes ${start}-${end}/${total}`);
+    res.setHeader('Accept-Ranges', 'bytes');
+    res.setHeader('Content-Length', chunksize);
+    res.setHeader('Content-Type', mimeType);
+    res.writeHead(206);
+    res.end(data.slice(start, end));
+  } else {
+    res.setHeader('Cache-Control', 'private, max-age=0, must-revalidate');
+    res.setHeader('Content-Length', stat.size);
+    res.setHeader('Content-Type', mimeType);
     res.writeHead(200);
     res.end(data);
-  });
+  }
 }).listen(9000);
 
 app.listen(PORT, function () {
