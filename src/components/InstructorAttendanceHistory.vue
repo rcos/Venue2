@@ -342,6 +342,7 @@
         */
 
         console.log(`calculating attendance percentage`)
+        if (this.selected_section == null || this.sections_info[this.selected_section] == null) return;
         Object.keys(this.sections_info[this.selected_section]).forEach(month_index => {
           this.sections_info[this.selected_section][month_index].forEach(lecture_ => {
 
