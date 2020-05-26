@@ -2,17 +2,21 @@
 	<div id="lecture_playback">
 		<video id="video_player" class="video-js vjs-big-play-centered" controls></video>
 		<div id="polls" class="hide">
-			<!--Poll Modals Start-->
-			<div v-for="(poll,i) in polls" :key="i" class="poll hide" :id="'poll'+(i+1)">
-				<div class="row question">
-					Question {{(i+1)}}: {{poll.question}}
+			<div id="poll_contents">
+				<!--Poll Modals Start-->
+				<div v-for="(poll,i) in polls" :key="i" class="poll hide" :id="'poll'+(i+1)">
+					<div class="row question">
+						<h2>{{poll.question}}</h2>
+					</div>
+					<div v-for="(possible_answer,j) in poll.possible_answers" :key="j" class="row option">
+						<p class="optionnumber">{{(j+1)}}:</p>
+						<p class="optiontext">{{possible_answer}}</p>
+						<input class="optioncheck" type="checkbox" :id="'student_answer_'+(i+1)+'_'+(j+1)"/>
+					</div>
+					<button class="answer_btn btn btn-primary" :id="'answer_btn_'+(i+1)" @click="answerPoll(i)">Submit</button>
 				</div>
-				<div v-for="(possible_answer,j) in poll.possible_answers" :key="j" class="row question">
-					{{(j+1)}}: {{possible_answer}} <input type="checkbox" :id="'student_answer_'+(i+1)+'_'+(j+1)"/>
-				</div>
-				<button :id="'answer_btn_'+(i+1)" @click="answerPoll(i)">Submit</button>
+				<!--Poll Modals End-->
 			</div>
-			<!--Poll Modals End-->
 		</div>
 	</div>
 </template>
@@ -69,8 +73,11 @@ export default {
 											let currTime = vid.currentTime()
 											if(currTime - self.prevTime < 0.5 && currTime > self.prevTime) {
 												//Considered NOT a 'seek', video is playing normally
-												if(self.lectureSubmission.video_progress < currTime) {
-													self.lectureSubmission.video_progress = currTime
+												if(self.lectureSubmission.video_progress < Math.floor(currTime)) {
+													self.lectureSubmission.video_progress = Math.floor(currTime)
+													if(self.lectureSubmission.video_progress%5 == 0) {
+														LectureSubmissionAPI.update(self.lectureSubmission)
+													}
 												}
 												for (let i = 0; i < self.polls.length; i++) {
 													if (currTime > self.polls[i].timestamp) {
@@ -138,24 +145,74 @@ export default {
 </script>
 
 <style scoped>
+#lecture_playback {
+	position: absolute;
+	top: 4rem;
+	bottom: 2rem;
+	left: 2rem;
+	right: 2rem;
+}
 #video_player {
-	width: 100%;
-	height: 100%;
+	/* position: relative; */
+	/* bottom: 0; */
+	max-width: 100%;
+	max-height: 100%;
+	width: auto;
 }
 .vjs-tech {
 	position:unset;
 }
-.hide {
-	display: none;
-}
 #polls {
 	position: absolute;
 	top: 25%;
-	bottom: 25%;
 	left: 25%;
 	right: 25%;
-	background: white;
+	background: lightskyblue;
+	border-radius: 1rem;
 	z-index: 999;
-	padding: 20px;
+}
+#poll_contents {
+	position: relative;
+	/* height: 100%; */
+	background: white;
+	border-radius: 1rem;
+	padding: 1rem;
+	margin: 1rem;
+	margin-bottom: -1rem;
+}
+.poll {
+	margin: 1rem;
+}
+.row {
+	margin: 0;
+	text-align: center;
+}
+h2 {
+	width: 100%;
+	margin-top: 1rem;
+}
+.question {
+	margin-bottom: 2rem;
+}
+.option {
+	margin-bottom: 1rem;
+}
+.optionnumber {
+	margin: 0;
+	width: 10%;
+}
+.optiontext {
+	margin: 0;
+	width: 80%;
+}
+.optioncheck {
+	margin: 0;
+	width: 10%;
+}
+.answer_btn {
+	margin: 1rem 0;
+}
+.hide {
+	display: none;
 }
 </style>
