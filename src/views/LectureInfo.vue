@@ -68,15 +68,14 @@
               </button>
               <LectureUploadModal v-else-if="Date.now() > new Date(lecture.end_time)
                                             && !lecture.video_ref.includes('.')
-                                            && is_instructor" v-bind:lecture="lecture" />
-              <button v-else-if="Date.now() > lecture.submission_start_time
-                            && Date.now() < lecture.submission_end_time
+                                            && is_instructor" v-bind:lecture="lecture" :update_lecture="true"/>
+              <button v-else-if="Date.now() > new Date(lecture.submission_start_time)
+                            && Date.now() < new Date(lecture.submission_end_time)
                             && !is_instructor" class="btn btn-secondary scan-qr-btn" @click="scanQR">
                 Attend this lecture
               </button>
-              <router-link v-else-if="Date.now() > lecture.playback_submission_start_time
-                            && Date.now() < lecture.playback_submission_end_time
-                            && !is_instructor" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+              <router-link v-else-if="((Date.now() > new Date(lecture.end_time)) || (undefined == lecture.end_time))
+                            && lecture.video_ref.includes('.')" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
                 <button class="btn btn-secondary watch-recording">Watch recording</button>
               </router-link>
           </h1>
@@ -513,6 +512,7 @@
     height: 4rem;
     box-shadow: 0 5px 10px -1px gray;
     padding-top: 0.5rem;
+    z-index: 100;
   }
 
   .custom-qr-scanner {
