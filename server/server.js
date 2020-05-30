@@ -8,12 +8,6 @@ const config = require('./DB.js');
 const jwt = require('jsonwebtoken');
 const PORT = 4000;
 
-var CASAuthentication = require('cas-authentication');
-var cas = new CASAuthentication({
-    cas_url: process.env.CAS_SERVER_URL || "http://cas-auth.rpi.edu/cas",
-    cas_version = process.env.CAS_VERSION || "3.0"
-});
-
 function jwtVerify(req,res,next) {
   const bearerHeader = req.headers['authorization']
   if (typeof bearerHeader !== 'undefined') {
