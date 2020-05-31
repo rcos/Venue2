@@ -23,6 +23,7 @@
     "chart.js": "^2.9.3",
     "core-js": "^2.6.5",
     "cors": "^2.8.5",
+    "express": "^4.17.1",
     "flatpickr": "^4.6.3",
     "formidable": "^1.2.2",
     "google-maps": "^3.3.0",
