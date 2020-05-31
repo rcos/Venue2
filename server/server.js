@@ -6,7 +6,7 @@ const path = require('path')
 const mongoose = require('mongoose');
 const config = require('./DB.js');
 const jwt = require('jsonwebtoken');
-const PORT = 4000;
+const LOCAL_PORT = 4000;
 
 function jwtVerify(req,res,next) {
   const bearerHeader = req.headers['authorization']
@@ -46,12 +46,19 @@ const lectureRouter = require('./Lecture/Lecture.route')
 const lectureSubmissionRouter = require('./LectureSubmission/LectureSubmission.route')
 const pollRouter = require('./PlaybackPoll/PlaybackPoll.route')
 
-
-mongoose.Promise = global.Promise;
-mongoose.connect(config.DB, { useNewUrlParser: true }).then(
-  () => { console.log('Database is connected') },
-  err => { console.log('Can not connect to the database' + err) }
-);
+// Connect to the database before starting the application server.
+mongoose.connect(process.env.MONGODB_URI || config.DB, function (err, client) {
+  if (err) {
+    console.log(err);
+    process.exit(1);
+  }
+  console.log("Database connection ready");
+  // Initialize the app.
+  var server = app.listen(process.env.PORT || LOCAL_PORT, function () {
+    var port = server.address().port;
+    console.log("App is now running on port", port);
+  });
+});
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -81,7 +88,3 @@ http.createServer(function (req, res) {
     res.end(data);
   });
 }).listen(9000);
-
-app.listen(PORT, function () {
-  console.log('Server is running on Port:', PORT);
-});
