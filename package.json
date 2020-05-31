@@ -30,6 +30,8 @@
     "mongoose-seed": "^0.6.0",
     "node-sass": "^4.12.0",
     "nodemailer": "^6.4.6",
+    "passport": "^0.4.1",
+    "passport-cas": "^0.1.1",
     "popper.js": "^1.15.0",
     "qr-code-scanner": "^1.0.7",
     "qrcode": "^1.4.4",

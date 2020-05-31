@@ -8,6 +8,8 @@ const config = require('./DB.js');
 const jwt = require('jsonwebtoken');
 const PORT = 4000;
 
+const passport = require('passport')
+
 function jwtVerify(req,res,next) {
   const bearerHeader = req.headers['authorization']
   if (typeof bearerHeader !== 'undefined') {
@@ -56,6 +58,9 @@ mongoose.connect(config.DB, { useNewUrlParser: true }).then(
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/auth', authRouter);
 app.use('/users', jwtVerify, userRouter);
