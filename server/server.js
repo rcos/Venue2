@@ -63,6 +63,10 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Serve front end build on static server
+var distDir = __dirname + "/../dist/";
+app.use(express.static(distDir));
+
 app.use('/auth', authRouter);
 app.use('/users', jwtVerify, userRouter);
 app.use('/courses', jwtVerify, courseRouter);
