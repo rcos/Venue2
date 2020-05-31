@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const history = require('connect-history-api-fallback');
 const config = require('./DB.js');
 const jwt = require('jsonwebtoken');
+const serveStatic = require('serve-static');
 const LOCAL_PORT = 4000;
 
 function jwtVerify(req,res,next) {
@@ -67,6 +68,7 @@ app.use(history())
 
 // Serve front end build on static server
 var distDir = __dirname + "/../dist/";
+// app.use(serveStatic(distDir))
 app.use(express.static(distDir));
 
 app.use('/auth', authRouter);
