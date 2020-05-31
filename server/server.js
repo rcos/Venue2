@@ -31,9 +31,8 @@ if (process.env.NODE_ENV !== 'production')
 
 // ensure auth key is available in environment
 if(!process.env.AUTH_KEY){
-  res.status(500).send("Error")
   console.log("No auth key")
-  return
+  process.exit(1);
 }
 
 const authRouter = require('./Auth/Auth.route')
