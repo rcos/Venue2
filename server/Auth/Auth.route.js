@@ -104,7 +104,8 @@ passport.use(new (require('passport-cas').Strategy)({
   serverBaseURL: 'http://localhost:4000'
 }, function(profile, done) {
   var login = profile.user;
-  User.findOne({user_id: login}, function (err, user) {
+  console.log(login)
+  User.findOne({user_id: "studenta"}, function (err, user) {
     if (err) {
       return done(err);
     }
@@ -116,12 +117,20 @@ passport.use(new (require('passport-cas').Strategy)({
   });
 }));
 
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
 authRoutes.get("/login", (req, res, next) => {
   passport.authenticate('cas', function (err, user, info) {
     if (err) {
       return next(err);
     }
-
+    console.log(user)
     if (!user) {
       req.session.messages = info.message;
       return res.redirect('/');

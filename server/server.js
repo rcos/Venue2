@@ -8,7 +8,17 @@ const config = require('./DB.js');
 const jwt = require('jsonwebtoken');
 const PORT = 4000;
 
+const cookieSession = require('cookie-session')
 const passport = require('passport')
+
+const allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', '*');
+    res.header('Access-Control-Allow-Headers', '*');
+    next();
+}
+
+app.use(allowCrossDomain)
 
 function jwtVerify(req,res,next) {
   const bearerHeader = req.headers['authorization']
@@ -58,6 +68,12 @@ mongoose.connect(config.DB, { useNewUrlParser: true }).then(
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use(cookieSession({
+    name: 'mysession',
+    keys: ['vueauthrandomkey'],
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}))
 
 app.use(passport.initialize());
 app.use(passport.session());
