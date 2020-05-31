@@ -406,38 +406,43 @@ lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
 lectureRoutes.post('/process_emails', (req,res) => {
 	let lectures = req.body.lectures
 	let toEmail = req.body.toEmail
-	lectures.forEach(lecture => {
-		if(!lecture.email_sent) { //email has not been sent yet
-			Lecture.findByIdAndUpdate(lecture._id,
-				{
-					email_sent: true //mark email as sent
-				},
-				function(err, lect) {
-					if (err || lect == null) {
-						console.log("<ERROR> Updating course by ID:",lecture._id,"with:",{email_sent: true})
-						res.status(404).send("lecture not found");
-					} else {
-						var mailOptions = {
-							from: 'venue.do.not.reply@gmail.com',
-							to: toEmail,
-							subject: 'Venue Lecture Upload Reminder',
-							html: '<p>Click <a href="http://localhost:8080/lecture_info/' + lect._id + '">here</a> to upload your lecture recording</p>'
-						};
-						console.log("About to send email with:",mailOptions)
-						transporter.sendMail(mailOptions, function(error, info){
-							if (error) {
-								console.log(error);
-							} else {
-								console.log('Email sent to '+toEmail+': ' + info.response);
-							}
-						});
+	if(lectures == null || toEmail == null){
+		console.log("<ERROR> Invalid request with lectures:",lectures,"and toEmail:", toEmail)
+		res.status(404).send("Bad request to process_emails")
+	} else {
+		lectures.forEach(lecture => {
+			if(!lecture.email_sent) { //email has not been sent yet
+				Lecture.findByIdAndUpdate(lecture._id,
+					{
+						email_sent: true //mark email as sent
+					},
+					function(err, lect) {
+						if (err || lect == null) {
+							console.log("<ERROR> Updating course by ID:",lecture._id,"with:",{email_sent: true})
+							res.status(404).send("lecture not found");
+						} else {
+							var mailOptions = {
+								from: 'venue.do.not.reply@gmail.com',
+								to: toEmail,
+								subject: 'Venue Lecture Upload Reminder',
+								html: '<p>Click <a href="http://localhost:8080/lecture_info/' + lect._id + '">here</a> to upload your lecture recording</p>'
+							};
+							console.log("About to send email with:",mailOptions)
+							transporter.sendMail(mailOptions, function(error, info){
+								if (error) {
+									console.log(error);
+								} else {
+									console.log('Email sent to '+toEmail+': ' + info.response);
+								}
+							});
+						}
 					}
-				}
-			);
-		}
-	})
-	console.log("<SUCCESS> Notification emails sent to:",toEmail);
-	res.json(lectures)
+				);
+			}
+		})
+		console.log("<SUCCESS> Notification emails sent to:",toEmail);
+		res.json(lectures)
+	}
 })
 
 function getLiveLectures(lectures) {
