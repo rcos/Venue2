@@ -6,8 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start": "npm run start --prefix server",
-    "postinstall": "vue-cli-service build --output-path dist"
+    "start": "npm run start --prefix server"
   },
   "proxy": {
     "/": {
