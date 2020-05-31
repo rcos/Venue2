@@ -104,7 +104,6 @@ passport.use(new (require('passport-cas').Strategy)({
   serverBaseURL: 'http://localhost:4000'
 }, function(profile, done) {
   var login = profile.user;
-  console.log(login)
   User.findOne({user_id: login}, function (err, user) {
     if (err) {
       return done(err);
