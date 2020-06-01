@@ -6,8 +6,11 @@ export default {
       user: user
     })
   },
-  login(user) {
+  login() {
     return API().get('auth/login')
+  },
+  loginStatus() {
+    return API().get('auth/loginStatus')
   },
   checkForTempUser(user_id, temp_password) {
     return API().get('auth/check_for_temp_user/' + user_id + '/' + temp_password)
