@@ -34,20 +34,6 @@ function jwtVerify(req,res,next) {
   }
 }
 
-function casVerify(req,res,next) {
-  passport.authenticate('cas', function (err, user, info) {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      req.session.messages = info.message;
-      return res.sendStatus(401).send("Unauthorized");
-    }
-    req.session.messages = '';
-    return res.send(user)
-  })(req, res, next);
-}
-
 // get environment variabless when not in production
 if (process.env.NODE_ENV !== 'production')
   require('dotenv').config({ path: path.resolve(__dirname, '../variables.env') })
@@ -59,7 +45,7 @@ if(!process.env.AUTH_KEY){
   return
 }
 
-// const authRouter = require('./Auth/Auth.route')
+const authRouter = require('./Auth/Auth.route')
 const userRouter = require('./User/User.route')
 const courseRouter = require('./Course/Course.route')
 const sectionRouter = require('./Section/Section.route')
@@ -99,82 +85,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(user, done) {
-  done(null, user);
-});
-
-let User = require('./User/User.model');
-
-passport.use(new (require('passport-cas').Strategy)({
-  version: 'CAS3.0',
-  ssoBaseURL: 'https://cas-auth.rpi.edu/cas',
-  serverBaseURL: 'http://localhost:4000'
-}, function(profile, done) {
-  var login = profile.user;
-  User.findOne({user_id: "studenta"}, function (err, user) {
-    if (err) {
-      return done(err);
-    }
-    if (!user) {
-      return done(null, false, {message: 'Unknown user'});
-    }
-    user.attributes = profile.attributes;
-    return done(null, user);
-  });
-}));
-
-app.get("/auth/login", (req, res, next) => {
-  passport.authenticate('cas', function (err, user, info) {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      req.session.messages = info.message;
-      return res.redirect('http://localhost:8080');
-    }
-    req.logIn(user, function (err) {
-      if (err) {
-        return next(err);
-      }
-      req.session.messages = '';
-      let rpiSID = req.cookies['connect.sid']
-      User.findOneAndUpdate({user_id: user.user_id},{connect_sid: rpiSID},function(err,user) {
-        if(err) {
-          return next(err);
-        }
-        if(!user) {
-          return next(null);
-        }
-        res.header("Set-Cookie","connect_sid="+rpiSID)
-        return res.redirect('http://localhost:8080');
-      })
-    });
-  })(req, res, next);
-});
-
-app.get("/auth/loginStatus", function(req, res) {
-  User.findOne({connect_sid: req.cookies["connect_sid"]}, function (err, user) {
-    if(err || user == null) {
-      res.send(null)
-    } else {
-      res.send(user)
-    }
-  });
-});
-
-// app.use('/auth', authRouter);
-app.use('/users', casVerify, userRouter);
-app.use('/courses', casVerify, courseRouter);
-app.use('/sections', casVerify, sectionRouter);
-app.use('/events', casVerify, eventRouter);
-app.use('/submissions', casVerify, submissionRouter);
-app.use('/lectures', casVerify, lectureRouter);
-app.use('/polls', casVerify, pollRouter);
-app.use('/lecturesubmissions', casVerify, lectureSubmissionRouter);
+app.use('/auth', authRouter);
+app.use('/users', jwtVerify, userRouter);
+app.use('/courses', jwtVerify, courseRouter);
+app.use('/sections', jwtVerify, sectionRouter);
+app.use('/events', jwtVerify, eventRouter);
+app.use('/submissions', jwtVerify, submissionRouter);
+app.use('/lectures', jwtVerify, lectureRouter);
+app.use('/polls', jwtVerify, pollRouter);
+app.use('/lecturesubmissions', jwtVerify, lectureSubmissionRouter);
 
 var fs = require('fs'),
   http = require('http');

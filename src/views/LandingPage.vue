@@ -8,7 +8,7 @@
       <Logo v-bind:show_large_logo="false" />
       <LoginForm ref="LoginForm" />
       <div id="login-signup-buttons" class="hidden">
-        <a href="https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Flocalhost%3A4000%2Fauth%2Flogin">Login with CAS</a>
+        <a href="https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Flocalhost%3A4000%2Fauth%2FloginCAS">Login with CAS</a>
         <Button ref="LoginBtn" v-bind:btn_text="'Login'" v-on:button-clicked="login" />
         <p style="font-weight:bold;">or</p>
         <Button ref="SignupBtn" v-bind:btn_text="'Sign Up'" v-on:button-clicked="signup" />
@@ -36,11 +36,8 @@
       }
     },
     created() {
-      AuthAPI.loginStatus()
-      .then(res => {
-        //current logged in user
-        console.log(res.data)
-      })
+      this.$store.dispatch('loginCAS')
+        .then(() => this.$router.push({name: 'dashboard'}))
     },
     methods: {
       showLoginForm() {
