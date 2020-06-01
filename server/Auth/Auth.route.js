@@ -5,13 +5,6 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const passport = require('passport')
 
-let User = require('../User/User.model');
-
-authRoutes.all('/*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    next();
-});
-
 // authRoutes.route('/signup').post(function (req, res) {
 //   let user = new User(req.body.user)
 //   user.save()
@@ -97,53 +90,5 @@ authRoutes.all('/*', function(req, res, next) {
 //     res.status(400).json({ error: 'Invalid user. Please try again.' })
 //   }
 // });
-
-passport.use(new (require('passport-cas').Strategy)({
-  version: 'CAS3.0',
-  ssoBaseURL: 'https://cas-auth.rpi.edu/cas',
-  serverBaseURL: 'http://localhost:4000'
-}, function(profile, done) {
-  var login = profile.user;
-  console.log(login)
-  User.findOne({user_id: "studenta"}, function (err, user) {
-    if (err) {
-      return done(err);
-    }
-    if (!user) {
-      return done(null, false, {message: 'Unknown user'});
-    }
-    user.attributes = profile.attributes;
-    return done(null, user);
-  });
-}));
-
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(user, done) {
-  done(null, user);
-});
-
-authRoutes.get("/login", (req, res, next) => {
-  passport.authenticate('cas', function (err, user, info) {
-    if (err) {
-      return next(err);
-    }
-    console.log(user)
-    if (!user) {
-      req.session.messages = info.message;
-      return res.redirect('/');
-    }
-    req.logIn(user, function (err) {
-      if (err) {
-        return next(err);
-      }
-
-      req.session.messages = '';
-      return res.redirect('/');
-    });
-  })(req, res, next);
-});
 
 module.exports = authRoutes;
