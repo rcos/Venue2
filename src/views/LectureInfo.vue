@@ -8,6 +8,9 @@
       <div id="lecture-info-container">
         <div id="lecture-info-section">
           <h1>{{lecture.title}} Info</h1>
+          <div v-if="show_qr_preview">
+            <qrcode-stream id="video_preview" @decode="onDecode"></qrcode-stream>
+          </div>
           <show-at breakpoint="small">
             <!-- Mobile Start -->
             <div id="lecture-data">
@@ -224,6 +227,7 @@
   import LectureSubmissionsList from "@/components/LectureSubmissionsList.vue";
   import StudentLectureSubmissionCard from "@/components/StudentLectureSubmissionCard.vue";
   import {showAt, hideAt} from 'vue-breakpoints';
+  import { QrcodeStream } from 'vue-qrcode-reader'
 
   export default {
     name: 'LectureInfo',
@@ -236,7 +240,8 @@
       LectureSubmissionsList,
       StudentLectureSubmissionCard,
       showAt,
-      hideAt
+      hideAt,
+      QrcodeStream
     },
     data(){
       return {
@@ -254,7 +259,8 @@
         live_submissions: [],
         playback_submissions: [],
         absent: [],
-        showing_qr: false
+        showing_qr: false,
+        show_qr_preview: false
       }
     },
     created() {
@@ -264,6 +270,9 @@
       this.getStudentsAndCalcAttendance()
     },
     methods: {
+      onDecode(result) {
+        console.log("I decoded",result)
+      },
       async getLecture() {
         const response = await LectureAPI.getLectureWithSectionsAndCourse(this.lecture_id)
         this.lecture = response.data
@@ -335,22 +344,23 @@
         document.getElementById("qr_modal").classList.add("hidden")
       },
       scanQR() {
-        QRScanner.initiate({
-          onResult: result => {
-            let submission = {
-              lecture: this.lecture,
-              submitter: this.$store.state.user.current_user,
-              time: Date(),
-              code: result
-            };
-            SubmissionAPI.addSubmission(submission);
-            console.log("ATTENDANCE CODE FOUND:", result);
-          },
-          onTimeout: () => {
-            console.log("TIMEOUT: Could not find any QRCode");
-          },
-          timeout: 10000,
-        })
+        this.show_qr_preview = !this.show_qr_preview
+        // QRScanner.initiate({
+        //   onResult: result => {
+        //     let submission = {
+        //       lecture: this.lecture,
+        //       submitter: this.$store.state.user.current_user,
+        //       time: Date(),
+        //       code: result
+        //     };
+        //     SubmissionAPI.addSubmission(submission);
+        //     console.log("ATTENDANCE CODE FOUND:", result);
+        //   },
+        //   onTimeout: () => {
+        //     console.log("TIMEOUT: Could not find any QRCode");
+        //   },
+        //   timeout: 10000,
+        // })
       },
       handleAttendanceOverride() {
         let names = document.getElementById("attendance_override").value.replace(/\s/g,'').split(",")
@@ -389,6 +399,11 @@
   /* div {
     border: 1px solid black;
   } */
+  #video_preview {
+    height: 20rem;
+    width: 20rem;
+  }
+
   #lecture-info-container {
     text-align: left; 
     position: absolute;
