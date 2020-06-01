@@ -4,9 +4,11 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path')
 const mongoose = require('mongoose');
+const history = require('connect-history-api-fallback');
 const config = require('./DB.js');
 const jwt = require('jsonwebtoken');
-const PORT = 4000;
+const serveStatic = require('serve-static');
+const LOCAL_PORT = 4000;
 
 const passport = require('passport')
 const session = require('express-session')
@@ -40,9 +42,8 @@ if (process.env.NODE_ENV !== 'production')
 
 // ensure auth key is available in environment
 if(!process.env.AUTH_KEY){
-  res.status(500).send("Error")
   console.log("No auth key")
-  return
+  process.exit(1);
 }
 
 const authRouter = require('./Auth/Auth.route')
@@ -55,12 +56,19 @@ const lectureRouter = require('./Lecture/Lecture.route')
 const lectureSubmissionRouter = require('./LectureSubmission/LectureSubmission.route')
 const pollRouter = require('./PlaybackPoll/PlaybackPoll.route')
 
-
-mongoose.Promise = global.Promise;
-mongoose.connect(config.DB, { useNewUrlParser: true }).then(
-  () => { console.log('Database is connected') },
-  err => { console.log('Can not connect to the database' + err) }
-);
+// Connect to the database before starting the application server.
+mongoose.connect(process.env.MONGODB_URI || config.DB, function (err, client) {
+  if (err) {
+    console.log(err);
+    process.exit(1);
+  }
+  console.log("Database connection ready");
+  // Initialize the app.
+  var server = app.listen(process.env.PORT || LOCAL_PORT, function () {
+    var port = server.address().port;
+    console.log("App is now running on port", port);
+  });
+});
 
 // const MongoStore = require('connect-mongo')(session);
 
@@ -69,6 +77,12 @@ app.use(cors({ origin:['http://localhost:8080'],
     credentials: true}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(history())
+
+// Serve front end build on static server
+var distDir = __dirname + "/../dist/";
+// app.use(serveStatic(distDir))
+app.use(express.static(distDir));
 
 app.use(cookieParser());
 // Configure session store (memory)
@@ -109,7 +123,3 @@ http.createServer(function (req, res) {
     res.end(data);
   });
 }).listen(9000);
-
-app.listen(PORT, function () {
-  console.log('Server is running on Port:', PORT);
-});
