@@ -3,7 +3,35 @@ const authRoutes = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+
+let User = require('../User/User.model');
+
+//Passport setup START
 const passport = require('passport')
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+passport.use(new (require('passport-cas').Strategy)({
+  version: 'CAS3.0',
+  ssoBaseURL: 'https://cas-auth.rpi.edu/cas',
+  serverBaseURL: 'http://localhost:4000'
+}, function(profile, done) {
+  var login = profile.user.toLowerCase();
+  User.findOne({user_id: login}, function (err, user) {
+    if (err) {
+      return done(err);
+    }
+    if (!user) {
+      return done(null, false, {message: 'Unknown user'});
+    }
+    user.attributes = profile.attributes;
+    return done(null, user);
+  });
+}));
+//Passport setup END
 
 authRoutes.route('/signup').post(function (req, res) {
   let user = new User(req.body.user)
@@ -72,7 +100,7 @@ authRoutes.route('/set_permanent_pasword').post(function (req, res) {
         User.findByIdAndUpdate(user._id, {
           password: hash,
           temp_password: null
-        }, 
+        },
         (error, updated_user) => {
           if(error || updated_user == null) {
             console.log("<ERROR> Setting password for user:",user)
@@ -91,60 +119,31 @@ authRoutes.route('/set_permanent_pasword').post(function (req, res) {
   }
 });
 
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(user, done) {
-  done(null, user);
-});
-
-let User = require('../User/User.model');
-
-passport.use(new (require('passport-cas').Strategy)({
-  version: 'CAS3.0',
-  ssoBaseURL: 'https://cas-auth.rpi.edu/cas',
-  serverBaseURL: 'http://localhost:4000'
-}, function(profile, done) {
-  var login = profile.user;
-  User.findOne({user_id: "studenta"}, function (err, user) {
-    if (err) {
-      return done(err);
-    }
-    if (!user) {
-      return done(null, false, {message: 'Unknown user'});
-    }
-    user.attributes = profile.attributes;
-    return done(null, user);
-  });
-}));
-
 authRoutes.get("/loginCAS", (req, res, next) => {
   passport.authenticate('cas', function (err, user, info) {
     if (err) {
       return next(err);
-    }
-    if (!user) {
+    } else if (!user) {
       req.session.messages = info.message;
       return res.redirect('http://localhost:8080');
-    }
-    req.logIn(user, function (err) {
-      if (err) {
-        return next(err);
-      }
-      req.session.messages = '';
-      let rpiSID = req.cookies['connect.sid']
-      User.findOneAndUpdate({user_id: user.user_id},{connect_sid: rpiSID},function(err,user) {
-        if(err) {
+    } else {
+      req.logIn(user, function (err) {
+        if (err) {
           return next(err);
+        } else {
+          req.session.messages = '';
+          let rpiSID = req.cookies['connect.sid']
+          User.findOneAndUpdate({user_id: user.user_id},{connect_sid: rpiSID},function(err,user) {
+            if(err || user == null) {
+              return next(err);
+            } else {
+              res.header("Set-Cookie","connect_sid="+rpiSID)
+              return res.redirect('http://localhost:8080');
+            }
+          })
         }
-        if(!user) {
-          return next(null);
-        }
-        res.header("Set-Cookie","connect_sid="+rpiSID)
-        return res.redirect('http://localhost:8080');
-      })
-    });
+      });
+    }
   })(req, res, next);
 });
 
@@ -154,7 +153,6 @@ authRoutes.get("/loginStatus", function(req, res) {
       res.json(null)
     } else {
       const token = jwt.sign({current_user}, process.env.AUTH_KEY)
-      console.log({token, current_user})
       res.json({token, current_user})
     }
   });

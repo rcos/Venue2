@@ -14,11 +14,6 @@ const passport = require('passport')
 const session = require('express-session')
 var cookieParser = require('cookie-parser');
 
-app.all('/*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    next();
-});
-
 function jwtVerify(req,res,next) {
   const bearerHeader = req.headers['authorization']
   if (typeof bearerHeader !== 'undefined') {
@@ -72,12 +67,14 @@ mongoose.connect(process.env.MONGODB_URI || config.DB, function (err, client) {
 
 // const MongoStore = require('connect-mongo')(session);
 
-app.use(cors({ origin:['http://localhost:8080'],
+app.use(cors({ 
+    origin:['http://localhost:8080'],
     methods:['GET','POST'],
-    credentials: true}));
+    credentials: true
+}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(history())
+// app.use(history())
 
 // Serve front end build on static server
 var distDir = __dirname + "/../dist/";
@@ -85,7 +82,6 @@ var distDir = __dirname + "/../dist/";
 app.use(express.static(distDir));
 
 app.use(cookieParser());
-// Configure session store (memory)
 app.use(session({
   secret: 'stackoverflow_didnt_even_help',
   cookie: {
@@ -94,7 +90,6 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -109,8 +104,8 @@ app.use('/lectures', jwtVerify, lectureRouter);
 app.use('/polls', jwtVerify, pollRouter);
 app.use('/lecturesubmissions', jwtVerify, lectureSubmissionRouter);
 
-var fs = require('fs'),
-  http = require('http');
+const fs = require('fs');
+const http = require('http');
 
 http.createServer(function (req, res) {
  fs.readFile(__dirname + '/../public' + req.url, function (err,data) {
