@@ -73,9 +73,7 @@
               <LectureUploadModal v-else-if="Date.now() > new Date(lecture.end_time)
                                             && !lecture.video_ref.includes('.')
                                             && is_instructor" v-bind:lecture="lecture" :update_lecture="true"/>
-              <button v-else-if="Date.now() > new Date(lecture.submission_start_time)
-                            && Date.now() < new Date(lecture.submission_end_time)
-                            && !is_instructor" class="btn btn-secondary scan-qr-btn" @click="showQRPreview">
+              <button v-else-if="lecture_is_live && submission_window_open && !is_instructor && !student_has_submitted" class="btn btn-secondary scan-qr-btn" @click="showQRPreview">
                 Attend this lecture
               </button>
               <router-link v-else-if="((Date.now() > new Date(lecture.end_time)) || (undefined == lecture.end_time))
@@ -200,7 +198,7 @@
         playback_submissions: [],
         absent: [],
         showing_qr: false,
-        show_qr_preview: false
+        show_qr_preview: false,
       }
     },
     created() {
