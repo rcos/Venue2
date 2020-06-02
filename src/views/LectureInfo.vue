@@ -83,53 +83,67 @@
                 <button class="btn btn-secondary watch-recording">Watch recording</button>
               </router-link>
           </h1>
-          <div class="tabs">
-            <button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)"><h5>Live ({{live_submissions.length}}/{{all_students.length}})</h5></button>
-            <button id="playback_btn" class="tab_btn" @click="selectTab(1)" v-if="is_instructor"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
-            <button id="absent_btn" class="tab_btn" @click="selectTab(2)"><h5>Absent ({{absent.length}}/{{all_students.length}})</h5></button>
-            <button id="stats_btn" class="tab_btn" @click="selectTab(3)"><h5>Statistics</h5></button>
-          </div>
-          <div v-if="selected_tab == 0" id="live_submit" class="tab_section">
-            <div v-if="live_submissions.length > 0">
-              <div class="namecard-edging live-color" v-for="(submission,i) in live_submissions" :key="i">
-                <div class="namecard">
-                  {{submission.submitter.first_name}} {{submission.submitter.last_name}}
-                  {{submission.submitter.email}}
+          <div v-if="is_instructor" class="coursewide_lecture_attendance_info">
+            <div class="tabs">
+              <button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)"><h5>Live ({{live_submissions.length}}/{{all_students.length}})</h5></button>
+              <button id="playback_btn" class="tab_btn" @click="selectTab(1)" v-if="is_instructor"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
+              <button id="absent_btn" class="tab_btn" @click="selectTab(2)"><h5>Absent ({{absent.length}}/{{all_students.length}})</h5></button>
+              <button id="stats_btn" class="tab_btn" @click="selectTab(3)"><h5>Statistics</h5></button>
+            </div>
+            <div v-if="selected_tab == 0" id="live_submit" class="tab_section">
+              <div v-if="live_submissions.length > 0">
+                <div class="namecard-edging live-color" v-for="(submission,i) in live_submissions" :key="i">
+                  <div class="namecard">
+                    {{submission.submitter.first_name}} {{submission.submitter.last_name}}
+                    {{submission.submitter.email}}
+                  </div>
+                </div>
+                </div>
+              <div v-else>
+                None
+              </div>
+            </div>
+            <div v-if="selected_tab == 1" id="playback_submit" class="tab_section">
+              <div v-if="playback_submissions.length > 0">
+                <div class="namecard-edging playback-color" v-for="(submission,i) in playback_submissions" :key="i">
+                  <div class="namecard">
+                    {{submission.submitter.first_name}} {{submission.submitter.last_name}}
+                    {{submission.submitter.email}}
+                  </div>
                 </div>
               </div>
+              <div v-else>
+                None
               </div>
-            <div v-else>
-              None
             </div>
-          </div>
-          <div v-if="selected_tab == 1" id="playback_submit" class="tab_section">
-            <div v-if="playback_submissions.length > 0">
-              <div class="namecard-edging playback-color" v-for="(submission,i) in playback_submissions" :key="i">
-                <div class="namecard">
-                  {{submission.submitter.first_name}} {{submission.submitter.last_name}}
-                  {{submission.submitter.email}}
+            <div v-if="selected_tab == 2" id="no_submit" class="tab_section">
+              <div v-if="absent.length > 0">
+                <div class="namecard-edging absent-color" v-for="(absentee,i) in absent" :key="i">
+                  <div class="namecard">
+                    {{absentee.first_name}} {{absentee.last_name}}
+                    {{absentee.email}}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div v-else>
-              None
-            </div>
-          </div>
-          <div v-if="selected_tab == 2" id="no_submit" class="tab_section">
-            <div v-if="absent.length > 0">
-              <div class="namecard-edging absent-color" v-for="(absentee,i) in absent" :key="i">
-                <div class="namecard">
-                  {{absentee.first_name}} {{absentee.last_name}}
-                  {{absentee.email}}
-                </div>
+              <div v-else>
+                None
               </div>
             </div>
-            <div v-else>
-              None
+            <div v-if="selected_tab == 3" id="stats" class="tab_section">
+              Statistics
             </div>
           </div>
-          <div v-if="selected_tab == 3" id="stats" class="tab_section">
-            Statistics
+          <div v-else class="student_lecture_attendance_info">
+            <div v-if="student_has_submitted">
+              <p v-if="student_lecture_submission.is_live_submission">Live submission was made</p>
+              <div v-else>
+                <p>Playback Submission was made</p>
+                <ul>
+                  <li v-for="answer in student_poll_answers">{{answer}}</li>
+                </ul>
+              </div>
+            </div>
+            <p v-else>No Submission</p>
           </div>
         </div>
       </div>
@@ -170,6 +184,8 @@
     data(){
       return {
         lecture: {},
+        student_lecture_submission: {},
+        student_has_submitted: false,
         is_instructor: Boolean,
         lecture_has_loaded: false,
         lecture_is_upcoming: false,
@@ -189,9 +205,14 @@
     },
     created() {
       this.lecture_id = this.$route.params.lecture_id
-      this.is_instructor = this.$store.state.user.current_user.is_instructor
+      this.user = this.$store.state.user.current_user
+      this.user_id = this.user._id
+      this.is_instructor = this.user.is_instructor
       this.getLecture()
-      this.getStudentsAndCalcAttendance()
+      if(this.is_instructor)
+        this.getStudentsAndCalcAttendance()
+      else
+        this.getStudentLectureSubmission()
     },
     methods: {
       async getLecture() {
@@ -225,6 +246,15 @@
         const response = await UserAPI.getStudentsForLecture(this.lecture_id)
         this.all_students = response.data
         this.checkAttendance()
+      },
+      async getStudentLectureSubmission() {
+        const response = await LectureSubmissionAPI.getLectureSubmissionForStudent(this.lecture_id,this.user_id)
+        this.student_lecture_submission = response.data
+        if(this.student_lecture_submission == null)
+          this.student_has_submitted = false
+        else
+          this.student_has_submitted = true
+        console.log("Got Student Lecture Submission",this.student_lecture_submission)
       },
       setLectureStatus() {
         let current_time = Date.now()
@@ -278,7 +308,7 @@
         console.log("I scanned:",result)
         let lecture_submission = {
           lecture: this.lecture,
-          submitter: this.$store.state.user.current_user,
+          submitter: this.user,
           is_live_submission: true
         }
         const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
@@ -321,6 +351,7 @@
   /* div {
     border: 1px solid black;
   } */
+
   #video_preview {
     /*height: 20rem;*/
     /*width: 20rem;*/
