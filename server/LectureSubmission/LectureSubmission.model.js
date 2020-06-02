@@ -21,7 +21,7 @@ let LectureSubmission = new Schema({
 		}]
 	],
 	is_live_submission: { type: Boolean, default: false },
-	// TODO: Store live submission time
+	live_submission_time: Date
 });
 
 module.exports = mongoose.model('LectureSubmission', LectureSubmission);

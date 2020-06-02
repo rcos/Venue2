@@ -133,7 +133,10 @@
           </div>
           <div v-else class="student_lecture_attendance_info">
             <div v-if="student_has_submitted">
-              <p v-if="student_lecture_submission.is_live_submission">Live submission was made</p>
+              <div v-if="student_lecture_submission.is_live_submission">
+                <p>Live submission was made</p>
+                <p>Live submission time: {{ new Date(student_lecture_submission.live_submission_time) }}</p>
+              </div>
               <div v-else>
                 <p>Playback Submission was made</p>
                 <ul>
@@ -314,7 +317,8 @@
         let lecture_submission = {
           lecture: this.lecture,
           submitter: this.user,
-          is_live_submission: true
+          is_live_submission: true,
+          live_submission_time: new Date()
         }
         const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
         console.log("Created Lecture Submission")
