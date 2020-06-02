@@ -6,11 +6,12 @@
     </div>
     <div v-else>
       <div id="lecture-info-container">
+        <div v-if="show_qr_preview">
+          <button @click="closeQRPreview" id="exit_preview_btn">X</button>
+          <qrcode-stream id="video_preview" @decode="createLiveSubmission"></qrcode-stream>
+        </div>
         <div id="lecture-info-section">
           <h1>{{lecture.title}} Info</h1>
-          <div v-if="show_qr_preview">
-            <qrcode-stream id="video_preview" @decode="onDecode"></qrcode-stream>
-          </div>
           <show-at breakpoint="small">
             <!-- Mobile Start -->
             <div id="lecture-data">
@@ -74,7 +75,7 @@
                                             && is_instructor" v-bind:lecture="lecture" :update_lecture="true"/>
               <button v-else-if="Date.now() > new Date(lecture.submission_start_time)
                             && Date.now() < new Date(lecture.submission_end_time)
-                            && !is_instructor" class="btn btn-secondary scan-qr-btn" @click="scanQR">
+                            && !is_instructor" class="btn btn-secondary scan-qr-btn" @click="showQRPreview">
                 Attend this lecture
               </button>
               <router-link v-else-if="((Date.now() > new Date(lecture.end_time)) || (undefined == lecture.end_time))
@@ -270,9 +271,6 @@
       this.getStudentsAndCalcAttendance()
     },
     methods: {
-      onDecode(result) {
-        console.log("I decoded",result)
-      },
       async getLecture() {
         const response = await LectureAPI.getLectureWithSectionsAndCourse(this.lecture_id)
         this.lecture = response.data
@@ -343,24 +341,25 @@
       hideQR() {
         document.getElementById("qr_modal").classList.add("hidden")
       },
-      scanQR() {
-        this.show_qr_preview = !this.show_qr_preview
-        // QRScanner.initiate({
-        //   onResult: result => {
-        //     let submission = {
-        //       lecture: this.lecture,
-        //       submitter: this.$store.state.user.current_user,
-        //       time: Date(),
-        //       code: result
-        //     };
-        //     SubmissionAPI.addSubmission(submission);
-        //     console.log("ATTENDANCE CODE FOUND:", result);
-        //   },
-        //   onTimeout: () => {
-        //     console.log("TIMEOUT: Could not find any QRCode");
-        //   },
-        //   timeout: 10000,
-        // })
+      showQRPreview() {
+        this.show_qr_preview = true
+      },
+      closeQRPreview() {
+        this.show_qr_preview = false
+      },
+      async createLiveSubmission(result) {
+        // TODO
+        // 1. Don't event show Attend this lecture button if submission window is not open
+        // 2. Check if result matches lecture QR Code before submission
+        this.show_qr_preview = false
+        console.log("I scanned:",result)
+        let lecture_submission = {
+          lecture: this.lecture,
+          submitter: this.$store.state.user.current_user,
+          is_live_submission: true
+        }
+        const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
+        console.log("Created Lecture Submission")
       },
       handleAttendanceOverride() {
         let names = document.getElementById("attendance_override").value.replace(/\s/g,'').split(",")
@@ -400,8 +399,17 @@
     border: 1px solid black;
   } */
   #video_preview {
-    height: 20rem;
-    width: 20rem;
+    /*height: 20rem;*/
+    /*width: 20rem;*/
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+  }
+
+  #exit_preview_btn {
+    position: absolute;
+    z-index: 2;
   }
 
   #lecture-info-container {
