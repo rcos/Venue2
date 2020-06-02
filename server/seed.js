@@ -151,9 +151,15 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			allow_playback_submissions: true,
 			start_time: Date.now(),
 			end_time: Date.now() + (2*60*60*1000),
-			submission_start_time: Date.now() + (60*1000),
-			submission_end_time: Date.now() + (3*60*1000),
-			code: "abcdefghijklmnopqrstuvwxyz",
+			checkins: [{
+				start_time: Date.now() + (60*1000),
+				end_time: Date.now() + (2*60*1000),
+				code: "abcdefghijklmnopqrstuvwxyz",
+			},{
+				start_time: Date.now() + (3*60*1000),
+				end_time: Date.now() + (4*60*1000),
+				code: "zyxwvutsrqponmlkjihgfedcba",
+			}],
 			video_ref: "/videos/sample/sample.mp4",
 			num_playback_polls: 0
 		}))
@@ -165,11 +171,13 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			allow_playback_submissions: true,
 			start_time: Date.now()-(60*2000),
 			end_time: Date.now() - (60*1000),
-			submission_start_time: Date.now() - (60*1500),
-			submission_end_time: Date.now() - (60*1200),
+			checkins: [{
+				start_time: Date.now() - (60*1500),
+				end_time: Date.now() - (60*1200),
+				code: "abcdefghijklmnopqrstuvwxyz",
+			}],
 			playback_submission_start_time: Date.now(),
 			playback_submission_end_time: Date.now() + (3*60*1000),
-			code: "abcdefghijklmnopqrstuvwxyz",
 			video_ref: "/videos/sample/sample.mp4",
 			num_playback_polls: 2
 		}))
@@ -192,11 +200,13 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			allow_playback_submissions: true,
 			start_time: Date.now(),
 			end_time: Date.now() + (2*60*60*1000),
-			submission_start_time: Date.now() + (60*1000),
-			submission_end_time: Date.now() + (3*60*1000),
+			checkins: [{
+				start_time: Date.now() + (60*1000),
+				end_time: Date.now() + (3*60*1000),
+				code: "abcdefghijklmnopqrstuvwxyz",
+			}],
 			playback_submission_start_time: Date.now() + (2*60*60*1000),
 			playback_submission_end_time: Date.now() + (4*60*1000),
-			code: "abcdefghijklmnopqrstuvwxyz",
 			video_ref: "/videos/sample/sample.mp4",
 			num_playback_polls: 2
 		}))
