@@ -8,7 +8,7 @@
       <div id="lecture-info-container">
         <div v-if="show_qr_preview">
           <button @click="closeQRPreview" id="exit_preview_btn">X</button>
-          <qrcode-stream id="video_preview" @decode="createLiveSubmission"></qrcode-stream>
+          <qrcode-stream id="video_preview" @decode="checkForQRMatch"></qrcode-stream>
         </div>
         <div id="lecture-info-section">
           <h1>{{lecture.title}} Info</h1>
@@ -298,12 +298,19 @@
       closeQRPreview() {
         this.show_qr_preview = false
       },
-      async createLiveSubmission(result) {
+      checkForQRMatch(scanned_str) {
+        if(scanned_str === this.lecture.code){
+          console.log("Scanned Correct Code. Creating Live Submission")
+          this.createLiveSubmission()
+          this.closeQRPreview()
+        } else {
+          alert("Scanned incorrect code!")
+        }
+      },
+      async createLiveSubmission() {
         // TODO
         // 1. Don't event show Attend this lecture button if submission window is not open
         // 2. Check if result matches lecture QR Code before submission
-        this.show_qr_preview = false
-        console.log("I scanned:",result)
         let lecture_submission = {
           lecture: this.lecture,
           submitter: this.user,
