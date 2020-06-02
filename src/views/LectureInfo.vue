@@ -61,12 +61,11 @@
         </div>
         <div id="lecture-attendance-section">
           <h1>Attendance
-              <button v-if="Date.now() > new Date(lecture.submission_start_time)
-                            && Date.now() < new Date(lecture.submission_end_time)
+              <button v-if="show_checkin_qr!=-1
                             && is_instructor" class="btn btn-secondary show-qr-btn" @click="showQR">
                 Show QR
               </button>
-              <LectureUploadModal v-else-if="Date.now() > new Date(lecture.end_time)
+              <LectureUploadModal v-if="Date.now() > new Date(lecture.end_time)
                                             && !lecture.video_ref.includes('.')
                                             && is_instructor" v-bind:lecture="lecture" :update_lecture="true"/>
               <button v-else-if="Date.now() > new Date(lecture.submission_start_time)
@@ -250,11 +249,11 @@
         submission_window_open: false,
         submission_window_closed: false,
         selected_tab: 0,
-        all_students: [],
-        live_submissions: [],
-        playback_submissions: [],
+        all_students: Map,
+        live_submissions: Map,
+        playback_submissions: Map,
         absent: [],
-        showing_qr: false
+        show_checkin_qr: -1
       }
     },
     created() {
@@ -315,7 +314,25 @@
           this.lecture_is_over = true
       },
       setSubmissionWindowStatus() {
-        let current_time = new Date()
+        let current_time = Date.now()
+        for(let i=0;i<this.lecture.checkins.length;i++) {
+          let start = new Date(this.lecture.checkins[i].start_time)
+          let end = new Date(this.lecture.checkins[i].end_time)
+          console.log(current_time-start,end-current_time)
+          let self = this
+          if(current_time < end) {
+            if(start < current_time) {
+              this.show_checkin_qr = i
+            } else {
+              setTimeout(function() {
+                self.show_checkin_qr = i
+              }, start-current_time);
+            }
+            setTimeout(function() {
+              self.show_checkin_qr = -1
+            }, end-current_time);
+          }
+        }
         let submission_start_time = new Date(this.lecture.submission_start_time)
         let submission_end_time = new Date(this.lecture.submission_end_time)
         if(current_time < submission_start_time)
@@ -326,7 +343,7 @@
           this.submission_window_closed = true
       },
       showQR() {
-        QRCode.toCanvas(document.getElementById("qr_render_area"), this.lecture.code, function(error) {
+        QRCode.toCanvas(document.getElementById("qr_render_area"), this.lecture.checkins[this.show_checkin_qr].code, function(error) {
           if (error) console.error(error)
         });
         document.getElementById("qr_modal").classList.remove("hidden")
