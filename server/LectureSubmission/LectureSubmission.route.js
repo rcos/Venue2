@@ -47,6 +47,7 @@ lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
           console.log("<ERROR> Getting lecture with ID:",req.body.lecture_id)
           res.json(err)
         } else {
+          let lectureSubmissions = []
           for(let i=0;i<lecture.checkins.length;i++) {
             let subobj = {
               lecture: lecture._id,
@@ -59,7 +60,10 @@ lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
             lectureSubmission.save()
               .then(() => {
                 console.log("<SUCCESS> Adding lecture submission for user with email:",email)
-                res.status(200).json(lectureSubmission);
+                lectureSubmissions.push(lectureSubmissions)
+                if(i == lecture.checkins.length-1) {
+                  res.status(200).json(lectureSubmission);
+                }
               })
               .catch(() => {
                 console.log("<ERROR> Adding lecture submission for user with email:",email)
