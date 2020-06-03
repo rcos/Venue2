@@ -37,11 +37,15 @@
             <label>End Time</label>
             <input id="lecture_end"/>
           </div>
-          <div class="input-wrapper" id="submission-time-wrapper">
+          <div v-for="(checkin,i) in checkins" :key="i" class="input-wrapper" id="submission-time-wrapper">
             <label>Submission Start Time</label>
-            <input id="submission_start"/>
+            <input :id="'submission_start_'+i"/>
             <label>Submission End Time</label>
-            <input id="submission_end"/>
+            <input :id="'submission_end_'+i"/>
+            <button type="button" class="btn btn-danger" @click="handleRemoveCheckin(i)">X</button>
+          </div>
+          <div class="input-wrapper" id="submission-time-wrapper">
+            <button type="button" class="btn btn-secondary" @click="handleAddCheckin">Add another attendance check-in</button>
           </div>
         </div>
         <!-- Playback video adder -->
@@ -84,6 +88,9 @@ export default {
       selected_geofence: [],
       allow_live_submissions: false,
       allow_playback_submissions: false,
+      checkins: [],
+      checkin_pickers: [],
+      times_added: 0
     };
   },
   created() {
@@ -134,15 +141,6 @@ export default {
         result += alnums[Math.floor(Math.random() * alnums.length)];
       }
       this.lecture.code = result;
-      // this.showQR(this.lecture.code);
-    },
-    showQR(qr_data) {
-      let canvas = document.getElementById("qr_render_area");
-      if (qr_data) {
-        QRCode.toCanvas(canvas, qr_data, function(error) {
-          if (error) console.error(error);
-        });
-      }
     },
     setAllowLiveSubmissions() {
       this.allow_live_submissions = true
@@ -171,25 +169,86 @@ export default {
         onChange: function(selectedDates, dateStr, instance) {
           self.lecture.end_time = Date.parse(dateStr)
         }
-      })      
-      var fp2 = flatpickr(document.getElementById("submission_start"),{
-        enableTime: true,
-        minDate: Date.now(),
-        onChange: function(selectedDates, dateStr, instance) {
-          self.lecture.submission_start_time = Date.parse(dateStr)
-          fp3.set("minDate",self.lecture.submission_start_time)
-          if(self.lecture.submission_start_time > self.lecture.submission_end_time) {
-            fp3.setDate(self.lecture.submission_start_time)
+      })
+      this.handleAddCheckin();
+    },
+    handleAddCheckin() {
+      this.checkins.push({
+        start_time: null,
+        end_time: null,
+        code: ""
+      })
+      this.checkin_pickers.push({
+        start: null,
+        end: null
+      })
+      this.$nextTick(() => {
+        let i = this.checkin_pickers.length-1
+        let pickrs = this.checkin_pickers[i]
+        let self = this
+        pickrs.start = flatpickr(document.getElementById("submission_start_"+i),{
+          enableTime: true,
+          minDate: Date.now(),
+          onChange: function(selectedDates, dateStr, instance) {
+            self.checkins[i].start_time = Date.parse(dateStr)
+            pickrs.end.set("minDate",self.checkins[i].start_time)
+            if(self.checkins[i].start_time > self.checkins[i].end_time) {
+              pickrs.end.setDate(self.checkins[i].start_time)
+            }
+          }
+        })
+        pickrs.end = flatpickr(document.getElementById("submission_end_"+i),{
+          enableTime: true,
+          minDate: Date.now(),
+          onChange: function(selectedDates, dateStr, instance) {
+            self.checkins[i].start_time = Date.parse(dateStr)
+          }
+        })
+      })
+    },
+    handleRemoveCheckin(i) {
+      let fallback = []
+      for(let j=i+1;j<this.checkins.length;j++) {
+        fallback.push({
+          start: this.checkins[j].start_time,
+          end: this.checkins[j].end_time
+        })
+      }
+      for(let j=i;j<this.checkin_pickers.length;j++) { // cleanup
+        this.checkin_pickers[j].start.destroy()
+        this.checkin_pickers[j].end.destroy()
+      }
+      this.checkins.splice(i,1)
+      this.checkin_pickers.splice(i,1)
+      for(let j=i;j<this.checkin_pickers.length;j++) { // rebuild instances
+        let self = this
+        self.checkin_pickers[j].start = flatpickr(document.getElementById("submission_start_"+j),{
+          enableTime: true,
+          minDate: Date.now(),
+          onChange: function(selectedDates, dateStr, instance) {
+            self.checkins[j].start_time = Date.parse(dateStr)
+            self.checkin_pickers[j].end.set("minDate",self.checkins[j].start_time)
+            if(self.checkins[j].start_time > self.checkins[j].end_time) {
+              self.checkin_pickers[j].end.setDate(self.checkins[j].start_time)
+            }
+          }
+        })
+        self.checkin_pickers[j].end = flatpickr(document.getElementById("submission_end_"+j),{
+          enableTime: true,
+          minDate: fallback[this.checkin_pickers.length-j-1].start || Date.now(),
+          onChange: function(selectedDates, dateStr, instance) {
+            self.checkins[j].start_time = Date.parse(dateStr)
+          }
+        })
+        if(fallback[this.checkin_pickers.length-j-1].start != null) { // setDate to fallback
+          self.checkin_pickers[j].start.setDate(fallback[this.checkin_pickers.length-j-1].start)
+          if(fallback[this.checkin_pickers.length-j-1].end != null) { // setDate to fallback
+            self.checkin_pickers[j].end.setDate(fallback[this.checkin_pickers.length-j-1].end)
+          } else {
+            self.checkin_pickers[j].end.setDate(fallback[this.checkin_pickers.length-j-1].start)
           }
         }
-      })
-      var fp3 = flatpickr(document.getElementById("submission_end"),{
-        enableTime: true,
-        minDate: Date.now(),
-        onChange: function(selectedDates, dateStr, instance) {
-          self.lecture.submission_end_time = Date.parse(dateStr)
-        }
-      })
+      }
     }
   }
 };
