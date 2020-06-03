@@ -7,43 +7,67 @@ let User = require('../User/User.model');
 
 lectureSubmissionRoutes.route('/add').post(function (req, res) {
   let lectureSubmission = new LectureSubmission(req.body.lectureSubmission);
-  lectureSubmission.save()
-    .then(() => {
-      console.log("<SUCCESS> Adding lecture submission:",lectureSubmission)
-      res.status(200).json(lectureSubmission);
-    })
-    .catch(() => {
-      console.log("<ERROR> Adding lecture submission:",lectureSubmission)
-      res.status(400).send("unable to save poll to database");
-    });
+  Lecture.findById(lectureSubmission.lecture, function(err, lecture) {
+    if(err || lecture == null) {
+      console.log("<ERROR> Getting lecture with ID:",lectureSubmission.lecture)
+      res.json(err)
+    } else {
+      let match = false
+      for(let i=0;i<lecture.checkins.length;i++) {
+        if(lecture.checkins[i].code == lectureSubmission.code) {
+          match = true
+          lectureSubmission.save()
+            .then(() => {
+              console.log("<SUCCESS> Adding lecture submission:",lectureSubmission)
+              res.status(200).json(lectureSubmission);
+            })
+            .catch(() => {
+              console.log("<ERROR> Adding lecture submission:",lectureSubmission)
+              res.status(400).send("unable to save poll to database");
+            });
+        }
+      }
+      if(!match) {
+        console.log("<ERROR> The given lecture's QR Codes do not contain the submitted QR Code:",lectureSubmission.code)
+        res.status(400).send("The given lecture's QR Codes do not contain the submitted QR Code");
+      }
+    }
+  })
 });
 
 lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
   let email = req.body.rcs + "@rpi.edu"
-  User.find({email: email},function(err,users){
-    if(err || users == null) {
+  User.findOne({email: email},function(err,user){
+    if(err || user == null) {
       console.log("<ERROR> Getting user(s) with email:",email)
       res.json(err)
-    } else if(users.length == 0) {
-      console.log("<ERROR> User with email ("+email+") not found")
-      res.status(400).send("no user with that email in database");
     } else {
-      let subobj = {
-        lecture: req.body.lecture_id,
-        video_progress: 0,
-        is_live_submission: true,
-        submitter: users[0]._id
-      }
-      let lectureSubmission = new LectureSubmission(subobj);
-      lectureSubmission.save()
-        .then(() => {
-          console.log("<SUCCESS> Adding lecture submission for user with email:",email)
-          res.status(200).json(lectureSubmission);
-        })
-        .catch(() => {
-          console.log("<ERROR> Adding lecture submission for user with email:",email)
-          res.status(400).send("unable to save submission to database");
-        });
+      Lecture.findById(req.body.lecture_id,function(err,lecture) {
+        if(err || lecture == null) {
+          console.log("<ERROR> Getting lecture with ID:",req.body.lecture_id)
+          res.json(err)
+        } else {
+          for(let i=0;i<lecture.checkins.length;i++) {
+            let subobj = {
+              lecture: lecture._id,
+              video_progress: 0,
+              is_live_submission: true,
+              submitter: user._id,
+              code: lecture.checkins[i].code
+            }
+            let lectureSubmission = new LectureSubmission(subobj);
+            lectureSubmission.save()
+              .then(() => {
+                console.log("<SUCCESS> Adding lecture submission for user with email:",email)
+                res.status(200).json(lectureSubmission);
+              })
+              .catch(() => {
+                console.log("<ERROR> Adding lecture submission for user with email:",email)
+                res.status(400).send("unable to save submission to database");
+              });
+          }
+        }
+      })
     }
   })
 });
