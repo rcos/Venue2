@@ -2,7 +2,7 @@
   <!-- ADDING USER -->
   <div>
     <h2>New Lecture For {{ course.name }}</h2>
-    <form class="new-lecture-form" @submit.prevent="addLecture">
+    <form class="new-lecture-form" @submit.prevent="handleAttemptSubmit">
       <div class="form-group">
         <!-- Lecture Info -->
         <div class="input-wrapper">
@@ -11,7 +11,7 @@
             type="text"
             class="form-control new-lecture-input"
             placeholder="e.g. Lecture 1"
-            v-model="lecture.title"
+            v-model.lazy="lecture.title"
           />
         </div>
         <!-- Section -->
@@ -67,6 +67,7 @@
         <!-- Playback video adder -->
         <LectureUploadModal ref="uploadmodal" v-if="allow_playback_submissions" :lecture="lecture" :update_lecture="false"/>
       </div>
+      <h6 class="error_msg" v-if="input_error_message!=''">{{input_error_message}}</h6>
       <button class="btn btn-primary create-lecture-btn">Create Lecture</button>
     </form>
   </div>
@@ -111,7 +112,8 @@ export default {
       random_times: true,
       custom_times: false,
       random_checkin_count: 1,
-      random_checkin_length: 5
+      random_checkin_length: 5,
+      input_error_message: ""
     };
   },
   created() {
@@ -128,8 +130,79 @@ export default {
       if(!this.lecture_sections.includes(section))
         this.lecture_sections.push(section)
     },
-    async addLecture(evt) {
+    setErrorMessage(error) {
+      this.input_error_message = "ERROR: "+error
+      let self = this
+      setTimeout(function() {
+        self.input_error_message = ""
+      },(7*1000))
+    },
+    handleAttemptSubmit(evt) {
       evt.preventDefault();
+      let allGood = true
+      let hasTitle = this.lecture.title && this.lecture.title != ""
+      let hasSections = this.lecture_sections.length > 0
+      let hasType = this.allow_live_submissions || this.allow_playback_submissions
+      if(hasTitle && hasSections && hasType) {
+        if(this.allow_live_submissions) {
+          let hasStart = this.lecture.start_time != null && this.lecture.start_time != ""
+          let hasEnd = this.lecture.end_time != null && this.lecture.end_time != ""
+          let validRange = this.lecture.start_time + (15 * 60 * 1000) <= this.lecture.end_time
+          if(hasStart && hasEnd && validRange) {
+            let hasRandom = this.random_times
+            if(hasRandom) {
+              allGood = true
+            } else {
+              this.checkins.sort((a, b) => (a.start_time > b.start_time) ? 1 : -1)
+              if(this.checkins[0].start_time == null || this.checkins[0].end_time == null || this.checkins[0].start_time == "" || this.checkins[0].end_time == "") {
+                this.setErrorMessage("Missing start or end time for check-in number: 1")
+                allGood = false
+              } else if(this.lecture.start_time < this.checkins[0].start_time && this.checkins[this.checkins.length-1].end_time < this.lecture.end_time) {
+                for(let i=0;i<this.checkins.length-1;i++) {
+                  if(this.checkins[i+1].start_time == null || this.checkins[i+1].end_time == null || this.checkins[i+1].start_time == "" || this.checkins[i+1].end_time == "") {
+                    this.setErrorMessage("Missing start or end time for check-in number: "+(i+2))
+                    allGood = false
+                  } else if(this.checkins[i].end_time >= this.checkins[i+1].start_time) {
+                    this.setErrorMessage("Invalid time range for check-in number: "+(i+2))
+                    allGood = false
+                  }
+                }
+              } else {
+                this.setErrorMessage("Check-in times must be between lecture start and end times")
+                allGood = false
+              }
+            }
+          } else if(!hasStart) {
+            this.setErrorMessage("Missing start time")
+            allGood = false
+          } else if(!hasEnd) {
+            this.setErrorMessage("Missing end time")
+            allGood = false
+          } else if(!validRange) {
+            this.setErrorMessage("Invalid lecture time range (must be at least 15 minutes long)")
+            allGood = false
+          }
+        } else if(this.$refs["uploadmodal"].isComplete()) {
+          allGood = true
+        } else {
+          this.setErrorMessage("Video upload section is not complete")
+          allGood = false
+        }
+      } else if(!hasTitle) {
+        this.setErrorMessage("Missing title")
+        allGood = false
+      } else if(!hasSections) {
+        this.setErrorMessage("Missing section(s)")
+        allGood = false
+      } else if(!hasType) {
+        this.setErrorMessage("Missing lecture type")
+        allGood = false
+      }
+      if(allGood) {
+        this.addLecture()
+      }
+    },
+    async addLecture() {
       this.lecture.sections = this.lecture_sections;
       this.lecture.allow_live_submissions = this.allow_live_submissions
       this.lecture.allow_playback_submissions = this.allow_playback_submissions
@@ -148,7 +221,7 @@ export default {
           params: { id: this.course_id }
         })
       }
-      else if(this.lecture.allow_playback_submissions && this.$refs["uploadmodal"].isComplete()) {
+      else if(this.lecture.allow_playback_submissions) {
         let response = await LectureAPI.addLecture(this.lecture);
         this.lecture = response.data
         this.$refs["uploadmodal"].updateLectureFromParent(this.lecture,this.course_id)
@@ -191,7 +264,7 @@ export default {
           code: ''
         })
       }
-      this.random_checkins.sort((a, b) => (a.start > b.start) ? 1 : -1)
+      this.random_checkins.sort((a, b) => (a.start_time > b.start_time) ? 1 : -1)
     },
     generateAttendanceCodes() {
       for(let i=0;i<this.lecture.checkins.length;i++) {
@@ -364,5 +437,9 @@ export default {
 
 #qr-section {
   margin-top: 2rem;
+}
+
+.error_msg {
+  color: red;
 }
 </style>
