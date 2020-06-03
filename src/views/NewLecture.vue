@@ -112,9 +112,10 @@ export default {
       this.lecture.sections = this.lecture_sections;
       this.lecture.allow_live_submissions = this.allow_live_submissions
       this.lecture.allow_playback_submissions = this.allow_playback_submissions
+      this.lecture.checkins = this.checkins
       // generate attendance codes for live lectures
       if(this.lecture.allow_live_submissions) {
-        this.generateAttendanceCode()
+        this.generateAttendanceCodes()
         let response = await LectureAPI.addLecture(this.lecture);
         this.lecture = response.data
         this.$router.push({
@@ -133,14 +134,15 @@ export default {
       this.course_sections = response.data;
       this.course_sections_have_loaded = true;
     },
-    generateAttendanceCode() {
-      const alnums =
-        "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      let result = "";
-      for (let i = 100; i > 0; --i) {
-        result += alnums[Math.floor(Math.random() * alnums.length)];
+    generateAttendanceCodes() {
+      for(let i=0;i<this.lecture.checkins.length;i++) {
+        const alnums = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let result = "";
+        for (let j = 100; j > 0; --j) {
+          result += alnums[Math.floor(Math.random() * alnums.length)];
+        }
+        this.lecture.checkins[i].code = result;
       }
-      this.lecture.code = result;
     },
     setAllowLiveSubmissions() {
       this.allow_live_submissions = true
@@ -201,7 +203,7 @@ export default {
           enableTime: true,
           minDate: Date.now(),
           onChange: function(selectedDates, dateStr, instance) {
-            self.checkins[i].start_time = Date.parse(dateStr)
+            self.checkins[i].end_time = Date.parse(dateStr)
           }
         })
       })
@@ -237,7 +239,7 @@ export default {
           enableTime: true,
           minDate: fallback[this.checkin_pickers.length-j-1].start || Date.now(),
           onChange: function(selectedDates, dateStr, instance) {
-            self.checkins[j].start_time = Date.parse(dateStr)
+            self.checkins[j].end_time = Date.parse(dateStr)
           }
         })
         if(fallback[this.checkin_pickers.length-j-1].start != null) { // setDate to fallback
