@@ -240,15 +240,9 @@
     },
     data(){
       return {
+        lecture_has_loaded: false,
         lecture: {},
         is_instructor: Boolean,
-        lecture_has_loaded: false,
-        lecture_is_upcoming: false,
-        lecture_is_live: false,
-        lecture_is_over: false,
-        submission_window_pending: false,
-        submission_window_open: false,
-        submission_window_closed: false,
         selected_tab: 0,
         all_students: [],
         live_submissions: {},
@@ -269,7 +263,7 @@
         const response = await LectureAPI.getLectureWithSectionsAndCourse(this.lecture_id)
         this.lecture = response.data
         this.lecture_has_loaded = true
-        this.setLectureStatus()
+        this.setSubmissionWindowStatus()
       },
       async checkAttendance() {
         const response = await LectureSubmissionAPI.getLectureSubmissionsForLecture(this.lecture_id)
@@ -301,24 +295,6 @@
         this.all_students = response.data
         this.checkAttendance()
       },
-      setLectureStatus() {
-        let current_time = Date.now()
-        let lecture_start_time = new Date(this.lecture.start_time)
-        let lecture_end_time = new Date(this.lecture.end_time)
-        let lecture_playback_submission_start_time = new Date(this.lecture.playback_submission_start_time)
-        let lecture_playback_submission_end_time = new Date(this.lecture.playback_submission_end_time)
-        if(undefined == this.lecture.start_time || undefined == this.lecture.end_time) {
-          this.lecture_is_over = true
-        }
-        if(current_time < lecture_start_time || current_time < lecture_playback_submission_start_time) 
-          this.lecture_is_upcoming = true
-        else if(current_time >= lecture_start_time && current_time <= lecture_end_time){
-          this.lecture_is_live = true
-          this.setSubmissionWindowStatus()
-        }
-        else
-          this.lecture_is_over = true
-      },
       setSubmissionWindowStatus() {
         let current_time = Date.now()
         for(let i=0;i<this.lecture.checkins.length;i++) {
@@ -339,14 +315,6 @@
             }, end-current_time);
           }
         }
-        let submission_start_time = new Date(this.lecture.submission_start_time)
-        let submission_end_time = new Date(this.lecture.submission_end_time)
-        if(current_time < submission_start_time)
-          this.submission_window_pending = true
-        else if(current_time >= submission_start_time && current_time <= submission_end_time)
-          this.submission_window_open = true
-        else
-          this.submission_window_closed = true
       },
       showQR() {
         QRCode.toCanvas(document.getElementById("qr_render_area"), this.lecture.checkins[this.show_checkin_qr].code, function(error) {
