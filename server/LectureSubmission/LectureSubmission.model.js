@@ -13,6 +13,7 @@ let LectureSubmission = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
+	code: String,
 	video_progress: Number,
 	student_poll_answers: [
 		[{

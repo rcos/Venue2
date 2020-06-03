@@ -68,9 +68,9 @@
               <LectureUploadModal v-if="Date.now() > new Date(lecture.end_time)
                                             && !lecture.video_ref.includes('.')
                                             && is_instructor" v-bind:lecture="lecture" :update_lecture="true"/>
-              <button v-else-if="Date.now() > new Date(lecture.submission_start_time)
-                            && Date.now() < new Date(lecture.submission_end_time)
-                            && !is_instructor" class="btn btn-secondary scan-qr-btn" @click="scanQR">
+              <button v-else-if="show_checkin_qr!=-1
+                            && !is_instructor
+                            && self_submission_count<=show_checkin_qr" class="btn btn-secondary scan-qr-btn" @click="scanQR">
                 Attend this lecture
               </button>
               <router-link v-else-if="((Date.now() > new Date(lecture.end_time)) || (undefined == lecture.end_time))
@@ -79,17 +79,18 @@
               </router-link>
           </h1>
           <div class="tabs">
-            <button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)"><h5>Live ({{live_submissions.length}}/{{all_students.length}})</h5></button>
-            <button id="playback_btn" class="tab_btn" @click="selectTab(1)" v-if="is_instructor"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
+            <button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)"><h5>Live ({{Object.keys(live_submissions).length}}/{{all_students.length}})</h5></button>
+            <button id="playback_btn" class="tab_btn" @click="selectTab(1)"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
             <button id="absent_btn" class="tab_btn" @click="selectTab(2)"><h5>Absent ({{absent.length}}/{{all_students.length}})</h5></button>
             <button id="stats_btn" class="tab_btn" @click="selectTab(3)"><h5>Statistics</h5></button>
           </div>
           <div v-if="selected_tab == 0" id="live_submit" class="tab_section">
-            <div v-if="live_submissions.length > 0">
-              <div class="namecard-edging live-color" v-for="(submission,i) in live_submissions" :key="i">
+            <div v-if="Object.keys(live_submissions).length > 0">
+              <div class="namecard-edging live-color" v-for="(submission,i) in Object.keys(live_submissions)" :key="i">
                 <div class="namecard">
-                  {{submission.submitter.first_name}} {{submission.submitter.last_name}}
-                  {{submission.submitter.email}}
+                  {{live_submissions[submission][0].submitter.first_name}} {{live_submissions[submission][0].submitter.last_name}}
+                  {{live_submissions[submission][0].submitter.email}}
+                  {{live_submissions[submission].length / lecture.checkins.length * 100}}%
                 </div>
               </div>
               </div>
@@ -249,11 +250,12 @@
         submission_window_open: false,
         submission_window_closed: false,
         selected_tab: 0,
-        all_students: Map,
-        live_submissions: Map,
-        playback_submissions: Map,
+        all_students: [],
+        live_submissions: {},
+        playback_submissions: [],
         absent: [],
-        show_checkin_qr: -1
+        show_checkin_qr: -1,
+        self_submission_count: 0
       }
     },
     created() {
@@ -275,14 +277,18 @@
         for(let i=0;i<this.all_students.length;i++) {
           let did_attend = false;
           for(let j=0;j<lecture_submissions.length;j++) {
-            if(this.all_students[i]._id == lecture_submissions[j].submitter._id) {
+            let subID = lecture_submissions[j].submitter._id
+            if(this.all_students[i]._id == subID) {
               if(lecture_submissions[j].is_live_submission) {
-                this.live_submissions.push(lecture_submissions[j])
+                this.live_submissions[subID] = this.live_submissions[subID] || [];
+                this.live_submissions[subID].push(lecture_submissions[j]);
               } else {
                 this.playback_submissions.push(lecture_submissions[j])
               }
               did_attend = true;
-              j = lecture_submissions.length
+              if(this.$store.state.user.current_user._id == subID) {
+                this.self_submission_count++
+              }
             }
           }
           if(!did_attend) {
@@ -352,19 +358,22 @@
         document.getElementById("qr_modal").classList.add("hidden")
       },
       scanQR() {
+        let self = this
         QRScanner.initiate({
           onResult: result => {
             let submission = {
-              lecture: this.lecture,
-              submitter: this.$store.state.user.current_user,
-              time: Date(),
-              code: result
+              lecture: self.lecture._id,
+              submitter: self.$store.state.user.current_user._id,
+              code: result,
+              is_live_submission: true
             };
-            SubmissionAPI.addSubmission(submission);
-            console.log("ATTENDANCE CODE FOUND:", result);
+            LectureSubmissionAPI.addLectureSubmission(submission)
+            .then(res => {
+              self.self_submission_count++
+            });
           },
           onTimeout: () => {
-            console.log("TIMEOUT: Could not find any QRCode");
+            console.log("CAMERA TIMEOUT");
           },
           timeout: 10000,
         })
