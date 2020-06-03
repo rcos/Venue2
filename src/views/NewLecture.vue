@@ -42,9 +42,9 @@
             <input :id="'submission_start_'+i"/>
             <label>Submission End Time</label>
             <input :id="'submission_end_'+i"/>
-            <button type="button" class="btn btn-danger" @click="handleRemoveCheckin(i)">X</button>
+            <button v-if="checkins.length > 1" type="button" class="btn btn-danger" @click="handleRemoveCheckin(i)">X</button>
           </div>
-          <div class="input-wrapper" id="submission-time-wrapper">
+          <div class="input-wrapper">
             <button type="button" class="btn btn-secondary" @click="handleAddCheckin">Add another attendance check-in</button>
           </div>
         </div>
@@ -255,10 +255,6 @@ export default {
 </script>
 
 <style>
-.new-lecture-form {
-  /*border: black solid;*/
-}
-
 .input-wrapper {
   width: 50%;
   margin: auto;
