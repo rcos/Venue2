@@ -6,14 +6,14 @@ let Lecture = require('../Lecture/Lecture.model');
 let User = require('../User/User.model');
 
 lectureSubmissionRoutes.route('/add').post(function (req, res) {
-  let lectureSubmission = new LectureSubmission(req.body.lectureSubmission);
-  lectureSubmission.save()
+  let lecture_submission = new LectureSubmission(req.body.lecture_submission);
+  lecture_submission.save()
     .then(() => {
-      console.log("<SUCCESS> Adding lecture submission:",lectureSubmission)
-      res.status(200).json(lectureSubmission);
+      console.log("<SUCCESS> Adding lecture submission:",lecture_submission)
+      res.status(200).json(lecture_submission);
     })
     .catch(() => {
-      console.log("<ERROR> Adding lecture submission:",lectureSubmission)
+      console.log("<ERROR> Adding lecture submission:",lecture_submission)
       res.status(400).send("unable to save poll to database");
     });
 });
@@ -164,11 +164,14 @@ lectureSubmissionRoutes.get('/for_student/:lecture_id/:student_id', (req, res) =
       submitter: student_id
     },
     function(err,lect_submission) {
-      if(err || lect_submission == null) {
+      if(err) {
         console.log("<ERROR> Getting lecture submission with lecture ID:",lecture_id,"and student ID:",student_id)
         res.json(err)
       } else {
-        console.log("<SUCCESS> Getting lecture submission with lecture ID:",lecture_id,"and student ID:",student_id)
+        if(lect_submission == null) 
+          console.log("<SUCCESS> No lecture submission was found:",lecture_id,"and student ID:",student_id)
+        else
+          console.log("<SUCCESS> Getting lecture submission with lecture ID:",lecture_id,"and student ID:",student_id)
         res.json(lect_submission)
       }
     }
