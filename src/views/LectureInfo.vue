@@ -321,6 +321,7 @@
           live_submission_time: new Date()
         }
         const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
+        alert("Live Submission Recorded")
         console.log("Created Lecture Submission")
       },
       handleAttendanceOverride() {
