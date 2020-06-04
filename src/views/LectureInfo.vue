@@ -250,11 +250,7 @@
       },
       async getStudentLectureSubmission() {
         const response = await LectureSubmissionAPI.getLectureSubmissionForStudent(this.lecture_id,this.user_id)
-        this.student_lecture_submission = response.data
-        if(this.student_lecture_submission == null)
-          this.student_has_submitted = false
-        else
-          this.student_has_submitted = true
+        this.assignStudentLectureSubmission(response.data)
         console.log("Got Student Lecture Submission",this.student_lecture_submission)
       },
       setLectureStatus() {
@@ -321,8 +317,16 @@
           live_submission_time: new Date()
         }
         const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
+        this.assignStudentLectureSubmission(lecture_submission)
         alert("Live Submission Recorded")
         console.log("Created Lecture Submission")
+      },
+      assignStudentLectureSubmission(lecture_submission) {
+        this.student_lecture_submission = lecture_submission
+        if(this.student_lecture_submission == null)
+          this.student_has_submitted = false
+        else
+          this.student_has_submitted = true
       },
       handleAttendanceOverride() {
         let names = document.getElementById("attendance_override").value.replace(/\s/g,'').split(",")
