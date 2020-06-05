@@ -1,6 +1,11 @@
 <template>
   <div>
-    <h1>Instructor Lecture info</h1>
+    <div class="spinner-border" role="status" v-if="!lecture_has_loaded">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div v-else>
+      <LectureInfoHeader v-bind:lecture="lecture" />
+    </div>
   </div>
 </template>
 
@@ -8,11 +13,12 @@
   import UserAPI from '@/services/UserAPI.js';
   import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js';
   import LectureAPI from '@/services/LectureAPI.js';
+  import LectureInfoHeader from '@/components/LectureInfoHeader.vue';
 
   export default {
     name: 'InstructorLectureInfo',
     components: {
-
+      LectureInfoHeader
     },
     data(){
       return {
