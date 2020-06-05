@@ -413,6 +413,7 @@
 
   #lecture-info-section {
     position: relative;
+    border: black solid;
   }
 
   #lecture-attendance-section {
