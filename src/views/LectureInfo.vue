@@ -274,6 +274,7 @@
       async getStudentLectureSubmissions() {
         const response = await LectureSubmissionAPI.getLectureSubmissionsForStudent(this.lecture_id,this.user_id)
         let lect_submissions = response.data
+        this.self_submission_count = lect_submissions.length
         lect_submissions.forEach(submission => {
           this.addStudentLectureSubmission(submission)
         })
@@ -339,6 +340,7 @@
           is_live_submission: true,
           live_submission_time: new Date()
         }
+        console.log("Adding submission: ",lecture_submission)
         const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
         this.self_submission_count++
         this.addStudentLectureSubmission(lecture_submission)
