@@ -134,16 +134,18 @@
             </div>
           </div>
           <div v-else class="student_lecture_attendance_info">
-            <div v-if="student_has_submitted">
-              <div v-if="student_lecture_submission.is_live_submission">
-                <p>Live submission was made</p>
-                <p>Live submission time: {{ new Date(student_lecture_submission.live_submission_time) }}</p>
-              </div>
-              <div v-else>
-                <p>Playback Submission was made</p>
-                <ul>
-                  <li v-for="answer in student_poll_answers">{{answer}}</li>
-                </ul>
+            <div v-if="self_submission_count > 0">
+              <div v-for="student_lecture_submission in student_lecture_submissions">
+                <div v-if="student_lecture_submission.is_live_submission">
+                  <p>Live submission was made {{ self_submission_count }} time(s)</p>
+                  <p>Live submission time: {{ new Date(student_lecture_submission.live_submission_time) }}</p>
+                </div>
+                <div v-else>
+                  <p>Playback Submission was made</p>
+                  <ul>
+                    <li v-for="answer in student_poll_answers">{{answer}}</li>
+                  </ul>
+                </div>
               </div>
             </div>
             <p v-else>No Submission</p>
@@ -200,6 +202,7 @@
         self_submission_count: 0,
         showing_qr: false,
         show_qr_preview: false,
+        student_lecture_submissions: []
       }
     },
     created() {
@@ -211,7 +214,7 @@
       if(this.is_instructor)
         this.getStudentsAndCalcAttendance()
       else
-        this.getStudentLectureSubmission()
+        this.getStudentLectureSubmissions()
     },
     methods: {
       async getLecture() {
@@ -268,10 +271,13 @@
         else
           this.lecture_is_over = true
       },
-      async getStudentLectureSubmission() {
-        const response = await LectureSubmissionAPI.getLectureSubmissionForStudent(this.lecture_id,this.user_id)
-        this.assignStudentLectureSubmission(response.data)
-        console.log("Got Student Lecture Submission",this.student_lecture_submission)
+      async getStudentLectureSubmissions() {
+        const response = await LectureSubmissionAPI.getLectureSubmissionsForStudent(this.lecture_id,this.user_id)
+        let lect_submissions = response.data
+        lect_submissions.forEach(submission => {
+          this.addStudentLectureSubmission(submission)
+        })
+        // console.log("Got Student Lecture Submission",this.student_lecture_submission)
       },
       setSubmissionWindowStatus() {
         let current_time = Date.now()
@@ -335,16 +341,12 @@
         }
         const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
         this.self_submission_count++
-        this.assignStudentLectureSubmission(lecture_submission)
+        this.addStudentLectureSubmission(lecture_submission)
         alert("Live Submission Recorded")
         console.log("Created Lecture Submission")
       },
-      assignStudentLectureSubmission(lecture_submission) {
-        this.student_lecture_submission = lecture_submission
-        if(this.student_lecture_submission == null)
-          this.student_has_submitted = false
-        else
-          this.student_has_submitted = true
+      addStudentLectureSubmission(lecture_submission) {
+        this.student_lecture_submissions.push(lecture_submission)
       },
       handleAttendanceOverride() {
         let names = document.getElementById("attendance_override").value.replace(/\s/g,'').split(",")
