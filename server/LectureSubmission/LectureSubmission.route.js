@@ -192,11 +192,14 @@ lectureSubmissionRoutes.get('/for_student/:lecture_id/:student_id', (req, res) =
       submitter: student_id
     },
     function(err,lect_submission) {
-      if(err || lect_submission == null) {
+      if(err) {
         console.log("<ERROR> Getting lecture submission with lecture ID:",lecture_id,"and student ID:",student_id)
         res.json(err)
       } else {
-        console.log("<SUCCESS> Getting lecture submission with lecture ID:",lecture_id,"and student ID:",student_id)
+        if(lect_submission == null) 
+          console.log("<SUCCESS> No lecture submission was found:",lecture_id,"and student ID:",student_id)
+        else
+          console.log("<SUCCESS> Getting lecture submission with lecture ID:",lecture_id,"and student ID:",student_id)
         res.json(lect_submission)
       }
     }

@@ -6,6 +6,10 @@
     </div>
     <div v-else>
       <div id="lecture-info-container">
+        <div v-if="show_qr_preview">
+          <button @click="closeQRPreview" id="exit_preview_btn">X</button>
+          <qrcode-stream id="video_preview" @decode="checkForQRMatch"></qrcode-stream>
+        </div>
         <div id="lecture-info-section">
           <h1>{{lecture.title}} Info</h1>
           <show-at breakpoint="small">
@@ -70,7 +74,7 @@
                                             && is_instructor" v-bind:lecture="lecture" :update_lecture="true"/>
               <button v-else-if="show_checkin_qr!=-1
                             && !is_instructor
-                            && self_submission_count<=show_checkin_qr" class="btn btn-secondary scan-qr-btn" @click="scanQR">
+                            && self_submission_count<=show_checkin_qr" class="btn btn-secondary scan-qr-btn" @click="showQRPreview">
                 Attend this lecture
               </button>
               <router-link v-else-if="((Date.now() > new Date(lecture.end_time)) || (undefined == lecture.end_time))
@@ -78,134 +82,74 @@
                 <button class="btn btn-secondary watch-recording">Watch recording</button>
               </router-link>
           </h1>
-          <div class="tabs">
-            <button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)"><h5>Live ({{Object.keys(live_submissions).length}}/{{all_students.length}})</h5></button>
-            <button id="playback_btn" class="tab_btn" @click="selectTab(1)"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
-            <button id="absent_btn" class="tab_btn" @click="selectTab(2)"><h5>Absent ({{absent.length}}/{{all_students.length}})</h5></button>
-            <button id="stats_btn" class="tab_btn" @click="selectTab(3)"><h5>Statistics</h5></button>
-          </div>
-          <div v-if="selected_tab == 0" id="live_submit" class="tab_section">
-            <div v-if="Object.keys(live_submissions).length > 0">
-              <div class="namecard-edging live-color" v-for="(submission,i) in Object.keys(live_submissions)" :key="i">
-                <div class="namecard">
-                  {{live_submissions[submission][0].submitter.first_name}} {{live_submissions[submission][0].submitter.last_name}}
-                  {{live_submissions[submission][0].submitter.email}}
-                  {{live_submissions[submission].length / lecture.checkins.length * 100}}%
+          <div v-if="is_instructor">
+            <div class="tabs">
+              <button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)"><h5>Live ({{Object.keys(live_submissions).length}}/{{all_students.length}})</h5></button>
+              <button id="playback_btn" class="tab_btn" @click="selectTab(1)"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
+              <button id="absent_btn" class="tab_btn" @click="selectTab(2)"><h5>Absent ({{absent.length}}/{{all_students.length}})</h5></button>
+              <button id="stats_btn" class="tab_btn" @click="selectTab(3)"><h5>Statistics</h5></button>
+            </div>
+            <div v-if="selected_tab == 0" id="live_submit" class="tab_section">
+              <div v-if="Object.keys(live_submissions).length > 0">
+                <div class="namecard-edging live-color" v-for="(submission,i) in Object.keys(live_submissions)" :key="i">
+                  <div class="namecard">
+                    {{live_submissions[submission][0].submitter.first_name}} {{live_submissions[submission][0].submitter.last_name}}
+                    {{live_submissions[submission][0].submitter.email}}
+                    {{live_submissions[submission].length / lecture.checkins.length * 100}}%
+                  </div>
                 </div>
               </div>
+              <div v-else>
+                None
               </div>
-            <div v-else>
-              None
             </div>
-          </div>
-          <div v-if="selected_tab == 1" id="playback_submit" class="tab_section">
-            <div v-if="playback_submissions.length > 0">
-              <div class="namecard-edging playback-color" v-for="(submission,i) in playback_submissions" :key="i">
-                <div class="namecard">
-                  {{submission.submitter.first_name}} {{submission.submitter.last_name}}
-                  {{submission.submitter.email}}
+            <div v-if="selected_tab == 1" id="playback_submit" class="tab_section">
+              <div v-if="playback_submissions.length > 0">
+                <div class="namecard-edging playback-color" v-for="(submission,i) in playback_submissions" :key="i">
+                  <div class="namecard">
+                    {{submission.submitter.first_name}} {{submission.submitter.last_name}}
+                    {{submission.submitter.email}}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div v-else>
-              None
-            </div>
-          </div>
-          <div v-if="selected_tab == 2" id="no_submit" class="tab_section">
-            <div v-if="absent.length > 0">
-              <div class="namecard-edging absent-color" v-for="(absentee,i) in absent" :key="i">
-                <div class="namecard">
-                  {{absentee.first_name}} {{absentee.last_name}}
-                  {{absentee.email}}
-                </div>
+              <div v-else>
+                None
               </div>
             </div>
-            <div v-else>
-              None
+            <div v-if="selected_tab == 2" id="no_submit" class="tab_section">
+              <div v-if="absent.length > 0">
+                <div class="namecard-edging absent-color" v-for="(absentee,i) in absent" :key="i">
+                  <div class="namecard">
+                    {{absentee.first_name}} {{absentee.last_name}}
+                    {{absentee.email}}
+                  </div>
+                </div>
+              </div>
+              <div v-else>
+                None
+              </div>
+            </div>
+            <div v-if="selected_tab == 3" id="stats" class="tab_section">
+              Statistics
             </div>
           </div>
-          <div v-if="selected_tab == 3" id="stats" class="tab_section">
-            Statistics
+          <div v-else class="student_lecture_attendance_info">
+            <div v-if="student_has_submitted">
+              <div v-if="student_lecture_submission.is_live_submission">
+                <p>Live submission was made</p>
+                <p>Live submission time: {{ new Date(student_lecture_submission.live_submission_time) }}</p>
+              </div>
+              <div v-else>
+                <p>Playback Submission was made</p>
+                <ul>
+                  <li v-for="answer in student_poll_answers">{{answer}}</li>
+                </ul>
+              </div>
+            </div>
+            <p v-else>No Submission</p>
           </div>
         </div>
       </div>
-      <!-- <h1 class="lecture-title">{{ lecture.title }}</h1>
-      <h3 class="course-name">{{ lecture.sections[0].course.name }}</h3>
-      <h5 class="section-numbers" v-for="section in lecture.sections">Section {{ section.number }}</h5>
-      <div class="time-info-container">
-        <h4 class="time-info">Start time: {{ new Date(lecture.start_time) }}</h4>
-        <h4 class="time-info">End time: {{ new Date(lecture.end_time) }}</h4>
-        <h4 class="time-info">Submission Start time: {{ new Date(lecture.submission_start_time) }}</h4>
-        <h4 class="time-info">Submission End time: {{ new Date(lecture.submission_end_time) }}</h4>
-      </div> -->
-      <!-- Submission Info -->
-      <!-- <div class="submission-status"> -->
-        <!-- Instructor -->
-        <!-- <div v-if="is_instructor">
-          <div v-if="lecture_is_upcoming">
-            <p>Lecture is upcoming</p>
-          </div>
-          <div v-else-if="lecture_is_live">
-            <p>Lecture is live.</p>
-            <p v-if="submission_window_pending">Submission Window pending</p>
-            <div v-else-if="submission_window_open">
-              <p>QR Code:</p>
-              <LectureSubmissionsList v-bind:lecture_id="lecture_id" />
-            </div>
-            <div v-else>
-              <p>Submission window closed</p>
-              <LectureSubmissionsList v-bind:lecture_id="lecture_id" />
-            </div>
-          </div>
-          <div v-else>
-            <p v-if="lecture.allow_live_submissions">Lecture was live</p>
-            <p v-else>Lecture was never live</p>
-            <div v-if="lecture.allow_playback_submissions">
-              <p>video_ref: {{ lecture.video_ref }}</p>
-              <p>playback_submission_start_time: {{ new Date(lecture.playback_submission_start_time) }}</p>
-              <p>playback_submission_end_time: {{ new Date(lecture.playback_submission_end_time) }}</p>
-              <router-link :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
-                <button>Video Playback</button>
-              </router-link>
-              <LectureSubmissionsList v-bind:lecture_id="lecture_id" />
-            </div>
-            <LectureUploadModal v-else v-bind:lecture="lecture" />
-          </div> -->
-          <!-- Give student a live submission -->
-          <!-- <div id="attendance_override_section">
-            <label>Mark as attended:</label>
-            <input id="attendance_override" type="text" placeholder="RCS IDs separated by ','"> <button class="btn btn-primary" @click="handleAttendanceOverride">Submit</button>
-          </div>
-        </div> -->
-        <!-- Student -->
-        <!-- <div v-else>
-          <div v-if="lecture_is_upcoming">
-            <p>Lecture is upcoming</p>
-          </div>
-          <div v-else-if="lecture_is_live">
-            <p>Lecture is ongoing.</p>
-            <p v-if="submission_window_pending">Submission Window pending</p>
-            <button v-else-if="submission_window_open" @click="scanQR">Scan Code</button>
-            <p v-else>Submission window closed</p>
-            <StudentLectureSubmissionCard v-bind:lecture_id="lecture_id" />
-          </div>
-          <div v-else>
-            <p v-if="lecture.allow_live_submissions">Lecture was live</p>
-            <p v-else>Lecture was never live</p>
-            <div v-if="lecture.allow_playback_submissions"> -->
-              <!-- TODO: Prevent students from viewing playback outside of the plabyack time -->
-              <!-- <p>video_ref: {{ lecture.video_ref }}</p>
-              <p>playback_submission_start_time: {{ new Date(lecture.playback_submission_start_time) }}</p>
-              <p>playback_submission_end_time: {{ new Date(lecture.playback_submission_end_time) }}</p>
-              <router-link :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
-                <button>Video Playback</button>
-              </router-link>
-            </div>
-            <p>No lecture playback</p>
-            <StudentLectureSubmissionCard v-bind:lecture_id="lecture_id" />
-          </div>
-        </div>
-      </div> -->
     </div>
     <div id="qr_modal" class="hidden">
       <canvas id="qr_render_area" width="600px" height="600px"></canvas>
@@ -224,6 +168,7 @@
   import LectureSubmissionsList from "@/components/LectureSubmissionsList.vue";
   import StudentLectureSubmissionCard from "@/components/StudentLectureSubmissionCard.vue";
   import {showAt, hideAt} from 'vue-breakpoints';
+  import { QrcodeStream } from 'vue-qrcode-reader'
 
   export default {
     name: 'LectureInfo',
@@ -236,12 +181,15 @@
       LectureSubmissionsList,
       StudentLectureSubmissionCard,
       showAt,
-      hideAt
+      hideAt,
+      QrcodeStream
     },
     data(){
       return {
         lecture_has_loaded: false,
         lecture: {},
+        student_lecture_submission: {},
+        student_has_submitted: false,
         is_instructor: Boolean,
         selected_tab: 0,
         all_students: [],
@@ -249,14 +197,21 @@
         playback_submissions: [],
         absent: [],
         show_checkin_qr: -1,
-        self_submission_count: 0
+        self_submission_count: 0,
+        showing_qr: false,
+        show_qr_preview: false,
       }
     },
     created() {
       this.lecture_id = this.$route.params.lecture_id
-      this.is_instructor = this.$store.state.user.current_user.is_instructor
+      this.user = this.$store.state.user.current_user
+      this.user_id = this.user._id
+      this.is_instructor = this.user.is_instructor
       this.getLecture()
-      this.getStudentsAndCalcAttendance()
+      if(this.is_instructor)
+        this.getStudentsAndCalcAttendance()
+      else
+        this.getStudentLectureSubmission()
     },
     methods: {
       async getLecture() {
@@ -295,6 +250,29 @@
         this.all_students = response.data
         this.checkAttendance()
       },
+      setLectureStatus() {
+        let current_time = Date.now()
+        let lecture_start_time = new Date(this.lecture.start_time)
+        let lecture_end_time = new Date(this.lecture.end_time)
+        let lecture_playback_submission_start_time = new Date(this.lecture.playback_submission_start_time)
+        let lecture_playback_submission_end_time = new Date(this.lecture.playback_submission_end_time)
+        if(undefined == this.lecture.start_time || undefined == this.lecture.end_time) {
+          this.lecture_is_over = true
+        }
+        if(current_time < lecture_start_time || current_time < lecture_playback_submission_start_time) 
+          this.lecture_is_upcoming = true
+        else if(current_time >= lecture_start_time && current_time <= lecture_end_time){
+          this.lecture_is_live = true
+          this.setSubmissionWindowStatus()
+        }
+        else
+          this.lecture_is_over = true
+      },
+      async getStudentLectureSubmission() {
+        const response = await LectureSubmissionAPI.getLectureSubmissionForStudent(this.lecture_id,this.user_id)
+        this.assignStudentLectureSubmission(response.data)
+        console.log("Got Student Lecture Submission",this.student_lecture_submission)
+      },
       setSubmissionWindowStatus() {
         let current_time = Date.now()
         for(let i=0;i<this.lecture.checkins.length;i++) {
@@ -325,26 +303,43 @@
       hideQR() {
         document.getElementById("qr_modal").classList.add("hidden")
       },
-      scanQR() {
-        let self = this
-        QRScanner.initiate({
-          onResult: result => {
-            let submission = {
-              lecture: self.lecture._id,
-              submitter: self.$store.state.user.current_user._id,
-              code: result,
-              is_live_submission: true
-            };
-            LectureSubmissionAPI.addLectureSubmission(submission)
-            .then(res => {
-              self.self_submission_count++
-            });
-          },
-          onTimeout: () => {
-            console.log("CAMERA TIMEOUT");
-          },
-          timeout: 10000,
-        })
+      showQRPreview() {
+        this.show_qr_preview = true
+      },
+      closeQRPreview() {
+        this.show_qr_preview = false
+      },
+      checkForQRMatch(scanned_str) {
+        if(scanned_str === this.lecture.code){
+          console.log("Scanned Correct Code. Creating Live Submission")
+          this.createLiveSubmission()
+          this.closeQRPreview()
+        } else {
+          alert("Scanned incorrect code!")
+        }
+      },
+      async createLiveSubmission() {
+        // TODO
+        // 1. Don't event show Attend this lecture button if submission window is not open
+        // 2. Check if result matches lecture QR Code before submission
+        let lecture_submission = {
+          lecture: this.lecture,
+          submitter: this.user,
+          is_live_submission: true,
+          live_submission_time: new Date()
+        }
+        const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
+        this.self_submission_count++
+        this.assignStudentLectureSubmission(lecture_submission)
+        alert("Live Submission Recorded")
+        console.log("Created Lecture Submission")
+      },
+      assignStudentLectureSubmission(lecture_submission) {
+        this.student_lecture_submission = lecture_submission
+        if(this.student_lecture_submission == null)
+          this.student_has_submitted = false
+        else
+          this.student_has_submitted = true
       },
       handleAttendanceOverride() {
         let names = document.getElementById("attendance_override").value.replace(/\s/g,'').split(",")
@@ -383,6 +378,21 @@
   /* div {
     border: 1px solid black;
   } */
+
+  #video_preview {
+    /*height: 20rem;*/
+    /*width: 20rem;*/
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+  }
+
+  #exit_preview_btn {
+    position: absolute;
+    z-index: 2;
+  }
+
   #lecture-info-container {
     text-align: left; 
     position: absolute;
