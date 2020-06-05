@@ -186,21 +186,22 @@ lectureSubmissionRoutes.get('/for_lecture/:lecture_id', (req, res) => {
 lectureSubmissionRoutes.get('/for_student/:lecture_id/:student_id', (req, res) => {
   let lecture_id = req.params.lecture_id
   let student_id = req.params.student_id
-  LectureSubmission.findOne(
+  LectureSubmission.find(
     {
       lecture: lecture_id,
       submitter: student_id
     },
-    function(err,lect_submission) {
+    function(err,lect_submissions) {
       if(err) {
         console.log("<ERROR> Getting lecture submission with lecture ID:",lecture_id,"and student ID:",student_id)
         res.json(err)
       } else {
-        if(lect_submission == null) 
+        if(lect_submissions == null) 
           console.log("<SUCCESS> No lecture submission was found:",lecture_id,"and student ID:",student_id)
         else
           console.log("<SUCCESS> Getting lecture submission with lecture ID:",lecture_id,"and student ID:",student_id)
-        res.json(lect_submission)
+        console.log("Found submissions",lect_submissions)
+        res.json(lect_submissions)
       }
     }
   )
