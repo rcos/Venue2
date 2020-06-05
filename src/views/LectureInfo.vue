@@ -310,7 +310,12 @@
         this.show_qr_preview = false
       },
       checkForQRMatch(scanned_str) {
-        if(scanned_str === this.lecture.code){
+        // Todo: check for actual code
+        let lecture_codes = []
+        this.lecture.checkins.forEach(check_in => {
+          lecture_codes.push(check_in.code)
+        })
+        if(lecture_codes.includes(scanned_str)){
           console.log("Scanned Correct Code. Creating Live Submission")
           this.createLiveSubmission()
           this.closeQRPreview()
