@@ -27,7 +27,7 @@
         live_submissions: [],
         playback_submissions: [],
         absent: [],
-        lecture_has_loaded: Boolean,
+        lecture_has_loaded: false,
         lecture_is_upcoming: Boolean,
         lecture_is_live: Boolean,
         lecture_is_over: Boolean,
