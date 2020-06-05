@@ -6,33 +6,16 @@ let Lecture = require('../Lecture/Lecture.model');
 let User = require('../User/User.model');
 
 lectureSubmissionRoutes.route('/add').post(function (req, res) {
-  let lectureSubmission = new LectureSubmission(req.body.lectureSubmission);
-  Lecture.findById(lectureSubmission.lecture, function(err, lecture) {
-    if(err || lecture == null) {
-      console.log("<ERROR> Getting lecture with ID:",lectureSubmission.lecture)
-      res.json(err)
-    } else {
-      let match = false
-      for(let i=0;i<lecture.checkins.length;i++) {
-        if(lecture.checkins[i].code == lectureSubmission.code) {
-          match = true
-          lectureSubmission.save()
-            .then(() => {
-              console.log("<SUCCESS> Adding lecture submission:",lectureSubmission)
-              res.status(200).json(lectureSubmission);
-            })
-            .catch(() => {
-              console.log("<ERROR> Adding lecture submission:",lectureSubmission)
-              res.status(400).send("unable to save poll to database");
-            });
-        }
-      }
-      if(!match) {
-        console.log("<ERROR> The given lecture's QR Codes do not contain the submitted QR Code:",lectureSubmission.code)
-        res.status(400).send("The given lecture's QR Codes do not contain the submitted QR Code");
-      }
-    }
-  })
+  let lecture_submission = new LectureSubmission(req.body.lecture_submission);
+  lecture_submission.save()
+    .then(() => {
+      console.log("<SUCCESS> Adding lecture submission:",lecture_submission)
+      res.status(200).json(lecture_submission);
+    })
+    .catch(() => {
+      console.log("<ERROR> Adding lecture submission:",lecture_submission)
+      res.status(400).send("unable to save poll to database");
+    });
 });
 
 lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
