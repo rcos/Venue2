@@ -4,7 +4,7 @@
       <span class="sr-only">Loading...</span>
     </div>
     <div v-else>
-      <LectureInfoHeader v-bind:lecture="lecture" />
+      <LectureInfoHeader v-bind:lecture="lecture" v-bind:is_instructor="true" />
     </div>
   </div>
 </template>
