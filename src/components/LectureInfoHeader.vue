@@ -2,7 +2,7 @@
   <div id="lecture-info-section">
     <h1>{{lecture.title}} Info</h1>
     <show-at breakpoint="small">
-      <!-- Mobile Start -->
+      <!-- Mobile -->
       <div id="lecture-data">
         <div class="row main-info">
           <h3>{{lecture.sections[0].course.name}}</h3>
@@ -10,20 +10,34 @@
           <h5>Sections: <a class="section-numbers" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></h5>
         </div>
         <div class="row">
-          <h5>Start Time:<h6>{{new Date(lecture.start_time)}}</h6></h5>
+          <div class="col-half">
+            <h5 class="underline">Start Time</h5>
+            <h6>{{new Date(lecture.start_time)}}</h6>
+          </div>
+          <div class="col-half">
+            <h5 class="underline">Playback Start Time</h5>
+            <h6>{{new Date(lecture.playback_submission_start_time)}}</h6>
+          </div>
         </div>
         <div class="row">
-          <h5>End Time: <h6>{{new Date(lecture.end_time)}}</h6></h5>
+          <div class="col-half">
+            <h5 class="underline">End Time</h5>
+            <h6>{{new Date(lecture.end_time)}}</h6>
+          </div>
+          <div class="col-half">
+            <h5 class="underline">Playback End Time</h5>
+            <h6>{{new Date(lecture.playback_submission_end_time)}}</h6>
+          </div>
         </div>
         <div class="col" v-if="is_instructor">
           <h5>Checkins</h5>
           <div id="checkins-container">
             <div class="checkin-container">
               <div class="time-container">
-                <p class="time-container-text">Start Time</p>
+                <p class="underline">Start Time</p>
               </div>
               <div class="time-container">
-                <p class="time-container-text">End Time</p>
+                <p class="underline">End Time</p>
               </div>
             </div>
             <div class="checkin-container" v-for="checkin in lecture.checkins">
@@ -37,10 +51,9 @@
           </div>
         </div>
       </div>
-      <!-- Mobile End -->
     </show-at>
+    <!-- Tablet & Up -->
     <show-at breakpoint="mediumAndAbove">
-      <!-- Not-mobile Start -->
       <div class="row" id="lecture-data">
         <div class="col main-info">
           <h3>{{lecture.sections[0].course.name}}</h3>
@@ -48,22 +61,34 @@
           <h5>Sections: <a class="section-numbers" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></h5>
         </div>
         <div class="col">
-          <h5>Start Time</h5>
-          <h6>{{new Date(lecture.start_time)}}</h6>
+          <div class="col-half">
+            <h5 class="underline">Start Time</h5>
+            <h6>{{new Date(lecture.start_time)}}</h6>
+          </div>
+          <div class="col-half">
+            <h5 class="underline">Playback Start Time</h5>
+            <h6>{{new Date(lecture.playback_submission_start_time)}}</h6>
+          </div>
         </div>
         <div class="col">
-          <h5>End Time</h5>
-          <h6>{{new Date(lecture.end_time)}}</h6>
+          <div class="col-half">
+            <h5 class="underline">End Time</h5>
+            <h6>{{new Date(lecture.end_time)}}</h6>
+          </div>
+          <div class="col-half">
+            <h5 class="underline">Playback End Time</h5>
+            <h6>{{new Date(lecture.playback_submission_end_time)}}</h6>
+          </div>
         </div>
         <div class="col" v-if="is_instructor">
-          <h5>Checkins</h5>
+          <h5 class="underline">Checkins</h5>
           <div id="checkins-container">
             <div class="checkin-container">
               <div class="time-container">
-                <p class="time-container-text">Start Time</p>
+                <p class="underline">Start Time</p>
               </div>
               <div class="time-container">
-                <p class="time-container-text">End Time</p>
+                <p class="underline">End Time</p>
               </div>
             </div>
             <div class="checkin-container" v-for="checkin in lecture.checkins">
@@ -77,7 +102,6 @@
           </div>
         </div>
       </div>
-      <!-- Not-mobile End -->
     </show-at>
   </div>
 </template>
@@ -159,7 +183,7 @@
     border: grey solid thin;
   }
 
-  .time-container-text {
+  .underline {
     text-decoration: underline;
   }
 
