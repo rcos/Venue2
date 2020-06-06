@@ -3,7 +3,7 @@
 		<div id="table-header">
 		  <h2>Attendance</h2>
 		  <button v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" @click="showQR" class="header-btn">Show QR</button>
-		  <button v-else-if="lecture.lecture_status === 'is_over' && !lecture.allow_playback_submission">Upload Playback</button>
+		  <LectureUploadModal v-else-if="lecture.lecture_status === 'is_over' && !lecture.allow_playback_submission" :lecture="lecture" :update_lecture="true" />
 		  <button v-else-if="lecture.lecture_status === 'is_active_playback'">Watch Playback</button>
 
 <!--       <LectureUploadModal v-if="lecture.lecture_status === 'is_over'" :update_lecture="true"/>
@@ -91,6 +91,7 @@
 
 <script>
   import QRCode from "qrcode";
+  import LectureUploadModal from "@/components/LectureUploadModal";
 
   export default {
     name: 'InstructorLectureAttendanceTable',
@@ -98,6 +99,7 @@
     	lecture: Object
     },
     components: {
+    	LectureUploadModal
     },
     data(){
       return {
