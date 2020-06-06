@@ -4,7 +4,7 @@
   'ongoing-container':status == 'ongoing',
   'ended-container':status == 'ended',
   'static-container': status == 'static'}" >
-    <router-link :to="is_instructor ? {name: 'instructor_lecture_info', params: { lecture_id: lecture._id }} : {name: 'student_lecture_info', params: { lecture_id: lecture._id }}" >
+    <router-link :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}" >
       <div class="active-event-card-background"></div>
       <div class="active-event-card">
         <div  class="event-card-section" id="course-section">
