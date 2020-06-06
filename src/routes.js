@@ -32,8 +32,7 @@ import WebexTest from './views/WebexTest.vue';
 import NewLecture from './views/NewLecture.vue';
 import LectureInfo from './views/LectureInfo.vue';
 import Settings from './views/Settings.vue';
-import InstructorLectureInfo from './views/InstructorLectureInfo.vue';
-import StudentLectureInfo from './views/StudentLectureInfo.vue';
+
 
 Vue.use(VueRouter);
 
@@ -306,24 +305,7 @@ const router = new VueRouter({
       meta: {
         requiresNoLogin: true
       }
-    },
-    {
-      name: 'instructor_lecture_info',
-      path: '/instructor_lecture_info/:lecture_id',
-      component: InstructorLectureInfo,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      name: 'student_lecture_info',
-      path: '/student_lecture_info/:lecture_id',
-      component: StudentLectureInfo,
-      meta: {
-        requiresAuth: true
-      }
     }
-
   ]
 })
 
