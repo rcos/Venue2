@@ -35,7 +35,7 @@
         lecture_is_live: Boolean,
         lecture_is_over: Boolean,
         show_checkin_qr: -1,
-        is_instructor
+        is_instructor: Boolean
       }
     },
     created() {
