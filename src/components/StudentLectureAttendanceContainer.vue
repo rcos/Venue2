@@ -88,6 +88,7 @@
 <script>
   import QRCode from "qrcode";
   import { QrcodeStream } from 'vue-qrcode-reader'
+  import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js';
 
   export default {
     name: 'StudentLectureAttendanceContainer',
@@ -124,7 +125,7 @@
       async createLiveSubmission() {
         let lecture_submission = {
           lecture: this.lecture,
-          submitter: this.user,
+          submitter: this.$store.state.user.current_user,
           is_live_submission: true,
           live_submission_time: new Date()
         }

@@ -7,13 +7,13 @@
       <button id="stats_btn" class="tab_btn" @click="selectTab(3)"><h5>Statistics</h5></button>
     </div>
     <div v-if="selected_tab === 0" id="live_submit" class="tab_section">
-      <LectureAttendanceList :submissions="live_submissions" :is_live="true" />
+      <LectureAttendanceList :lecture="lecture" :submissions="live_submissions" :is_live="true" />
     </div>
     <div v-if="selected_tab === 1" id="playback_submit" class="tab_section">
-      <LectureAttendanceList :submissions="playback_submissions" :is_playback="true" />
+      <LectureAttendanceList :lecture="lecture" :submissions="playback_submissions" :is_playback="true" />
     </div>
     <div v-if="selected_tab === 2" id="no_submit" class="tab_section">
-      <LectureAttendanceList :submissions="absent" :is_absent="true" />
+      <LectureAttendanceList :lecture="lecture" :submissions="absent" :is_absent="true" />
     </div>
     <div v-if="selected_tab === 3" id="stats" class="tab_section">
       Statistics
@@ -29,6 +29,7 @@
   export default {
     name: 'InstructorLectureAttendanceTable',
     props: {
+      lecture: Object,
     	live_submissions: Array,
     	playback_submissions: Array,
     	absent: Array,
@@ -39,10 +40,12 @@
     },
     data(){
       return {
-        selected_tab: 1
+        selected_tab: 0
       }
     },
     created() {
+      console.log("in table. received live submissions", this.live_submissions)
+      console.log("Length",Object.keys(this.live_submissions).length)
     },
     methods: {
     	selectTab(i) {

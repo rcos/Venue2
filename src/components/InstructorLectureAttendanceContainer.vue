@@ -12,7 +12,7 @@
 	    <canvas id="qr_render_area"></canvas>
 	    <button id="close_qr_btn" @click="hideQR">Hide</button>
 	  </div>
-	  <InstructorLectureAttendanceTable :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" :all_students="all_students" />
+	  <InstructorLectureAttendanceTable :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" :all_students="all_students" />
 	</div>
 </template>
 
