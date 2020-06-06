@@ -104,7 +104,7 @@
       }
     },
     created() {
-    	console.log("In lecture attendance table. Lecture:",this.lecture)
+    	console.log("In insturctor lecture attendance table. Lecture:",this.lecture)
     },
     methods: {
     	showQR() {
