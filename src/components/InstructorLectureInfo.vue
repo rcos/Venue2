@@ -32,7 +32,7 @@
       }
     },
     created() {
-      this.lecture_id = this.$route.params.lecture_id
+      this.lecture_id = this.lecture._id
       this.getStudentsForLecture()
       this.getAttendanceForLecture()
     },
