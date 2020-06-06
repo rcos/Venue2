@@ -1,7 +1,7 @@
 <template>
   <div>
     <LectureInfoHeader v-bind:lecture="lecture" v-bind:is_instructor="true" />
-    <LectureAttendanceTable />
+    <InstructorLectureAttendanceTable />
   </div>
 </template>
 
@@ -10,7 +10,7 @@
   import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js';
   import LectureAPI from '@/services/LectureAPI.js';
   import LectureInfoHeader from '@/components/LectureInfoHeader.vue';
-  import LectureAttendanceTable from '@/components/LectureAttendanceTable.vue';
+  import InstructorLectureAttendanceTable from '@/components/InstructorLectureAttendanceTable.vue';
 
   export default {
     name: 'InstructorLectureInfo',
@@ -20,7 +20,7 @@
     },
     components: {
       LectureInfoHeader,
-      LectureAttendanceTable
+      InstructorLectureAttendanceTable
     },
     data(){
       return {

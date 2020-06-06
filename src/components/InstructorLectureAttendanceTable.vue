@@ -94,7 +94,7 @@
 
 <script>
   export default {
-    name: 'LectureAttendanceTable',
+    name: 'InstructorLectureAttendanceTable',
     props: {
 
     },
@@ -179,5 +179,5 @@
 	  padding-top: 0.5rem;
 	  z-index: 100;
 	}
-	
+
 </style>
