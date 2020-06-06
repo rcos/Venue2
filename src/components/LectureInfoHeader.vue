@@ -15,11 +15,26 @@
         <div class="row">
           <h5>End Time: <h6>{{new Date(lecture.end_time)}}</h6></h5>
         </div>
-        <div class="row">
-          <h5>Submission Start Time: <h6>{{new Date(lecture.submission_start_time)}}</h6></h5>
-        </div>
-        <div class="row">
-          <h5>Submission End Time: <h6>{{new Date(lecture.submission_end_time)}}</h6></h5>
+        <div class="col" v-if="is_instructor">
+          <h5>Checkins</h5>
+          <div id="checkins-container">
+            <div class="checkin-container">
+              <div class="time-container">
+                <p class="time-container-text">Start Time</p>
+              </div>
+              <div class="time-container">
+                <p class="time-container-text">End Time</p>
+              </div>
+            </div>
+            <div class="checkin-container" v-for="checkin in lecture.checkins">
+              <div class="time-container">
+                <p>{{ new Date(checkin.start_time) }}</p>
+              </div>
+              <div class="time-container">
+                <p>{{ new Date(checkin.end_time) }}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <!-- Mobile End -->
