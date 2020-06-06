@@ -148,7 +148,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			title: "Live Lecture",
 			sections: [s[1]._id],
 			allow_live_submissions: true,
-			allow_playback_submissions: true,
+			allow_playback_submissions: false,
 			start_time: Date.now(),
 			end_time: Date.now() + (2*60*60*1000),
 			checkins: [{
@@ -160,22 +160,14 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 				end_time: Date.now() + (4*60*1000),
 				code: "zyxwvutsrqponmlkjihgfedcba",
 			}],
-			video_ref: "/videos/sample/sample.mp4",
 			num_playback_polls: 0
 		}))
 
 		l.push(new Lecture({
 			title: "Playback Lecture",
 			sections: [s[1]._id],
-			allow_live_submissions: true,
+			allow_live_submissions: false,
 			allow_playback_submissions: true,
-			start_time: Date.now()-(60*2000),
-			end_time: Date.now() - (60*1000),
-			checkins: [{
-				start_time: Date.now() - (60*1500),
-				end_time: Date.now() - (60*1200),
-				code: "abcdefghijklmnopqrstuvwxyz",
-			}],
 			playback_submission_start_time: Date.now(),
 			playback_submission_end_time: Date.now() + (3*60*1000),
 			video_ref: "/videos/sample/sample.mp4",
@@ -197,7 +189,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			title: "How to use Venue",
 			sections: [s[0]._id],
 			allow_live_submissions: true,
-			allow_playback_submissions: true,
+			allow_playback_submissions: false,
 			start_time: Date.now(),
 			end_time: Date.now() + (2*60*60*1000),
 			checkins: [{
@@ -205,9 +197,6 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 				end_time: Date.now() + (3*60*1000),
 				code: "abcdefghijklmnopqrstuvwxyz",
 			}],
-			playback_submission_start_time: Date.now() + (2*60*60*1000),
-			playback_submission_end_time: Date.now() + (4*60*1000),
-			video_ref: "/videos/sample/sample.mp4",
 			num_playback_polls: 2
 		}))
 
