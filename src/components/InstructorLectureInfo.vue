@@ -1,7 +1,12 @@
 <template>
   <div>
     <LectureInfoHeader :lecture="lecture" :is_instructor="true" />
-    <InstructorLectureAttendanceTable :lecture="lecture" />
+    <div class="spinner-border" role="status" v-if="!attendance_calculated">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div v-else>
+      <InstructorLectureAttendanceTable :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" v-bind:all_students="all_students" />
+    </div>
   </div>
 </template>
 
@@ -16,7 +21,7 @@
     name: 'InstructorLectureInfo',
     props: {
       lecture: Object,
-      is_instructor: Boolean
+      is_instructor: Boolean,
     },
     components: {
       LectureInfoHeader,
@@ -28,13 +33,14 @@
         live_submissions: [],
         playback_submissions: [],
         absent: [],
-        show_checkin_qr: -1
+        show_checkin_qr: -1,
+        attendance_calculated: false
       }
     },
-    created() {
+    async created() {
       console.log("In InstructorLectureInfo. Received Lecture",this.lecture)
       this.lecture_id = this.lecture._id
-      this.getStudentsForLecture()
+      await this.getStudentsForLecture()
       this.getAttendanceForLecture()
     },
     methods: {
@@ -63,7 +69,8 @@
             this.absent.push(this.all_students[i])
           }
         }
-      },
+        this.attendance_calculated = true
+      }
     }
   }
 </script>
