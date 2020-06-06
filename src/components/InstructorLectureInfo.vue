@@ -5,7 +5,7 @@
       <span class="sr-only">Loading...</span>
     </div>
     <div v-else>
-      <InstructorLectureAttendanceTable :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" v-bind:all_students="all_students" />
+      <InstructorLectureAttendanceContainer :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" v-bind:all_students="all_students" />
     </div>
   </div>
 </template>
@@ -15,7 +15,7 @@
   import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js';
   import LectureAPI from '@/services/LectureAPI.js';
   import LectureInfoHeader from '@/components/LectureInfoHeader.vue';
-  import InstructorLectureAttendanceTable from '@/components/InstructorLectureAttendanceTable.vue';
+  import InstructorLectureAttendanceContainer from '@/components/InstructorLectureAttendanceContainer.vue';
 
   export default {
     name: 'InstructorLectureInfo',
@@ -25,7 +25,7 @@
     },
     components: {
       LectureInfoHeader,
-      InstructorLectureAttendanceTable
+      InstructorLectureAttendanceContainer
     },
     data(){
       return {
