@@ -1,9 +1,9 @@
 <template>
   <div>
     <h2>Select a Section</h2>
-    <div class="section-container" v-for="section in sections">
+    <div class="section-container" v-for="(section,i) in sections" :key="i">
       Section {{ section.number }}
-      <button @click.prevent="$emit('select-section', section)">Select</button>
+      <button class="btn btn-primary" @click.prevent="$emit('select-section', section)">Select</button>
     </div>
   </div>
 </template>

@@ -33,6 +33,7 @@ import NewLecture from './views/NewLecture.vue';
 import LectureInfo from './views/LectureInfo.vue';
 import Settings from './views/Settings.vue';
 
+
 Vue.use(VueRouter);
 
 const router = new VueRouter({
