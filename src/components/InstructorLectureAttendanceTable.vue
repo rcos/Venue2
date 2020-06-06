@@ -57,7 +57,7 @@
 <script>
 
   export default {
-    name: 'InstructorLectureAttendanceList',
+    name: 'InstructorLectureAttendanceTable',
     props: {
     	live_submissions: Array,
     	playback_submissions: Array,
@@ -96,9 +96,8 @@
 </script>
 
 <style scoped>
-
 	.tabs {
-	  margin-top: 4rem;
+	  margin-top: 5rem;
 	  margin-left: 3rem;
 	}
 
