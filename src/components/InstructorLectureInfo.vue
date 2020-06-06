@@ -35,6 +35,7 @@
       }
     },
     created() {
+      console.log("Received Lecture",this.lecture)
       this.lecture_id = this.lecture._id
       this.getStudentsForLecture()
       this.getAttendanceForLecture()
