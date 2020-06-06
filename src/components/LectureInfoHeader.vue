@@ -40,13 +40,26 @@
           <h5>End Time</h5>
           <h6>{{new Date(lecture.end_time)}}</h6>
         </div>
-        <div class="col">
-          <h5>Submission Start Time</h5>
-          <h6>{{new Date(lecture.submission_start_time)}}</h6>
-        </div>
-        <div class="col">
-          <h5>Submission End Time</h5>
-          <h6>{{new Date(lecture.submission_end_time)}}</h6>
+        <div class="col" v-if="is_instructor">
+          <h5>Checkins</h5>
+          <div id="checkins-container">
+            <div class="checkin-container">
+              <div class="time-container">
+                <p class="time-container-text">Start Time</p>
+              </div>
+              <div class="time-container">
+                <p class="time-container-text">End Time</p>
+              </div>
+            </div>
+            <div class="checkin-container" v-for="checkin in lecture.checkins">
+              <div class="time-container">
+                <p>{{ new Date(checkin.start_time) }}</p>
+              </div>
+              <div class="time-container">
+                <p>{{ new Date(checkin.end_time) }}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <!-- Not-mobile End -->
@@ -64,7 +77,8 @@
       hideAt
     },
     props: {
-      lecture: Object
+      lecture: Object,
+      is_instructor: Boolean
     },
     data(){
       return {
@@ -81,7 +95,6 @@
 <style scoped>
   #lecture-info-section {
     position: relative;
-    border: black solid;
   }
 
   #lecture-data {
@@ -113,6 +126,26 @@
     background: black;
     color: white;
     border-radius: 1rem;
+  }
+
+  #checkins-container {
+    overflow-y: scroll;
+    height: 9rem;
+  }
+
+  .checkin-container {
+    border: grey solid;
+  }
+
+  .time-container {
+    display: inline-block;
+    text-align: center;
+    width:50%;
+    border: grey solid thin;
+  }
+
+  .time-container-text {
+    text-decoration: underline;
   }
 
 </style>
