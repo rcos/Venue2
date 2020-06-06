@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div id="table-header">
+		<div id="container-header">
 		  <h2>Attendance</h2>
 		  <button v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" @click="showQR" class="header-btn">Show QR</button>
 		  <LectureUploadModal v-else-if="lecture.lecture_status === 'is_over' && !lecture.allow_playback_submission" :lecture="lecture" :update_lecture="true" />
@@ -23,7 +23,7 @@
   import InstructorLectureAttendanceList from "@/components/InstructorLectureAttendanceList.vue";
 
   export default {
-    name: 'InstructorLectureAttendanceTable',
+    name: 'InstructorLectureAttendanceContainer',
     props: {
     	lecture: Object,
     	live_submissions: Array,
@@ -58,7 +58,7 @@
 </script>
 
 <style scoped>
-	#table-header {
+	#container-header {
 	  position: relative;
 	  top: 3rem;
 	  bottom: 0;
@@ -67,7 +67,7 @@
 	  padding-right: 5rem;
 	}
 
-	#table-header h2 {
+	#container-header h2 {
 		display: inline-block;
 	}
 
