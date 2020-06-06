@@ -4,8 +4,8 @@
       <span class="sr-only">Loading...</span>
     </div>
     <div v-else>
-      <InstructorLectureInfo :lecture="lecture" :is_instructor="is_instructor" />
-      <StudentLectureInfo :lecture="lecture" :is_instructor="is_instructor" />
+      <InstructorLectureInfo v-if="is_instructor" :lecture="lecture" :is_instructor="is_instructor" />
+      <StudentLectureInfo v-else :lecture="lecture" :is_instructor="is_instructor" />
     </div>
   </div>
 </template>
@@ -34,12 +34,13 @@
         lecture_is_upcoming: Boolean,
         lecture_is_live: Boolean,
         lecture_is_over: Boolean,
-        show_checkin_qr: -1
+        show_checkin_qr: -1,
         is_instructor
       }
     },
     created() {
       this.lecture_id = this.$route.params.lecture_id
+      this.is_instructor = this.$store.state.user.current_user.is_instructor
       this.getLecture()
       this.setLectureStatus()
       this.getStudentsForLecture()
