@@ -62,9 +62,9 @@
           else
             this.lecture.lecture_status = "is_over"
         } else if(this.lecture.allow_playback_submissions) {
-          if(current_time < lecture_playback_submission_start_time)
+          if(current_time < playback_submission_start_time)
             this.lecture.lecture_status = "is_upcoming_playback"
-          else if(current_time >= lecture_playback_submission_start_time && current_time <= lecture_playback_submission_end_time)
+          else if(current_time >= playback_submission_start_time && current_time <= playback_submission_end_time)
             this.lecture.lecture_status = "is_active_playback"
           else
             this.lecture.lecture_status = "is_over_playback"
