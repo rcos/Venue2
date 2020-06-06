@@ -1,25 +1,18 @@
 <template>
 	<div>
-		<div id="lecture-attendance-section">
-		  <h1>Attendance
-		      <button v-if="show_checkin_qr!=-1
-		                    && is_instructor" class="btn btn-secondary show-qr-btn" @click="showQR">
-		        Show QR
-		      </button>
-		      <LectureUploadModal v-if="Date.now() > new Date(lecture.end_time)
-		                                    && !lecture.video_ref.includes('.')
-		                                    && is_instructor" v-bind:lecture="lecture" :update_lecture="true"/>
-		      <button v-else-if="show_checkin_qr!=-1
-		                    && !is_instructor
-		                    && self_submission_count<=show_checkin_qr" class="btn btn-secondary scan-qr-btn" @click="showQRPreview">
-		        Attend this lecture
-		      </button>
-		      <router-link v-else-if="((Date.now() > new Date(lecture.end_time)) || (undefined == lecture.end_time))
-		                    && lecture.video_ref.includes('.')" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
-		        <button class="btn btn-secondary watch-recording">Watch recording</button>
-		      </router-link>
-		  </h1>
-		  <div v-if="is_instructor">
+		<div id="table-header">
+		  <h2>Attendance</h2>
+		  <button v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" class="header-btn">Show QR</button>
+		  <button v-else-if="lecture.lecture_status === 'is_over' && !lecture.allow_playback_submission">Upload Playback</button>
+		  <button v-else-if="lecture.lecture_status === 'is_active_playback'">Watch Playback</button>
+
+<!--       <LectureUploadModal v-if="lecture.lecture_status === 'is_over'" :update_lecture="true"/>
+      <router-link v-else-if="((Date.now() > new Date(lecture.end_time)) || (undefined == lecture.end_time))
+                    && lecture.video_ref.includes('.')" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+	        <button class="btn btn-secondary watch-recording">Watch recording</button>
+	     </router-link> -->
+	  </div>
+<!-- 		  <div v-if="is_instructor">
 		    <div class="tabs">
 		      <button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)"><h5>Live ({{Object.keys(live_submissions).length}}/{{all_students.length}})</h5></button>
 		      <button id="playback_btn" class="tab_btn" @click="selectTab(1)"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
@@ -87,7 +80,7 @@
 		    </div>
 		    <p v-else>No Submission</p>
 		  </div>
-		</div>
+		</div> -->
 	</div>
 </template>
 
@@ -96,17 +89,16 @@
   export default {
     name: 'InstructorLectureAttendanceTable',
     props: {
-
+    	lecture: Object
     },
     components: {
     },
     data(){
       return {
-
       }
     },
     created() {
-
+    	console.log("In lecture attendance table. Lecture:",this.lecture)
     },
     methods: {
     }
@@ -114,10 +106,23 @@
 </script>
 
 <style scoped>
-	#lecture-attendance-section {
+	#table-header {
 	  position: relative;
 	  top: 3rem;
 	  bottom: 0;
+	  border: black solid;
+	  text-align: left;
+	  padding-left: 5rem;
+	  padding-right: 5rem;
+	}
+
+	#table-header h2 {
+		display: inline-block;
+	}
+
+	.header-btn {
+		display: inline-block;
+		margin-left: 2rem;
 	}
 
 	.show-qr-btn {

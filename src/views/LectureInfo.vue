@@ -39,15 +39,14 @@
       this.lecture_id = this.$route.params.lecture_id
       this.is_instructor = this.$store.state.user.current_user.is_instructor
       await this.getLecture()
-      this.setLectureStatus()
+      this.setLectureAndCheckinWindowStatus()
     },
     methods: {
       async getLecture() {
         const response = await LectureAPI.getLectureWithSectionsAndCourse(this.lecture_id)
         this.lecture = response.data
-        this.lecture_has_loaded = true
       },
-      setLectureStatus() {
+      setLectureAndCheckinWindowStatus() {
         let current_time = Date.now()
         let lecture_start_time = new Date(this.lecture.start_time)
         let lecture_end_time = new Date(this.lecture.end_time)
@@ -72,6 +71,30 @@
         } else {
           console.log("ERROR: Lecture not allowing live or playback submissions")
         }
+        this.setCheckinWindowStatus()
+      },
+      setCheckinWindowStatus() {
+        if(this.lecture.lecture_status === "is_live") {
+          let current_time = new Date()
+          let found_open_checkin_window = false
+          for(let i = 0; i < this.lecture.checkins.length; i++) {
+            let current_checkin = this.lecture.checkins[i]
+            let current_checkin_start_time = new Date(current_checkin.start_time)
+            let current_checkin_end_time = new Date(current_checkin.end_time)
+            if(current_time >= current_checkin_start_time && current_time <= current_checkin_end_time){
+              this.lecture.checkin_window_status = "open"
+              this.lecture.checkin = current_checkin
+              found_open_checkin_window = true
+              break
+            } else {
+            }
+          }
+          if(!found_open_checkin_window)
+            this.lecture.checkin_window_status = "closed"
+        } else {
+          this.lecture.checkin_window_status = "closed"
+        }
+        this.lecture_has_loaded = true
       },
       setSubmissionWindowStatus() {
         let current_time = Date.now()
