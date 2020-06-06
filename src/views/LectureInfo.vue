@@ -43,41 +43,12 @@
       this.is_instructor = this.$store.state.user.current_user.is_instructor
       this.getLecture()
       this.setLectureStatus()
-      this.getStudentsForLecture()
-      this.getAttendanceForLecture()
-      this.setLectureStatus()
     },
     methods: {
       async getLecture() {
         const response = await LectureAPI.getLectureWithSectionsAndCourse(this.lecture_id)
         this.lecture = response.data
         this.lecture_has_loaded = true
-      },
-      async getStudentsForLecture() {
-        const response = await UserAPI.getStudentsForLecture(this.lecture_id)
-        this.all_students = response.data
-      },
-      async getAttendanceForLecture() {
-        const response = await LectureSubmissionAPI.getLectureSubmissionsForLecture(this.lecture_id)
-        let lecture_submissions = response.data
-        for(let i=0;i<this.all_students.length;i++) {
-          let did_attend = false;
-          for(let j=0;j<lecture_submissions.length;j++) {
-            let subID = lecture_submissions[j].submitter._id
-            if(this.all_students[i]._id == subID) {
-              if(lecture_submissions[j].is_live_submission) {
-                this.live_submissions[subID] = this.live_submissions[subID] || [];
-                this.live_submissions[subID].push(lecture_submissions[j]);
-              } else {
-                this.playback_submissions.push(lecture_submissions[j])
-              }
-              did_attend = true;
-            }
-          }
-          if(!did_attend) {
-            this.absent.push(this.all_students[i])
-          }
-        }
       },
       setLectureStatus() {
         let current_time = Date.now()
