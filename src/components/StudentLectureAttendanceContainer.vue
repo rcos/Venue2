@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- Check if student submitted already -->
+    <!-- TODO: Check if student submitted already -->
     <div v-if="qr_scanning_window_open">
       <button @click="closeQRScanningWindow" id="exit_preview_btn">X</button>
       <qrcode-stream id="video_preview" @decode="checkForQRMatch"></qrcode-stream>
