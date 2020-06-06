@@ -4,7 +4,9 @@
 		  <h2>Attendance</h2>
 		  <button v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" @click="showQR" class="header-btn">Show QR</button>
 		  <LectureUploadModal v-else-if="lecture.lecture_status === 'is_over' && !lecture.allow_playback_submission" :lecture="lecture" :update_lecture="true" />
-		  <button v-else-if="lecture.lecture_status === 'is_active_playback'">Watch Playback</button>
+		  <router-link v-else-if="lecture.lecture_status === 'is_active_playback'" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+		  	<button >Watch Playback</button>
+		  </router-link>
 
 <!--       <LectureUploadModal v-if="lecture.lecture_status === 'is_over'" :update_lecture="true"/>
       <router-link v-else-if="((Date.now() > new Date(lecture.end_time)) || (undefined == lecture.end_time))
