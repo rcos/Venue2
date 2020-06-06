@@ -90,7 +90,7 @@
   import { QrcodeStream } from 'vue-qrcode-reader'
 
   export default {
-    name: 'StudentLectureAttendanceTable',
+    name: 'StudentLectureAttendanceContainer',
     props: {
       lecture: Object
     },
