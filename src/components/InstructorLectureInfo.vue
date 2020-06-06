@@ -1,7 +1,7 @@
 <template>
   <div>
-    <LectureInfoHeader v-bind:lecture="lecture" v-bind:is_instructor="true" />
-    <InstructorLectureAttendanceTable />
+    <LectureInfoHeader :lecture="lecture" :is_instructor="true" />
+    <InstructorLectureAttendanceTable :lecture="lecture" />
   </div>
 </template>
 
@@ -28,14 +28,11 @@
         live_submissions: [],
         playback_submissions: [],
         absent: [],
-        lecture_is_upcoming: Boolean,
-        lecture_is_live: Boolean,
-        lecture_is_over: Boolean,
         show_checkin_qr: -1
       }
     },
     created() {
-      console.log("Received Lecture",this.lecture)
+      console.log("In InstructorLectureInfo. Received Lecture",this.lecture)
       this.lecture_id = this.lecture._id
       this.getStudentsForLecture()
       this.getAttendanceForLecture()
