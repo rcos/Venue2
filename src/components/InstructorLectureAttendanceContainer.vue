@@ -12,7 +12,7 @@
 	    <canvas id="qr_render_area"></canvas>
 	    <button id="close_qr_btn" @click="hideQR">Hide</button>
 	  </div>
-	  <InstructorLectureAttendanceTable :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" :all_students="all_students" />
+	  <LectureAttendanceTable :is_instructor="true" :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" :all_students="all_students" />
 	</div>
 </template>
 
@@ -20,7 +20,7 @@
 <script>
   import QRCode from "qrcode";
   import LectureUploadModal from "@/components/LectureUploadModal";
-  import InstructorLectureAttendanceTable from "@/components/InstructorLectureAttendanceTable.vue";
+  import LectureAttendanceTable from "@/components/LectureAttendanceTable.vue";
 
   export default {
     name: 'InstructorLectureAttendanceContainer',
@@ -33,7 +33,7 @@
     },
     components: {
     	LectureUploadModal,
-    	InstructorLectureAttendanceTable
+    	LectureAttendanceTable
     },
     data(){
       return {

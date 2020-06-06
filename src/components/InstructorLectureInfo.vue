@@ -4,9 +4,7 @@
     <div class="spinner-border" role="status" v-if="!attendance_calculated">
       <span class="sr-only">Loading...</span>
     </div>
-    <div v-else>
-      <InstructorLectureAttendanceContainer :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" v-bind:all_students="all_students" />
-    </div>
+    <InstructorLectureAttendanceContainer v-else :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" v-bind:all_students="all_students" />
   </div>
 </template>
 

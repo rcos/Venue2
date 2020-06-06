@@ -1,43 +1,72 @@
 <template>
 	<div>
-    <div v-if="is_live">
-      <div v-if="Object.keys(submissions).length > 0">
-        <div class="namecard-edging live-color" v-for="(submission,i) in Object.keys(submissions)" :key="i">
-          <div class="namecard">
-            {{submissions[submission][0].submitter.first_name}} {{submissions[submission][0].submitter.last_name}}
-            {{submissions[submission][0].submitter.email}}
-            {{submissions[submission].length / lecture.checkins.length * 100}}%
+    <div v-if="is_instructor">
+      <div v-if="is_live">
+        <div v-if="Object.keys(submissions).length > 0">
+          <div class="namecard-edging live-color" v-for="(submission,i) in Object.keys(submissions)" :key="i">
+            <div class="namecard">
+              {{submissions[submission][0].submitter.first_name}} {{submissions[submission][0].submitter.last_name}}
+              {{submissions[submission][0].submitter.email}}
+              {{submissions[submission].length / lecture.checkins.length * 100}}%
+            </div>
           </div>
         </div>
+        <div v-else>
+          None
+        </div>
       </div>
-      <div v-else>
-        None
+      <div v-else-if="is_playback">
+        <div v-if="submissions.length > 0">
+          <div class="namecard-edging playback-color" v-for="(submission,i) in submissions" :key="i">
+            <div class="namecard">
+              {{submission.submitter.first_name}} {{submission.submitter.last_name}}
+              {{submission.submitter.email}}
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          None
+        </div>
+      </div>
+      <div v-else-if="is_absent">
+        <div v-if="submissions.length > 0">
+          <div class="namecard-edging absent-color" v-for="(absentee,i) in submissions" :key="i">
+            <div class="namecard">
+              {{absentee.first_name}} {{absentee.last_name}}
+              {{absentee.email}}
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          None
+        </div>
       </div>
     </div>
-    <div v-else-if="is_playback">
-      <div v-if="submissions.length > 0">
-        <div class="namecard-edging playback-color" v-for="(submission,i) in submissions" :key="i">
-          <div class="namecard">
-            {{submission.submitter.first_name}} {{submission.submitter.last_name}}
-            {{submission.submitter.email}}
+    <!-- Student -->
+    <div v-else>
+      <div v-if="is_live">
+        <div v-if="Object.keys(submissions).length > 0">
+          <div class="namecard-edging live-color" v-for="submission in submissions" :key="submission._id">
+            <div class="namecard">
+              {{submission.live_submission_time}}
+            </div>
           </div>
         </div>
-      </div>
-      <div v-else>
-        None
-      </div>
-    </div>
-    <div v-else-if="is_absent">
-      <div v-if="submissions.length > 0">
-        <div class="namecard-edging absent-color" v-for="(absentee,i) in submissions" :key="i">
-          <div class="namecard">
-            {{absentee.first_name}} {{absentee.last_name}}
-            {{absentee.email}}
-          </div>
+        <div v-else>
+          None
         </div>
       </div>
-      <div v-else>
-        None
+      <div v-else-if="is_playback">
+        <div v-if="submissions.length > 0">
+          <div class="namecard-edging playback-color" v-for="submission in submissions" :key="submission._id">
+            <div class="namecard">
+              {{ submission.video_progress }}
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          None
+        </div>
       </div>
     </div>
 	</div>
@@ -62,7 +91,8 @@
       is_absent: {
         type: Boolean,
         default: false
-      }
+      },
+      is_instructor: Boolean
     },
     components: {
     },
@@ -72,6 +102,14 @@
       }
     },
     created() {
+      if(this.is_live) {
+        let keys = Object.keys(this.submissions)
+        keys.forEach((key,i) => {
+          console.log(key)
+          console.log(i)
+        })
+        // console.log("Received live submissions", Object.keys(this.submissions))
+      }
     },
     methods: {
     }
