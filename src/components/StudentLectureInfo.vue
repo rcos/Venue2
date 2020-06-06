@@ -1,7 +1,10 @@
 <template>
   <div>
     <LectureInfoHeader v-bind:lecture="lecture" v-bind:is_instructor="false" />
-    <StudentLectureAttendanceContainer :lecture="lecture" />
+    <div class="spinner-border" role="status" v-if="!attendance_calculated">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <StudentLectureAttendanceContainer v-else :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" />
   </div>
 </template>
 
@@ -31,13 +34,15 @@
         lecture_is_over: Boolean,
         show_checkin_qr: -1,
         self_submission_count: 0,
-        student_lecture_submissions: []
+        student_lecture_submissions: [],
+        attendance_calculated: false
       }
     },
-    created() {
+    async created() {
       this.lecture_id = this.lecture._id
       this.user_id = this.$store.state.user.current_user._id
-      this.getStudentLectureSubmissions()
+      await this.getStudentLectureSubmissions()
+      this.getAttendanceForLecture()
     },
     methods: {
       async getStudentLectureSubmissions() {
@@ -45,6 +50,20 @@
         this.student_lecture_submissions = response.data 
         console.log("Got lecture submissions",this.student_lecture_submissions)
       },
+      async getAttendanceForLecture() {
+        console.log("Lecture id",this.lecture_id)
+        const response = await LectureSubmissionAPI.getLectureSubmissionsForLecture(this.lecture_id)
+        let lecture_submissions = response.data
+        console.log("Lecture submissions",lecture_submissions)
+        this.student_lecture_submissions.forEach(submission => {
+          if(submission.is_live_submission)
+            this.live_submissions.push(submission)
+          else
+            this.playback_submissions.push(submission)
+        })
+        this.attendance_calculated = true
+        console.log("Found live submissions",this.live_submissions)
+      }
     }
   }
 </script>

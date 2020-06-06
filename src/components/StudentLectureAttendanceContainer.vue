@@ -12,75 +12,7 @@
         <button>Watch Playback</button>
       </router-link>
     </div>
-<!--      <div v-if="is_instructor">
-        <div class="tabs">
-          <button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)"><h5>Live ({{Object.keys(live_submissions).length}}/{{all_students.length}})</h5></button>
-          <button id="playback_btn" class="tab_btn" @click="selectTab(1)"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
-          <button id="absent_btn" class="tab_btn" @click="selectTab(2)"><h5>Absent ({{absent.length}}/{{all_students.length}})</h5></button>
-          <button id="stats_btn" class="tab_btn" @click="selectTab(3)"><h5>Statistics</h5></button>
-        </div>
-        <div v-if="selected_tab == 0" id="live_submit" class="tab_section">
-          <div v-if="Object.keys(live_submissions).length > 0">
-            <div class="namecard-edging live-color" v-for="(submission,i) in Object.keys(live_submissions)" :key="i">
-              <div class="namecard">
-                {{live_submissions[submission][0].submitter.first_name}} {{live_submissions[submission][0].submitter.last_name}}
-                {{live_submissions[submission][0].submitter.email}}
-                {{live_submissions[submission].length / lecture.checkins.length * 100}}%
-              </div>
-            </div>
-          </div>
-          <div v-else>
-            None
-          </div>
-        </div>
-        <div v-if="selected_tab == 1" id="playback_submit" class="tab_section">
-          <div v-if="playback_submissions.length > 0">
-            <div class="namecard-edging playback-color" v-for="(submission,i) in playback_submissions" :key="i">
-              <div class="namecard">
-                {{submission.submitter.first_name}} {{submission.submitter.last_name}}
-                {{submission.submitter.email}}
-              </div>
-            </div>
-          </div>
-          <div v-else>
-            None
-          </div>
-        </div>
-        <div v-if="selected_tab == 2" id="no_submit" class="tab_section">
-          <div v-if="absent.length > 0">
-            <div class="namecard-edging absent-color" v-for="(absentee,i) in absent" :key="i">
-              <div class="namecard">
-                {{absentee.first_name}} {{absentee.last_name}}
-                {{absentee.email}}
-              </div>
-            </div>
-          </div>
-          <div v-else>
-            None
-          </div>
-        </div>
-        <div v-if="selected_tab == 3" id="stats" class="tab_section">
-          Statistics
-        </div>
-      </div>
-      <div v-else class="student_lecture_attendance_info">
-        <div v-if="self_submission_count > 0">
-          <div v-for="student_lecture_submission in student_lecture_submissions">
-            <div v-if="student_lecture_submission.is_live_submission">
-              <p>Live submission was made {{ self_submission_count }} time(s)</p>
-              <p>Live submission time: {{ new Date(student_lecture_submission.live_submission_time) }}</p>
-            </div>
-            <div v-else>
-              <p>Playback Submission was made</p>
-              <ul>
-                <li v-for="answer in student_poll_answers">{{answer}}</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <p v-else>No Submission</p>
-      </div>
-    </div> -->
+    <LectureAttendanceTable :is_instructor="false" :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" />
   </div>
 </template>
 
@@ -89,14 +21,19 @@
   import QRCode from "qrcode";
   import { QrcodeStream } from 'vue-qrcode-reader'
   import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js';
+  import LectureAttendanceTable from "@/components/LectureAttendanceTable.vue";
 
   export default {
     name: 'StudentLectureAttendanceContainer',
     props: {
-      lecture: Object
+      lecture: Object,
+      live_submissions: Array,
+      playback_submissions: Array,
+      absent: Array
     },
     components: {
-      QrcodeStream
+      QrcodeStream,
+      LectureAttendanceTable
     },
     data(){
       return {
