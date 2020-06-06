@@ -4,32 +4,34 @@
   'ongoing-container':status == 'ongoing',
   'ended-container':status == 'ended',
   'static-container': status == 'static'}" >
-    <div class="active-event-card-background"></div>
-    <div class="active-event-card">
-      <div  class="event-card-section" id="course-section">
-        <div class="course-name">{{ courseName }}</div>
-        <div class="course-title">{{ courseDept }} {{ courseNumber }}</div>
-      </div>
-      <div v-if="eventSublabel != undefined && eventSublabel != ''" class="event-card-section event-section">
-        <div class="event-name">{{ eventLabel }}</div>
-        <div class="event-location">{{ eventSublabel }}</div>
-      </div>
-      <div v-else class="event-card-section event-section">
-        <div class="event-name solo">{{ eventLabel }}</div>
-      </div>
-      <div class="event-card-section" id="time-section">
-        <div>
-          <img src="@/assets/clock.svg" class="clock">
-          <div class="time-remaining">
-            <span v-if="status == 'pending'" class="pending-text">pending</span>
-            <div v-else-if="status == 'ongoing' || status == 'static'">
-              {{ getTimeString( timeFromNow ) }}
+    <router-link :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}" >
+      <div class="active-event-card-background"></div>
+      <div class="active-event-card">
+        <div  class="event-card-section" id="course-section">
+          <div class="course-name">{{ courseName }}</div>
+          <div class="course-title">{{ courseDept }} {{ courseNumber }}</div>
+        </div>
+        <div v-if="eventSublabel != undefined && eventSublabel != ''" class="event-card-section event-section">
+          <div class="event-name">{{ eventLabel }}</div>
+          <div class="event-location">{{ eventSublabel }}</div>
+        </div>
+        <div v-else class="event-card-section event-section">
+          <div class="event-name solo">{{ eventLabel }}</div>
+        </div>
+        <div class="event-card-section" id="time-section">
+          <div>
+            <img src="@/assets/clock.svg" class="clock">
+            <div class="time-remaining">
+              <span v-if="status == 'pending'" class="pending-text">pending</span>
+              <div v-else-if="status == 'ongoing' || status == 'static'">
+                {{ getTimeString( timeFromNow ) }}
+              </div>
+              <span v-else class="ended-text">ended</span>
             </div>
-            <span v-else class="ended-text">ended</span>
           </div>
         </div>
       </div>
-    </div>
+    </router-link>
   </div>
 </template>
 
@@ -40,6 +42,7 @@ import SubmissionAPI from "@/services/SubmissionAPI.js";
 export default {
   name: "LectureCard",
   props: {
+    lecture: Object,
     courseName: String,
     courseDept: String,
     courseNumber: Number,
@@ -57,9 +60,11 @@ export default {
       remaining_days: Number,
       remaining_hours: Number,
       remaining_mins: Number,
+      is_instructor: Boolean
     }
   },
   created() {
+    this.is_instructor = this.$store.state.user.current_user.is_instructor
   },
   methods: {
     getTimeString (time_string) {

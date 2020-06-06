@@ -2,7 +2,7 @@
   <!-- ADDING USER -->
   <div>
     <h2>New Lecture For {{ course.name }}</h2>
-    <form class="new-lecture-form" @submit.prevent="addLecture">
+    <form class="new-lecture-form" @submit.prevent="handleAttemptSubmit">
       <div class="form-group">
         <!-- Lecture Info -->
         <div class="input-wrapper">
@@ -11,7 +11,7 @@
             type="text"
             class="form-control new-lecture-input"
             placeholder="e.g. Lecture 1"
-            v-model="lecture.title"
+            v-model.lazy="lecture.title"
           />
         </div>
         <!-- Section -->
@@ -24,7 +24,7 @@
         </div>
         <Sections v-else v-bind:sections="course_sections" v-on:select-section="addSection" />
         <div class="input-wrapper">
-          <input @click="setAllowLiveSubmissions" type="checkbox" name="live_submission" v-model="allow_live_submissions" @change="handleAllowLive">
+          <input @click="setAllowLiveSubmissions" type="checkbox" name="live_submission" v-model="allow_live_submissions">
           <label for="live_submission">Live Submissions (can add playback after lecture ends)</label><br>
           <input @click="setAllowPlaybackSubmissions" type="checkbox" name="playback_submission" v-model="allow_playback_submissions">
           <label for="playback_submission">Playback Submissions Only</label><br>
@@ -37,16 +37,37 @@
             <label>End Time</label>
             <input id="lecture_end"/>
           </div>
-          <div class="input-wrapper" id="submission-time-wrapper">
-            <label>Submission Start Time</label>
-            <input id="submission_start"/>
-            <label>Submission End Time</label>
-            <input id="submission_end"/>
+          <div class="input-wrapper">
+            <input @click="setAllowRandom" type="checkbox" name="random_times" v-model="random_times"/>
+            <label for="random_times">Use randomized check-in times</label>
+            <input @click="setAllowCustom" type="checkbox" name="custom_times" v-model="custom_times"/>
+            <label for="custom_times">Use custom check-in times</label><br>
+          </div>
+          <div v-if="random_times">
+            <div class="input-wrapper">
+              <label for="random_checkin_count">Number of check-in times</label>
+              <input class="random_input" type="number" min="1" max="5" name="random_checkin_count" v-model.lazy="random_checkin_count"/>
+              <label for="random_checkin_length">Minutes for each check-in</label>
+              <input class="random_input" type="number" min="1" max="10" name="random_checkin_length" v-model.lazy="random_checkin_length"/>
+            </div>
+          </div>
+          <div v-else-if="custom_times">
+            <div v-for="(checkin,i) in checkins" :key="i" class="input-wrapper" id="submission-time-wrapper">
+              <label>Submission Start Time</label>
+              <input :id="'submission_start_'+i"/>
+              <label>Submission End Time</label>
+              <input :id="'submission_end_'+i"/>
+              <button v-if="checkins.length > 1" type="button" class="btn btn-danger" @click="handleRemoveCheckin(i)">X</button>
+            </div>
+            <div class="input-wrapper">
+              <button type="button" class="btn btn-secondary" @click="handleAddCheckin">Add another attendance check-in</button>
+            </div>
           </div>
         </div>
         <!-- Playback video adder -->
         <LectureUploadModal ref="uploadmodal" v-if="allow_playback_submissions" :lecture="lecture" :update_lecture="false"/>
       </div>
+      <h6 class="error_msg" v-if="input_error_message!=''">{{input_error_message}}</h6>
       <button class="btn btn-primary create-lecture-btn">Create Lecture</button>
     </form>
   </div>
@@ -84,6 +105,15 @@ export default {
       selected_geofence: [],
       allow_live_submissions: false,
       allow_playback_submissions: false,
+      checkins: [],
+      checkin_pickers: [],
+      random_checkins: [],
+      times_added: 0,
+      random_times: true,
+      custom_times: false,
+      random_checkin_count: 1,
+      random_checkin_length: 5,
+      input_error_message: ""
     };
   },
   created() {
@@ -100,14 +130,90 @@ export default {
       if(!this.lecture_sections.includes(section))
         this.lecture_sections.push(section)
     },
-    async addLecture(evt) {
+    setErrorMessage(error) {
+      this.input_error_message = "ERROR: "+error
+      let self = this
+      setTimeout(function() {
+        self.input_error_message = ""
+      },(7*1000))
+    },
+    handleAttemptSubmit(evt) {
       evt.preventDefault();
+      let allGood = true
+      let hasTitle = this.lecture.title && this.lecture.title != ""
+      let hasSections = this.lecture_sections.length > 0
+      let hasType = this.allow_live_submissions || this.allow_playback_submissions
+      if(hasTitle && hasSections && hasType) {
+        if(this.allow_live_submissions) {
+          let hasStart = this.lecture.start_time != null && this.lecture.start_time != ""
+          let hasEnd = this.lecture.end_time != null && this.lecture.end_time != ""
+          let validRange = this.lecture.start_time + (15 * 60 * 1000) <= this.lecture.end_time
+          if(hasStart && hasEnd && validRange) {
+            let hasRandom = this.random_times
+            if(hasRandom) {
+              allGood = true
+            } else {
+              this.checkins.sort((a, b) => (a.start_time > b.start_time) ? 1 : -1)
+              if(this.checkins[0].start_time == null || this.checkins[0].end_time == null || this.checkins[0].start_time == "" || this.checkins[0].end_time == "") {
+                this.setErrorMessage("Missing start or end time for check-in number: 1")
+                allGood = false
+              } else if(this.lecture.start_time < this.checkins[0].start_time && this.checkins[this.checkins.length-1].end_time < this.lecture.end_time) {
+                for(let i=0;i<this.checkins.length-1;i++) {
+                  if(this.checkins[i+1].start_time == null || this.checkins[i+1].end_time == null || this.checkins[i+1].start_time == "" || this.checkins[i+1].end_time == "") {
+                    this.setErrorMessage("Missing start or end time for check-in number: "+(i+2))
+                    allGood = false
+                  } else if(this.checkins[i].end_time >= this.checkins[i+1].start_time) {
+                    this.setErrorMessage("Invalid time range for check-in number: "+(i+2))
+                    allGood = false
+                  }
+                }
+              } else {
+                this.setErrorMessage("Check-in times must be between lecture start and end times")
+                allGood = false
+              }
+            }
+          } else if(!hasStart) {
+            this.setErrorMessage("Missing start time")
+            allGood = false
+          } else if(!hasEnd) {
+            this.setErrorMessage("Missing end time")
+            allGood = false
+          } else if(!validRange) {
+            this.setErrorMessage("Invalid lecture time range (must be at least 15 minutes long)")
+            allGood = false
+          }
+        } else if(this.$refs["uploadmodal"].isComplete()) {
+          allGood = true
+        } else {
+          this.setErrorMessage("Video upload section is not complete")
+          allGood = false
+        }
+      } else if(!hasTitle) {
+        this.setErrorMessage("Missing title")
+        allGood = false
+      } else if(!hasSections) {
+        this.setErrorMessage("Missing section(s)")
+        allGood = false
+      } else if(!hasType) {
+        this.setErrorMessage("Missing lecture type")
+        allGood = false
+      }
+      if(allGood) {
+        this.addLecture()
+      }
+    },
+    async addLecture() {
       this.lecture.sections = this.lecture_sections;
       this.lecture.allow_live_submissions = this.allow_live_submissions
       this.lecture.allow_playback_submissions = this.allow_playback_submissions
+      this.lecture.checkins = this.checkins
       // generate attendance codes for live lectures
       if(this.lecture.allow_live_submissions) {
-        this.generateAttendanceCode()
+        if(this.random_times) {
+          this.generateRandomCheckins()
+          this.lecture.checkins = this.random_checkins
+        }
+        this.generateAttendanceCodes()
         let response = await LectureAPI.addLecture(this.lecture);
         this.lecture = response.data
         this.$router.push({
@@ -115,7 +221,7 @@ export default {
           params: { id: this.course_id }
         })
       }
-      else if(this.lecture.allow_playback_submissions && this.$refs["uploadmodal"].isComplete()) {
+      else if(this.lecture.allow_playback_submissions) {
         let response = await LectureAPI.addLecture(this.lecture);
         this.lecture = response.data
         this.$refs["uploadmodal"].updateLectureFromParent(this.lecture,this.course_id)
@@ -126,85 +232,192 @@ export default {
       this.course_sections = response.data;
       this.course_sections_have_loaded = true;
     },
-    generateAttendanceCode() {
-      const alnums =
-        "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      let result = "";
-      for (let i = 100; i > 0; --i) {
-        result += alnums[Math.floor(Math.random() * alnums.length)];
+    generateRandomCheckins() {
+      function randomNumber(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
       }
-      this.lecture.code = result;
-      // this.showQR(this.lecture.code);
+      let n = this.random_checkin_count
+      let l = this.random_checkin_length * 60 * 1000
+      let buffer = 5 * 60 * 1000
+      this.random_checkins = []
+      let min = this.lecture.start_time + buffer //Cannot start attendance until 5 min after start
+      let max = this.lecture.end_time - l - buffer //Cannot start attendance until l min before end
+      for(let i=0;i<n;i++) { // Try to create an acceptable check-in start time
+        let start
+        let accept = true
+        let attempts = 0
+        do {
+          attempts++
+          start = randomNumber(min,max)
+          for(let j=0;j<this.random_checkins.length;j++) {
+            let checkin = this.random_checkins[j]
+            if(start >= checkin.start_time && start <= checkin.end_time + buffer) {
+              accept = false
+            }
+          }
+        }while(!accept && attempts < 10)
+        this.random_checkins.push({
+          start_time: start,
+          end_time: start + l,
+          code: ''
+        })
+      }
+      this.random_checkins.sort((a, b) => (a.start_time > b.start_time) ? 1 : -1)
     },
-    showQR(qr_data) {
-      let canvas = document.getElementById("qr_render_area");
-      if (qr_data) {
-        QRCode.toCanvas(canvas, qr_data, function(error) {
-          if (error) console.error(error);
-        });
+    generateAttendanceCodes() {
+      for(let i=0;i<this.lecture.checkins.length;i++) {
+        const alnums = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let result = "";
+        for (let j = 100; j > 0; --j) {
+          result += alnums[Math.floor(Math.random() * alnums.length)];
+        }
+        this.lecture.checkins[i].code = result;
       }
     },
     setAllowLiveSubmissions() {
       this.allow_live_submissions = true
       this.allow_playback_submissions = false
+      this.$nextTick(() => {
+        let self = this
+        var fp0 = flatpickr(document.getElementById("lecture_start"),{
+          enableTime: true,
+          minDate: Date.now(),
+          onChange: function(selectedDates, dateStr, instance) {
+            self.lecture.start_time = Date.parse(dateStr)
+            fp1.set("minDate",self.lecture.start_time)
+            if(self.lecture.start_time > self.lecture.end_time || !self.lecture.end_time) {
+              fp1.setDate(self.lecture.start_time)
+            }
+          }
+        })
+        var fp1 = flatpickr(document.getElementById("lecture_end"),{
+          enableTime: true,
+          minDate: Date.now(),
+          onChange: function(selectedDates, dateStr, instance) {
+            self.lecture.end_time = Date.parse(dateStr)
+          }
+        })
+      })
+    },
+    resetPickers() {
+      for(let i=0;i<this.checkins.length;i++) {
+        if(this.checkin_pickers[i].start)
+          this.checkin_pickers[i].start.destroy()
+        if(this.checkin_pickers[i].end)
+          this.checkin_pickers[i].end.destroy()
+      }
+      this.checkins = []
+      this.checkin_pickers = []
     },
     setAllowPlaybackSubmissions() {
       this.allow_playback_submissions = true
       this.allow_live_submissions = false
+      this.resetPickers()
     },
-    handleAllowLive() {
-      let self = this
-      var fp0 = flatpickr(document.getElementById("lecture_start"),{
-        enableTime: true,
-        minDate: Date.now(),
-        onChange: function(selectedDates, dateStr, instance) {
-          self.lecture.start_time = Date.parse(dateStr)
-          fp1.set("minDate",self.lecture.start_time)
-          if(self.lecture.start_time > self.lecture.end_time) {
-            fp1.setDate(self.lecture.start_time)
+    setAllowRandom() {
+      this.custom_times = false
+      this.random_times = true
+      this.resetPickers()
+    },
+    setAllowCustom() {
+      this.custom_times = true
+      this.random_times = false
+      this.handleAddCheckin()
+    },
+    handleAddCheckin() {
+      this.checkins.push({
+        start_time: null,
+        end_time: null,
+        code: ""
+      })
+      this.checkin_pickers.push({
+        start: null,
+        end: null
+      })
+      this.$nextTick(() => {
+        let i = this.checkin_pickers.length-1
+        let pickrs = this.checkin_pickers[i]
+        let self = this
+        pickrs.start = flatpickr(document.getElementById("submission_start_"+i),{
+          enableTime: true,
+          minDate: Date.now(),
+          onChange: function(selectedDates, dateStr, instance) {
+            self.checkins[i].start_time = Date.parse(dateStr)
+            pickrs.end.set("minDate",self.checkins[i].start_time)
+            if(self.checkins[i].start_time > self.checkins[i].end_time) {
+              pickrs.end.setDate(self.checkins[i].start_time)
+            }
+          }
+        })
+        pickrs.end = flatpickr(document.getElementById("submission_end_"+i),{
+          enableTime: true,
+          minDate: Date.now(),
+          onChange: function(selectedDates, dateStr, instance) {
+            self.checkins[i].end_time = Date.parse(dateStr)
+          }
+        })
+      })
+    },
+    handleRemoveCheckin(i) {
+      let fallback = []
+      for(let j=i+1;j<this.checkins.length;j++) {
+        fallback.push({
+          start: this.checkins[j].start_time,
+          end: this.checkins[j].end_time
+        })
+      }
+      for(let j=i;j<this.checkin_pickers.length;j++) { // cleanup
+        this.checkin_pickers[j].start.destroy()
+        this.checkin_pickers[j].end.destroy()
+      }
+      this.checkins.splice(i,1)
+      this.checkin_pickers.splice(i,1)
+      for(let j=i;j<this.checkin_pickers.length;j++) { // rebuild instances
+        let self = this
+        self.checkin_pickers[j].start = flatpickr(document.getElementById("submission_start_"+j),{
+          enableTime: true,
+          minDate: Date.now(),
+          onChange: function(selectedDates, dateStr, instance) {
+            self.checkins[j].start_time = Date.parse(dateStr)
+            self.checkin_pickers[j].end.set("minDate",self.checkins[j].start_time)
+            if(self.checkins[j].start_time > self.checkins[j].end_time) {
+              self.checkin_pickers[j].end.setDate(self.checkins[j].start_time)
+            }
+          }
+        })
+        self.checkin_pickers[j].end = flatpickr(document.getElementById("submission_end_"+j),{
+          enableTime: true,
+          minDate: fallback[this.checkin_pickers.length-j-1].start || Date.now(),
+          onChange: function(selectedDates, dateStr, instance) {
+            self.checkins[j].end_time = Date.parse(dateStr)
+          }
+        })
+        if(fallback[this.checkin_pickers.length-j-1].start != null) { // setDate to fallback
+          self.checkin_pickers[j].start.setDate(fallback[this.checkin_pickers.length-j-1].start)
+          if(fallback[this.checkin_pickers.length-j-1].end != null) { // setDate to fallback
+            self.checkin_pickers[j].end.setDate(fallback[this.checkin_pickers.length-j-1].end)
+          } else {
+            self.checkin_pickers[j].end.setDate(fallback[this.checkin_pickers.length-j-1].start)
           }
         }
-      })
-      var fp1 = flatpickr(document.getElementById("lecture_end"),{
-        enableTime: true,
-        minDate: Date.now(),
-        onChange: function(selectedDates, dateStr, instance) {
-          self.lecture.end_time = Date.parse(dateStr)
-        }
-      })      
-      var fp2 = flatpickr(document.getElementById("submission_start"),{
-        enableTime: true,
-        minDate: Date.now(),
-        onChange: function(selectedDates, dateStr, instance) {
-          self.lecture.submission_start_time = Date.parse(dateStr)
-          fp3.set("minDate",self.lecture.submission_start_time)
-          if(self.lecture.submission_start_time > self.lecture.submission_end_time) {
-            fp3.setDate(self.lecture.submission_start_time)
-          }
-        }
-      })
-      var fp3 = flatpickr(document.getElementById("submission_end"),{
-        enableTime: true,
-        minDate: Date.now(),
-        onChange: function(selectedDates, dateStr, instance) {
-          self.lecture.submission_end_time = Date.parse(dateStr)
-        }
-      })
+      }
     }
   }
 };
 </script>
 
 <style>
-.new-lecture-form {
-  /*border: black solid;*/
-}
-
 .input-wrapper {
   width: 50%;
   margin: auto;
   margin-top: 3rem;
   /*border: blue solid;*/
+}
+
+.random_input {
+  width: 5rem;
 }
 
 #submission-time-wrapper {
@@ -224,5 +437,9 @@ export default {
 
 #qr-section {
   margin-top: 2rem;
+}
+
+.error_msg {
+  color: red;
 }
 </style>
