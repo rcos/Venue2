@@ -2,7 +2,7 @@
 	<div>
 		<div id="table-header">
 		  <h2>Attendance</h2>
-		  <button v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" class="header-btn">Show QR</button>
+		  <button v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" @click="showQR" class="header-btn">Show QR</button>
 		  <button v-else-if="lecture.lecture_status === 'is_over' && !lecture.allow_playback_submission">Upload Playback</button>
 		  <button v-else-if="lecture.lecture_status === 'is_active_playback'">Watch Playback</button>
 
@@ -11,6 +11,10 @@
                     && lecture.video_ref.includes('.')" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
 	        <button class="btn btn-secondary watch-recording">Watch recording</button>
 	     </router-link> -->
+	  </div>
+	  <div id="qr_modal" class="hidden">
+	    <canvas id="qr_render_area"></canvas>
+	    <button id="close_qr_btn" @click="hideQR">Hide</button>
 	  </div>
 <!-- 		  <div v-if="is_instructor">
 		    <div class="tabs">
@@ -86,6 +90,8 @@
 
 
 <script>
+  import QRCode from "qrcode";
+
   export default {
     name: 'InstructorLectureAttendanceTable',
     props: {
@@ -101,6 +107,15 @@
     	console.log("In lecture attendance table. Lecture:",this.lecture)
     },
     methods: {
+    	showQR() {
+    	  QRCode.toCanvas(document.getElementById("qr_render_area"), this.lecture.current_checkin.code, function(error) {
+    	    if (error) console.error(error)
+    	  });
+    	  document.getElementById("qr_modal").classList.remove("hidden")
+    	},
+    	hideQR() {
+    	  document.getElementById("qr_modal").classList.add("hidden")
+    	},
     }
   }
 </script>
@@ -110,7 +125,6 @@
 	  position: relative;
 	  top: 3rem;
 	  bottom: 0;
-	  border: black solid;
 	  text-align: left;
 	  padding-left: 5rem;
 	  padding-right: 5rem;
@@ -183,6 +197,10 @@
 	  box-shadow: 0 5px 10px -1px gray;
 	  padding-top: 0.5rem;
 	  z-index: 100;
+	}
+
+	.hidden {
+	  display: none;
 	}
 
 </style>
