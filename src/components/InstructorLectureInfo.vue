@@ -49,8 +49,10 @@
         this.all_students = response.data
       },
       async getAttendanceForLecture() {
+        console.log("Lecture id",this.lecture_id)
         const response = await LectureSubmissionAPI.getLectureSubmissionsForLecture(this.lecture_id)
         let lecture_submissions = response.data
+        console.log("Lecture submissions",lecture_submissions)
         for(let i=0;i<this.all_students.length;i++) {
           let did_attend = false;
           for(let j=0;j<lecture_submissions.length;j++) {
@@ -70,6 +72,7 @@
           }
         }
         this.attendance_calculated = true
+        console.log("Found live submissions",this.live_submissions)
       }
     }
   }

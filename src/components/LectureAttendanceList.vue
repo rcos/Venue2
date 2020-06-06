@@ -50,6 +50,7 @@
     name: 'LectureAttendanceList',
     props: {
       submissions: Array,
+      lecture: Object,
       is_live: {
         type: Boolean,
         default: false

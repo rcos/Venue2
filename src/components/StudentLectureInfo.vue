@@ -36,12 +36,14 @@
     },
     created() {
       this.lecture_id = this.lecture._id
+      this.user_id = this.$store.state.user.current_user._id
       this.getStudentLectureSubmissions()
     },
     methods: {
       async getStudentLectureSubmissions() {
         const response = await LectureSubmissionAPI.getLectureSubmissionsForStudent(this.lecture_id,this.user_id)
         this.student_lecture_submissions = response.data 
+        console.log("Got lecture submissions",this.student_lecture_submissions)
       },
     }
   }
