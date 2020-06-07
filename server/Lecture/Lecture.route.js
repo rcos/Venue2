@@ -64,6 +64,7 @@ lectureRoutes.route('/add_playback/:lecture_id').post(function (req, res) {
 				playback_submission_start_time: fields.playback_submission_start_time,
 				playback_submission_end_time: fields.playback_submission_end_time,
 				allow_playback_submissions: true,
+				allow_live_submissions: false,
 				email_sent: true
 			},
 			function (err, updated_lecture) {

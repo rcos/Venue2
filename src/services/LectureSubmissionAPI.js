@@ -4,9 +4,9 @@ export default {
   getLectureSubmissions() {
     return API().get('lecturesubmissions')
   },
-  addLectureSubmission(lectureSubmission) {
+  addLectureSubmission(lecture_submission) {
     return API().post('lecturesubmissions/add', {
-      lectureSubmission: lectureSubmission // add our data to the request body
+      lecture_submission: lecture_submission // add our data to the request body
     })
   },
   addLiveSubmissionByRCS(rcs,lecture_id) {
@@ -29,7 +29,7 @@ export default {
   getLectureSubmissionsForLecture(lecture_id) {
     return API().get('lecturesubmissions/for_lecture/' + lecture_id)
   },
-  getLectureSubmissionForStudent(lecture_id, student_id) {
+  getLectureSubmissionsForStudent(lecture_id, student_id) {
     return API().get('lecturesubmissions/for_student/' + lecture_id + '/' + student_id)
   }
 }

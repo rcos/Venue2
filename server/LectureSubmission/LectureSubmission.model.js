@@ -13,6 +13,7 @@ let LectureSubmission = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
+	code: String,
 	video_progress: Number,
 	student_poll_answers: [
 		[{
@@ -21,6 +22,7 @@ let LectureSubmission = new Schema({
 		}]
 	],
 	is_live_submission: { type: Boolean, default: false },
+	live_submission_time: Date
 });
 
 module.exports = mongoose.model('LectureSubmission', LectureSubmission);
