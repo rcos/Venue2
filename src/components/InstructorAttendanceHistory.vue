@@ -368,10 +368,15 @@
                       }
                     }
                   })
-                  if(playback) {
-                    running_total += Math.ceil(sub.video_percent * 100) / 100
+                  if(live.length > 0 && playback) {
+                    running_total += Math.max(
+                      live.length / lecture_.checkins.length,
+                      Math.ceil(playback.video_percent * 100) / 100
+                    )
                   } else if(live.length > 0) {
                     running_total += live.length / lecture_.checkins.length
+                  } else if(playback) {
+                    running_total += Math.ceil(playback.video_percent * 100) / 100
                   }
                 })
                 lecture_.percentage = running_total / students.length * 100
