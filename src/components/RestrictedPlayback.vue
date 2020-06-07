@@ -130,6 +130,11 @@ export default {
 </script>
 
 <style scoped>
+#restricted_playback {
+	position: absolute;
+	top: 4rem;
+	bottom: 2rem;
+}
 #video_player {
 	width: 100%;
 	height: 100%;

@@ -15,10 +15,6 @@ import UnrestrictedPlayback from "../components/UnrestrictedPlayback";
 
 export default {
 	name: 'LecturePlayback',
-	props: {
-	},
-	computed: {
-	},
 	components: {
 		RestrictedPlayback,
 		UnrestrictedPlayback
@@ -36,6 +32,9 @@ export default {
 		LectureAPI.getLecture(this.$route.params.lecture_id)
 			.then(res => {
 				this.lecture = res.data
+				if(new Date() > new Date(this.lecture.playback_submission_end_time)) {
+					this.unrestricted = true
+				}
 				this.lecture_loaded = true
 			})
 	},
