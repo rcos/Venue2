@@ -353,9 +353,28 @@
               LectureSubmissionAPI.getLectureSubmissionsForLecture(lecture_._id)
               .catch(err => { console.log('error retrieving lecture submissions for lecture ' + lecture_._id); console.log(err); })
               .then(response => {
-                let submission_count = response.data.length == undefined ? 0 : response.data.length
-                let student_count = this.selected_section_info.students.length
-                lecture_.percentage = (submission_count / student_count) * 100
+                let submissions = response.data == undefined ? [] : response.data
+                let students = this.selected_section_info.students
+                let running_total = 0
+                students.forEach(stud => {
+                  let live = []
+                  let playback
+                  submissions.forEach(sub => {
+                    if(sub.submitter._id == stud) {
+                      if(sub.is_live_submission) {
+                        live.push(sub)
+                      } else {
+                        playback = sub
+                      }
+                    }
+                  })
+                  if(playback) {
+                    running_total += Math.ceil(sub.video_percent * 100) / 100
+                  } else if(live.length > 0) {
+                    running_total += live.length / lecture_.checkins.length
+                  }
+                })
+                lecture_.percentage = running_total / students.length * 100
               })
             )
 
