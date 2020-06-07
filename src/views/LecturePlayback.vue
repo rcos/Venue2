@@ -71,6 +71,7 @@ export default {
 												//Considered NOT a 'seek', video is playing normally
 												if(self.lectureSubmission.video_progress < currTime) {
 													self.lectureSubmission.video_progress = currTime
+													self.lectureSubmission.video_percent = currTime / vid.duration()
 												}
 												for (let i = 0; i < self.polls.length; i++) {
 													if (currTime > self.polls[i].timestamp) {

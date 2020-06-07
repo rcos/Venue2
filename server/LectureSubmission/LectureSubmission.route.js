@@ -35,6 +35,7 @@ lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
             let subobj = {
               lecture: lecture._id,
               video_progress: 0,
+              video_percent: 0,
               is_live_submission: true,
               submitter: user._id,
               code: lecture.checkins[i].code
