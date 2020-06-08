@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="main-content">
-      <NavBar v-if="this.$route.name != 'landing_page' && this.$route.name != 'set_permanent_password'"></NavBar>
+      <NavBar v-if="this.$route.name != 'landing_page' && this.$route.name != 'set_permanent_password' && current_user"></NavBar>
       <router-view />
     </div>
     <Footer />
@@ -19,35 +19,50 @@ export default {
     NavBar,
     Footer
   },
-  created() {
-    if(this.$store.state.user && this.$store.state.user.current_user && this.$store.state.user.current_user.is_instructor) {
-      LectureAPI.getLecturesForUser(this.$store.state.user.current_user._id,"live", "none") 
-        .then(res => {
-          LectureAPI.getLecturesForUser(this.$store.state.user.current_user._id,"upcoming", "none")
-            .then(res2 => {
-              let lectures = res.data.concat(res2.data)
-              if (!("Notification" in window)) {
-                alert("This browser does not support desktop notification");
-              } else if (Notification.permission === "granted") {
-                this.processNotifications(lectures)
-              } else if (Notification.permission !== "denied") {
-                Notification.requestPermission().then(function (permission) {
-                  if (permission === "granted") {
-                    this.processNotifications(lectures)
-                  }
-                });
-              }
-            })
-        })
-      LectureAPI.getLecturesForUser(this.$store.state.user.current_user._id,"past", "none")
-        .then(res => {
-          this.processInstructorEmails(res.data)
-        })
-    } else if(this.$store.state.user && this.$store.state.user.current_user) {
-      
+  data() {
+    return {
+      current_user: null
     }
   },
+  created() {
+    let self = this
+    var waitForUser = setInterval(function(){
+      if (self.$store.state.user && self.$store.state.user.current_user) {
+        self.current_user = self.$store.state.user.current_user
+        self.afterUser()
+        clearInterval(waitForUser);
+      }
+    }, 100);
+  },
   methods: {
+    afterUser() {
+      if(this.current_user.is_instructor) {
+        LectureAPI.getLecturesForUser(this.current_user._id,"live", "none") 
+          .then(res => {
+            LectureAPI.getLecturesForUser(this.current_user._id,"upcoming", "none")
+              .then(res2 => {
+                let lectures = res.data.concat(res2.data)
+                if (!("Notification" in window)) {
+                  alert("This browser does not support desktop notification");
+                } else if (Notification.permission === "granted") {
+                  this.processNotifications(lectures)
+                } else if (Notification.permission !== "denied") {
+                  Notification.requestPermission().then(function (permission) {
+                    if (permission === "granted") {
+                      this.processNotifications(lectures)
+                    }
+                  });
+                }
+              })
+          })
+        LectureAPI.getLecturesForUser(this.current_user._id,"past", "none")
+          .then(res => {
+            this.processInstructorEmails(res.data)
+          })
+      } else {
+        
+      }
+    },
     processNotifications(lectures) {
       for(let i=0;i<lectures.length;i++) {
         let timeuntil = Date.parse(lectures[i].submission_start_time) - Date.now()
@@ -65,7 +80,7 @@ export default {
       }
     },
     processInstructorEmails(lectures) {
-      LectureAPI.processEmailsForLectures(lectures,this.$store.state.user.current_user.email)
+      LectureAPI.processEmailsForLectures(lectures,this.current_user.email)
     }
   }
   //initially displayNav is false because the first page loaded is the homepage
