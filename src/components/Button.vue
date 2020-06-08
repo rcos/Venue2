@@ -1,10 +1,12 @@
 <template>
   <div class="container" style="padding:2rem;">
-    <button @click="$emit('button-clicked')" v-bind:class="{hidden:fade_out, visible:fade_in}" type="button" class="btn button shadow" id="venue-btn">
-      <!-- <div v-if="show_login_text">Login</div> -->
-      <!-- <div v-else>Get Started</div> -->
-      <div>{{ btn_text }}</div>
-    </button>
+    <a :href="cas_url">
+      <button @click="$emit('button-clicked')" v-bind:class="{hidden:fade_out, visible:fade_in}" type="button" class="btn button shadow" id="venue-btn">
+        <!-- <div v-if="show_login_text">Login</div> -->
+        <!-- <div v-else>Get Started</div> -->
+        <div>{{ btn_text }}</div>
+      </button>
+    </a>
   </div>
 </template>
 
@@ -13,6 +15,7 @@
     name: 'Button',
     props: {
       // btn_str: String
+      cas_url: String,
       btn_text: String
     },
     data() {
