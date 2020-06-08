@@ -27,10 +27,6 @@ export default {
 	props: {
 		lecture: Object
 	},
-	computed: {
-	},
-	components: {
-	},
 	data(){
 		return {
 			vjs: null,
@@ -39,8 +35,6 @@ export default {
 			lectureSubmission: null,
 			polls: []
 		}
-	},
-	created() {
 	},
 	mounted() {
 		let self = this
