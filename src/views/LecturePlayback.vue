@@ -62,8 +62,6 @@ export default {
 							} else if(live.length > 0) {
 								this.needs_decision = true
 							}
-							console.log(live)
-							console.log(playback)
 						})
 				}
 			})
