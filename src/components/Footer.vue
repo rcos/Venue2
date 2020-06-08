@@ -1,7 +1,7 @@
 <template>
     <footer class="footer">
     	© 2020 Venue v2.0 | 
-    	<a href="https://github.com/tdurkin18/Venue2" target="_blank">
+    	<a href="https://github.com/rcos/Venue2" target="_blank">
     		<img class="github-mark" src="../assets/github_mark.png" />
     	</a>
     	| An RCOS project

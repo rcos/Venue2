@@ -2,27 +2,35 @@
   <div>
     <nav id="venue-nav">
       <!-- Logo -->
-      <a id="nav-logo" href="/dashboard">
+      <router-link id="nav-logo" :to="{name: 'dashboard'}">
         <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
-      </a>
+      </router-link>
       <!-- Nav Links -->
       <div id="venue-nav-links">
         <!-- Dashboard -->
         <div class="venue-nav-link-container" v-if="this.$route.name === 'dashboard'">
-          <a class="venue-nav-link active-link" href="/dashboard">Dashboard</a>
+          <router-link class="venue-nav-link active-link" :to="{name: 'dashboard'}">
+            Dashboard
+          </router-link>
           <div class="active-link-underline"></div>
         </div>
         <div v-else class="venue-nav-link-container">
-          <a class="venue-nav-link" href="/dashboard">Dashboard</a>
+          <router-link class="venue-nav-link" :to="{name: 'dashboard'}">
+            Dashboard
+          </router-link>
         </div>
         <!-- Courses -->
         <show-at breakpoint="mediumAndBelow">
           <div v-if="this.$route.name === 'user_courses'" class="venue-nav-link-container">
-            <a class="venue-nav-link active-link" href="/user_courses">Courses</a>
+            <router-link class="venue-nav-link active-link" :to="{name: 'user_courses'}">
+              Courses
+            </router-link>
             <div class="active-link-underline"></div>
           </div>
           <div v-else class="venue-nav-link-container">
-            <a class="venue-nav-link" href="/user_courses">Courses</a>
+            <router-link class="venue-nav-link" :to="{name: 'user_courses'}">
+              Courses
+            </router-link>
           </div>
         </show-at>
         <!-- Attendance -->
