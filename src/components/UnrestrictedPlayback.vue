@@ -12,10 +12,6 @@ export default {
 	props: {
 		lecture: Object
 	},
-	data(){
-		return {
-		}
-	},
 	mounted() {
 		let self = this
 		videojs("video_player", {}, function() {
@@ -23,8 +19,6 @@ export default {
 			this.load()
 		})
 	},
-	methods: {
-	}
 }
 </script>
 

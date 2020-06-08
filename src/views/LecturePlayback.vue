@@ -1,9 +1,8 @@
 <template>
 	<div id="lecture_playback">
-		<div v-if="lecture_loaded">
-			<UnrestrictedPlayback v-if="is_instructor || unrestricted" :lecture="lecture"/>
-			<RestrictedPlayback v-else :lecture="lecture"/>
-		</div>		
+		<div v-if="unrestricted">
+			<UnrestrictedPlayback :lecture="lecture"/>
+		</div>
 	</div>
 </template>
 
@@ -32,10 +31,15 @@ export default {
 		LectureAPI.getLecture(this.$route.params.lecture_id)
 			.then(res => {
 				this.lecture = res.data
-				if(new Date() > new Date(this.lecture.playback_submission_end_time)) {
+				if(new Date() > new Date(this.lecture.playback_submission_end_time) || this.is_instructor) {
 					this.unrestricted = true
+					this.lecture_loaded = true
+				} else {
+					LectureSubmissionAPI.getLectureSubmissionsForStudent(this.lecture._id,this.$store.state.user.current_user._id)
+						.then(res => {
+							let submissions = res.data
+						})
 				}
-				this.lecture_loaded = true
 			})
 	},
 	mounted() {
