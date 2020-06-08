@@ -84,7 +84,8 @@
             <div class="tab active">Attendance History</div>
           </div>
           <div class="right"  v-if="this.current_user.is_instructor">
-            <select v-model="selected_section">
+            <label id="section_select_label">Select Section</label>
+            <select v-model="selected_section" aria-labelledby="section_select_label">
               <option v-for="section_ in section_arr" :value="section_[1]">Section {{ section_[0] }}</option>
               <option :value="null" selected>All Sections</option>
             </select>

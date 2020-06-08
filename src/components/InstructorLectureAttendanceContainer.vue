@@ -4,13 +4,13 @@
 		  <h2>Attendance</h2>
 		  <button v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" @click="showQR" class="header-btn">Show QR</button>
 		  <LectureUploadModal v-else-if="lecture.lecture_status === 'is_over' && !lecture.allow_playback_submissions" :lecture="lecture" :update_lecture="true" />
-		  <router-link v-else-if="lecture.allow_playback_submissions" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+		  <router-link v-else-if="lecture.allow_playback_submissions" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}" aria-label="Watch Playback">
 		  	<button >Watch Playback</button>
 		  </router-link>
 	  </div>
 	  <div id="qr_modal" class="hidden">
 	    <canvas id="qr_render_area"></canvas>
-	    <button id="close_qr_btn" @click="hideQR">Hide</button>
+	    <button id="close_qr_btn" @click="hideQR" aria-label="Hide QR">Hide</button>
 	  </div>
 	  <LectureAttendanceTable :is_instructor="true" :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" :all_students="all_students" />
 	</div>
