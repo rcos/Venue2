@@ -203,6 +203,10 @@ body, * {
   cursor: pointer;
 }
 
+.course-info-sub-tab .left .tab:focus{
+  font-weight: bolder;
+}
+
 .course-info-sub-tab .left .tab.active {
   font-weight: bold;
 }
