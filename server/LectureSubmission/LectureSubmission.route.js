@@ -6,44 +6,55 @@ let Lecture = require('../Lecture/Lecture.model');
 let User = require('../User/User.model');
 
 lectureSubmissionRoutes.route('/add').post(function (req, res) {
-  let lectureSubmission = new LectureSubmission(req.body.lectureSubmission);
-  lectureSubmission.save()
+  let lecture_submission = new LectureSubmission(req.body.lecture_submission);
+  lecture_submission.save()
     .then(() => {
-      console.log("<SUCCESS> Adding lecture submission:",lectureSubmission)
-      res.status(200).json(lectureSubmission);
+      console.log("<SUCCESS> Adding lecture submission:",lecture_submission)
+      res.status(200).json(lecture_submission);
     })
     .catch(() => {
-      console.log("<ERROR> Adding lecture submission:",lectureSubmission)
+      console.log("<ERROR> Adding lecture submission:",lecture_submission)
       res.status(400).send("unable to save poll to database");
     });
 });
 
 lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
   let email = req.body.rcs + "@rpi.edu"
-  User.find({email: email},function(err,users){
-    if(err || users == null) {
+  User.findOne({email: email},function(err,user){
+    if(err || user == null) {
       console.log("<ERROR> Getting user(s) with email:",email)
       res.json(err)
-    } else if(users.length == 0) {
-      console.log("<ERROR> User with email ("+email+") not found")
-      res.status(400).send("no user with that email in database");
     } else {
-      let subobj = {
-        lecture: req.body.lecture_id,
-        video_progress: 0,
-        is_live_submission: true,
-        submitter: users[0]._id
-      }
-      let lectureSubmission = new LectureSubmission(subobj);
-      lectureSubmission.save()
-        .then(() => {
-          console.log("<SUCCESS> Adding lecture submission for user with email:",email)
-          res.status(200).json(lectureSubmission);
-        })
-        .catch(() => {
-          console.log("<ERROR> Adding lecture submission for user with email:",email)
-          res.status(400).send("unable to save submission to database");
-        });
+      Lecture.findById(req.body.lecture_id,function(err,lecture) {
+        if(err || lecture == null) {
+          console.log("<ERROR> Getting lecture with ID:",req.body.lecture_id)
+          res.json(err)
+        } else {
+          let lectureSubmissions = []
+          for(let i=0;i<lecture.checkins.length;i++) {
+            let subobj = {
+              lecture: lecture._id,
+              video_progress: 0,
+              is_live_submission: true,
+              submitter: user._id,
+              code: lecture.checkins[i].code
+            }
+            let lectureSubmission = new LectureSubmission(subobj);
+            lectureSubmission.save()
+              .then(() => {
+                console.log("<SUCCESS> Adding lecture submission for user with email:",email)
+                lectureSubmissions.push(lectureSubmissions)
+                if(i == lecture.checkins.length-1) {
+                  res.status(200).json(lectureSubmission);
+                }
+              })
+              .catch(() => {
+                console.log("<ERROR> Adding lecture submission for user with email:",email)
+                res.status(400).send("unable to save submission to database");
+              });
+          }
+        }
+      })
     }
   })
 });
@@ -158,18 +169,22 @@ lectureSubmissionRoutes.get('/for_lecture/:lecture_id', (req, res) => {
 lectureSubmissionRoutes.get('/for_student/:lecture_id/:student_id', (req, res) => {
   let lecture_id = req.params.lecture_id
   let student_id = req.params.student_id
-  LectureSubmission.findOne(
+  LectureSubmission.find(
     {
       lecture: lecture_id,
       submitter: student_id
     },
-    function(err,lect_submission) {
-      if(err || lect_submission == null) {
+    function(err,lect_submissions) {
+      if(err) {
         console.log("<ERROR> Getting lecture submission with lecture ID:",lecture_id,"and student ID:",student_id)
         res.json(err)
       } else {
-        console.log("<SUCCESS> Getting lecture submission with lecture ID:",lecture_id,"and student ID:",student_id)
-        res.json(lect_submission)
+        if(lect_submissions == null) 
+          console.log("<SUCCESS> No lecture submission was found:",lecture_id,"and student ID:",student_id)
+        else
+          console.log("<SUCCESS> Getting lecture submission with lecture ID:",lecture_id,"and student ID:",student_id)
+        console.log("Found submissions",lect_submissions)
+        res.json(lect_submissions)
       }
     }
   )

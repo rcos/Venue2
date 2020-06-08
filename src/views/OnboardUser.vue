@@ -53,7 +53,7 @@
       async onboardUser(evt){
         evt.preventDefault(); // prevents the form's default action from redirecting the page
         this.setEmail()
-        this.setTempPassword()
+        // this.setTempPassword()
         const response = await UserAPI.onboardUser(this.user);
         this.$router.push({name: 'users'});
       },

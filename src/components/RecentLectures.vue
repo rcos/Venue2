@@ -8,18 +8,16 @@
       No recent lectures.
     </div>
     <div v-else :class="'sub-section ' + (mobileMode ? 'is-mobile':'')">
-      <router-link v-for="lecture in recent_lectures" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}" >
-        <LectureCard
-          :courseName="lecture.sections[0].course.name"
-          :courseDept="lecture.sections[0].course.dept"
-          :courseNumber="lecture.sections[0].course.course_number"
-          :eventLabel="lecture.title"
-          status="ended"
-          :timeFromNow="lecture.end_time"
-         />
-      </router-link>
+      <LectureCard v-for="lecture in recent_lectures"
+        :lecture="lecture"
+        :courseName="lecture.sections[0].course.name"
+        :courseDept="lecture.sections[0].course.dept"
+        :courseNumber="lecture.sections[0].course.course_number"
+        :eventLabel="lecture.title"
+        status="ended"
+        :timeFromNow="lecture.end_time"
+       />
     </div>
-
   </div>
 </template>
 <script>

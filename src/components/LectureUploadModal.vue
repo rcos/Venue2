@@ -166,6 +166,10 @@ export default {
         }
       })
     },
+    setLectureSubmissionVariables() {
+      this.lecture.allow_live_submissions = false
+      this.lecture.allow_playback_submissions = true
+    },
     handleShowModal() {
       this.showModal()
       this.$nextTick(() => {
