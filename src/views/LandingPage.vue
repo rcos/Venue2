@@ -8,10 +8,9 @@
       <Logo v-bind:show_large_logo="false" />
       <LoginForm ref="LoginForm" />
       <div id="login-signup-buttons" class="hidden">
-        <a :href="cas_url">Login with CAS</a>
-        <Button ref="LoginBtn" v-bind:btn_text="'Login'" v-on:button-clicked="login" />
-        <p style="font-weight:bold;">or</p>
-        <Button ref="SignupBtn" v-bind:btn_text="'Sign Up'" v-on:button-clicked="signup" />
+        <Button :cas_url="cas_url" ref="LoginBtn" v-bind:btn_text="'Login'"/>
+<!--         <p style="font-weight:bold;">or</p>
+        <Button ref="SignupBtn" v-bind:btn_text="'Sign Up'" v-on:button-clicked="signup" /> -->
       </div>
     </div>
   </div>
