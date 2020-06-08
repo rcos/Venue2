@@ -32,6 +32,7 @@ import WebexTest from './views/WebexTest.vue';
 import NewLecture from './views/NewLecture.vue';
 import LectureInfo from './views/LectureInfo.vue';
 import Settings from './views/Settings.vue';
+import RedirectCASLogin from './views/RedirectCASLogin.vue';
 
 Vue.use(VueRouter);
 
@@ -301,6 +302,14 @@ const router = new VueRouter({
       name: 'set_permanent_password',
       path: '/set_permanent_password/:user_id',
       component: SetPermanentPassword,
+      meta: {
+        requiresNoLogin: true
+      }
+    },
+    {
+      name: 'redirect_cas_login',
+      path: '/redirectCASLogin',
+      component: RedirectCASLogin,
       meta: {
         requiresNoLogin: true
       }
