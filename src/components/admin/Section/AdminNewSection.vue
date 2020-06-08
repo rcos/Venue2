@@ -67,7 +67,7 @@
         this.section.instructor = this.instructor
         this.section.course = this.course
         const response = await SectionAPI.addSection(this.section)
-        this.$router.push({name: 'sections'})
+        this.$router.push({name: 'admin_sections'})
       },
       selectCourse(course){
         this.course = course
