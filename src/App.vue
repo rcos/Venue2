@@ -15,6 +15,11 @@ import LectureAPI from './services/LectureAPI';
 import '@/assets/css/venue.css';
 
 export default {
+  watch: {
+    '$route' (to, from) {
+      document.title = to.meta.title || 'Venue'
+    }
+  },
   components: {
     NavBar,
     Footer
