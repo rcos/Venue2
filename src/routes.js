@@ -50,7 +50,10 @@ const router = new VueRouter({
       name: 'settings',
       path: '/settings',
       component: Settings,
-      meta: { requiresAuth: true }
+      meta: {
+        title: "Venue - Settings",
+        requiresAuth: true
+      }
     },
     {
       name: 'new_user',
@@ -228,6 +231,7 @@ const router = new VueRouter({
       path: '/dashboard',
       component: Dashboard,
       meta: {
+        title: "Venue - Dashboard",
         requiresAuth: true
       }
     },
@@ -236,6 +240,7 @@ const router = new VueRouter({
       path: '/user_courses',
       component: CourseList,
       meta: {
+        title: "Venue - Courses",
         requiresAuth: true
       }
     },
@@ -244,6 +249,7 @@ const router = new VueRouter({
       path: '/course_info/:id',
       component: CourseInfo,
       meta: {
+        title: "Venue - Course Info",
         requiresAuth: true
       }
     },
@@ -279,6 +285,7 @@ const router = new VueRouter({
       path: '/lecture_playback/:lecture_id',
       component: LecturePlayback,
       meta: {
+        title: "Venue - Lecture Playback",
         requiresAuth: true,
       }
     },
@@ -287,6 +294,7 @@ const router = new VueRouter({
       path: '/new_lecture/:course_id',
       component: NewLecture,
       meta: {
+        title: "Venue - New Lecture",
         requiresAuth: true,
         requiresInstructor: true
       }
@@ -296,6 +304,7 @@ const router = new VueRouter({
       path: '/lecture_info/:lecture_id',
       component: LectureInfo,
       meta: {
+        title: "Venue - Lecture Info",
         requiresAuth: true,
       }
     },
@@ -312,6 +321,7 @@ const router = new VueRouter({
       path: '/redirectCASLogin',
       component: RedirectCASLogin,
       meta: {
+        title: "Venue - Redirecting",
         requiresNoLogin: true
       }
     }
