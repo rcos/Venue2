@@ -8,8 +8,8 @@
       No playback lectures.
     </div>
     <div v-else :class="'sub-section ' + (mobileMode ? 'is-mobile':'')">
-      <router-link v-for="lecture in playback_lectures" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}" >
-      <LectureCard
+      <LectureCard v-for="lecture in playback_lectures"
+        :lecture="lecture"
         :courseName="lecture.sections[0].course.name"
         :courseDept="lecture.sections[0].course.dept"
         :courseNumber="lecture.sections[0].course.course_number"
@@ -17,7 +17,6 @@
         status="static"
         :timeFromNow="lecture.playback_submission_end_time"
        />
-      </router-link>
     </div>
   </div>
 </template>

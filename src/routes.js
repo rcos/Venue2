@@ -34,6 +34,7 @@ import LectureInfo from './views/LectureInfo.vue';
 import Settings from './views/Settings.vue';
 import RedirectCASLogin from './views/RedirectCASLogin.vue';
 
+
 Vue.use(VueRouter);
 
 const router = new VueRouter({

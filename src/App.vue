@@ -65,10 +65,14 @@ export default {
     },
     processNotifications(lectures) {
       for(let i=0;i<lectures.length;i++) {
-        let timeuntil = Date.parse(lectures[i].submission_start_time) - Date.now()
-        let self = this
-        if(timeuntil > -2000) { //Within a second of lecturetime
-          setTimeout(function() {self.attendanceNotification(lectures[i]._id)},timeuntil)
+        for(let j=0;j<lectures[i].checkins.length;j++) {
+          let timeuntil = Date.parse(lectures[i].checkins[j].start_time) - Date.now()
+          if(timeuntil > -1000) { //If the page loads within one second of checkin-time
+            let self = this
+            setTimeout(function() {
+              self.attendanceNotification(lectures[i]._id)
+            },timeuntil)
+          }
         }
       }
     },
