@@ -1,5 +1,6 @@
 <template>
-  <router-link :to="is_instructor ? {name: 'course_info', params: { id: course._id }} : {name: 'course_info', params: { id: section._id }}">
+  <router-link :to="is_instructor ? {name: 'course_info', params: { id: course._id }} : {name: 'course_info', params: { id: section._id }}"
+  :aria-label="'Course Info - '+course.name+' - '+course.dept+' '+course.course_number">
     <div v-if="mobile" class="course-card-mobile">
     	<div class="color-box"  :style="{backgroundColor: box_color}"></div>
       <div v-if="is_instructor" class="course-info">
@@ -169,7 +170,7 @@
 .course-title {
   display: inline-block;
   font-size: 0.7rem;
-  color: #1591C5;
+  color: rgb(14, 96, 131);
 }
 
 .course-name {

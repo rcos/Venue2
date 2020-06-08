@@ -2,8 +2,8 @@
   <div>
     <nav id="venue-nav">
       <!-- Logo -->
-      <router-link id="nav-logo" :to="{name: 'dashboard'}">
-        <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+      <router-link id="nav-logo" :to="{name: 'dashboard'}" role="link" aria-label="Dashboard">
+        <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="Venue Logo" aria-label="Venue Logo">
       </router-link>
       <!-- Nav Links -->
       <div id="venue-nav-links">
@@ -46,17 +46,17 @@
       </div>
       <!-- Name -->
       <hide-at breakpoint="mediumAndBelow">
-        <router-link :to="{name: 'settings'}">
+        <router-link :to="{name: 'settings'}" role="link" aria-label="User Settings">
           <div class="user-name float-right">
-            <p class="d-inline-block mr-2">{{ current_user.first_name }} {{ current_user.last_name }}</p>
-            <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="">
+            <p class="d-inline-block mr-2" aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }}</p>
+            <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
           </div>
         </router-link>
       </hide-at>
       <show-at breakpoint="mediumAndBelow">
-        <router-link :to="{name: 'settings'}">
+        <router-link :to="{name: 'settings'}" role="link" aria-label="User Settings">
           <div class="user-name float-right">
-            <p class="d-inline-block mr-2">{{ current_user.first_name }}</p>
+            <p class="d-inline-block mr-2" aria-label="User Name">{{ current_user.first_name }}</p>
           </div>
         </router-link>
       </show-at>
@@ -133,7 +133,7 @@
 
   .venue-nav-link{
     text-decoration: none;
-    color: #858585;
+    color: #575757;
     font-weight: bold;
   }
 

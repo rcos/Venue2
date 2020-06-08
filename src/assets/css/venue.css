@@ -421,7 +421,7 @@ a:active {
 .load-course-size {
   font-size: 1.2rem;
   margin-left: 0.9rem;
-  color: rgba(87, 140, 171, 0.8);
+  color: rgb(52, 89, 110);
 }
 
 #no-active {

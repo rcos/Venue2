@@ -1,8 +1,8 @@
 <template>
     <footer class="footer">
     	© 2020 Venue v2.0 | 
-    	<a href="https://github.com/rcos/Venue2" target="_blank">
-    		<img class="github-mark" src="../assets/github_mark.png" />
+    	<a href="https://github.com/rcos/Venue2" target="_blank" aria-label="Github Repository">
+    		<img class="github-mark" src="../assets/github_mark.png" aria-label="Github Icon"/>
     	</a>
     	| An RCOS project
     </footer>
