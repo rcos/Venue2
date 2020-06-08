@@ -2,7 +2,8 @@
   <div>
     <div v-if="!show_login_form">
       <Logo v-bind:show_large_logo="true" />
-      <Button ref="GetStartedBtn" v-bind:btn_text="'Get Started'" v-on:button-clicked="showLoginForm" />
+      <Button :cas_url="cas_url" ref="LoginBtn" v-bind:btn_text="'Login'"/>
+      <!-- <Button ref="GetStartedBtn" v-bind:btn_text="'Get Started'" v-on:button-clicked="showLoginForm" /> -->
     </div>
     <div v-else>
       <Logo v-bind:show_large_logo="false" />
