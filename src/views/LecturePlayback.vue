@@ -3,6 +3,13 @@
 		<div v-if="unrestricted">
 			<UnrestrictedPlayback :lecture="lecture"/>
 		</div>
+		<div v-else-if="!unrestricted && !needs_decision">
+			<RestrictedPlayback :lecture="lecture"/>
+		</div>
+		<div v-else-if="needs_decision">
+			<button class="btn btn-primary" @click="handleOptIntoRestricted">Watch lecture with restrictions, and improve my attendance grade</button>
+			<button class="btn btn-secondary" @click="handleOptIntoUnrestricted">Watch lecture without restrictions, and ignore my attendance grade</button>
+		</div>
 	</div>
 </template>
 
@@ -23,7 +30,8 @@ export default {
 			is_instructor: false,
 			lecture: {},
 			lecture_loaded: false,
-			unrestricted: false
+			unrestricted: false,
+			needs_decision: true
 		}
 	},
 	created() {
@@ -38,13 +46,37 @@ export default {
 					LectureSubmissionAPI.getLectureSubmissionsForStudent(this.lecture._id,this.$store.state.user.current_user._id)
 						.then(res => {
 							let submissions = res.data
+							let live = []
+							let playback
+							submissions.forEach(sub => {
+								if(sub.is_live_submission) {
+									live.push(sub)
+								} else {
+									playback = sub
+								}
+							})
+							if(undefined != playback && playback.video_percent < 1) {
+								this.unrestricted = true
+							} else if(live.length == this.lecture.checkins.length) {
+								this.unrestricted = true
+							} else if(live.length > 0) {
+								this.needs_decision = true
+							}
+							console.log(live)
+							console.log(playback)
 						})
 				}
 			})
 	},
-	mounted() {
-	},
 	methods: {
+		handleOptIntoUnrestricted() {
+			this.needs_decision = false
+			this.unrestricted = true
+		},
+		handleOptIntoRestricted() {
+			this.needs_decision = false
+			this.unrestricted = false
+		}
 	}
 }
 </script>

@@ -84,6 +84,8 @@ export default {
 									self.prevTime = vid.currentTime()
 								})
 								vid.on('ended', function() {
+									self.lectureSubmission.video_progress = vid.duration()
+									self.lectureSubmission.video_percent = 1
 									LectureSubmissionAPI.update(self.lectureSubmission)
 								});
 							})
