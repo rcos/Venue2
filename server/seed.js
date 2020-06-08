@@ -30,6 +30,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 		let c = []
 		let s = []
 		let l = []
+		let ls = []
 		let p = []
 
 		u.push(new User({
@@ -168,6 +169,15 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			sections: [s[1]._id],
 			allow_live_submissions: false,
 			allow_playback_submissions: true,
+			checkins: [{
+				start_time: Date.now() - (4*60*1000),
+				end_time: Date.now() - (3*60*1000),
+				code: "abcdefghijklmnopqrstuvwxyz",
+			},{
+				start_time: Date.now() - (2*60*1000),
+				end_time: Date.now() - (60*1000),
+				code: "zyxwvutsrqponmlkjihgfedcba",
+			}],
 			playback_submission_start_time: Date.now(),
 			playback_submission_end_time: Date.now() + (3*60*1000),
 			video_ref: "/videos/sample/sample.mp4",
@@ -200,6 +210,12 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			num_playback_polls: 2
 		}))
 
+		ls.push(new LectureSubmission({
+			lecture: l[1]._id,
+			submitter: u[2]._id,
+			is_live_submission: true,
+			code: "abcdefghijklmnopqrstuvwxyz"
+		}))
 
 		p.push(new PlaybackPoll({
 			lecture: l[1]._id,
@@ -300,6 +316,9 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 				}, {
 					"model": "Lecture",
 					"documents": l
+				}, {
+					"model": "LectureSubmission",
+					"documents": ls
 				}, {
 					"model": "PlaybackPoll",
 					"documents": p
