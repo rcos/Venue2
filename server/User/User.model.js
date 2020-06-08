@@ -12,10 +12,6 @@ let User = new Schema({
 	email: String,
 	temp_password: String,
 	password: String,
-	connect_sid: {
-		type: String,
-		default: ""
-	},
 	is_admin: {
 		type: Boolean,
 		default: false

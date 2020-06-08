@@ -6,53 +6,6 @@ const saltRounds = 10;
 
 let User = require('../User/User.model');
 
-//Passport setup START
-const passport = require('passport')
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-passport.deserializeUser(function(user, done) {
-  done(null, user);
-});
-if(process.env.NODE_ENV === "production") {
-  passport.use(new (require('passport-cas').Strategy)({
-    version: 'CAS3.0',
-    ssoBaseURL: 'https://cas-auth.rpi.edu/cas',
-    serverBaseURL: 'https://venue-attend.herokuapp.com'
-  }, function(profile, done) {
-    var login = profile.user.toLowerCase();
-    User.findOne({user_id: login}, function (err, user) {
-      if (err) {
-        return done(err);
-      }
-      if (!user) {
-        return done(null, false, {message: 'Unknown user'});
-      }
-      user.attributes = profile.attributes;
-      return done(null, user);
-    });
-  }));
-} else {
-  passport.use(new (require('passport-cas').Strategy)({
-    version: 'CAS3.0',
-    ssoBaseURL: 'https://cas-auth.rpi.edu/cas',
-    serverBaseURL: 'http://localhost:4000'
-  }, function(profile, done) {
-    var login = profile.user.toLowerCase();
-    User.findOne({user_id: login}, function (err, user) {
-      if (err) {
-        return done(err);
-      }
-      if (!user) {
-        return done(null, false, {message: 'Unknown user'});
-      }
-      user.attributes = profile.attributes;
-      return done(null, user);
-    });
-  }));
-}
-//Passport setup END
-
 authRoutes.route('/signup').post(function (req, res) {
   let user = new User(req.body.user)
   user.save()
@@ -120,7 +73,7 @@ authRoutes.route('/set_permanent_pasword').post(function (req, res) {
         User.findByIdAndUpdate(user._id, {
           password: hash,
           temp_password: null
-        },
+        }, 
         (error, updated_user) => {
           if(error || updated_user == null) {
             console.log("<ERROR> Setting password for user:",user)
@@ -137,58 +90,6 @@ authRoutes.route('/set_permanent_pasword').post(function (req, res) {
   }else{
     res.status(400).json({ error: 'Invalid user. Please try again.' })
   }
-});
-
-authRoutes.get("/loginCAS", (req, res, next) => {
-  passport.authenticate('cas', function (err, user, info) {
-    if (err) {
-      return next(err);
-    } else if (!user) {
-      req.session.messages = info.message;
-      if(process.env.NODE_ENV === "production") {
-        return res.redirect('https://venue-attend.herokuapp.com');
-      } else {
-        return res.redirect('http://localhost:8080');
-      }
-    } else {
-      req.logIn(user, function (err) {
-        if (err) {
-          return next(err);
-        } else {
-          req.session.messages = '';
-          let rpiSID = req.cookies['connect.sid']
-          User.findOneAndUpdate({user_id: user.user_id},{connect_sid: rpiSID},function(err,user) {
-            if(err || user == null) {
-              return next(err);
-            } else {
-              res.header("Set-Cookie","connect_sid="+rpiSID)
-              if(process.env.NODE_ENV === "production") {
-                return res.redirect('https://venue-attend.herokuapp.com/#/redirectCASLogin');
-              } else {
-                return res.redirect('http://localhost:8080/#/redirectCASLogin');
-              }
-            }
-          })
-        }
-      });
-    }
-  })(req, res, next);
-});
-
-authRoutes.get("/loginStatus", function(req, res) {
-  User.findOne({connect_sid: req.cookies["connect_sid"]}, function (err, current_user) {
-    if(err || current_user == null) {
-      res.json(null)
-    } else {
-      const token = jwt.sign({current_user}, process.env.AUTH_KEY)
-      res.json({token, current_user})
-    }
-  });
-});
-
-authRoutes.get("/logoutCAS", function(req, res) {
-  res.header("Set-Cookie","connect_sid="+";expires=Thu, 01 Jan 1970 00:00:00 GMT")
-  res.send()
 });
 
 module.exports = authRoutes;

@@ -45,7 +45,6 @@
   import { authComputed } from '../vuex/helpers.js'
   import {showAt, hideAt} from 'vue-breakpoints'
   import ChangePassword from '@/components/ChangePassword.vue'
-  import AuthAPI from '../services/AuthAPI';
 
   export default {
     name: 'Dashboard',
@@ -76,9 +75,7 @@
       },
       logoutUser() {
         console.log('logging out')
-        AuthAPI.logoutCAS().then(res => {
-          this.$store.dispatch('logout')
-        })
+        this.$store.dispatch('logout')
       }
     }
   }
