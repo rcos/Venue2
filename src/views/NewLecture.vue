@@ -258,11 +258,13 @@ export default {
             }
           }
         }while(!accept && attempts < 10)
-        this.random_checkins.push({
-          start_time: start,
-          end_time: start + l,
-          code: ''
-        })
+        if(attempts < 10) {
+          this.random_checkins.push({
+            start_time: start,
+            end_time: start + l,
+            code: ''
+          })
+        }
       }
       this.random_checkins.sort((a, b) => (a.start_time > b.start_time) ? 1 : -1)
     },

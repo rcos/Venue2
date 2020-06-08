@@ -19,7 +19,7 @@
                 </div>
             </div>
 
-            <div class="setting-option-section">
+<!--             <div class="setting-option-section">
                 <div class="left">
                     <div>Current Password: <span class="value-area">*********</span></div>
                     <div class="small-div">The password is the key to your Venue account.</div>
@@ -27,7 +27,7 @@
                 <div class="right">
                     <div class="change-button" v-on:click="mode = 'change_password'">Change</div>
                 </div>
-            </div>
+            </div> -->
 
           </div>
 
@@ -45,6 +45,7 @@
   import { authComputed } from '../vuex/helpers.js'
   import {showAt, hideAt} from 'vue-breakpoints'
   import ChangePassword from '@/components/ChangePassword.vue'
+  import AuthAPI from '../services/AuthAPI';
 
   export default {
     name: 'Dashboard',
@@ -75,7 +76,9 @@
       },
       logoutUser() {
         console.log('logging out')
-        this.$store.dispatch('logout')
+        AuthAPI.logoutCAS().then(res => {
+          this.$store.dispatch('logout')
+        })
       }
     }
   }
