@@ -118,7 +118,7 @@
         this.section.course = this.course
         this.section.students = this.students
         const response = await SectionAPI.updateSection(section_id, this.section)
-        this.$router.push({name: 'sections'})
+        this.$router.push({name: 'admin_sections'})
       }
     }
   }
