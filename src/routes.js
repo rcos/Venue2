@@ -38,7 +38,7 @@ import RedirectCASLogin from './views/RedirectCASLogin.vue';
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-  mode: 'history',
+  // mode: 'history',
   routes: [
     {
       name: 'landing_page',
