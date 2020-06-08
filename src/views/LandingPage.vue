@@ -9,8 +9,8 @@
       <LoginForm ref="LoginForm" />
       <div id="login-signup-buttons" class="hidden">
         <Button ref="LoginBtn" v-bind:btn_text="'Login'" v-on:button-clicked="login" />
-        <p style="font-weight:bold;">or</p>
-        <Button ref="SignupBtn" v-bind:btn_text="'Sign Up'" v-on:button-clicked="signup" />
+<!--         <p style="font-weight:bold;">or</p>
+        <Button ref="SignupBtn" v-bind:btn_text="'Sign Up'" v-on:button-clicked="signup" /> -->
       </div>
     </div>
   </div>
