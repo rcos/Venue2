@@ -14,11 +14,13 @@ export default new Vuex.Store({
     // local storage, and add their token to the axios header
     // for any asynchronous requests that will be made
     SET_USER_DATA(state, userData){
-      state.user = userData
-      localStorage.setItem('user', JSON.stringify(userData))
-      axios.defaults.headers.common['Authorization'] = `Bearer ${
-        userData.token
-      }`
+      if(userData != null) {
+        state.user = userData
+        localStorage.setItem('user', JSON.stringify(userData))
+        axios.defaults.headers.common['Authorization'] = `Bearer ${
+          userData.token
+        }`
+      }
     },
     CLEAR_USER_DATA() {
       localStorage.removeItem('user')
@@ -29,6 +31,13 @@ export default new Vuex.Store({
     login({ commit }, user) {
       return AuthAPI.login(user)
         .then(({data}) => {
+          commit('SET_USER_DATA', data)
+        })
+    },
+    loginCAS({ commit }) {
+      return AuthAPI.loginStatus()
+        .then(({data}) => {
+          console.log(data)
           commit('SET_USER_DATA', data)
         })
     },

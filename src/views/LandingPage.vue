@@ -8,6 +8,7 @@
       <Logo v-bind:show_large_logo="false" />
       <LoginForm ref="LoginForm" />
       <div id="login-signup-buttons" class="hidden">
+        <a :href="cas_url">Login with CAS</a>
         <Button ref="LoginBtn" v-bind:btn_text="'Login'" v-on:button-clicked="login" />
         <p style="font-weight:bold;">or</p>
         <Button ref="SignupBtn" v-bind:btn_text="'Sign Up'" v-on:button-clicked="signup" />
@@ -20,6 +21,8 @@
   import Logo from '@/components/Logo.vue'
   import Button from '@/components/Button.vue'
   import LoginForm from '@/Forms/LoginForm.vue'
+  import AuthAPI from '@/services/AuthAPI.js'
+  import axios from 'axios';
 
   export default {
     components: {
@@ -29,10 +32,16 @@
     },
     data() {
       return {
-        show_login_form: false
+        show_login_form: false,
+        cas_url: ""
       }
     },
     created() {
+      if(process.env.NODE_ENV === "production") {
+        this.cas_url = "https://cas-auth.rpi.edu/cas/login?service=https%3A%2F%2Fvenue-attend.herokuapp.com%2Fauth%2FloginCAS"
+      } else {
+        this.cas_url = "https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Flocalhost%3A4000%2Fauth%2FloginCAS"
+      }
     },
     methods: {
       showLoginForm() {
