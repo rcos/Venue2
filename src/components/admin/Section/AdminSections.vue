@@ -73,7 +73,7 @@
         this.sections.splice(this.sections.findIndex(i => i._id == id), 1);
       }, 
       setIsSectionView() {
-        this.is_section_view = this.$router.currentRoute.name === "sections"
+        this.is_section_view = this.$router.currentRoute.name === "admin_sections"
       }     
     }
   }
