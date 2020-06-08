@@ -163,9 +163,9 @@ authRoutes.get("/loginCAS", (req, res, next) => {
             } else {
               res.header("Set-Cookie","connect_sid="+rpiSID)
               if(process.env.NODE_ENV === "production") {
-                return res.redirect('https://venue-attend.herokuapp.com/redirectCASLogin');
+                return res.redirect('https://venue-attend.herokuapp.com/#/redirectCASLogin');
               } else {
-                return res.redirect('http://localhost:8080/redirectCASLogin');
+                return res.redirect('http://localhost:8080/#/redirectCASLogin');
               }
             }
           })
