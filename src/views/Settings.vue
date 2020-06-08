@@ -19,7 +19,7 @@
                 </div>
             </div>
 
-            <div class="setting-option-section">
+<!--             <div class="setting-option-section">
                 <div class="left">
                     <div>Current Password: <span class="value-area">*********</span></div>
                     <div class="small-div">The password is the key to your Venue account.</div>
@@ -27,7 +27,7 @@
                 <div class="right">
                     <div class="change-button" v-on:click="mode = 'change_password'">Change</div>
                 </div>
-            </div>
+            </div> -->
 
           </div>
 
