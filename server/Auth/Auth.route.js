@@ -14,23 +14,43 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
   done(null, user);
 });
-passport.use(new (require('passport-cas').Strategy)({
-  version: 'CAS3.0',
-  ssoBaseURL: 'https://cas-auth.rpi.edu/cas',
-  serverBaseURL: 'http://localhost:4000'
-}, function(profile, done) {
-  var login = profile.user.toLowerCase();
-  User.findOne({user_id: login}, function (err, user) {
-    if (err) {
-      return done(err);
-    }
-    if (!user) {
-      return done(null, false, {message: 'Unknown user'});
-    }
-    user.attributes = profile.attributes;
-    return done(null, user);
-  });
-}));
+if(process.env.NODE_ENV === "production") {
+  passport.use(new (require('passport-cas').Strategy)({
+    version: 'CAS3.0',
+    ssoBaseURL: 'https://cas-auth.rpi.edu/cas',
+    serverBaseURL: 'https://venue-attend.herokuapp.com'
+  }, function(profile, done) {
+    var login = profile.user.toLowerCase();
+    User.findOne({user_id: login}, function (err, user) {
+      if (err) {
+        return done(err);
+      }
+      if (!user) {
+        return done(null, false, {message: 'Unknown user'});
+      }
+      user.attributes = profile.attributes;
+      return done(null, user);
+    });
+  }));
+} else {
+  passport.use(new (require('passport-cas').Strategy)({
+    version: 'CAS3.0',
+    ssoBaseURL: 'https://cas-auth.rpi.edu/cas',
+    serverBaseURL: 'http://localhost:4000'
+  }, function(profile, done) {
+    var login = profile.user.toLowerCase();
+    User.findOne({user_id: login}, function (err, user) {
+      if (err) {
+        return done(err);
+      }
+      if (!user) {
+        return done(null, false, {message: 'Unknown user'});
+      }
+      user.attributes = profile.attributes;
+      return done(null, user);
+    });
+  }));
+}
 //Passport setup END
 
 authRoutes.route('/signup').post(function (req, res) {
@@ -125,7 +145,11 @@ authRoutes.get("/loginCAS", (req, res, next) => {
       return next(err);
     } else if (!user) {
       req.session.messages = info.message;
-      return res.redirect('http://localhost:8080');
+      if(process.env.NODE_ENV === "production") {
+        return res.redirect('https://venue-attend.herokuapp.com');
+      } else {
+        return res.redirect('http://localhost:8080');
+      }
     } else {
       req.logIn(user, function (err) {
         if (err) {
@@ -138,7 +162,11 @@ authRoutes.get("/loginCAS", (req, res, next) => {
               return next(err);
             } else {
               res.header("Set-Cookie","connect_sid="+rpiSID)
-              return res.redirect('http://localhost:8080');
+              if(process.env.NODE_ENV === "production") {
+                return res.redirect('https://venue-attend.herokuapp.com/redirectCASLogin');
+              } else {
+                return res.redirect('http://localhost:8080/redirectCASLogin');
+              }
             }
           })
         }
