@@ -7,7 +7,7 @@
     </div>
     <div id="table-header">
       <h2>Attendance</h2>
-      <button v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" @click="showQRScanningWindow" class="header-btn">Scan QR</button>
+      <button v-if="student_can_submit_live" @click="showQRScanningWindow" class="header-btn">Scan QR</button>
       <router-link v-else-if="lecture.lecture_status === 'is_active_playback' || lecture.lecture_status === 'is_over_playback'" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
         <button>Watch Playback</button>
       </router-link>
@@ -37,11 +37,14 @@
     },
     data(){
       return {
-        qr_scanning_window_open: false
+        qr_scanning_window_open: false,
+        student_can_submit_live: false
       }
     },
     created() {
       console.log("In student lecture attendance table. Lecture:",this.lecture)
+      this.checkIfStudentCanSubmitLive()
+      console.log("Student submitted to checkin",this.studentSubmittedToCheckin())
     },
     methods: {
       showQRScanningWindow() {
@@ -72,6 +75,23 @@
         alert("Live Submission Recorded")
         console.log("Created Lecture Submission")
       },
+      checkIfStudentCanSubmitLive() {
+        this.student_can_submit_live = this.lecture.lecture_status === 'is_live' && this.lecture.checkin_window_status === 'open' && !this.studentSubmittedToCheckin()
+      },
+      studentSubmittedToCheckin() {
+        let student_submitted_to_checkin = false
+        let current_checkin_code = this.lecture.checkins[this.lecture.checkin_index]
+        for(let i = 0; i < this.live_submissions.length; i++) {
+          console.log("Current live submission",this.live_submissions[i])
+          if(this.live_submissions[i].code === current_checkin_code){
+            student_submitted_to_checkin = true
+            break
+          }else{
+            console.log("No. this code",this.live_submissions[i].code,"not equal to this code",current_checkin_code)
+          }
+        }
+        return student_submitted_to_checkin
+      }
     }
   }
 </script>
