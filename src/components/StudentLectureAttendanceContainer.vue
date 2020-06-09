@@ -8,7 +8,7 @@
     <div id="table-header">
       <h2>Attendance</h2>
       <button v-if="student_can_submit_live" @click="showQRScanningWindow" class="header-btn">Scan QR</button>
-      <router-link v-else-if="lecture.lecture_status === 'is_active_playback' || lecture.lecture_status === 'is_over_playback'" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+      <router-link v-else-if="student_can_watch_playback" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
         <button>Watch Playback</button>
       </router-link>
     </div>
@@ -38,12 +38,14 @@
     data(){
       return {
         qr_scanning_window_open: false,
-        student_can_submit_live: false
+        student_can_submit_live: false,
+        student_can_watch_playback: false
       }
     },
     created() {
       console.log("In student lecture attendance table. Lecture:",this.lecture)
       this.checkIfStudentCanSubmitLive()
+      this.checkIfStudentCanWatchPlayback()
       console.log("Student submitted to checkin",this.studentSubmittedToCheckin())
     },
     methods: {
@@ -91,6 +93,9 @@
           }
         }
         return student_submitted_to_checkin
+      },
+      checkIfStudentCanWatchPlayback() {
+        this.student_can_watch_playback = this.lecture.lecture_status === 'is_active_playback' || this.lecture.lecture_status === 'is_over_playback'
       }
     }
   }
