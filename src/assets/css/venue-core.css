@@ -391,19 +391,19 @@ body, * {
 
 
 .instructor-attendance-history-pill.bad {
-  border: 2px solid #FF6358;
+  border: 2px solid rgb(209, 62, 52);
   box-shadow: 0px 3px 10px rgba(255, 99, 88, 0.36);
 }
 .instructor-attendance-history-pill.bad .date-area {
-  background-color: #FF6358;
+  background-color: rgb(209, 62, 52);
 }
 .instructor-attendance-history-pill.bad .percentage-area {
-  background-color: #FF6358;
+  background-color: rgb(209, 62, 52);
 }
 
 .instructor-attendance-history-pill.bad .percentage-area::before {
-  border-right: 15px solid #FF6358;
-  border-bottom: 31px solid #FF6358;
+  border-right: 15px solid rgb(209, 62, 52);
+  border-bottom: 31px solid rgb(209, 62, 52);
 }
 
 .instructor-attendance .month-area,
@@ -694,7 +694,7 @@ a:hover {
 }
 
 .mobile-event-pill-area .mobile-pill.bad {
-  border: 3px solid #FF6358;
+  border: 3px solid rgb(209, 62, 52);
   box-shadow: 0px 3px 10px rgba(255, 99, 88, 0.36);
 
 }
@@ -756,4 +756,13 @@ a:hover {
 
 .course-info-upcoming-lecture-pill .lecture-date {
   float: right;
+}
+
+.btn-primary {
+  background: rgb(64, 92, 201);
+  border: 1px solid rgb(51, 75, 168);
+}
+
+.btn-primary:hover {
+  background: rgb(51, 75, 168);
 }

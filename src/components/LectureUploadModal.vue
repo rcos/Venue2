@@ -3,32 +3,36 @@
     <button type="button" class="btn btn-primary" @click="handleShowModal">Upload Lecture Video...</button>
     <div id="lecture_modal_viewable" class="hiddenModal">
       <div class="row titlerow">
-        <h1 id="banner_title">New Lecture Video <button type="button" v-if="update_lecture" id="cancel_upload_btn" class="btn btn-secondary" @click="hideModal">Cancel</button>
-          <button type="button" v-else id="cancel_upload_btn" class="btn btn-secondary" @click="hideModal()">Cancel</button>
+        <h1 id="banner_title" aria-label="New Lecture Video">New Lecture Video <button type="button" v-if="update_lecture" id="cancel_upload_btn" class="btn btn-secondary" @click="hideModal" aria-label="Cancel Video Upload">Cancel</button>
+          <button type="button" v-else id="cancel_upload_btn" class="btn btn-secondary" @click="hideModal()" aria-label="Cancel Video Upload">Cancel</button>
         </h1>
       </div>
       <div class="row filerow">
-        <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn"/>
+        <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn" role="button" tabindex="0" aria-label="Video Selector"/>
       </div>
       <div class="row" id="lecture_container" v-if="file_selected">
         <div class="col">
           <h2>Add Poll</h2>
           <div class="poll_card">
             <div class="row questionrow">
-              <textarea id="question" class="col" type="text" placeholder="Question"/>
+              <label id="question_label">Question</label>
+              <textarea id="question" class="col" type="text" placeholder="Which of the following...?" aria-labelledby="question_label"/>
             </div>
             <div class="row">
               <div class="col-4">
                 <!-- <label for="hour">Hour:</label> -->
-                  <input type="number" id="hour" min="0" max="5" placeholder="Hours">
+                  <label id="hour_label">Hour</label>
+                  <input type="number" id="hour" min="0" max="5" aria-labelledby="hour_label"/>
               </div>
               <div class="col-4">
                 <!-- <label for="min">Minute:</label> -->
-                  <input type="number" id="min" min="0" max="59" placeholder="Minutes">
+                  <label id="minute_label">Min</label>
+                  <input type="number" id="min" min="0" max="59" aria-labelledby="minute_label"/>
               </div>
               <div class="col-4">
                 <!-- <label for="sec">Second:</label> -->
-                  <input type="number" id="sec" min="0" max="59" placeholder="Seconds">
+                  <label id="seconds_label">Sec</label>
+                  <input type="number" id="sec" min="0" max="59" aria-labelledby="seconds_label"/>
               </div>
             </div>
             <h4 class="row">Possible Answers</h4>
@@ -36,7 +40,7 @@
               <p class="answernumber">{{i + 1}}</p>
               <input class="answerfield" type="text" v-model.lazy="current_answers[i]"/>
               <input class="iscorrectfield" type="checkbox" v-model.lazy="current_is_correct[i]"/>
-              <button type="button" class="btn btn-danger removeanswer" @click="current_answers.splice(i,1);current_is_correct.splice(i,1)">X</button>
+              <button type="button" class="btn btn-danger removeanswer" @click="current_answers.splice(i,1);current_is_correct.splice(i,1)" :aria-label="'Remove Answer '+(i+1)">X</button>
             </div>
             <div class="row addanswerrow">
               <button type="button" id="add_answer_btn" class="btn btn-secondary" @click="current_answers.push('');current_is_correct.push(false)">Add Option</button>
@@ -48,10 +52,11 @@
         </div>
         <div class="col">
           <h2>Current Polls</h2>
+          <h6 id="pq_label">Question</h6>
           <div v-for="(poll,i) in polls" :key="i" class="row pollrow">
             <p class="polltimestamp">{{secondsToHHMMSS(poll.timestamp)}}</p>
-            <input class="pollquestion" :value="poll.question" readonly/>
-            <button type="button" class="removepollbtn btn btn-danger" @click="polls.splice(i,1)">X</button>
+            <input class="pollquestion" :value="poll.question" readonly aria-labelledby="pq_label"/>
+            <button type="button" class="removepollbtn btn btn-danger" @click="polls.splice(i,1)" :aria-label="'Remove Poll '+(i+1)">X</button>
           </div>
         </div>
         <div class="col-5">
@@ -59,8 +64,10 @@
         </div>
       </div>
       <div class="row" id="bottomrow">
-        <input id="playback_start" placeholder="Playback Submission Start" v-model.lazy="lecture.playback_submission_start_time"/>
-        <input id="playback_end" placeholder="Playback Submission End" v-model.lazy="lecture.playback_submission_end_time"/>
+        <label id="playback_start_label">Playback Submission Start</label>
+        <input id="playback_start" v-model.lazy="lecture.playback_submission_start_time" aria-labelledby="playback_start_label"/>
+        <label id="playback_end_label">Playback Submission End</label>
+        <input id="playback_end" v-model.lazy="lecture.playback_submission_end_time" aria-labelledby="playback_end_label"/>
         <button type="button" v-if="update_lecture" id="video_upload_btn" class="btn btn-secondary" @click="updateLecture()" disabled>Upload</button>
         <button type="button" v-else id="video_upload_btn" class="btn btn-secondary" @click="hideModal()" disabled>Upload</button>
       </div>
@@ -350,12 +357,22 @@ h2 {
 }
 #playback_start {
   height: 4rem;
-  width: 40%;
+  width: 20%;
   font-size: 1.5rem;
 }
 #playback_end {
   height: 4rem;
-  width: 40%;
+  width: 20%;
+  font-size: 1.5rem;
+}
+#playback_start_label {
+  height: 4rem;
+  width: 20%;
+  font-size: 1.5rem;
+}
+#playback_end_label {
+  height: 4rem;
+  width: 20%;
   font-size: 1.5rem;
 }
 #video_upload_btn {
