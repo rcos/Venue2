@@ -67,7 +67,8 @@
           lecture: this.lecture,
           submitter: this.$store.state.user.current_user,
           is_live_submission: true,
-          live_submission_time: new Date()
+          live_submission_time: new Date(),
+          code: this.lecture.current_checkin.code
         }
         console.log("Adding submission: ",lecture_submission)
         const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
