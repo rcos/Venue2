@@ -72,6 +72,7 @@
         }
         console.log("Adding submission: ",lecture_submission)
         const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
+        this.live_submissions.push(lecture_submission)
         alert("Live Submission Recorded")
         console.log("Created Lecture Submission")
       },
