@@ -72,7 +72,6 @@
         }
         console.log("Adding submission: ",lecture_submission)
         const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
-        // this.addStudentLectureSubmission(lecture_submission)
         alert("Live Submission Recorded")
         console.log("Created Lecture Submission")
       },
@@ -81,14 +80,12 @@
       },
       studentSubmittedToCheckin() {
         let student_submitted_to_checkin = false
-        let current_checkin_code = this.lecture.checkins[this.lecture.checkin_index]
+        let current_checkin_code = this.lecture.checkins[this.lecture.checkin_index].code
         for(let i = 0; i < this.live_submissions.length; i++) {
-          console.log("Current live submission",this.live_submissions[i])
           if(this.live_submissions[i].code === current_checkin_code){
             student_submitted_to_checkin = true
+            console.log("student already made submission")
             break
-          }else{
-            console.log("No. this code",this.live_submissions[i].code,"not equal to this code",current_checkin_code)
           }
         }
         return student_submitted_to_checkin
