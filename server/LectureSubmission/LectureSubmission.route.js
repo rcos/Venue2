@@ -132,8 +132,32 @@ lectureSubmissionRoutes.route('/get_or_make').post(function (req, res) {
             res.status(400).send("unable to save lectureSubmission to database");
           });
       } else {
-        console.log("<SUCCESS> Getting lecture submission with lecture ID:",lecture_id,"and submitter ID:",submitter_id)
-        res.status(200).json(lectureSubmissions[0]);
+        let n = 0;
+        let found = false;
+        lectureSubmissions.forEach(sub => {
+          n++;
+          if(!sub.is_live_submission) {
+            found = true
+            console.log("<SUCCESS> Getting lecture submission with lecture ID:",lecture_id,"and submitter ID:",submitter_id)
+            res.status(200).json(sub);
+          } else if(n == lectureSubmissions.length && !found) {
+            let lectureSubmission = new LectureSubmission({
+              lecture: lecture_id,
+              submitter: submitter_id,
+              video_progress: 0,
+              student_poll_answers: []
+            });
+            lectureSubmission.save()
+              .then(() => {
+                console.log("<SUCCESS> Adding lecture submission:",lectureSubmission)
+                res.status(200).json(lectureSubmission);
+              })
+              .catch(() => {
+                console.log("<ERROR> Adding lecture submission:",lectureSubmission)
+                res.status(400).send("unable to save lectureSubmission to database");
+              });
+          }
+        })
       }
     }
   );
