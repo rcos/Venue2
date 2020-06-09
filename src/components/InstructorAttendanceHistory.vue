@@ -358,7 +358,7 @@
                 let running_total = 0
                 students.forEach(stud => {
                   let live = []
-                  let playback
+                  let playback = null
                   submissions.forEach(sub => {
                     if(sub.submitter._id == stud) {
                       if(sub.is_live_submission) {
@@ -368,14 +368,14 @@
                       }
                     }
                   })
-                  if(live.length > 0 && playback) {
+                  if(live.length > 0 && playback != null) {
                     running_total += Math.max(
                       live.length / lecture_.checkins.length,
                       Math.ceil(playback.video_percent * 100) / 100
                     )
                   } else if(live.length > 0) {
                     running_total += live.length / lecture_.checkins.length
-                  } else if(playback) {
+                  } else if(playback != null) {
                     running_total += Math.ceil(playback.video_percent * 100) / 100
                   }
                 })
