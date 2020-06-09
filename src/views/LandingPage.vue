@@ -2,14 +2,14 @@
   <div>
     <div v-if="!show_login_form">
       <Logo v-bind:show_large_logo="true" />
-      <Button :cas_url="cas_url" ref="LoginBtn" v-bind:btn_text="'Login'"/>
-      <!-- <Button ref="GetStartedBtn" v-bind:btn_text="'Get Started'" v-on:button-clicked="showLoginForm" /> -->
+      <Button :cas_url="cas_url" v-bind:btn_text="'Login'"/>
+      <Button v-if="!is_production" ref="GetStartedBtn" v-bind:btn_text="'Get Started'" v-on:button-clicked="showLoginForm" />
     </div>
     <div v-else>
       <Logo v-bind:show_large_logo="false" />
       <LoginForm ref="LoginForm" />
       <div id="login-signup-buttons" class="hidden">
-        <Button :cas_url="cas_url" ref="LoginBtn" v-bind:btn_text="'Login'"/>
+        <Button ref="LoginBtn" v-bind:btn_text="'Login'" v-on:button-clicked="login"/>
 <!--         <p style="font-weight:bold;">or</p>
         <Button ref="SignupBtn" v-bind:btn_text="'Sign Up'" v-on:button-clicked="signup" /> -->
       </div>
@@ -33,10 +33,12 @@
     data() {
       return {
         show_login_form: false,
-        cas_url: ""
+        cas_url: "",
+        is_production: Boolean
       }
     },
     created() {
+      this.setIsProduction()
       if(process.env.NODE_ENV === "production") {
         this.cas_url = "https://cas-auth.rpi.edu/cas/login?service=https%3A%2F%2Fvenue-attend.herokuapp.com%2Fauth%2FloginCAS"
       } else {
@@ -44,6 +46,9 @@
       }
     },
     methods: {
+      setIsProduction() {
+        this.is_production = process.env.NODE_ENV === 'production'
+      },
       showLoginForm() {
         let self = this
         setTimeout(function(){
@@ -61,6 +66,7 @@
         }, 1000)
       },
       login() {
+        console.log("Login was called")
         this.$refs.LoginForm.login()
       },
       signup() {
