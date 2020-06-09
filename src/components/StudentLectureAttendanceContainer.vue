@@ -8,7 +8,7 @@
     <div id="table-header">
       <h2>Attendance</h2>
       <button v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" @click="showQRScanningWindow" class="header-btn">Scan QR</button>
-      <router-link v-else-if="lecture.lecture_status === 'is_active_playback'" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+      <router-link v-else-if="lecture.lecture_status === 'is_active_playback' || lecture.lecture_status === 'is_over_playback'" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
         <button>Watch Playback</button>
       </router-link>
     </div>

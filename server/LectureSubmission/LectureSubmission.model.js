@@ -15,6 +15,7 @@ let LectureSubmission = new Schema({
 	},
 	code: String,
 	video_progress: Number,
+	video_percent: Number,
 	student_poll_answers: [
 		[{
 			type: Boolean,
