@@ -3,14 +3,23 @@
 		<video id="video_player" class="video-js vjs-big-play-centered" controls></video>
 		<div id="polls" class="hide">
 			<!--Poll Modals Start-->
-			<div v-for="(poll,i) in polls" :key="i" class="poll hide" :id="'poll'+(i+1)">
-				<div class="row question">
-					Question {{(i+1)}}: {{poll.question}}
+			<div id="poll_contents">
+				<div v-for="(poll,i) in polls" :key="i" class="poll hide" :id="'poll'+(i+1)">
+					<div class="row question">
+						<h2>{{poll.question}}</h2>
+					</div>
+					<div class="row">
+						<h6 id="number_label">Number</h6>
+						<h6 id="answer_label">Option</h6>
+						<h6 id="correct_label">Correct</h6>
+					</div>
+					<div v-for="(possible_answer,j) in poll.possible_answers" :key="j" class="row option">
+						<p class="optionnumber">{{(j+1)}}:</p>
+						<p class="optiontext">{{possible_answer}}</p>
+						<input class="optioncheck" type="checkbox" :id="'student_answer_'+(i+1)+'_'+(j+1)"/>
+					</div>
+					<button class="answer_btn btn btn-primary" :id="'answer_btn_'+(i+1)" @click="answerPoll(i)">Submit</button>
 				</div>
-				<div v-for="(possible_answer,j) in poll.possible_answers" :key="j" class="row question">
-					{{(j+1)}}: {{possible_answer}} <input type="checkbox" :id="'student_answer_'+(i+1)+'_'+(j+1)"/>
-				</div>
-				<button :id="'answer_btn_'+(i+1)" @click="answerPoll(i)">Submit</button>
 			</div>
 			<!--Poll Modals End-->
 		</div>
@@ -55,11 +64,14 @@ export default {
 								self.polls = resp.data
 								vid.on('timeupdate', function () {
 									let currTime = vid.currentTime()
-									if(currTime - self.prevTime < 0.5 && currTime > self.prevTime) {
+									if(currTime - self.prevTime < 0.5 && currTime >= self.prevTime) {
 										//Considered NOT a 'seek', video is playing normally
-										if(self.lectureSubmission.video_progress < currTime) {
-											self.lectureSubmission.video_progress = currTime
+										if(self.lectureSubmission.video_progress < Math.floor(currTime)) {
+											self.lectureSubmission.video_progress = Math.floor(currTime)
 											self.lectureSubmission.video_percent = currTime / vid.duration()
+											if(self.lectureSubmission.video_progress%5 == 0) {
+												LectureSubmissionAPI.update(self.lectureSubmission)
+											}
 										}
 										for (let i = 0; i < self.polls.length; i++) {
 											if (currTime > self.polls[i].timestamp) {
@@ -138,17 +150,65 @@ export default {
 .vjs-tech {
 	position:unset;
 }
-.hide {
-	display: none;
-}
 #polls {
 	position: absolute;
 	top: 25%;
-	bottom: 25%;
 	left: 25%;
 	right: 25%;
-	background: white;
+	background: lightskyblue;
+	border-radius: 1rem;
 	z-index: 999;
-	padding: 20px;
+}
+#poll_contents {
+	position: relative;
+	background: white;
+	border-radius: 1rem;
+	padding: 1rem;
+	margin: 1rem;
+	margin-bottom: -1rem;
+}
+.poll {
+	margin: 1rem;
+}
+.row {
+	margin: 0;
+	text-align: center;
+}
+h2 {
+	width: 100%;
+	margin-top: 1rem;
+}
+.question {
+	margin-bottom: 2rem;
+}
+.option {
+	margin-bottom: 1rem;
+}
+#number_label {
+	width: 10%;
+}
+.optionnumber {
+	margin: 0;
+	width: 10%;
+}
+#option_label {
+	width: 80%;
+}
+.optiontext {
+	margin: 0;
+	width: 80%;
+}
+#correct_label {
+	width: 10%;
+}
+.optioncheck {
+	margin: 0;
+	width: 10%;
+}
+.answer_btn {
+	margin: 1rem 0;
+}
+.hide {
+	display: none;
 }
 </style>
