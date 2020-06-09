@@ -8,15 +8,15 @@
 					<div class="row question">
 						<h2>{{poll.question}}</h2>
 					</div>
-					<div class="row">
+					<div class="row labelrow">
 						<h6 id="number_label">Number</h6>
 						<h6 id="answer_label">Option</h6>
 						<h6 id="correct_label">Correct</h6>
 					</div>
 					<div v-for="(possible_answer,j) in poll.possible_answers" :key="j" class="row option">
-						<p class="optionnumber">{{(j+1)}}:</p>
-						<p class="optiontext">{{possible_answer}}</p>
-						<input class="optioncheck" type="checkbox" :id="'student_answer_'+(i+1)+'_'+(j+1)"/>
+						<p class="optionnumber" aria-labelledby="number_label">{{(j+1)}}:</p>
+						<p class="optiontext" aria-labelledby="answer_label">{{possible_answer}}</p>
+						<input class="optioncheck" type="checkbox" :id="'student_answer_'+(i+1)+'_'+(j+1)" aria-labelledby="correct_label"/>
 					</div>
 					<button class="answer_btn btn btn-primary" :id="'answer_btn_'+(i+1)" @click="answerPoll(i)">Submit</button>
 				</div>
@@ -105,6 +105,11 @@ export default {
 			}
 		})
 	},
+	beforeDestroy() {
+		if(this.vjs) {
+			this.vjs.dispose()
+		}
+	},
 	methods: {
 		startPoll(i) {
 			let modal = document.getElementById("polls")
@@ -184,6 +189,10 @@ h2 {
 .option {
 	margin-bottom: 1rem;
 }
+.labelrow {
+	margin-bottom: 1rem;
+	border-bottom: 1px solid black;
+}
 #number_label {
 	width: 10%;
 }
@@ -191,7 +200,7 @@ h2 {
 	margin: 0;
 	width: 10%;
 }
-#option_label {
+#answer_label {
 	width: 80%;
 }
 .optiontext {
