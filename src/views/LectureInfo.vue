@@ -83,6 +83,7 @@
             let current_checkin_end_time = new Date(current_checkin.end_time)
             if(current_time >= current_checkin_start_time && current_time <= current_checkin_end_time){
               this.lecture.checkin_window_status = "open"
+              this.lecture.checkin_index = i
               this.lecture.current_checkin = current_checkin
               found_open_checkin_window = true
               break

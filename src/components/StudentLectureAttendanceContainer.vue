@@ -7,8 +7,8 @@
     </div>
     <div id="table-header">
       <h2>Attendance</h2>
-      <button v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" @click="showQRScanningWindow" class="header-btn">Scan QR</button>
-      <router-link v-else-if="lecture.lecture_status === 'is_active_playback' || lecture.lecture_status === 'is_over_playback'" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+      <button v-if="student_can_submit_live" @click="showQRScanningWindow" class="header-btn">Scan QR</button>
+      <router-link v-else-if="student_can_watch_playback" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
         <button>Watch Playback</button>
       </router-link>
     </div>
@@ -37,11 +37,16 @@
     },
     data(){
       return {
-        qr_scanning_window_open: false
+        qr_scanning_window_open: false,
+        student_can_submit_live: false,
+        student_can_watch_playback: false
       }
     },
     created() {
       console.log("In student lecture attendance table. Lecture:",this.lecture)
+      this.checkIfStudentCanSubmitLive()
+      this.checkIfStudentCanWatchPlayback()
+      console.log("Student submitted to checkin",this.studentSubmittedToCheckin())
     },
     methods: {
       showQRScanningWindow() {
@@ -64,14 +69,34 @@
           lecture: this.lecture,
           submitter: this.$store.state.user.current_user,
           is_live_submission: true,
-          live_submission_time: new Date()
+          live_submission_time: new Date(),
+          code: this.lecture.current_checkin.code
         }
         console.log("Adding submission: ",lecture_submission)
         const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
-        // this.addStudentLectureSubmission(lecture_submission)
+        this.live_submissions.push(lecture_submission)
+        this.student_can_submit_live = false
         alert("Live Submission Recorded")
         console.log("Created Lecture Submission")
       },
+      checkIfStudentCanSubmitLive() {
+        this.student_can_submit_live = this.lecture.lecture_status === 'is_live' && this.lecture.checkin_window_status === 'open' && !this.studentSubmittedToCheckin()
+      },
+      studentSubmittedToCheckin() {
+        let student_submitted_to_checkin = false
+        let current_checkin_code = this.lecture.checkins[this.lecture.checkin_index].code
+        for(let i = 0; i < this.live_submissions.length; i++) {
+          if(this.live_submissions[i].code === current_checkin_code){
+            student_submitted_to_checkin = true
+            console.log("student already made submission")
+            break
+          }
+        }
+        return student_submitted_to_checkin
+      },
+      checkIfStudentCanWatchPlayback() {
+        this.student_can_watch_playback = this.lecture.lecture_status === 'is_active_playback' || this.lecture.lecture_status === 'is_over_playback'
+      }
     }
   }
 </script>
