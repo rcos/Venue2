@@ -120,6 +120,7 @@ lectureSubmissionRoutes.route('/get_or_make').post(function (req, res) {
           lecture: lecture_id,
           submitter: submitter_id,
           video_progress: 0,
+          video_percent: 0,
           student_poll_answers: []
         });
         lectureSubmission.save()
@@ -145,6 +146,7 @@ lectureSubmissionRoutes.route('/get_or_make').post(function (req, res) {
               lecture: lecture_id,
               submitter: submitter_id,
               video_progress: 0,
+              video_percent: 0,
               student_poll_answers: []
             });
             lectureSubmission.save()
