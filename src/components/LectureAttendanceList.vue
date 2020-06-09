@@ -21,6 +21,7 @@
             <div class="namecard">
               {{submission.submitter.first_name}} {{submission.submitter.last_name}}
               {{submission.submitter.email}}
+              {{Math.ceil(submission.video_percent * 100)}}%
             </div>
           </div>
         </div>
