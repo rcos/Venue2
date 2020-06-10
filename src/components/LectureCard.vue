@@ -4,7 +4,7 @@
   'ongoing-container':status == 'ongoing',
   'ended-container':status == 'ended',
   'static-container': status == 'static'}" >
-    <router-link :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}" :aria-label="'Lecture Info - '+courseName+' - '+lecture.title">
+    <router-link class="lecture_card_link" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}" :aria-label="'Lecture Info - '+courseName+' - '+lecture.title">
       <div class="active-event-card-background"></div>
       <div class="active-event-card">
         <div  class="event-card-section" id="course-section">
@@ -114,10 +114,15 @@ export default {
   transition: width 0.25s, left 0.25s, top 0.25s;
 }
 
-.active-event-card-container:hover .active-event-card-background {
+.active-event-card-container:hover .active-event-card-background,
+.lecture_card_link:focus .active-event-card-background {
   width: 106%;
   left: -3%;
   top: -20%;
+}
+
+.lecture_card_link:focus {
+  outline: none;
 }
 
 .active-event-card-container {

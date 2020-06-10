@@ -1,8 +1,8 @@
 <template>
   <div class="course_card_container">
     <div v-if="is_instructor">
-      <router-link :to="is_instructor ? {name: 'course_info', params: { id: course._id }} : {name: 'course_info', params: { id: section._id }}"
-      :aria-label="'Course Info - '+course.name+' - '+course.dept+' '+course.course_number">
+      <router-link class="course_card_link" :to="is_instructor ? {name: 'course_info', params: { id: course._id }} : {name: 'course_info', params: { id: section._id }}"
+      :aria-label="'Course Info - '+course.name+' - '+course.dept+' '+course.course_number" tabindex="0">
         <div v-if="mobile" class="course-card-mobile">
           <div class="color-box"  :style="{backgroundColor: box_color}"></div>
           <div class="course-info">
@@ -22,8 +22,8 @@
       </router-link>
     </div>
     <div v-else>
-      <router-link :to="is_instructor ? {name: 'course_info', params: { id: course._id }} : {name: 'course_info', params: { id: section._id }}"
-      :aria-label="'Course Info - '+section.course.name+' - '+section.course.dept+' '+section.course.course_number">
+      <router-link class="course_card_link" :to="is_instructor ? {name: 'course_info', params: { id: course._id }} : {name: 'course_info', params: { id: section._id }}"
+      :aria-label="'Course Info - '+section.course.name+' - '+section.course.dept+' '+section.course.course_number" tabindex="0">
         <div v-if="mobile" class="course-card-mobile">
           <div class="color-box"  :style="{backgroundColor: box_color}"></div>
           <div class="course-info">
@@ -96,9 +96,14 @@
   border: 1px solid rgba(107, 163, 195, 0.7);
 }
 
-.course-card:hover {
+.course-card:hover,
+.course_card_link:focus .course-card {
   border: 1px solid rgba(85, 136, 166, 1);
-  box-shadow: 0px 3px 10px 7px rgba(0, 0, 0, 0.04);
+  box-shadow: 0px 0px 10px 7px rgba(0, 0, 0, 0.2);
+}
+
+.course_card_link:focus {
+  outline: none;
 }
 
 .course-card-mobile {
@@ -114,9 +119,10 @@
   border: 1px solid rgba(107, 163, 195, 0.7);
 }
 
-.course-card-mobile:hover {
+.course-card-mobile:hover,
+.course_card_link:focus .course-card-mobile {
   border: 1px solid rgba(85, 136, 166, 1);
-  box-shadow: 0px 3px 10px 7px rgba(0, 0, 0, 0.04);
+  box-shadow: 0px 0px 10px 7px rgba(0, 0, 0, 0.2);
 }
 
 .course-card-mobile .course-title {
