@@ -112,10 +112,10 @@ export default {
       play_sub_end: null
     };
   },
-  created() {
-    
-  },
-  mounted() {
+  beforeDestroy() {
+    if(this.vjs) {
+      this.vjs.dispose()
+    }
   },
   methods: {
     async updateLecture() {
