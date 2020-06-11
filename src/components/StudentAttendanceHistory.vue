@@ -167,7 +167,7 @@
 
           this.history_data[month_index].forEach(lecture_data => {
 
-            LectureSubmissionAPI.getLectureSubmissionForStudent(lecture_data._id, this.current_user._id)
+            LectureSubmissionAPI.getLectureSubmissionsForStudent(lecture_data._id, this.current_user._id)
             .catch(err => { console.log(`error retrieving lecture submissions for student ${this.current_user._id}`); console.log(err); })
             .then(response => {
 
