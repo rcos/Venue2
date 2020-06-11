@@ -38,12 +38,12 @@
             <h4 class="row">Possible Answers</h4>
             <div class="row">
               <h6 id="spacer1">Number</h6>
-              <h6 id="q_label">Question</h6>
+              <h6 id="a_label">Answer</h6>
               <h6 id="correct_label">Correct</h6>
             </div>
             <div v-for="(current_answer,i) in current_answers" v-bind:key="i" class="row possible_answer">
               <p class="answernumber">{{i + 1}}</p>
-              <input class="answerfield" type="text" v-model.lazy="current_answers[i]" aria-labelledby="q_label"/>
+              <input class="answerfield" type="text" v-model.lazy="current_answers[i]" aria-labelledby="a_label"/>
               <input class="iscorrectfield" type="checkbox" v-model.lazy="current_is_correct[i]" aria-labelledby="correct_label"/>
               <button type="button" class="btn btn-danger removeanswer" @click="current_answers.splice(i,1);current_is_correct.splice(i,1)" :aria-label="'Remove Answer '+(i+1)">X</button>
             </div>
@@ -401,7 +401,7 @@ input {
   width: 15%;
   text-align: center;
 }
-#q_label {
+#a_label {
   width: 65%;
 }
 .answerfield {
