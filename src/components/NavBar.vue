@@ -46,7 +46,7 @@
       </div>
       <!-- Name -->
       <hide-at breakpoint="mediumAndBelow">
-        <router-link :to="{name: 'settings'}" role="link" aria-label="User Settings">
+        <router-link :to="{name: 'settings'}" role="link" aria-label="User Settings" class="settings_link">
           <div class="user-name float-right">
             <p class="d-inline-block mr-2" aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }}</p>
             <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
@@ -54,7 +54,7 @@
         </router-link>
       </hide-at>
       <show-at breakpoint="mediumAndBelow">
-        <router-link :to="{name: 'settings'}" role="link" aria-label="User Settings">
+        <router-link :to="{name: 'settings'}" role="link" aria-label="User Settings" class="settings_link">
           <div class="user-name float-right">
             <p class="d-inline-block mr-2" aria-label="User Name">{{ current_user.first_name }}</p>
             <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
@@ -132,15 +132,25 @@
   .venue-nav-link{
     text-decoration: none;
     color: #575757;
-    font-weight: bold;
+    font-weight: 100;
   }
 
   .active-link {
     color: #466D85;
   }
 
+  .venue-nav-link:focus,
+  .settings_link:focus .mr-2 {
+    color: #466D85;
+    font-weight: 900;
+  }
+
+  .active-link:focus {
+    color: #575757;
+  }
+
   .active-link-underline {
-    height: 3px;
+    height: 2px;
     width: 80%;
     background-color: #466D85;
     margin: auto;
@@ -148,11 +158,16 @@
 
   .user-name {
     margin-top: 5px;
-    font-weight: bold;
+    font-weight: 100;
   }
 
   .settings {
     cursor: pointer;
     margin-top: 2px;
+  }
+
+  .venue-nav-link:focus,
+  .settings_link:focus {
+    outline: none;
   }
 </style>
