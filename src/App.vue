@@ -80,7 +80,11 @@ export default {
       var notification = new Notification("Time to take attendance!");
       notification.onclick = function(event) {
         event.preventDefault(); // prevent the browser from focusing the Notification's tab
-        window.open('http://localhost:8080/lecture_info/'+lectureid, '_blank');
+        if(process.env.NODE_ENV === "production") {
+          window.open('https://venue-attend.herokuapp.com/#/lecture_info/'+lectureid, '_blank');
+        } else {
+          window.open('http://localhost:8080/#/lecture_info/'+lectureid, '_blank');
+        }
       }
     },
     processInstructorEmails(lectures) {
