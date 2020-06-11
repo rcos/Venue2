@@ -422,11 +422,17 @@ lectureRoutes.post('/process_emails', (req,res) => {
 							console.log("<ERROR> Updating course by ID:",lecture._id,"with:",{email_sent: true})
 							res.status(404).send("lecture not found");
 						} else {
+							let myhtml = ""
+							if(process.env.NODE_ENV === "production") {
+								html = '<p>Click <a href="https://venue-attend.herokuapp.com/#/lecture_info/' + lect._id + '">here</a> to upload your lecture recording</p>'
+							} else {
+								html = '<p>Click <a href="http://localhost:8080/#/lecture_info/' + lect._id + '">here</a> to upload your lecture recording</p>'
+							}
 							var mailOptions = {
 								from: 'venue.do.not.reply@gmail.com',
 								to: toEmail,
 								subject: 'Venue Lecture Upload Reminder',
-								html: '<p>Click <a href="http://localhost:8080/lecture_info/' + lect._id + '">here</a> to upload your lecture recording</p>'
+								html: myhtml
 							};
 							console.log("About to send email with:",mailOptions)
 							transporter.sendMail(mailOptions, function(error, info){
