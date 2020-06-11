@@ -57,6 +57,7 @@
         <router-link :to="{name: 'settings'}" role="link" aria-label="User Settings">
           <div class="user-name float-right">
             <p class="d-inline-block mr-2" aria-label="User Name">{{ current_user.first_name }}</p>
+            <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
           </div>
         </router-link>
       </show-at>
@@ -94,27 +95,24 @@
 
 <style scoped>
   #venue-nav {
-    /*border-style: none none solid none;*/
-    /*border-bottom: #e0e0e0 solid thin;*/
-    padding-left: 2rem;
-    padding-right: 2rem;
-    /*padding-top: 1rem;*/
-    padding-bottom: 0.5rem;
+    height: 4rem;
+    padding: 1rem 2rem;
+    background: white;
     overflow: hidden;
   }
 
-  @media (min-width: 577px) {
+  /* @media (min-width: 577px) {
     #venue-nav{
       padding-top: 1rem;
     }
-  }
+  } */
 
   /*Small devices (landscape phones, 576px and up)*/
-  @media (max-width: 575.98px) {
+  /* @media (max-width: 575.98px) {
     #venue-nav {
       padding-top: 1.5rem;
     }
-  }
+  } */
 
   #nav-logo {
     float: left;
