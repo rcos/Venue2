@@ -78,15 +78,17 @@
 
 <style scoped>
 .course_card_container {
+  min-width: 40%;
   display: inline-block;
+  margin: 1rem;
+}
+.mobile-justify-div .course_card_container {
+  width: 80%;
 }
 .course-card {
 	display: inline-block;
-	margin-left: 2rem;
-  margin-top: 1rem;
-	/*width: 16rem;*/
-  width: 20rem;
 	height: 3rem;
+  width: 100%;
   line-height: 3rem;
   box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.04);
   border-radius: 3px;
@@ -109,7 +111,7 @@
 .course-card-mobile {
 	height: 50px;
   vertical-align: top;
-  width: 80%;
+  min-width: 90%;
   margin: 2rem auto;
   box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.04);
   border-radius: 3px;
@@ -201,21 +203,5 @@
   display: inline-block;
   margin-left: 0.85rem;
   font-size: 0.9rem;
-}
-
-/*Medium devices (tablets and below)*/
-@media (max-width: 1128px) {
-  .course-card {
-    width: 21rem;
-    margin-top: 2.5rem;
-  }
-}
-
-/*Small devices (phones and below)*/
-@media (max-width: 575.98px) {
-  .course-card {
-    margin: auto;
-    margin-top: 2.5rem;
-  }
 }
 </style>
