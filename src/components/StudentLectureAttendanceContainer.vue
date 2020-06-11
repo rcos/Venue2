@@ -46,7 +46,6 @@
       console.log("In student lecture attendance table. Lecture:",this.lecture)
       this.checkIfStudentCanSubmitLive()
       this.checkIfStudentCanWatchPlayback()
-      console.log("Student submitted to checkin",this.studentSubmittedToCheckin())
     },
     methods: {
       showQRScanningWindow() {
