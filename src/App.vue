@@ -1,7 +1,7 @@
 <template>
   <div id="app">
+    <NavBar class="main_navbar" v-if="this.$route.name != 'landing_page' && this.$route.name != 'set_permanent_password' && current_user"></NavBar>
     <div id="main-content">
-      <NavBar v-if="this.$route.name != 'landing_page' && this.$route.name != 'set_permanent_password' && current_user"></NavBar>
       <router-view />
     </div>
     <Footer />
@@ -106,10 +106,25 @@ export default {
   margin: 0 auto;
   padding: 0;
   min-height: 100%;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+Footer {
+  position: fixed;
+  bottom: 0;
 }
 
 #main-content {
-  padding-bottom: 3rem;
+  position: absolute;
+  top: 4rem;
+  bottom: 2rem;
+  left: 0;
+  right: 0;
+  // padding-bottom: 1rem;
+  overflow-y: auto;
 }
 </style>
