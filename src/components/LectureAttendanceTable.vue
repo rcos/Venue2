@@ -102,16 +102,19 @@
 	  color: blue;
 	}
 
+	.tab_btn:hover,
 	.tab_btn:focus {
 	  color: gray;
 	  border-bottom: .2rem solid gray;
 	}
 
+	.tab_btn.selected_tab:hover,
 	.tab_btn.selected_tab:focus {
 	  color: gray;
 	  border-bottom: .2rem solid gray;
 	}
 
+	.tab_btn.selected_tab:hover h5,
 	.tab_btn.selected_tab:focus h5 {
 	  color: gray;
 	}

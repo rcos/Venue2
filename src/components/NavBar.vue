@@ -139,12 +139,15 @@
     color: #466D85;
   }
 
+  .venue-nav-link:hover,
+  .settings_link:hover .mr-2,
   .venue-nav-link:focus,
   .settings_link:focus .mr-2 {
     color: #466D85;
     font-weight: 900;
   }
 
+  .active-link:hover,
   .active-link:focus {
     color: #575757;
   }
