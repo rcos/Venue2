@@ -1,11 +1,11 @@
 const express = require('express');
 const lectureRoutes = express.Router();
-
 const formidable = require('formidable');
+const {Storage} = require("@google-cloud/storage")
 var fs = require('fs');
 var path = require('path');
 var nodemailer = require('nodemailer');
-
+var multer = require("multer")
 var transporter = nodemailer.createTransport({
 	service: 'gmail',
 	auth: {
@@ -13,6 +13,15 @@ var transporter = nodemailer.createTransport({
 		pass: process.env.EMAIL_PASS
 	}
 });
+// var multer_storage = multer.diskStorage({
+//     destination: function(req, file, cb) {
+//         cb(null, './uploads');
+//      },
+//     filename: function (req, file, cb) {
+//         cb(null , file.originalname);
+//     }
+// });
+var upload = multer({ storage: multer.memoryStorage() })
 
 const legal_lecture_types = ["all","live","upcoming","past","recent","active_playback"]
 const legal_preferences = ["with_sections", "with_sections_and_course", "none"]
@@ -21,6 +30,34 @@ let Lecture = require('../Lecture/Lecture.model')
 let User = require('../User/User.model')
 let Course = require('../Course/Course.model')
 let Section = require('../Section/Section.model')
+
+// GCS Specific
+
+const storage = new Storage({
+  keyFilename: path.join(__dirname, 'venue-279902-649f22aa6e34.json'),
+  projectId: "venue-279902"
+})
+
+const bucket = storage.bucket('venue_videos')
+
+const uploadVideo = (file) => new Promise((resolve, reject) => {
+  const { originalname, buffer } = file
+
+  const blob = bucket.file(originalname.replace(/ /g, "_"))
+  const blobStream = blob.createWriteStream({
+    resumable: false
+  })
+  blobStream.on('finish', () => {
+    const publicUrl = 'https://storage.googleapis.com/' + bucket.name + '/' + blob.name
+    resolve(publicUrl)
+  })
+  .on('error', () => {
+    reject(`Unable to upload video, something went wrong`)
+  })
+  .end(buffer)
+})
+
+// Lecture Routes
 
 lectureRoutes.route('/add').post(function (req, res) {
   let lecture = new Lecture(req.body.lecture);
@@ -35,91 +72,97 @@ lectureRoutes.route('/add').post(function (req, res) {
     });
 });
 
-lectureRoutes.route('/add_playback/:lecture_id').post(function (req, res) {
-
-	const form = formidable({ multiples: true });
+lectureRoutes.post('/add_playback_video/:lecture_id', upload.single('video'),function (req, res) {
 	let lecture_id = req.params.lecture_id
+		try {
+		  const lecture_video = req.file
+		  // Why the heck is fields working?
+		  uploadVideo(lecture_video).then(public_video_url => {
+	  		// update the lecture with video
+	  		Lecture.findByIdAndUpdate(lecture_id,
+	  			{
+	  				video_ref: public_video_url,
+	  			},
+	  			function (err, updated_lecture) {
+	  				if (err || updated_lecture == null) {
+	  					console.log("<ERROR> Updating lecture by ID:",lecture_id,"with:",updated_lecture)
+	  					res.status(404).send("lecture not found");
+	  				} else {
+							console.log("<SUCCESS> Adding playback video at URL:",public_video_url)
+	  					res.status(200).json(updated_lecture)
+	  			}
+		  	})
+	  	})
+		} catch (error) {
+		  res.json(error)
+		}	
 
-	form.parse(req, (err, fields, files) => {
-		if (err) {
-			next(err);
-			return;
-		}
-		var oldpath = files.video.path;
-		var pubDir = path.join(__dirname,'..','..','public')
-		var newpath = (pubDir + fields.video_ref + files.video.name).split(' ').join('_');
-		if (!fs.existsSync(pubDir + "/videos")) {
-			fs.mkdirSync(pubDir + "/videos")
-		}
-		if (!fs.existsSync(pubDir + fields.video_ref)) {
-			fs.mkdirSync(pubDir + fields.video_ref)
-		}
-		//TODO check if a file already exists there
-		fs.rename(oldpath, newpath, function (err) {});
+})
 
-		// update the lecture with video
-		Lecture.findByIdAndUpdate(lecture_id,
-			{
-				video_ref: (fields.video_ref + files.video.name).split(' ').join('_'),
-				playback_submission_start_time: fields.playback_submission_start_time,
-				playback_submission_end_time: fields.playback_submission_end_time,
-				allow_playback_submissions: true,
-				allow_live_submissions: false,
-				email_sent: true
-			},
-			function (err, updated_lecture) {
-				if (err || updated_lecture == null) {
-					console.log("<ERROR> Updating lecture by ID:",lecture_id,"with:",updated_lecture)
-					res.status(404).send("lecture not found");
-				} else {
-					let section_itr = 0
-					updated_lecture.sections.forEach(section => {
-						Section.findById(section, function (err, section){
-							if(err || section == null) {
-								console.log("<ERROR> Getting section with ID:",section)
-								res.json(err);
-							} else {
-								let student_ids = section.students;
-								let num_iterations = 0;
-								student_ids.forEach(student_id => {
-									User.findById(student_id, function(err, student) {
-										if(err || student == null) {
-											console.log("<ERROR> Getting user with ID:",student_id)
-											res.json(err);
-										} else {
-											//send email
-											var mailOptions = {
-												from: 'venue.do.not.reply@gmail.com',
-												to: student.email,
-												subject: 'Venue - New Lecture Recording Notification',
-												html: '<p>New Lecture available for playback <a href="http://localhost:8080/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
-											};
-											console.log("About to send email with:",mailOptions)
-											transporter.sendMail(mailOptions, function(error, info){
-												if (error || info == null) {
-													console.log(error);
-												} else {
-													console.log('Email sent to '+student.email+': ' + info.response);
-												}
-											});
-											num_iterations++;
-											if(num_iterations === student_ids.length) {
-												section_itr++;
-												if(section_itr == updated_lecture.sections.length) {
-													console.log("<SUCCESS> Adding playback to lecture with ID:",lecture_id)
-													res.json(updated_lecture);
-												}
+lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) {
+	let lecture_id = req.params.lecture_id
+	let lecture = req.body.lecture
+	console.log("Received lecture",lecture)
+	Lecture.findByIdAndUpdate(lecture_id,
+		{
+			playback_submission_start_time: lecture.playback_submission_start_time,
+			playback_submission_end_time: lecture.playback_submission_end_time,
+			allow_playback_submissions: true,
+			allow_live_submissions: false,
+			email_sent: true
+		},
+		function (err, updated_lecture) {
+			if (err || updated_lecture == null) {
+				console.log("<ERROR> Updating lecture by ID:",lecture_id,"with:",updated_lecture)
+				res.status(404).send("lecture not found");
+			} else {
+				let section_itr = 0
+				updated_lecture.sections.forEach(section => {
+					Section.findById(section, function (err, section){
+						if(err || section == null) {
+							console.log("<ERROR> Getting section with ID:",section)
+							res.json(err);
+						} else {
+							let student_ids = section.students;
+							let num_iterations = 0;
+							student_ids.forEach(student_id => {
+								User.findById(student_id, function(err, student) {
+									if(err || student == null) {
+										console.log("<ERROR> Getting user with ID:",student_id)
+										res.json(err);
+									} else {
+										//send email
+										var mailOptions = {
+											from: 'venue.do.not.reply@gmail.com',
+											to: student.email,
+											subject: 'Venue - New Lecture Recording Notification',
+											html: '<p>New Lecture available for playback <a href="http://localhost:8080/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
+										};
+										console.log("About to send email with:",mailOptions)
+										transporter.sendMail(mailOptions, function(error, info){
+											if (error || info == null) {
+												console.log(error);
+											} else {
+												console.log('Email sent to '+student.email+': ' + info.response);
+											}
+										});
+										num_iterations++;
+										if(num_iterations === student_ids.length) {
+											section_itr++;
+											if(section_itr == updated_lecture.sections.length) {
+												console.log("<SUCCESS> Adding playback to lecture with ID:",lecture_id)
+												res.json(updated_lecture);
 											}
 										}
-									})
+									}
 								})
-							}
-						})
+							})
+						}
 					})
-				}
+				})
 			}
-		);
-	});
+		}
+	);
 });
 
 lectureRoutes.route('/').get(function (req, res) {
