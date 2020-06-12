@@ -39,7 +39,7 @@
           </div>
           <div v-if="this.current_user.is_instructor" class="right">
             <label id="section_select_label">Select Section</label>
-            <select v-model="selected_section" aria-labelledby="section_select_label">
+            <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label">
               <option v-for="(section_,i) in section_arr" :key="i" :value="section_[1]">Section {{ section_[0] }}</option>
               <option :value="null" selected>All Sections</option>
             </select>
