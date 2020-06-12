@@ -121,62 +121,58 @@ export default {
     async updateLecture() {
       if(this.isComplete()) {
         this.lecture.video_ref = "/videos/" + this.lecture._id + "/";
-        LectureAPI.addLecturePlayback(
-          this.lecture,
-          document.getElementById("video_selector").files[0]
-        ).then(res => {
-          let n_saved = 0
-          if(this.polls.length == 0) {
-            this.hideModal()
-            location.reload()
-          } else {
-            for(let i=0;i<this.polls.length;i++) {
-              this.polls[i].lecture = this.lecture._id
-              PlaybackPollAPI.addPoll(this.polls[i])
-              .then(res => {
-                n_saved++
-                if(n_saved == this.polls.length) {
-                  this.polls = []
-                  this.hideModal()
-                  location.reload()
-                }
-              })
-            }
-          }
-        })
-      }
-    },
-    async updateLectureFromParent(lect,course_id) {
-      lect.video_ref = "/videos/" + lect._id + "/";
-      LectureAPI.addLecturePlayback(
-        lect,
-        document.getElementById("video_selector").files[0]
-      ).then(res => {
+        let lecture_video = document.getElementById("video_selector").files[0]
+        await LectureAPI.addPlaybackVideo(this.lecture._id, lecture_video)
+        await LectureAPI.updateToPlayback(this.lecture, lecture_video)
         let n_saved = 0
         if(this.polls.length == 0) {
           this.hideModal()
-          this.$router.push({
-            name: "course_info",
-            params: { id: course_id }
-          })
+          location.reload()
         } else {
           for(let i=0;i<this.polls.length;i++) {
-            this.polls[i].lecture = lect._id
+            this.polls[i].lecture = this.lecture._id
             PlaybackPollAPI.addPoll(this.polls[i])
             .then(res => {
               n_saved++
               if(n_saved == this.polls.length) {
                 this.polls = []
                 this.hideModal()
-                this.$router.push({
-                  name: "course_info",
-                  params: { id: course_id }
-                })
+                location.reload()
               }
             })
           }
         }
-      })
+      }
+    },
+    async updateLectureFromParent(lect,course_id) {
+      lect.video_ref = "/videos/" + lect._id + "/";
+      let lecture_video = document.getElementById("video_selector").files[0]
+      await LectureAPI.addPlaybackVideo(lect._id, lecture_video)
+      await LectureAPI.updateToPlayback(lect, lecture_video)
+      let n_saved = 0
+      if(this.polls.length == 0) {
+        this.hideModal()
+        this.$router.push({
+          name: "course_info",
+          params: { id: course_id }
+        })
+      } else {
+        for(let i=0;i<this.polls.length;i++) {
+          this.polls[i].lecture = lect._id
+          PlaybackPollAPI.addPoll(this.polls[i])
+          .then(res => {
+            n_saved++
+            if(n_saved == this.polls.length) {
+              this.polls = []
+              this.hideModal()
+              this.$router.push({
+                name: "course_info",
+                params: { id: course_id }
+              })
+            }
+          })
+        }
+      }
     },
     setLectureSubmissionVariables() {
       this.lecture.allow_live_submissions = false
