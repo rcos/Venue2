@@ -435,7 +435,7 @@ body, * {
 
 .dashboard-section-modal {
   width: 50%;
-  min-height: 200px;
+  height: 16rem;
   display: inline-block;
   vertical-align: top;
 }
@@ -447,7 +447,7 @@ body, * {
 
 .dashboard-section-modal .sub-section {
   margin: 1rem 1rem;
-  height: 16.5rem;
+  height: 12rem;
   overflow-y: auto;
 }
 
