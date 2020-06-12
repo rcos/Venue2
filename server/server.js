@@ -4,7 +4,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path')
 const mongoose = require('mongoose');
-const history = require('connect-history-api-fallback');
 const config = require('./DB.js');
 const jwt = require('jsonwebtoken');
 const serveStatic = require('serve-static');
@@ -65,8 +64,6 @@ mongoose.connect(process.env.MONGODB_URI || config.DB, function (err, client) {
   });
 });
 
-// const MongoStore = require('connect-mongo')(session);
-
 app.use(cors({ 
     origin:['http://localhost:8080'],
     methods:['GET','POST'],
@@ -74,11 +71,9 @@ app.use(cors({
 }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// app.use(history())
 
 // Serve front end build on static server
 var distDir = __dirname + "/../dist/";
-// app.use(serveStatic(distDir))
 app.use(express.static(distDir));
 
 app.use(cookieParser());
