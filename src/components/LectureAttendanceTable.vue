@@ -121,7 +121,7 @@
 	  margin-top: 3rem;
 	  margin-left: 6rem;
 	  overflow-y: auto;
-	  height: 17rem;
+	  /* height: 17rem; */
 	  padding-bottom: 3rem;
 	}
 </style>
