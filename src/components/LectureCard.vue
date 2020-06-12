@@ -116,9 +116,9 @@ export default {
 
 .active-event-card-container:hover .active-event-card-background,
 .lecture_card_link:focus .active-event-card-background {
-  width: 106%;
-  left: -3%;
-  top: -20%;
+  width: 110%;
+  left: -5%;
+  top: -25%;
 }
 
 .lecture_card_link:focus {
@@ -131,6 +131,7 @@ export default {
   height: 3.5rem;
   margin-left: 2rem;
   margin-top: 2rem;
+  margin-bottom: 1rem;
   cursor: pointer;
 }
 
