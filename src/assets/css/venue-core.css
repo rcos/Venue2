@@ -373,6 +373,12 @@ body, * {
   border-bottom: 32px solid #24E565;
 }
 
+.instructor-attendance-history-pill.good:hover,
+.instructor-attendance-history-pill.good:focus {
+  outline: none;
+  box-shadow: 0px 0px 10px 7px rgba(65, 162, 91, 0.33);
+}
+
 .instructor-attendance-history-pill.medium {
   border: 2px solid #E97E47;
   box-shadow: 0px 3px 10px rgba(233, 126, 71, 0.36);
@@ -389,6 +395,11 @@ body, * {
   border-bottom: 32px solid #E97E47;
 }
 
+.instructor-attendance-history-pill.medium:hover,
+.instructor-attendance-history-pill.medium:focus {
+  outline: none;
+  box-shadow: 0px 0px 10px 7px rgba(233, 126, 71, 0.36);
+}
 
 .instructor-attendance-history-pill.bad {
   border: 2px solid rgb(209, 62, 52);
@@ -404,6 +415,12 @@ body, * {
 .instructor-attendance-history-pill.bad .percentage-area::before {
   border-right: 16px solid rgb(209, 62, 52);
   border-bottom: 32px solid rgb(209, 62, 52);
+}
+
+.instructor-attendance-history-pill.bad:hover,
+.instructor-attendance-history-pill.bad:focus {
+  outline: none;
+  box-shadow: 0px 0px 10px 7px rgba(255, 99, 88, 0.36);
 }
 
 .instructor-attendance .month-area,
@@ -588,9 +605,11 @@ custom-scrollbar::-webkit-scrollbar-thumb {
   transition: border 0.25s, box-shadow 0.25s;
 }
 
-.big-button:hover {
+.big-button:hover,
+.big-button:focus {
+  outline: none;
   border: 2px solid rgba(44, 62, 80, 1);
-  box-shadow: 0px 3px 5px rgba(44, 62, 80, 0.2);
+  box-shadow: 0px 0px 10px 7px rgba(44, 62, 80, 0.2);
 }
 
 .center-fill-section {
@@ -763,6 +782,8 @@ a:hover {
   border: 1px solid rgb(51, 75, 168);
 }
 
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-primary:focus {
+  outline: none;
   background: rgb(51, 75, 168);
 }
