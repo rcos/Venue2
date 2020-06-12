@@ -4,7 +4,7 @@
     <div class="settings-container">
           <div class="name-area">
               <div class="name-div">{{ current_user.first_name }} {{ current_user.last_name }}</div>
-              <div class="logout-div"><div class="logout-button" v-on:click="logoutUser">Logout</div></div>
+              <div class="logout-div"><div class="logout-button" v-on:click="logoutUser" tabindex="0" role="button">Logout</div></div>
           </div>
 
           <div v-if="mode == 'setting_options'">
@@ -150,7 +150,8 @@
         cursor: pointer;
     }
 
-    .name-area .logout-div .logout-button:hover {
+    .name-area .logout-div .logout-button:hover,
+    .name-area .logout-div .logout-button:focus {
       background-color: #FC6F71;
       color: white;
     }

@@ -1,7 +1,7 @@
 <template>
   <div class="container" style="padding:2rem;">
-    <a :href="cas_url">
-      <button @click="$emit('button-clicked')" v-bind:class="{hidden:fade_out, visible:fade_in}" type="button" class="btn button shadow" id="venue-btn">
+    <a :href="cas_url" :class="loginLink" tabindex="-1">
+      <button @click="$emit('button-clicked')" v-bind:class="{hidden:fade_out, visible:fade_in}" type="button" class="btn button shadow" id="venue-btn" tabindex="0">
         <!-- <div v-if="show_login_text">Login</div> -->
         <!-- <div v-else>Get Started</div> -->
         <div>{{ btn_text }}</div>
@@ -52,7 +52,8 @@
     border-radius: 5px;
   }
 
-  #venue-btn:hover {
+  #venue-btn:hover,
+  #venue-btn:focus {
     background-color: #007bff;
     color: white;
   }
