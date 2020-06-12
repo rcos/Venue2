@@ -72,102 +72,97 @@ lectureRoutes.route('/add').post(function (req, res) {
     });
 });
 
-lectureRoutes.post('/add_playback/:lecture_id', upload.single('video'),function (req, res) {
+lectureRoutes.post('/add_playback_video/:lecture_id', upload.single('video'),function (req, res) {
 	let lecture_id = req.params.lecture_id
-	try {
-	  const lecture_video = req.file
-	  uploadVideo(lecture_video).then(public_video_url => {
-	  	console.log("public_video_url", public_video_url)
-	    res
-	      .status(200)
-	      .json({
-	        message: "Upload was successful",
-	        data: public_video_url
-	      })
-	    })
-	} catch (error) {
-	  next(error)
-	}
-	// form.parse(req, (err, fields, files) => {
-	// 	if (err) {
-	// 		next(err);
-	// 		return;
-	// 	}
-	// 	var oldpath = files.video.path;
-	// 	var pubDir = path.join(__dirname,'..','..','public')
-	// 	var newpath = (pubDir + fields.video_ref + files.video.name).split(' ').join('_');
-	// 	if (!fs.existsSync(pubDir + "/videos")) {
-	// 		fs.mkdirSync(pubDir + "/videos")
-	// 	}
-	// 	if (!fs.existsSync(pubDir + fields.video_ref)) {
-	// 		fs.mkdirSync(pubDir + fields.video_ref)
-	// 	}
-	// 	//TODO check if a file already exists there
-	// 	fs.rename(oldpath, newpath, function (err) {});
+		try {
+		  const lecture_video = req.file
+		  // Why the heck is fields working?
+		  uploadVideo(lecture_video).then(public_video_url => {
+	  		// update the lecture with video
+	  		Lecture.findByIdAndUpdate(lecture_id,
+	  			{
+	  				video_ref: public_video_url,
+	  			},
+	  			function (err, updated_lecture) {
+	  				if (err || updated_lecture == null) {
+	  					console.log("<ERROR> Updating lecture by ID:",lecture_id,"with:",updated_lecture)
+	  					res.status(404).send("lecture not found");
+	  				} else {
+							console.log("<SUCCESS> Adding playback video at URL:",public_video_url)
+	  					res.status(200).json(updated_lecture)
+	  			}
+		  	})
+	  	})
+		} catch (error) {
+		  res.json(error)
+		}	
 
-	// 	// update the lecture with video
-	// 	Lecture.findByIdAndUpdate(lecture_id,
-	// 		{
-	// 			video_ref: (fields.video_ref + files.video.name).split(' ').join('_'),
-	// 			playback_submission_start_time: fields.playback_submission_start_time,
-	// 			playback_submission_end_time: fields.playback_submission_end_time,
-	// 			allow_playback_submissions: true,
-	// 			allow_live_submissions: false,
-	// 			email_sent: true
-	// 		},
-	// 		function (err, updated_lecture) {
-	// 			if (err || updated_lecture == null) {
-	// 				console.log("<ERROR> Updating lecture by ID:",lecture_id,"with:",updated_lecture)
-	// 				res.status(404).send("lecture not found");
-	// 			} else {
-	// 				let section_itr = 0
-	// 				updated_lecture.sections.forEach(section => {
-	// 					Section.findById(section, function (err, section){
-	// 						if(err || section == null) {
-	// 							console.log("<ERROR> Getting section with ID:",section)
-	// 							res.json(err);
-	// 						} else {
-	// 							let student_ids = section.students;
-	// 							let num_iterations = 0;
-	// 							student_ids.forEach(student_id => {
-	// 								User.findById(student_id, function(err, student) {
-	// 									if(err || student == null) {
-	// 										console.log("<ERROR> Getting user with ID:",student_id)
-	// 										res.json(err);
-	// 									} else {
-	// 										//send email
-	// 										var mailOptions = {
-	// 											from: 'venue.do.not.reply@gmail.com',
-	// 											to: student.email,
-	// 											subject: 'Venue - New Lecture Recording Notification',
-	// 											html: '<p>New Lecture available for playback <a href="http://localhost:8080/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
-	// 										};
-	// 										console.log("About to send email with:",mailOptions)
-	// 										transporter.sendMail(mailOptions, function(error, info){
-	// 											if (error || info == null) {
-	// 												console.log(error);
-	// 											} else {
-	// 												console.log('Email sent to '+student.email+': ' + info.response);
-	// 											}
-	// 										});
-	// 										num_iterations++;
-	// 										if(num_iterations === student_ids.length) {
-	// 											section_itr++;
-	// 											if(section_itr == updated_lecture.sections.length) {
-	// 												console.log("<SUCCESS> Adding playback to lecture with ID:",lecture_id)
-	// 												res.json(updated_lecture);
-	// 											}
-	// 										}
-	// 									}
-	// 								})
-	// 							})
-	// 						}
-	// 					})
-	// 				})
-	// 			}
-	// 		}
-	// 	);
-	// });
+})
+
+lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) {
+	let lecture_id = req.params.lecture_id
+	let lecture = req.body.lecture
+	console.log("Received lecture",lecture)
+	Lecture.findByIdAndUpdate(lecture_id,
+		{
+			playback_submission_start_time: lecture.playback_submission_start_time,
+			playback_submission_end_time: lecture.playback_submission_end_time,
+			allow_playback_submissions: true,
+			allow_live_submissions: false,
+			email_sent: true
+		},
+		function (err, updated_lecture) {
+			if (err || updated_lecture == null) {
+				console.log("<ERROR> Updating lecture by ID:",lecture_id,"with:",updated_lecture)
+				res.status(404).send("lecture not found");
+			} else {
+				let section_itr = 0
+				updated_lecture.sections.forEach(section => {
+					Section.findById(section, function (err, section){
+						if(err || section == null) {
+							console.log("<ERROR> Getting section with ID:",section)
+							res.json(err);
+						} else {
+							let student_ids = section.students;
+							let num_iterations = 0;
+							student_ids.forEach(student_id => {
+								User.findById(student_id, function(err, student) {
+									if(err || student == null) {
+										console.log("<ERROR> Getting user with ID:",student_id)
+										res.json(err);
+									} else {
+										//send email
+										var mailOptions = {
+											from: 'venue.do.not.reply@gmail.com',
+											to: student.email,
+											subject: 'Venue - New Lecture Recording Notification',
+											html: '<p>New Lecture available for playback <a href="http://localhost:8080/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
+										};
+										console.log("About to send email with:",mailOptions)
+										transporter.sendMail(mailOptions, function(error, info){
+											if (error || info == null) {
+												console.log(error);
+											} else {
+												console.log('Email sent to '+student.email+': ' + info.response);
+											}
+										});
+										num_iterations++;
+										if(num_iterations === student_ids.length) {
+											section_itr++;
+											if(section_itr == updated_lecture.sections.length) {
+												console.log("<SUCCESS> Adding playback to lecture with ID:",lecture_id)
+												res.json(updated_lecture);
+											}
+										}
+									}
+								})
+							})
+						}
+					})
+				})
+			}
+		}
+	);
 });
 
 lectureRoutes.route('/').get(function (req, res) {
