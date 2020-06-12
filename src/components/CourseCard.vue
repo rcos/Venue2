@@ -1,32 +1,48 @@
 <template>
-  <router-link :to="is_instructor ? {name: 'course_info', params: { id: course._id }} : {name: 'course_info', params: { id: section._id }}">
-    <div v-if="mobile" class="course-card-mobile">
-    	<div class="color-box"  :style="{backgroundColor: box_color}"></div>
-      <div v-if="is_instructor" class="course-info">
-        <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
-        <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>
-        <div v-else class="course-name">{{ course.name }}</div>
-      </div>
-      <div v-else class="course-info">
-        <div class="course-title">{{ section.course.dept }} {{ section.course.course_number }}-{{ section.number }}</div>
-        <div v-if="section.course.name.length > 21" class="course-name">{{ section.course.name.substring(0,18) + "..." }}</div>
-        <div v-else class="course-name">{{ section.course.name }}</div>
-      </div>
+  <div class="course_card_container">
+    <div v-if="is_instructor">
+      <router-link class="course_card_link" :to="is_instructor ? {name: 'course_info', params: { id: course._id }} : {name: 'course_info', params: { id: section._id }}"
+      :aria-label="'Course Info - '+course.name+' - '+course.dept+' '+course.course_number" tabindex="0">
+        <div v-if="mobile" class="course-card-mobile">
+          <div class="color-box"  :style="{backgroundColor: box_color}"></div>
+          <div class="course-info">
+            <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
+            <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>
+            <div v-else class="course-name">{{ course.name }}</div>
+          </div>
+        </div>
+        <div v-else class="course-card">
+          <div class="color-box" :style="{backgroundColor: box_color}"></div>
+          <div class="course-info">
+            <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
+            <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>
+            <div v-else class="course-name">{{ course.name }}</div>
+          </div>
+        </div>
+      </router-link>
     </div>
-    <div v-else class="course-card">
-    	<div class="color-box" :style="{backgroundColor: box_color}"></div>
-      <div v-if="is_instructor" class="course-info">
-        <div class="course-title">{{ course.dept }} {{ course.course_number }}</div>
-        <div v-if="course.name.length > 21" class="course-name">{{ course.name.substring(0,18) + "..." }}</div>
-        <div v-else class="course-name">{{ course.name }}</div>
-      </div>
-      <div v-else class="course-info">
-        <div class="course-title">{{ section.course.dept }} {{ section.course.course_number }}-{{ section.number }}</div>
-        <div v-if="section.course.name.length > 21" class="course-name">{{ section.course.name.substring(0,18) + "..." }}</div>
-        <div v-else class="course-name">{{ section.course.name }}</div>
-      </div>
+    <div v-else>
+      <router-link class="course_card_link" :to="is_instructor ? {name: 'course_info', params: { id: course._id }} : {name: 'course_info', params: { id: section._id }}"
+      :aria-label="'Course Info - '+section.course.name+' - '+section.course.dept+' '+section.course.course_number" tabindex="0">
+        <div v-if="mobile" class="course-card-mobile">
+          <div class="color-box"  :style="{backgroundColor: box_color}"></div>
+          <div class="course-info">
+            <div class="course-title">{{ section.course.dept }} {{ section.course.course_number }}-{{ section.number }}</div>
+            <div v-if="section.course.name.length > 21" class="course-name">{{ section.course.name.substring(0,18) + "..." }}</div>
+            <div v-else class="course-name">{{ section.course.name }}</div>
+          </div>
+        </div>
+        <div v-else class="course-card">
+          <div class="color-box" :style="{backgroundColor: box_color}"></div>
+          <div class="course-info">
+            <div class="course-title">{{ section.course.dept }} {{ section.course.course_number }}-{{ section.number }}</div>
+            <div v-if="section.course.name.length > 21" class="course-name">{{ section.course.name.substring(0,18) + "..." }}</div>
+            <div v-else class="course-name">{{ section.course.name }}</div>
+          </div>
+        </div>
+      </router-link>
     </div>
-  </router-link>
+  </div>
 </template>
 
 <script>
@@ -61,13 +77,19 @@
 </script>
 
 <style scoped>
+.course_card_container {
+  /*min-width: 40*/
+  width: 20rem;
+  display: inline-block;
+  margin: 1rem;
+}
+.mobile-justify-div .course_card_container {
+  width: 80%;
+}
 .course-card {
 	display: inline-block;
-	margin-left: 2rem;
-  margin-top: 1rem;
-	/*width: 16rem;*/
-  width: 20rem;
 	height: 3rem;
+  width: 100%;
   line-height: 3rem;
   box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.04);
   border-radius: 3px;
@@ -77,15 +99,20 @@
   border: 1px solid rgba(107, 163, 195, 0.7);
 }
 
-.course-card:hover {
+.course-card:hover,
+.course_card_link:focus .course-card {
   border: 1px solid rgba(85, 136, 166, 1);
-  box-shadow: 0px 3px 10px 7px rgba(0, 0, 0, 0.04);
+  box-shadow: 0px 0px 10px 7px rgba(0, 0, 0, 0.2);
+}
+
+.course_card_link:focus {
+  outline: none;
 }
 
 .course-card-mobile {
 	height: 50px;
   vertical-align: top;
-  width: 80%;
+  min-width: 90%;
   margin: 2rem auto;
   box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.04);
   border-radius: 3px;
@@ -95,9 +122,10 @@
   border: 1px solid rgba(107, 163, 195, 0.7);
 }
 
-.course-card-mobile:hover {
+.course-card-mobile:hover,
+.course_card_link:focus .course-card-mobile {
   border: 1px solid rgba(85, 136, 166, 1);
-  box-shadow: 0px 3px 10px 7px rgba(0, 0, 0, 0.04);
+  box-shadow: 0px 0px 10px 7px rgba(0, 0, 0, 0.2);
 }
 
 .course-card-mobile .course-title {
@@ -169,28 +197,12 @@
 .course-title {
   display: inline-block;
   font-size: 0.7rem;
-  color: #1591C5;
+  color: rgb(14, 96, 131);
 }
 
 .course-name {
   display: inline-block;
   margin-left: 0.85rem;
   font-size: 0.9rem;
-}
-
-/*Medium devices (tablets and below)*/
-@media (max-width: 1128px) {
-  .course-card {
-    width: 21rem;
-    margin-top: 2.5rem;
-  }
-}
-
-/*Small devices (phones and below)*/
-@media (max-width: 575.98px) {
-  .course-card {
-    margin: auto;
-    margin-top: 2.5rem;
-  }
 }
 </style>

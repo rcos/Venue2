@@ -7,8 +7,8 @@
     <div class="center-fill-section" v-else-if="live_lectures == null || live_lectures.length == 0">
       No live lectures.
     </div>
-    <div v-else :class="'sub-section ' + (mobileMode ? 'is-mobile':'')">
-      <LectureCard v-for="lecture in live_lectures"
+    <div v-else :class="'sub-section ' + (mobileMode ? 'is-mobile':'')" aria-label="Live Lecture List">
+      <LectureCard v-for="(lecture,i) in live_lectures" :key="i"
         :lecture="lecture"
         :courseName="lecture.sections[0].course.name"
         :courseDept="lecture.sections[0].course.dept"

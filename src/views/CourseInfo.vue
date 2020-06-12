@@ -24,13 +24,23 @@
         <!-- Attendance History Tab Button / Statistics Tab Button Bar -->
         <div class="course-info-sub-tab">
           <div class="left">
-            <div v-on:click="subview_section_id = 0" :class="'tab ' + (subview_section_id == 0 ? 'active' : '')">Attendance History</div>
-            <div v-on:click="subview_section_id = 2" :class="'tab ' + (subview_section_id == 2 ? 'active' : '')">Upcoming</div>
-            <div v-if="data_to_show" v-on:click="subview_section_id = 1" :class="'tab ' + (subview_section_id == 1 ? 'active' : '')">Statistics</div>
+            <div
+              v-on:click="subview_section_id = 0" v-on:keyup.enter="subview_section_id = 0"
+              :class="'tab ' + (subview_section_id == 0 ? 'active' : '')"
+              tabindex="0" role="button" aria-label="Show Attendance History">Attendance History</div>
+            <div
+              v-on:click="subview_section_id = 2" v-on:keyup.enter="subview_section_id = 2"
+              :class="'tab ' + (subview_section_id == 2 ? 'active' : '')"
+              tabindex="0" role="button" aria-label="Show Upcoming Lectures">Upcoming</div>
+            <div
+              v-if="data_to_show" v-on:click="subview_section_id = 1" v-on:keyup.enter="subview_section_id = 1"
+              :class="'tab ' + (subview_section_id == 1 ? 'active' : '')"
+              tabindex="0" role="button" aria-label="Show Course Statistics">Statistics</div>
           </div>
           <div v-if="this.current_user.is_instructor" class="right">
-            <select v-model="selected_section">
-              <option v-for="section_ in section_arr" :value="section_[1]">Section {{ section_[0] }}</option>
+            <label id="section_select_label">Select Section</label>
+            <select v-model="selected_section" aria-labelledby="section_select_label">
+              <option v-for="(section_,i) in section_arr" :key="i" :value="section_[1]">Section {{ section_[0] }}</option>
               <option :value="null" selected>All Sections</option>
             </select>
           </div>
@@ -74,7 +84,8 @@
             <div class="tab active">Attendance History</div>
           </div>
           <div class="right"  v-if="this.current_user.is_instructor">
-            <select v-model="selected_section">
+            <label id="section_select_label">Select Section</label>
+            <select v-model="selected_section" aria-labelledby="section_select_label">
               <option v-for="section_ in section_arr" :value="section_[1]">Section {{ section_[0] }}</option>
               <option :value="null" selected>All Sections</option>
             </select>

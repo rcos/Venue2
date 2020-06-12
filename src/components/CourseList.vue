@@ -169,7 +169,8 @@
 .course-list {
   height: 12.5rem;
   overflow-y: auto;
-  width: 90%;
+  width: 100%;
+  padding-left: 2rem;
 }
 
 .course-list::-webkit-scrollbar {

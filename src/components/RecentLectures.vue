@@ -7,8 +7,8 @@
     <div class="center-fill-section" v-else-if="recent_lectures == null || recent_lectures.length == 0">
       No recent lectures.
     </div>
-    <div v-else :class="'sub-section ' + (mobileMode ? 'is-mobile':'')">
-      <LectureCard v-for="lecture in recent_lectures"
+    <div v-else :class="'sub-section ' + (mobileMode ? 'is-mobile':'')" aria-label="Recent Lecture List">
+      <LectureCard v-for="(lecture,i) in recent_lectures" :key="i"
         :lecture="lecture"
         :courseName="lecture.sections[0].course.name"
         :courseDept="lecture.sections[0].course.dept"

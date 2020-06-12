@@ -11,7 +11,7 @@
               <div class="mobile-event-pill-area">
 
 
-                <router-link v-for="event in sections_info[selected_section][month_index]" :key="event._id" :to="{name: 'lecture_info', params: { lecture_id: event._id }}">
+                <router-link v-for="event in sections_info[selected_section][month_index]" :key="event._id" :to="{name: 'lecture_info', params: { lecture_id: event._id }}" :aria-label="'Lecture Info - '+event.title">
                   <div :class="'mobile-pill ' + getClassByAttendance(event.percentage == undefined ? 0 : event.percentage)">
                     <div class="day-of-week">{{ getDayOfWeek(event) }}</div>
                     <div class="day-of-month">{{ getDayOfMonth(event) }}</div>
@@ -24,7 +24,7 @@
             <div v-else>
               <div class="month-area">{{ STATIC_MONTHS[month_index] }}</div>
               <div class="event-pills-area">
-                <router-link v-for="event in sections_info[selected_section][month_index]" :key="event._id" :to="{name: 'lecture_info', params: { lecture_id: event._id }}">
+                <router-link v-for="event in sections_info[selected_section][month_index]" :key="event._id" :to="{name: 'lecture_info', params: { lecture_id: event._id }}" :aria-label="'Lecture Info - '+event.title">
                   <!-- <div :class="'inline-block instructor-attendance-history-pill ' + getClassByAttendance(getAttendancePercentage(event, selected_section))"> -->
                   <div :class="'inline-block instructor-attendance-history-pill ' + getClassByAttendance(event.percentage == undefined ? 0 : event.percentage)">
                     <div class="inline-block date-area">
@@ -358,7 +358,7 @@
                 let running_total = 0
                 students.forEach(stud => {
                   let live = []
-                  let playback
+                  let playback = null
                   submissions.forEach(sub => {
                     if(sub.submitter._id == stud) {
                       if(sub.is_live_submission) {
@@ -368,14 +368,14 @@
                       }
                     }
                   })
-                  if(live.length > 0 && playback) {
+                  if(live.length > 0 && playback != null) {
                     running_total += Math.max(
                       live.length / lecture_.checkins.length,
                       Math.ceil(playback.video_percent * 100) / 100
                     )
                   } else if(live.length > 0) {
                     running_total += live.length / lecture_.checkins.length
-                  } else if(playback) {
+                  } else if(playback != null) {
                     running_total += Math.ceil(playback.video_percent * 100) / 100
                   }
                 })
