@@ -22,15 +22,22 @@ export default {
       lecture: lecture
     })
   },
-  addLecturePlayback(lecture, video) {
+  addPlaybackVideo(lecture_id, video) {
     let formdata = new FormData()
     formdata.append('video', video)
-    return API().post('lectures/add_playback/' + lecture._id,
+    return API().post('lectures/add_playback_video/' + lecture_id,
       formdata,
       {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
+      }
+    )
+  },
+  updateToPlayback(lecture, video) {
+    return API().post('lectures/update_to_playback/' + lecture._id,
+      {
+        lecture: lecture
       }
     )
   },
