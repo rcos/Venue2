@@ -1,6 +1,8 @@
 <template>
 	<div id="unrestricted_playback">
-		<video id="video_player" class="video-js vjs-big-play-centered" controls></video>
+		<video id="video_player" class="video-js vjs-big-play-centered" controls>
+			<source v-bind:src="lecture.video_ref" type="">
+		</video>
 	</div>
 </template>
 
@@ -18,11 +20,10 @@ export default {
 		}
 	},
 	mounted() {
+		console.log("video ref",this.lecture.video_ref)
 		let self = this
 		videojs("video_player", {}, function() {
 			self.vjs = this
-			this.src('http://localhost:9000' + self.lecture.video_ref)
-			this.load()
 		})
 	},
 	beforeDestroy() {
