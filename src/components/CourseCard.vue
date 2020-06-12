@@ -78,7 +78,8 @@
 
 <style scoped>
 .course_card_container {
-  min-width: 40%;
+  /*min-width: 40*/
+  width: 20rem;
   display: inline-block;
   margin: 1rem;
 }
