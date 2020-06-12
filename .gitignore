@@ -6,6 +6,8 @@ node_modules
 .env.local
 .env.*.local
 
+server/Lecture/venue-279902-649f22aa6e34.json
+
 # server env files
 variables.env
 
