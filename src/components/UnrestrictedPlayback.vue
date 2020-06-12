@@ -12,13 +12,24 @@ export default {
 	props: {
 		lecture: Object
 	},
+	data() {
+		return {
+			vjs: null
+		}
+	},
 	mounted() {
 		let self = this
 		videojs("video_player", {}, function() {
+			self.vjs = this
 			this.src('http://localhost:9000' + self.lecture.video_ref)
 			this.load()
 		})
 	},
+	beforeDestroy() {
+		if(this.vjs) {
+			this.vjs.dispose()
+		}
+	}
 }
 </script>
 

@@ -2,14 +2,14 @@
   <div>
     <!-- TODO: Check if student submitted already -->
     <div v-if="qr_scanning_window_open">
-      <button @click="closeQRScanningWindow" id="exit_preview_btn">X</button>
+      <button @click="closeQRScanningWindow" id="exit_preview_btn" tabindex="0" aria-label="Close QR Scanner">X</button>
       <qrcode-stream id="video_preview" @decode="checkForQRMatch"></qrcode-stream>
     </div>
     <div id="table-header">
       <h2>Attendance</h2>
-      <button v-if="student_can_submit_live" @click="showQRScanningWindow" class="header-btn">Scan QR</button>
-      <router-link v-else-if="student_can_watch_playback" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
-        <button>Watch Playback</button>
+      <button v-if="student_can_submit_live" @click="showQRScanningWindow" class="header-btn btn btn-primary">Scan QR</button>
+      <router-link class="header-btn btn btn-secondary" v-else-if="student_can_watch_playback" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+        Watch Playback
       </router-link>
     </div>
     <LectureAttendanceTable :is_instructor="false" :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" />
@@ -46,7 +46,6 @@
       console.log("In student lecture attendance table. Lecture:",this.lecture)
       this.checkIfStudentCanSubmitLive()
       this.checkIfStudentCanWatchPlayback()
-      console.log("Student submitted to checkin",this.studentSubmittedToCheckin())
     },
     methods: {
       showQRScanningWindow() {

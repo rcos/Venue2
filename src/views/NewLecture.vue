@@ -6,12 +6,13 @@
       <div class="form-group">
         <!-- Lecture Info -->
         <div class="input-wrapper">
-          <label>Title</label>
+          <label id="title_label">Lecture Title</label>
           <input
             type="text"
             class="form-control new-lecture-input"
             placeholder="e.g. Lecture 1"
             v-model.lazy="lecture.title"
+            aria-labelledby="title_label"
           />
         </div>
         <!-- Section -->
@@ -24,40 +25,40 @@
         </div>
         <Sections v-else v-bind:sections="course_sections" v-on:select-section="addSection" />
         <div class="input-wrapper">
-          <input @click="setAllowLiveSubmissions" type="checkbox" name="live_submission" v-model="allow_live_submissions">
-          <label for="live_submission">Live Submissions (can add playback after lecture ends)</label><br>
-          <input @click="setAllowPlaybackSubmissions" type="checkbox" name="playback_submission" v-model="allow_playback_submissions">
-          <label for="playback_submission">Playback Submissions Only</label><br>
+          <input @click="setAllowLiveSubmissions" type="checkbox" name="live_submission" v-model="allow_live_submissions" aria-labelledby="live_submission_label">
+          <label id="live_submission_label">Live Submissions (can add playback after lecture ends)</label><br>
+          <input @click="setAllowPlaybackSubmissions" type="checkbox" name="playback_submission" v-model="allow_playback_submissions" aria-labelledby="playback_submission_label">
+          <label id="playback_submission_label">Playback Submissions Only</label><br>
         </div>
         <!-- Times -->
         <div v-if="allow_live_submissions">
           <div class="input-wrapper">
-            <label>Start Time</label>
-            <input id="lecture_start"/>
-            <label>End Time</label>
-            <input id="lecture_end"/>
+            <label id="start_time_label">Start Time</label>
+            <input id="lecture_start" aria-labelledby="start_time_label"/>
+            <label id="end_time_label">End Time</label>
+            <input id="lecture_end" aria-labelledby="end_time_label"/>
           </div>
           <div class="input-wrapper">
-            <input @click="setAllowRandom" type="checkbox" name="random_times" v-model="random_times"/>
-            <label for="random_times">Use randomized check-in times</label>
-            <input @click="setAllowCustom" type="checkbox" name="custom_times" v-model="custom_times"/>
-            <label for="custom_times">Use custom check-in times</label><br>
+            <input @click="setAllowRandom" type="checkbox" v-model="random_times" aria-labelledby="random_times"/>
+            <label id="random_times">Use randomized check-in times</label>
+            <input @click="setAllowCustom" type="checkbox" v-model="custom_times" aria-labelledby="custom_times"/>
+            <label id="custom_times">Use custom check-in times</label><br>
           </div>
           <div v-if="random_times">
             <div class="input-wrapper">
-              <label for="random_checkin_count">Number of check-in times</label>
-              <input class="random_input" type="number" min="1" max="5" name="random_checkin_count" v-model.lazy="random_checkin_count"/>
-              <label for="random_checkin_length">Minutes for each check-in</label>
-              <input class="random_input" type="number" min="1" max="10" name="random_checkin_length" v-model.lazy="random_checkin_length"/>
+              <label id="random_checkin_count">Number of check-in times</label>
+              <input class="random_input" type="number" min="1" max="5" v-model.lazy="random_checkin_count" aria-labelledby="random_checkin_count"/>
+              <label id="random_checkin_length">Minutes for each check-in</label>
+              <input class="random_input" type="number" min="1" max="10" v-model.lazy="random_checkin_length" aria-labelledby="random_checkin_length"/>
             </div>
           </div>
           <div v-else-if="custom_times">
             <div v-for="(checkin,i) in checkins" :key="i" class="input-wrapper" id="submission-time-wrapper">
-              <label>Submission Start Time</label>
-              <input :id="'submission_start_'+i"/>
-              <label>Submission End Time</label>
-              <input :id="'submission_end_'+i"/>
-              <button v-if="checkins.length > 1" type="button" class="btn btn-danger" @click="handleRemoveCheckin(i)">X</button>
+              <label :id="'submission_start_label_'+i">Submission Start Time</label>
+              <input :id="'submission_start_'+i" :aria-labelledby="'submission_start_label_'+i"/>
+              <label :id="'submission_end_label_'+i">Submission End Time</label>
+              <input :id="'submission_end_'+i" :aria-labelledby="'submission_end_label_'+i"/>
+              <button v-if="checkins.length > 1" type="button" class="btn btn-danger" @click="handleRemoveCheckin(i)" :aria-label="'Remove submission window '+(i+1)">X</button>
             </div>
             <div class="input-wrapper">
               <button type="button" class="btn btn-secondary" @click="handleAddCheckin">Add another attendance check-in</button>
