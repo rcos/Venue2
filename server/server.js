@@ -103,18 +103,3 @@ app.use('/submissions', jwtVerify, submissionRouter);
 app.use('/lectures', jwtVerify, lectureRouter);
 app.use('/polls', jwtVerify, pollRouter);
 app.use('/lecturesubmissions', jwtVerify, lectureSubmissionRouter);
-
-const fs = require('fs');
-const http = require('http');
-
-http.createServer(function (req, res) {
- fs.readFile(__dirname + '/../public' + req.url, function (err,data) {
-    if (err) {
-      res.writeHead(404);
-      res.end(JSON.stringify(err));
-      return;
-    }
-    res.writeHead(200);
-    res.end(data);
-  });
-}).listen(9000);
