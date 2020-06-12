@@ -1,11 +1,10 @@
 const express = require('express');
 const lectureRoutes = express.Router();
-
 const formidable = require('formidable');
 var fs = require('fs');
 var path = require('path');
 var nodemailer = require('nodemailer');
-
+var multer = require("multer")
 var transporter = nodemailer.createTransport({
 	service: 'gmail',
 	auth: {
@@ -13,6 +12,15 @@ var transporter = nodemailer.createTransport({
 		pass: process.env.EMAIL_PASS
 	}
 });
+var multer_storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './uploads');
+     },
+    filename: function (req, file, cb) {
+        cb(null , file.originalname);
+    }
+});
+var upload = multer({ storage: multer_storage })
 
 const legal_lecture_types = ["all","live","upcoming","past","recent","active_playback"]
 const legal_preferences = ["with_sections", "with_sections_and_course", "none"]
@@ -35,91 +43,89 @@ lectureRoutes.route('/add').post(function (req, res) {
     });
 });
 
-lectureRoutes.route('/add_playback/:lecture_id').post(function (req, res) {
-
-	const form = formidable({ multiples: true });
+lectureRoutes.post('/add_playback/:lecture_id', upload.single('video'),function (req, res) {
 	let lecture_id = req.params.lecture_id
+	res.status(200).send("Uploaded video")
+	// form.parse(req, (err, fields, files) => {
+	// 	if (err) {
+	// 		next(err);
+	// 		return;
+	// 	}
+	// 	var oldpath = files.video.path;
+	// 	var pubDir = path.join(__dirname,'..','..','public')
+	// 	var newpath = (pubDir + fields.video_ref + files.video.name).split(' ').join('_');
+	// 	if (!fs.existsSync(pubDir + "/videos")) {
+	// 		fs.mkdirSync(pubDir + "/videos")
+	// 	}
+	// 	if (!fs.existsSync(pubDir + fields.video_ref)) {
+	// 		fs.mkdirSync(pubDir + fields.video_ref)
+	// 	}
+	// 	//TODO check if a file already exists there
+	// 	fs.rename(oldpath, newpath, function (err) {});
 
-	form.parse(req, (err, fields, files) => {
-		if (err) {
-			next(err);
-			return;
-		}
-		var oldpath = files.video.path;
-		var pubDir = path.join(__dirname,'..','..','public')
-		var newpath = (pubDir + fields.video_ref + files.video.name).split(' ').join('_');
-		if (!fs.existsSync(pubDir + "/videos")) {
-			fs.mkdirSync(pubDir + "/videos")
-		}
-		if (!fs.existsSync(pubDir + fields.video_ref)) {
-			fs.mkdirSync(pubDir + fields.video_ref)
-		}
-		//TODO check if a file already exists there
-		fs.rename(oldpath, newpath, function (err) {});
-
-		// update the lecture with video
-		Lecture.findByIdAndUpdate(lecture_id,
-			{
-				video_ref: (fields.video_ref + files.video.name).split(' ').join('_'),
-				playback_submission_start_time: fields.playback_submission_start_time,
-				playback_submission_end_time: fields.playback_submission_end_time,
-				allow_playback_submissions: true,
-				allow_live_submissions: false,
-				email_sent: true
-			},
-			function (err, updated_lecture) {
-				if (err || updated_lecture == null) {
-					console.log("<ERROR> Updating lecture by ID:",lecture_id,"with:",updated_lecture)
-					res.status(404).send("lecture not found");
-				} else {
-					let section_itr = 0
-					updated_lecture.sections.forEach(section => {
-						Section.findById(section, function (err, section){
-							if(err || section == null) {
-								console.log("<ERROR> Getting section with ID:",section)
-								res.json(err);
-							} else {
-								let student_ids = section.students;
-								let num_iterations = 0;
-								student_ids.forEach(student_id => {
-									User.findById(student_id, function(err, student) {
-										if(err || student == null) {
-											console.log("<ERROR> Getting user with ID:",student_id)
-											res.json(err);
-										} else {
-											//send email
-											var mailOptions = {
-												from: 'venue.do.not.reply@gmail.com',
-												to: student.email,
-												subject: 'Venue - New Lecture Recording Notification',
-												html: '<p>New Lecture available for playback <a href="http://localhost:8080/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
-											};
-											console.log("About to send email with:",mailOptions)
-											transporter.sendMail(mailOptions, function(error, info){
-												if (error || info == null) {
-													console.log(error);
-												} else {
-													console.log('Email sent to '+student.email+': ' + info.response);
-												}
-											});
-											num_iterations++;
-											if(num_iterations === student_ids.length) {
-												section_itr++;
-												if(section_itr == updated_lecture.sections.length) {
-													console.log("<SUCCESS> Adding playback to lecture with ID:",lecture_id)
-													res.json(updated_lecture);
-												}
-											}
-										}
-									})
-								})
-							}
-						})
-					})
-				}
-			}
-		);
-	});
+	// 	// update the lecture with video
+	// 	Lecture.findByIdAndUpdate(lecture_id,
+	// 		{
+	// 			video_ref: (fields.video_ref + files.video.name).split(' ').join('_'),
+	// 			playback_submission_start_time: fields.playback_submission_start_time,
+	// 			playback_submission_end_time: fields.playback_submission_end_time,
+	// 			allow_playback_submissions: true,
+	// 			allow_live_submissions: false,
+	// 			email_sent: true
+	// 		},
+	// 		function (err, updated_lecture) {
+	// 			if (err || updated_lecture == null) {
+	// 				console.log("<ERROR> Updating lecture by ID:",lecture_id,"with:",updated_lecture)
+	// 				res.status(404).send("lecture not found");
+	// 			} else {
+	// 				let section_itr = 0
+	// 				updated_lecture.sections.forEach(section => {
+	// 					Section.findById(section, function (err, section){
+	// 						if(err || section == null) {
+	// 							console.log("<ERROR> Getting section with ID:",section)
+	// 							res.json(err);
+	// 						} else {
+	// 							let student_ids = section.students;
+	// 							let num_iterations = 0;
+	// 							student_ids.forEach(student_id => {
+	// 								User.findById(student_id, function(err, student) {
+	// 									if(err || student == null) {
+	// 										console.log("<ERROR> Getting user with ID:",student_id)
+	// 										res.json(err);
+	// 									} else {
+	// 										//send email
+	// 										var mailOptions = {
+	// 											from: 'venue.do.not.reply@gmail.com',
+	// 											to: student.email,
+	// 											subject: 'Venue - New Lecture Recording Notification',
+	// 											html: '<p>New Lecture available for playback <a href="http://localhost:8080/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
+	// 										};
+	// 										console.log("About to send email with:",mailOptions)
+	// 										transporter.sendMail(mailOptions, function(error, info){
+	// 											if (error || info == null) {
+	// 												console.log(error);
+	// 											} else {
+	// 												console.log('Email sent to '+student.email+': ' + info.response);
+	// 											}
+	// 										});
+	// 										num_iterations++;
+	// 										if(num_iterations === student_ids.length) {
+	// 											section_itr++;
+	// 											if(section_itr == updated_lecture.sections.length) {
+	// 												console.log("<SUCCESS> Adding playback to lecture with ID:",lecture_id)
+	// 												res.json(updated_lecture);
+	// 											}
+	// 										}
+	// 									}
+	// 								})
+	// 							})
+	// 						}
+	// 					})
+	// 				})
+	// 			}
+	// 		}
+	// 	);
+	// });
 });
 
 lectureRoutes.route('/').get(function (req, res) {
