@@ -199,16 +199,19 @@ body, * {
 }
 
 .course-info-sub-tab .left .tab {
+  font-weight: 100;
   margin-right: 55px;
   cursor: pointer;
 }
 
-.course-info-sub-tab .left .tab:focus{
-  font-weight: bolder;
+.course-info-sub-tab .left .tab.active {
+  border-bottom: 1px solid gray;
 }
 
-.course-info-sub-tab .left .tab.active {
-  font-weight: bold;
+.course-info-sub-tab .left .tab:hover,
+.course-info-sub-tab .left .tab:focus {
+  outline: none;
+  font-weight: 900;
 }
 
 .course-info-sub-tab .right {
