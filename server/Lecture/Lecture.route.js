@@ -1,6 +1,7 @@
 const express = require('express');
 const lectureRoutes = express.Router();
 const formidable = require('formidable');
+const {Storage} = require("@google-cloud/storage")
 var fs = require('fs');
 var path = require('path');
 var nodemailer = require('nodemailer');
@@ -12,15 +13,15 @@ var transporter = nodemailer.createTransport({
 		pass: process.env.EMAIL_PASS
 	}
 });
-var multer_storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, './uploads');
-     },
-    filename: function (req, file, cb) {
-        cb(null , file.originalname);
-    }
-});
-var upload = multer({ storage: multer_storage })
+// var multer_storage = multer.diskStorage({
+//     destination: function(req, file, cb) {
+//         cb(null, './uploads');
+//      },
+//     filename: function (req, file, cb) {
+//         cb(null , file.originalname);
+//     }
+// });
+var upload = multer({ storage: multer.memoryStorage() })
 
 const legal_lecture_types = ["all","live","upcoming","past","recent","active_playback"]
 const legal_preferences = ["with_sections", "with_sections_and_course", "none"]
@@ -29,6 +30,34 @@ let Lecture = require('../Lecture/Lecture.model')
 let User = require('../User/User.model')
 let Course = require('../Course/Course.model')
 let Section = require('../Section/Section.model')
+
+// GCS Specific
+
+const storage = new Storage({
+  keyFilename: path.join(__dirname, 'venue-279902-649f22aa6e34.json'),
+  projectId: "venue-279902"
+})
+
+const bucket = storage.bucket('venue_videos')
+
+const uploadVideo = (file) => new Promise((resolve, reject) => {
+  const { originalname, buffer } = file
+
+  const blob = bucket.file(originalname.replace(/ /g, "_"))
+  const blobStream = blob.createWriteStream({
+    resumable: false
+  })
+  blobStream.on('finish', () => {
+    const publicUrl = 'https://storage.googleapis.com/' + bucket.name + '/' + blob.name
+    resolve(publicUrl)
+  })
+  .on('error', () => {
+    reject(`Unable to upload video, something went wrong`)
+  })
+  .end(buffer)
+})
+
+// Lecture Routes
 
 lectureRoutes.route('/add').post(function (req, res) {
   let lecture = new Lecture(req.body.lecture);
@@ -45,7 +74,20 @@ lectureRoutes.route('/add').post(function (req, res) {
 
 lectureRoutes.post('/add_playback/:lecture_id', upload.single('video'),function (req, res) {
 	let lecture_id = req.params.lecture_id
-	res.status(200).send("Uploaded video")
+	try {
+	  const lecture_video = req.file
+	  uploadVideo(lecture_video).then(public_video_url => {
+	  	console.log("public_video_url", public_video_url)
+	    res
+	      .status(200)
+	      .json({
+	        message: "Upload was successful",
+	        data: public_video_url
+	      })
+	    })
+	} catch (error) {
+	  next(error)
+	}
 	// form.parse(req, (err, fields, files) => {
 	// 	if (err) {
 	// 		next(err);

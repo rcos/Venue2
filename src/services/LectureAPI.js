@@ -25,9 +25,6 @@ export default {
   addLecturePlayback(lecture, video) {
     let formdata = new FormData()
     formdata.append('video', video)
-    formdata.append("video_ref", lecture.video_ref)
-    formdata.append("playback_submission_start_time", lecture.playback_submission_start_time)
-    formdata.append("playback_submission_end_time", lecture.playback_submission_end_time)
     return API().post('lectures/add_playback/' + lecture._id,
       formdata,
       {
