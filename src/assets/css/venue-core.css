@@ -349,10 +349,10 @@ body, * {
 .instructor-attendance-history-pill .percentage-area::before {
   content: '';
   position: absolute;
-  border-right: 15px solid green;
-  border-bottom: 31px solid green;
-  border-top: 31px solid transparent;
-  border-left: 15px solid transparent;
+  border-right: 16px solid green;
+  border-bottom: 32px solid green;
+  border-top: 32px solid transparent;
+  border-left: 16px solid transparent;
   left: -30px;
 }
 
@@ -369,8 +369,8 @@ body, * {
 }
 
 .instructor-attendance-history-pill.good .percentage-area::before {
-  border-right: 15px solid #24E565;
-  border-bottom: 31px solid #24E565;
+  border-right: 16px solid #24E565;
+  border-bottom: 32px solid #24E565;
 }
 
 .instructor-attendance-history-pill.medium {
@@ -385,8 +385,8 @@ body, * {
 }
 
 .instructor-attendance-history-pill.medium .percentage-area::before {
-  border-right: 15px solid #E97E47;
-  border-bottom: 31px solid #E97E47;
+  border-right: 16px solid #E97E47;
+  border-bottom: 32px solid #E97E47;
 }
 
 
@@ -402,8 +402,8 @@ body, * {
 }
 
 .instructor-attendance-history-pill.bad .percentage-area::before {
-  border-right: 15px solid rgb(209, 62, 52);
-  border-bottom: 31px solid rgb(209, 62, 52);
+  border-right: 16px solid rgb(209, 62, 52);
+  border-bottom: 32px solid rgb(209, 62, 52);
 }
 
 .instructor-attendance .month-area,
