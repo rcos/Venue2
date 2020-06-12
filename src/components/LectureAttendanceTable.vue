@@ -1,29 +1,28 @@
 <template>
 	<div>
-    <div class="tabs" v-if="all_students">
-      <button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)" tabindex="0" aria-label="Show Live Attendance"><h5>Live ({{Object.keys(live_submissions).length}}/{{all_students.length}})</h5></button>
-      <button id="playback_btn" class="tab_btn" @click="selectTab(1)" tabindex="0" aria-label="Show Playback Attendance"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
-      <button id="absent_btn" class="tab_btn" @click="selectTab(2)" tabindex="0" aria-label="Show Absent"><h5>Absent ({{absent.length}}/{{all_students.length}})</h5></button>
-      <button id="stats_btn" class="tab_btn" @click="selectTab(3)" tabindex="0" aria-label="Show Statistics"><h5>Statistics</h5></button>
-    </div>
-    <div class="tabs" v-else>
-      <button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)" tabindex="0" aria-label="Show Live Attendance"><h5>Live</h5></button>
-      <button id="playback_btn" class="tab_btn" @click="selectTab(1)" tabindex="0" aria-label="Show Playback Attendance"><h5>Playback</h5></button>
-      <button id="absent_btn" class="tab_btn" @click="selectTab(2)" tabindex="0" aria-label="Show Absent"><h5>Absent</h5></button>
-      <button id="stats_btn" class="tab_btn" @click="selectTab(3)" tabindex="0" aria-label="Show Statistics"><h5>Statistics</h5></button>
-    </div>
-    <div v-if="selected_tab === 0" id="live_submit" class="tab_section">
-      <LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="live_submissions" :is_live="true" />
-    </div>
-    <div v-if="selected_tab === 1" id="playback_submit" class="tab_section">
-      <LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="playback_submissions" :is_playback="true" />
-    </div>
-    <div v-if="selected_tab === 2" id="no_submit" class="tab_section">
-      <LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="absent" :is_absent="true" />
-    </div>
-    <div v-if="selected_tab === 3" id="stats" class="tab_section">
-      Statistics
-    </div>
+		<div class="tabs" v-if="all_students">
+			<button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)" tabindex="0" aria-label="Show Live Attendance"><h5>Live ({{Object.keys(live_submissions).length}}/{{all_students.length}})</h5></button>
+			<button id="playback_btn" class="tab_btn" @click="selectTab(1)" tabindex="0" aria-label="Show Playback Attendance"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
+			<button id="absent_btn" class="tab_btn" @click="selectTab(2)" tabindex="0" aria-label="Show Absent"><h5>Absent ({{absent.length}}/{{all_students.length}})</h5></button>
+			<button id="stats_btn" class="tab_btn" @click="selectTab(3)" tabindex="0" aria-label="Show Statistics"><h5>Statistics</h5></button>
+		</div>
+		<div class="tabs" v-else>
+			<button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)" tabindex="0" aria-label="Show Live Attendance"><h5>Live</h5></button>
+			<button id="playback_btn" class="tab_btn" @click="selectTab(1)" tabindex="0" aria-label="Show Playback Attendance"><h5>Playback</h5></button>
+			<button id="absent_btn" class="tab_btn" @click="selectTab(2)" tabindex="0" aria-label="Show Absent"><h5>Absent</h5></button>
+			<button id="stats_btn" class="tab_btn" @click="selectTab(3)" tabindex="0" aria-label="Show Statistics"><h5>Statistics</h5></button>
+		</div>
+		<div v-if="selected_tab === 0" id="live_submit" class="tab_section">
+			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="live_submissions" :is_live="true" />
+		</div>
+		<div v-if="selected_tab === 1" id="playback_submit" class="tab_section">
+			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="playback_submissions" :is_playback="true" />
+		</div>
+		<div v-if="selected_tab === 2" id="no_submit" class="tab_section">
+			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="absent" :is_absent="true" />
+		</div>
+		<div v-if="selected_tab === 3" id="stats" class="tab_section">
+			Statistics
 		</div>
 	</div>
 </template>
