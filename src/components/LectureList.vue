@@ -34,6 +34,7 @@
     height: 100%;
     width: 85%;
     margin: auto;
+    overflow-y: auto;
   }
 
   /*Ipad & below*/
