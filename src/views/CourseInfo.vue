@@ -27,15 +27,15 @@
             <div
               v-on:click="subview_section_id = 0" v-on:keyup.enter="subview_section_id = 0"
               :class="'tab ' + (subview_section_id == 0 ? 'active' : '')"
-              tabindex="0" role="button" aria-label="Show Attendance History">Attendance History</div>
+              tabindex="0" role="tab" :aria-selected="(subview_section_id == 0 ? 'true' : 'false')" aria-controls="panel-1" aria-label="Show Attendance History">Attendance History</div>
             <div
               v-on:click="subview_section_id = 2" v-on:keyup.enter="subview_section_id = 2"
               :class="'tab ' + (subview_section_id == 2 ? 'active' : '')"
-              tabindex="0" role="button" aria-label="Show Upcoming Lectures">Upcoming</div>
+              tabindex="0" role="tab" :aria-selected="(subview_section_id == 2 ? 'true' : 'false')" aria-controls="panel-3" aria-label="Show Upcoming Lectures">Upcoming</div>
             <div
               v-if="data_to_show" v-on:click="subview_section_id = 1" v-on:keyup.enter="subview_section_id = 1"
               :class="'tab ' + (subview_section_id == 1 ? 'active' : '')"
-              tabindex="0" role="button" aria-label="Show Course Statistics">Statistics</div>
+              tabindex="0" role="tab" :aria-selected="(subview_section_id == 1 ? 'true' : 'false')" aria-controls="panel-2" aria-label="Show Course Statistics">Statistics</div>
           </div>
           <div v-if="this.current_user.is_instructor" class="right">
             <label id="section_select_label">Select Section</label>
@@ -47,7 +47,7 @@
         </div>
 
         <!-- Attendance History -->
-        <div v-if="subview_section_id == 0">
+        <div v-if="subview_section_id == 0" id="panel-1" role="tabpanel">
 
           <InstructorAttendanceHistory
             :informSections="this.informSections"
@@ -59,7 +59,7 @@
           <StudentAttendanceHistory :section_id="section_id" :showData="showData" v-else />
 
         </div>
-        <div v-else-if="subview_section_id == 1" :style="{marginTop: `20px`}">
+        <div v-else-if="subview_section_id == 1" :style="{marginTop: `20px`}" id="panel-2" role="tabpanel">
           <SectionAttendanceGraph v-if="this.current_user.is_instructor && selected_section != null" :section_id="selected_section" />
           <SectionAttendanceGraph v-else-if="this.current_user.is_instructor && selected_section == null" :section_id="null" />
 
@@ -68,7 +68,7 @@
             :section_id="section_id"
           />
         </div>
-        <div v-else-if="subview_section_id == 2" :style="{marginTop: '20px'}">
+        <div v-else-if="subview_section_id == 2" :style="{marginTop: '20px'}" id="panel-3" role="tabpanel">
           <show-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" /></show-at>
           <hide-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" mobileMode/></hide-at>
         </div>
