@@ -1,6 +1,6 @@
 <template>
   <div class="lecture-card">
-    <div class="lecture-card-background">
+    <div class="lecture-card-background" :class="{'live-lecture':lecture_type === 'Live', 'playback-lecture':lecture_type === 'Playback', 'recent-lecture':lecture_type === 'Recent', 'upcoming-lecture':lecture_type === 'Upcoming'}">
     </div>
     <div class="lecture-card-foreground">
       <InstructorLectureCard v-if="is_instructor" :lecture_type="lecture_type" />
@@ -47,7 +47,23 @@
     height: 4rem;
     margin-top: 2rem;
     border-radius: 5px;
+    /*background-color: #4ECC4B;*/
+  }
+
+  .live-lecture {
     background-color: #4ECC4B;
+  }
+
+  .playback-lecture {
+    background-color: #516DED;
+  }
+
+  .recent-lecture {
+    background-color: #858585;
+  }
+
+  .upcoming-lecture {
+    background-color: #00B3FF;
   }
 
   .lecture-card-foreground {
