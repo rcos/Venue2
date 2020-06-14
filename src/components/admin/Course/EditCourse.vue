@@ -84,7 +84,6 @@
         this.course.instructor = instructor
       },
       instructorIsNull(){
-        console.log("I was called. instructor: " + this.instructor)
         return this.instructor == null
       }
     }

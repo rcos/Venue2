@@ -66,7 +66,6 @@ export default {
       let date_ = new Date(time_string)
       let now = new Date ()
 
-      console.log(date_.getTime())
       let timeDiff = Math.abs(date_.getTime() - now.getTime())
 
       let diffDays = timeDiff / (1000 * 3600 * 24)

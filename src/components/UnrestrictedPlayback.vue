@@ -20,7 +20,6 @@ export default {
 		}
 	},
 	mounted() {
-		console.log("video ref",this.lecture.video_ref)
 		let self = this
 		videojs("video_player", {}, function() {
 			self.vjs = this

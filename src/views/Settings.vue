@@ -75,7 +75,6 @@
         this.mode = "setting_options";
       },
       logoutUser() {
-        console.log('logging out')
         AuthAPI.logoutCAS().then(res => {
           this.$store.dispatch('logout')
         })

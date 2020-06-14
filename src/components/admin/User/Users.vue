@@ -49,7 +49,6 @@
         this.users.splice(this.users.findIndex(i => i._id == id), 1);
       },
       logout () {
-        console.log("Log out!")
         this.$store.dispatch('logout')
           .then(() => this.$router.push({name: 'dashboard'}))
       }

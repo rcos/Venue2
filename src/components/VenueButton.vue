@@ -22,7 +22,7 @@
       },
       clickFn: {
         type: Function,
-        default: () => { console.log(`Default button function.`) }
+        default: () => {  }
       },
       width: {
         type: String,

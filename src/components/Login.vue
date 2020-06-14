@@ -48,7 +48,6 @@ export default {
   },
   methods: {
     login() {
-      console.log("Login function was called")
       this.$store.dispatch('login', this.user)
         .then(() => this.$router.push({name: 'dashboard'}))
     }
