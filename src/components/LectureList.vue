@@ -30,7 +30,7 @@
 
 <style scoped>
   .lecture-list {
-    border: green solid;
+    /*border: green solid;*/
     height: 100%;
     width: 85%;
     margin: auto;
