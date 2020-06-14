@@ -5,30 +5,32 @@
     <div v-else class="lecture-card-background" :class="{'playback-lecture':lecture_type === 'Playback', 'recent-lecture':lecture_type === 'Recent', 'upcoming-lecture':lecture_type === 'Upcoming'}">
     </div>
     <div class="lecture-card-foreground">
-      <div class="lecture-card-section" id="left-section">
-        <p class="course-name">{{ lecture.sections[0].course.name }}</p>
-        <p class="course-title">{{ lecture.sections[0].course.dept }} {{ lecture.sections[0].course.course_number }}</p>
-      </div>
-      <div class="lecture-card-section" id="middle-section">
-        <p class="lecture-name">{{ lecture.title }}</p>
-      </div>
-      <div class="lecture-card-section" id="right-section">
-        <div v-if="lecture_type === 'Live'" class="right-container">
-          <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon">
-          <p v-if="lecture.checkin_window_status === 'open'" class="lecture-time-text open-text">{{ getTimeToWindowCloseString() }}</p>
-          <p v-else class="lecture-time-text closed-text">closed</p>
+      <router-link class="lecture_card_link" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}" :aria-label="'Lecture Info - '+ lecture_course.name +' - '+lecture.title">
+        <div class="lecture-card-section" id="left-section">
+          <p class="course-name">{{ lecture_course.name }}</p>
+          <p class="course-title">{{ lecture_course.dept }} {{ lecture_course.course_number }}</p>
         </div>
-        <div v-else-if="lecture_type === 'Playback'" class="right-container">
-          <p class="playback-percentage-text">87% submission</p>
+        <div class="lecture-card-section" id="middle-section">
+          <p class="lecture-name">{{ lecture.title }}</p>
         </div>
-        <div v-else-if="lecture_type === 'Recent'" class="right-container">
-          <p class="recent-percentage-text">91% submission</p>
+        <div class="lecture-card-section" id="right-section">
+          <div v-if="lecture_type === 'Live'" class="right-container">
+            <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon">
+            <p v-if="lecture.checkin_window_status === 'open'" class="lecture-time-text open-text">{{ getTimeToWindowCloseString() }}</p>
+            <p v-else class="lecture-time-text closed-text">closed</p>
+          </div>
+          <div v-else-if="lecture_type === 'Playback'" class="right-container">
+            <p class="playback-percentage-text">87% submission</p>
+          </div>
+          <div v-else-if="lecture_type === 'Recent'" class="right-container">
+            <p class="recent-percentage-text">91% submission</p>
+          </div>
+          <div v-else-if="lecture_type === 'Upcoming'" class="right-container">
+            <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon">
+            <p class="lecture-time-text upcoming-text">{{ getUpcomingTimeString(lecture.start_time) }}</p>
+          </div>
         </div>
-        <div v-else-if="lecture_type === 'Upcoming'" class="right-container">
-          <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon">
-          <p class="lecture-time-text upcoming-text">{{ getUpcomingTimeString(lecture.start_time) }}</p>
-        </div>
-      </div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -46,11 +48,13 @@
     },
     data(){
       return {
-        is_instructor: Boolean
+        is_instructor: Boolean,
+        lecture_course: Object
       }
     },
     created() {
       this.is_instructor = this.$store.state.user.current_user.is_instructor
+      this.lecture_course = this.lecture.sections[0].course
     },
     methods: {
       getTimeToWindowCloseString() {
