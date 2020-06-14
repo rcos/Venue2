@@ -295,6 +295,10 @@ export default {
 </script>
 
 <style scoped>
+#lecture-upload-modal {
+  display: inline-flex;
+  margin-left: 2rem;
+}
 #banner_title {
   text-align: center;
   position: relative;

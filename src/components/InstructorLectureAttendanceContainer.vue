@@ -1,12 +1,24 @@
 <template>
 	<div>
 		<div id="container-header">
-		  <h2>Attendance</h2>
-		  <button v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" @click="showQR" class="header-btn btn btn-secondary">Show QR</button>
-		  <LectureUploadModal v-else-if="lecture.lecture_status === 'is_over' && !lecture.allow_playback_submissions" :lecture="lecture" :update_lecture="true" />
-		  <router-link class="header-btn btn btn-secondary" v-else-if="lecture.allow_playback_submissions" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}" aria-label="Watch Playback">
-		  	Watch Playback
-		  </router-link>
+			<h2>Attendance</h2>
+			<button v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" @click="showQR" class="header-btn btn btn-secondary">Show QR</button>
+			<LectureUploadModal v-else-if="lecture.lecture_status === 'is_over' && !lecture.allow_playback_submissions" :lecture="lecture" :update_lecture="true" />
+			<router-link class="header-btn btn btn-secondary" v-else-if="lecture.allow_playback_submissions" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}" aria-label="Watch Playback">
+				Watch Playback
+			</router-link>
+			<div class="float-right" id="manual-override-container">
+				<div class="input-group">
+					<label for="rcs-ids" id="override-label">Manual override:</label>
+					<input id="rcs-ids" type="text" v-model.lazy="overrides" class="form-control" placeholder="eg: 'whitte3,mbizin'" aria-label="RCS IDs to override" aria-describedby="basic-addon2"/>
+					<div class="input-group-append">
+						<span class="input-group-text" id="basic-addon2">@rpi.edu</span>
+					</div>
+					<div class="input-group-append">
+						<button id="submit-manual-override" class="btn btn-primary" aria-label="Submit Override" @click="handleOverride">Override</button>
+					</div>
+				</div>
+			</div>
 	  </div>
 	  <div id="qr_modal" class="hidden">
 	    <canvas id="qr_render_area"></canvas>
@@ -21,15 +33,16 @@
   import QRCode from "qrcode";
   import LectureUploadModal from "@/components/LectureUploadModal";
   import LectureAttendanceTable from "@/components/LectureAttendanceTable.vue";
+	import LectureSubmissionAPI from "@/services/LectureSubmissionAPI.js"
 
   export default {
     name: 'InstructorLectureAttendanceContainer',
     props: {
     	lecture: Object,
-    	live_submissions: Array,
+    	live_submissions: Object,
     	playback_submissions: Array,
     	absent: Array,
-    	all_students: Array
+    	all_students: Array,
     },
     components: {
     	LectureUploadModal,
@@ -37,11 +50,10 @@
     },
     data(){
       return {
+				overrides: ""
       }
     },
     created() {
-    	console.log("In insturctor lecture attendance table. Lecture:",this.lecture)
-    	console.log("Live submissions", this.live_submissions)
     },
     methods: {
     	showQR() {
@@ -53,6 +65,13 @@
     	hideQR() {
     	  document.getElementById("qr_modal").classList.add("hidden")
     	},
+			handleOverride() {
+				let rcs_list = this.overrides.replace(/\s/g,'').split(",")
+				LectureSubmissionAPI.addLiveSubmissionByRCS(rcs_list,this.lecture._id)
+				.then(res => {
+					this.overrides = res.data.join(",")
+				})
+			}
     }
   }
 </script>
@@ -151,6 +170,23 @@
 
 	.hidden {
 	  display: none;
+	}
+
+	#override-label {
+		margin: auto 1rem;
+		font-size: 1.2rem;
+	}
+
+	#manual-override-container {
+		display: inline-flex;
+	}
+
+	#rcs-ids {
+		/* width: 20rem; */
+	}
+
+	#submit-manual-override {
+		display: inline;
 	}
 
 </style>
