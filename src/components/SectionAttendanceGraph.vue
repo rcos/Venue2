@@ -43,8 +43,6 @@
       getSectionData () {
         StatsAPI.getDataForSection(this.section_id)
         .then(response => {
-          console.log(`fulfilled`)
-          console.log(response)
           this.section_data = response
         })
         .catch(err => {

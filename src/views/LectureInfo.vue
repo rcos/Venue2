@@ -102,7 +102,6 @@
         for(let i=0;i<this.lecture.checkins.length;i++) {
           let start = new Date(this.lecture.checkins[i].start_time)
           let end = new Date(this.lecture.checkins[i].end_time)
-          console.log(current_time-start,end-current_time)
           let self = this
           if(current_time < end) {
             if(start < current_time) {

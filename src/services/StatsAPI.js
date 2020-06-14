@@ -159,7 +159,6 @@ StatsAPI.getDataForSection = async (section_id) => {
        })
        .finally(_ => {
          if (earliest_date == null) {
-           console.log(`No events data retrieved.`)
            reject()
          }
 
@@ -181,7 +180,6 @@ StatsAPI.getDataForSection = async (section_id) => {
              y: 0.72
            })
 
-           console.log(`returning...`)
            resolve(event_averages)
          }
 

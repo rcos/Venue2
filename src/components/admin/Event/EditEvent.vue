@@ -151,9 +151,6 @@ export default {
     },
     async getUserForSubmissions() {
       let counter = 0;
-      // this.event_submissions.forEach((submission) => {
-      //   console.log("submitter: " + submission.submitter)
-      // })
       this.event_submissions.forEach(async submission => {
         counter++;
         const response = await UserAPI.getUser(submission.submitter);

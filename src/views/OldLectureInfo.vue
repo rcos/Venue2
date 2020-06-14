@@ -278,14 +278,12 @@
         lect_submissions.forEach(submission => {
           this.addStudentLectureSubmission(submission)
         })
-        // console.log("Got Student Lecture Submission",this.student_lecture_submission)
       },
       setSubmissionWindowStatus() {
         let current_time = Date.now()
         for(let i=0;i<this.lecture.checkins.length;i++) {
           let start = new Date(this.lecture.checkins[i].start_time)
           let end = new Date(this.lecture.checkins[i].end_time)
-          console.log(current_time-start,end-current_time)
           let self = this
           if(current_time < end) {
             if(start < current_time) {
@@ -323,7 +321,6 @@
           lecture_codes.push(check_in.code)
         })
         if(lecture_codes.includes(scanned_str)){
-          console.log("Scanned Correct Code. Creating Live Submission")
           this.createLiveSubmission()
           this.closeQRPreview()
         } else {
@@ -340,12 +337,10 @@
           is_live_submission: true,
           live_submission_time: new Date()
         }
-        console.log("Adding submission: ",lecture_submission)
         const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
         this.self_submission_count++
         this.addStudentLectureSubmission(lecture_submission)
         alert("Live Submission Recorded")
-        console.log("Created Lecture Submission")
       },
       addStudentLectureSubmission(lecture_submission) {
         this.student_lecture_submissions.push(lecture_submission)

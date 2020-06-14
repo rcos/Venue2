@@ -284,7 +284,6 @@ export default {
       }
     },
     isComplete() {
-      console.log(document.getElementById("playback_start").value != "")
       return (document.getElementById("playback_start").value != "" && document.getElementById("playback_end").value != "")
     },
     secondsToHHMMSS(seconds) {
@@ -295,6 +294,10 @@ export default {
 </script>
 
 <style scoped>
+#lecture-upload-modal {
+  display: inline-flex;
+  margin-left: 2rem;
+}
 #banner_title {
   text-align: center;
   position: relative;

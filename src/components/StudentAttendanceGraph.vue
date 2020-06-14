@@ -34,8 +34,6 @@
         StatsAPI.getDataForStudent(this.student_id, this.section_id)
         .catch(err => { console.log(err) })
         .then(response => {
-          console.log(`Data for student:`)
-          console.log(response)
           this.student_dataset = response
         })
       },
