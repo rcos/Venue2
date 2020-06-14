@@ -30,7 +30,8 @@
   export default {
     name: 'LectureCard',
     props: {
-      lecture_type: String
+      lecture_type: String,
+      lecture: Object
     },
     computed: {
     },
