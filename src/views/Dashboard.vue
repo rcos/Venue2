@@ -1,11 +1,14 @@
 <template>
   <div id="dashboard-container">
-
-    <DashboardSection lecture_type="Live" :lecture_list="live_lectures" />
-    <DashboardSection lecture_type="Playback" :lecture_list="playback_lectures" />
-    <DashboardSection lecture_type="Recent" :lecture_list="recent_lectures" />
-    <DashboardSection lecture_type="Upcoming" :lecture_list="upcoming_lectures" />
-
+    <div class="spinner-border" role="status" v-if="!live_lectures_loaded && !playback_lectures_loaded && !recent_lectures_loaded && !upcoming_lectures_loaded">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div v-else>
+      <DashboardSection lecture_type="Live" :lecture_list="live_lectures" />
+      <DashboardSection lecture_type="Playback" :lecture_list="playback_lectures" />
+      <DashboardSection lecture_type="Recent" :lecture_list="recent_lectures" />
+      <DashboardSection lecture_type="Upcoming" :lecture_list="upcoming_lectures" />
+    </div>
 
 <!--     <show-at breakpoint="large">
       <div class="venue-body-container">

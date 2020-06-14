@@ -26,7 +26,6 @@
       }
     },
     created() {
-      console.log("Lecture List", this.lecture_list)
     },
     methods: {
 
