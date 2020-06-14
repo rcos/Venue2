@@ -58,13 +58,11 @@ export default {
       this.submission.event = this.event;
       this.submission.submitter = this.submitter;
 
-      console.log("Here1");
       if (!("geolocation" in navigator)) {
         this.errorStr = "Geolocation is not available.";
       } else {
         this.gettingLocation = true;
         // get position
-        // console.log("Here2");
         // // navigator.geolocation.getCurrentPosition(pos => {}, err => {});
 
         // //Dummy one, which will result in a working next statement.

@@ -47,14 +47,11 @@
     methods: {
       async getStudentLectureSubmissions() {
         const response = await LectureSubmissionAPI.getLectureSubmissionsForStudent(this.lecture_id,this.user_id)
-        this.student_lecture_submissions = response.data 
-        console.log("Got lecture submissions",this.student_lecture_submissions)
+        this.student_lecture_submissions = response.data
       },
       async getAttendanceForLecture() {
-        console.log("Lecture id",this.lecture_id)
         const response = await LectureSubmissionAPI.getLectureSubmissionsForLecture(this.lecture_id)
         let lecture_submissions = response.data
-        console.log("Lecture submissions",lecture_submissions)
         this.student_lecture_submissions.forEach(submission => {
           if(submission.is_live_submission)
             this.live_submissions.push(submission)
@@ -62,7 +59,6 @@
             this.playback_submissions.push(submission)
         })
         this.attendance_calculated = true
-        console.log("Found live submissions",this.live_submissions)
       }
     }
   }

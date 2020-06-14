@@ -6,9 +6,9 @@
         <!-- Title -->
         <div class="title">
           <div class="inline-block">Course Info</div>
-          <router-link v-if="this.current_user.is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}">
-            <div class="inline-block big-button" :style="{float: 'right'}">Create New Lecture for {{ course.dept }} {{ course.course_number }}</div>
-        </router-link>
+          <router-link v-if="this.current_user.is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}" tabindex="-1">
+            <div class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Create New Lecture for {{ course.dept }} {{ course.course_number }}</div>
+          </router-link>
         </div>
         <div>
           <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" :section_number="this.current_user.is_instructor ? -1 : section.number" />
@@ -39,7 +39,7 @@
           </div>
           <div v-if="this.current_user.is_instructor" class="right">
             <label id="section_select_label">Select Section</label>
-            <select v-model="selected_section" aria-labelledby="section_select_label">
+            <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label">
               <option v-for="(section_,i) in section_arr" :key="i" :value="section_[1]">Section {{ section_[0] }}</option>
               <option :value="null" selected>All Sections</option>
             </select>
@@ -86,7 +86,7 @@
           <div class="right"  v-if="this.current_user.is_instructor">
             <label id="section_select_label">Select Section</label>
             <select v-model="selected_section" aria-labelledby="section_select_label">
-              <option v-for="section_ in section_arr" :value="section_[1]">Section {{ section_[0] }}</option>
+              <option v-for="(section_,i) in section_arr" :key="i" :value="section_[1]">Section {{ section_[0] }}</option>
               <option :value="null" selected>All Sections</option>
             </select>
           </div>
@@ -239,7 +239,7 @@ export default {
     async getActivePlaybackLecturesForCourse() {
 
       LectureAPI.getLecturesForCourse(this.course_id, "active_playback")
-      .then(response => { this.playback_lectures = response.data; console.log(`playback lectures`); console.log(response.data); })
+      .then(response => { this.playback_lectures = response.data; })
     },
     async getPastLecturesForCourse() {
 
@@ -279,7 +279,7 @@ export default {
     async getUpcomingLecturesForSection() {
 
       LectureAPI.getLecturesForSection(this.section_id, "upcoming")
-      .then(response => { this.upcoming_lectures = response.data; console.log(`Gettting upcoming sections`); console.log(response.data) })
+      .then(response => { this.upcoming_lectures = response.data; })
       .catch(err => { console.log(`Error getting upcoming sections.`); console.log(err); })
     },
     async getAllLecturesForSection() {

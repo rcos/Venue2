@@ -2,12 +2,12 @@
 	<div>
     <div v-if="is_instructor">
       <div v-if="is_live">
-        <div v-if="Object.keys(submissions).length > 0">
-          <div class="namecard-edging live-color" v-for="(submission,i) in Object.keys(submissions)" :key="i">
+        <div v-if="Object.keys(live_submissions).length > 0">
+          <div class="namecard-edging live-color" v-for="(submission,i) in Object.keys(live_submissions)" :key="i">
             <div class="namecard">
-              {{submissions[submission][0].submitter.first_name}} {{submissions[submission][0].submitter.last_name}}
-              {{submissions[submission][0].submitter.email}}
-              {{submissions[submission].length / lecture.checkins.length * 100}}%
+              {{live_submissions[submission][0].submitter.first_name}} {{live_submissions[submission][0].submitter.last_name}}
+              {{live_submissions[submission][0].submitter.email}}
+              {{live_submissions[submission].length / lecture.checkins.length * 100}}%
             </div>
           </div>
         </div>
@@ -46,8 +46,8 @@
     <!-- Student -->
     <div v-else>
       <div v-if="is_live">
-        <div v-if="Object.keys(submissions).length > 0">
-          <div class="namecard-edging live-color" v-for="submission in submissions" :key="submission._id">
+        <div v-if="Object.keys(live_submissions).length > 0">
+          <div class="namecard-edging live-color" v-for="submission in live_submissions" :key="submission._id">
             <div class="namecard">
               {{submission.live_submission_time}}
             </div>
@@ -79,6 +79,7 @@
   export default {
     name: 'LectureAttendanceList',
     props: {
+      live_submissions: Object,
       submissions: Array,
       lecture: Object,
       is_live: {
@@ -103,14 +104,6 @@
       }
     },
     created() {
-      if(this.is_live) {
-        let keys = Object.keys(this.submissions)
-        keys.forEach((key,i) => {
-          console.log(key)
-          console.log(i)
-        })
-        // console.log("Received live submissions", Object.keys(this.submissions))
-      }
     },
     methods: {
     }

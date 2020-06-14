@@ -19,42 +19,53 @@ lectureSubmissionRoutes.route('/add').post(function (req, res) {
 });
 
 lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
-  let email = req.body.rcs + "@rpi.edu"
-  User.findOne({email: email},function(err,user){
-    if(err || user == null) {
-      console.log("<ERROR> Getting user(s) with email:",email)
+  let rcsids = req.body.rcs
+  Lecture.findById(req.body.lecture_id,function(err,lecture) {
+    if(err || lecture == null) {
+      console.log("<ERROR> Getting lecture with ID:",req.body.lecture_id)
       res.json(err)
     } else {
-      Lecture.findById(req.body.lecture_id,function(err,lecture) {
-        if(err || lecture == null) {
-          console.log("<ERROR> Getting lecture with ID:",req.body.lecture_id)
-          res.json(err)
-        } else {
-          let lectureSubmissions = []
-          for(let i=0;i<lecture.checkins.length;i++) {
-            let subobj = {
-              lecture: lecture._id,
-              video_progress: 0,
-              video_percent: 0,
-              is_live_submission: true,
-              submitter: user._id,
-              code: lecture.checkins[i].code
+      let n = 0
+      let bad_ids = []
+      rcsids.forEach(rcs => {
+        User.findOne({user_id: rcs},function(err,user){
+          n++
+          if(err) {
+            console.log("<ERROR> Getting user(s) with RCS:",rcs)
+            res.json(err)
+          } else if(user == null) {
+            bad_ids.push(rcs)
+            if(n == rcsids.length) {
+              console.log("<SUCCESS> Getting some user(s) with RCS")
+              res.json(bad_ids)
             }
-            let lectureSubmission = new LectureSubmission(subobj);
-            lectureSubmission.save()
-              .then(() => {
-                console.log("<SUCCESS> Adding lecture submission for user with email:",email)
-                lectureSubmissions.push(lectureSubmissions)
-                if(i == lecture.checkins.length-1) {
-                  res.status(200).json(lectureSubmission);
-                }
-              })
-              .catch(() => {
-                console.log("<ERROR> Adding lecture submission for user with email:",email)
-                res.status(400).send("unable to save submission to database");
-              });
+          } else {
+            let m = 0
+            lecture.checkins.forEach(checkin => {
+              let subobj = {
+                lecture: lecture._id,
+                video_progress: 0,
+                video_percent: 0,
+                is_live_submission: true,
+                submitter: user._id,
+                code: checkin.code
+              }
+              let lectureSubmission = new LectureSubmission(subobj);
+              lectureSubmission.save()
+                .then(() => {
+                  m++
+                  console.log("<SUCCESS> Adding lecture submission for user with RCS:",rcs)
+                  if(m == checkin.length && n == rcsids.length) {
+                    res.json(bad_ids)
+                  }
+                })
+                .catch(() => {
+                  console.log("<ERROR> Adding lecture submission for user with RCS:",rcs)
+                  res.status(400).send("unable to save submission to database");
+                });
+            })
           }
-        }
+        })
       })
     }
   })
@@ -173,17 +184,21 @@ lectureSubmissionRoutes.get('/for_lecture/:lecture_id', (req, res) => {
       if(err || lect_submissions == null) {
         res.json(err)
       } else if(lect_submissions.length > 0){
-        User.findById({'_id': lect_submissions[0].submitter}, (error, submitter) => {
-          if(error || submitter == null) {
-            console.log("<ERROR> Getting lecture submissions for lecture with ID:",lecture_id)
-            res.json(error)
-          } else {
-            lect_submissions.forEach(submission => {
-              submission.submitter = submitter
-            })
-            console.log("<SUCCESS> Getting lecture submissions for lecture with ID:",lecture_id)
-            res.json(lect_submissions)
-          }
+        let n = 0
+        lect_submissions.forEach(lect_sub => {
+          User.findById(lect_sub.submitter, (error, submitter) => {
+            n++
+            if(error || submitter == null) {
+              console.log("<ERROR> Getting lecture submissions for lecture with ID:",lecture_id)
+              res.json(error)
+            } else {
+              lect_sub.submitter = submitter
+              if(n == lect_submissions.length) {
+                console.log("<SUCCESS> Getting lecture submissions for lecture with ID:",lecture_id)
+                res.json(lect_submissions)
+              }
+            }
+          })
         })
       } else {
         console.log("<SUCCESS> Getting lecture submissions for lecture with ID:",lecture_id)
