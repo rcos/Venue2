@@ -167,6 +167,9 @@
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "live", "with_sections_and_course")
         this.live_lectures = response.data
         this.setcheckinWindowStatusesForLiveLectures()
+        this.sortLiveLecturesByCheckinWindowStatus()
+        this.live_lectures_loaded = true
+        this.live_lectures_exist = this.live_lectures.length > 0
       },
       async getPlaybackLectures() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "active_playback", "with_sections_and_course")
@@ -190,8 +193,6 @@
         this.live_lectures.forEach(lecture => {
           this.setCheckinWindowStatus(lecture)
         })
-        this.live_lectures_loaded = true
-        this.live_lectures_exist = this.live_lectures.length > 0
       },
       setCheckinWindowStatus(lecture) {
         let current_time = new Date()
@@ -210,6 +211,16 @@
         }
         if(!found_open_checkin_window)
           lecture.checkin_window_status = "closed"
+      },
+      sortLiveLecturesByCheckinWindowStatus() {
+        let temp_list = []
+        this.live_lectures.forEach(lecture => {
+          if(lecture.checkin_window_status === "open")
+            temp_list.unshift(lecture)
+          else
+            temp_list.push(lecture)
+        })
+        this.live_lectures = temp_list
       },
       chooseLecturesToDisplay() {
         let lecture_existence_pairs = [["live", this.live_lectures_exist], ["playback", this.playback_lectures_exist],
