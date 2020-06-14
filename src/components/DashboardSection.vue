@@ -58,6 +58,17 @@
   .dashboard-section-body-container {
     /*border: red solid;*/
     height: 88%;
+    overflow-y: auto;
+  }
+
+  .dashboard-section-body-container::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  .dashboard-section-body-container::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  background-color: #F5F5F5; 
   }
 
   /*Ipad & below*/
