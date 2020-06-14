@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-section">
     <div class="dashboard-section-title-container">
-      <h3>{{ lecture_type }}</h3>
+      <h4 class="dashboard-section-title">{{ lecture_type }}</h4>
     </div>
     <div class="dashboard-section-body-container">
       <LectureList :lecture_type="lecture_type" />
@@ -47,6 +47,11 @@
     height: 15%;
     text-align: left;
     padding-left: 2rem;
+  }
+
+  .dashboard-section-title {
+    color: #2C3E50;
+    font-weight: bold;
   }
 
   .dashboard-section-body-container {
