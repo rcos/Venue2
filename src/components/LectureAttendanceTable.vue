@@ -13,7 +13,7 @@
 			<button id="stats_btn" class="tab_btn" @click="selectTab(3)" tabindex="0" aria-label="Show Statistics"><h5>Statistics</h5></button>
 		</div>
 		<div v-if="selected_tab === 0" id="live_submit" class="tab_section">
-			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="live_submissions" :is_live="true" />
+			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :live_submissions="live_submissions" :is_live="true" />
 		</div>
 		<div v-if="selected_tab === 1" id="playback_submit" class="tab_section">
 			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="playback_submissions" :is_playback="true" />
@@ -35,7 +35,7 @@
     name: 'LectureAttendanceTable',
     props: {
       lecture: Object,
-    	live_submissions: Array,
+    	live_submissions: Object,
     	playback_submissions: Array,
     	absent: Array,
     	all_students: Array,
@@ -50,9 +50,6 @@
       }
     },
     created() {
-      console.log("in table. received live submissions", this.live_submissions)
-      console.log("in table. received playback_submissions", this.playback_submissions)
-      console.log("Length",Object.keys(this.live_submissions).length)
     },
     methods: {
     	selectTab(i) {

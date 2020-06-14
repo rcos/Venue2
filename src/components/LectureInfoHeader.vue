@@ -124,7 +124,6 @@
       }
     },
     created() {
-      console.log("Received this lecture",this.lecture)
     },
     methods: {
     }
