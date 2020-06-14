@@ -160,7 +160,7 @@
 
   .course-name {
     font-size: .75rem;
-    margin-top: .75rem;
+    margin-top: 1rem;
     color: #466D85;
     font-weight: bold;
     text-overflow: ellipsis;
@@ -173,7 +173,7 @@
     font-size: .75rem;
     color: #1591C5;
     font-weight: bold;
-    margin-top: .5rem;
+    /*margin-top: .5rem;*/
   }
 
   .lecture-name {
@@ -198,7 +198,7 @@
   .right-container {
     margin: auto;
     margin-top: 1.4rem;
-    width: 95%;
+    width: 97%;
     font-size: .9rem;
     /*font-weight: bold;*/
   }
