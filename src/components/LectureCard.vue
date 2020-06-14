@@ -144,8 +144,8 @@
 
   /deep/ .right-container {
     margin: auto;
-    margin-top: 1.2rem;
-    width: 60%;
+    margin-top: 1.4rem;
+    width: 95%;
     font-size: .9rem;
     /*font-weight: bold;*/
   }
