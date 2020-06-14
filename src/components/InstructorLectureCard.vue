@@ -20,7 +20,7 @@
       </div>
       <div v-else-if="lecture_type === 'Upcoming'" class="right-container">
         <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon">
-        <p class="lecture-time-text upcoming-text">3/3/20</p>
+        <p class="lecture-time-text upcoming-text">{{ getUpcomingTimeString(lecture.start_time) }}</p>
       </div>
     </div>
   </div>
@@ -45,7 +45,13 @@
     created() {
     },
     methods: {
-
+      getUpcomingTimeString(time) {
+        let upcoming_time = new Date(time)
+        let month = upcoming_time.getMonth()
+        let day = upcoming_time.getDay()
+        let year = upcoming_time.getFullYear()
+        return month + '/' + day + '/' + year
+      }
     }
   }
 </script>
