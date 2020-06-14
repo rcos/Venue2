@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <h1>I'm the lecture list</h1>
-    <LectureCard />
+  <div class="lecture-list">
+    <LectureCard :lecture_type="lecture_type" />
+    <LectureCard :lecture_type="lecture_type" />
   </div>
 </template>
 
@@ -29,6 +29,17 @@
 </script>
 
 <style scoped>
+  .lecture-list {
+    border: green solid;
+    height: 100%;
+    width: 85%;
+    margin: auto;
+  }
 
-
+  /*Ipad & below*/
+  @media only screen and (max-width: 800px) {
+    .lecture-list {
+      width: 100%;
+    }
+  }
 </style>
