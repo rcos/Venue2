@@ -4,7 +4,7 @@
       <h3>{{ lecture_type }}</h3>
     </div>
     <div class="dashboard-section-body-container">
-      <LectureList />
+      <LectureList :lecture_type="lecture_type" />
     </div>
   </div>
 </template>
@@ -34,22 +34,24 @@
 
 <style scoped>
   .dashboard-section {
-    border: green solid;
+    /*border: green solid;*/
     height: 15rem;
     width: 50%;
     display: inline-block;
+    vertical-align: top;
+    margin-top: 2rem;
   }
 
   .dashboard-section-title-container {
-    border: blue solid;
-    height: 20%;
+    /*border: blue solid;*/
+    height: 15%;
     text-align: left;
     padding-left: 2rem;
   }
 
   .dashboard-section-body-container {
     border: red solid;
-    height: 80%;
+    height: 85%;
   }
 
   /*Ipad & below*/

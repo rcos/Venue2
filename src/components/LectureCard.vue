@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <h1>I'm the lecture card</h1>
+  <div class="lecture-card">
   </div>
 </template>
 
@@ -26,6 +25,10 @@
 </script>
 
 <style scoped>
-
+  .lecture-card {
+    border: black solid;
+    height: 5rem;
+    margin-top: 1rem;
+  }
 
 </style>

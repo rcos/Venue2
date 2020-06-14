@@ -209,10 +209,10 @@
 
 <style scoped>
   #dashboard-container {
-    border: black solid;
+    /*border: black solid;*/
     width: 85%;
     margin: auto;
-    margin-top: 2rem;
+    /*margin-top: 2rem;*/
   }
 
 /*  .dashboard-section {
