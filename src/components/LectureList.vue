@@ -1,6 +1,9 @@
 <template>
   <div class="lecture-list">
-    <LectureCard v-for="lecture in lecture_list" :lecture_type="lecture_type" :key="lecture._id" />
+    <div v-if="lecture_list.length > 0">
+      <LectureCard v-for="lecture in lecture_list" :lecture_type="lecture_type" :key="lecture._id" />
+    </div>
+    <p v-else class="no-lecture-text"> No {{ lecture_type }} Lectures</p>
   </div>
 </template>
 
@@ -38,6 +41,11 @@
     width: 85%;
     margin: auto;
     overflow-y: auto;
+  }
+
+  .no-lecture-text {
+    color: #2C3E50;
+    margin-top: 4rem;
   }
 
   /*Ipad & below*/
