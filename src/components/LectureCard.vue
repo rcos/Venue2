@@ -123,4 +123,40 @@
     font-weight: bold;
   }
 
+  /deep/ .clock {
+    display: inline-block;
+    vertical-align: middle;
+    height: 1rem;
+    font-weight: bold;
+  }
+
+  /deep/ .right-container {
+    margin-top: 1.2rem;
+    /*border: black solid;*/
+    width: 98%;
+    font-size: .9rem;
+    /*font-weight: bold;*/
+  }
+
+  /deep/ .lecture-time-text {
+    display: inline-block;
+    font-size: .8rem;
+    margin-left: .5rem;
+    font-weight: bold;
+  }
+
+  /deep/ .playback-percentage-text {
+    color: #516DED;
+    font-weight: bold;
+  }
+
+  /deep/ .recent-percentage-text {
+    color: #858585;
+    font-weight: bold;
+  }
+
+  /deep/ .upcoming-text {
+    color: #00B3FF;
+  }
+
 </style>
