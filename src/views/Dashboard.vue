@@ -9,41 +9,6 @@
       <DashboardSection lecture_type="Recent" :lecture_list="recent_lectures" />
       <DashboardSection lecture_type="Upcoming" :lecture_list="upcoming_lectures" />
     </div>
-
-<!--     <show-at breakpoint="large">
-      <div class="venue-body-container">
-        <LiveLectureList v-if="section_1 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
-        <PlaybackLectures v-if="section_1 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
-        <RecentLectures v-if="section_1 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
-        <UpcomingLectures v-if="section_1 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
-        <LiveLectureList v-if="section_2 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
-        <PlaybackLectures v-if="section_2 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
-        <RecentLectures v-if="section_2 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
-        <UpcomingLectures v-if="section_2 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
-      </div>
-    </show-at>
-    <hide-at breakpoint="large">
-      <div class="venue-body-container is-mobile">
-        <LiveLectureList v-if="section_1 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode />
-        <PlaybackLectures v-if="section_1 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode/>
-        <RecentLectures v-if="section_1 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
-        <UpcomingLectures v-if="section_1 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
-        <LiveLectureList v-if="section_2 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode />
-        <PlaybackLectures v-if="section_2 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode />
-        <RecentLectures v-if="section_2 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
-        <UpcomingLectures v-if="section_2 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
-      </div>
-    </hide-at>
-
-    <hide-at breakpoint="mediumAndBelow">
-      <div class="venue-body-container">
-        <div class="courses-section-title">
-          <div><h4  class="section-title">Courses</h4></div>
-          <div v-if="courses_loaded != 0" class="load-course-size">{{courses_loaded}} {{courses_loaded == 1 ? 'course' : 'courses'}} loaded</div>
-        </div>
-        <CourseList :colors="STATIC_COURSE_COLORS" :coursesCallback='setCourses' :sizeCallback="setCourseSize" />
-      </div>
-    </hide-at> -->
   </div>
 </template>
 
@@ -247,48 +212,7 @@
 
 <style scoped>
   #dashboard-container {
-    /*border: black solid;*/
     width: 85%;
     margin: auto;
-    /*margin-top: 2rem;*/
-  }
-
-/*  .dashboard-section {
-    text-align: left;
-    margin-top: 4rem;
-    display: inline-block;
-    vertical-align: top;
-    height: 15rem;
-    overflow-y: scroll;
-  }*/
-
-  #section-1 {
-    float: left;
-    margin-left: 8rem;
-    width: 30rem;
-  }
-
-  #section-2 {
-    width: 30rem;
-    margin-left: -5rem;
-  }
-
-  .section-title {
-    font-weight: bold;
-  }
-
-  .lecture-box {
-    border: blue solid;
-    width: 10rem;
-    height: 3rem;
-    border-radius: 5px;
-    margin-left: 3rem;
-    margin-top: 2rem;
-    cursor: pointer;
-  }
-
-  .lecture-box p {
-    text-align: center;
-    margin-top: 0.5rem;
   }
 </style>
