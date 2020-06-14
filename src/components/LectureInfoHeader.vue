@@ -30,24 +30,22 @@
           </div>
         </div>
         <div class="col" v-if="is_instructor">
-          <h5>Checkins</h5>
-          <div id="checkins-container">
-            <div class="checkin-container">
-              <div class="time-container">
-                <p class="underline">Start Time</p>
-              </div>
-              <div class="time-container">
-                <p class="underline">End Time</p>
-              </div>
-            </div>
-            <div class="checkin-container" v-for="checkin in lecture.checkins">
-              <div class="time-container">
-                <p>{{ new Date(checkin.start_time) }}</p>
-              </div>
-              <div class="time-container">
-                <p>{{ new Date(checkin.end_time) }}</p>
-              </div>
-            </div>
+          <h5 class="underline">Checkins</h5>
+          <div id="table-container">
+            <table id="checkins-container">
+              <thead>
+                <tr>
+                  <th>Start Time</th>
+                  <th>End Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(checkin,i) in lecture.checkins" :key="i">
+                  <td>{{ new Date(checkin.start_time) }}</td>
+                  <td>{{ new Date(checkin.end_time) }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -82,23 +80,21 @@
         </div>
         <div class="col" v-if="is_instructor">
           <h5 class="underline">Checkins</h5>
-          <div id="checkins-container">
-            <div class="checkin-container">
-              <div class="time-container">
-                <p class="underline">Start Time</p>
-              </div>
-              <div class="time-container">
-                <p class="underline">End Time</p>
-              </div>
-            </div>
-            <div class="checkin-container" v-for="checkin in lecture.checkins">
-              <div class="time-container">
-                <p>{{ new Date(checkin.start_time) }}</p>
-              </div>
-              <div class="time-container">
-                <p>{{ new Date(checkin.end_time) }}</p>
-              </div>
-            </div>
+          <div id="table-container">
+            <table id="checkins-container">
+              <thead>
+                <tr>
+                  <th>Start Time</th>
+                  <th>End Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(checkin,i) in lecture.checkins" :key="i">
+                  <td>{{ new Date(checkin.start_time) }}</td>
+                  <td>{{ new Date(checkin.end_time) }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -166,11 +162,6 @@
     border-radius: 1rem;
   }
 
-  #checkins-container {
-    overflow-y: scroll;
-    height: 9rem;
-  }
-
   .checkin-container {
     border: grey solid;
   }
@@ -184,6 +175,19 @@
 
   .underline {
     text-decoration: underline;
+  }
+
+  table, th, td {
+    border: 1px solid black;
+  }
+
+  th {
+    font-weight: 900;
+  }
+
+  #table-container {
+    max-height: 9rem;
+    overflow-y: auto;
   }
 
 </style>

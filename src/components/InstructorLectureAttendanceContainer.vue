@@ -181,10 +181,6 @@
 		display: inline-flex;
 	}
 
-	#rcs-ids {
-		/* width: 20rem; */
-	}
-
 	#submit-manual-override {
 		display: inline;
 	}
