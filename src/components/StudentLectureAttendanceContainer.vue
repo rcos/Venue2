@@ -43,7 +43,6 @@
       }
     },
     created() {
-      console.log("In student lecture attendance table. Lecture:",this.lecture)
       this.checkIfStudentCanSubmitLive()
       this.checkIfStudentCanWatchPlayback()
     },
@@ -56,7 +55,6 @@
       },
       checkForQRMatch(scanned_str) {
         if(this.lecture.current_checkin.code === scanned_str){
-          console.log("Scanned Correct Code. Creating Live Submission")
           this.createLiveSubmission()
           this.closeQRScanningWindow()
         } else {
@@ -71,12 +69,10 @@
           live_submission_time: new Date(),
           code: this.lecture.current_checkin.code
         }
-        console.log("Adding submission: ",lecture_submission)
         const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
         this.live_submissions.push(lecture_submission)
         this.student_can_submit_live = false
         alert("Live Submission Recorded")
-        console.log("Created Lecture Submission")
       },
       checkIfStudentCanSubmitLive() {
         this.student_can_submit_live = this.lecture.lecture_status === 'is_live' && this.lecture.checkin_window_status === 'open' && !this.studentSubmittedToCheckin()
@@ -87,7 +83,6 @@
         for(let i = 0; i < this.live_submissions.length; i++) {
           if(this.live_submissions[i].code === current_checkin_code){
             student_submitted_to_checkin = true
-            console.log("student already made submission")
             break
           }
         }

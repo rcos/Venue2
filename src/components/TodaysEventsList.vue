@@ -62,7 +62,6 @@
 
         EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
         .then(response => {
-          console.log(response)
           this.data_loaded = true
           this.todays_events = response.data
 

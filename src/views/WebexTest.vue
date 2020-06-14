@@ -43,7 +43,6 @@ export default {
     // // Might need to change to post request
     this.axios.post(uri, xml_body_str, config).then((response) => {
         this.meeting_info = response.data;
-        console.log(this.meeting_info)
     });
   },
   methods: {

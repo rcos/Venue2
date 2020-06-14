@@ -66,7 +66,6 @@
         }, 1000)
       },
       login() {
-        console.log("Login was called")
         this.$refs.LoginForm.login()
       },
       signup() {

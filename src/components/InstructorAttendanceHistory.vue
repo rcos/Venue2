@@ -293,8 +293,6 @@
         .then(response => {
 
           let sections = response.data
-          console.log(`Sections:`)
-          console.log(sections)
 
           this.informSections(sections.map(section_ => [section_.number, section_._id] ))
 
@@ -341,7 +339,6 @@
         * number of submissions divided by the student body count then multiplied by 100.
         */
 
-        console.log(`calculating attendance percentage`)
         if (this.selected_section == null || this.sections_info[this.selected_section] == null) return;
         Object.keys(this.sections_info[this.selected_section]).forEach(month_index => {
           this.sections_info[this.selected_section][month_index].forEach(lecture_ => {

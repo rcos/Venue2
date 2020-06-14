@@ -31,7 +31,6 @@
       async getLectureSubmissionsForLecture() {
         const response = await LectureSubmissionAPI.getLectureSubmissionsForLecture(this.lecture_id)
         this.lecture_submissions = response.data
-        console.log(this.lecture_submissions)
       },
     }
   }

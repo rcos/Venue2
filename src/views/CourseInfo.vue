@@ -239,7 +239,7 @@ export default {
     async getActivePlaybackLecturesForCourse() {
 
       LectureAPI.getLecturesForCourse(this.course_id, "active_playback")
-      .then(response => { this.playback_lectures = response.data; console.log(`playback lectures`); console.log(response.data); })
+      .then(response => { this.playback_lectures = response.data; })
     },
     async getPastLecturesForCourse() {
 
@@ -279,7 +279,7 @@ export default {
     async getUpcomingLecturesForSection() {
 
       LectureAPI.getLecturesForSection(this.section_id, "upcoming")
-      .then(response => { this.upcoming_lectures = response.data; console.log(`Gettting upcoming sections`); console.log(response.data) })
+      .then(response => { this.upcoming_lectures = response.data; })
       .catch(err => { console.log(`Error getting upcoming sections.`); console.log(err); })
     },
     async getAllLecturesForSection() {

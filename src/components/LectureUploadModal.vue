@@ -284,7 +284,6 @@ export default {
       }
     },
     isComplete() {
-      console.log(document.getElementById("playback_start").value != "")
       return (document.getElementById("playback_start").value != "" && document.getElementById("playback_end").value != "")
     },
     secondsToHHMMSS(seconds) {

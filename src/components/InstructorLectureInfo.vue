@@ -67,7 +67,6 @@
           }
         }
         this.attendance_calculated = true
-        console.log(this.live_submissions)
       }
     }
   }

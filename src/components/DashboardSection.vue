@@ -57,7 +57,6 @@
     },
     methods: {
       setCourseSize (_size_) {
-        console.log(`Course Size: ${_size_}`)
         this.courses_loaded = _size_
       }
     }
