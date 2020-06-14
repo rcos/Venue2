@@ -782,12 +782,12 @@ a:hover {
 }
 
 .btn-primary {
-  background: rgb(64, 92, 201);
-  border: 1px solid rgb(51, 75, 168);
+  background: #0078c2;
+  border: 1px solid #0078c2;
 }
 
 .btn-primary:hover,
 .btn-primary:focus {
   outline: none;
-  background: rgb(51, 75, 168);
+  background: #0078c2;
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div v-if="show_large_logo">
-      <img src="@/assets/venue-logo.svg" class="venue-logo" style="width:15rem;" />
+      <img src="@/assets/venue-logo.svg" class="venue-logo" alt="Venue Logo" aria-label="Venue Logo" style="width:15rem;" />
       <div class="logo-text" style="font-size:8rem;">venue</div>
       <div class="sub-logo" style="font-size:1.5rem;">
         <span style="color:#e83e8c">secure </span> 
@@ -9,7 +9,7 @@
       </div>
     </div>
     <div v-else>
-      <img src="@/assets/venue-logo.svg" class="venue-logo" style="width:10rem;" />
+      <img src="@/assets/venue-logo.svg" class="venue-logo" alt="Venue Logo" aria-label="Venue Logo" style="width:10rem;" />
       <div class="logo-text" style="font-size:4rem;">venue</div>
       <div class="sub-logo" style="font-size:1rem;">
         <span style="color:#e83e8c">secure </span> 
