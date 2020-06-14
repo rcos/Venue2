@@ -1,9 +1,9 @@
 <template>
 	<div id="lecture_playback">
-		<div v-if="unrestricted">
+		<div v-if="unrestricted && lecture_loaded">
 			<UnrestrictedPlayback :lecture="lecture"/>
 		</div>
-		<div v-else-if="!unrestricted && !needs_decision">
+		<div v-else-if="!unrestricted && !needs_decision && lecture_loaded">
 			<RestrictedPlayback :lecture="lecture"/>
 		</div>
 		<div v-else-if="needs_decision">
