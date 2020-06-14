@@ -1,6 +1,8 @@
 <template>
   <div class="lecture-card">
-    <div class="lecture-card-background" :class="{'live-lecture':lecture_type === 'Live', 'playback-lecture':lecture_type === 'Playback', 'recent-lecture':lecture_type === 'Recent', 'upcoming-lecture':lecture_type === 'Upcoming'}">
+    <div v-if="lecture_type === 'Live'" class="lecture-card-background" :class="{'live-lecture-open':lecture.checkin_window_status === 'open', 'live-lecture-closed':lecture.checkin_window_status ==='closed'}">
+    </div>
+    <div v-else class="lecture-card-background" :class="{'playback-lecture':lecture_type === 'Playback', 'recent-lecture':lecture_type === 'Recent', 'upcoming-lecture':lecture_type === 'Upcoming'}">
     </div>
     <div class="lecture-card-foreground">
       <InstructorLectureCard v-if="is_instructor" :lecture_type="lecture_type" :lecture="lecture" />
@@ -51,8 +53,12 @@
     /*background-color: #4ECC4B;*/
   }
 
-  .live-lecture {
+  .live-lecture-open {
     background-color: #4ECC4B;
+  }
+
+  .live-lecture-closed {
+    background-color: #F29F33;
   }
 
   .playback-lecture {
