@@ -90,7 +90,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    width: 95%;
+    width: 90%;
   }
 
   /deep/ .course-title {
