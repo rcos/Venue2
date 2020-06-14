@@ -139,12 +139,13 @@
     vertical-align: middle;
     height: 1rem;
     font-weight: bold;
+    float: left;
   }
 
   /deep/ .right-container {
+    margin: auto;
     margin-top: 1.2rem;
-    /*border: black solid;*/
-    width: 98%;
+    width: 60%;
     font-size: .9rem;
     /*font-weight: bold;*/
   }
@@ -152,6 +153,7 @@
   /deep/ .lecture-time-text {
     display: inline-block;
     font-size: .8rem;
+    float: left;
     margin-left: .5rem;
     font-weight: bold;
   }
