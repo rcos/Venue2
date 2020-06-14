@@ -35,7 +35,7 @@
 <style scoped>
   .dashboard-section {
     /*border: green solid;*/
-    height: 17rem;
+    height: 15rem;
     width: 50%;
     display: inline-block;
     vertical-align: top;
