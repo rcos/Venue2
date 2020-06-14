@@ -1,11 +1,11 @@
 <template>
   <div class="lecture-card">
     <div class="lecture-card-section" id="left-section">
-      <p class="course-name">Open Source Software</p>
-      <p class="course-title">CSCI 2960-01</p>
+      <p class="course-name">{{ lecture.sections[0].course.name }}</p>
+      <p class="course-title">{{ lecture.sections[0].course.dept }} {{ lecture.sections[0].course.course_number }}</p>
     </div>
     <div class="lecture-card-section" id="middle-section">
-      <p class="lecture-name">Class 5/20</p>
+      <p class="lecture-name">{{ lecture.title }}</p>
     </div>
     <div class="lecture-card-section" id="right-section">
       <div v-if="lecture_type === 'Live'" class="right-container">
@@ -30,7 +30,8 @@
   export default {
     name: 'LectureCard',
     props: {
-      lecture_type: String
+      lecture_type: String,
+      lecture: Object
     },
     computed: {
     },

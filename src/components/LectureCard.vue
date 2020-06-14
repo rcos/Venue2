@@ -3,8 +3,8 @@
     <div class="lecture-card-background" :class="{'live-lecture':lecture_type === 'Live', 'playback-lecture':lecture_type === 'Playback', 'recent-lecture':lecture_type === 'Recent', 'upcoming-lecture':lecture_type === 'Upcoming'}">
     </div>
     <div class="lecture-card-foreground">
-      <InstructorLectureCard v-if="is_instructor" :lecture_type="lecture_type" />
-      <StudentLectureCard v-else :lecture_type="lecture_type" />
+      <InstructorLectureCard v-if="is_instructor" :lecture_type="lecture_type" :lecture="lecture" />
+      <StudentLectureCard v-else :lecture_type="lecture_type" :lecture="lecture" />
     </div>
   </div>
 </template>
@@ -16,7 +16,8 @@
   export default {
     name: 'LectureCard',
     props: {
-      lecture_type: String
+      lecture_type: String,
+      lecture: Object
     },
     computed: {
     },
@@ -121,6 +122,10 @@
     font-size: 1.25rem;
     margin-top: 1rem;
     font-weight: bold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 95%;
   }
 
   /deep/ .clock {
