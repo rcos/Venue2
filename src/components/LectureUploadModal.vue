@@ -41,12 +41,14 @@
               <h6 id="a_label">Answer</h6>
               <h6 id="correct_label">Correct</h6>
             </div>
-            <div v-for="(current_answer,i) in current_answers" v-bind:key="i" class="row possible_answer">
-              <p class="answernumber">{{i + 1}}</p>
-              <input class="answerfield" type="text" v-model.lazy="current_answers[i]" aria-labelledby="a_label"/>
-              <input class="iscorrectfield" type="checkbox" v-model.lazy="current_is_correct[i]" aria-labelledby="correct_label"/>
-              <button type="button" class="btn btn-danger removeanswer" @click="current_answers.splice(i,1);current_is_correct.splice(i,1)" :aria-label="'Remove Answer '+(i+1)">X</button>
-            </div>
+            <ol class="row possible_answer">
+              <li v-for="(current_answer,i) in current_answers" v-bind:key="i">
+                <!-- <p class="answernumber">{{i + 1}}</p> -->
+                <input class="answerfield" type="text" v-model.lazy="current_answers[i]" aria-labelledby="a_label"/>
+                <input class="iscorrectfield" type="checkbox" v-model.lazy="current_is_correct[i]" aria-labelledby="correct_label"/>
+                <button type="button" class="btn btn-danger removeanswer" @click="current_answers.splice(i,1);current_is_correct.splice(i,1)" :aria-label="'Remove Answer '+(i+1)">X</button>
+              </li>
+            </ol>
             <div class="row addanswerrow">
               <button type="button" id="add_answer_btn" class="btn btn-secondary" @click="current_answers.push('');current_is_correct.push(false)">Add Option</button>
             </div>
@@ -58,11 +60,13 @@
         <div class="col">
           <h2>Current Polls</h2>
           <h6 v-if="polls.length > 0" id="pq_label">Question</h6>
-          <div v-for="(poll,i) in polls" :key="i" class="row pollrow">
-            <p class="polltimestamp">{{secondsToHHMMSS(poll.timestamp)}}</p>
-            <input class="pollquestion" :value="poll.question" readonly aria-labelledby="pq_label"/>
-            <button type="button" class="removepollbtn btn btn-danger" @click="polls.splice(i,1)" :aria-label="'Remove Poll '+(i+1)">X</button>
-          </div>
+          <ol class="row pollrow">
+            <li v-for="(poll,i) in polls" :key="i" class="row prow">
+              <p class="polltimestamp">{{secondsToHHMMSS(poll.timestamp)}}</p>
+              <input class="pollquestion" :value="poll.question" readonly aria-labelledby="pq_label"/>
+              <button type="button" class="removepollbtn btn btn-danger" @click="polls.splice(i,1)" :aria-label="'Remove Poll '+(i+1)">X</button>
+            </li>
+          </ol>
         </div>
         <div class="col-5">
           <video id="video_player" class="video-js vjs-big-play-centered" controls></video>
@@ -386,6 +390,13 @@ h2 {
   height: 4rem;
   width: 20%;
 }
+li {
+  width: 100%;
+}
+#pq_label {
+  width: 100%;
+  text-align: center;
+}
 .possible_answer {
   margin-bottom: 1rem;
 }
@@ -402,10 +413,11 @@ input {
 }
 #a_label {
   width: 65%;
+  text-align: center;
 }
 .answerfield {
   position: relative;
-  width: 65%;
+  width: 80%;
   height: 1rem;
   font-size: 1rem;
 }
@@ -461,6 +473,7 @@ p {
   top: 0.45rem;
 }
 .pollrow {
+  list-style-type: none;
   margin-left: 0rem;
   margin-bottom: 1rem;
   font-size: 1rem;
