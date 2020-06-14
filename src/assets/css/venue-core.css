@@ -405,19 +405,19 @@ body, * {
 }
 
 .instructor-attendance-history-pill.bad {
-  border: 2px solid rgb(209, 62, 52);
+  border: 2px solid #d13e34;
   box-shadow: 0px 3px 10px rgba(255, 99, 88, 0.36);
 }
 .instructor-attendance-history-pill.bad .date-area {
-  background-color: rgb(209, 62, 52);
+  background-color: #d13e34;
 }
 .instructor-attendance-history-pill.bad .percentage-area {
-  background-color: rgb(209, 62, 52);
+  background-color: #d13e34;
 }
 
 .instructor-attendance-history-pill.bad .percentage-area::before {
-  border-right: 15px solid rgb(209, 62, 52);
-  border-bottom: 31px solid rgb(209, 62, 52);
+  border-right: 15px solid #d13e34;
+  border-bottom: 31px solid #d13e34;
 }
 
 .instructor-attendance-history-pill.bad:hover,
@@ -509,7 +509,7 @@ body, * {
 
 .course-pill .background-pillar {
   position: absolute;
-  background-color: red;
+  background-color: #d13e34;
   left: -1%;
   top: -6%;
   border-radius: 5px;
@@ -579,7 +579,7 @@ body, * {
    that is currently Firefox-only */
 custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #FC5D60 white;
+  scrollbar-color: #d13e34 white;
 }
 
 /* Works on Chrome/Edge/Safari */
@@ -590,7 +590,7 @@ custom-scrollbar::-webkit-scrollbar-track {
   background: white;
 }
 custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #FC5D60;
+  background-color: #d13e34;
   border-radius: 20px;
 }
 
@@ -655,19 +655,19 @@ a:hover {
 }
 
 .lecture-pill-min.green {
-  background-color: #4ECD4C;
+  background-color: #04852f;
   box-shadow: 0px 3px 5px rgba(78, 205, 76, 0.3);
 }
 .lecture-pill-min.blue {
-  background-color: #4F6DEA;
+  background-color: #0078c2;
   box-shadow: 0px 3px 5px rgba(79, 109, 234, 0.3);
 }
 .lecture-pill-min.yellow {
-  background-color: #F49F32;
+  background-color: #b95726;
   box-shadow: 0px 3px 5px rgba(244, 159, 50, 0.4);
 }
 .lecture-pill-min.red {
-  background-color: #F95247;
+  background-color: #d13e34;
   box-shadow: 0px 3px 5px rgba(249, 82, 71, 0.3);
 }
 
@@ -717,7 +717,7 @@ a:hover {
 }
 
 .mobile-event-pill-area .mobile-pill.bad {
-  border: 3px solid rgb(209, 62, 52);
+  border: 3px solid #d13e34;
   box-shadow: 0px 3px 10px rgba(255, 99, 88, 0.36);
 
 }
@@ -765,7 +765,7 @@ a:hover {
   left: -2%;
   width: 104%;
   height: 100%;
-  background-color: #01B1FC;
+  background-color: #0078c2;
   border-radius: 5px;
 }
 
