@@ -4,16 +4,16 @@
       <img src="@/assets/venue-logo.svg" class="venue-logo" alt="Venue Logo" aria-label="Venue Logo" style="width:15rem;" />
       <div class="logo-text" style="font-size:8rem;">venue</div>
       <div class="sub-logo" style="font-size:1.5rem;">
-        <span style="color:#e83e8c">secure </span> 
-        <span style="color:#007bff">attendance</span>
+        <span class="logotext1">secure </span> 
+        <span class="logotext2">attendance</span>
       </div>
     </div>
     <div v-else>
       <img src="@/assets/venue-logo.svg" class="venue-logo" alt="Venue Logo" aria-label="Venue Logo" style="width:10rem;" />
       <div class="logo-text" style="font-size:4rem;">venue</div>
       <div class="sub-logo" style="font-size:1rem;">
-        <span style="color:#e83e8c">secure </span> 
-        <span style="color:#007bff">attendance</span>
+        <span class="logotext1">secure </span> 
+        <span class="logotext2">attendance</span>
       </div>
     </div>
   </div>
@@ -39,5 +39,13 @@
 <style>
   .venue-logo {
     transition: width 0.75s;
+  }
+
+  .logotext1 {
+    color:#ca3279;
+  }
+
+  .logotext2 {
+    color:#0078c2;
   }
 </style>
