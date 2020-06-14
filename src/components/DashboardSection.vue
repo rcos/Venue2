@@ -39,6 +39,8 @@
   .dashboard-section-title-container {
     border: blue solid;
     height: 20%;
+    text-align: left;
+    padding-left: 2rem;
   }
 
   .dashboard-section-body-container {
@@ -51,6 +53,11 @@
     .dashboard-section {
       width: 100%;
       height: 10rem;
+    }
+
+    .dashboard-section-title-container {
+      text-align: center;
+      padding: 0;
     }
   }
 
