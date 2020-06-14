@@ -4,7 +4,7 @@
       <h4 class="dashboard-section-title">{{ lecture_type }}</h4>
     </div>
     <div class="dashboard-section-body-container">
-      <LectureList :lecture_type="lecture_type" />
+      <LectureList :lecture_type="lecture_type" :lecture_list="lecture_list" />
     </div>
   </div>
 </template>
@@ -15,7 +15,8 @@
   export default {
     name: 'DashboardSection',
     props: {
-      lecture_type: String
+      lecture_type: String,
+      lecture_list: Array
     },
     computed: {
     },

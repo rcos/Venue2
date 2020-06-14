@@ -1,7 +1,6 @@
 <template>
   <div class="lecture-list">
-    <LectureCard :lecture_type="lecture_type" />
-    <LectureCard :lecture_type="lecture_type" />
+    <LectureCard v-for="lecture in lecture_list" :lecture_type="lecture_type" :key="lecture._id" />
   </div>
 </template>
 
@@ -11,7 +10,8 @@
   export default {
     name: 'LectureList',
     props: {
-      lecture_type: String
+      lecture_type: String,
+      lecture_list: Array
     },
     computed: {
     },
@@ -21,6 +21,9 @@
     data(){
       return {
       }
+    },
+    created() {
+      console.log("Lecture List", this.lecture_list)
     },
     methods: {
 
