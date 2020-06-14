@@ -35,7 +35,7 @@
 <style scoped>
   .dashboard-section {
     /*border: green solid;*/
-    height: 15rem;
+    height: 17rem;
     width: 50%;
     display: inline-block;
     vertical-align: top;
@@ -44,7 +44,7 @@
 
   .dashboard-section-title-container {
     /*border: blue solid;*/
-    height: 15%;
+    height: 10%;
     text-align: left;
     padding-left: 2rem;
   }
@@ -55,8 +55,8 @@
   }
 
   .dashboard-section-body-container {
-    border: red solid;
-    height: 85%;
+    /*border: red solid;*/
+    height: 90%;
   }
 
   /*Ipad & below*/
