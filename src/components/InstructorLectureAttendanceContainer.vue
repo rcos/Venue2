@@ -117,12 +117,12 @@
 	}
 
 	.tab_btn.selected_tab {
-	  color: blue;
-	  border-bottom: .2rem solid blue;
+	  color: #0078c2;
+	  border-bottom: .2rem solid #0078c2;
 	}
 
 	.tab_btn.selected_tab h5 {
-	  color: blue;
+	  color: #0078c2;
 	}
 
 	.tab_section {

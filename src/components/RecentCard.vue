@@ -2,7 +2,7 @@
 
   <div class="card">
     <div class="card_image">
-      <img src="../assets/demo.jpeg" />
+      <img src="../assets/demo.jpeg" alt="Demo Image" aria-label="Demo Image"/>
       </div>
     <div class="card_Class title-white">
       <p>Event Name</p>
