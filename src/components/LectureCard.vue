@@ -132,26 +132,33 @@
     z-index: 4;
   }
 
-  /deep/ .lecture-card-section {
+  .lecture-card-foreground:hover {
+    background-color: #c9c9c9;
+    -webkit-transition: background-color 200ms linear;
+    -ms-transition: background-color 200ms linear;
+    transition: background-color 200ms linear;
+  }
+
+  .lecture-card-section {
     height: 4rem;
     display: inline-block;
     /*border: black solid;*/
     vertical-align: top;
   }
 
-  /deep/ #left-section {
+  #left-section {
     width: 30%;
   }
 
-  /deep/ #middle-section {
+  #middle-section {
     width: 40%;
   }
 
-  /deep/ #right-section {
+  #right-section {
     width: 30%;
   }
 
-  /deep/ .course-name {
+  .course-name {
     font-size: .75rem;
     margin-top: .75rem;
     color: #466D85;
@@ -162,14 +169,14 @@
     width: 90%;
   }
 
-  /deep/ .course-title {
+  .course-title {
     font-size: .75rem;
     color: #1591C5;
     font-weight: bold;
     margin-top: .5rem;
   }
 
-  /deep/ .lecture-name {
+  .lecture-name {
     color: #2C3E50;
     font-size: 1.25rem;
     margin-top: 1rem;
@@ -180,7 +187,7 @@
     width: 95%;
   }
 
-  /deep/ .clock {
+  .clock {
     display: inline-block;
     vertical-align: middle;
     height: 1rem;
@@ -188,7 +195,7 @@
     float: left;
   }
 
-  /deep/ .right-container {
+  .right-container {
     margin: auto;
     margin-top: 1.4rem;
     width: 95%;
@@ -196,7 +203,7 @@
     /*font-weight: bold;*/
   }
 
-  /deep/ .lecture-time-text {
+  .lecture-time-text {
     display: inline-block;
     font-size: .8rem;
     float: left;
@@ -204,25 +211,25 @@
     font-weight: bold;
   }
 
-  /deep/ .playback-percentage-text {
+  .playback-percentage-text {
     color: #516DED;
     font-weight: bold;
   }
 
-  /deep/ .recent-percentage-text {
+  .recent-percentage-text {
     color: #858585;
     font-weight: bold;
   }
 
-  /deep/ .upcoming-text {
+  .upcoming-text {
     color: #00B3FF;
   }
 
-  /deep/ .open-text {
+  .open-text {
     color: #4ECC4B;
   }
 
-  /deep/ .closed-text {
+  .closed-text {
     color: #F29F33;
   }
 
