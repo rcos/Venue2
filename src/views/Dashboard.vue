@@ -1,6 +1,6 @@
 <template>
   <div>
-    <show-at breakpoint="large">
+<!--     <show-at breakpoint="large">
       <div class="venue-body-container">
         <LiveLectureList v-if="section_1 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
         <PlaybackLectures v-if="section_1 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
@@ -33,7 +33,7 @@
         </div>
         <CourseList :colors="STATIC_COURSE_COLORS" :coursesCallback='setCourses' :sizeCallback="setCourseSize" />
       </div>
-    </hide-at>
+    </hide-at> -->
   </div>
 </template>
 
