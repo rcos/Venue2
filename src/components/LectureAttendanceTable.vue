@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div id="lecture-attendance-table">
 		<div class="tabs" v-if="all_students">
 			<button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)" tabindex="0" aria-label="Show Live Attendance"><h5>Live ({{Object.keys(live_submissions).length}}/{{all_students.length}})</h5></button>
 			<button id="playback_btn" class="tab_btn" @click="selectTab(1)" tabindex="0" aria-label="Show Playback Attendance"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
@@ -73,6 +73,10 @@
 </script>
 
 <style scoped>
+	#lecture-attendance-table {
+		margin-top: 2rem;
+	}
+
 	.tabs {
 	  margin-top: 5rem;
 	  margin-left: 3rem;
