@@ -1,10 +1,10 @@
 <template>
   <div id="dashboard-container">
 
-    <DashboardSection section_title="Live" />
-    <DashboardSection section_title="Playback" />
-    <DashboardSection section_title="Recent" />
-    <DashboardSection section_title="Upcoming" />
+    <DashboardSection lecture_type="Live" />
+    <DashboardSection lecture_type="Playback" />
+    <DashboardSection lecture_type="Recent" />
+    <DashboardSection lecture_type="Upcoming" />
 
 
 <!--     <show-at breakpoint="large">

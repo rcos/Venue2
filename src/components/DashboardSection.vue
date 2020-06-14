@@ -1,22 +1,26 @@
 <template>
   <div class="dashboard-section">
     <div class="dashboard-section-title-container">
-      <h3>{{ section_title }}</h3>
+      <h3>{{ lecture_type }}</h3>
     </div>
-    <div class="dashboard-section-body-container"></div>
+    <div class="dashboard-section-body-container">
+      <LectureList />
+    </div>
   </div>
 </template>
 
 <script>
+  import LectureList from '@/components/LectureList'
+
   export default {
     name: 'DashboardSection',
     props: {
-      section_title: String
+      lecture_type: String
     },
     computed: {
     },
     components: {
-
+      LectureList
     },
     data(){
       return {
@@ -28,7 +32,7 @@
   }
 </script>
 
-<style type="text/css">
+<style scoped>
   .dashboard-section {
     border: green solid;
     height: 15rem;
