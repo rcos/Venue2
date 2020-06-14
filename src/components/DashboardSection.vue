@@ -39,7 +39,7 @@
     width: 50%;
     display: inline-block;
     vertical-align: top;
-    margin-top: 2rem;
+    margin-top: 1rem;
   }
 
   .dashboard-section-title-container {
