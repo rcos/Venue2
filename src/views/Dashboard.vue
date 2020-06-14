@@ -1,5 +1,12 @@
 <template>
-  <div>
+  <div id="dashboard-container">
+
+    <DashboardSection section_title="Live" />
+    <DashboardSection section_title="Playback" />
+    <DashboardSection section_title="Recent" />
+    <DashboardSection section_title="Upcoming" />
+
+
 <!--     <show-at breakpoint="large">
       <div class="venue-body-container">
         <LiveLectureList v-if="section_1 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
@@ -42,7 +49,6 @@
   import LectureAPI from '@/services/LectureAPI.js';
   import CourseAPI from '@/services/CourseAPI.js';
   import SectionAPI from '@/services/SectionAPI.js';
-  import DashboardSection from '@/components/DashboardSection'
   import { authComputed } from '../vuex/helpers.js'
   import {showAt, hideAt} from 'vue-breakpoints'
 
@@ -52,9 +58,7 @@
   import UpcomingLectures from '@/components/UpcomingLectures.vue'
   import CourseList from '@/components/CourseList.vue'
   import moment from 'moment'
-
-  import '@/assets/css/venue-core.css'
-  import '@/assets/css/venue.css'
+  import DashboardSection from '@/components/DashboardSection.vue'
 
   export default {
     name: 'Dashboard',
@@ -204,15 +208,21 @@
 </script>
 
 <style scoped>
-  .dashboard-section {
-    /*border: red solid;*/
+  #dashboard-container {
+    border: black solid;
+    width: 85%;
+    margin: auto;
+    margin-top: 2rem;
+  }
+
+/*  .dashboard-section {
     text-align: left;
     margin-top: 4rem;
     display: inline-block;
     vertical-align: top;
     height: 15rem;
     overflow-y: scroll;
-  }
+  }*/
 
   #section-1 {
     float: left;
