@@ -10,7 +10,7 @@
     <div class="lecture-card-section" id="right-section">
       <div v-if="lecture_type === 'Live'" class="right-container">
         <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon">
-        <p class="lecture-time-text">5m</p>
+        <p class="lecture-time-text" :class="{'open-text':lecture.checkin_window_status==='open','closed-text':lecture.checkin_window_status==='closed',}">5m</p>
       </div>
       <div v-else-if="lecture_type === 'Playback'" class="right-container">
         <p class="playback-percentage-text">87% submission</p>

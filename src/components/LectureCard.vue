@@ -170,4 +170,12 @@
     color: #00B3FF;
   }
 
+  /deep/ .open-text {
+    color: #4ECC4B;
+  }
+
+  /deep/ .closed-text {
+    color: #F29F33;
+  }
+
 </style>
