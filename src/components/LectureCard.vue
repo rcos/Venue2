@@ -100,11 +100,16 @@
 <style scoped>
   .lecture-card {
     position: relative;
+    margin-bottom: 2rem;
+  }
+
+  .lecture-card:last-of-type {
+    margin-bottom: 1rem;
   }
 
   .lecture-card-background {
     height: 4rem;
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
     border-radius: 5px;
     /*background-color: #4ECC4B;*/
   }
