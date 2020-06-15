@@ -69,7 +69,7 @@
         <!-- Playback video adder -->
         <LectureUploadModal ref="uploadmodal" v-if="allow_playback_submissions" :lecture="lecture" :update_lecture="false" :shown="modal_open" @openstatus="handleModalChange"/>
       </div>
-      <h6 class="error_msg" v-if="input_error_message!=''">{{input_error_message}}</h6>
+      <p class="error_msg" v-if="input_error_message!=''">{{input_error_message}}</p>
       <button class="btn btn-primary create-lecture-btn" :tabindex="(modal_open ? '-1' : '0')">Create Lecture</button>
     </form>
   </div>
