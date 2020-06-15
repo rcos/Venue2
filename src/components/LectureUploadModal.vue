@@ -37,9 +37,9 @@
             </div>
             <h4 class="row">Possible Answers</h4>
             <div class="row">
-              <h6 id="spacer1">Number</h6>
-              <h6 id="a_label">Answer</h6>
-              <h6 id="correct_label">Correct</h6>
+              <label id="spacer1">Number</label>
+              <label id="a_label">Answer</label>
+              <label id="correct_label">Correct</label>
             </div>
             <ol class="row possible_answer">
               <li v-for="(current_answer,i) in current_answers" v-bind:key="i">
@@ -59,7 +59,7 @@
         </div>
         <div class="col">
           <h2>Current Polls</h2>
-          <h6 v-if="polls.length > 0" id="pq_label">Question</h6>
+          <label v-if="polls.length > 0" id="pq_label">Question</label>
           <ol class="row pollrow">
             <li v-for="(poll,i) in polls" :key="i" class="row prow">
               <p class="polltimestamp">{{secondsToHHMMSS(poll.timestamp)}}</p>

@@ -6,27 +6,27 @@
       <div id="lecture-data">
         <div class="row main-info">
           <h3>{{lecture.sections[0].course.name}}</h3>
-          <h5 class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</h5>
-          <h5>Sections: <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></h5>
+          <p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p>
+          <p>Sections: <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></p>
         </div>
         <div class="row">
           <div class="col-half">
             <h5 class="underline">Start Time</h5>
-            <h6>{{new Date(lecture.start_time)}}</h6>
+            <p>{{new Date(lecture.start_time)}}</p>
           </div>
           <div class="col-half">
             <h5 class="underline">Playback Start Time</h5>
-            <h6>{{new Date(lecture.playback_submission_start_time)}}</h6>
+            <p>{{new Date(lecture.playback_submission_start_time)}}</p>
           </div>
         </div>
         <div class="row">
           <div class="col-half">
             <h5 class="underline">End Time</h5>
-            <h6>{{new Date(lecture.end_time)}}</h6>
+            <p>{{new Date(lecture.end_time)}}</p>
           </div>
           <div class="col-half">
             <h5 class="underline">Playback End Time</h5>
-            <h6>{{new Date(lecture.playback_submission_end_time)}}</h6>
+            <p>{{new Date(lecture.playback_submission_end_time)}}</p>
           </div>
         </div>
         <div class="col" v-if="is_instructor">
@@ -55,27 +55,27 @@
       <div class="row" id="lecture-data">
         <div class="col main-info">
           <h3>{{lecture.sections[0].course.name}}</h3>
-          <h5 class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</h5>
-          <h5>Sections: <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></h5>
+          <p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p>
+          <p>Sections: <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></p>
         </div>
         <div class="col">
           <div class="col-half">
             <h5 class="underline">Start Time</h5>
-            <h6>{{new Date(lecture.start_time)}}</h6>
+            <p>{{new Date(lecture.start_time)}}</p>
           </div>
           <div class="col-half">
             <h5 class="underline">Playback Start Time</h5>
-            <h6>{{new Date(lecture.playback_submission_start_time)}}</h6>
+            <p>{{new Date(lecture.playback_submission_start_time)}}</p>
           </div>
         </div>
         <div class="col">
           <div class="col-half">
             <h5 class="underline">End Time</h5>
-            <h6>{{new Date(lecture.end_time)}}</h6>
+            <p>{{new Date(lecture.end_time)}}</p>
           </div>
           <div class="col-half">
             <h5 class="underline">Playback End Time</h5>
-            <h6>{{new Date(lecture.playback_submission_end_time)}}</h6>
+            <p>{{new Date(lecture.playback_submission_end_time)}}</p>
           </div>
         </div>
         <div class="col" v-if="is_instructor">

@@ -11,9 +11,9 @@
 						<h2>{{poll.question}}</h2>
 					</div>
 					<div class="row labelrow">
-						<h6 id="number_label">Number</h6>
-						<h6 id="answer_label">Option</h6>
-						<h6 id="correct_label">Correct</h6>
+						<label id="number_label">Number</label>
+						<label id="answer_label">Option</label>
+						<label id="correct_label">Correct</label>
 					</div>
 					<ol class="optionslist">
 						<li v-for="(possible_answer,j) in poll.possible_answers" :key="j" class="row option">
