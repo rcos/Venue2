@@ -36,7 +36,7 @@
   .lecture-list {
     border: white solid;
     height: 100%;
-    width: 85%;
+    width: 95%;
     margin: auto;
   }
 
@@ -46,9 +46,9 @@
   }
 
   /*Ipad & below*/
-  @media only screen and (max-width: 800px) {
+  /* @media only screen and (max-width: 800px) {
     .lecture-list {
-      width: 100%;
+      width: 95%;
     }
-  }
+  } */
 </style>
