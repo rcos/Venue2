@@ -31,7 +31,8 @@
           </div>
           <div v-else-if="lecture_type === 'Upcoming'" class="right-container">
             <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon">
-            <p class="lecture-time-text upcoming-text">{{ getUpcomingTimeString(lecture.start_time) }}</p>
+            <p v-if="lecture.allow_live_submissions" class="lecture-time-text upcoming-text">{{ getUpcomingTimeString(lecture.start_time) }}</p>
+            <p v-else class="lecture-time-text upcoming-text">{{ getUpcomingTimeString(lecture.playback_submission_start_time) }}</p>
           </div>
         </div>
       </router-link>
