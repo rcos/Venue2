@@ -16,14 +16,18 @@
         <div class="lecture-card-section" id="right-section">
           <div v-if="lecture_type === 'Live'" class="right-container">
             <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon">
-            <p v-if="lecture.checkin_window_status === 'open'" class="lecture-time-text open-text">{{ getTimeToWindowCloseString() }}</p>
+            <p v-if="lecture.checkin_window_status === 'open'" class="lecture-time-text open-text">{{ getTimeToWindowCloseString(false) }}</p>
             <p v-else class="lecture-time-text closed-text">closed</p>
           </div>
           <div v-else-if="lecture_type === 'Playback'" class="right-container">
-            <p class="playback-percentage-text">87% submission</p>
+            <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon">
+            <p class="lecture-time-text playback-percentage-text">{{ getTimeToWindowCloseString(true) }}</p>
+            <!-- <p class="playback-percentage-text">87% submission</p> -->
           </div>
           <div v-else-if="lecture_type === 'Recent'" class="right-container">
-            <p class="recent-percentage-text">91% submission</p>
+            <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon">
+            <p class="lecture-time-text">closed</p>
+            <!-- <p class="recent-percentage-text">91% submission</p> -->
           </div>
           <div v-else-if="lecture_type === 'Upcoming'" class="right-container">
             <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon">
@@ -53,13 +57,18 @@
       }
     },
     created() {
+      // TODO: Change plabyack and recent sections to show percentages like in figma
       this.is_instructor = this.$store.state.user.current_user.is_instructor
       this.lecture_course = this.lecture.sections[0].course
     },
     methods: {
-      getTimeToWindowCloseString() {
+      getTimeToWindowCloseString(is_playback) {
         let current_time = new Date()
-        let window_close_time = this.getCurrentCheckinWindowCloseTime()
+        let window_close_time;
+        if(is_playback)
+          window_close_time = new Date(this.lecture.playback_submission_end_time)
+        else
+          window_close_time = this.getCurrentCheckinWindowCloseTime()
         // get total seconds between the times
         let delta = Math.abs(window_close_time - current_time) / 1000;
         let diff_days = Math.floor(delta / 86400);
