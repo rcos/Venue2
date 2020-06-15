@@ -142,11 +142,16 @@
     z-index: 4;
   }
 
-  .lecture-card-foreground:hover {
+  .lecture-card-foreground:hover,
+  .lecture-card-foreground:focus-within {
     background-color: #c9c9c9;
     -webkit-transition: background-color 200ms linear;
     -ms-transition: background-color 200ms linear;
     transition: background-color 200ms linear;
+  }
+
+  .lecture_card_link:focus {
+    outline: none;
   }
 
   .lecture-card-section {
@@ -171,7 +176,7 @@
   .course-name {
     font-size: .75rem;
     margin-top: 1rem;
-    color: #466D85;
+    /* color: #466D85; */
     font-weight: bold;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -181,13 +186,13 @@
 
   .course-title {
     font-size: .75rem;
-    color: #1591C5;
+    /* color: #1591C5; */
     font-weight: bold;
     /*margin-top: .5rem;*/
   }
 
   .lecture-name {
-    color: #2C3E50;
+    /* color: #2C3E50; */
     font-size: 1.25rem;
     margin-top: 1rem;
     font-weight: bold;
@@ -222,7 +227,7 @@
   }
 
   .playback-percentage-text {
-    color: #516DED;
+    /* color: #516DED; */
     font-weight: bold;
   }
 
@@ -231,7 +236,7 @@
     font-weight: bold;
   }
 
-  .upcoming-text {
+  /* .upcoming-text {
     color: #00B3FF;
   }
 
@@ -241,6 +246,6 @@
 
   .closed-text {
     color: #F29F33;
-  }
+  } */
 
 </style>
