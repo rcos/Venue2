@@ -102,6 +102,7 @@ html,body {
   /*font-size: 25px;*/
   position: relative;
   margin-top: -20px;
+  color: #2C3E50;
 }
 
 .sub-logo {
@@ -379,8 +380,7 @@ a:active {
   }
 }
 
-.dashboard-section {
-  /*border: red solid;*/
+/*.dashboard-section {
   text-align: left;
   margin-top: 4rem;
   display: inline-block;
@@ -388,7 +388,7 @@ a:active {
   height: 15rem;
   width: 100%;
   margin: 0 8rem;
-}
+}*/
 
 .active-section {
   float: left;
@@ -437,7 +437,7 @@ a:active {
 }
 
 /*Medium devices (tablets and below)*/
-@media (max-width: 1128px) {
+/*@media (max-width: 1128px) {
   .dashboard-section {
     text-align: center;
     height: auto;
@@ -458,4 +458,4 @@ a:active {
   #no-today {
     margin-left: auto;
   }
-}
+}*/
