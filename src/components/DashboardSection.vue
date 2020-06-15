@@ -35,8 +35,7 @@
 
 <style scoped>
   .dashboard-section {
-    /*border: red solid;*/
-    height: 17rem;
+    max-height: 22rem;
     width: 50%;
     display: inline-block;
     vertical-align: top;
@@ -44,7 +43,6 @@
   }
 
   .dashboard-section-title-container {
-    /*border: blue solid;*/
     height: 12%;
     text-align: left;
     padding-left: 2rem;
@@ -56,8 +54,7 @@
   }
 
   .dashboard-section-body-container {
-    /*border: red solid;*/
-    height: 88%;
+    max-height: 20rem;
     overflow-y: auto;
   }
 
