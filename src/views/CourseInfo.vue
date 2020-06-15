@@ -365,7 +365,7 @@ export default {
   .new-event-btn {
     background-color: white;
     border: #007bff solid;
-    color: #black;
+    color: black;
     border-radius: 5px;
   }
 
