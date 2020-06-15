@@ -13,63 +13,64 @@
             placeholder="e.g. Lecture 1"
             v-model.lazy="lecture.title"
             aria-labelledby="title_label"
+            :tabindex="(modal_open ? '-1' : '0')"
           />
         </div>
         <!-- Section -->
         <div class="input-wrapper">
           <label>Section(s)</label>
-          <input v-for="(section,i) in lecture_sections" :key="i" type="text" class="form-control new-lecture-input" v-model="section.number" readonly />
+          <input v-for="(section,i) in lecture_sections" :key="i" type="text" class="form-control new-lecture-input" v-model="section.number" readonly :tabindex="(modal_open ? '-1' : '0')"/>
         </div>
         <div class="spinner-border" role="status" v-if="!course_sections_have_loaded">
           <span class="sr-only">Loading...</span>
         </div>
-        <Sections v-else v-bind:sections="course_sections" v-on:select-section="addSection" />
+        <Sections v-else v-bind:sections="course_sections" v-on:select-section="addSection" :disable_tabbing="(modal_open ? true : false)"/>
         <div class="input-wrapper">
-          <input @click="setAllowLiveSubmissions" type="checkbox" name="live_submission" v-model="allow_live_submissions" aria-labelledby="live_submission_label">
-          <label id="live_submission_label">Live Submissions (can add playback after lecture ends)</label><br>
-          <input @click="setAllowPlaybackSubmissions" type="checkbox" name="playback_submission" v-model="allow_playback_submissions" aria-labelledby="playback_submission_label">
-          <label id="playback_submission_label">Playback Submissions Only</label><br>
+          <input @click="setAllowLiveSubmissions" type="checkbox" name="live_submission" v-model="allow_live_submissions" aria-labelledby="live_submission_label" :tabindex="(modal_open ? '-1' : '0')">
+          <label id="live_submission_label">Lecture DOES have Live Submissions and Show Associated Options</label><br>
+          <input @click="setAllowPlaybackSubmissions" type="checkbox" name="playback_submission" v-model="allow_playback_submissions" aria-labelledby="playback_submission_label" :tabindex="(modal_open ? '-1' : '0')">
+          <label id="playback_submission_label">Lecture DOES NOT have Live Submissions and Show Associated Options</label><br>
         </div>
         <!-- Times -->
         <div v-if="allow_live_submissions">
           <div class="input-wrapper">
             <label id="start_time_label">Start Time</label>
-            <input id="lecture_start" aria-labelledby="start_time_label"/>
+            <input id="lecture_start" aria-labelledby="start_time_label" :tabindex="(modal_open ? '-1' : '0')"/>
             <label id="end_time_label">End Time</label>
-            <input id="lecture_end" aria-labelledby="end_time_label"/>
+            <input id="lecture_end" aria-labelledby="end_time_label" :tabindex="(modal_open ? '-1' : '0')"/>
           </div>
           <div class="input-wrapper">
-            <input @click="setAllowRandom" type="checkbox" v-model="random_times" aria-labelledby="random_times"/>
-            <label id="random_times">Use randomized check-in times</label>
-            <input @click="setAllowCustom" type="checkbox" v-model="custom_times" aria-labelledby="custom_times"/>
-            <label id="custom_times">Use custom check-in times</label><br>
+            <input @click="setAllowRandom" type="checkbox" v-model="random_times" aria-labelledby="random_times" :tabindex="(modal_open ? '-1' : '0')"/>
+            <label id="random_times">Use randomized check-in times and show associated options</label>
+            <input @click="setAllowCustom" type="checkbox" v-model="custom_times" aria-labelledby="custom_times" :tabindex="(modal_open ? '-1' : '0')"/>
+            <label id="custom_times">Use custom check-in times and show associated options</label><br>
           </div>
           <div v-if="random_times">
             <div class="input-wrapper">
               <label id="random_checkin_count">Number of check-in times</label>
-              <input class="random_input" type="number" min="1" max="5" v-model.lazy="random_checkin_count" aria-labelledby="random_checkin_count"/>
+              <input class="random_input" type="number" min="1" max="5" v-model.lazy="random_checkin_count" aria-labelledby="random_checkin_count" :tabindex="(modal_open ? '-1' : '0')"/>
               <label id="random_checkin_length">Minutes for each check-in</label>
-              <input class="random_input" type="number" min="1" max="10" v-model.lazy="random_checkin_length" aria-labelledby="random_checkin_length"/>
+              <input class="random_input" type="number" min="1" max="10" v-model.lazy="random_checkin_length" aria-labelledby="random_checkin_length" :tabindex="(modal_open ? '-1' : '0')"/>
             </div>
           </div>
           <div v-else-if="custom_times">
             <div v-for="(checkin,i) in checkins" :key="i" class="input-wrapper" id="submission-time-wrapper">
               <label :id="'submission_start_label_'+i">Submission Start Time</label>
-              <input :id="'submission_start_'+i" :aria-labelledby="'submission_start_label_'+i"/>
+              <input :id="'submission_start_'+i" :aria-labelledby="'submission_start_label_'+i" :tabindex="(modal_open ? '-1' : '0')"/>
               <label :id="'submission_end_label_'+i">Submission End Time</label>
-              <input :id="'submission_end_'+i" :aria-labelledby="'submission_end_label_'+i"/>
-              <button v-if="checkins.length > 1" type="button" class="btn btn-danger" @click="handleRemoveCheckin(i)" :aria-label="'Remove submission window '+(i+1)">X</button>
+              <input :id="'submission_end_'+i" :aria-labelledby="'submission_end_label_'+i" :tabindex="(modal_open ? '-1' : '0')"/>
+              <button v-if="checkins.length > 1" type="button" class="btn btn-danger" @click="handleRemoveCheckin(i)" :aria-label="'Remove submission window '+(i+1)" :tabindex="(modal_open ? '-1' : '0')">X</button>
             </div>
             <div class="input-wrapper">
-              <button type="button" class="btn btn-secondary" @click="handleAddCheckin">Add another attendance check-in</button>
+              <button type="button" class="btn btn-secondary" @click="handleAddCheckin" :tabindex="(modal_open ? '-1' : '0')">Add another attendance check-in</button>
             </div>
           </div>
         </div>
         <!-- Playback video adder -->
-        <LectureUploadModal ref="uploadmodal" v-if="allow_playback_submissions" :lecture="lecture" :update_lecture="false"/>
+        <LectureUploadModal ref="uploadmodal" v-if="allow_playback_submissions" :lecture="lecture" :update_lecture="false" :shown="modal_open" @openstatus="handleModalChange"/>
       </div>
       <h6 class="error_msg" v-if="input_error_message!=''">{{input_error_message}}</h6>
-      <button class="btn btn-primary create-lecture-btn">Create Lecture</button>
+      <button class="btn btn-primary create-lecture-btn" :tabindex="(modal_open ? '-1' : '0')">Create Lecture</button>
     </form>
   </div>
 </template>
@@ -114,7 +115,8 @@ export default {
       custom_times: false,
       random_checkin_count: 1,
       random_checkin_length: 5,
-      input_error_message: ""
+      input_error_message: "",
+      modal_open: false
     };
   },
   created() {
@@ -406,6 +408,9 @@ export default {
           }
         }
       }
+    },
+    handleModalChange(isOpen) {
+      this.modal_open = isOpen
     }
   }
 };

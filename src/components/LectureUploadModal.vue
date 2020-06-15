@@ -1,6 +1,6 @@
 <template>
   <div id="lecture-upload-modal">
-    <button type="button" class="btn btn-primary" @click="handleShowModal">Upload Lecture Video...</button>
+    <button type="button" class="btn btn-primary" @click="handleShowModal" :tabindex="(modal_open ? '-1' : '0')">Upload Lecture Video...</button>
     <div id="lecture_modal_viewable" class="hiddenModal">
       <div class="row titlerow">
         <h1 id="banner_title" aria-label="New Lecture Video">New Lecture Video <button type="button" v-if="update_lecture" id="cancel_upload_btn" class="btn btn-secondary" @click="hideModal" aria-label="Cancel Video Upload">Cancel</button>
@@ -8,7 +8,7 @@
         </h1>
       </div>
       <div class="row filerow">
-        <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn" role="button" tabindex="0" aria-label="Video Selector"/>
+        <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn" role="button" tabindex="0" aria-label="Select Video and Show Poll Creation Options"/>
       </div>
       <div class="row" id="lecture_container" v-if="file_selected">
         <div class="col">
@@ -16,7 +16,7 @@
           <div class="poll_card">
             <div class="row questionrow">
               <label id="question_label">Question</label>
-              <textarea id="question" class="col" type="text" placeholder="Which of the following...?" aria-labelledby="question_label"/>
+              <textarea id="question" class="col" type="text" placeholder="eg. Which of the following...?" aria-labelledby="question_label"/>
             </div>
             <div class="row">
               <div class="col-4">
@@ -113,7 +113,8 @@ export default {
       video_ref: "",
       vjs: null,
       play_sub_start: null,
-      play_sub_end: null
+      play_sub_end: null,
+      modal_open: false
     };
   },
   beforeDestroy() {
@@ -232,9 +233,13 @@ export default {
       })
     },
     hideModal() {
+      this.modal_open = false 
+      this.$emit('openstatus', false)
       document.getElementById('lecture_modal_viewable').classList.add('hiddenModal')
     },
     showModal() {
+      this.modal_open = true
+      this.$emit('openstatus', true)
       document.getElementById('lecture_modal_viewable').classList.remove('hiddenModal')
     },
     addPoll() {

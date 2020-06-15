@@ -54,7 +54,8 @@
     data(){
       return {
 				overrides: "",
-				override_err_msg: ""
+				override_err_msg: "",
+				modal_open: false
       }
     },
     created() {
