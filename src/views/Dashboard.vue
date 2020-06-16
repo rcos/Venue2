@@ -1,39 +1,14 @@
 <template>
-  <div>
-    <show-at breakpoint="large">
-      <div class="venue-body-container">
-        <LiveLectureList v-if="section_1 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
-        <PlaybackLectures v-if="section_1 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
-        <RecentLectures v-if="section_1 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
-        <UpcomingLectures v-if="section_1 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
-        <LiveLectureList v-if="section_2 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" />
-        <PlaybackLectures v-if="section_2 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" />
-        <RecentLectures v-if="section_2 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" />
-        <UpcomingLectures v-if="section_2 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" />
-      </div>
-    </show-at>
-    <hide-at breakpoint="large">
-      <div class="venue-body-container is-mobile">
-        <LiveLectureList v-if="section_1 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode />
-        <PlaybackLectures v-if="section_1 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode/>
-        <RecentLectures v-if="section_1 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
-        <UpcomingLectures v-if="section_1 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
-        <LiveLectureList v-if="section_2 === 'live'" :loaded="live_lectures_loaded" :live_lectures="live_lectures" mobileMode />
-        <PlaybackLectures v-if="section_2 === 'playback'" :loaded="playback_lectures_loaded" :playback_lectures="playback_lectures" mobileMode />
-        <RecentLectures v-if="section_2 === 'recent'" :loaded="recent_lectures_loaded" :recent_lectures="recent_lectures" mobileMode />
-        <UpcomingLectures v-if="section_2 === 'upcoming'" :loaded="upcoming_lectures_loaded" :upcoming_lectures="upcoming_lectures" mobileMode />
-      </div>
-    </hide-at>
-
-    <hide-at breakpoint="mediumAndBelow">
-      <div class="venue-body-container">
-        <div class="courses-section-title">
-          <div><h4  class="section-title">Courses</h4></div>
-          <div v-if="courses_loaded != 0" class="load-course-size">{{courses_loaded}} {{courses_loaded == 1 ? 'course' : 'courses'}} loaded</div>
-        </div>
-        <CourseList :colors="STATIC_COURSE_COLORS" :coursesCallback='setCourses' :sizeCallback="setCourseSize" />
-      </div>
-    </hide-at>
+  <div id="dashboard-container">
+    <div class="spinner-border" role="status" v-if="!live_lectures_loaded && !playback_lectures_loaded && !recent_lectures_loaded && !upcoming_lectures_loaded">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div v-else>
+      <DashboardSection lecture_type="Live" :lecture_list="live_lectures" />
+      <DashboardSection lecture_type="Playback" :lecture_list="playback_lectures" />
+      <DashboardSection lecture_type="Recent" :lecture_list="recent_lectures" />
+      <DashboardSection lecture_type="Upcoming" :lecture_list="upcoming_lectures" />
+    </div>
   </div>
 </template>
 
@@ -42,7 +17,6 @@
   import LectureAPI from '@/services/LectureAPI.js';
   import CourseAPI from '@/services/CourseAPI.js';
   import SectionAPI from '@/services/SectionAPI.js';
-  import DashboardSection from '@/components/DashboardSection'
   import { authComputed } from '../vuex/helpers.js'
   import {showAt, hideAt} from 'vue-breakpoints'
 
@@ -52,9 +26,7 @@
   import UpcomingLectures from '@/components/UpcomingLectures.vue'
   import CourseList from '@/components/CourseList.vue'
   import moment from 'moment'
-
-  import '@/assets/css/venue-core.css'
-  import '@/assets/css/venue.css'
+  import DashboardSection from '@/components/DashboardSection.vue'
 
   export default {
     name: 'Dashboard',
@@ -159,6 +131,8 @@
       async getLiveLecturesForUser() {
         const response = await LectureAPI.getLecturesForUser(this.current_user._id, "live", "with_sections_and_course")
         this.live_lectures = response.data
+        this.setcheckinWindowStatusesForLiveLectures()
+        this.sortLiveLecturesByCheckinWindowStatus()
         this.live_lectures_loaded = true
         this.live_lectures_exist = this.live_lectures.length > 0
       },
@@ -179,6 +153,39 @@
         this.upcoming_lectures = response.data
         this.upcoming_lectures_loaded = true
         this.upcoming_lectures_exist = this.upcoming_lectures.length > 0
+      },
+      setcheckinWindowStatusesForLiveLectures() {
+        this.live_lectures.forEach(lecture => {
+          this.setCheckinWindowStatus(lecture)
+        })
+      },
+      setCheckinWindowStatus(lecture) {
+        let current_time = new Date()
+        let found_open_checkin_window = false
+        for(let i = 0; i < lecture.checkins.length; i++) {
+          let current_checkin = lecture.checkins[i]
+          let current_checkin_start_time = new Date(current_checkin.start_time)
+          let current_checkin_end_time = new Date(current_checkin.end_time)
+          if(current_time >= current_checkin_start_time && current_time <= current_checkin_end_time){
+            lecture.checkin_window_status = "open"
+            lecture.checkin_index = i
+            lecture.current_checkin = current_checkin
+            found_open_checkin_window = true
+            break
+          }
+        }
+        if(!found_open_checkin_window)
+          lecture.checkin_window_status = "closed"
+      },
+      sortLiveLecturesByCheckinWindowStatus() {
+        let temp_list = []
+        this.live_lectures.forEach(lecture => {
+          if(lecture.checkin_window_status === "open")
+            temp_list.unshift(lecture)
+          else
+            temp_list.push(lecture)
+        })
+        this.live_lectures = temp_list
       },
       chooseLecturesToDisplay() {
         let lecture_existence_pairs = [["live", this.live_lectures_exist], ["playback", this.playback_lectures_exist],
@@ -204,43 +211,8 @@
 </script>
 
 <style scoped>
-  .dashboard-section {
-    /*border: red solid;*/
-    text-align: left;
-    margin-top: 4rem;
-    display: inline-block;
-    vertical-align: top;
-    height: 15rem;
-    overflow-y: scroll;
-  }
-
-  #section-1 {
-    float: left;
-    margin-left: 8rem;
-    width: 30rem;
-  }
-
-  #section-2 {
-    width: 30rem;
-    margin-left: -5rem;
-  }
-
-  .section-title {
-    font-weight: bold;
-  }
-
-  .lecture-box {
-    border: blue solid;
-    width: 10rem;
-    height: 3rem;
-    border-radius: 5px;
-    margin-left: 3rem;
-    margin-top: 2rem;
-    cursor: pointer;
-  }
-
-  .lecture-box p {
-    text-align: center;
-    margin-top: 0.5rem;
+  #dashboard-container {
+    width: 85%;
+    margin: auto;
   }
 </style>
