@@ -36,7 +36,7 @@
   .lecture-list {
     border: white solid;
     height: 100%;
-    width: 95%;
+    width: 85%;
     margin: auto;
   }
 
