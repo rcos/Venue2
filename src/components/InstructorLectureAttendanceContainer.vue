@@ -8,7 +8,10 @@
 				Watch Playback
 			</router-link>
 			<div class="float-right" id="manual-override-container">
-				<div class="input-group">
+				<div v-if="override_err_msg != ''" id="override-err-msg">
+					<p class="err-msg">{{override_err_msg}}</p>
+				</div>
+				<div class="input-group row">
 					<label for="rcs-ids" id="override-label">Manual override:</label>
 					<input id="rcs-ids" type="text" v-model.lazy="overrides" class="form-control" placeholder="eg: 'whitte3,mbizin'" aria-label="RCS IDs to override" aria-describedby="basic-addon2"/>
 					<div class="input-group-append">
@@ -50,7 +53,9 @@
     },
     data(){
       return {
-				overrides: ""
+				overrides: "",
+				override_err_msg: "",
+				modal_open: false
       }
     },
     created() {
@@ -67,10 +72,22 @@
     	},
 			handleOverride() {
 				let rcs_list = this.overrides.replace(/\s/g,'').split(",")
-				LectureSubmissionAPI.addLiveSubmissionByRCS(rcs_list,this.lecture._id)
-				.then(res => {
-					this.overrides = res.data.join(",")
-				})
+				console.log(rcs_list)
+				if(rcs_list.length == 1 && rcs_list[0]=="") {
+					this.overrides = ""
+					this.override_err_msg = "Empty"
+				} else {
+					LectureSubmissionAPI.addLiveSubmissionByRCS(rcs_list,this.lecture._id)
+					.then(res => {
+						if(res.data.length == 0) {
+							this.overrides = ""
+							this.override_err_msg = ""
+						} else {
+							this.overrides = res.data.join(",")
+							this.override_err_msg = "Remaining are invalid"
+						}
+					})
+				}
 			}
     }
   }
@@ -117,12 +134,12 @@
 	}
 
 	.tab_btn.selected_tab {
-	  color: blue;
-	  border-bottom: .2rem solid blue;
+	  color: #0078c2;
+	  border-bottom: .2rem solid #0078c2;
 	}
 
 	.tab_btn.selected_tab h5 {
-	  color: blue;
+	  color: #0078c2;
 	}
 
 	.tab_section {
@@ -172,6 +189,10 @@
 	  display: none;
 	}
 
+	#rcs-ids {
+		height: 100%;
+	}
+
 	#override-label {
 		margin: auto 1rem;
 		font-size: 1.2rem;
@@ -181,12 +202,13 @@
 		display: inline-flex;
 	}
 
-	#rcs-ids {
-		/* width: 20rem; */
-	}
-
 	#submit-manual-override {
 		display: inline;
+	}
+
+	#override-err-msg {
+		color:#c40000;
+		padding: 0.5rem;
 	}
 
 </style>

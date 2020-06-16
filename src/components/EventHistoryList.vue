@@ -146,7 +146,7 @@
 
   .event-pill-list-mode {
     width: 45%;
-    border: 1px solid #24E565;
+    border: 1px solid #04852f;
     display: inline-block;
     margin-left: 0.5rem;
     margin-right: 0.5rem;

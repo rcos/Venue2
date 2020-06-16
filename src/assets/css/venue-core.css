@@ -352,28 +352,28 @@ body, * {
 .instructor-attendance-history-pill .percentage-area::before {
   content: '';
   position: absolute;
-  border-right: 16px solid green;
-  border-bottom: 32px solid green;
-  border-top: 32px solid transparent;
-  border-left: 16px solid transparent;
+  border-right: 15px solid green;
+  border-bottom: 31px solid green;
+  border-top: 31px solid transparent;
+  border-left: 15px solid transparent;
   left: -30px;
 }
 
 
 .instructor-attendance-history-pill.good {
-  border: 2px solid #24E565;
+  border: 2px solid #04852f;
   box-shadow: 0px 3px 10px rgba(65, 162, 91, 0.33);
 }
 .instructor-attendance-history-pill.good .date-area {
-  background-color: #24E565;
+  background-color: #04852f;
 }
 .instructor-attendance-history-pill.good .percentage-area {
-  background-color: #24E565;
+  background-color: #04852f;
 }
 
 .instructor-attendance-history-pill.good .percentage-area::before {
-  border-right: 16px solid #24E565;
-  border-bottom: 32px solid #24E565;
+  border-right: 15px solid #04852f;
+  border-bottom: 31px solid #04852f;
 }
 
 .instructor-attendance-history-pill.good:hover,
@@ -383,19 +383,19 @@ body, * {
 }
 
 .instructor-attendance-history-pill.medium {
-  border: 2px solid #E97E47;
+  border: 2px solid #b95726;
   box-shadow: 0px 3px 10px rgba(233, 126, 71, 0.36);
 }
 .instructor-attendance-history-pill.medium .date-area {
-  background-color: #E97E47;
+  background-color: #b95726;
 }
 .instructor-attendance-history-pill.medium .percentage-area {
-  background-color: #E97E47;
+  background-color: #b95726;
 }
 
 .instructor-attendance-history-pill.medium .percentage-area::before {
-  border-right: 16px solid #E97E47;
-  border-bottom: 32px solid #E97E47;
+  border-right: 15px solid #b95726;
+  border-bottom: 31px solid #b95726;
 }
 
 .instructor-attendance-history-pill.medium:hover,
@@ -405,19 +405,19 @@ body, * {
 }
 
 .instructor-attendance-history-pill.bad {
-  border: 2px solid rgb(209, 62, 52);
+  border: 2px solid #d13e34;
   box-shadow: 0px 3px 10px rgba(255, 99, 88, 0.36);
 }
 .instructor-attendance-history-pill.bad .date-area {
-  background-color: rgb(209, 62, 52);
+  background-color: #d13e34;
 }
 .instructor-attendance-history-pill.bad .percentage-area {
-  background-color: rgb(209, 62, 52);
+  background-color: #d13e34;
 }
 
 .instructor-attendance-history-pill.bad .percentage-area::before {
-  border-right: 16px solid rgb(209, 62, 52);
-  border-bottom: 32px solid rgb(209, 62, 52);
+  border-right: 15px solid #d13e34;
+  border-bottom: 31px solid #d13e34;
 }
 
 .instructor-attendance-history-pill.bad:hover,
@@ -509,7 +509,7 @@ body, * {
 
 .course-pill .background-pillar {
   position: absolute;
-  background-color: red;
+  background-color: #d13e34;
   left: -1%;
   top: -6%;
   border-radius: 5px;
@@ -579,7 +579,7 @@ body, * {
    that is currently Firefox-only */
 custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #FC5D60 white;
+  scrollbar-color: #d13e34 white;
 }
 
 /* Works on Chrome/Edge/Safari */
@@ -590,7 +590,7 @@ custom-scrollbar::-webkit-scrollbar-track {
   background: white;
 }
 custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #FC5D60;
+  background-color: #d13e34;
   border-radius: 20px;
 }
 
@@ -655,19 +655,19 @@ a:hover {
 }
 
 .lecture-pill-min.green {
-  background-color: #4ECD4C;
+  background-color: #04852f;
   box-shadow: 0px 3px 5px rgba(78, 205, 76, 0.3);
 }
 .lecture-pill-min.blue {
-  background-color: #4F6DEA;
+  background-color: #0078c2;
   box-shadow: 0px 3px 5px rgba(79, 109, 234, 0.3);
 }
 .lecture-pill-min.yellow {
-  background-color: #F49F32;
+  background-color: #b95726;
   box-shadow: 0px 3px 5px rgba(244, 159, 50, 0.4);
 }
 .lecture-pill-min.red {
-  background-color: #F95247;
+  background-color: #d13e34;
   box-shadow: 0px 3px 5px rgba(249, 82, 71, 0.3);
 }
 
@@ -712,18 +712,18 @@ a:hover {
 }
 
 .mobile-event-pill-area .mobile-pill.good {
-  border: 3px solid #24E565;
+  border: 3px solid #04852f;
   box-shadow: 0px 3px 10px rgba(65, 162, 91, 0.33);
 }
 
 .mobile-event-pill-area .mobile-pill.bad {
-  border: 3px solid rgb(209, 62, 52);
+  border: 3px solid #d13e34;
   box-shadow: 0px 3px 10px rgba(255, 99, 88, 0.36);
 
 }
 
 .mobile-event-pill-area .mobile-pill.medium {
-  border: 3px solid #E97E47;
+  border: 3px solid #b95726;
   box-shadow: 0px 3px 10px rgba(233, 126, 71, 0.36);
 }
 
@@ -765,7 +765,7 @@ a:hover {
   left: -2%;
   width: 104%;
   height: 100%;
-  background-color: #01B1FC;
+  background-color: #0078c2;
   border-radius: 5px;
 }
 
@@ -782,12 +782,12 @@ a:hover {
 }
 
 .btn-primary {
-  background: rgb(64, 92, 201);
-  border: 1px solid rgb(51, 75, 168);
+  background: #0078c2;
+  border: 1px solid #0078c2;
 }
 
 .btn-primary:hover,
 .btn-primary:focus {
   outline: none;
-  background: rgb(51, 75, 168);
+  background: #0078c2;
 }

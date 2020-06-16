@@ -1,6 +1,6 @@
 <template>
   <div id="lecture-upload-modal">
-    <button type="button" class="btn btn-primary" @click="handleShowModal">Upload Lecture Video...</button>
+    <button type="button" class="btn btn-primary" @click="handleShowModal" :tabindex="(modal_open ? '-1' : '0')">Upload Lecture Video...</button>
     <div id="lecture_modal_viewable" class="hiddenModal">
       <div class="row titlerow">
         <h1 id="banner_title" aria-label="New Lecture Video">New Lecture Video <button type="button" v-if="update_lecture" id="cancel_upload_btn" class="btn btn-secondary" @click="hideModal" aria-label="Cancel Video Upload">Cancel</button>
@@ -8,7 +8,7 @@
         </h1>
       </div>
       <div class="row filerow">
-        <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn" role="button" tabindex="0" aria-label="Video Selector"/>
+        <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn" role="button" tabindex="0" aria-label="Select Video and Show Poll Creation Options"/>
       </div>
       <div class="row" id="lecture_container" v-if="file_selected">
         <div class="col">
@@ -16,7 +16,7 @@
           <div class="poll_card">
             <div class="row questionrow">
               <label id="question_label">Question</label>
-              <textarea id="question" class="col" type="text" placeholder="Which of the following...?" aria-labelledby="question_label"/>
+              <textarea id="question" class="col" type="text" placeholder="eg. Which of the following...?" aria-labelledby="question_label"/>
             </div>
             <div class="row">
               <div class="col-4">
@@ -37,16 +37,18 @@
             </div>
             <h4 class="row">Possible Answers</h4>
             <div class="row">
-              <h6 id="spacer1">Number</h6>
-              <h6 id="a_label">Answer</h6>
-              <h6 id="correct_label">Correct</h6>
+              <label id="spacer1">Number</label>
+              <label id="a_label">Answer</label>
+              <label id="correct_label">Correct</label>
             </div>
-            <div v-for="(current_answer,i) in current_answers" v-bind:key="i" class="row possible_answer">
-              <p class="answernumber">{{i + 1}}</p>
-              <input class="answerfield" type="text" v-model.lazy="current_answers[i]" aria-labelledby="a_label"/>
-              <input class="iscorrectfield" type="checkbox" v-model.lazy="current_is_correct[i]" aria-labelledby="correct_label"/>
-              <button type="button" class="btn btn-danger removeanswer" @click="current_answers.splice(i,1);current_is_correct.splice(i,1)" :aria-label="'Remove Answer '+(i+1)">X</button>
-            </div>
+            <ol class="row possible_answer">
+              <li v-for="(current_answer,i) in current_answers" v-bind:key="i">
+                <!-- <p class="answernumber">{{i + 1}}</p> -->
+                <input class="answerfield" type="text" v-model.lazy="current_answers[i]" aria-labelledby="a_label"/>
+                <input class="iscorrectfield" type="checkbox" v-model.lazy="current_is_correct[i]" aria-labelledby="correct_label"/>
+                <button type="button" class="btn btn-danger removeanswer" @click="current_answers.splice(i,1);current_is_correct.splice(i,1)" :aria-label="'Remove Answer '+(i+1)">X</button>
+              </li>
+            </ol>
             <div class="row addanswerrow">
               <button type="button" id="add_answer_btn" class="btn btn-secondary" @click="current_answers.push('');current_is_correct.push(false)">Add Option</button>
             </div>
@@ -57,12 +59,14 @@
         </div>
         <div class="col">
           <h2>Current Polls</h2>
-          <h6 v-if="polls.length > 0" id="pq_label">Question</h6>
-          <div v-for="(poll,i) in polls" :key="i" class="row pollrow">
-            <p class="polltimestamp">{{secondsToHHMMSS(poll.timestamp)}}</p>
-            <input class="pollquestion" :value="poll.question" readonly aria-labelledby="pq_label"/>
-            <button type="button" class="removepollbtn btn btn-danger" @click="polls.splice(i,1)" :aria-label="'Remove Poll '+(i+1)">X</button>
-          </div>
+          <label v-if="polls.length > 0" id="pq_label">Question</label>
+          <ol class="row pollrow">
+            <li v-for="(poll,i) in polls" :key="i" class="row prow">
+              <p class="polltimestamp">{{secondsToHHMMSS(poll.timestamp)}}</p>
+              <input class="pollquestion" :value="poll.question" readonly aria-labelledby="pq_label"/>
+              <button type="button" class="removepollbtn btn btn-danger" @click="polls.splice(i,1)" :aria-label="'Remove Poll '+(i+1)">X</button>
+            </li>
+          </ol>
         </div>
         <div class="col-5">
           <video id="video_player" class="video-js vjs-big-play-centered" controls></video>
@@ -109,7 +113,8 @@ export default {
       video_ref: "",
       vjs: null,
       play_sub_start: null,
-      play_sub_end: null
+      play_sub_end: null,
+      modal_open: false
     };
   },
   beforeDestroy() {
@@ -228,9 +233,13 @@ export default {
       })
     },
     hideModal() {
+      this.modal_open = false 
+      this.$emit('openstatus', false)
       document.getElementById('lecture_modal_viewable').classList.add('hiddenModal')
     },
     showModal() {
+      this.modal_open = true
+      this.$emit('openstatus', true)
       document.getElementById('lecture_modal_viewable').classList.remove('hiddenModal')
     },
     addPoll() {
@@ -386,6 +395,13 @@ h2 {
   height: 4rem;
   width: 20%;
 }
+li {
+  width: 100%;
+}
+#pq_label {
+  width: 100%;
+  text-align: center;
+}
 .possible_answer {
   margin-bottom: 1rem;
 }
@@ -402,10 +418,11 @@ input {
 }
 #a_label {
   width: 65%;
+  text-align: center;
 }
 .answerfield {
   position: relative;
-  width: 65%;
+  width: 80%;
   height: 1rem;
   font-size: 1rem;
 }
@@ -461,6 +478,7 @@ p {
   top: 0.45rem;
 }
 .pollrow {
+  list-style-type: none;
   margin-left: 0rem;
   margin-bottom: 1rem;
   font-size: 1rem;

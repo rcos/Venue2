@@ -2,7 +2,7 @@
     <footer class="footer">
     	© 2020 Venue v2.0 | 
     	<a href="https://github.com/rcos/Venue2" target="_blank" aria-label="Github Repository">
-    		<img class="github-mark" src="../assets/github_mark.png" aria-label="Github Icon"/>
+    		<img class="github-mark" src="../assets/github_mark.png" aria-label="Github Icon" alt="Github Icon"/>
     	</a>
     	| An RCOS project
     </footer>

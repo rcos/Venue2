@@ -2,7 +2,7 @@
 
   <div class="card">
     <div class="card_image">
-      <img src="../assets/venuelogo.svg" />
+      <img src="../assets/venuelogo.svg" alt="Venue Logo"/>
       </div>
     <div class="card_Event title-white">
       <p>Event Name</p>
