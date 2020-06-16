@@ -42,7 +42,7 @@
   }
 
   .dashboard-section-title-container {
-    height: 2rem;
+    height: 4rem;
     text-align: left;
     padding-left: 2rem;
   }
@@ -53,6 +53,7 @@
   }
 
   .dashboard-section-body-container {
+    min-height: 10rem;
     max-height: 18rem;
     overflow-y: auto;
   }
@@ -77,6 +78,10 @@
     .dashboard-section-title-container {
       text-align: center;
       padding: 0;
+    }
+
+    .dashboard-section-body-container {
+      min-height: 4rem;
     }
   }
 
