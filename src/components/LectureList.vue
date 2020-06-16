@@ -36,19 +36,18 @@
   .lecture-list {
     border: white solid;
     height: 100%;
-    width: 95%;
+    width: 85%;
     margin: auto;
   }
 
   .no-lecture-text {
     color: #2C3E50;
-    margin-top: 4rem;
   }
 
   /*Ipad & below*/
-  /* @media only screen and (max-width: 800px) {
+   @media only screen and (max-width: 800px) {
     .lecture-list {
       width: 95%;
     }
-  } */
+  } 
 </style>
