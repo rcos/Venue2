@@ -118,7 +118,7 @@
   }
 
   .live-lecture-closed {
-    background-color: #a7640d;
+    background-color: #f29f33;
   }
 
   .playback-lecture {
