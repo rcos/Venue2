@@ -10,29 +10,29 @@
         <!-- Dashboard -->
         <div class="venue-nav-link-container" v-if="this.$route.name === 'dashboard'">
           <router-link class="venue-nav-link active-link" :to="{name: 'dashboard'}">
-            Dashboard
+            <p v-if="is_instructor">Instructor Dashboard</p>
+            <p v-else>Student Dashboard</p>
           </router-link>
           <div class="active-link-underline"></div>
         </div>
         <div v-else class="venue-nav-link-container">
           <router-link class="venue-nav-link" :to="{name: 'dashboard'}">
-            Dashboard
+            <p v-if="is_instructor">Instructor Dashboard</p>
+            <p v-else>Student Dashboard</p>
           </router-link>
         </div>
         <!-- Courses -->
-        <show-at breakpoint="mediumAndBelow">
-          <div v-if="this.$route.name === 'user_courses'" class="venue-nav-link-container">
-            <router-link class="venue-nav-link active-link" :to="{name: 'user_courses'}">
-              Courses
-            </router-link>
-            <div class="active-link-underline"></div>
-          </div>
-          <div v-else class="venue-nav-link-container">
-            <router-link class="venue-nav-link" :to="{name: 'user_courses'}">
-              Courses
-            </router-link>
-          </div>
-        </show-at>
+        <div v-if="this.$route.name === 'user_courses'" class="venue-nav-link-container">
+          <router-link class="venue-nav-link active-link" :to="{name: 'user_courses'}">
+            Courses
+          </router-link>
+          <div class="active-link-underline"></div>
+        </div>
+        <div v-else class="venue-nav-link-container">
+          <router-link class="venue-nav-link" :to="{name: 'user_courses'}">
+            Courses
+          </router-link>
+        </div>
         <!-- Attendance -->
         <!-- <hide-at breakpoint="small">
           <div v-if="this.$route.name === 'attendance'" class="venue-nav-link-container">
@@ -79,7 +79,8 @@
     },
     data(){
       return {
-        current_user: {}
+        current_user: {},
+        is_instructor: Boolean
       }
     },
     created() {
@@ -88,6 +89,7 @@
     methods: {
       getCurrentUser() {
         this.current_user = this.$store.state.user.current_user
+        this.is_instructor = this.current_user.is_instructor
       },
     }
   }
@@ -139,14 +141,6 @@
     color: #466D85;
   }
 
-  .venue-nav-link:hover,
-  .settings_link:hover .mr-2,
-  .venue-nav-link:focus,
-  .settings_link:focus .mr-2 {
-    color: #466D85;
-    font-weight: 900;
-  }
-
   .active-link:hover,
   .active-link:focus {
     color: #575757;
@@ -172,5 +166,15 @@
   .venue-nav-link:focus,
   .settings_link:focus {
     outline: none;
+  }
+
+  .venue-nav-link:hover,
+  .settings_link:hover .mr-2,
+  .venue-nav-link:focus,
+  .settings_link:focus .mr-2,
+  .venue-nav-link:focus p,
+  .venue-nav-link:hover p {
+    color: #466D85;
+    font-weight: 900;
   }
 </style>

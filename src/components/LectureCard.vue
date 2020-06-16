@@ -1,270 +1,256 @@
 <template>
-  <div class="active-event-card-container" v-bind:class="{
-  'pending-container':status == 'pending',
-  'ongoing-container':status == 'ongoing',
-  'ended-container':status == 'ended',
-  'static-container': status == 'static'}" >
-    <router-link class="lecture_card_link" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}" :aria-label="'Lecture Info - '+courseName+' - '+lecture.title">
-      <div class="active-event-card-background"></div>
-      <div class="active-event-card">
-        <div  class="event-card-section" id="course-section">
-          <div class="course-name">{{ courseName }}</div>
-          <div class="course-title">{{ courseDept }} {{ courseNumber }}</div>
+  <div class="lecture-card">
+    <div v-if="lecture_type === 'Live'" class="lecture-card-background" :class="{'live-lecture-open':lecture.checkin_window_status === 'open', 'live-lecture-closed':lecture.checkin_window_status ==='closed'}">
+    </div>
+    <div v-else class="lecture-card-background" :class="{'playback-lecture':lecture_type === 'Playback', 'recent-lecture':lecture_type === 'Recent', 'upcoming-lecture':lecture_type === 'Upcoming'}">
+    </div>
+    <div class="lecture-card-foreground">
+      <router-link class="lecture_card_link" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}" :aria-label="'Lecture Info - '+ lecture_course.name +' - '+lecture.title">
+        <div class="lecture-card-section" id="left-section">
+          <p class="course-name">{{ lecture_course.name }}</p>
+          <p class="course-title">{{ lecture_course.dept }} {{ lecture_course.course_number }}</p>
         </div>
-        <div v-if="eventSublabel != undefined && eventSublabel != ''" class="event-card-section event-section">
-          <div class="event-name">{{ eventLabel }}</div>
-          <div class="event-location">{{ eventSublabel }}</div>
+        <div class="lecture-card-section" id="middle-section">
+          <p class="lecture-name">{{ lecture.title }}</p>
         </div>
-        <div v-else class="event-card-section event-section">
-          <div class="event-name solo">{{ eventLabel }}</div>
-        </div>
-        <div class="event-card-section" id="time-section">
-          <div>
-            <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon">
-            <div class="time-remaining">
-              <span v-if="status == 'pending'" class="pending-text">pending</span>
-              <div v-else-if="status == 'ongoing' || status == 'static'">
-                {{ getTimeString( timeFromNow ) }}
-              </div>
-              <span v-else class="ended-text">ended</span>
-            </div>
+        <div class="lecture-card-section" id="right-section">
+          <div v-if="lecture_type === 'Live'" class="right-container">
+            <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
+            <p v-if="lecture.checkin_window_status === 'open'" class="lecture-time-text open-text">{{ getTimeToWindowCloseString(false) }}</p>
+            <p v-else class="lecture-time-text closed-text">closed</p>
+          </div>
+          <div v-else-if="lecture_type === 'Playback'" class="right-container">
+            <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
+            <p class="lecture-time-text playback-percentage-text">{{ getTimeToWindowCloseString(true) }}</p>
+            <!-- <p class="playback-percentage-text">87% submission</p> -->
+          </div>
+          <div v-else-if="lecture_type === 'Recent'" class="right-container">
+            <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
+            <p class="lecture-time-text">closed</p>
+            <!-- <p class="recent-percentage-text">91% submission</p> -->
+          </div>
+          <div v-else-if="lecture_type === 'Upcoming'" class="right-container">
+            <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
+            <p v-if="lecture.allow_live_submissions" class="lecture-time-text upcoming-text">{{ getUpcomingTimeString(lecture.start_time) }}</p>
+            <p v-else class="lecture-time-text upcoming-text">{{ getUpcomingTimeString(lecture.playback_submission_start_time) }}</p>
           </div>
         </div>
-      </div>
-    </router-link>
+      </router-link>
+    </div>
   </div>
 </template>
 
 <script>
-import SectionAPI from "@/services/SectionAPI.js";
-import SubmissionAPI from "@/services/SubmissionAPI.js";
-
-export default {
-  name: "LectureCard",
-  props: {
-    lecture: Object,
-    courseName: String,
-    courseDept: String,
-    courseNumber: Number,
-    eventLabel: String,
-    eventSublabel: String,
-    status: String,
-    timeFromNow: String
-  },
-  computed: {},
-  components: {},
-  data() {
-    return {
-      section: {},
-      course: {},
-      remaining_days: Number,
-      remaining_hours: Number,
-      remaining_mins: Number,
-      is_instructor: Boolean
-    }
-  },
-  created() {
-    this.is_instructor = this.$store.state.user.current_user.is_instructor
-  },
-  methods: {
-    getTimeString (time_string) {
-      if (time_string == '' || time_string == undefined || time_string == null) return ''
-      let date_ = new Date(time_string)
-      let now = new Date ()
-
-      let timeDiff = Math.abs(date_.getTime() - now.getTime())
-
-      let diffDays = timeDiff / (1000 * 3600 * 24)
-      if (diffDays < 0.5) {
-        // show the hh mm ss
-        let hrs = Math.floor(this.fmod(timeDiff / (1000 * 60 * 60), 12));
-        let mins = Math.floor(this.fmod(timeDiff / (1000 * 60), 60));
-        let secs = Math.floor(this.fmod(timeDiff / (1000), 60));
-        return `${hrs}h ${mins}m ${secs}s`
-      }
-      else {
-        // show the days
-        return `${Math.ceil(diffDays)}d`
-      }
-
-
-      return "123"
+  export default {
+    name: 'LectureCard',
+    props: {
+      lecture_type: String,
+      lecture: Object
     },
-    fmod (value, mod_op) {
-      if (value < mod_op) return value;
-
-      while (value > mod_op) {
-        value -= Math.abs(mod_op)
+    computed: {
+    },
+    components: {
+    },
+    data(){
+      return {
+        is_instructor: Boolean,
+        lecture_course: Object
       }
-      return value
+    },
+    created() {
+      // TODO: Change plabyack and recent sections to show percentages like in figma
+      this.is_instructor = this.$store.state.user.current_user.is_instructor
+      this.lecture_course = this.lecture.sections[0].course
+    },
+    methods: {
+      getTimeToWindowCloseString(is_playback) {
+        let current_time = new Date()
+        let window_close_time;
+        if(is_playback)
+          window_close_time = new Date(this.lecture.playback_submission_end_time)
+        else
+          window_close_time = this.getCurrentCheckinWindowCloseTime()
+        // get total seconds between the times
+        let delta = Math.abs(window_close_time - current_time) / 1000;
+        let diff_days = Math.floor(delta / 86400);
+        var diff_hours = Math.floor(delta / 3600) % 24;
+        var diff_minutes = Math.floor(delta / 60) % 60;
+        let time_to_close_str = ""
+        if(diff_days > 0)
+          time_to_close_str += diff_days + "d "
+        if(diff_hours > 0)
+          time_to_close_str += diff_hours + "h "
+        time_to_close_str += diff_minutes + "m "
+        return time_to_close_str
+      },
+      getCurrentCheckinWindowCloseTime() {
+        return new Date(this.lecture.checkins[this.lecture.checkin_index].end_time)
+      },
+      getUpcomingTimeString(time) {
+        let upcoming_time = new Date(time)
+        let month = upcoming_time.getMonth()
+        let day = upcoming_time.getDay()
+        let year = upcoming_time.getFullYear()
+        return month + '/' + day + '/' + year
+      }
     }
   }
-};
 </script>
 
 <style scoped>
-.active-event-card-container .active-event-card-background {
-  position: absolute;
-  z-index: 1;
-  width: 104%;
-  left: -2%;
-  height: 100%;
-  top: -15%;
-  border-radius: 5px;
-  transition: width 0.25s, left 0.25s, top 0.25s;
-}
-
-.active-event-card-container:hover .active-event-card-background,
-.lecture_card_link:focus .active-event-card-background {
-  width: 110%;
-  left: -5%;
-  top: -25%;
-}
-
-.lecture_card_link:focus {
-  outline: none;
-}
-
-.active-event-card-container {
-  position: relative;
-  width: 75%;
-  height: 3.5rem;
-  margin-left: 2rem;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  cursor: pointer;
-}
-
-.pending-container .active-event-card-background {
-  background-color: #E0932F;
-}
-
-.ongoing-container .active-event-card-background {
-  background-color: #4bcc69;
-}
-
-.static-container .active-event-card-background {
-  background-color: #2a8dc7;
-}
-
-.ended-container .active-event-card-background {
-  background-color: #919191;
-}
-
-.active-event-card {
-  position: absolute;
-  background-color: white;
-  width: 100%;
-  border-radius: 5px;
-  padding: 0.8rem 0.4rem 0.7rem 0.4rem;
-  box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.1);
-  transition: background-color, box-shadow 0.25s;
-  z-index: 4;
-}
-
-.event-card-section {
-  display: inline-block;
-  vertical-align: top;
-  height: 100%;
-}
-
-#course-section {
-  width: 30%;
-  margin-left: 0.5rem;
-  /*text-align: center;*/
-}
-
-.course-name {
-  /*font-size: 0.8rem;*/
-  font-size: 0.8rem;
-  color: #466d85;
-  font-weight: bold;
-}
-
-.course-title {
-  font-size: 0.75rem;
-  color: #146c91;
-}
-
-.event-section {
-  width: 40%;
-  text-align: center;
-  margin: auto;
-}
-
-.event-name {
-  font-size: 0.9rem;
-  font-weight: bold;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-height: 1.6rem;
-}
-
-.event-name.solo {
-  position: relative;
-  top: 5px;
-  font-size: 1.1rem;
-}
-
-.event-location {
-  font-size: 0.75rem;
-  color: #524e0a;
-}
-
-#time-section {
-  width: 26%;
-  text-align: center;
-  padding-top: 0.25rem;
-}
-
-.clock {
-  display: inline-block;
-  height: 1rem;
-}
-
-.time-remaining {
-  display: inline-block;
-  padding-top: 0.25rem;
-  margin-left: 0.5rem;
-  font-size: 0.7rem;
-  font-weight: bold;
-}
-
-.pending-text {
-  color: #cf8423;
-}
-
-.time-remaining-text {
-  color: #4bcc69;
-}
-
-.ended-text {
-  color: #575757;
-}
-
-/*Large devices (Laptops and above)*/
-@media (max-width: 1128px) {
-  .active-event-card-container {
-    margin: auto;
-    margin-top: 2rem;
-    width: 50%;
+  .lecture-card {
+    position: relative;
+    margin-bottom: 2rem;
   }
-  #course-section {
-    width: 23%;
-  }
-}
 
-/*Small devices (phones and below)*/
-@media (max-width: 575.98px) {
-  .active-event-card-container {
-    width: 80%;
+  .lecture-card:last-of-type {
+    margin-bottom: 1rem;
   }
-  .active-event-card {
-    padding-left: 0;
+
+  .lecture-card-background {
+    height: 4rem;
+    /* margin-top: 2rem; */
+    border-radius: 5px;
+    /*background-color: #4ECC4B;*/
   }
-  #course-section {
+
+  .live-lecture-open {
+    background-color: #4ECC4B;
+  }
+
+  .live-lecture-closed {
+    background-color: #F29F33;
+  }
+
+  .playback-lecture {
+    background-color: #516DED;
+  }
+
+  .recent-lecture {
+    background-color: #858585;
+  }
+
+  .upcoming-lecture {
+    background-color: #00B3FF;
+  }
+
+  .lecture-card-foreground {
+    position: absolute;
+    height: 4rem;
+    width: 96.5%;
+    margin-top: -3.5rem;
+    /*margin-left:.5rem;*/
+    margin-left: 1.7%;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.1);
+    z-index: 4;
+  }
+
+  .lecture-card-foreground:hover,
+  .lecture-card-foreground:focus-within {
+    background-color: #c9c9c9;
+    -webkit-transition: background-color 200ms linear;
+    -ms-transition: background-color 200ms linear;
+    transition: background-color 200ms linear;
+  }
+
+  .lecture_card_link:focus {
+    outline: none;
+  }
+
+  .lecture-card-section {
+    height: 4rem;
+    display: inline-block;
+    /*border: black solid;*/
+    vertical-align: top;
+  }
+
+  #left-section {
     width: 30%;
   }
-}
+
+  #middle-section {
+    width: 40%;
+  }
+
+  #right-section {
+    width: 30%;
+  }
+
+  .course-name {
+    font-size: .75rem;
+    margin-top: 1rem;
+    /* color: #466D85; */
+    font-weight: bold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 90%;
+  }
+
+  .course-title {
+    font-size: .75rem;
+    /* color: #1591C5; */
+    font-weight: bold;
+    /*margin-top: .5rem;*/
+  }
+
+  .lecture-name {
+    /* color: #2C3E50; */
+    font-size: 1.25rem;
+    margin-top: 1rem;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 95%;
+  }
+
+  .clock {
+    display: inline-block;
+    vertical-align: middle;
+    height: 1rem;
+    font-weight: bold;
+    float: left;
+  }
+
+  .right-container {
+    margin: auto;
+    margin-top: 1.4rem;
+    width: 97%;
+    font-size: .9rem;
+    /*font-weight: bold;*/
+  }
+
+  .lecture-time-text {
+    display: inline-block;
+    font-size: .8rem;
+    float: left;
+    margin-left: .5rem;
+    font-weight: bold;
+  }
+
+  .playback-percentage-text {
+    /* color: #516DED; */
+    font-weight: bold;
+  }
+
+  .recent-percentage-text {
+    color: #858585;
+    font-weight: bold;
+  }
+
+  /* .upcoming-text {
+    color: #00B3FF;
+  }
+
+  .open-text {
+    color: #4ECC4B;
+  }
+
+  .closed-text {
+    color: #F29F33;
+  } */
+
 </style>
