@@ -110,7 +110,11 @@
   .lecture-card-background {
     height: 4rem;
     width: 100%;
+    margin-left: 0;
     border-radius: 5px;
+    -webkit-transition: height 300ms, width 300ms, margin-left 300ms;
+    -ms-transition: height 300ms, width 300ms, margin-left 300ms;
+    transition: height 300ms, width 300ms, margin-left 300ms;
   }
 
   .live-lecture-open {
@@ -150,9 +154,9 @@
     height: 4.5rem;
     width: 102.5%;
     margin-left: -1.25%;
-    -webkit-transition: height 200ms, width 200ms, margin-left 200ms;
-    -ms-transition: height 200ms, width 200ms, margin-left 200ms;
-    transition: height 200ms, width 200ms, margin-left 200ms;
+    -webkit-transition: height 300ms, width 300ms, margin-left 300ms;
+    -ms-transition: height 300ms, width 300ms, margin-left 300ms;
+    transition: height 300ms, width 300ms, margin-left 300ms;
   }
 
   .lecture_card_link:focus {
