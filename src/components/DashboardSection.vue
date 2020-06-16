@@ -53,6 +53,7 @@
   }
 
   .dashboard-section-body-container {
+    min-height: 10rem;
     max-height: 18rem;
     overflow-y: auto;
   }
@@ -77,6 +78,10 @@
     .dashboard-section-title-container {
       text-align: center;
       padding: 0;
+    }
+
+    .dashboard-section-body-container {
+      min-height: 4rem;
     }
   }
 
