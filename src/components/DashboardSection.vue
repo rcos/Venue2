@@ -54,7 +54,7 @@
 
   .dashboard-section-body-container {
     min-height: 10rem;
-    max-height: 18rem;
+    max-height: 12rem;
     overflow-y: auto;
   }
 
