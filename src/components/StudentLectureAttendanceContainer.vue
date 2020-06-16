@@ -101,8 +101,8 @@
     top: 3rem;
     bottom: 0;
     text-align: left;
-    padding-left: 5rem;
-    padding-right: 5rem;
+    /* padding-left: 5rem;
+    padding-right: 5rem; */
   }
 
   #table-header h2 {
@@ -133,7 +133,6 @@
 
   .tab_section {
     margin-top: 3rem;
-    margin-left: 6rem;
     overflow-y: auto;
     height: 17rem;
     padding-bottom: 3rem;

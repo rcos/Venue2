@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="lecture-info-container-root">
     <div class="spinner-border" role="status" v-if="!lecture_has_loaded">
       <span class="sr-only">Loading...</span>
     </div>
@@ -122,5 +122,7 @@
 </script>
 
 <style scoped>
-
+  #lecture-info-container-root {
+    padding: 0 2rem;
+  }
 </style>
