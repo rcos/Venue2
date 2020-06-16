@@ -1,5 +1,9 @@
 <template>
 	<div>
+		<div id="qr_modal" class="hidden">
+			<qrcode v-bind:value="lecture.current_checkin.code" :options="{ width: 600 }"></qrcode>
+		  <button class="btn btn-secondary" id="close_qr_btn" @click="hideQR" aria-label="Hide QR">Hide</button>
+		</div>
 		<div id="container-header">
 			<h2>Attendance</h2>
 			<button v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" @click="showQR" class="header-btn btn btn-secondary">Show QR</button>
@@ -23,20 +27,16 @@
 				</div>
 			</div>
 	  </div>
-	  <div id="qr_modal" class="hidden">
-	    <canvas id="qr_render_area"></canvas>
-	    <button class="btn btn-secondary" id="close_qr_btn" @click="hideQR" aria-label="Hide QR">Hide</button>
-	  </div>
 	  <LectureAttendanceTable :is_instructor="true" :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" :all_students="all_students" />
 	</div>
 </template>
 
 
 <script>
-  import QRCode from "qrcode";
   import LectureUploadModal from "@/components/LectureUploadModal";
   import LectureAttendanceTable from "@/components/LectureAttendanceTable.vue";
 	import LectureSubmissionAPI from "@/services/LectureSubmissionAPI.js"
+	import qrcode from '@chenfengyuan/vue-qrcode';
 
   export default {
     name: 'InstructorLectureAttendanceContainer',
@@ -49,7 +49,8 @@
     },
     components: {
     	LectureUploadModal,
-    	LectureAttendanceTable
+    	LectureAttendanceTable,
+    	qrcode
     },
     data(){
       return {
@@ -62,9 +63,6 @@
     },
     methods: {
     	showQR() {
-    	  QRCode.toCanvas(document.getElementById("qr_render_area"), this.lecture.current_checkin.code, function(error) {
-    	    if (error) console.error(error)
-    	  });
     	  document.getElementById("qr_modal").classList.remove("hidden")
     	},
     	hideQR() {
@@ -94,6 +92,15 @@
 </script>
 
 <style scoped>
+	#qr_modal {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		z-index: 5;
+		top: 0;
+		background-color: white;
+	}
+
 	#container-header {
 	  position: relative;
 	  top: 3rem;
