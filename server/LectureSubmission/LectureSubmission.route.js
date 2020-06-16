@@ -54,8 +54,9 @@ lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
               lectureSubmission.save()
                 .then(() => {
                   m++
+                  console.log(m)
                   console.log("<SUCCESS> Adding lecture submission for user with RCS:",rcs)
-                  if(m == checkin.length && n == rcsids.length) {
+                  if(m == lecture.checkins.length && n == rcsids.length) {
                     res.json(bad_ids)
                   }
                 })

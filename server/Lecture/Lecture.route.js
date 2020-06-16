@@ -467,9 +467,9 @@ lectureRoutes.post('/process_emails', (req,res) => {
 						} else {
 							let myhtml = ""
 							if(process.env.NODE_ENV === "production") {
-								html = '<p>Click <a href="https://venue-attend.herokuapp.com/#/lecture_info/' + lect._id + '">here</a> to upload your lecture recording</p>'
+								myhtml = '<p>Click <a href="https://venue-attend.herokuapp.com/#/lecture_info/' + lect._id + '">here</a> to upload your lecture recording</p>'
 							} else {
-								html = '<p>Click <a href="http://localhost:8080/#/lecture_info/' + lect._id + '">here</a> to upload your lecture recording</p>'
+								myhtml = '<p>Click <a href="http://localhost:8080/#/lecture_info/' + lect._id + '">here</a> to upload your lecture recording</p>'
 							}
 							var mailOptions = {
 								from: 'venue.do.not.reply@gmail.com',
