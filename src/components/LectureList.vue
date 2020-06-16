@@ -46,9 +46,9 @@
   }
 
   /*Ipad & below*/
-  /* @media only screen and (max-width: 800px) {
+   @media only screen and (max-width: 800px) {
     .lecture-list {
       width: 95%;
     }
-  } */
+  } 
 </style>
