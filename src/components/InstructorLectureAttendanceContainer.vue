@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div id="qr_modal" class="hidden">
+		<div v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" id="qr_modal" class="hidden">
 			<qrcode v-bind:value="lecture.current_checkin.code" :options="{ width: 600 }"></qrcode>
 		  <button class="btn btn-secondary" id="close_qr_btn" @click="hideQR" aria-label="Hide QR">Hide</button>
 		</div>
@@ -56,7 +56,8 @@
       return {
 				overrides: "",
 				override_err_msg: "",
-				modal_open: false
+				modal_open: false,
+				lecture_has_checkin: false
       }
     },
     created() {
