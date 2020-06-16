@@ -109,21 +109,20 @@
 
   .lecture-card-background {
     height: 4rem;
-    /* margin-top: 2rem; */
+    width: 100%;
     border-radius: 5px;
-    /*background-color: #4ECC4B;*/
   }
 
   .live-lecture-open {
-    background-color: #4ECC4B;
+    background-color: #04852F;
   }
 
   .live-lecture-closed {
-    background-color: #F29F33;
+    background-color: #a7640d;
   }
 
   .playback-lecture {
-    background-color: #516DED;
+    background-color: #683eca;
   }
 
   .recent-lecture {
@@ -131,7 +130,7 @@
   }
 
   .upcoming-lecture {
-    background-color: #00B3FF;
+    background-color: #0076a8;
   }
 
   .lecture-card-foreground {
@@ -139,7 +138,6 @@
     height: 4rem;
     width: 96.5%;
     margin-top: -3.5rem;
-    /*margin-left:.5rem;*/
     margin-left: 1.7%;
     background-color: white;
     border-radius: 5px;
@@ -147,12 +145,14 @@
     z-index: 4;
   }
 
-  .lecture-card-foreground:hover,
-  .lecture-card-foreground:focus-within {
-    background-color: #c9c9c9;
-    -webkit-transition: background-color 200ms linear;
-    -ms-transition: background-color 200ms linear;
-    transition: background-color 200ms linear;
+  .lecture-card:hover .lecture-card-background,
+  .lecture-card:focus-within .lecture-card-background{
+    height: 4.5rem;
+    width: 102.5%;
+    margin-left: -1.25%;
+    -webkit-transition: height 200ms, width 200ms, margin-left 200ms;
+    -ms-transition: height 200ms, width 200ms, margin-left 200ms;
+    transition: height 200ms, width 200ms, margin-left 200ms;
   }
 
   .lecture_card_link:focus {
@@ -162,7 +162,6 @@
   .lecture-card-section {
     height: 4rem;
     display: inline-block;
-    /*border: black solid;*/
     vertical-align: top;
   }
 
@@ -181,7 +180,7 @@
   .course-name {
     font-size: .75rem;
     margin-top: 1rem;
-    /* color: #466D85; */
+    color: #466D85;
     font-weight: bold;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -191,13 +190,12 @@
 
   .course-title {
     font-size: .75rem;
-    /* color: #1591C5; */
+    color: #097bac;
     font-weight: bold;
-    /*margin-top: .5rem;*/
   }
 
   .lecture-name {
-    /* color: #2C3E50; */
+    color: #2C3E50;
     font-size: 1.25rem;
     margin-top: 1rem;
     font-weight: bold;
@@ -232,7 +230,7 @@
   }
 
   .playback-percentage-text {
-    /* color: #516DED; */
+    color: #683eca;
     font-weight: bold;
   }
 
@@ -241,16 +239,16 @@
     font-weight: bold;
   }
 
-  /* .upcoming-text {
-    color: #00B3FF;
+  .upcoming-text {
+    color: #0076a8;
   }
 
   .open-text {
-    color: #4ECC4B;
+    color: #04852F;
   }
 
   .closed-text {
-    color: #F29F33;
-  } */
+    color: #a7640d;
+  }
 
 </style>
