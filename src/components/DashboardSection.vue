@@ -42,7 +42,7 @@
   }
 
   .dashboard-section-title-container {
-    height: 2rem;
+    height: 4rem;
     text-align: left;
     padding-left: 2rem;
   }
