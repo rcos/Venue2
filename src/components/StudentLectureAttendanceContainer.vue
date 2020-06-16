@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- TODO: Check if student submitted already -->
-    <div v-if="qr_scanning_window_open">
+    <div id="qr-sccanning-container" v-if="qr_scanning_window_open">
       <button @click="closeQRScanningWindow" id="exit_preview_btn" tabindex="0" aria-label="Close QR Scanner">X</button>
       <qrcode-stream id="video_preview" @decode="checkForQRMatch"></qrcode-stream>
     </div>
@@ -178,4 +178,12 @@
     display: none;
   }
 
+  #qr-sccanning-container {
+    position: absolute;
+    width: 100%;
+    height: 90%;
+    top: 0;
+    z-index: 1;
+    background-color: white;
+  }
 </style>
