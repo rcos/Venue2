@@ -42,7 +42,6 @@
 
   .no-lecture-text {
     color: #2C3E50;
-    margin-top: 4rem;
   }
 
   /*Ipad & below*/
