@@ -70,10 +70,12 @@ export default {
 		handleOptIntoUnrestricted() {
 			this.needs_decision = false
 			this.unrestricted = true
+			this.lecture_loaded = true;
 		},
 		handleOptIntoRestricted() {
 			this.needs_decision = false
 			this.unrestricted = false
+			this.lecture_loaded = true;
 		}
 	}
 }
