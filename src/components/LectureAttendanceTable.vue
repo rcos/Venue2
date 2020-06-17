@@ -72,6 +72,7 @@
 
 
 <script>
+	import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
   import LectureAttendanceList from '@/components/LectureAttendanceList.vue'
 
   export default {
