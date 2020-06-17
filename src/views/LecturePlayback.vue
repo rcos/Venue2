@@ -55,7 +55,7 @@ export default {
 									playback = sub
 								}
 							})
-							if(undefined != playback && playback.video_percent < 1) {
+							if(undefined != playback && playback.video_percent == 1) {
 								this.unrestricted = true
 								this.needs_decision = false
 							} else if(live.length == this.lecture.checkins.length) {
