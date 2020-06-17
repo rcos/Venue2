@@ -39,9 +39,9 @@ export default {
 		LectureAPI.getLecture(this.$route.params.lecture_id)
 			.then(res => {
 				this.lecture = res.data
+				this.lecture_loaded = true
 				if(new Date() > new Date(this.lecture.playback_submission_end_time) || this.is_instructor) {
 					this.unrestricted = true
-					this.lecture_loaded = true
 				} else {
 					LectureSubmissionAPI.getLectureSubmissionsForStudent(this.lecture._id,this.$store.state.user.current_user._id)
 						.then(res => {
@@ -57,10 +57,10 @@ export default {
 							})
 							if(undefined != playback && playback.video_percent < 1) {
 								this.unrestricted = true
+								this.needs_decision = false
 							} else if(live.length == this.lecture.checkins.length) {
 								this.unrestricted = true
-							} else if(live.length > 0) {
-								this.needs_decision = true
+								this.needs_decision = false
 							}
 						})
 				}
@@ -70,12 +70,10 @@ export default {
 		handleOptIntoUnrestricted() {
 			this.needs_decision = false
 			this.unrestricted = true
-			this.lecture_loaded = true;
 		},
 		handleOptIntoRestricted() {
 			this.needs_decision = false
 			this.unrestricted = false
-			this.lecture_loaded = true;
 		}
 	}
 }
