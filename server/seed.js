@@ -214,7 +214,8 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			lecture: l[1]._id,
 			submitter: u[2]._id,
 			is_live_submission: true,
-			code: "abcdefghijklmnopqrstuvwxyz"
+			code: "abcdefghijklmnopqrstuvwxyz",
+			live_submission_time: Date.now() - (3.5*60*1000)
 		}))
 
 		p.push(new PlaybackPoll({

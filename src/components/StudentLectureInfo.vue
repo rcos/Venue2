@@ -26,7 +26,7 @@
     },
     data(){
       return {
-        live_submissions: [],
+        live_submissions: {},
         playback_submissions: [],
         absent: [],
         lecture_is_upcoming: Boolean,
@@ -52,9 +52,10 @@
       async getAttendanceForLecture() {
         const response = await LectureSubmissionAPI.getLectureSubmissionsForLecture(this.lecture_id)
         let lecture_submissions = response.data
+        this.live_submissions[this.user_id] = []
         this.student_lecture_submissions.forEach(submission => {
           if(submission.is_live_submission)
-            this.live_submissions.push(submission)
+            this.live_submissions[this.user_id].push(submission)
           else
             this.playback_submissions.push(submission)
         })
