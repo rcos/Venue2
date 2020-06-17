@@ -27,7 +27,7 @@
     name: 'StudentLectureAttendanceContainer',
     props: {
       lecture: Object,
-      live_submissions: Array,
+      live_submissions: Object,
       playback_submissions: Array,
       absent: Array
     },
@@ -70,7 +70,7 @@
           code: this.lecture.current_checkin.code
         }
         const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
-        this.live_submissions.push(lecture_submission)
+        this.live_submissions[this.$store.state.user.current_user._id].push(lecture_submission)
         this.student_can_submit_live = false
         alert("Live Submission Recorded")
       },
@@ -80,8 +80,8 @@
       studentSubmittedToCheckin() {
         let student_submitted_to_checkin = false
         let current_checkin_code = this.lecture.checkins[this.lecture.checkin_index].code
-        for(let i = 0; i < this.live_submissions.length; i++) {
-          if(this.live_submissions[i].code === current_checkin_code){
+        for(let i = 0; i < this.live_submissions[this.$store.state.user.current_user._id].length; i++) {
+          if(this.live_submissions[this.$store.state.user.current_user._id][i].code === current_checkin_code){
             student_submitted_to_checkin = true
             break
           }

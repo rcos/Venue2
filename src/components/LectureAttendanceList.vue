@@ -46,10 +46,10 @@
     <!-- Student -->
     <div v-else>
       <div v-if="is_live">
-        <div v-if="Object.keys(live_submissions).length > 0">
-          <div class="namecard-edging live-color" v-for="submission in live_submissions" :key="submission._id">
+        <div v-if="live_submissions[this.$store.state.user.current_user._id].length > 0">
+          <div class="namecard-edging live-color" v-for="submission in live_submissions[this.$store.state.user.current_user._id]" :key="submission._id">
             <div class="namecard">
-              {{submission.live_submission_time}}
+              {{getPrettyDateTimeWithMS(new Date(submission.live_submission_time))}}
             </div>
           </div>
         </div>
@@ -61,7 +61,7 @@
         <div v-if="submissions.length > 0">
           <div class="namecard-edging playback-color" v-for="submission in submissions" :key="submission._id">
             <div class="namecard">
-              {{ submission.video_progress }}
+              {{ submission.video_percent * 100 }}%
             </div>
           </div>
         </div>
@@ -106,6 +106,17 @@
     created() {
     },
     methods: {
+      getPrettyDateTimeWithMS(datetime) {
+        if("Invalid Date" == datetime) {
+          return ("Not set")
+        }
+        let hours = datetime.getHours()
+        if(hours < 12) {
+          return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + (datetime.getMinutes()) + ":" + (datetime.getMilliseconds()) + " AM")
+        } else {
+          return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours-12) + ":" + (datetime.getMinutes()) + ":" + (datetime.getMilliseconds()) + " PM")
+        }
+      }
     }
   }
 </script>
