@@ -42,6 +42,7 @@ export default {
 				this.lecture_loaded = true
 				if(new Date() > new Date(this.lecture.playback_submission_end_time) || this.is_instructor) {
 					this.unrestricted = true
+					this.needs_decision = false
 				} else {
 					LectureSubmissionAPI.getLectureSubmissionsForStudent(this.lecture._id,this.$store.state.user.current_user._id)
 						.then(res => {
@@ -68,12 +69,12 @@ export default {
 	},
 	methods: {
 		handleOptIntoUnrestricted() {
-			this.needs_decision = false
 			this.unrestricted = true
+			this.needs_decision = false
 		},
 		handleOptIntoRestricted() {
-			this.needs_decision = false
 			this.unrestricted = false
+			this.needs_decision = false
 		}
 	}
 }
