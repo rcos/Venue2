@@ -9,6 +9,8 @@
 				role="tab" aria-selected="false" aria-controls="no_submit"><h5>Absent ({{absent.length}}/{{all_students.length}})</h5></button>
 			<button id="stats_btn" class="tab_btn" tabindex="0" @click="selectTab(3)" aria-label="Show Statistics"
 				role="tab" aria-selected="false" aria-controls="stats"><h5>Statistics</h5></button>
+			<button id="instructors_only_btn" class="tab_btn" tabindex="0" @click="selectTab(4)" aria-label="Show Instructors Only"
+				role="tab" aria-selected="false" aria-controls="instructors_only"><h5>Instructors Only</h5></button>
 		</div>
 		<div class="tabs" v-else>
 			<button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)" tabindex="0" aria-label="Show Live Attendance"
@@ -32,11 +34,45 @@
 		<div v-if="selected_tab === 3" role="tabpanel" aria-labelledby="stats_btn" id="stats" class="tab_section">
 			Statistics
 		</div>
+		<div v-if="selected_tab === 4" role="tabpanel" aria-labelledby="instructors_only_btn" id="instructors_only" class="tab_section">
+			<div id="manual-override-container">
+				<div v-if="override_err_msg != ''" id="override-err-msg">
+					<p class="err-msg">{{override_err_msg}}</p>
+				</div>
+				<div class="input-group">
+					<label for="rcs-ids" id="override-label">Manual override:</label>
+					<input id="rcs-ids" type="text" v-model.lazy="overrides" class="form-control" placeholder="eg: 'whitte3,mbizin'" aria-label="RCS IDs to override"/>
+					<div class="input-group-append">
+						<button id="submit-manual-override" class="btn btn-primary" aria-label="Submit Override" @click="handleOverride">Override</button>
+					</div>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div id="table-container">
+					<label id="checkin-table-label">Check-in Windows</label>
+					<table id="checkins-container" aria-labelledby="checkin-table-label">
+						<thead>
+							<tr>
+								<th>Start Time</th>
+								<th>End Time</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="(checkin,i) in lecture.checkins" :key="i">
+								<td>{{ getPrettyDateTime(new Date(checkin.start_time)) }}</td>
+								<td>{{ getPrettyDateTime(new Date(checkin.end_time)) }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
 
 <script>
+	import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
   import LectureAttendanceList from '@/components/LectureAttendanceList.vue'
 
   export default {
@@ -54,7 +90,9 @@
     },
     data(){
       return {
-        selected_tab: 0
+        selected_tab: 0,
+		overrides: "",
+		override_err_msg: ""
       }
     },
     created() {
@@ -67,23 +105,49 @@
     	    document.getElementById("absent_btn"),
     	    document.getElementById("stats_btn")
     	  ]
-		  let panels = [
-			document.getElementById("live_submit"),
-    	    document.getElementById("playback_submit"),
-    	    document.getElementById("no_submit"),
-    	    document.getElementById("stats")
-		  ]
+				if(this.all_students) {
+					btns.push(document.getElementById("instructors_only_btn"))
+				}
     	  for(let j=0;j<btns.length;j++) {
     	    if(j==i) {
     	      btns[j].classList.add("selected_tab")
-			  btns[j].setAttribute("aria-selected","true")
+			  		btns[j].setAttribute("aria-selected","true")
     	    } else {
     	      btns[j].classList.remove("selected_tab")
-			  btns[j].setAttribute("aria-selected","false")
+			  		btns[j].setAttribute("aria-selected","false")
     	    }
     	  }
     	  this.selected_tab = i
-    	}
+    	},
+		handleOverride() {
+			let rcs_list = this.overrides.replace(/\s/g,'').split(",")
+			if(rcs_list.length == 1 && rcs_list[0]=="") {
+				this.overrides = ""
+				this.override_err_msg = "Empty"
+			} else {
+				LectureSubmissionAPI.addLiveSubmissionByRCS(rcs_list,this.lecture._id)
+				.then(res => {
+					if(res.data.length == 0) {
+						this.overrides = ""
+						this.override_err_msg = ""
+					} else {
+						this.overrides = res.data.join(",")
+						this.override_err_msg = "Remaining are invalid"
+					}
+				})
+			}
+		},
+		getPrettyDateTime(datetime) {
+			if("Invalid Date" == datetime) {
+			return ("Not set")
+			}
+			let hours = datetime.getHours()
+			if(hours < 12) {
+				return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + (datetime.getMinutes()) + " AM")
+			} else {
+				return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours-12) + ":" + (datetime.getMinutes()) + " PM")
+			}
+		}
     }
   }
 </script>
@@ -91,11 +155,12 @@
 <style scoped>
 	#lecture-attendance-table {
 		margin-top: 2rem;
+		text-align: start;
 	}
 
 	.tabs {
 	  margin-top: 5rem;
-	  margin-left: 3rem;
+		margin-left: 2rem;
 	}
 
 	.tab_btn {
@@ -137,10 +202,58 @@
 	}
 
 	.tab_section {
+		text-align: center;
 	  margin-top: 3rem;
-	  margin-left: 6rem;
 	  overflow-y: auto;
-	  /* height: 17rem; */
 	  padding-bottom: 3rem;
+	}
+
+	.row,
+	.col {
+		margin: 0;
+		padding: 0;
+		margin-top: 2rem;
+	}
+
+	#rcs-ids {
+		height: 100%;
+	}
+
+	#override-label {
+		margin: auto 1rem;
+		font-size: 1.2rem;
+	}
+
+	.override-row {
+		height: 2rem;
+	}
+
+	#manual-override-container {
+		display: flex;
+		height: 3rem;
+	}
+
+	#override-err-msg {
+		color:#c40000;
+		padding: 0.5rem;
+	}
+
+	#checkins-section {
+		display: inline-block;
+	}
+
+	table, th, td {
+		border: 1px solid black;
+		padding: 0.5rem;
+	}
+
+	th {
+		font-weight: 900;
+	}
+
+	#instructors_only {
+		/* max-width: 70%; */
+		margin: 0 auto;
+		margin-top: 2rem;
 	}
 </style>
