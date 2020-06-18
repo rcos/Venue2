@@ -101,6 +101,7 @@ lectureSubmissionRoutes.route('/update').post(function (req, res) {
   LectureSubmission.findByIdAndUpdate(updated._id,
     {
       video_progress: updated.video_progress,
+      video_percent: updated.video_percent,
       student_poll_answers: updated.student_poll_answers
     },
     function (err, updatedSubmission) {
