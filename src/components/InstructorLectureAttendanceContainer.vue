@@ -97,7 +97,7 @@
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		z-index: 5;
+		z-index: 115;
 		top: 0;
 		background-color: white;
 	}
