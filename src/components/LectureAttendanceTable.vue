@@ -32,7 +32,7 @@
 			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="absent" :is_absent="true" />
 		</div>
 		<div v-if="selected_tab === 3" role="tabpanel" aria-labelledby="stats_btn" id="stats" class="tab_section">
-			Statistics
+			<button class="btn btn-primary" @click="download_submitty_csv">Export for Submitty...</button>
 		</div>
 		<div v-if="selected_tab === 4" role="tabpanel" aria-labelledby="instructors_only_btn" id="instructors_only" class="tab_section">
 			<div id="manual-override-container">
@@ -147,6 +147,55 @@
 			} else {
 				return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours-12) + ":" + (datetime.getMinutes()) + " PM")
 			}
+		},
+		download_submitty_csv() {
+			let data = []
+
+			let self = this
+			this.all_students.forEach(function(student) {
+				let stud_data = []
+
+				stud_data.push(student.user_id)
+				stud_data.push(student.first_name)
+				stud_data.push(student.last_name)
+				stud_data.push("SECTIONPLACEHOLDER")
+				
+				let live = self.live_submissions[student._id]
+                let playback = self.playback_submissions.find(x => x._id == student._id)
+				
+				if(undefined != live && undefined != playback) {
+					stud_data.push(Math.max(
+						live.length / self.lecture.checkins.length,
+						playback.video_percent
+					))
+				} else if(undefined != live) {
+					stud_data.push(live.length / self.lecture.checkins.length)
+					stud_data.push(live[live.length-1].live_submission_time)
+				} else if(undefined != playback) {
+					stud_data.push(playback.video_percent)
+					stud_data.push(null)
+				} else {
+					stud_data.push(0)
+					stud_data.push(null)
+				}
+
+				data.push(stud_data)
+			})
+
+			let csv = 'User ID,First Name,Last Name,Registration Section,Grade,Submission Timestamp\n';
+			data.forEach(function(row) {
+				csv += row.join(',');
+				csv += "\n";
+			});
+
+			let downloadname = (self.lecture.sections[0].course.name + '_' + self.lecture.title + '_attendance.csv').replaceAll("/","-")
+			console.log(downloadname)
+
+			var hiddenElement = document.createElement('a');
+			hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+			hiddenElement.target = '_blank';
+			hiddenElement.download = downloadname;
+			hiddenElement.click();
 		}
     }
   }
