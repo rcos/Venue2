@@ -1,35 +1,42 @@
 <template>
   <div id="lecture-info-section">
-    <h1>{{lecture.title}} Info</h1>
     <show-at breakpoint="small">
       <!-- Mobile -->
       <div id="lecture-data">
-        <div class="row main-info">
+        <div class="row" id="main-info">
           <h3>{{lecture.sections[0].course.name}}</h3>
           <p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p>
-          <p>Sections: <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></p>
+          <p>Sections:
+            <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
+              <a v-if="i > 1">,{{ section.number }}</a>
+              <a v-else>{{ section.number }}</a>
+            </a>
+          </p>
         </div>
         <div class="row">
-          <div class="col-half">
-            <h5 class="underline">Start Time</h5>
-            <p>{{new Date(lecture.start_time)}}</p>
+          <h1 id="lecture-title-mobile">{{lecture.title}} - Info</h1>
+        </div>
+        <div class="row start-end-row">
+          <div class="row-half">
+            <h5>Start Time</h5>
+            <p>{{getPrettyDateTime(new Date(lecture.start_time))}}</p>
           </div>
-          <div class="col-half">
-            <h5 class="underline">Playback Start Time</h5>
-            <p>{{new Date(lecture.playback_submission_start_time)}}</p>
+          <div class="row-half">
+            <h5>End Time</h5>
+            <p>{{getPrettyDateTime(new Date(lecture.end_time))}}</p>
           </div>
         </div>
-        <div class="row">
-          <div class="col-half">
-            <h5 class="underline">End Time</h5>
-            <p>{{new Date(lecture.end_time)}}</p>
+        <div class="row playback-row">
+          <div class="row-half">
+            <h5>Playback Start Time</h5>
+            <p>{{getPrettyDateTime(new Date(lecture.playback_submission_start_time))}}</p>
           </div>
-          <div class="col-half">
-            <h5 class="underline">Playback End Time</h5>
-            <p>{{new Date(lecture.playback_submission_end_time)}}</p>
+          <div class="row-half">
+            <h5>Playback End Time</h5>
+            <p>{{getPrettyDateTime(new Date(lecture.playback_submission_end_time))}}</p>
           </div>
         </div>
-        <div class="col" v-if="is_instructor">
+        <!-- <div class="col" v-if="is_instructor">
           <h5 class="underline">Checkins</h5>
           <div id="table-container">
             <table id="checkins-container">
@@ -41,60 +48,51 @@
               </thead>
               <tbody>
                 <tr v-for="(checkin,i) in lecture.checkins" :key="i">
-                  <td>{{ new Date(checkin.start_time) }}</td>
-                  <td>{{ new Date(checkin.end_time) }}</td>
+                  <td>{{ getPrettyDateTime(new Date(checkin.start_time)) }}</td>
+                  <td>{{ getPrettyDateTime(new Date(checkin.end_time)) }}</td>
                 </tr>
               </tbody>
             </table>
           </div>
-        </div>
+        </div> -->
       </div>
     </show-at>
     <!-- Tablet & Up -->
     <show-at breakpoint="mediumAndAbove">
-      <div class="row" id="lecture-data">
-        <div class="col main-info">
-          <h3>{{lecture.sections[0].course.name}}</h3>
-          <p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p>
-          <p>Sections: <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></p>
-        </div>
-        <div class="col">
-          <div class="col-half">
-            <h5 class="underline">Start Time</h5>
-            <p>{{new Date(lecture.start_time)}}</p>
+      <div>
+        <div class="row" id="lecture-data">
+          <div class="col-3">
+            <div id="main-info">
+              <h3>{{lecture.sections[0].course.name}}</h3>
+              <p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p>
+              <p class="sections">Sections:
+                <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
+                  <a v-if="i > 1">,{{ section.number }}</a>
+                  <a v-else>{{ section.number }}</a>
+                </a>
+              </p>
+            </div>
           </div>
-          <div class="col-half">
-            <h5 class="underline">Playback Start Time</h5>
-            <p>{{new Date(lecture.playback_submission_start_time)}}</p>
-          </div>
-        </div>
-        <div class="col">
-          <div class="col-half">
-            <h5 class="underline">End Time</h5>
-            <p>{{new Date(lecture.end_time)}}</p>
-          </div>
-          <div class="col-half">
-            <h5 class="underline">Playback End Time</h5>
-            <p>{{new Date(lecture.playback_submission_end_time)}}</p>
+          <div class="col">
+            <h1 id="lecture-title">{{lecture.title}} - Info</h1>
           </div>
         </div>
-        <div class="col" v-if="is_instructor">
-          <h5 class="underline">Checkins</h5>
-          <div id="table-container">
-            <table id="checkins-container">
-              <thead>
-                <tr>
-                  <th>Start Time</th>
-                  <th>End Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(checkin,i) in lecture.checkins" :key="i">
-                  <td>{{ new Date(checkin.start_time) }}</td>
-                  <td>{{ new Date(checkin.end_time) }}</td>
-                </tr>
-              </tbody>
-            </table>
+        <div class="row">
+          <div class="col">
+            <h5>Start Time</h5>
+            <p>{{getPrettyDateTime(new Date(lecture.start_time))}}</p>
+          </div>
+          <div class="col">
+            <h5>End Time</h5>
+            <p>{{getPrettyDateTime(new Date(lecture.end_time))}}</p>
+          </div>
+          <div class="col">
+            <h5>Playback Start Time</h5>
+            <p>{{getPrettyDateTime(new Date(lecture.playback_submission_start_time))}}</p>
+          </div>
+          <div class="col">
+            <h5>Playback End Time</h5>
+            <p>{{getPrettyDateTime(new Date(lecture.playback_submission_end_time))}}</p>
           </div>
         </div>
       </div>
@@ -122,47 +120,80 @@
     created() {
     },
     methods: {
+      getPrettyDateTime(datetime) {
+        if("Invalid Date" == datetime) {
+          return ("Not set")
+        }
+        let hours = datetime.getHours()
+        if(hours < 12) {
+          return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + (datetime.getMinutes()) + " AM")
+        } else {
+          return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours-12) + ":" + (datetime.getMinutes()) + " PM")
+        }
+      }
     }
   }
 </script>
 
 <style scoped>
+  #lecture-title {
+    position: absolute;
+    bottom: 0;
+    text-align: left;
+    margin-left: 1rem;
+  }
+
+  #lecture-title-mobile {
+    width: 100%;
+  }
+
   #lecture-info-section {
     position: relative;
   }
 
   #lecture-data {
     position: relative;
+    margin-top: 2rem;
     text-align: center;
-    margin-top: 3rem;
-    margin-left: 3rem;
+  }
+
+  .col {
+    margin: 0;
   }
 
   .row {
-    position: relative;
-    right: 1rem;
+    margin-top: 2rem;
   }
 
-  .col.main-info {
+  .row-half {
+    width: 50%;
+  }
+
+  #main-info {
     border-radius: .5rem;
     box-shadow: 0 5px 10px -1px gray;
     padding: 1rem;
+    margin: 0;
   }
 
-  .row.main-info {
-    border-radius: .5rem;
-    box-shadow: 0 5px 10px -1px gray;
-    padding: 1rem;
-    margin-right: 1rem;
+  .row-half h5,
+  .col h5 {
+    font-weight: 900;
   }
 
   .dept-and-number {
     background: black;
     color: white;
     border-radius: 1rem;
+    padding: 0.5rem;
   }
 
-  .checkin-container {
+  .sections {
+    padding: 0.5rem;
+  }
+
+  #checkins-container {
+    width: 100%;
     border: grey solid;
   }
 
@@ -171,23 +202,6 @@
     text-align: center;
     width:50%;
     border: grey solid thin;
-  }
-
-  .underline {
-    text-decoration: underline;
-  }
-
-  table, th, td {
-    border: 1px solid black;
-  }
-
-  th {
-    font-weight: 900;
-  }
-
-  #table-container {
-    max-height: 9rem;
-    overflow-y: auto;
   }
 
 </style>

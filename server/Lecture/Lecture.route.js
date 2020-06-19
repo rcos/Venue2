@@ -132,11 +132,17 @@ lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) 
 										res.json(err);
 									} else {
 										//send email
+										let myhtml = ""
+										if(process.env.NODE_ENV === "production") {
+											myhtml = '<p>New Lecture available for playback <a href="https://venue-attend.herokuapp.com/#/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
+										} else {
+											myhtml = '<p>New Lecture available for playback <a href="http://localhost:8080/#/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
+										}
 										var mailOptions = {
 											from: 'venue.do.not.reply@gmail.com',
 											to: student.email,
 											subject: 'Venue - New Lecture Recording Notification',
-											html: '<p>New Lecture available for playback <a href="http://localhost:8080/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
+											html: myhtml
 										};
 										console.log("About to send email with:",mailOptions)
 										transporter.sendMail(mailOptions, function(error, info){
