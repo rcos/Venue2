@@ -164,25 +164,33 @@
                 let playback = self.playback_submissions.find(x => x._id == student._id)
 				
 				if(undefined != live && undefined != playback) {
-					stud_data.push(Math.max(
-						live.length / self.lecture.checkins.length,
-						playback.video_percent
-					))
+					if(live.length / self.lecture.checkins.length >= playback.video_percent) {
+						stud_data.push(live.length / self.lecture.checkins.length)
+						stud_data.push("Live")
+						stud_data.push(live[live.length-1].live_submission_time)
+					} else {
+						stud_data.push(playback.video_percent)
+						stud_data.push("Playback")
+						stud_data.push(null)
+					}
 				} else if(undefined != live) {
 					stud_data.push(live.length / self.lecture.checkins.length)
+					stud_data.push("Live")
 					stud_data.push(live[live.length-1].live_submission_time)
 				} else if(undefined != playback) {
 					stud_data.push(playback.video_percent)
+					stud_data.push("Playback")
 					stud_data.push(null)
 				} else {
 					stud_data.push(0)
+					stud_data.push(null)
 					stud_data.push(null)
 				}
 
 				data.push(stud_data)
 			})
 
-			let csv = 'User ID,First Name,Last Name,Registration Section,Grade,Submission Timestamp\n';
+			let csv = 'User ID,First Name,Last Name,Registration Section,Grade,Submission Type,Submission Timestamp\n';
 			data.forEach(function(row) {
 				csv += row.join(',');
 				csv += "\n";
