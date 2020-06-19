@@ -170,16 +170,31 @@
             LectureSubmissionAPI.getLectureSubmissionsForStudent(lecture_data._id, this.current_user._id)
             .catch(err => { console.log(`error retrieving lecture submissions for student ${this.current_user._id}`); console.log(err); })
             .then(response => {
-
-              // response data is null if there is no submission for this lecture
-              if (response.data == null) {
+              if (response.data == null || response.data == []) {
                 lecture_data.percentage = 0
+              } else {
+                let live = []
+                let playback = null
+                response.data.forEach(sub => {
+                  if(sub.submitter == this.current_user._id) {
+                    if(sub.is_live_submission) {
+                      live.push(sub)
+                    } else {
+                      playback = sub
+                    }
+                  }
+                })
+                if(live.length > 0 && playback != null) {
+                  lecture_data.percentage = Math.max(
+                    live.length / lecture_data.checkins.length * 100,
+                    Math.ceil(playback.video_percent * 100)
+                  )
+                } else if(live.length > 0) {
+                  lecture_data.percentage = live.length / lecture_data.checkins.length * 100
+                } else if(playback != null) {
+                  lecture_data.percentage = Math.ceil(playback.video_percent * 100)
+                }
               }
-              else {
-                // TODO check if the submission is for live lecture or for playback lecture
-                lecture_data.percentage = 100
-              }
-
               this.$forceUpdate ()
             })
           })
