@@ -192,7 +192,7 @@
                 } else if(live.length > 0) {
                   lecture_data.percentage = live.length / lecture_data.checkins.length * 100
                 } else if(playback != null) {
-                  lecture_data.percentage = Math.ceil(playback.video_percent * 100) / 100
+                  lecture_data.percentage = Math.ceil(playback.video_percent * 100)
                 }
               }
               this.$forceUpdate ()
