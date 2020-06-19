@@ -49,6 +49,7 @@
         <div v-if="live_submissions[this.$store.state.user.current_user._id].length > 0">
           <div class="namecard-edging live-color" v-for="submission in live_submissions[this.$store.state.user.current_user._id]" :key="submission._id">
             <div class="namecard">
+              Submission Time:
               {{getPrettyDateTimeWithMS(new Date(submission.live_submission_time))}}
             </div>
           </div>
