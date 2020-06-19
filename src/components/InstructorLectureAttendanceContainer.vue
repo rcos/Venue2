@@ -11,21 +11,6 @@
 			<router-link class="header-btn btn btn-secondary" v-else-if="lecture.allow_playback_submissions" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}" aria-label="Watch Playback">
 				Watch Playback
 			</router-link>
-			<div class="float-right" id="manual-override-container">
-				<div v-if="override_err_msg != ''" id="override-err-msg">
-					<p class="err-msg">{{override_err_msg}}</p>
-				</div>
-				<div class="input-group row">
-					<label for="rcs-ids" id="override-label">Manual override:</label>
-					<input id="rcs-ids" type="text" v-model.lazy="overrides" class="form-control" placeholder="eg: 'whitte3,mbizin'" aria-label="RCS IDs to override" aria-describedby="basic-addon2"/>
-					<div class="input-group-append">
-						<span class="input-group-text" id="basic-addon2">@rpi.edu</span>
-					</div>
-					<div class="input-group-append">
-						<button id="submit-manual-override" class="btn btn-primary" aria-label="Submit Override" @click="handleOverride">Override</button>
-					</div>
-				</div>
-			</div>
 	  </div>
 	  <LectureAttendanceTable :is_instructor="true" :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" :all_students="all_students" />
 	</div>
@@ -54,8 +39,6 @@
     },
     data(){
       return {
-				overrides: "",
-				override_err_msg: "",
 				modal_open: false,
 				lecture_has_checkin: false
       }
@@ -68,26 +51,7 @@
     	},
     	hideQR() {
     	  document.getElementById("qr_modal").classList.add("hidden")
-    	},
-			handleOverride() {
-				let rcs_list = this.overrides.replace(/\s/g,'').split(",")
-				console.log(rcs_list)
-				if(rcs_list.length == 1 && rcs_list[0]=="") {
-					this.overrides = ""
-					this.override_err_msg = "Empty"
-				} else {
-					LectureSubmissionAPI.addLiveSubmissionByRCS(rcs_list,this.lecture._id)
-					.then(res => {
-						if(res.data.length == 0) {
-							this.overrides = ""
-							this.override_err_msg = ""
-						} else {
-							this.overrides = res.data.join(",")
-							this.override_err_msg = "Remaining are invalid"
-						}
-					})
-				}
-			}
+    	}
     }
   }
 </script>
@@ -97,7 +61,7 @@
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		z-index: 5;
+		z-index: 115;
 		top: 0;
 		background-color: white;
 	}
@@ -107,8 +71,11 @@
 	  top: 3rem;
 	  bottom: 0;
 	  text-align: left;
-	  padding-left: 5rem;
-	  padding-right: 5rem;
+	}
+
+	.row {
+		margin: 0;
+		width: 100%;
 	}
 
 	#container-header h2 {
@@ -126,7 +93,6 @@
 
 	.tabs {
 	  margin-top: 3rem;
-	  margin-left: 3rem;
 	}
 
 	.tab_btn {
@@ -152,7 +118,6 @@
 
 	.tab_section {
 	  margin-top: 3rem;
-	  margin-left: 6rem;
 	  overflow-y: auto;
 	  height: 17rem;
 	  padding-bottom: 3rem;
@@ -195,28 +160,6 @@
 
 	.hidden {
 	  display: none;
-	}
-
-	#rcs-ids {
-		height: 100%;
-	}
-
-	#override-label {
-		margin: auto 1rem;
-		font-size: 1.2rem;
-	}
-
-	#manual-override-container {
-		display: inline-flex;
-	}
-
-	#submit-manual-override {
-		display: inline;
-	}
-
-	#override-err-msg {
-		color:#c40000;
-		padding: 0.5rem;
 	}
 
 </style>
