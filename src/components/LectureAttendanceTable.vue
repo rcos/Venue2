@@ -74,6 +74,7 @@
 <script>
 	import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
   import LectureAttendanceList from '@/components/LectureAttendanceList.vue'
+  import SectionAPI from '@/services/SectionAPI.js'
 
   export default {
     name: 'LectureAttendanceTable',
@@ -151,59 +152,66 @@
 		download_submitty_csv() {
 			let data = []
 
-			let self = this
-			this.all_students.forEach(function(student) {
-				let stud_data = []
+			SectionAPI.getSectionsForCourse(this.lecture.sections[0].course._id)
+			.then(res => {
+				let course_sections = res.data
 
-				stud_data.push(student.user_id)
-				stud_data.push(student.first_name)
-				stud_data.push(student.last_name)
-				stud_data.push("SECTIONPLACEHOLDER")
-				
-				let live = self.live_submissions[student._id]
-                let playback = self.playback_submissions.find(x => x._id == student._id)
-				
-				if(undefined != live && undefined != playback) {
-					if(live.length / self.lecture.checkins.length >= playback.video_percent) {
-						stud_data.push(live.length / self.lecture.checkins.length)
-						stud_data.push("Live")
-						stud_data.push(live[live.length-1].live_submission_time)
-					} else {
-						stud_data.push(playback.video_percent)
-						stud_data.push("Playback")
-						stud_data.push(null)
-					}
-				} else if(undefined != live) {
-					stud_data.push(live.length / self.lecture.checkins.length)
-					stud_data.push("Live")
-					stud_data.push(live[live.length-1].live_submission_time)
-				} else if(undefined != playback) {
-					stud_data.push(playback.video_percent)
-					stud_data.push("Playback")
-					stud_data.push(null)
-				} else {
-					stud_data.push(0)
-					stud_data.push(null)
-					stud_data.push(null)
-				}
+				let self = this
+				this.all_students.forEach(function(student) {
+					course_sections.forEach(function(section) {
+						let stud_data = []
 
-				data.push(stud_data)
+						stud_data.push(student.user_id)
+						stud_data.push(student.first_name)
+						stud_data.push(student.last_name)
+						
+						stud_data.push(section.number)
+						
+						let live = self.live_submissions[student._id]
+						let playback = self.playback_submissions.find(x => x._id == student._id)
+						
+						if(undefined != live && undefined != playback) {
+							if(live.length / self.lecture.checkins.length >= playback.video_percent) {
+								stud_data.push(live.length / self.lecture.checkins.length)
+								stud_data.push("Live")
+								stud_data.push(live[live.length-1].live_submission_time)
+							} else {
+								stud_data.push(playback.video_percent)
+								stud_data.push("Playback")
+								stud_data.push(null)
+							}
+						} else if(undefined != live) {
+							stud_data.push(live.length / self.lecture.checkins.length)
+							stud_data.push("Live")
+							stud_data.push(live[live.length-1].live_submission_time)
+						} else if(undefined != playback) {
+							stud_data.push(playback.video_percent)
+							stud_data.push("Playback")
+							stud_data.push(null)
+						} else {
+							stud_data.push(0)
+							stud_data.push(null)
+							stud_data.push(null)
+						}
+
+						data.push(stud_data)
+					})
+				})
+
+				let csv = 'User ID,First Name,Last Name,Registration Section,Grade,Submission Type,Submission Timestamp\n';
+				data.forEach(function(row) {
+					csv += row.join(',');
+					csv += "\n";
+				});
+
+				let downloadname = (self.lecture.sections[0].course.name + '_' + self.lecture.title + '_attendance.csv').replaceAll("/","-")
+
+				var hiddenElement = document.createElement('a');
+				hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+				hiddenElement.target = '_blank';
+				hiddenElement.download = downloadname;
+				hiddenElement.click();
 			})
-
-			let csv = 'User ID,First Name,Last Name,Registration Section,Grade,Submission Type,Submission Timestamp\n';
-			data.forEach(function(row) {
-				csv += row.join(',');
-				csv += "\n";
-			});
-
-			let downloadname = (self.lecture.sections[0].course.name + '_' + self.lecture.title + '_attendance.csv').replaceAll("/","-")
-			console.log(downloadname)
-
-			var hiddenElement = document.createElement('a');
-			hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-			hiddenElement.target = '_blank';
-			hiddenElement.download = downloadname;
-			hiddenElement.click();
 		}
     }
   }
