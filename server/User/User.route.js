@@ -250,6 +250,7 @@ userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
     } else {
       let sections = lecture.sections;
       let sect_itr = 0;
+      let students = [];
       sections.forEach(sect => {
         Section.findById(sect, function (err, section) {
           if(err || section == null) {
@@ -257,7 +258,6 @@ userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
             res.json(err);
           } else {
             let student_ids = section.students;
-            let students = [];
             let num_iterations = 0;
             student_ids.forEach(student_id => {
               User.findById(student_id, function(err, student) {
