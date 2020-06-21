@@ -141,7 +141,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 		s.push(new Section({
 			course: c[1]._id,
 			number: 2,
-			students: [u[2]._id, u[3]._id],
+			students: [u[2]._id, u[4]._id],
 			teaching_assistants: [u[0]._id]
 		}))
 
@@ -166,7 +166,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 
 		l.push(new Lecture({
 			title: "Playback Lecture",
-			sections: [s[1]._id],
+			sections: [s[1]._id,s[2]._id],
 			allow_live_submissions: false,
 			allow_playback_submissions: true,
 			checkins: [{
