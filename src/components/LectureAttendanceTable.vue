@@ -168,7 +168,7 @@
 							stud_data.push(section.number)
 							
 							let live = self.live_submissions[student._id]
-							let playback = self.playback_submissions.find(x => x._id == student._id)
+							let playback = self.playback_submissions.find(x => x.submitter._id == student._id)
 							
 							if(undefined != live && undefined != playback) {
 								if(live.length / self.lecture.checkins.length >= playback.video_percent) {
@@ -178,7 +178,7 @@
 								} else {
 									stud_data.push(playback.video_percent)
 									stud_data.push("Playback")
-									stud_data.push(null)
+									stud_data.push(playback.playback_submission_time)
 								}
 							} else if(undefined != live) {
 								stud_data.push(live.length / self.lecture.checkins.length)
@@ -187,7 +187,7 @@
 							} else if(undefined != playback) {
 								stud_data.push(playback.video_percent)
 								stud_data.push("Playback")
-								stud_data.push(null)
+								stud_data.push(playback.playback_submission_time)
 							} else {
 								stud_data.push(0)
 								stud_data.push(null)
