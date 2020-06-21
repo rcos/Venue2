@@ -173,18 +173,22 @@ authRoutes.get("/loginCAS", (req, res, next) => {
           req.session.messages = '';
           let venueSID = generateSID()
           Promise.resolve(venueSID).then(resolvedSID => {
-            User.findOneAndUpdate({user_id: user.user_id},{connect_sid: resolvedSID},function(err,user) {
-              if(err || user == null) {
-                return next(err);
-              } else {
-                res.header("Set-Cookie","connect_sid="+resolvedSID)
-                if(process.env.NODE_ENV === "production") {
-                  return res.redirect('https://venue-attend.herokuapp.com/#/redirectCASLogin');
+            if(resolvedSID != null) {
+              User.findOneAndUpdate({user_id: user.user_id},{connect_sid: resolvedSID},function(err,user) {
+                if(err || user == null) {
+                  return next(err);
                 } else {
-                  return res.redirect('http://localhost:8080/#/redirectCASLogin');
+                  res.header("Set-Cookie","connect_sid="+resolvedSID)
+                  if(process.env.NODE_ENV === "production") {
+                    return res.redirect('https://venue-attend.herokuapp.com/#/redirectCASLogin');
+                  } else {
+                    return res.redirect('http://localhost:8080/#/redirectCASLogin');
+                  }
                 }
-              }
-            })
+              })
+            } else {
+              return res.redirect('http://localhost:8080');
+            }
           })
         }
       });
