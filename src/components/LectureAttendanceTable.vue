@@ -159,42 +159,43 @@
 				let self = this
 				this.all_students.forEach(function(student) {
 					course_sections.forEach(function(section) {
-						let stud_data = []
+						if(section.students.includes(student._id)) {
+							let stud_data = []
 
-						stud_data.push(student.user_id)
-						stud_data.push(student.first_name)
-						stud_data.push(student.last_name)
-						
-						stud_data.push(section.number)
-						
-						let live = self.live_submissions[student._id]
-						let playback = self.playback_submissions.find(x => x._id == student._id)
-						
-						if(undefined != live && undefined != playback) {
-							if(live.length / self.lecture.checkins.length >= playback.video_percent) {
+							stud_data.push(student.user_id)
+							stud_data.push(student.first_name)
+							stud_data.push(student.last_name)
+							stud_data.push(section.number)
+							
+							let live = self.live_submissions[student._id]
+							let playback = self.playback_submissions.find(x => x._id == student._id)
+							
+							if(undefined != live && undefined != playback) {
+								if(live.length / self.lecture.checkins.length >= playback.video_percent) {
+									stud_data.push(live.length / self.lecture.checkins.length)
+									stud_data.push("Live")
+									stud_data.push(live[live.length-1].live_submission_time)
+								} else {
+									stud_data.push(playback.video_percent)
+									stud_data.push("Playback")
+									stud_data.push(null)
+								}
+							} else if(undefined != live) {
 								stud_data.push(live.length / self.lecture.checkins.length)
 								stud_data.push("Live")
 								stud_data.push(live[live.length-1].live_submission_time)
-							} else {
+							} else if(undefined != playback) {
 								stud_data.push(playback.video_percent)
 								stud_data.push("Playback")
 								stud_data.push(null)
+							} else {
+								stud_data.push(0)
+								stud_data.push(null)
+								stud_data.push(null)
 							}
-						} else if(undefined != live) {
-							stud_data.push(live.length / self.lecture.checkins.length)
-							stud_data.push("Live")
-							stud_data.push(live[live.length-1].live_submission_time)
-						} else if(undefined != playback) {
-							stud_data.push(playback.video_percent)
-							stud_data.push("Playback")
-							stud_data.push(null)
-						} else {
-							stud_data.push(0)
-							stud_data.push(null)
-							stud_data.push(null)
-						}
 
-						data.push(stud_data)
+							data.push(stud_data)
+						}
 					})
 				})
 
