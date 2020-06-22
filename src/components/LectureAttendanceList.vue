@@ -6,8 +6,8 @@
           <div class="namecard-edging live-color" v-for="(submission,i) in Object.keys(live_submissions)" :key="i">
             <div class="namecard">
               <p>{{live_submissions[submission][0].submitter.first_name}} {{live_submissions[submission][0].submitter.last_name}}</p>
-              <p>{{live_submissions[submission][0].submitter.email}}
-              {{live_submissions[submission].length / lecture.checkins.length * 100}}%</p>
+              <p>{{live_submissions[submission][0].submitter.email}}</p>
+              <p>{{live_submissions[submission].length / lecture.checkins.length * 100}}%</p>
             </div>
           </div>
         </div>
@@ -20,7 +20,8 @@
           <div class="namecard-edging playback-color" v-for="(submission,i) in submissions" :key="i">
             <div class="namecard">
               <p>{{submission.submitter.first_name}} {{submission.submitter.last_name}}</p>
-              <p>{{submission.submitter.email}} {{Math.ceil(submission.video_percent * 100)}}%</p>
+              <p>{{submission.submitter.email}}</p>
+              <p>{{Math.ceil(submission.video_percent * 100)}}%</p>
             </div>
           </div>
         </div>
