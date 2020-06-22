@@ -336,19 +336,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 				})
 			})
 			.catch(err => {
-
+				console.log("ERROR IN RESOLVING HASHED PASSWORDS",err)
 			})
-
-		// 	bcrypt.hash(u[1].password, saltRounds, (err, hash) => {
-		// 		u[1].password = hash
-		// 		bcrypt.hash(u[2].password, saltRounds, (err, hash) => {
-		// 			u[2].password = hash
-		// 			bcrypt.hash(u[3].password, saltRounds, (err, hash) => {
-		// 				u[3].password = hash
-
-		// 			});
-		// 		});
-		// 	});
-		// });
 	});
 });
