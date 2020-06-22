@@ -33,7 +33,7 @@
 		</div>
 		<div v-if="selected_tab === 3" role="tabpanel" aria-labelledby="stats_btn" id="stats" class="tab_section">
 			<button v-if="is_instructor" class="btn btn-primary" @click="download_submitty_csv" id="submitty_export">Export for Submitty...</button>
-			<p v-else>Statistics</p>
+			<p>Statistics Graphs Coming Soon...</p>
 		</div>
 		<div v-if="selected_tab === 4" role="tabpanel" aria-labelledby="instructors_only_btn" id="instructors_only" class="tab_section">
 			<div id="manual-override-container">
@@ -340,6 +340,6 @@
 	}
 
 	#submitty_export {
-		margin-top: 0.5rem;
+		margin: 0.5rem;
 	}
 </style>
