@@ -6,6 +6,21 @@ const saltRounds = 10;
 
 let User = require('../User/User.model');
 
+const alnums = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+async function generateSID() {
+  let venueSID = ""
+  for (let i = 1000; i > 0; --i) {
+    venueSID += alnums[Math.floor(Math.random() * alnums.length)];
+  }
+  let user = await User.findOne({connect_sid: venueSID})
+  if (!user) {
+    return venueSID
+  } else {
+    return null
+  }
+}
+
 //Passport setup START
 const passport = require('passport')
 passport.serializeUser(function(user, done) {
@@ -156,17 +171,23 @@ authRoutes.get("/loginCAS", (req, res, next) => {
           return next(err);
         } else {
           req.session.messages = '';
-          let rpiSID = req.cookies['connect.sid']
-          User.findOneAndUpdate({user_id: user.user_id},{connect_sid: rpiSID},function(err,user) {
-            if(err || user == null) {
-              return next(err);
+          let venueSID = generateSID()
+          Promise.resolve(venueSID).then(resolvedSID => {
+            if(resolvedSID != null) {
+              User.findOneAndUpdate({user_id: user.user_id},{connect_sid: resolvedSID},function(err,user) {
+                if(err || user == null) {
+                  return next(err);
+                } else {
+                  res.header("Set-Cookie","connect_sid="+resolvedSID)
+                  if(process.env.NODE_ENV === "production") {
+                    return res.redirect('https://venue-attend.herokuapp.com/#/redirectCASLogin');
+                  } else {
+                    return res.redirect('http://localhost:8080/#/redirectCASLogin');
+                  }
+                }
+              })
             } else {
-              res.header("Set-Cookie","connect_sid="+rpiSID)
-              if(process.env.NODE_ENV === "production") {
-                return res.redirect('https://venue-attend.herokuapp.com/#/redirectCASLogin');
-              } else {
-                return res.redirect('http://localhost:8080/#/redirectCASLogin');
-              }
+              return res.redirect('http://localhost:8080');
             }
           })
         }
