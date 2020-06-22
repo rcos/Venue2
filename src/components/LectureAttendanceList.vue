@@ -5,9 +5,9 @@
         <div v-if="Object.keys(live_submissions).length > 0">
           <div class="namecard-edging live-color" v-for="(submission,i) in Object.keys(live_submissions)" :key="i">
             <div class="namecard">
-              {{live_submissions[submission][0].submitter.first_name}} {{live_submissions[submission][0].submitter.last_name}}
-              {{live_submissions[submission][0].submitter.email}}
-              {{live_submissions[submission].length / lecture.checkins.length * 100}}%
+              <p>{{live_submissions[submission][0].submitter.first_name}} {{live_submissions[submission][0].submitter.last_name}}</p>
+              <p>{{live_submissions[submission][0].submitter.email}}
+              {{live_submissions[submission].length / lecture.checkins.length * 100}}%</p>
             </div>
           </div>
         </div>
@@ -19,9 +19,8 @@
         <div v-if="submissions.length > 0">
           <div class="namecard-edging playback-color" v-for="(submission,i) in submissions" :key="i">
             <div class="namecard">
-              {{submission.submitter.first_name}} {{submission.submitter.last_name}}
-              {{submission.submitter.email}}
-              {{Math.ceil(submission.video_percent * 100)}}%
+              <p>{{submission.submitter.first_name}} {{submission.submitter.last_name}}</p>
+              <p>{{submission.submitter.email}} {{Math.ceil(submission.video_percent * 100)}}%</p>
             </div>
           </div>
         </div>
@@ -33,8 +32,8 @@
         <div v-if="submissions.length > 0">
           <div class="namecard-edging absent-color" v-for="(absentee,i) in submissions" :key="i">
             <div class="namecard">
-              {{absentee.first_name}} {{absentee.last_name}}
-              {{absentee.email}}
+              <p>{{absentee.first_name}} {{absentee.last_name}}</p>
+              <p>{{absentee.email}}</p>
             </div>
           </div>
         </div>
@@ -124,10 +123,12 @@
 
 <style scoped>
 	.namecard-edging {
-	  display: inline-block;
+	  display: inline-flex;
 	  border-radius: .25rem;
-	  width: 12rem;
-	  height: 4rem;
+	  padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.5rem;
+	  height: 100%;
 	  margin-right: 1rem;
 	  margin-bottom: 1rem;
 	}
@@ -149,10 +150,12 @@
 	  background: white;
 	  text-align: center;
 	  border-radius: .25rem;
-	  top: 0.5rem;
-	  margin-left: 0.5rem;
-	  width: 11rem;
-	  height: 4rem;
+	  /* top: 0.5rem; */
+	  /* margin-left: 0.5rem; */
+    margin-bottom: -0.5rem;
+    padding: 0.5rem 1rem;
+	  /* width: 11rem; */
+	  /* height: 4rem; */
 	  box-shadow: 0 5px 10px -1px gray;
 	  padding-top: 0.5rem;
 	  z-index: 100;
