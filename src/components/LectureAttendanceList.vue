@@ -48,8 +48,8 @@
         <div v-if="live_submissions[this.$store.state.user.current_user._id].length > 0">
           <div class="namecard-edging live-color" v-for="submission in live_submissions[this.$store.state.user.current_user._id]" :key="submission._id">
             <div class="namecard">
-              Submission Time:
-              {{getPrettyDateTimeWithMS(new Date(submission.live_submission_time))}}
+              <p>Submission Time:</p>
+              <p>{{getPrettyDateTimeWithMS(new Date(submission.live_submission_time))}}</p>
             </div>
           </div>
         </div>
@@ -61,7 +61,9 @@
         <div v-if="submissions.length > 0">
           <div class="namecard-edging playback-color" v-for="submission in submissions" :key="submission._id">
             <div class="namecard">
-              {{ submission.video_percent * 100 }}%
+              <p>Submission Time:</p>
+              <p>{{getPrettyDateTimeWithMS(new Date(submission.live_submission_time))}}</p>
+              <p>{{ submission.video_percent * 100 }}%</p>
             </div>
           </div>
         </div>
