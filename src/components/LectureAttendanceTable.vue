@@ -32,7 +32,8 @@
 			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="absent" :is_absent="true" />
 		</div>
 		<div v-if="selected_tab === 3" role="tabpanel" aria-labelledby="stats_btn" id="stats" class="tab_section">
-			<button class="btn btn-primary" @click="download_submitty_csv">Export for Submitty...</button>
+			<button v-if="is_instructor" class="btn btn-primary" @click="download_submitty_csv">Export for Submitty...</button>
+			<p v-else>Statistics</p>
 		</div>
 		<div v-if="selected_tab === 4" role="tabpanel" aria-labelledby="instructors_only_btn" id="instructors_only" class="tab_section">
 			<div id="manual-override-container">
