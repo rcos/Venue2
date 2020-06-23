@@ -221,7 +221,7 @@
 					csv += "\n";
 				});
 
-				let downloadname = (self.lecture.sections[0].course.name + '_' + self.lecture.title + '_attendance.csv').replaceAll("/","-")
+				let downloadname = self.lecture.sections[0].course.name + '_' + self.lecture.title + '_attendance.csv'
 
 				var hiddenElement = document.createElement('a');
 				hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
