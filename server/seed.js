@@ -46,10 +46,10 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 		}))
 
 		u.push(new User({
-			first_name: "Kakashi",
-			last_name: "Sensei",
-			user_id: "kakashi",
-			email: "kakashi@rpi.edu",
+			first_name: "John",
+			last_name: "Doe",
+			user_id: "testinst",
+			email: "testinst@rpi.edu",
 			password: "password",
 			is_instructor: true,
 			is_admin: false,
