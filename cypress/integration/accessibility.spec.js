@@ -27,4 +27,8 @@ describe('Accessibility for Instructors',function(){
 		cy.visit('/user_courses')
 		cy.checkAccessibility()
 	})
+	it('on the user settings page',function(){
+		cy.visit('/settings')
+		cy.checkAccessibility()
+	})
 })

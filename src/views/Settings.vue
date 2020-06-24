@@ -1,6 +1,6 @@
 <template>
   <div>
-
+    <h1>Settings</h1>
     <div class="settings-container">
           <div class="name-area">
               <div class="name-div">{{ current_user.first_name }} {{ current_user.last_name }}</div>
@@ -138,20 +138,20 @@
         text-align: center;
         height: 35px;
         line-height: 30px;
-        border: 3px solid #FC6F71;
+        border: 3px solid rgb(207,39,41);
         border-radius: 4px;
         box-shadow: 0px 3px 5px rgba(252, 111, 113, 0.3);
         background-color: white;
         transition: background 0.25s, color 0.25s;
         font-weight: bold;
-        color: #FC6F71;
+        color: rgb(207,39,41);
         /* background-color: #FC6F71; */
         cursor: pointer;
     }
 
     .name-area .logout-div .logout-button:hover,
     .name-area .logout-div .logout-button:focus {
-      background-color: #FC6F71;
+      background-color: rgb(207,39,41);
       color: white;
     }
 
@@ -205,10 +205,10 @@
     }
 
     .change-button:hover {
-        background-color: #FC6F71;
+        background-color: rgb(207, 39, 41);
         color: white;
         box-shadow: 0px 0px 10px 5px rgba(252, 111, 113, 0.2);
-        border: 3px solid rgba(252, 111, 113, 1);
+        border: 3px solid rgb(207,39,41);
     }
 
 </style>
