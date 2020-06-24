@@ -250,6 +250,7 @@ userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
     } else {
       let sections = lecture.sections;
       let sect_itr = 0;
+      let students = [];
       sections.forEach(sect => {
         Section.findById(sect, function (err, section) {
           if(err || section == null) {
@@ -257,7 +258,6 @@ userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
             res.json(err);
           } else {
             let student_ids = section.students;
-            let students = [];
             let num_iterations = 0;
             student_ids.forEach(student_id => {
               User.findById(student_id, function(err, student) {
@@ -265,7 +265,16 @@ userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
                   console.log("<ERROR> Getting user with ID:",student_id)
                   res.json(err);
                 } else {
-                  students.push(student);
+                  let found = false;
+                  for(let i = 0; i < students.length; i++) {
+                    if (students[i]._id.equals(student._id)) {
+                      found = true;
+                      break;
+                    }
+                  }
+                  if(!found) {
+                    students.push(student);
+                  }
                   num_iterations++;
                   if(num_iterations === student_ids.length) {
                     sect_itr++

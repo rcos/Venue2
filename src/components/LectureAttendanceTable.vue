@@ -32,7 +32,8 @@
 			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="absent" :is_absent="true" />
 		</div>
 		<div v-if="selected_tab === 3" role="tabpanel" aria-labelledby="stats_btn" id="stats" class="tab_section">
-			Statistics
+			<button v-if="is_instructor" class="btn btn-primary" @click="download_submitty_csv" id="submitty_export">Export for Submitty...</button>
+			<p>Statistics Graphs Coming Soon...</p>
 		</div>
 		<div v-if="selected_tab === 4" role="tabpanel" aria-labelledby="instructors_only_btn" id="instructors_only" class="tab_section">
 			<div id="manual-override-container">
@@ -74,6 +75,7 @@
 <script>
 	import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
   import LectureAttendanceList from '@/components/LectureAttendanceList.vue'
+  import SectionAPI from '@/services/SectionAPI.js'
 
   export default {
     name: 'LectureAttendanceTable',
@@ -147,6 +149,86 @@
 			} else {
 				return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours-12) + ":" + (datetime.getMinutes()) + " PM")
 			}
+		},
+		download_submitty_csv() {
+			let data = []
+
+			SectionAPI.getSectionsForCourse(this.lecture.sections[0].course._id)
+			.then(res => {
+				let course_sections = res.data
+
+				let self = this
+				this.all_students.forEach(function(student) {
+					course_sections.forEach(function(section) {
+						if(section.students.includes(student._id)) {
+							let stud_data = []
+							
+							let live = self.live_submissions[student._id]
+							let playback = self.playback_submissions.find(x => x.submitter._id == student._id)
+							
+							if(undefined != live && undefined != playback) {
+								if(live.length / self.lecture.checkins.length >= playback.video_percent) {
+									stud_data.push(live[live.length-1].live_submission_time)
+									stud_data.push(student.user_id)
+									stud_data.push(student.first_name)
+									stud_data.push(student.last_name)
+									stud_data.push(section.number)
+									stud_data.push("Live")
+									stud_data.push(live.length / self.lecture.checkins.length)
+								} else {
+									stud_data.push(playback.playback_submission_time)
+									stud_data.push(student.user_id)
+									stud_data.push(student.first_name)
+									stud_data.push(student.last_name)
+									stud_data.push(section.number)
+									stud_data.push("Playback")
+									stud_data.push(playback.video_percent)
+								}
+							} else if(undefined != live) {
+								stud_data.push(live[live.length-1].live_submission_time)
+								stud_data.push(student.user_id)
+								stud_data.push(student.first_name)
+								stud_data.push(student.last_name)
+								stud_data.push(section.number)
+								stud_data.push("Live")
+								stud_data.push(live.length / self.lecture.checkins.length)
+							} else if(undefined != playback) {
+								stud_data.push(playback.playback_submission_time)
+								stud_data.push(student.user_id)
+								stud_data.push(student.first_name)
+								stud_data.push(student.last_name)
+								stud_data.push(section.number)
+								stud_data.push("Playback")
+								stud_data.push(playback.video_percent)
+							} else {
+								stud_data.push(null)
+								stud_data.push(student.user_id)
+								stud_data.push(student.first_name)
+								stud_data.push(student.last_name)
+								stud_data.push(section.number)
+								stud_data.push(null)
+								stud_data.push(0)
+							}
+
+							data.push(stud_data)
+						}
+					})
+				})
+
+				let csv = 'Submission Timestamp,User ID,First Name,Last Name,Registration Section,Submission Type,Grade\n';
+				data.forEach(function(row) {
+					csv += row.join(',');
+					csv += "\n";
+				});
+
+				let downloadname = self.lecture.sections[0].course.name + '_' + self.lecture.title + '_attendance.csv'
+
+				var hiddenElement = document.createElement('a');
+				hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+				hiddenElement.target = '_blank';
+				hiddenElement.download = downloadname;
+				hiddenElement.click();
+			})
 		}
     }
   }
@@ -255,5 +337,9 @@
 		/* max-width: 70%; */
 		margin: 0 auto;
 		margin-top: 2rem;
+	}
+
+	#submitty_export {
+		margin: 0.5rem;
 	}
 </style>
