@@ -40,3 +40,8 @@ Cypress.Commands.add('login', (user_id,password) => {
     window.localStorage.setItem('user', JSON.stringify(res.body))
   })
 })
+
+Cypress.Commands.add('checkAccessibility', () => { 
+  cy.injectAxe()
+  cy.checkA11y()
+})

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>Courses</h1>
     <show-at breakpoint="mediumAndAbove">
       <div class="course-list">
         <div v-if="is_instructor">

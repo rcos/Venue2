@@ -105,6 +105,12 @@ html,body {
   color: #2C3E50;
 }
 
+h1 {
+  /* font-family: "Exo"; */
+  font-weight: bold;
+  color: #2C3E50;
+}
+
 .sub-logo {
   position: relative;
   margin-top: -20px;

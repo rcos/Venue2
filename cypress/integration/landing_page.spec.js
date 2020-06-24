@@ -5,6 +5,7 @@ describe('The Landing Page', () => {
   })
   it('is reachable when not logged in', function () {
     cy.visit('/')
+    cy.checkAccessibility()
   })
   it('has a CAS "Login" button', function () {
     cy.get(".venue-btn").contains("CAS Login")
