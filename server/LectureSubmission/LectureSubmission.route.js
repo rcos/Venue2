@@ -102,7 +102,8 @@ lectureSubmissionRoutes.route('/update').post(function (req, res) {
     {
       video_progress: updated.video_progress,
       video_percent: updated.video_percent,
-      student_poll_answers: updated.student_poll_answers
+      student_poll_answers: updated.student_poll_answers,
+      playback_submission_time: new Date()
     },
     function (err, updatedSubmission) {
       if (err || updatedSubmission == null) {
@@ -134,6 +135,7 @@ lectureSubmissionRoutes.route('/get_or_make').post(function (req, res) {
           submitter: submitter_id,
           video_progress: 0,
           video_percent: 0,
+          playback_submission_time: new Date(),
           student_poll_answers: []
         });
         lectureSubmission.save()
@@ -160,6 +162,7 @@ lectureSubmissionRoutes.route('/get_or_make').post(function (req, res) {
               submitter: submitter_id,
               video_progress: 0,
               video_percent: 0,
+              playback_submission_time: new Date(),
               student_poll_answers: []
             });
             lectureSubmission.save()
