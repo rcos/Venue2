@@ -781,13 +781,30 @@ a:hover {
   float: right;
 }
 
-.btn-primary {
+.btn.btn-primary {
   background: #0078c2;
-  border: 1px solid #0078c2;
+  border: 0.1rem solid #005183;
 }
 
-.btn-primary:hover,
-.btn-primary:focus {
+.btn.btn-secondary {
+  background: #727272;
+  border: 0.1rem solid #444444;
+}
+
+.btn.btn-primary:hover,
+.btn.btn-primary:focus,
+.btn.btn-primary:active,
+.btn.btn-primary:target {
   outline: none;
-  background: #0078c2;
+  border: 0.1rem solid #005183;
+  background: #005183;
+}
+
+.btn.btn-secondary:hover,
+.btn.btn-secondary:focus,
+.btn.btn-secondary:active
+.btn.btn-secondary:target {
+  outline: none;
+  border: 0.1rem solid #444444;
+  background: #444444;
 }
