@@ -24,7 +24,9 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-Cypress.Commands.add('login', (user_id,password) => { 
+Cypress.Commands.add('setUser', (user_id,password) => { 
+  cy.clearCookies()
+  cy.clearLocalStorage()
   cy.request({
     method: 'POST',
     url: 'http://localhost:4000/auth/login',
@@ -36,12 +38,15 @@ Cypress.Commands.add('login', (user_id,password) => {
     }
   })
   .then(res => {
-	console.log(res.body.current_user)
-    window.localStorage.setItem('user', JSON.stringify(res.body))
+    cy.window().then((window) => window.localStorage.setItem('user', JSON.stringify(res.body)))
   })
 })
 
 Cypress.Commands.add('checkAccessibility', () => { 
   cy.injectAxe()
   cy.checkA11y()
+})
+
+Cypress.Commands.add('seed', () => { 
+  cy.exec('cd server && npm run seed && cd ../')
 })

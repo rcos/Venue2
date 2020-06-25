@@ -7,7 +7,7 @@
     "build": "vue-cli-service build && mkdir dist/dist && touch dist/dist/build.js",
     "lint": "vue-cli-service lint",
     "start": "npm run start --prefix server",
-    "test": "cd server && npm run seed && cd ../ && cypress open"
+    "test": "cypress run"
   },
   "proxy": {
     "/": {

@@ -21,7 +21,7 @@ function jwtVerify(req,res,next) {
     req.token = bearerToken
     jwt.verify(req.token, process.env.AUTH_KEY, err => {
       if(err)
-        res.sendStatus(401).send("Unauthorized access")
+        res.sendStatus(401)
       else
         next()
     })
