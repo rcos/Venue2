@@ -191,6 +191,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			course: c[4]._id,
 			number: 2,
 			students: [
+				u[2]._id,
 				u[14]._id,
 				u[15]._id,
 				u[16]._id,

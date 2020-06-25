@@ -2,7 +2,7 @@ describe('Create Lecture', () => {
   beforeEach(() => {
     cy.clearCookies()
     cy.clearLocalStorage()
-    cy.login('testinst','password')
+    cy.setUser('testinst','password')
   })
   it('can reach the Course List by URL',function() {
     cy.visit('/user_courses')

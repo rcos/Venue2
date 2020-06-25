@@ -20,3 +20,8 @@ import './commands'
 // require('./commands')
 
 require('cypress-axe')
+
+before(() => {
+	cy.exec("sleep 1");
+	cy.seed()
+})

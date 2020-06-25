@@ -17,7 +17,7 @@ describe('Accessibility for Instructors',function(){
 	beforeEach(() => {
 		cy.clearCookies()
 		cy.clearLocalStorage()
-		cy.login('testinst','password')
+		cy.setUser('testinst','password')
 	})
 	it('on the dashboard page',function(){
 		cy.visit('/dashboard')
