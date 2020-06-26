@@ -22,6 +22,6 @@ import './commands'
 require('cypress-axe')
 
 before(() => {
-	cy.exec("sleep 1");
+	cy.exec("sleep 0.5");
 	cy.seed()
 })

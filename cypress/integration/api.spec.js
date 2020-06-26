@@ -1,3 +1,7 @@
+let getJwt = function() {
+	return 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
+}
+
 describe('User API Accessors',function() {
 	before(() => {
 		cy.seed()
@@ -11,11 +15,10 @@ describe('User API Accessors',function() {
 			url: 'http://localhost:4000/users',
 			form: true,
 			headers: {
-				authorization: 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
+				authorization: getJwt()
 			}
 		}).then(res => {
-			let users = res.body
-			expect(users.length).to.equal(28)
+			expect(res.body.length).to.equal(28)
 		})
 	})
 	it('can getInstructors()',function() {
@@ -25,7 +28,7 @@ describe('User API Accessors',function() {
 			url: 'http://localhost:4000/users/instructors',
 			form: true,
 			headers: {
-				authorization: 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
+				authorization: getJwt()
 			}
 		}).then(res => {
 			let instructors = res.body
@@ -39,7 +42,7 @@ describe('User API Accessors',function() {
 			url: 'http://localhost:4000/users/students',
 			form: true,
 			headers: {
-				authorization: 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
+				authorization: getJwt()
 			}
 		}).then(res => {
 			let students = res.body
@@ -53,7 +56,7 @@ describe('User API Accessors',function() {
 			url: 'http://localhost:4000/users/instructor_courses/'+id,
 			form: true,
 			headers: {
-				authorization: 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
+				authorization: getJwt()
 			}
 		}).then(res => {
 			let courses = res.body
@@ -67,7 +70,7 @@ describe('User API Accessors',function() {
 			url: 'http://localhost:4000/users/instructor_courses/'+id,
 			form: true,
 			headers: {
-				authorization: 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
+				authorization: getJwt()
 			}
 		}).then(res => {
 			let courses = res.body
@@ -84,7 +87,7 @@ describe('User API Accessors',function() {
 				url: 'http://localhost:4000/users/student_sections/'+id,
 				form: true,
 				headers: {
-					authorization: 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
+					authorization: getJwt()
 				}
 			}).then(res => {
 				let sections = res.body
@@ -102,7 +105,7 @@ describe('User API Accessors',function() {
 			url: 'http://localhost:4000/users/instructor_courses/'+id,
 			form: true,
 			headers: {
-				authorization: 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
+				authorization: getJwt()
 			}
 		}).then(res => {
 			let courses = res.body
@@ -112,7 +115,7 @@ describe('User API Accessors',function() {
 				url: 'http://localhost:4000/users/students_for_course/'+courses[0]._id,
 				form: true,
 				headers: {
-					authorization: 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
+					authorization: getJwt()
 				}
 			}).then(res => {
 				let students = res.body
@@ -136,7 +139,7 @@ describe('User API Modifiers',function() {
 			url: 'http://localhost:4000/users/add',
 			form: true,
 			headers: {
-				authorization: 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
+				authorization: getJwt()
 			},
 			body: {
 				user: {
@@ -165,7 +168,7 @@ describe('User API Modifiers',function() {
 			url: 'http://localhost:4000/users/update/'+id,
 			form: true,
 			headers: {
-				authorization: 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
+				authorization: getJwt()
 			},
 			body: {
 				updated_user: {
@@ -185,7 +188,7 @@ describe('User API Modifiers',function() {
 				url: 'http://localhost:4000/users/edit/'+id,
 				form: true,
 				headers: {
-					authorization: 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
+					authorization: getJwt()
 				}
 			}).then(res => {
 				let updatedUser = res.body
@@ -205,7 +208,7 @@ describe('User API Modifiers',function() {
 			url: 'http://localhost:4000/users/delete/'+id,
 			form: true,
 			headers: {
-				authorization: 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
+				authorization: getJwt()
 			}
 		}).then(res => {
 			cy.request({
@@ -213,7 +216,7 @@ describe('User API Modifiers',function() {
 				url: 'http://localhost:4000/users/edit/'+id,
 				form: true,
 				headers: {
-					authorization: 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
+					authorization: getJwt()
 				}
 			}).then(res => {
 				let removedUser = res.body
@@ -224,37 +227,98 @@ describe('User API Modifiers',function() {
 	})
 })
 
-describe('Course API',function() {
+describe('Course API Accessors',function() {
+	before(() => {
+		cy.seed()
+	})
 	beforeEach(() => {
-		cy.exec('cd server && npm run seed && cd ../')
 		cy.setUser('testinst','password')
+	})
+	it('can getCourses() and getCourse()',function() {
+		let jwt = getJwt()
+		cy.request({
+			method: 'GET',
+			url: 'http://localhost:4000/courses',
+			form: true,
+			headers: {
+				authorization: jwt
+			}
+		}).then(res => {
+			expect(res.body.length).to.equal(5)
+			res.body.forEach(course => {
+				cy.request({
+					method: 'GET',
+					url: 'http://localhost:4000/courses/edit/'+course._id,
+					form: true,
+					headers: {
+						authorization: jwt
+					}
+				}).then(res2 => {
+					expect(course.name).to.equal(res2.body.name)
+					expect(course.dept).to.equal(res2.body.dept)
+					expect(course.course_number).to.equal(res2.body.course_number)
+					expect(course.instructor).to.equal(res2.body.instructor)
+				})
+			})
+		})
+	})
+	it('can getInstructorCourses() and getInstructor()',function() {
+		let jwt = getJwt()
+		cy.window().then(window=> {
+			let inst = JSON.parse(window.localStorage.getItem('user')).current_user
+			cy.request({
+				method: 'GET',
+				url: 'http://localhost:4000/courses/get_instructor_courses/'+inst._id,
+				form: true,
+				headers: {
+					authorization: jwt
+				}
+			}).then(res => {
+				expect(res.body.length).to.equal(1)
+				let course = res.body[0]
+				expect(course.name).to.equal("Testing Course")
+				expect(course.dept).to.equal("TEST")
+				expect(course.course_number).to.equal(1000)
+				expect(course.instructor).to.equal(inst._id)
+				cy.request({
+					method: 'GET',
+					url: 'http://localhost:4000/courses/getInstructor/'+course._id,
+					form: true,
+					headers: {
+						authorization: jwt
+					}
+				}).then(res2 => {
+					expect(res2.body._id).to.equal(inst._id)
+				})
+			})
+		})
 	})
 })
 
 describe('Section API',function() {
 	beforeEach(() => {
-		cy.exec('cd server && npm run seed && cd ../')
+		cy.seed()
 		cy.setUser('testinst','password')
 	})
 })
 
 describe('Lecture API',function() {
 	beforeEach(() => {
-		cy.exec('cd server && npm run seed && cd ../')
+		cy.seed()
 		cy.setUser('testinst','password')
 	})
 })
 
 describe('PlaybackPoll API',function() {
 	beforeEach(() => {
-		cy.exec('cd server && npm run seed && cd ../')
+		cy.seed()
 		cy.setUser('testinst','password')
 	})
 })
 
 describe('LectureSubmission API',function() {
 	beforeEach(() => {
-		cy.exec('cd server && npm run seed && cd ../')
+		cy.seed()
 		cy.setUser('testinst','password')
 	})
 })
