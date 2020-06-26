@@ -2,7 +2,7 @@ let getJwt = function() {
 	return 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
 }
 
-describe('User API Accessors',function() {
+describe('API - User Accessors',function() {
 	before(() => {
 		cy.seed()
 	})
@@ -128,7 +128,7 @@ describe('User API Accessors',function() {
 	// })
 })
 
-describe('User API Modifiers',function() {
+describe('API - User Modifiers',function() {
 	beforeEach(() => {
 		cy.seed()
 		cy.setUser('testinst','password')
@@ -221,13 +221,12 @@ describe('User API Modifiers',function() {
 			}).then(res => {
 				let removedUser = res.body
 				expect(removedUser).to.equal(null)
-				cy.exec('cd server && npm run seed && cd ../')
 			})
 		})
 	})
 })
 
-describe('Course API Accessors',function() {
+describe('API - Course Accessors',function() {
 	before(() => {
 		cy.seed()
 	})
@@ -290,6 +289,97 @@ describe('Course API Accessors',function() {
 				}).then(res2 => {
 					expect(res2.body._id).to.equal(inst._id)
 				})
+			})
+		})
+	})
+})
+
+describe('API - Course Modifiers',function() {
+	before(() => {
+		cy.seed()
+	})
+	beforeEach(() => {
+		cy.setUser('testinst','password')
+	})
+	let addedCourse
+	it('can addCourse()',function() {
+		cy.request({
+			method: 'POST',
+			url: 'http://localhost:4000/courses/add',
+			form: true,
+			headers: {
+				authorization: getJwt()
+			},
+			body: {
+				course: {
+					name: "NewCourse",
+					dept: "TEST",
+					course_number: 1010,
+					instructor: JSON.parse(window.localStorage.getItem('user')).current_user._id
+				}
+			}
+		}).then(res => {
+			addedCourse = res.body
+			console.log(addedCourse)
+			expect(addedCourse.name).to.equal('NewCourse')
+			expect(addedCourse.dept).to.equal('TEST')
+			expect(addedCourse.course_number).to.equal(1010)
+			expect(addedCourse.instructor).to.equal(JSON.parse(window.localStorage.getItem('user')).current_user._id)
+		})
+	})
+	it('can updateCourse()',function() {
+		cy.request({
+			method: 'POST',
+			url: 'http://localhost:4000/courses/update/'+addedCourse._id,
+			form: true,
+			headers: {
+				authorization: getJwt()
+			},
+			body: {
+				updated_course: {
+					name: "OldCourse",
+					dept: "TEST",
+					course_number: 1111,
+					instructor: JSON.parse(window.localStorage.getItem('user')).current_user._id
+				}
+			}
+		}).then(res => {
+			cy.request({
+				method: 'GET',
+				url: 'http://localhost:4000/courses/edit/'+addedCourse._id,
+				form: true,
+				headers: {
+					authorization: getJwt()
+				}
+			}).then(res => {
+				let updatedCourse = res.body
+				expect(updatedCourse.name).to.equal('OldCourse')
+				expect(updatedCourse.dept).to.equal('TEST')
+				expect(updatedCourse.course_number).to.equal(1111)
+				expect(updatedCourse.instructor).to.equal(JSON.parse(window.localStorage.getItem('user')).current_user._id)
+			})
+		})
+		
+	})
+	it('can deleteCourse()',function() {
+		cy.request({
+			method: 'DELETE',
+			url: 'http://localhost:4000/courses/delete/'+addedCourse._id,
+			form: true,
+			headers: {
+				authorization: getJwt()
+			}
+		}).then(res => {
+			cy.request({
+				method: 'GET',
+				url: 'http://localhost:4000/courses/edit/'+addedCourse._id,
+				form: true,
+				headers: {
+					authorization: getJwt()
+				}
+			}).then(res => {
+				let removedCourse = res.body
+				expect(removedCourse).to.equal(null)
 			})
 		})
 	})
