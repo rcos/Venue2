@@ -385,10 +385,80 @@ describe('API - Course Modifiers',function() {
 	})
 })
 
-describe('Section API',function() {
-	beforeEach(() => {
+describe('API - Section Accessors',function() {
+	before(() => {
 		cy.seed()
+	})
+	beforeEach(() => {
 		cy.setUser('testinst','password')
+	})
+	let sections
+	it('can getSections() and getSection()',function() {
+		let jwt = getJwt()
+		cy.request({
+			method: 'GET',
+			url: 'http://localhost:4000/sections',
+			form: true,
+			headers: {
+				authorization: jwt
+			}
+		}).then(res => {
+			sections = res.body
+			expect(sections.length).to.equal(5)
+			sections.forEach(section => {
+				cy.request({
+					method: 'GET',
+					url: 'http://localhost:4000/sections/edit/'+section._id,
+					form: true,
+					headers: {
+						authorization: jwt
+					}
+				}).then(res2 => {
+					expect(section.course).to.equal(res2.body.course)
+					expect(section.number).to.equal(res2.body.number)
+					section.students.forEach((stud,index) => {
+						expect(stud).to.deep.equal(res2.body.students[index])
+					})
+					section.teaching_assistants.forEach((ta,index) => {
+						expect(ta).to.deep.equal(res2.body.teaching_assistants[index])
+					})
+				})
+			})
+		})
+	})
+	it('can getCourse(), getInstructor(), and getSectionWithCourse()',function() {
+		let jwt = getJwt()
+		sections.forEach(section => {
+			cy.request({
+				method: 'GET',
+				url: 'http://localhost:4000/sections/getCourse/'+section._id,
+				form: true,
+				headers: {
+					authorization: jwt
+				}
+			}).then(res => {
+				cy.request({
+					method: 'GET',
+					url: 'http://localhost:4000/sections/getInstructor/'+section._id,
+					form: true,
+					headers: {
+						authorization: jwt
+					}
+				}).then(res2 => {
+					expect(res.body.instructor).to.equal(res2.body._id)
+				})
+				cy.request({
+					method: 'GET',
+					url: 'http://localhost:4000/sections/get_with_course/'+section._id,
+					form: true,
+					headers: {
+						authorization: jwt
+					}
+				}).then(res2 => {
+					expect(res.body).to.deep.equal(res2.body.course)
+				})
+			})
+		})
 	})
 })
 
