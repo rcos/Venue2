@@ -12,6 +12,7 @@
 import NavBar from "./components/NavBar.vue";
 import Footer from "./components/Footer.vue";
 import LectureAPI from './services/LectureAPI';
+import {getLiveLectures,getUpcomingLectures,getPastLectures} from './services/GlobalFunctions.js'
 import '@/assets/css/venue.css';
 
 export default {
@@ -42,27 +43,22 @@ export default {
   methods: {
     afterUser() {
       if(this.current_user.is_instructor) {
-        LectureAPI.getLecturesForUser(this.current_user._id,"live", "none") 
+        LectureAPI.getLecturesForUser(this.current_user._id, "none") 
           .then(res => {
-            LectureAPI.getLecturesForUser(this.current_user._id,"upcoming", "none")
-              .then(res2 => {
-                let lectures = res.data.concat(res2.data)
-                if (!("Notification" in window)) {
-                  alert("This browser does not support desktop notification");
-                } else if (Notification.permission === "granted") {
-                  this.processNotifications(lectures)
-                } else if (Notification.permission !== "denied") {
-                  Notification.requestPermission().then(function (permission) {
-                    if (permission === "granted") {
-                      this.processNotifications(lectures)
-                    }
-                  });
+            let liveAndUpcoming = getLiveLectures(res.data).concat(getUpcomingLectures(res.data))
+            console.log(liveAndUpcoming)
+            if (!("Notification" in window)) {
+              alert("This browser does not support desktop notification");
+            } else if (Notification.permission === "granted") {
+              this.processNotifications(liveAndUpcoming)
+            } else if (Notification.permission !== "denied") {
+              Notification.requestPermission().then(function (permission) {
+                if (permission === "granted") {
+                  this.processNotifications(liveAndUpcoming)
                 }
-              })
-          })
-        LectureAPI.getLecturesForUser(this.current_user._id,"past", "none")
-          .then(res => {
-            this.processInstructorEmails(res.data)
+              });
+            }
+            this.processInstructorEmails(getPastLectures(res.data))
           })
       } else {
         
