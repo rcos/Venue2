@@ -136,7 +136,7 @@
       },
       getLectureHistoryData () {
         // find the lectures for this section
-        LectureAPI.getLecturesForSection(this.section_id, "all")
+        LectureAPI.getLecturesForSection(this.section_id)
         .catch(err => { console.log(`Error retrieving lectures for section.`); console.log(err); })
         .then(response => {
 

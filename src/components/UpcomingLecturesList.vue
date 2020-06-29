@@ -33,41 +33,19 @@
     props: {
       mobileMode: Boolean,
       section_id: String,
-      selected_section: String
+      selected_section: String,
+      lecture_data: Array
     },
     data () {
       return {
-        lecture_data: Array,
         data_loaded: Boolean
       }
     },
     created () {
-      this.data_loaded = false
-      if (this.section_id != undefined) {
-        // load the section info directly
-        this.getUpcomingLectures(this.section_id)
-      }
-      else if (this.selected_section != undefined) {
-        // load section info for the selected section
-        this.getUpcomingLectures(this.selected_section)
-      }
     },
     methods: {
       getDate (date_string) {
         return moment(date_string).fromNow()
-      },
-      getUpcomingLectures (section_id) {
-
-        LectureAPI.getLecturesForSection(section_id, "upcoming")
-        .catch(err => {
-          console.log(`getLecturesForSection () error`)
-          console.log(err)
-        })
-        .then(response => {
-
-          this.data_loaded = true
-          this.lecture_data = response.data
-        })
       }
     }
   }

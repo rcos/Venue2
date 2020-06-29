@@ -23,7 +23,6 @@ var transporter = nodemailer.createTransport({
 // });
 var upload = multer({ storage: multer.memoryStorage() })
 
-const legal_lecture_types = ["all","live","upcoming","past","recent","active_playback"]
 const legal_preferences = ["with_sections", "with_sections_and_course", "none"]
 
 let Lecture = require('../Lecture/Lecture.model')
@@ -262,7 +261,7 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 						res.json(error)
 					} else {
 						console.log("<SUCCESS> Getting lectures for student ID: " + user_id +
-							", with lecture type: " + lecture_type + ", with preference: " + preference)
+							", with preference: " + preference)
 						student_sections.forEach(student_section => {
 							if(student_section.course == null)
 								console.log("section course is null")
@@ -343,34 +342,17 @@ lectureRoutes.get('/for_course/:course_id', (req, res) => {
 	})
 })
 
-lectureRoutes.get('/for_section/:section_id/:lecture_type', (req, res) => {
+lectureRoutes.get('/for_section/:section_id', (req, res) => {
 	let section_id = req.params.section_id
-	let lecture_type = req.params.lecture_type
-	if(!legal_lecture_types.includes(lecture_type)){
-		console.log("<ERROR> Invalid lecture type:",lecture_type)
-		res.status(400).send("Illegal lecture type")
-	} else {
-		Lecture.find({sections: section_id}, (error, section_lectures) => {
-			if(error || section_lectures == null) {
-				console.log("<ERROR> Getting lectures for section with ID:",section_id)
-				res.json(error)
-			} else {
-				console.log("<SUCCESS> Getting lectures for section with ID:",section_id,"and lecture type:",lecture_type)
-				if(lecture_type === "all")
-					res.json(section_lectures)
-				else if(lecture_type === "upcoming")
-					res.json(getUpcomingLectures(section_lectures))
-				else if(lecture_type === "live")
-					res.json(getLiveLectures(section_lectures))
-				else if(lecture_type === "past")
-					res.json(getPastLectures(section_lectures))
-				else if(lecture_type === "active_playback")
-					res.json(getActivePlaybackLectures(section_lectures))
-				else if(lecture_type === "recent")
-					res.json(getRecentLectures(section_lectures))
-			}
-		})
-	}
+	Lecture.find({sections: section_id}, (error, section_lectures) => {
+		if(error || section_lectures == null) {
+			console.log("<ERROR> Getting lectures for section with ID:",section_id)
+			res.json(error)
+		} else {
+			console.log("<SUCCESS> Getting lectures for section with ID:",section_id)
+			res.json(section_lectures)
+		}
+	})
 })
 
 lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
