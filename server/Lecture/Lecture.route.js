@@ -321,43 +321,26 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 	})
 })
 
-lectureRoutes.get('/for_course/:course_id/:lecture_type', (req, res) => {
+lectureRoutes.get('/for_course/:course_id', (req, res) => {
 	let course_id = req.params.course_id
-	let lecture_type = req.params.lecture_type
-	if(!legal_lecture_types.includes(lecture_type)){
-		console.log("<ERROR> Invalid lecture type:",lecture_type)
-		res.status(400).send("Illegal lecture type")
-	} else {
-		// get sections for course
-		Section.find({course: course_id}, (error, course_sections) => {
-			if(error || course_sections == null) {
-				console.log("<ERROR> Getting sections for course with ID:",course_id)
-				res.json(error)
-			} else {
-				// get lectures for these courses
-				Lecture.find({sections: {$in: course_sections}}, (error,course_lectures) => {
-					if(error || course_lectures == null) {
-						console.log("<ERROR> Getting lectures for sections:",course_sections)
-						res.json(error)
-					} else {
-						console.log("<SUCCESS> Getting lectures for course with ID:",course_id,"and lecture type:",lecture_type)
-						if(lecture_type === "all")
-							res.json(course_lectures)
-						else if(lecture_type === "upcoming")
-							res.json(getUpcomingLectures(course_lectures))
-						else if(lecture_type === "live")
-							res.json(getLiveLectures(course_lectures))
-						else if(lecture_type === "past")
-							res.json(getPastLectures(course_lectures))
-						else if(lecture_type === "active_playback")
-							res.json(getActivePlaybackLectures(course_lectures))
-						else if(lecture_type === "recent")
-							res.json(getRecentLectures(course_lectures))
-					}
-				})
-			}
-		})
-	}
+	// get sections for course
+	Section.find({course: course_id}, (error, course_sections) => {
+		if(error || course_sections == null) {
+			console.log("<ERROR> Getting sections for course with ID:",course_id)
+			res.json(error)
+		} else {
+			// get lectures for these courses
+			Lecture.find({sections: {$in: course_sections}}, (error,course_lectures) => {
+				if(error || course_lectures == null) {
+					console.log("<ERROR> Getting lectures for sections:",course_sections)
+					res.json(error)
+				} else {
+					console.log("<SUCCESS> Getting lectures for course with ID:",course_id)
+					res.json(course_lectures)
+				}
+			})
+		}
+	})
 })
 
 lectureRoutes.get('/for_section/:section_id/:lecture_type', (req, res) => {

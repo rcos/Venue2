@@ -7,8 +7,8 @@ export default {
   getLecturesForUser(user_id, preference) {
     return API().get('lectures/for_user/' + user_id + '/' + preference)
   },
-  getLecturesForCourse(course_id, lecture_type) {
-    return API().get('lectures/for_course/' + course_id + '/' + lecture_type)
+  getLecturesForCourse(course_id) {
+    return API().get('lectures/for_course/' + course_id)
   },
   getLecturesForSection(section_id, lecture_type) {
     return API().get('lectures/for_section/' + section_id + '/' + lecture_type)
