@@ -10,8 +10,8 @@ export default {
   getLecturesForCourse(course_id) {
     return API().get('lectures/for_course/' + course_id)
   },
-  getLecturesForSection(section_id, lecture_type) {
-    return API().get('lectures/for_section/' + section_id + '/' + lecture_type)
+  getLecturesForSection(section_id) {
+    return API().get('lectures/for_section/' + section_id)
   },
   getLectureWithSectionsAndCourse(lecture_id) {
     return API().get('lectures/with_sections_and_course/' + lecture_id)

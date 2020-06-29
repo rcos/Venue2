@@ -69,8 +69,8 @@
           />
         </div>
         <div v-else-if="subview_section_id == 2" :style="{marginTop: '20px'}" id="panel-3" role="tabpanel">
-          <show-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" /></show-at>
-          <hide-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" mobileMode/></hide-at>
+          <show-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" :lecture_data="upcoming_lectures"/></show-at>
+          <hide-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" :lecture_data="upcoming_lectures" mobileMode/></hide-at>
         </div>
 
       </div>
@@ -195,10 +195,6 @@ export default {
 
       this.getSectionWithCourse()
       this.getAllLecturesForSection()
-      this.getUpcomingLecturesForSection()
-      this.getLiveLecturesForSection()
-      this.getPastLecturesForSection()
-      this.getActivePlaybackLecturesForSection()
     }
   },
   methods: {
@@ -231,53 +227,37 @@ export default {
     getCurrentUser() {
       this.current_user = this.$store.state.user.current_user
     },
+    parseActivePlaybackLectures(all_lectures) {
+      this.playback_lectures = getActivePlaybackLectures(all_lectures)
+    },
+    parsePastLectures(all_lectures) {
+      this.past_lectures = getPastLectures(all_lectures)
+    },
+    parseLiveLectures(all_lectures) {
+      this.live_lectures = getLiveLectures(all_lectures)
+    },
+    parseUpcomingLectures(all_lectures) {
+      this.upcoming_lectures = getUpcomingLectures(all_lectures)
+    },
     async getAllLecturesForCourse() {
       LectureAPI.getLecturesForCourse(this.course_id)
       .then(response => {
         this.all_lectures = response.data
-        this.parseUpcomingLecturesForCourse(this.all_lectures)
-        this.parseLiveLecturesForCourse(this.all_lectures)
-        this.parsePastLecturesForCourse(this.all_lectures)
-        this.parseActivePlaybackLecturesForCourse(this.all_lectures)
+        this.parseUpcomingLectures(this.all_lectures)
+        this.parseLiveLectures(this.all_lectures)
+        this.parsePastLectures(this.all_lectures)
+        this.parseActivePlaybackLectures(this.all_lectures)
       })
     },
-    parseActivePlaybackLecturesForCourse(all_lectures) {
-      this.playback_lectures = getActivePlaybackLectures(all_lectures)
-    },
-    parsePastLecturesForCourse(all_lectures) {
-      this.past_lectures = getPastLectures(all_lectures)
-    },
-    parseLiveLecturesForCourse(all_lectures) {
-      this.live_lectures = getLiveLectures(all_lectures)
-    },
-    parseUpcomingLecturesForCourse(all_lectures) {
-      this.upcoming_lectures = getUpcomingLectures(all_lectures)
-    },
-    async getActivePlaybackLecturesForSection() {
-
-      LectureAPI.getLecturesForSection(this.section_id, "active_playback")
-      .then(response => { this.playback_lectures = response.data })
-    },
-    async getPastLecturesForSection() {
-
-      LectureAPI.getLecturesForSection(this.section_id, "past")
-      .then(response => { this.past_lectures = response.data })
-    },
-    async getLiveLecturesForSection() {
-
-      LectureAPI.getLecturesForSection(this.section_id, "live")
-      .then(response => { this.live_lectures = response.data })
-    },
-    async getUpcomingLecturesForSection() {
-
-      LectureAPI.getLecturesForSection(this.section_id, "upcoming")
-      .then(response => { this.upcoming_lectures = response.data; })
-      .catch(err => { console.log(`Error getting upcoming sections.`); console.log(err); })
-    },
     async getAllLecturesForSection() {
-
-      LectureAPI.getLecturesForSection(this.section_id, "all")
-      .then(response => { this.all_lectures = response.data })
+      LectureAPI.getLecturesForSection(this.section_id)
+      .then(response => {
+        this.all_lectures = response.data
+        this.parseUpcomingLectures(this.all_lectures)
+        this.parseLiveLectures(this.all_lectures)
+        this.parsePastLectures(this.all_lectures)
+        this.parseActivePlaybackLectures(this.all_lectures)
+      })
     },
     getCourse () {
 
