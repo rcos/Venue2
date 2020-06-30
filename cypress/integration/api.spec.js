@@ -81,7 +81,6 @@ describe('API - User Accessors',function() {
 		cy.setUser('studenta','password')
 		cy.window().then((window)=> {
 			let id = JSON.parse(window.localStorage.getItem('user')).current_user._id
-			console.log(id)
 			cy.request({
 				method: 'GET',
 				url: 'http://localhost:4000/users/student_sections/'+id,
@@ -152,7 +151,6 @@ describe('API - User Modifiers',function() {
 			}
 		}).then(res => {
 			let addedUser = res.body
-			console.log(addedUser)
 			expect(addedUser.first_name).to.equal('New')
 			expect(addedUser.last_name).to.equal('User')
 			expect(addedUser.is_admin).to.equal(false)
@@ -320,7 +318,6 @@ describe('API - Course Modifiers',function() {
 			}
 		}).then(res => {
 			addedCourse = res.body
-			console.log(addedCourse)
 			expect(addedCourse.name).to.equal('NewCourse')
 			expect(addedCourse.dept).to.equal('TEST')
 			expect(addedCourse.course_number).to.equal(1010)
@@ -426,7 +423,7 @@ describe('API - Section Accessors',function() {
 			})
 		})
 	})
-	it('can getCourse(), getInstructor(), and getSectionWithCourse()',function() {
+	it('can getCourse(), getInstructor(), getSectionsWithCourse(), and getSectionsForCourse()',function() {
 		let jwt = getJwt()
 		sections.forEach(section => {
 			cy.request({
@@ -456,7 +453,143 @@ describe('API - Section Accessors',function() {
 					}
 				}).then(res2 => {
 					expect(res.body).to.deep.equal(res2.body.course)
+					cy.request({
+						method: 'GET',
+						url: 'http://localhost:4000/sections/get_for_course/'+res2.body.course._id,
+						form: true,
+						headers: {
+							authorization: jwt
+						}
+					}).then(res3 => {
+						let count = 0
+						res3.body.forEach(sect => {
+							if(sect._id == section._id) {
+								count++
+							}
+						})
+						expect(count).to.equal(1)
+					})
 				})
+			})
+		})
+	})
+	it('can getStudents() and getSectionsWithCoursesForStudent()',function() {
+		let jwt = getJwt()
+		sections.forEach(section => {
+			cy.request({
+				method: 'GET',
+				url: 'http://localhost:4000/sections/getStudents/'+section._id,
+				form: true,
+				headers: {
+					authorization: jwt
+				}
+			}).then(res => {
+				res.body.forEach(student => {
+					cy.request({
+						method: 'GET',
+						url: 'http://localhost:4000/sections/get_with_courses_for_student/'+student._id,
+						form: true,
+						headers: {
+							authorization: jwt
+						}
+					}).then(res => {
+						let count = 0
+						res.body.forEach(sectionWithCourse => {
+							if(sectionWithCourse._id == section._id) {
+								count++
+							}
+							expect(sectionWithCourse.students).to.contain(student._id)
+							expect(sectionWithCourse.course.dept).to.exist
+						})
+						expect(count).to.equal(1)
+					})
+				})
+			})
+		})
+	})
+})
+
+describe('API - Course Modifiers',function() {
+	before(() => {
+		cy.seed()
+	})
+	beforeEach(() => {
+		cy.setUser('testinst','password')
+	})
+	let addedSection
+	it('can addSection()',function() {
+		cy.request({
+			method: 'POST',
+			url: 'http://localhost:4000/sections/add',
+			form: true,
+			headers: {
+				authorization: getJwt()
+			},
+			body: {
+				section: {
+					number: 999,
+					students: [],
+					teaching_assistants: []
+				}
+			}
+		}).then(res => {
+			addedSection = res.body
+			expect(addedSection.number).to.equal(999)
+			expect(addedSection.students.length).to.equal(0)
+			expect(addedSection.teaching_assistants.length).to.equal(0)
+		})
+	})
+	it('can updateSection()',function() {
+		cy.request({
+			method: 'POST',
+			url: 'http://localhost:4000/sections/update/'+addedSection._id,
+			form: true,
+			headers: {
+				authorization: getJwt()
+			},
+			body: {
+				updated_section: {
+					number: 998,
+					students: [],
+					teaching_assistants: []
+				}
+			}
+		}).then(res => {
+			cy.request({
+				method: 'GET',
+				url: 'http://localhost:4000/sections/edit/'+addedSection._id,
+				form: true,
+				headers: {
+					authorization: getJwt()
+				}
+			}).then(res => {
+				let updatedSection = res.body
+				expect(updatedSection.number).to.equal(998)
+				expect(updatedSection.students).to.equal(null)
+				expect(updatedSection.teaching_assistants).to.equal(null)
+			})
+		})
+		
+	})
+	it('can deleteSection()',function() {
+		cy.request({
+			method: 'DELETE',
+			url: 'http://localhost:4000/sections/delete/'+addedSection._id,
+			form: true,
+			headers: {
+				authorization: getJwt()
+			}
+		}).then(res => {
+			cy.request({
+				method: 'GET',
+				url: 'http://localhost:4000/sections/edit/'+addedSection._id,
+				form: true,
+				headers: {
+					authorization: getJwt()
+				}
+			}).then(res => {
+				let removedSection = res.body
+				expect(removedSection).to.equal(null)
 			})
 		})
 	})
