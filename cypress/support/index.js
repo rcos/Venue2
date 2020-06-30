@@ -25,3 +25,7 @@ before(() => {
 	cy.exec("sleep 0.5");
 	cy.seed()
 })
+
+after(() => {
+	cy.seed()
+})
