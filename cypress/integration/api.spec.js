@@ -509,7 +509,7 @@ describe('API - Section Accessors',function() {
 	})
 })
 
-describe('API - Course Modifiers',function() {
+describe('API - Section Modifiers',function() {
 	before(() => {
 		cy.seed()
 	})
