@@ -300,7 +300,7 @@
           let lectures_for_sections = []
           sections.forEach(section_ => {
             lectures_for_sections.push( new Promise((resolve, reject) => {
-              LectureAPI.getLecturesForSection(section_._id, "all")
+              LectureAPI.getLecturesForSection(section_._id)
               .then(response => { resolve(response.data) })
               .catch(err => { resolve(null) })
             }) )

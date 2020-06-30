@@ -19,6 +19,7 @@
   import SectionAPI from '@/services/SectionAPI.js';
   import { authComputed } from '../vuex/helpers.js'
   import {showAt, hideAt} from 'vue-breakpoints'
+  import {getLiveLectures,getRecentLectures,getUpcomingLectures,getActivePlaybackLectures} from '@/services/GlobalFunctions.js'
 
   import LiveLectureList from '@/components/LiveLectureList.vue'
   import PlaybackLectures from '@/components/PlaybackLectures.vue'
@@ -122,35 +123,32 @@
         this.courses_loaded = _size_
       },
       async getAllLecturesForUser() {
-        await this.getLiveLecturesForUser()
-        await this.getPlaybackLectures()
-        await this.getRecentLecturesForUser()
-        await this.getUpcomingLecturesForUser()
+        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "with_sections_and_course")
+        this.parseLiveLectures(response.data)
+        this.parsePlaybackLectures(response.data)
+        this.parseRecentLectures(response.data)
+        this.parseUpcomingLectures(response.data)
         this.chooseLecturesToDisplay()
       },
-      async getLiveLecturesForUser() {
-        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "live", "with_sections_and_course")
-        this.live_lectures = response.data
+      parseLiveLectures(all_lectures) {
+        this.live_lectures = getLiveLectures(all_lectures)
         this.setcheckinWindowStatusesForLiveLectures()
         this.sortLiveLecturesByCheckinWindowStatus()
         this.live_lectures_loaded = true
         this.live_lectures_exist = this.live_lectures.length > 0
       },
-      async getPlaybackLectures() {
-        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "active_playback", "with_sections_and_course")
-        this.playback_lectures = response.data
+      parsePlaybackLectures(all_lectures) {
+        this.playback_lectures = getActivePlaybackLectures(all_lectures)
         this.playback_lectures_loaded = true
         this.playback_lectures_exist = this.playback_lectures.length > 0
       },
-      async getRecentLecturesForUser() {
-        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "recent", "with_sections_and_course")
-        this.recent_lectures = response.data
+      parseRecentLectures(all_lectures) {
+        this.recent_lectures = getRecentLectures(all_lectures)
         this.recent_lectures_loaded = true
         this.recent_lectures_exist = this.recent_lectures.length > 0
       },
-      async getUpcomingLecturesForUser() {
-        const response = await LectureAPI.getLecturesForUser(this.current_user._id, "upcoming", "with_sections_and_course")
-        this.upcoming_lectures = response.data
+      parseUpcomingLectures(all_lectures) {
+        this.upcoming_lectures = getUpcomingLectures(all_lectures)
         this.upcoming_lectures_loaded = true
         this.upcoming_lectures_exist = this.upcoming_lectures.length > 0
       },

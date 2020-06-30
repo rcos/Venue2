@@ -69,8 +69,8 @@
           />
         </div>
         <div v-else-if="subview_section_id == 2" :style="{marginTop: '20px'}" id="panel-3" role="tabpanel">
-          <show-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" /></show-at>
-          <hide-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" mobileMode/></hide-at>
+          <show-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" :lecture_data="upcoming_lectures"/></show-at>
+          <hide-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" :lecture_data="upcoming_lectures" mobileMode/></hide-at>
         </div>
 
       </div>
@@ -113,10 +113,9 @@
   import CourseAPI from '@/services/CourseAPI.js';
   import UserAPI from '@/services/UserAPI.js';
   import SectionAPI from '@/services/SectionAPI.js';
-  import SubmissionAPI from '@/services/SubmissionAPI.js';
-  import EventAPI from '@/services/EventAPI.js';
   import {showAt, hideAt} from 'vue-breakpoints';
   import LectureAPI from '@/services/LectureAPI.js';
+  import {getLiveLectures,getRecentLectures,getUpcomingLectures,getActivePlaybackLectures,getPastLectures} from '@/services/GlobalFunctions.js'
 
   import CourseInfoTitle from '@/components/CourseInfoTitle.vue'
   import AverageWeeklyAttendanceBar from '@/components/AverageWeeklyAttendanceBar.vue'
@@ -186,10 +185,6 @@ export default {
       this.getCourse()
       this.getStudentsForCourse()
       this.getAllLecturesForCourse()
-      this.getUpcomingLecturesForCourse()
-      this.getLiveLecturesForCourse()
-      this.getPastLecturesForCourse()
-      this.getActivePlaybackLecturesForCourse()
       this.getAllSections()
     }
     else {
@@ -200,10 +195,6 @@ export default {
 
       this.getSectionWithCourse()
       this.getAllLecturesForSection()
-      this.getUpcomingLecturesForSection()
-      this.getLiveLecturesForSection()
-      this.getPastLecturesForSection()
-      this.getActivePlaybackLecturesForSection()
     }
   },
   methods: {
@@ -236,66 +227,37 @@ export default {
     getCurrentUser() {
       this.current_user = this.$store.state.user.current_user
     },
-    async getActivePlaybackLecturesForCourse() {
-
-      LectureAPI.getLecturesForCourse(this.course_id, "active_playback")
-      .then(response => { this.playback_lectures = response.data; })
+    parseActivePlaybackLectures(all_lectures) {
+      this.playback_lectures = getActivePlaybackLectures(all_lectures)
     },
-    async getPastLecturesForCourse() {
-
-      LectureAPI.getLecturesForCourse(this.course_id, "past")
-      .then(response => { this.past_lectures = response.data })
+    parsePastLectures(all_lectures) {
+      this.past_lectures = getPastLectures(all_lectures)
     },
-    async getLiveLecturesForCourse() {
-
-      LectureAPI.getLecturesForCourse(this.course_id, "live")
-      .then(response => { this.live_lectures = response.data })
+    parseLiveLectures(all_lectures) {
+      this.live_lectures = getLiveLectures(all_lectures)
     },
-    async getUpcomingLecturesForCourse() {
-
-      LectureAPI.getLecturesForCourse(this.course_id, "upcoming")
-      .then(response => { this.upcoming_lectures = response.data; })
+    parseUpcomingLectures(all_lectures) {
+      this.upcoming_lectures = getUpcomingLectures(all_lectures)
     },
     async getAllLecturesForCourse() {
-
-      LectureAPI.getLecturesForCourse(this.course_id, "all")
-      .then(response => { this.all_lectures = response.data })
-    },
-    async getActivePlaybackLecturesForSection() {
-
-      LectureAPI.getLecturesForSection(this.section_id, "active_playback")
-      .then(response => { this.playback_lectures = response.data })
-    },
-    async getPastLecturesForSection() {
-
-      LectureAPI.getLecturesForSection(this.section_id, "past")
-      .then(response => { this.past_lectures = response.data })
-    },
-    async getLiveLecturesForSection() {
-
-      LectureAPI.getLecturesForSection(this.section_id, "live")
-      .then(response => { this.live_lectures = response.data })
-    },
-    async getUpcomingLecturesForSection() {
-
-      LectureAPI.getLecturesForSection(this.section_id, "upcoming")
-      .then(response => { this.upcoming_lectures = response.data; })
-      .catch(err => { console.log(`Error getting upcoming sections.`); console.log(err); })
+      LectureAPI.getLecturesForCourse(this.course_id)
+      .then(response => {
+        this.all_lectures = response.data
+        this.parseUpcomingLectures(this.all_lectures)
+        this.parseLiveLectures(this.all_lectures)
+        this.parsePastLectures(this.all_lectures)
+        this.parseActivePlaybackLectures(this.all_lectures)
+      })
     },
     async getAllLecturesForSection() {
-
-      LectureAPI.getLecturesForSection(this.section_id, "all")
-      .then(response => { this.all_lectures = response.data })
-    },
-    async getActiveEventsForCourse() {
-
-      EventAPI.getActiveEventsForCourse(this.course_id)
-      .then(response => { this.active_events = response.data; this.getRemainingTimeForActiveEvents(); })
-    },
-    async getActiveEventsForSection() {
-
-      EventAPI.getActiveEventsForSection(this.section_id)
-      .then(response => { this.active_events = response.data; this.getRemainingTimeForActiveEvents(); })
+      LectureAPI.getLecturesForSection(this.section_id)
+      .then(response => {
+        this.all_lectures = response.data
+        this.parseUpcomingLectures(this.all_lectures)
+        this.parseLiveLectures(this.all_lectures)
+        this.parsePastLectures(this.all_lectures)
+        this.parseActivePlaybackLectures(this.all_lectures)
+      })
     },
     getCourse () {
 
