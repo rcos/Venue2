@@ -4,9 +4,6 @@ let getJwt = function() {
 }
 
 describe('API - User Accessors',function() {
-	before(() => {
-		cy.seed()
-	})
 	beforeEach(() => {
 		cy.setUser('testinst','password')
 	})
@@ -130,9 +127,12 @@ describe('API - User Accessors',function() {
 
 describe('API - User Modifiers',function() {
 	beforeEach(() => {
-		cy.seed()
 		cy.setUser('testinst','password')
 	})
+	after(() => {
+		cy.seed()
+	})
+	let addedUser
 	it('can addUser()',function() {
 		cy.request({
 			method: 'POST',
@@ -151,7 +151,7 @@ describe('API - User Modifiers',function() {
 				}
 			}
 		}).then(res => {
-			let addedUser = res.body
+			addedUser = res.body
 			expect(addedUser.first_name).to.equal('New')
 			expect(addedUser.last_name).to.equal('User')
 			expect(addedUser.is_admin).to.equal(false)
@@ -161,20 +161,19 @@ describe('API - User Modifiers',function() {
 		})
 	})
 	it('can updateUser()',function() {
-		let id = JSON.parse(window.localStorage.getItem('user')).current_user._id
 		cy.request({
 			method: 'POST',
-			url: 'http://localhost:4000/users/update/'+id,
+			url: 'http://localhost:4000/users/update/'+addedUser._id,
 			form: true,
 			headers: {
 				authorization: getJwt()
 			},
 			body: {
 				updated_user: {
-					first_name: "John",
-					last_name: "Smith",
-					email: "testinst@rpi.edu",
-					user_id: "testinst",
+					first_name: "Old",
+					last_name: "User",
+					email: "olduser@rpi.edu",
+					user_id: "olduser",
 					password: "password",
 					is_instructor: true,
 					ta_sections: [],
@@ -184,15 +183,15 @@ describe('API - User Modifiers',function() {
 		}).then(res => {
 			cy.request({
 				method: 'GET',
-				url: 'http://localhost:4000/users/edit/'+id,
+				url: 'http://localhost:4000/users/edit/'+addedUser._id,
 				form: true,
 				headers: {
 					authorization: getJwt()
 				}
 			}).then(res => {
 				let updatedUser = res.body
-				expect(updatedUser.first_name).to.equal('John')
-				expect(updatedUser.last_name).to.equal('Smith')
+				expect(updatedUser.first_name).to.equal('Old')
+				expect(updatedUser.last_name).to.equal('User')
 				expect(updatedUser.is_admin).to.equal(false)
 				expect(updatedUser.is_instructor).to.equal(true)
 				expect(updatedUser.password).to.equal("password")
@@ -226,9 +225,6 @@ describe('API - User Modifiers',function() {
 })
 
 describe('API - Course Accessors',function() {
-	before(() => {
-		cy.seed()
-	})
 	beforeEach(() => {
 		cy.setUser('testinst','password')
 	})
@@ -294,11 +290,11 @@ describe('API - Course Accessors',function() {
 })
 
 describe('API - Course Modifiers',function() {
-	before(() => {
-		cy.seed()
-	})
 	beforeEach(() => {
 		cy.setUser('testinst','password')
+	})
+	after(() => {
+		cy.seed()
 	})
 	let addedCourse
 	it('can addCourse()',function() {
@@ -384,9 +380,6 @@ describe('API - Course Modifiers',function() {
 })
 
 describe('API - Section Accessors',function() {
-	before(() => {
-		cy.seed()
-	})
 	beforeEach(() => {
 		cy.setUser('testinst','password')
 	})
@@ -511,11 +504,11 @@ describe('API - Section Accessors',function() {
 })
 
 describe('API - Section Modifiers',function() {
-	before(() => {
-		cy.seed()
-	})
 	beforeEach(() => {
 		cy.setUser('testinst','password')
+	})
+	after(() => {
+		cy.seed()
 	})
 	let addedSection
 	it('can addSection()',function() {
@@ -597,9 +590,6 @@ describe('API - Section Modifiers',function() {
 })
 
 describe('API - Lecture Accessors',function() {
-	before(() => {
-		cy.seed()
-	})
 	beforeEach(() => {
 		cy.setUser('testinst','password')
 	})
@@ -773,11 +763,11 @@ describe('API - Lecture Accessors',function() {
 })
 
 describe('API - Lecture Modifiers',function() {
-	before(() => {
-		cy.seed()
-	})
 	beforeEach(() => {
 		cy.setUser('testinst','password')
+	})
+	after(() => {
+		cy.seed()
 	})
 	it('can addLecture()',function() {
 		cy.request({
@@ -800,9 +790,6 @@ describe('API - Lecture Modifiers',function() {
 })
 
 describe('API - PlaybackPoll Accessors',function() {
-	before(() => {
-		cy.seed()
-	})
 	beforeEach(() => {
 		cy.setUser('testinst','password')
 	})
@@ -841,11 +828,11 @@ describe('API - PlaybackPoll Accessors',function() {
 })
 
 describe('API - PlaybackPoll Modifiers',function() {
-	before(() => {
-		cy.seed()
-	})
 	beforeEach(() => {
 		cy.setUser('testinst','password')
+	})
+	after(() => {
+		cy.seed()
 	})
 	it('can addPoll()',function() {
 		cy.request({
@@ -874,19 +861,16 @@ describe('API - PlaybackPoll Modifiers',function() {
 })
 
 describe('API - LectureSubmission Accessors',function() {
-	before(() => {
-		cy.seed()
-	})
 	beforeEach(() => {
 		cy.setUser('testinst','password')
 	})
 })
 
 describe('API - LectureSubmission Modifiers',function() {
-	before(() => {
-		cy.seed()
-	})
 	beforeEach(() => {
 		cy.setUser('testinst','password')
+	})
+	after(() => {
+		cy.seed()
 	})
 })
