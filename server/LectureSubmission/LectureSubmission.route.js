@@ -111,7 +111,7 @@ lectureSubmissionRoutes.route('/update').post(function (req, res) {
         res.json(err);
       } else {
         console.log("<SUCCESS> Updating lecture submission by ID:",updated._id,"with:",updated)
-        res.json(updatedSubmission);
+        res.json(updated);
       }
     }
   );
