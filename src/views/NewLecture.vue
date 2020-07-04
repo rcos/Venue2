@@ -12,7 +12,7 @@
               type="text"
               class="form-control new-lecture-input"
               placeholder="e.g. Lecture 1"
-              v-model.lazy="lecture.title"
+              v-model="lecture.title"
               aria-labelledby="title_label"
               :tabindex="(modal_open ? '-1' : '0')"
             />
@@ -52,7 +52,7 @@
             <div v-if="random_times">
               <div class="input-wrapper">
                 <label id="random_checkin_count">Number of check-in times</label>
-                <input class="random_input" type="number" min="1" max="5" v-model.lazy="random_checkin_count" aria-labelledby="random_checkin_count" :tabindex="(modal_open ? '-1' : '0')"/>
+                <input class="random_input" type="number" min="1" max="10" v-model.lazy="random_checkin_count" aria-labelledby="random_checkin_count" :tabindex="(modal_open ? '-1' : '0')"/>
                 <label id="random_checkin_length">Minutes for each check-in</label>
                 <input class="random_input" type="number" min="1" max="10" v-model.lazy="random_checkin_length" aria-labelledby="random_checkin_length" :tabindex="(modal_open ? '-1' : '0')"/>
               </div>
@@ -155,7 +155,7 @@ export default {
         if(this.allow_live_submissions) {
           let hasStart = this.lecture.start_time != null && this.lecture.start_time != ""
           let hasEnd = this.lecture.end_time != null && this.lecture.end_time != ""
-          let validRange = this.lecture.start_time + (15 * 60 * 1000) <= this.lecture.end_time
+          let validRange = this.lecture.start_time < this.lecture.end_time
           if(hasStart && hasEnd && validRange) {
             let hasRandom = this.random_times
             if(hasRandom) {
@@ -187,7 +187,7 @@ export default {
             this.setErrorMessage("Missing end time")
             allGood = false
           } else if(!validRange) {
-            this.setErrorMessage("Invalid lecture time range (must be at least 15 minutes long)")
+            this.setErrorMessage("Invalid lecture time range")
             allGood = false
           }
         } else if(this.$refs["uploadmodal"].isComplete()) {
@@ -299,6 +299,7 @@ export default {
             self.lecture.start_time = Date.parse(dateStr)
             fp1.set("minDate",self.lecture.start_time)
             if(self.lecture.start_time > self.lecture.end_time || !self.lecture.end_time) {
+              self.lecture.end_time = Date.parse(dateStr)
               fp1.setDate(self.lecture.start_time)
             }
           }
@@ -360,6 +361,7 @@ export default {
             self.checkins[i].start_time = Date.parse(dateStr)
             pickrs.end.set("minDate",self.checkins[i].start_time)
             if(self.checkins[i].start_time > self.checkins[i].end_time) {
+              self.checkins[i].end_time = Date.parse(dateStr)
               pickrs.end.setDate(self.checkins[i].start_time)
             }
           }
@@ -398,6 +400,7 @@ export default {
             self.checkins[j].start_time = Date.parse(dateStr)
             self.checkin_pickers[j].end.set("minDate",self.checkins[j].start_time)
             if(self.checkins[j].start_time > self.checkins[j].end_time) {
+              self.checkins[j].end_time = Date.parse(dateStr)
               self.checkin_pickers[j].end.setDate(self.checkins[j].start_time)
             }
           }
