@@ -212,6 +212,7 @@ export default {
               self.play_sub_start = flatpickr(document.getElementById("playback_start"),{
                 enableTime: true,
                 minDate: Date.now(),
+                minuteIncrement: 1,
                 onChange: function(selectedDates, dateStr, instance) {
                   self.lecture.playback_submission_start_time = Date.parse(dateStr)
                   self.play_sub_end.set("minDate",self.lecture.playback_submission_start_time)
@@ -223,6 +224,7 @@ export default {
               self.play_sub_end = flatpickr(document.getElementById("playback_end"),{
                 enableTime: true,
                 minDate: Date.now(),
+                minuteIncrement: 1,
                 onChange: function(selectedDates, dateStr, instance) {
                   self.lecture.playback_submission_end_time = Date.parse(dateStr)
                 }
