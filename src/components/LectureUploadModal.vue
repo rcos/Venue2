@@ -217,6 +217,7 @@ export default {
                   self.lecture.playback_submission_start_time = Date.parse(dateStr)
                   self.play_sub_end.set("minDate",self.lecture.playback_submission_start_time)
                   if(self.lecture.playback_submission_start_time > self.lecture.playback_submission_end_time) {
+                    self.lecture.playback_submission_end_time = Date.parse(dateStr)
                     self.play_sub_end.setDate(self.lecture.playback_submission_start_time)
                   }
                 }
