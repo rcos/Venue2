@@ -5,13 +5,11 @@
       <!-- Individual section view -->
       <div v-if="selected_section != null">
         <div
-          v-for="month_index in Object.keys( sections_info[ selected_section ] )">
+          v-for="month_index in Object.keys( sections_info[ selected_section ] )" :key="month_index">
             <div v-if="mobileMode">
               <div class="month-area mobile">{{ STATIC_MONTHS[month_index] }}</div>
               <div class="mobile-event-pill-area">
-
-
-                <router-link v-for="event in sections_info[selected_section][month_index]" :key="event._id" :to="{name: 'lecture_info', params: { lecture_id: event._id }}" :aria-label="'Lecture Info - '+event.title">
+                <router-link v-for="event in lecturesByDate(sections_info[selected_section][month_index])" :key="event._id" :to="{name: 'lecture_info', params: { lecture_id: event._id }}" :aria-label="'Lecture Info - '+event.title">
                   <div :class="'mobile-pill ' + getClassByAttendance(event.percentage == undefined ? 0 : event.percentage)">
                     <div class="day-of-week">{{ getDayOfWeek(event) }}</div>
                     <div class="day-of-month">{{ getDayOfMonth(event) }}</div>
@@ -24,7 +22,7 @@
             <div v-else>
               <div class="month-area">{{ STATIC_MONTHS[month_index] }}</div>
               <div class="event-pills-area">
-                <router-link v-for="event in sections_info[selected_section][month_index]" :key="event._id" :to="{name: 'lecture_info', params: { lecture_id: event._id }}" tabindex="-1">
+                <router-link v-for="event in lecturesByDate(sections_info[selected_section][month_index])" :key="event._id" :to="{name: 'lecture_info', params: { lecture_id: event._id }}" tabindex="-1">
                   <!-- <div :class="'inline-block instructor-attendance-history-pill ' + getClassByAttendance(getAttendancePercentage(event, selected_section))"> -->
                   <div :class="'inline-block instructor-attendance-history-pill ' + getClassByAttendance(event.percentage == undefined ? 0 : event.percentage)" tabindex="0" :aria-label="'Lecture Info - '+event.title">
                     <div class="inline-block date-area">
@@ -76,10 +74,8 @@
   // (1) Get all the events for each section for this course,
   // (2)
 
-  import EventAPI from '@/services/EventAPI.js'
   import SectionAPI from '@/services/SectionAPI.js'
   import LectureAPI from '@/services/LectureAPI.js'
-  import SubmissionAPI from '@/services/SubmissionAPI.js'
   import SquareLoader from '@/components/Loaders/SquareLoader.vue'
   import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
 
@@ -112,9 +108,7 @@
       this.data_to_show = false
       this.STATIC_DAY_OF_WEEK = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat']
       this.STATIC_MONTHS = ['Janurary', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-      // this.getEventHistoryForCourse ()
       this.getLectureHistoryForCourse ()
-      // this.populatePlaceholderLectures ()
     },
     methods: {
       shortenString (string, max_length) {
@@ -122,11 +116,6 @@
           return string
         }
         return string.substring(0, max_length - 3) + "..."
-      },
-      getEventByMonth () {
-        // sections_info[selected_section].events_by_month
-
-        return this.sections_info[this.selected_section].events_by_month
       },
       getClassByAttendance (percent) {
         // percent b/w 0 and 100
@@ -144,50 +133,6 @@
       getDayOfMonth (event) {
         let _date = new Date(event.start_time == undefined ? event.playback_submission_start_time : event.start_time)
         return _date.getDate ()
-      },
-      populatePlaceholderLectures () {
-        // create temporary lecture info for 2 sections to view on the
-        // attendance history page.
-        let sections = [{id: '123', number: 0}, {id: '456', number: 1}]
-        this.informSections(sections.map(section_ => [section_.number, section_.id]))
-
-        this.sections_info = {
-          123: [{
-            title: 'Lecture 1',
-            start_time: '2020-04-20T17:02:38.427+00:00',
-            _id: 1
-          },{
-            title: 'Lecture 2',
-            start_time: '2020-04-21T17:02:38.427+00:00',
-            _id: 2
-          },{
-            title: 'Lecture 3',
-            start_time: '2020-05-21T17:02:38.427+00:00',
-            _id: 3
-          }],
-          456: [{
-            title: 'Lecture 1',
-            start_time: '2020-01-21T17:02:38.427+00:00',
-            _id: 4
-          },{
-            title: 'Lecture 3',
-            start_time: '2020-02-21T17:02:38.427+00:00',
-            _id: 5
-          },{
-            title: 'Lecture 2',
-            start_time: '2020-02-11T17:02:38.427+00:00',
-            _id: 6
-          },{
-            title: 'Lecture 4',
-            start_time: '2020-03-21T17:02:38.427+00:00',
-            _id: 7
-          }]
-        }
-
-        this.separateSectionsInfoByMonth ()
-        this.data_loaded = true
-        this.data_to_show = Object.keys(this.sections_info).length > 0
-        this.showData(this.data_to_show)
       },
       separateSectionsInfoByMonth () {
         // separate and sort this.sections_info by month
@@ -217,69 +162,6 @@
           this.sections_info[section_id] = lectures_by_month
         })
         this.$forceUpdate ()
-      },
-      getEventsForEachSection () {
-        // For each section and for each event in that section, find the number
-        // of submissions for that event and store it in the section_info]
-        Object.keys(this.sections_info).forEach(section_id => {
-
-          let event_submissions = []
-          this.sections_info[section_id].events.map(event_ => {
-            // find the submission count for this event
-
-            event_submissions.push(new Promise((resolve, reject) => {
-
-              SubmissionAPI.getSubmissionsForEvent(event_._id)
-              .then(event_response => {
-                resolve(event_response.data)
-              })
-              .catch(err => { resolve(null) })
-
-            }))
-          })
-
-          Promise.all(event_submissions).then(true_event_submissions => {
-
-            true_event_submissions.map((event_submissions, i) => {
-              if (event_submissions == null) this.sections_info[section_id].events[i].submission_count = 0
-              else this.sections_info[section_id].events[i].submission_count = event_submissions.length
-            })
-
-          })
-          .finally(_ => {
-            // Now, categorize the events by month and store them into this.sections_info[section_id].events_by_month
-            let events_by_month = {}
-            this.sections_info[section_id].events.forEach(event_ => {
-              let event_date = new Date(event_.start_time)
-              if (events_by_month.hasOwnProperty( event_date.getMonth() )) {
-                // add it to the array
-                events_by_month[event_date.getMonth()].push( event_ )
-              }
-              else {
-                events_by_month[event_date.getMonth()] = [ event_ ]
-              }
-            })
-
-            // sort the dates
-            Object.keys(events_by_month).forEach(month_index => {
-              events_by_month[month_index].sort((a, b) => {
-                return new Date(a.start_time) > new Date(b.start_time)
-              })
-            })
-
-            // now, attach it to the section_info[section_id]
-            this.sections_info[section_id].events_by_month = events_by_month
-            this.$forceUpdate ()
-
-          })
-
-          // let events_by_month = {}
-          // this.sections_info[section_id]
-
-        })
-      },
-      returnEventsForSection (section_id, event_arr) {
-        return event_arr.filter(event_ => event_.section == section_id)
       },
       getLectureHistoryForCourse () {
 
@@ -387,56 +269,8 @@
           })
         })
       },
-      getEventHistoryForCourse () {
-        EventAPI.getEventHistoryForCourse(this.course_id)
-        .then(response => {
-
-          let sections = new Set()
-          response.data.forEach(event_ => {
-            sections.add(event_.section)
-            //
-          })
-
-          let section_promise_arr = []
-
-          sections.forEach(section_ => {
-            // call getSection () on each section in the course
-            section_promise_arr.push(new Promise( (resolve, reject) => {
-              SectionAPI.getSection(section_)
-              .then(section_response => {
-                this.sections_info[section_] = section_response.data
-                this.section_number_to_id[ this.sections_info[section_].number ] = this.sections_info[section_]._id
-
-                this.sections_info[section_].events = this.returnEventsForSection(section_, response.data)
-                resolve(true)
-              })
-              .catch(err => { console.log(err); resolve(false) })
-              .finally(_ => {
-                this.getEventsForEachSection ()
-              })
-            }))
-          })
-
-          // Handle the getSection () for all sections
-          Promise.all(section_promise_arr)
-          .then(results => {
-
-            let section_number_arr = Object.keys(this.sections_info).map(section_id => {
-              return [this.sections_info[section_id].number, section_id]
-            })
-
-            this.informSections(section_number_arr)
-          })
-          .finally(_ => {
-            this.data_loaded = true
-            this.data_to_show = Object.keys(this.sections_info).length > 0
-            this.showData(this.data_to_show)
-          })
-
-        })
-        .catch(err => {
-          console.log(err)
-        })
+      lecturesByDate(lectures) {
+        return lectures.concat().sort((a, b) => (a.start_time < b.start_time) ? 1 : -1);
       }
     }
   }
