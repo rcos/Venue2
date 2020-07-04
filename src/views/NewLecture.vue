@@ -165,12 +165,12 @@ export default {
               if(this.checkins[0].start_time == null || this.checkins[0].end_time == null || this.checkins[0].start_time == "" || this.checkins[0].end_time == "") {
                 this.setErrorMessage("Missing start or end time for check-in number: 1")
                 allGood = false
-              } else if(this.lecture.start_time < this.checkins[0].start_time && this.checkins[this.checkins.length-1].end_time < this.lecture.end_time) {
+              } else if(this.lecture.start_time <= this.checkins[0].start_time && this.checkins[this.checkins.length-1].end_time <= this.lecture.end_time) {
                 for(let i=0;i<this.checkins.length-1;i++) {
                   if(this.checkins[i+1].start_time == null || this.checkins[i+1].end_time == null || this.checkins[i+1].start_time == "" || this.checkins[i+1].end_time == "") {
                     this.setErrorMessage("Missing start or end time for check-in number: "+(i+2))
                     allGood = false
-                  } else if(this.checkins[i].end_time >= this.checkins[i+1].start_time) {
+                  } else if(this.checkins[i].end_time > this.checkins[i+1].start_time) {
                     this.setErrorMessage("Invalid time range for check-in number: "+(i+2))
                     allGood = false
                   }
