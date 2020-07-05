@@ -262,12 +262,14 @@ export default {
       this.all_lectures.forEach(lect => {
         sorted["all"].lectures.push(lect)
         lect.sections.forEach(sectID => {
-          if(undefined == lect.students) {
-            lect.students = [...this.sections[sectID].students]
-          } else {
-            for(let i=0;i<this.sections[sectID].students;i++) {
-              if(!lect.students.includes(this.sections[sectID].students[i])) {
-                lect.students.push(this.sections[sectID].students[i])
+          if(undefined != this.sections[sectID]) {
+            if(undefined == lect.students) {
+              lect.students = [...this.sections[sectID].students]
+            } else {
+              for(let i=0;i<this.sections[sectID].students.length;i++) {
+                if(!lect.students.includes(this.sections[sectID].students[i])) {
+                  lect.students.push(this.sections[sectID].students[i])
+                }
               }
             }
           }
