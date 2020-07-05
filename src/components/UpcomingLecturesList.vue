@@ -42,6 +42,7 @@
       }
     },
     created () {
+      this.lecture_data.sort((a,b) => a.start_time - b.start_time)
     },
     methods: {
       getDate (date_string) {
