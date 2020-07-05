@@ -8,7 +8,7 @@
           <p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p>
           <p>Sections:
             <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
-              <a v-if="i > 1">,{{ section.number }}</a>
+              <a v-if="i > 0">,{{ section.number }}</a>
               <a v-else>{{ section.number }}</a>
             </a>
           </p>
@@ -67,7 +67,7 @@
               <p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p>
               <p class="sections">Sections:
                 <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
-                  <a v-if="i > 1">,{{ section.number }}</a>
+                  <a v-if="i > 0">,{{ section.number }}</a>
                   <a v-else>{{ section.number }}</a>
                 </a>
               </p>
