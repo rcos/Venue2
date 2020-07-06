@@ -60,8 +60,6 @@
       }
     },
     created () {
-      // this.getCurrentUser ()
-      // this.calculateGradeForHistoryData()
     },
     methods: {
       shortenString (string, max_length) {
@@ -69,9 +67,6 @@
           return string
         }
         return string.substring(0, max_length - 3) + "..."
-      },
-      getCurrentUser() {
-        this.current_user = this.$store.state.user.current_user
       },
       getHTMLClassByAttendance (percent) {
         // percent b/w 0 and 100
