@@ -79,10 +79,7 @@
       getDayOfMonth (event) {
         let _date = new Date(event.start_time == undefined ? event.playback_submission_start_time : event.start_time)
         return _date.getDate ()
-      },
-      lecturesByDate(lectures) {
-        return lectures.concat().sort((a, b) => (a.start_time < b.start_time) ? 1 : -1);
-      },
+      }
     }
   }
 
