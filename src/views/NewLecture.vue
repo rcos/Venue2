@@ -289,6 +289,7 @@ export default {
         let self = this
         var fp0 = flatpickr(document.getElementById("lecture_start"),{
           enableTime: true,
+          dateFormat: "h:i K, M d, Y",
           minDate: Date.now(),
           minuteIncrement: 1,
           onChange: function(selectedDates, dateStr, instance) {
@@ -302,6 +303,7 @@ export default {
         })
         var fp1 = flatpickr(document.getElementById("lecture_end"),{
           enableTime: true,
+          dateFormat: "h:i K, M d, Y",
           minDate: Date.now(),
           minuteIncrement: 1,
           onChange: function(selectedDates, dateStr, instance) {
@@ -351,6 +353,7 @@ export default {
         let self = this
         pickrs.start = flatpickr(document.getElementById("submission_start_"+i),{
           enableTime: true,
+          dateFormat: "h:i K, M d, Y",
           minDate: Date.now(),
           minuteIncrement: 1,
           onChange: function(selectedDates, dateStr, instance) {
@@ -364,6 +367,7 @@ export default {
         })
         pickrs.end = flatpickr(document.getElementById("submission_end_"+i),{
           enableTime: true,
+          dateFormat: "h:i K, M d, Y",
           minDate: Date.now(),
           minuteIncrement: 1,
           onChange: function(selectedDates, dateStr, instance) {
@@ -390,6 +394,7 @@ export default {
         let self = this
         self.checkin_pickers[j].start = flatpickr(document.getElementById("submission_start_"+j),{
           enableTime: true,
+          dateFormat: "h:i K, M d, Y",
           minDate: Date.now(),
           minuteIncrement: 1,
           onChange: function(selectedDates, dateStr, instance) {
@@ -403,6 +408,7 @@ export default {
         })
         self.checkin_pickers[j].end = flatpickr(document.getElementById("submission_end_"+j),{
           enableTime: true,
+          dateFormat: "h:i K, M d, Y",
           minDate: fallback[this.checkin_pickers.length-j-1].start || Date.now(),
           minuteIncrement: 1,
           onChange: function(selectedDates, dateStr, instance) {

@@ -211,6 +211,7 @@ export default {
               }
               self.play_sub_start = flatpickr(document.getElementById("playback_start"),{
                 enableTime: true,
+                dateFormat: "h:i K, M d, Y",
                 minDate: Date.now(),
                 minuteIncrement: 1,
                 onChange: function(selectedDates, dateStr, instance) {
@@ -224,6 +225,7 @@ export default {
               })
               self.play_sub_end = flatpickr(document.getElementById("playback_end"),{
                 enableTime: true,
+                dateFormat: "h:i K, M d, Y",
                 minDate: Date.now(),
                 minuteIncrement: 1,
                 onChange: function(selectedDates, dateStr, instance) {
