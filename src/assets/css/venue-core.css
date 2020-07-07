@@ -818,12 +818,6 @@ a:hover {
   color: white;
 }
 
-input {
-  border: 0.1rem solid #0078c2 !important;
-  color: #0078c2 !important;
-  border-radius: 0.25rem !important;
-}
-
 
 /* .btn.btn-primary {
   background: #0078c2;
