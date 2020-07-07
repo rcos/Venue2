@@ -32,7 +32,6 @@
 			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="absent" :is_absent="true" />
 		</div>
 		<div v-if="selected_tab === 3" role="tabpanel" aria-labelledby="stats_btn" id="stats" class="tab_section">
-			<button v-if="is_instructor" class="btn btn-primary" @click="download_submitty_csv" id="submitty_export">Export for Submitty...</button>
 			<p>Statistics Graphs Coming Soon...</p>
 		</div>
 		<div v-if="selected_tab === 4" role="tabpanel" aria-labelledby="instructors_only_btn" id="instructors_only" class="tab_section">
@@ -75,7 +74,6 @@
 <script>
 	import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
   import LectureAttendanceList from '@/components/LectureAttendanceList.vue'
-  import SectionAPI from '@/services/SectionAPI.js'
 
   export default {
     name: 'LectureAttendanceTable',
@@ -93,8 +91,8 @@
     data(){
       return {
         selected_tab: 0,
-		overrides: "",
-		override_err_msg: ""
+				overrides: "",
+				override_err_msg: ""
       }
     },
     created() {
@@ -121,117 +119,37 @@
     	  }
     	  this.selected_tab = i
     	},
-		handleOverride() {
-			let rcs_list = this.overrides.replace(/\s/g,'').split(",")
-			if(rcs_list.length == 1 && rcs_list[0]=="") {
-				this.overrides = ""
-				this.override_err_msg = "Empty"
-			} else {
-				LectureSubmissionAPI.addLiveSubmissionByRCS(rcs_list,this.lecture._id)
-				.then(res => {
-					if(res.data.length == 0) {
-						this.overrides = ""
-						this.override_err_msg = ""
-					} else {
-						this.overrides = res.data.join(",")
-						this.override_err_msg = "Remaining are invalid"
-					}
-				})
-			}
-		},
-		getPrettyDateTime(datetime) {
-			if("Invalid Date" == datetime) {
-			return ("Not set")
-			}
-			let hours = datetime.getHours()
-			if(hours < 12) {
-				return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + (datetime.getMinutes()) + " AM")
-			} else {
-				return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours-12) + ":" + (datetime.getMinutes()) + " PM")
-			}
-		},
-		download_submitty_csv() {
-			let data = []
-
-			SectionAPI.getSectionsForCourse(this.lecture.sections[0].course._id)
-			.then(res => {
-				let course_sections = res.data
-
-				let self = this
-				this.all_students.forEach(function(student) {
-					course_sections.forEach(function(section) {
-						if(section.students.includes(student._id)) {
-							let stud_data = []
-							
-							let live = self.live_submissions[student._id]
-							let playback = self.playback_submissions.find(x => x.submitter._id == student._id)
-							
-							if(undefined != live && undefined != playback) {
-								if(live.length / self.lecture.checkins.length >= playback.video_percent) {
-									stud_data.push(live[live.length-1].live_submission_time)
-									stud_data.push(student.user_id)
-									stud_data.push(student.first_name)
-									stud_data.push(student.last_name)
-									stud_data.push(section.number)
-									stud_data.push("Live")
-									stud_data.push(live.length / self.lecture.checkins.length)
-								} else {
-									stud_data.push(playback.playback_submission_time)
-									stud_data.push(student.user_id)
-									stud_data.push(student.first_name)
-									stud_data.push(student.last_name)
-									stud_data.push(section.number)
-									stud_data.push("Playback")
-									stud_data.push(playback.video_percent)
-								}
-							} else if(undefined != live) {
-								stud_data.push(live[live.length-1].live_submission_time)
-								stud_data.push(student.user_id)
-								stud_data.push(student.first_name)
-								stud_data.push(student.last_name)
-								stud_data.push(section.number)
-								stud_data.push("Live")
-								stud_data.push(live.length / self.lecture.checkins.length)
-							} else if(undefined != playback) {
-								stud_data.push(playback.playback_submission_time)
-								stud_data.push(student.user_id)
-								stud_data.push(student.first_name)
-								stud_data.push(student.last_name)
-								stud_data.push(section.number)
-								stud_data.push("Playback")
-								stud_data.push(playback.video_percent)
-							} else {
-								stud_data.push(null)
-								stud_data.push(student.user_id)
-								stud_data.push(student.first_name)
-								stud_data.push(student.last_name)
-								stud_data.push(section.number)
-								stud_data.push(null)
-								stud_data.push(0)
-							}
-
-							data.push(stud_data)
+			handleOverride() {
+				let rcs_list = this.overrides.replace(/\s/g,'').split(",")
+				if(rcs_list.length == 1 && rcs_list[0]=="") {
+					this.overrides = ""
+					this.override_err_msg = "Empty"
+				} else {
+					LectureSubmissionAPI.addLiveSubmissionByRCS(rcs_list,this.lecture._id)
+					.then(res => {
+						if(res.data.length == 0) {
+							this.overrides = ""
+							this.override_err_msg = ""
+						} else {
+							this.overrides = res.data.join(",")
+							this.override_err_msg = "Remaining are invalid"
 						}
 					})
-				})
-
-				let csv = 'Submission Timestamp,User ID,First Name,Last Name,Registration Section,Submission Type,Grade\n';
-				data.forEach(function(row) {
-					csv += row.join(',');
-					csv += "\n";
-				});
-
-				let downloadname = self.lecture.sections[0].course.name + '_' + self.lecture.title + '_attendance.csv'
-
-				var hiddenElement = document.createElement('a');
-				hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-				hiddenElement.target = '_blank';
-				hiddenElement.download = downloadname;
-				hiddenElement.click();
-			})
+				}
+			},
+			getPrettyDateTime(datetime) {
+				if("Invalid Date" == datetime) {
+					return ("Not set")
+				}
+				let hours = datetime.getHours()
+				if(hours < 12) {
+					return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + (datetime.getMinutes()) + " AM")
+				} else {
+					return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours-12) + ":" + (datetime.getMinutes()) + " PM")
+				}
+			}
 		}
-    }
-  }
+	}
 </script>
 
 <style scoped>
@@ -281,6 +199,10 @@
 	.tab_btn.selected_tab:hover h5,
 	.tab_btn.selected_tab:focus h5 {
 	  color: #636363;
+	}
+
+	#stats_btn {
+
 	}
 
 	.tab_section {
@@ -339,7 +261,8 @@
 		margin-top: 2rem;
 	}
 
-	#submitty_export {
-		margin: 0.5rem;
+	#stats {
+		margin: 0;
+		padding: 0;
 	}
 </style>
