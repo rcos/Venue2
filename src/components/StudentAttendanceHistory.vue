@@ -49,7 +49,7 @@
                   </div>
                   <div class="inline-block name-area">
                     <div class="event-name">{{ shortenString(event.title, 18) }}</div>
-                    <div class="event-location">Event Location</div>
+                    <div class="event-location">Location Not Set</div>
                   </div>
                   <!-- <div class="inline-block percentage-area">{{ getAttendancePercentage(event, selected_section) }}%</div> -->
                   <div class="inline-block percentage-area">{{ event.percentage == undefined ? 0 : event.percentage }}%</div>
