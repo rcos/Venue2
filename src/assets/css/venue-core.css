@@ -786,7 +786,7 @@ a:hover {
   border-radius: 0.25rem;
 }
 
-.btn.btn-primary {
+/* .btn.btn-primary {
   background: none;
   border: 0.1rem solid #0078c2;
   color: #0078c2
@@ -816,10 +816,10 @@ a:hover {
   border: 0.1rem solid #727272;
   background: #727272;
   color: white;
-}
+} */
 
 
-/* .btn.btn-primary {
+.btn.btn-primary {
   background: #0078c2;
   border: 0.1rem solid #005183;
 }
@@ -845,4 +845,4 @@ a:hover {
   outline: none;
   border: 0.1rem solid #444444;
   background: #444444;
-} */
+}
