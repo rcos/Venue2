@@ -285,7 +285,11 @@ export default {
         sorted[sectID].lectures.sort((a, b) => (a.start_time < b.start_time) ? 1 : -1)
         for(let i=0;i<sorted[sectID].lectures.length;i++) {
           let lect = sorted[sectID].lectures[i]
-          lect.start_time = new Date(lect.start_time)
+          if(undefined == lect.start_time || "Invalid Date" == lect.start_time || null == lect.start_time) {
+            lect.start_time = new Date(lect.playback_submission_start_time)
+          } else {
+            lect.start_time = new Date(lect.start_time)
+          }
           let year = lect.start_time.getFullYear()
           let month = lect.start_time.getMonth()
           if(!sorted[sectID].timeline[year]) {
