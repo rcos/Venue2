@@ -88,8 +88,8 @@
       },
       getUpcomingTimeString(time) {
         let upcoming_time = new Date(time)
-        let month = upcoming_time.getMonth()
-        let day = upcoming_time.getDay()
+        let month = upcoming_time.getMonth()+1
+        let day = upcoming_time.getDate()
         let year = upcoming_time.getFullYear()
         return month + '/' + day + '/' + year
       }

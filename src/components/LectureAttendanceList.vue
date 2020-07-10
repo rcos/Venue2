@@ -114,12 +114,20 @@
           return ("Not set")
         }
         let hours = datetime.getHours()
-        if(hours < 12) {
-          return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + (datetime.getMinutes()) + ":" + (datetime.getMilliseconds()) + " AM")
-        } else {
-          return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours-12) + ":" + (datetime.getMinutes()) + ":" + (datetime.getMilliseconds()) + " PM")
+        let minutes = datetime.getMinutes()
+        if(minutes < 10) {
+          minutes = "0" + minutes
         }
-      }
+        let ms = datetime.getMilliseconds()
+        if(ms < 10) {
+          ms = "0" + ms
+        }
+        if(hours < 12) {
+          return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + minutes + ":" + ms + " AM")
+        } else {
+          return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==12 ? hours : hours-12) + ":" + minutes + ":" + ms + " PM")
+        }
+      },
     }
   }
 </script>

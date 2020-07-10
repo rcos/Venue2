@@ -8,7 +8,7 @@
           <p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p>
           <p>Sections:
             <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
-              <a v-if="i > 1">,{{ section.number }}</a>
+              <a v-if="i > 0">,{{ section.number }}</a>
               <a v-else>{{ section.number }}</a>
             </a>
           </p>
@@ -67,7 +67,7 @@
               <p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p>
               <p class="sections">Sections:
                 <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
-                  <a v-if="i > 1">,{{ section.number }}</a>
+                  <a v-if="i > 0">,{{ section.number }}</a>
                   <a v-else>{{ section.number }}</a>
                 </a>
               </p>
@@ -125,10 +125,14 @@
           return ("Not set")
         }
         let hours = datetime.getHours()
+        let minutes = datetime.getMinutes()
+        if(minutes < 10) {
+          minutes = "0" + minutes
+        }
         if(hours < 12) {
-          return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + (datetime.getMinutes()) + " AM")
+          return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + minutes + " AM")
         } else {
-          return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours-12) + ":" + (datetime.getMinutes()) + " PM")
+          return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==12 ? hours : hours-12) + ":" + minutes + " PM")
         }
       }
     }
