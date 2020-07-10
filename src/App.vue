@@ -7,6 +7,7 @@
     <Footer />
   </div>
 </template>
+
 <script>
 
 import NavBar from "./components/NavBar.vue";
@@ -14,6 +15,12 @@ import Footer from "./components/Footer.vue";
 import LectureAPI from './services/LectureAPI';
 import {getLiveLectures,getUpcomingLectures,getPastLectures} from './services/GlobalFunctions.js'
 import '@/assets/css/venue.css';
+
+Number.prototype.toFixedDecimals = function(digits) {
+    var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
+        m = this.toString().match(re);
+    return m ? parseFloat(m[1]) : this.valueOf();
+};
 
 export default {
   watch: {
@@ -46,7 +53,6 @@ export default {
         LectureAPI.getLecturesForUser(this.current_user._id, "none") 
           .then(res => {
             let liveAndUpcoming = getLiveLectures(res.data).concat(getUpcomingLectures(res.data))
-            console.log(liveAndUpcoming)
             if (!("Notification" in window)) {
               alert("This browser does not support desktop notification");
             } else if (Notification.permission === "granted") {

@@ -1,7 +1,7 @@
 <template>
   <!-- ADDING USER -->
   <div>
-    <h2>New Lecture For {{ course.name }}</h2>
+    <h1>New Lecture For {{ course.name }}</h1>
     <form class="new-lecture-form" @submit.prevent="handleAttemptSubmit">
       <div class="form-group">
         <!-- Lecture Info -->
@@ -11,20 +11,20 @@
             type="text"
             class="form-control new-lecture-input"
             placeholder="e.g. Lecture 1"
-            v-model.lazy="lecture.title"
+            v-model="lecture.title"
             aria-labelledby="title_label"
             :tabindex="(modal_open ? '-1' : '0')"
           />
         </div>
         <!-- Section -->
-        <div class="input-wrapper">
-          <label>Section(s)</label>
-          <input v-for="(section,i) in lecture_sections" :key="i" type="text" class="form-control new-lecture-input" v-model="section.number" readonly :tabindex="(modal_open ? '-1' : '0')"/>
-        </div>
         <div class="spinner-border" role="status" v-if="!course_sections_have_loaded">
           <span class="sr-only">Loading...</span>
         </div>
         <Sections v-else v-bind:sections="course_sections" v-on:select-section="addSection" :disable_tabbing="(modal_open ? true : false)"/>
+        <div class="input-wrapper">
+          <label>Section(s):</label>
+          <input v-for="(section,i) in lecture_sections" :key="i" type="text" class="form-control new-lecture-input" v-model="section.number" readonly :tabindex="(modal_open ? '-1' : '0')"/>
+        </div>
         <div class="input-wrapper">
           <input @click="setAllowLiveSubmissions" type="checkbox" name="live_submission" v-model="allow_live_submissions" aria-labelledby="live_submission_label" :tabindex="(modal_open ? '-1' : '0')">
           <label id="live_submission_label">Lecture DOES have Live Submissions and Show Associated Options</label><br>
@@ -35,20 +35,21 @@
         <div v-if="allow_live_submissions">
           <div class="input-wrapper">
             <label id="start_time_label">Start Time</label>
-            <input id="lecture_start" aria-labelledby="start_time_label" :tabindex="(modal_open ? '-1' : '0')"/>
+            <input id="lecture_start" aria-labelledby="start_time_label" :tabindex="(modal_open ? '-1' : '0')" type="datetime-local"/>
+            <br>
             <label id="end_time_label">End Time</label>
-            <input id="lecture_end" aria-labelledby="end_time_label" :tabindex="(modal_open ? '-1' : '0')"/>
+            <input id="lecture_end" aria-labelledby="end_time_label" :tabindex="(modal_open ? '-1' : '0')" type="datetime-local"/>
           </div>
           <div class="input-wrapper">
             <input @click="setAllowRandom" type="checkbox" v-model="random_times" aria-labelledby="random_times" :tabindex="(modal_open ? '-1' : '0')"/>
-            <label id="random_times">Use randomized check-in times and show associated options</label>
+            <label id="random_times">Use randomized check-in times and show associated options</label><br>
             <input @click="setAllowCustom" type="checkbox" v-model="custom_times" aria-labelledby="custom_times" :tabindex="(modal_open ? '-1' : '0')"/>
             <label id="custom_times">Use custom check-in times and show associated options</label><br>
           </div>
           <div v-if="random_times">
             <div class="input-wrapper">
               <label id="random_checkin_count">Number of check-in times</label>
-              <input class="random_input" type="number" min="1" max="5" v-model.lazy="random_checkin_count" aria-labelledby="random_checkin_count" :tabindex="(modal_open ? '-1' : '0')"/>
+              <input class="random_input" type="number" min="1" max="10" v-model.lazy="random_checkin_count" aria-labelledby="random_checkin_count" :tabindex="(modal_open ? '-1' : '0')"/>
               <label id="random_checkin_length">Minutes for each check-in</label>
               <input class="random_input" type="number" min="1" max="10" v-model.lazy="random_checkin_length" aria-labelledby="random_checkin_length" :tabindex="(modal_open ? '-1' : '0')"/>
             </div>
@@ -68,9 +69,9 @@
         </div>
         <!-- Playback video adder -->
         <LectureUploadModal ref="uploadmodal" v-if="allow_playback_submissions" :lecture="lecture" :update_lecture="false" :shown="modal_open" @openstatus="handleModalChange"/>
+        <p class="error_msg" v-if="input_error_message!=''">{{input_error_message}}</p>
+        <button class="btn btn-primary create-lecture-btn" :tabindex="(modal_open ? '-1' : '0')">Create Lecture</button>
       </div>
-      <p class="error_msg" v-if="input_error_message!=''">{{input_error_message}}</p>
-      <button class="btn btn-primary create-lecture-btn" :tabindex="(modal_open ? '-1' : '0')">Create Lecture</button>
     </form>
   </div>
 </template>
@@ -150,7 +151,7 @@ export default {
         if(this.allow_live_submissions) {
           let hasStart = this.lecture.start_time != null && this.lecture.start_time != ""
           let hasEnd = this.lecture.end_time != null && this.lecture.end_time != ""
-          let validRange = this.lecture.start_time + (15 * 60 * 1000) <= this.lecture.end_time
+          let validRange = this.lecture.start_time < this.lecture.end_time
           if(hasStart && hasEnd && validRange) {
             let hasRandom = this.random_times
             if(hasRandom) {
@@ -160,12 +161,12 @@ export default {
               if(this.checkins[0].start_time == null || this.checkins[0].end_time == null || this.checkins[0].start_time == "" || this.checkins[0].end_time == "") {
                 this.setErrorMessage("Missing start or end time for check-in number: 1")
                 allGood = false
-              } else if(this.lecture.start_time < this.checkins[0].start_time && this.checkins[this.checkins.length-1].end_time < this.lecture.end_time) {
+              } else if(this.lecture.start_time <= this.checkins[0].start_time && this.checkins[this.checkins.length-1].end_time <= this.lecture.end_time) {
                 for(let i=0;i<this.checkins.length-1;i++) {
                   if(this.checkins[i+1].start_time == null || this.checkins[i+1].end_time == null || this.checkins[i+1].start_time == "" || this.checkins[i+1].end_time == "") {
                     this.setErrorMessage("Missing start or end time for check-in number: "+(i+2))
                     allGood = false
-                  } else if(this.checkins[i].end_time >= this.checkins[i+1].start_time) {
+                  } else if(this.checkins[i].end_time > this.checkins[i+1].start_time) {
                     this.setErrorMessage("Invalid time range for check-in number: "+(i+2))
                     allGood = false
                   }
@@ -182,7 +183,7 @@ export default {
             this.setErrorMessage("Missing end time")
             allGood = false
           } else if(!validRange) {
-            this.setErrorMessage("Invalid lecture time range (must be at least 15 minutes long)")
+            this.setErrorMessage("Invalid lecture time range")
             allGood = false
           }
         } else if(this.$refs["uploadmodal"].isComplete()) {
@@ -288,18 +289,23 @@ export default {
         let self = this
         var fp0 = flatpickr(document.getElementById("lecture_start"),{
           enableTime: true,
+          dateFormat: "h:i K, M d, Y",
           minDate: Date.now(),
+          minuteIncrement: 1,
           onChange: function(selectedDates, dateStr, instance) {
             self.lecture.start_time = Date.parse(dateStr)
             fp1.set("minDate",self.lecture.start_time)
             if(self.lecture.start_time > self.lecture.end_time || !self.lecture.end_time) {
+              self.lecture.end_time = Date.parse(dateStr)
               fp1.setDate(self.lecture.start_time)
             }
           }
         })
         var fp1 = flatpickr(document.getElementById("lecture_end"),{
           enableTime: true,
+          dateFormat: "h:i K, M d, Y",
           minDate: Date.now(),
+          minuteIncrement: 1,
           onChange: function(selectedDates, dateStr, instance) {
             self.lecture.end_time = Date.parse(dateStr)
           }
@@ -347,18 +353,23 @@ export default {
         let self = this
         pickrs.start = flatpickr(document.getElementById("submission_start_"+i),{
           enableTime: true,
+          dateFormat: "h:i K, M d, Y",
           minDate: Date.now(),
+          minuteIncrement: 1,
           onChange: function(selectedDates, dateStr, instance) {
             self.checkins[i].start_time = Date.parse(dateStr)
             pickrs.end.set("minDate",self.checkins[i].start_time)
             if(self.checkins[i].start_time > self.checkins[i].end_time) {
+              self.checkins[i].end_time = Date.parse(dateStr)
               pickrs.end.setDate(self.checkins[i].start_time)
             }
           }
         })
         pickrs.end = flatpickr(document.getElementById("submission_end_"+i),{
           enableTime: true,
+          dateFormat: "h:i K, M d, Y",
           minDate: Date.now(),
+          minuteIncrement: 1,
           onChange: function(selectedDates, dateStr, instance) {
             self.checkins[i].end_time = Date.parse(dateStr)
           }
@@ -383,18 +394,23 @@ export default {
         let self = this
         self.checkin_pickers[j].start = flatpickr(document.getElementById("submission_start_"+j),{
           enableTime: true,
+          dateFormat: "h:i K, M d, Y",
           minDate: Date.now(),
+          minuteIncrement: 1,
           onChange: function(selectedDates, dateStr, instance) {
             self.checkins[j].start_time = Date.parse(dateStr)
             self.checkin_pickers[j].end.set("minDate",self.checkins[j].start_time)
             if(self.checkins[j].start_time > self.checkins[j].end_time) {
+              self.checkins[j].end_time = Date.parse(dateStr)
               self.checkin_pickers[j].end.setDate(self.checkins[j].start_time)
             }
           }
         })
         self.checkin_pickers[j].end = flatpickr(document.getElementById("submission_end_"+j),{
           enableTime: true,
+          dateFormat: "h:i K, M d, Y",
           minDate: fallback[this.checkin_pickers.length-j-1].start || Date.now(),
+          minuteIncrement: 1,
           onChange: function(selectedDates, dateStr, instance) {
             self.checkins[j].end_time = Date.parse(dateStr)
           }
@@ -418,10 +434,15 @@ export default {
 
 <style>
 .input-wrapper {
-  width: 50%;
+  width: 80%;
   margin: auto;
   margin-top: 3rem;
+  padding: 0;
   /*border: blue solid;*/
+}
+
+.form-group {
+  margin: 0;
 }
 
 .random_input {
