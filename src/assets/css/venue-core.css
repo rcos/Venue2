@@ -705,6 +705,7 @@ a:hover {
   width: 60px;
   height: 60px;
   margin-right: 15px;
+  margin-bottom: 15px;
   text-align: center;
   box-sizing: border-box;
   padding: 3px 0px;
@@ -780,6 +781,43 @@ a:hover {
 .course-info-upcoming-lecture-pill .lecture-date {
   float: right;
 }
+
+.btn {
+  border-radius: 0.25rem;
+}
+
+/* .btn.btn-primary {
+  background: none;
+  border: 0.1rem solid #0078c2;
+  color: #0078c2
+}
+
+.btn.btn-secondary {
+  background: none;
+  border: 0.1rem solid #727272;
+  color: #727272;
+}
+
+.btn.btn-primary:hover,
+.btn.btn-primary:focus,
+.btn.btn-primary:active,
+.btn.btn-primary:target {
+  outline: none;
+  border: 0.1rem solid #0078c2;
+  background: #0078c2;
+  color: white
+}
+
+.btn.btn-secondary:hover,
+.btn.btn-secondary:focus,
+.btn.btn-secondary:active
+.btn.btn-secondary:target {
+  outline: none;
+  border: 0.1rem solid #727272;
+  background: #727272;
+  color: white;
+} */
+
 
 .btn.btn-primary {
   background: #0078c2;
