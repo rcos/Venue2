@@ -20,3 +20,9 @@ export default {
 }
 
 </script>
+
+<style scoped>
+.lecture-pill-min {
+  display: inline-block;
+}
+</style>

@@ -41,8 +41,8 @@
     .loader-centerer {
       width: 37px;
       margin: 0 auto;
-      padding-top: 50px;
-      padding-bottom: 50px;
+      padding-top: 9px;
+      padding-bottom: 9px;
     }
 
     .self-building-square-spinner .square {
@@ -54,51 +54,53 @@
       float: left;
       position:relative;
       opacity: 0;
-      animation: self-building-square-spinner 6s infinite;
+      animation: self-building-square-spinner 3s infinite;
     }
 
     .self-building-square-spinner .square.even {
       background: #4CC9FF;
+      transition: background 1000ms linear;
     }
 
     .self-building-square-spinner .square.odd {
       background: #FC6E71;
+      transition: background 1000ms linear;
     }
 
     .self-building-square-spinner .square:nth-child(1) {
-      animation-delay: calc(300ms * 6);
+      animation-delay: calc(150ms * 6);
     }
 
     .self-building-square-spinner .square:nth-child(2) {
-      animation-delay: calc(300ms * 7);
+      animation-delay: calc(150ms * 7);
     }
 
     .self-building-square-spinner .square:nth-child(3) {
-      animation-delay: calc(300ms * 8);
+      animation-delay: calc(150ms * 8);
     }
 
     .self-building-square-spinner .square:nth-child(4) {
-      animation-delay: calc(300ms * 3);
+      animation-delay: calc(150ms * 3);
     }
 
     .self-building-square-spinner .square:nth-child(5) {
-      animation-delay: calc(300ms * 4);
+      animation-delay: calc(150ms * 4);
     }
 
     .self-building-square-spinner .square:nth-child(6) {
-      animation-delay: calc(300ms * 5);
+      animation-delay: calc(150ms * 5);
     }
 
     .self-building-square-spinner .square:nth-child(7) {
-      animation-delay: calc(300ms * 0);
+      animation-delay: calc(150ms * 0);
     }
 
     .self-building-square-spinner .square:nth-child(8) {
-      animation-delay: calc(300ms * 1);
+      animation-delay: calc(150ms * 1);
     }
 
     .self-building-square-spinner .square:nth-child(9) {
-      animation-delay: calc(300ms * 2);
+      animation-delay: calc(150ms * 2);
     }
 
     .self-building-square-spinner .clear{
@@ -110,7 +112,7 @@
         opacity: 0;
       }
       5% {
-        opacity: 1;
+        opacity: 0.5;
         top: 0;
       }
       50.9% {

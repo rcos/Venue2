@@ -142,6 +142,87 @@
 					return ("Not set")
 				}
 				let hours = datetime.getHours()
+				let minutes = datetime.getMinutes()
+				if(minutes < 10) {
+					minutes = "0" + minutes
+				}
+				if(hours < 12) {
+					return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + minutes + " AM")
+				} else {
+					return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==12 ? hours : hours-12) + ":" + minutes + " PM")
+				}
+			},
+			download_submitty_csv() {
+				let data = []
+
+				SectionAPI.getSectionsForCourse(this.lecture.sections[0].course._id)
+				.then(res => {
+					let course_sections = res.data
+
+					let self = this
+					this.all_students.forEach(function(student) {
+						course_sections.forEach(function(section) {
+							if(section.students.includes(student._id)) {
+								let stud_data = []
+								
+								let live = self.live_submissions[student._id]
+								let playback = self.playback_submissions.find(x => x.submitter._id == student._id)
+								
+								if(undefined != live && undefined != playback) {
+									if(live.length / self.lecture.checkins.length >= playback.video_percent) {
+										stud_data.push(live[live.length-1].live_submission_time)
+										stud_data.push(student.user_id)
+										stud_data.push(student.first_name)
+										stud_data.push(student.last_name)
+										stud_data.push(section.number)
+										stud_data.push("Live")
+										stud_data.push(live.length / self.lecture.checkins.length)
+									} else {
+										stud_data.push(playback.playback_submission_time)
+										stud_data.push(student.user_id)
+										stud_data.push(student.first_name)
+										stud_data.push(student.last_name)
+										stud_data.push(section.number)
+										stud_data.push("Playback")
+										stud_data.push(playback.video_percent)
+									}
+								} else if(undefined != live) {
+									stud_data.push(live[live.length-1].live_submission_time)
+									stud_data.push(student.user_id)
+									stud_data.push(student.first_name)
+									stud_data.push(student.last_name)
+									stud_data.push(section.number)
+									stud_data.push("Live")
+									stud_data.push(live.length / self.lecture.checkins.length)
+								} else if(undefined != playback) {
+									stud_data.push(playback.playback_submission_time)
+									stud_data.push(student.user_id)
+									stud_data.push(student.first_name)
+									stud_data.push(student.last_name)
+									stud_data.push(section.number)
+									stud_data.push("Playback")
+									stud_data.push(playback.video_percent)
+								} else {
+									stud_data.push(null)
+									stud_data.push(student.user_id)
+									stud_data.push(student.first_name)
+									stud_data.push(student.last_name)
+									stud_data.push(section.number)
+									stud_data.push(null)
+									stud_data.push(0)
+								}
+
+								data.push(stud_data)
+							}
+						})
+					})
+				})
+			},
+			getPrettyDateTime(datetime) {
+				if("Invalid Date" == datetime) {
+					return ("Not set")
+				}
+				let hours = datetime.getHours()
 				if(hours < 12) {
 					return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + (datetime.getMinutes()) + " AM")
 				} else {
