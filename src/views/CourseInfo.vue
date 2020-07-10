@@ -226,7 +226,10 @@ export default {
       LectureAPI.getLecturesForCourse(this.course_id)
       .then(response => {
         this.all_lectures = response.data
-        this.all_lectures.sort((a, b) => (a.start_time < b.start_time) ? 1 : -1)
+        this.all_lectures.sort((a, b) => 
+          (a.start_time < b.start_time || a.playback_submission_start_time < b.playback_submission_start_time ||
+          a.start_time < b.playback_submission_start_time || a.playback_submission_start_time < b.start_time) ? 1 : -1
+        )
         this.parseUpcomingLectures(this.all_lectures)
         this.parseLiveLectures(this.all_lectures)
         this.parsePastLectures(this.all_lectures)
@@ -238,7 +241,10 @@ export default {
       LectureAPI.getLecturesForSection(this.section_id)
       .then(response => {
         this.all_lectures = response.data
-        this.all_lectures.sort((a, b) => (a.start_time < b.start_time) ? 1 : -1)
+        this.all_lectures.sort((a, b) =>
+          (a.start_time < b.start_time || a.playback_submission_start_time < b.playback_submission_start_time ||
+          a.start_time < b.playback_submission_start_time || a.playback_submission_start_time < b.start_time) ? 1 : -1
+        )
         this.parseUpcomingLectures(this.all_lectures)
         this.parseLiveLectures(this.all_lectures)
         this.parsePastLectures(this.all_lectures)
