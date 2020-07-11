@@ -92,9 +92,9 @@
           </div>
           <div>
             <InstructorAttendanceHistory
-            v-if="this.current_user.is_instructor && lectures_loaded"
+            v-if="this.current_user.is_instructor && lectures_loaded && scores_loaded"
             :lectures="selected_section == 'all' ? all_lectures : sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded" mobileMode/>
-            <StudentAttendanceHistory v-else-if="lectures_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
+            <StudentAttendanceHistory v-else-if="lectures_loaded && scores_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
             <div v-else :style='{textAlign: "center"}'>
               <SquareLoader />
             </div>
@@ -349,6 +349,7 @@ export default {
               }
             })
             lecture_.percentage = running_total / students.length * 100
+            lecture_.color = this.getHTMLClassByAttendance(lecture_.percentage)
           })
         )
       })
@@ -389,6 +390,7 @@ export default {
               } else if(playback != null) {
                 lecture_data.percentage = Math.ceil(playback.video_percent * 100)
               }
+              lecture_data.color = this.getHTMLClassByAttendance(lecture_data.percentage)
             }
           })
         )
@@ -400,6 +402,11 @@ export default {
     },
     onSectionChange() {
       this.$forceUpdate()
+    },
+    getHTMLClassByAttendance (percent) {
+      if (percent <= 60) return 'bad'
+      else if (percent <= 75) return 'medium'
+      return 'good'
     }
   }
 }
