@@ -37,19 +37,11 @@
               :class="'tab ' + (subview_section_id == 1 ? 'active' : '')"
               tabindex="0" role="tab" :aria-selected="(subview_section_id == 1 ? 'true' : 'false')" aria-controls="panel-2" aria-label="Show Course Statistics">Statistics</div>
           </div>
-<<<<<<< HEAD
-          <div v-if="this.current_user.is_instructor" class="right" id="section-select-container">
-            <label id="section_select_label">Section:</label>
-            <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label">
-              <option v-for="(section_,i) in section_arr" :key="i" :value="section_[1]">{{ section_[0] }}</option>
-              <option :value="null" selected>All</option>
-=======
           <div v-if="this.current_user.is_instructor" class="right">
             <label id="section_select_label">Select Section</label>
             <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange">
               <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">Section {{section.number}}</option>
               <option :value="'all'" selected>All Sections</option>
->>>>>>> master
             </select>
           </div>
         </div>
