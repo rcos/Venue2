@@ -17,7 +17,7 @@
           <div class="month-area">{{ STATIC_MONTHS[month] }} {{year}}</div>
           <div class="event-pills-area">
             <router-link v-for="i in timeline[year][month]" :key="lectures[i]._id" :to="{name: 'lecture_info', params: { lecture_id: lectures[i]._id }}" tabindex="-1">
-              <div :class="'inline-block instructor-attendance-history-pill ' + lectures[i].color" tabindex="0" :aria-label="'Lecture Info - '+lectures[i].title">
+              <div :class="'inline-block instructor-attendance-history-pill ' + lectures[i].color" :title="lectures[i].title" tabindex="0" :aria-label="'Lecture Info - '+lectures[i].title">
                 <div class="inline-block date-area">
                   <div class="day-of-week">{{ getDayOfWeek(lectures[i]) }}</div>
                   <div class="day-of-month">{{ getDayOfMonth(lectures[i]) }}</div>
