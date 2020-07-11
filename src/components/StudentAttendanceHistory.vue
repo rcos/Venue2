@@ -1,7 +1,7 @@
 <template>
   <div class="student-attendance">
-    <div v-for="year in getStringsDescending(Object.keys(timeline))" :key="year">
-      <div v-for="month in getStringsDescending(Object.keys(timeline[year]))" :key="month">
+    <div v-for="year in getStringsAscending(Object.keys(timeline))" :key="year">
+      <div v-for="month in getStringsAscending(Object.keys(timeline[year]))" :key="month">
         <div v-if="mobileMode">
           <div class="month-area mobile">{{ STATIC_MONTHS[month] }} {{year}}</div>
           <div class="mobile-event-pill-area">
@@ -82,8 +82,8 @@
         let date_ = new Date(event_info.start_time == undefined ? event_info.playback_submission_start_time : event_info.start_time)
         return date_.getDate ()
       },
-      getStringsDescending(arr) {
-        return arr.concat().sort((a,b) => parseInt(a) < parseInt(b) ? 1 : -1)
+      getStringsAscending(arr) {
+        return arr.concat().sort((a,b) => parseInt(a) > parseInt(b) ? 1 : -1)
       }
     }
   }
