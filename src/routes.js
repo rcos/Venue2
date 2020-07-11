@@ -33,7 +33,7 @@ import NewLecture from './views/NewLecture.vue';
 import LectureInfo from './views/LectureInfo.vue';
 import Settings from './views/Settings.vue';
 import RedirectCASLogin from './views/RedirectCASLogin.vue';
-
+import Statistics from './views/Statistics.vue';
 
 Vue.use(VueRouter);
 
@@ -323,6 +323,16 @@ const router = new VueRouter({
       meta: {
         title: "Venue - Redirecting",
         requiresNoLogin: true
+      }
+    },
+    {
+      name: 'statistics',
+      path: '/statistics',
+      component: Statistics,
+      meta: {
+        title: "Venue - Statistics",
+        requiresAuth: true,
+        requiresInstructor: true
       }
     }
   ]
