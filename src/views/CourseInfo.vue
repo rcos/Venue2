@@ -227,8 +227,8 @@ export default {
       .then(response => {
         this.all_lectures = response.data
         this.all_lectures.sort((a, b) => 
-          (a.start_time < b.start_time || a.playback_submission_start_time < b.playback_submission_start_time ||
-          a.start_time < b.playback_submission_start_time || a.playback_submission_start_time < b.start_time) ? 1 : -1
+          (a.start_time > b.start_time || a.playback_submission_start_time > b.playback_submission_start_time ||
+          a.start_time > b.playback_submission_start_time || a.playback_submission_start_time > b.start_time) ? 1 : -1
         )
         this.parseUpcomingLectures(this.all_lectures)
         this.parseLiveLectures(this.all_lectures)
@@ -242,8 +242,8 @@ export default {
       .then(response => {
         this.all_lectures = response.data
         this.all_lectures.sort((a, b) =>
-          (a.start_time < b.start_time || a.playback_submission_start_time < b.playback_submission_start_time ||
-          a.start_time < b.playback_submission_start_time || a.playback_submission_start_time < b.start_time) ? 1 : -1
+          (a.start_time > b.start_time || a.playback_submission_start_time > b.playback_submission_start_time ||
+          a.start_time > b.playback_submission_start_time || a.playback_submission_start_time > b.start_time) ? 1 : -1
         )
         this.parseUpcomingLectures(this.all_lectures)
         this.parseLiveLectures(this.all_lectures)
@@ -288,7 +288,7 @@ export default {
       })
       Object.keys(sorted).forEach(sectID => {
         sorted[sectID].timeline = {}
-        sorted[sectID].lectures.sort((a, b) => (a.start_time < b.start_time) ? 1 : -1)
+        sorted[sectID].lectures.sort((a, b) => (a.start_time > b.start_time) ? 1 : -1)
         for(let i=0;i<sorted[sectID].lectures.length;i++) {
           let lect = sorted[sectID].lectures[i]
           if(undefined == lect.start_time || "Invalid Date" == lect.start_time || null == lect.start_time) {
