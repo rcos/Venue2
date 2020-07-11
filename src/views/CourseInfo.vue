@@ -404,7 +404,7 @@ export default {
       this.$forceUpdate()
     },
     getHTMLClassByAttendance (percent) {
-      if (percent <= 60) return 'bad'
+      if (undefined == percent || percent <= 60) return 'bad'
       else if (percent <= 75) return 'medium'
       return 'good'
     }
