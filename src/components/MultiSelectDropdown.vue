@@ -67,13 +67,23 @@ export default {
 				}
 				this.unselected.sort()
 			}
+			this.sendUpdates()
 		},
 		removeSelection(i) {
 			this.unselected.push(this.selected[i])
 			this.selected.splice(i,1)
+			this.unselected.sort()
+			this.sendUpdates()
 		},
 		sendUpdates() {
-			this.$emit('update',selected)
+			this.$emit('update',this.selected)
+		},
+		repopulate(data) {
+			this.unselected = []
+			this.selected = []
+			data.forEach(option => {
+				this.unselected.push(option)
+			})
 		}
 	}
 }
