@@ -7,7 +7,7 @@
 						Course:
 					</div>
 					<div class="col col-8 selector-col">
-						<MultiSelectDropdown id="course-selector" v-if="course_options.length > 0" :options="course_options" @selection="handleCourseChange" :max="1"/>
+						<MultiSelectDropdown id="course-selector" v-if="course_options.length > 0" :options="course_options" @update="handleCourseChange" :max="1" ref="courseSelector"/>
 					</div>
 				</div>
 				<div class="row side-panel-section">
@@ -15,7 +15,7 @@
 						Sections:
 					</div>
 					<div class="col col-8 selector-col">
-						<MultiSelectDropdown id="sections-selector" v-if="course_options.length > 0" :options="course_options" @selection="handleCourseChange" :max="4"/>
+						<MultiSelectDropdown id="sections-selector" v-if="section_options.length > 0" :options="section_options" @update="handleSectionsChange" :max="4" ref="sectionsSelector"/>
 					</div>
 				</div>
 			</div>
@@ -35,6 +35,7 @@
 
 <script>
 import CourseAPI from '@/services/CourseAPI.js';
+import SectionAPI from '@/services/SectionAPI.js'
 
 import MultiSelectDropdown from '@/components/MultiSelectDropdown.vue';
 
@@ -52,8 +53,10 @@ export default {
 			current_user: null,
 			courses: [],
 			course_options: [],
-			selected_courses: [],
+			active_course: null,
 			sections: [],
+			section_options: [],
+			active_sections: [],
 			lectures: [],
 			students: []
 		}
@@ -69,10 +72,37 @@ export default {
 				this.courses = res.data
 				this.courses.forEach(course => {
 					this.course_options.push(course.name)
+					SectionAPI.getSectionsForCourse(course._id)
+					.then(res2 => {
+						this.sections = this.sections.concat(res2.data)
+					})
 				})
 			})
 		},
 		handleCourseChange(data) {
+			this.courses.forEach(course => {
+				if(course.name == data[0]) {
+					this.active_course = course
+					this.active_sections = []
+					let section_options = []
+					this.sections.forEach(section => {
+						if(section.course == course._id) {
+							section_options.push(new Promise((resolve,reject) => {
+								resolve(section.number)
+							}))
+						}
+					})
+					Promise.all(section_options)
+					.then(resolved => {
+						if(this.section_options.length > 0) {
+							this.$refs.sectionsSelector.repopulate(resolved)
+						}
+						this.section_options = resolved
+					})
+				}
+			})
+		},
+		handleSectionsChange() {
 
 		}
 	}
