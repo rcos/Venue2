@@ -18,6 +18,14 @@
 						<MultiSelectDropdown id="sections-selector" v-if="section_options.length > 0" :options="section_options" @update="handleSectionsChange" :max="4" ref="sectionsSelector"/>
 					</div>
 				</div>
+				<div class="row side-panel-section">
+					<div class="col selector-label">
+						Lectures:
+					</div>
+					<div class="col col-8 selector-col">
+						<MultiSelectDropdown id="lectures-selector" v-if="lecture_options.length > 0" :options="lecture_options" @update="handleLectureChange" :max="4" ref="lecturesSelector"/>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div id="stats-right">
@@ -58,6 +66,8 @@ export default {
 			section_options: [],
 			active_sections: [],
 			lectures: [],
+			lecture_options: [],
+			active_lectures: [],
 			students: []
 		}
 	},
@@ -102,8 +112,26 @@ export default {
 				}
 			})
 		},
-		handleSectionsChange() {
-
+		handleSectionsChange(data) {
+			let active_sections = []
+			data.forEach(sect => {
+				this.sections.forEach(section => {
+					if(section.course == this.active_course._id && sect == section.number) {
+						active_sections.push(new Promise((resolve,reject) => {
+							resolve(section)
+						}))
+					}
+				})
+			})
+			Promise.all(active_sections)
+			.then(resolved => {
+				// if(this.section_options.length > 0) {
+				// 	this.$refs.sectionsSelector.repopulate(resolved)
+				// }
+				//TODO repopulate() lectures
+				this.active_sections = resolved
+				console.log(resolved)
+			})
 		}
 	}
 }
