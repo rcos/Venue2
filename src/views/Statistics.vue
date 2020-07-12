@@ -42,10 +42,13 @@
 </template>
 
 <script>
-import CourseAPI from '@/services/CourseAPI.js';
+import CourseAPI from '@/services/CourseAPI.js'
 import SectionAPI from '@/services/SectionAPI.js'
+import LectureAPI from '@/services/LectureAPI.js'
 
-import MultiSelectDropdown from '@/components/MultiSelectDropdown.vue';
+import chartjs from 'chart.js'
+
+import MultiSelectDropdown from '@/components/MultiSelectDropdown.vue'
 
 export default {
 	name: 'Statistics',
@@ -67,8 +70,7 @@ export default {
 			active_sections: [],
 			lectures: [],
 			lecture_options: [],
-			active_lectures: [],
-			students: []
+			active_lectures: []
 		}
 	},
 	created() {
@@ -88,6 +90,10 @@ export default {
 					})
 				})
 			})
+			LectureAPI.getLecturesForUser(this.current_user._id,'none')
+			.then(res => {
+				this.lectures = res.data
+			})
 		},
 		handleCourseChange(data) {
 			this.courses.forEach(course => {
@@ -95,11 +101,21 @@ export default {
 					this.active_course = course
 					this.active_sections = []
 					let section_options = []
+					let lecture_options = []
 					this.sections.forEach(section => {
 						if(section.course == course._id) {
 							section_options.push(new Promise((resolve,reject) => {
 								resolve(section.number)
 							}))
+							this.lectures.forEach(lecture => {
+								lecture.sections.forEach(sectID => {
+									if(sectID == section._id) {
+										lecture_options.push(new Promise((resolve,reject) => {
+											resolve(lecture.title)
+										}))
+									}
+								})
+							})
 						}
 					})
 					Promise.all(section_options)
@@ -109,14 +125,22 @@ export default {
 						}
 						this.section_options = resolved
 					})
+					Promise.all(lecture_options)
+					.then(resolved => {
+						let reduced = [...(new Set(resolved))]
+						if(this.lecture_options.length > 0) {
+							this.$refs.lecturesSelector.repopulate(reduced)
+						}
+						this.lecture_options = reduced
+					})
 				}
 			})
 		},
 		handleSectionsChange(data) {
 			let active_sections = []
-			data.forEach(sect => {
+			data.forEach(sectID => {
 				this.sections.forEach(section => {
-					if(section.course == this.active_course._id && sect == section.number) {
+					if(section.course == this.active_course._id && sectID == section.number) {
 						active_sections.push(new Promise((resolve,reject) => {
 							resolve(section)
 						}))
@@ -125,13 +149,31 @@ export default {
 			})
 			Promise.all(active_sections)
 			.then(resolved => {
-				// if(this.section_options.length > 0) {
-				// 	this.$refs.sectionsSelector.repopulate(resolved)
-				// }
-				//TODO repopulate() lectures
 				this.active_sections = resolved
-				console.log(resolved)
+				let lecture_options = []
+				this.active_sections.forEach(section => {
+					this.lectures.forEach(lecture => {
+						lecture.sections.forEach(sectID => {
+							if(sectID == section._id) {
+								lecture_options.push(new Promise((resolve,reject) => {
+									resolve(lecture.title)
+								}))
+							}
+						})
+					})
+				})
+				Promise.all(lecture_options)
+				.then(resolved => {
+					let reduced = [...(new Set(resolved))]
+					if(this.lecture_options.length > 0) {
+						this.$refs.lecturesSelector.repopulate(reduced)
+					}
+					this.lecture_options = reduced
+				})
 			})
+		},
+		handleLectureChange(data) {
+
 		}
 	}
 }
