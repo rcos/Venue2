@@ -223,6 +223,8 @@ export default {
 #stats-right-bottom {
 	top: 5rem;
 	bottom: 0;
+	padding: 0rem 1rem;
+	padding-bottom: 1rem;
 }
 
 .stats-panel {

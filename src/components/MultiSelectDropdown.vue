@@ -138,7 +138,7 @@ export default {
 	position: absolute;
 	/* margin-top: -0.25rem; */
 	background: rgb(255, 255, 255);
-	border-top: 1px solid black;
+	border: 1px solid black;
 }
 .multiselect-option {
 	margin: 0.5rem;
