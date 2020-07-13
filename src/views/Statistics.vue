@@ -31,11 +31,12 @@
 		<div id="stats-right">
 			<div id="stats-right-top">
 				<div id="top-panel" class="stats-panel">
-					<canvas id="myChart"></canvas>
 				</div>
 			</div>
 			<div id="stats-right-bottom">
-				<div id="stats-render"></div>
+				<div id="stats-render">
+					<canvas v-if="courses.active && sections.active.length == 0 && lectures.active.length == 0" id="courseChart"></canvas>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -83,13 +84,16 @@ export default {
 			},
 			colors: {
 				green: {
-
+					fill: '#bfffc6',
+					stroke: '#00ff83',
 				},
 				blue: {
-
+					fill: '#92bed2',
+					stroke: '#3282bf',
 				},
 				red: {
-					
+					fill: '#ff8787',
+					stroke: '#ff6363'
 				}
 			}
 		}
@@ -144,20 +148,134 @@ export default {
 				//calculate course graph data
 				let live = []
 				let playback = []
-				let asbent = []
-				let x = []
+				let absent = []
+				let dates = []
+				this.lectures.filtered.sort((a, b) => 
+					(a.start_time > b.start_time || a.playback_submission_start_time > b.playback_submission_start_time ||
+					a.start_time > b.playback_submission_start_time || a.playback_submission_start_time > b.start_time) ? 1 : -1
+				)
 				this.lectures.filtered.forEach(lecture => {
-					//calculate the students per lecture
-					lecture.students = new Set()
+					lecture.students = {}
 					lecture.sections.forEach(sectID => {
 						let section = this.sections.all.find(section => section._id == sectID)
-						section.students.forEach(studID => lecture.students.add(studID))
+						section.students.forEach(studID => {
+							lecture.students[studID] = {
+								live: [],
+								playback: null
+							}
+						})
 					})
+					let subsForLecture = this.lectureSubmissions.filtered.filter(a => a.lecture == lecture._id)
+					subsForLecture.forEach(sub => {
+						Object.keys(lecture.students).forEach(studID => {
+							if(sub.submitter._id == studID) {
+								if(sub.is_live_submission) {
+									lecture.students[studID].live.push(sub)
+								} else {
+									lecture.students[studID].playback = sub
+								}
+							}
+						})
+					})
+					let lectureStudents = Object.keys(lecture.students)
+					let lectureLive = 0
+					let lecturePlayback = 0
+					let lectureAbsent = 0
+					lectureStudents.forEach(studID => {
+						let studSubmissions = lecture.students[studID]
+						if(studSubmissions.live.length > 0 && studSubmissions.playback != null) {
+							let percentage = Math.max(
+								studSubmissions.live.length / lecture.checkins.length * 100,
+								Math.ceil(studSubmissions.playback.video_percent * 100)
+							)
+							if(studSubmissions.live.length / lecture.checkins.length == percentage) {
+								lectureLive += percentage
+							} else {
+								lecturePlayback += percentage
+							}
+							lectureAbsent += (100 - percentage)
+						} else if(studSubmissions.live.length > 0) {
+							let percentage = studSubmissions.live.length / lecture.checkins.length * 100
+							lectureLive += percentage
+							lectureAbsent += (100 - percentage)
+						} else if(studSubmissions.playback != null) {
+							let percentage = Math.ceil(studSubmissions.playback.video_percent * 100)
+							lecturePlayback += percentage
+							lectureTotal += (100 - percentage)
+						} else {
+							lectureAbsent += 100
+						}
+					})
+					lectureLive /= lectureStudents.length
+					lecturePlayback /= lectureStudents.length
+					lectureAbsent /= lectureStudents.length
+					live.push(lectureLive)
+					playback.push(lecturePlayback)
+					absent.push(lectureAbsent)
+					if(lecture.start_time) {
+						dates.push(lecture.start_time)
+					} else if(lecture.playback_submission_start_time) {
+						dates.push(lecture.playback_submission_start_time)
+					} else {
+						dates.push(null)
+					}
 				})
+				this.createCourseGraph(live,playback,absent,dates)
 			}
 		},
-		createCourseGraph(data) {
-
+		createCourseGraph(live,playback,absent,dates) {
+			let ctx = document.getElementById('courseChart').getContext('2d')
+			const courseChart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: dates,
+					datasets: [{
+						label: "Live",
+						fill: true,
+						backgroundColor: this.colors.green.fill,
+						pointBackgroundColor: this.colors.green.stroke,
+						borderColor: this.colors.green.stroke,
+						pointHighlightStroke: this.colors.green.stroke,
+						borderCapStyle: 'butt',
+						pointRadius: 5,
+						pointHoverRadius: 10,
+						data: live,
+					}, {
+						label: "Playback",
+						fill: true,
+						backgroundColor:this.colors.blue.fill,
+						pointBackgroundColor: this.colors.blue.stroke,
+						borderColor: this.colors.blue.stroke,
+						pointHighlightStroke: this.colors.blue.stroke,
+						borderCapStyle: 'butt',
+						pointRadius: 5,
+						pointHoverRadius: 10,
+						data: playback,
+					}, {
+						label: "Absent",
+						fill: true,
+						backgroundColor: this.colors.red.fill,
+						pointBackgroundColor: this.colors.red.stroke,
+						borderColor: this.colors.red.stroke,
+						pointHighlightStroke: this.colors.green.stroke,
+						borderCapStyle: 'butt',
+						pointRadius: 5,
+						pointHoverRadius: 10,
+						data: absent,
+					}]
+				},
+				options: {
+					responsive: true,
+					scales: {
+						yAxes: [{
+							stacked: true,
+						}]
+					},
+					animation: {
+						duration: 1000,
+					},
+				}
+			});
 		},
 		handleCourseChange(data) {
 			this.courses.active = data[0]
@@ -192,7 +310,6 @@ export default {
 		execSubmissionsForLectures(lectures) {
 			this.getSubmissionsForLectures(lectures)
 			.then(submissions => {
-				console.log(submissions)
 				this.lectureSubmissions.filtered = submissions
 				this.setupGraphs()
 			})
