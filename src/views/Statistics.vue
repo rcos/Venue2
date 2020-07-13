@@ -23,7 +23,7 @@
 						Lectures:
 					</div>
 					<div class="col col-8 selector-col">
-						<MultiSelectDropdown id="lectures-selector" v-if="lectures.filtered.length > 0" :options="lectures.filtered" property="title" @update="handleLectureChange" :max="0" :n="2" ref="lecturesSelector"/>
+						<MultiSelectDropdown id="lectures-selector" v-if="lectures.filtered.length > 0" :options="lectures.filtered" property="title" @update="handleLecturesChange" :max="4" :n="2" ref="lecturesSelector"/>
 					</div>
 				</div>
 			</div>
@@ -65,22 +65,21 @@ export default {
 			current_user: null,
 			courses: {
 				all: [],
-				active: null
+				active: null //selected from dropdown
 			},
 			sections: {
 				all: [],
-				filtered: [],
-				active: []
+				filtered: [], //for course
+				active: [] //selected from dropdown
 			},
 			lectures: {
 				all: [],
-				filtered: [],
-				active: []
+				filtered: [], //for sections/course
+				active: [] //selected from dropdown
 			},
 			lectureSubmissions: {
 				all: [],
-				filtered: [],
-				active: []
+				filtered: [] //for lectures/sections/course
 			},
 			colors: {
 				green: {
@@ -136,10 +135,29 @@ export default {
 				})
 			})
 		},
-		createGraphs() {
-			if(this.courses.active) {
-
+		setupGraphs() {
+			if(this.lectures.active.length > 0) {
+				//calculate lectures graphs data
+			} else if(this.sections.active.length > 0) {
+				//calculate sections graphs data
+			} else if(this.courses.active) {
+				//calculate course graph data
+				let live = []
+				let playback = []
+				let asbent = []
+				let x = []
+				this.lectures.filtered.forEach(lecture => {
+					//calculate the students per lecture
+					lecture.students = new Set()
+					lecture.sections.forEach(sectID => {
+						let section = this.sections.all.find(section => section._id == sectID)
+						section.students.forEach(studID => lecture.students.add(studID))
+					})
+				})
 			}
+		},
+		createCourseGraph(data) {
+
 		},
 		handleCourseChange(data) {
 			this.courses.active = data[0]
@@ -149,24 +167,34 @@ export default {
 					this.$refs.sectionsSelector.repopulate(sections)
 				}
 				this.sections.filtered = sections
-				this.execLecturesForSections(sections,false)
+				this.execLecturesForSections(sections)
 			})
 		},
 		handleSectionsChange(data) {
-			this.execLecturesForSections(data,true)
+			this.sections.active = data
+			this.execLecturesForSections(data)
 		},
-		handleLectureChange(data) {
-			this.execLecturesForSections(data,true)
+		handleLecturesChange(data) {
+			this.lectures.active = data
+			this.execSubmissionsForLectures(data)
 		},
-		execLecturesForSections(data,needs_every) {
-			this.getLecturesForSections(data,needs_every)
+		execLecturesForSections(data) {
+			this.getLecturesForSections(data)
 			.then(lectures => {
 				let clean = lectures.filter(a => undefined != a)
 				if(undefined != this.lectures.filtered && this.lectures.filtered.length > 0) {
 					this.$refs.lecturesSelector.repopulate(clean)
 				}
 				this.lectures.filtered = clean
-
+				this.execSubmissionsForLectures(clean)
+			})
+		},
+		execSubmissionsForLectures(lectures) {
+			this.getSubmissionsForLectures(lectures)
+			.then(submissions => {
+				console.log(submissions)
+				this.lectureSubmissions.filtered = submissions
+				this.setupGraphs()
 			})
 		},
 		async getSectionsForCourse(course) {
@@ -180,45 +208,43 @@ export default {
 			})
 			return Promise.all(sectionsForCourse)
 		},
-		async getLecturesForSections(sections,needs_every) {
+		async getLecturesForSections(sections) {
 			let lecturesForSections = []
-			if(sections.length == 0) {
-				this.lectures.all.forEach(lecture => {
+			this.lectures.all.forEach(lecture => {
+				let ids
+				if(sections.length == 0) {
+					ids = this.sections.filtered.map(a => a._id)
+				} else {
+					ids = sections.map(a => a._id)
+				}
+				if(ids.some(v => lecture.sections.includes(v))) {
 					lecturesForSections.push(
 						new Promise((resolve,reject) => {
-							let ids = this.sections.filtered.map(a => a._id)
-							if(ids.some(v => lecture.sections.includes(v))) {
-								resolve(lecture)
-							} else {
-								resolve()
-							}
+							resolve(lecture)
 						})
 					)
-				})
-			} else {
-				this.lectures.all.forEach(lecture => {
-					lecturesForSections.push(
-						new Promise((resolve,reject) => {
-							let ids = sections.map(a => a._id)
-							if(needs_every) {
-								if(ids.every(v => lecture.sections.includes(v))) {
-									resolve(lecture)
-								} else {
-									resolve()
-								}
-							} else if(ids.some(v => lecture.sections.includes(v))) {
-								resolve(lecture)
-							} else {
-								resolve()
-							}
-						})
-					)
-				})
-			}
+				}
+			})
 			return Promise.all(lecturesForSections)
 		},
-		async getSubmissionsForLectures() {
-
+		async getSubmissionsForLectures(lectures) {
+			let submissions = []
+			this.lectureSubmissions.all.forEach(submission => {
+				let ids
+				if(lectures.length == 0) {
+					ids = this.lectures.filtered.map(a => a._id)
+				} else {
+					ids = lectures.map(a => a._id)
+				}
+				if(ids.includes(submission.lecture)) {
+					submissions.push(
+						new Promise((resolve,reject) => {
+							resolve(submission)
+						})
+					)
+				}
+			})
+			return Promise.all(submissions)
 		}
 	}
 }
