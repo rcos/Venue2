@@ -6,8 +6,8 @@
 			</div>
 			<div v-for="(selection,i) in selected" :key="i">
 				<div :class="'multiselect-selected ' + (i==0?'first ':'') + (i==selected.length-1?'last ':'')">
-					<div class="multiselect-selected-text" :title="selection">
-						{{selection}}
+					<div class="multiselect-selected-text" :title="selection[property]">
+						{{selection[property]}}
 					</div>
 					<div v-if="max > 1" class="multiselect-selected-remove">
 						<button class="btn btn-danger" @click="removeSelection(i)">X</button>
@@ -15,9 +15,9 @@
 				</div>
 			</div>
 		</div>
-		<div v-if="open" class="multiselect-dropdown">
+		<div v-if="open" :class="'multiselect-dropdown z'+(999-n)">
 			<div v-for="(option,i) in unselected" :key="i" class="multiselect-option" @click="addSelection(option)">
-				{{option}}
+				{{option[property]}}
 			</div>
 			<div v-if="unselected.length == 0">
 				None
@@ -33,7 +33,9 @@ export default {
 	name: 'Statistics',
 	props: {
 		options: Array,
-		max: { type: Number, default: 999 }
+		property: String,
+		max: { type: Number, default: 999 },
+		n: { type: Number, default: 0 }
 	},
 	components: {},
 	data(){
@@ -47,17 +49,18 @@ export default {
 		this.options.forEach(option => {
 			this.unselected.push(option)
 		})
+		this.unselected.sort((a,b) => a[this.property] > b[this.property] ? 1 : -1)
 	},
 	methods: {
 		addSelection(option) {
 			if(this.selected.length < this.max) {
 				this.selected.push(option)
-				this.selected.sort()
+				this.selected.sort((a,b) => a[this.property] > b[this.property] ? 1 : -1)
 				let index = this.unselected.indexOf(option);
 				if (index > -1) {
 					this.unselected.splice(index, 1);
 				}
-				this.unselected.sort()
+				this.unselected.sort((a,b) => a[this.property] > b[this.property] ? 1 : -1)
 			} else if(this.max == 1 && this.selected[0] != option) {
 				this.unselected.push(this.selected[0])
 				this.selected[0] = option;
@@ -65,14 +68,14 @@ export default {
 				if (index > -1) {
 					this.unselected.splice(index, 1);
 				}
-				this.unselected.sort()
+				this.unselected.sort((a,b) => a[this.property] > b[this.property] ? 1 : -1)
 			}
 			this.sendUpdates()
 		},
 		removeSelection(i) {
 			this.unselected.push(this.selected[i])
 			this.selected.splice(i,1)
-			this.unselected.sort()
+			this.unselected.sort((a,b) => a[this.property] > b[this.property] ? 1 : -1)
 			this.sendUpdates()
 		},
 		sendUpdates() {
@@ -84,6 +87,7 @@ export default {
 			data.forEach(option => {
 				this.unselected.push(option)
 			})
+			this.unselected.sort((a,b) => a[this.property] > b[this.property] ? 1 : -1)
 		}
 	}
 }
@@ -131,7 +135,6 @@ export default {
 	text-overflow: ellipsis;
 }
 .multiselect-dropdown {
-	z-index: 999;
 	max-height: 10rem;
 	width: 10rem;
 	overflow: auto;
@@ -139,6 +142,27 @@ export default {
 	/* margin-top: -0.25rem; */
 	background: rgb(255, 255, 255);
 	border: 1px solid black;
+}
+.multiselect-dropdown.z999 {
+	z-index: 999;
+}
+.multiselect-dropdown.z998 {
+	z-index: 998;
+}
+.multiselect-dropdown.z997 {
+	z-index: 997;
+}
+.multiselect-dropdown.z996 {
+	z-index: 996;
+}
+.multiselect-dropdown.z995 {
+	z-index: 995;
+}
+.multiselect-dropdown.z994 {
+	z-index: 994;
+}
+.multiselect-dropdown.z993 {
+	z-index: 993;
 }
 .multiselect-option {
 	margin: 0.5rem;

@@ -7,7 +7,7 @@
 						Course:
 					</div>
 					<div class="col col-8 selector-col">
-						<MultiSelectDropdown id="course-selector" v-if="course_options.length > 0" :options="course_options" @update="handleCourseChange" :max="1" ref="courseSelector"/>
+						<MultiSelectDropdown id="course-selector" v-if="courses.all.length > 0" :options="courses.all" property="name" @update="handleCourseChange" :max="1" :n="0" ref="courseSelector"/>
 					</div>
 				</div>
 				<div class="row side-panel-section">
@@ -15,7 +15,7 @@
 						Sections:
 					</div>
 					<div class="col col-8 selector-col">
-						<MultiSelectDropdown id="sections-selector" v-if="section_options.length > 0" :options="section_options" @update="handleSectionsChange" :max="4" ref="sectionsSelector"/>
+						<MultiSelectDropdown id="sections-selector" v-if="sections.filtered.length > 0" :options="sections.filtered" property="number" @update="handleSectionsChange" :max="4" :n="1" ref="sectionsSelector"/>
 					</div>
 				</div>
 				<div class="row side-panel-section">
@@ -23,7 +23,7 @@
 						Lectures:
 					</div>
 					<div class="col col-8 selector-col">
-						<MultiSelectDropdown id="lectures-selector" v-if="lecture_options.length > 0" :options="lecture_options" @update="handleLectureChange" :max="4" ref="lecturesSelector"/>
+						<MultiSelectDropdown id="lectures-selector" v-if="lectures.filtered.length > 0" :options="lectures.filtered" property="title" @update="handleLectureChange" :max="0" :n="2" ref="lecturesSelector"/>
 					</div>
 				</div>
 			</div>
@@ -31,7 +31,7 @@
 		<div id="stats-right">
 			<div id="stats-right-top">
 				<div id="top-panel" class="stats-panel">
-
+					<canvas id="myChart"></canvas>
 				</div>
 			</div>
 			<div id="stats-right-bottom">
@@ -45,6 +45,7 @@
 import CourseAPI from '@/services/CourseAPI.js'
 import SectionAPI from '@/services/SectionAPI.js'
 import LectureAPI from '@/services/LectureAPI.js'
+import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
 
 import chartjs from 'chart.js'
 
@@ -62,15 +63,36 @@ export default {
 	data(){
 		return {
 			current_user: null,
-			courses: [],
-			course_options: [],
-			active_course: null,
-			sections: [],
-			section_options: [],
-			active_sections: [],
-			lectures: [],
-			lecture_options: [],
-			active_lectures: []
+			courses: {
+				all: [],
+				active: null
+			},
+			sections: {
+				all: [],
+				filtered: [],
+				active: []
+			},
+			lectures: {
+				all: [],
+				filtered: [],
+				active: []
+			},
+			lectureSubmissions: {
+				all: [],
+				filtered: [],
+				active: []
+			},
+			colors: {
+				green: {
+
+				},
+				blue: {
+
+				},
+				red: {
+					
+				}
+			}
 		}
 	},
 	created() {
@@ -81,98 +103,121 @@ export default {
 		fetchData() {
 			CourseAPI.getInstructorCourses(this.current_user._id)
 			.then(res => {
-				this.courses = res.data
-				this.courses.forEach(course => {
-					this.course_options.push(course.name)
+				this.courses.all = res.data
+				this.courses.all.forEach(course => {
 					SectionAPI.getSectionsForCourse(course._id)
 					.then(res2 => {
-						this.sections = this.sections.concat(res2.data)
+						this.sections.all = this.sections.all.concat(res2.data)
 					})
 				})
 			})
 			LectureAPI.getLecturesForUser(this.current_user._id,'none')
 			.then(res => {
-				this.lectures = res.data
+				this.lectures.all = res.data
+				let all_submissions = []
+				this.lectures.all.forEach(lecture => {
+					all_submissions = all_submissions.concat(new Promise((resolve,reject) => {
+						LectureSubmissionAPI.getLectureSubmissionsForLecture(lecture._id)
+						.then(res => {
+							let submissions = []
+							res.data.forEach(lectSub => {
+								submissions.push(new Promise((resolve2,reject2) => {
+									resolve2(lectSub)
+								}))
+							})
+							Promise.all(submissions).then(resolved => {
+								resolve(resolved)
+							})
+						})
+					}))
+				})
+				Promise.all(all_submissions).then(resolved => {
+					this.lectureSubmissions.all = [].concat.apply([], resolved)
+				})
 			})
 		},
+		createGraphs() {
+			if(this.courses.active) {
+
+			}
+		},
 		handleCourseChange(data) {
-			this.courses.forEach(course => {
-				if(course.name == data[0]) {
-					this.active_course = course
-					this.active_sections = []
-					let section_options = []
-					let lecture_options = []
-					this.sections.forEach(section => {
-						if(section.course == course._id) {
-							section_options.push(new Promise((resolve,reject) => {
-								resolve(section.number)
-							}))
-							this.lectures.forEach(lecture => {
-								lecture.sections.forEach(sectID => {
-									if(sectID == section._id) {
-										lecture_options.push(new Promise((resolve,reject) => {
-											resolve(lecture.title)
-										}))
-									}
-								})
-							})
-						}
-					})
-					Promise.all(section_options)
-					.then(resolved => {
-						if(this.section_options.length > 0) {
-							this.$refs.sectionsSelector.repopulate(resolved)
-						}
-						this.section_options = resolved
-					})
-					Promise.all(lecture_options)
-					.then(resolved => {
-						let reduced = [...(new Set(resolved))]
-						if(this.lecture_options.length > 0) {
-							this.$refs.lecturesSelector.repopulate(reduced)
-						}
-						this.lecture_options = reduced
-					})
+			this.courses.active = data[0]
+			this.getSectionsForCourse(data[0])
+			.then(sections => {
+				if(undefined != this.sections.filtered && this.sections.filtered.length > 0) {
+					this.$refs.sectionsSelector.repopulate(sections)
 				}
+				this.sections.filtered = sections
+				this.execLecturesForSections(sections,false)
 			})
 		},
 		handleSectionsChange(data) {
-			let active_sections = []
-			data.forEach(sectID => {
-				this.sections.forEach(section => {
-					if(section.course == this.active_course._id && sectID == section.number) {
-						active_sections.push(new Promise((resolve,reject) => {
-							resolve(section)
-						}))
-					}
-				})
-			})
-			Promise.all(active_sections)
-			.then(resolved => {
-				this.active_sections = resolved
-				let lecture_options = []
-				this.active_sections.forEach(section => {
-					this.lectures.forEach(lecture => {
-						lecture.sections.forEach(sectID => {
-							if(sectID == section._id) {
-								lecture_options.push(new Promise((resolve,reject) => {
-									resolve(lecture.title)
-								}))
-							}
-						})
-					})
-				})
-				Promise.all(lecture_options)
-				.then(resolved => {
-					let reduced = [...(new Set(resolved))]
-					if(this.lecture_options.length > 0) {
-						this.$refs.lecturesSelector.repopulate(reduced)
-					}
-					this.lecture_options = reduced
-				})
-			})
+			this.execLecturesForSections(data,true)
 		},
 		handleLectureChange(data) {
+			this.execLecturesForSections(data,true)
+		},
+		execLecturesForSections(data,needs_every) {
+			this.getLecturesForSections(data,needs_every)
+			.then(lectures => {
+				let clean = lectures.filter(a => undefined != a)
+				if(undefined != this.lectures.filtered && this.lectures.filtered.length > 0) {
+					this.$refs.lecturesSelector.repopulate(clean)
+				}
+				this.lectures.filtered = clean
+
+			})
+		},
+		async getSectionsForCourse(course) {
+			let sectionsForCourse = []
+			this.sections.all.forEach(section => {
+				if(section.course == course._id) {
+					sectionsForCourse.push(new Promise((resolve,reject) => {
+						resolve(section)
+					}))
+				}
+			})
+			return Promise.all(sectionsForCourse)
+		},
+		async getLecturesForSections(sections,needs_every) {
+			let lecturesForSections = []
+			if(sections.length == 0) {
+				this.lectures.all.forEach(lecture => {
+					lecturesForSections.push(
+						new Promise((resolve,reject) => {
+							let ids = this.sections.filtered.map(a => a._id)
+							if(ids.some(v => lecture.sections.includes(v))) {
+								resolve(lecture)
+							} else {
+								resolve()
+							}
+						})
+					)
+				})
+			} else {
+				this.lectures.all.forEach(lecture => {
+					lecturesForSections.push(
+						new Promise((resolve,reject) => {
+							let ids = sections.map(a => a._id)
+							if(needs_every) {
+								if(ids.every(v => lecture.sections.includes(v))) {
+									resolve(lecture)
+								} else {
+									resolve()
+								}
+							} else if(ids.some(v => lecture.sections.includes(v))) {
+								resolve(lecture)
+							} else {
+								resolve()
+							}
+						})
+					)
+				})
+			}
+			return Promise.all(lecturesForSections)
+		},
+		async getSubmissionsForLectures() {
 
 		}
 	}
@@ -241,7 +286,10 @@ export default {
 }
 
 .side-panel-section {
-	padding: 1rem;
+	margin: 0rem 2rem;
+	width: 15rem;
+	padding: 2rem 0rem;
+	border-bottom: 1px solid black;
 }
 
 #course-section {
