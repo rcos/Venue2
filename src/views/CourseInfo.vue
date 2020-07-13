@@ -60,13 +60,6 @@
         </div>
         <div v-else-if="subview_section_id == 1" :style="{marginTop: `20px`}" id="panel-2" role="tabpanel">
           Coming Soon...
-          <!-- <SectionAttendanceGraph v-if="this.current_user.is_instructor && selected_section != null" :section_id="selected_section" />
-          <SectionAttendanceGraph v-else-if="this.current_user.is_instructor && selected_section == null" :section_id="null" />
-
-          <StudentAttendanceGraph v-else
-            :student_id="this.current_user._id"
-            :section_id="section_id"
-          /> -->
         </div>
         <div v-else-if="subview_section_id == 2" :style="{marginTop: '20px'}" id="panel-3" role="tabpanel">
           <show-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" :lecture_data="upcoming_lectures"/></show-at>
@@ -120,8 +113,6 @@
   import EventHistoryList from '@/components/EventHistoryList.vue';
   import InstructorAttendanceHistory from '@/components/InstructorAttendanceHistory.vue'
   import StudentAttendanceHistory from '@/components/StudentAttendanceHistory.vue'
-  import SectionAttendanceGraph from '@/components/SectionAttendanceGraph.vue'
-  import StudentAttendanceGraph from '@/components/StudentAttendanceGraph.vue'
   import LecturePillList from '@/components/LecturePillList.vue'
   import UpcomingLecturesList from '@/components/UpcomingLecturesList.vue'
 
@@ -143,8 +134,6 @@ export default {
     CourseInfoTitle,
     StudentAttendanceHistory,
     InstructorAttendanceHistory,
-    SectionAttendanceGraph,
-    StudentAttendanceGraph,
     LecturePillList,
     UpcomingLecturesList,
     SquareLoader
