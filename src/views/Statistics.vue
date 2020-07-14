@@ -39,8 +39,6 @@
 				<div id="stats-render">
 					<div v-if="lectures.active.length > 0">
 						<canvas id="lectureChart"></canvas>
-						<a v-if="lectures.active.length == 1 && this.half" class="pie-label half">Hey</a>
-						<a v-if="lectures.active.length == 1 && this.half" class="pie-label half">Hey</a>
 					</div>
 					<div v-else-if="sections.active.length > 0">
 						<canvas v-for="section in sections.active" :id="'sectionChart_'+section.number" :key="section.number"></canvas>
@@ -110,7 +108,8 @@ export default {
 			},
 			charts: [],
 			stacked: true,
-			half: true
+			half: true,
+			pieLabel: 0
 		}
 	},
 	created() {
@@ -156,7 +155,6 @@ export default {
 		},
 		setupGraphs() {
 			if(this.lectures.active.length > 0) {
-				//calculate lectures graphs data
 				let lecturesAttendance = {}
 				this.lectures.active.forEach(lecture => {
 					lecturesAttendance[lecture._id] = {
@@ -208,8 +206,8 @@ export default {
 						playback: lecturesAttendance[lectIDs[0]].playback,
 						absent: lecturesAttendance[lectIDs[0]].absent
 					})
+					this.pieLabel = 100 - lecturesAttendance[lectIDs[0]].absent
 				} else {
-					//barCharts
 					lectIDs.sort((a,b) => {
 						(lecturesAttendance[a].obj.start_time > lecturesAttendance[b].obj.start_time ||
 						lecturesAttendance[a].obj.playback_submission_start_time > lecturesAttendance[b].obj.playback_submission_start_time ||
@@ -236,7 +234,6 @@ export default {
 					})
 				}
 			} else if(this.sections.active.length > 0) {
-				//calculate sections graphs data
 				let sections = {}
 				this.sections.active.sort((a,b) => a.number > b.number ? 1 : -1)
 				this.sections.active.forEach(section => {
@@ -297,7 +294,6 @@ export default {
 					})
 				})
 			} else if(this.courses.active) {
-				//calculate course graph data
 				let live = []
 				let playback = []
 				let absent = []
