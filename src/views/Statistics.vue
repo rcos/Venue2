@@ -35,9 +35,7 @@
 			</div>
 			<div id="stats-right-bottom">
 				<div id="stats-render">
-					<div v-if="lectures.active.length > 0">
-						<canvas v-for="lecture in lectures.active" :id="'lectureChart_'+lecture._id" :key="lecture._id"></canvas>
-					</div>
+						<canvas v-if="lectures.active.length > 0" id="lectureChart"></canvas>
 					<div v-else-if="sections.active.length > 0">
 						<canvas v-for="section in sections.active" :id="'sectionChart_'+section.number" :key="section.number"></canvas>
 					</div>
@@ -149,10 +147,6 @@ export default {
 		setupGraphs() {
 			if(this.lectures.active.length > 0) {
 				//calculate lectures graphs data
-				this.lectures.active.sort((a, b) => 
-					(a.start_time > b.start_time || a.playback_submission_start_time > b.playback_submission_start_time ||
-					a.start_time > b.playback_submission_start_time || a.playback_submission_start_time > b.start_time) ? 1 : -1
-				)
 				let lecturesAttendance = {}
 				this.lectures.active.forEach(lecture => {
 					lecturesAttendance[lecture._id] = {
@@ -198,7 +192,7 @@ export default {
 				let lectIDs = Object.keys(lecturesAttendance)
 				if(lectIDs.length == 1) {
 					this.createPieGraph({
-						chartID: "lectureChart_"+lectIDs[0],
+						chartID: "lectureChart",
 						title: lecturesAttendance[lectIDs[0]].obj.title + " Attendance",
 						live: lecturesAttendance[lectIDs[0]].live,
 						playback: lecturesAttendance[lectIDs[0]].playback,
@@ -206,7 +200,30 @@ export default {
 					})
 				} else {
 					//barCharts
-					console.log(">1")
+					lectIDs.sort((a,b) => {
+						(lecturesAttendance[a].obj.start_time > lecturesAttendance[b].obj.start_time ||
+						lecturesAttendance[a].obj.playback_submission_start_time > lecturesAttendance[b].obj.playback_submission_start_time ||
+						lecturesAttendance[a].obj.start_time > lecturesAttendance[b].obj.playback_submission_start_time ||
+						lecturesAttendance[a].obj.playback_submission_start_time > lecturesAttendance[b].obj.start_time) ? 1 : -1}
+					)
+					let live = []
+					let playback = []
+					let absent = []
+					let labels = []
+					lectIDs.forEach(lectID => {
+						live.push(lecturesAttendance[lectID].live)
+						playback.push(lecturesAttendance[lectID].playback)
+						absent.push(lecturesAttendance[lectID].absent)
+						labels.push(lecturesAttendance[lectID].obj.title)
+					})
+					this.createBarsGraph({
+						chartID: "lectureChart",
+						title: "Lectures Attendance",
+						live: live,
+						playback: playback,
+						absent: absent,
+						labels: labels
+					})
 				}
 			} else if(this.sections.active.length > 0) {
 				//calculate sections graphs data
@@ -398,7 +415,67 @@ export default {
 			}))
 		},
 		createBarsGraph(chartInfo) {
-
+			let ctx = document.getElementById(chartInfo.chartID).getContext('2d')
+			this.charts.push(new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: chartInfo.labels,
+					datasets: [{
+						label: 'Live',
+						backgroundColor: this.colors.green.fill,
+						borderColor: this.colors.green.stroke,
+						borderWidth: 3,
+						data: chartInfo.live,
+					}, {
+						label: 'Playback',
+						backgroundColor: this.colors.blue.fill,
+						borderColor: this.colors.blue.stroke,
+						borderWidth: 3,
+						data: chartInfo.playback,
+					}, {
+						label: 'Absent',
+						backgroundColor: this.colors.red.fill,
+						borderColor: this.colors.red.stroke,
+						borderWidth: 3,
+						data: chartInfo.absent,
+					}],
+				},
+				options: {
+					title: {
+						text: chartInfo.title,
+						display: true,
+						fontSize: 24
+					},
+					tooltips: {
+						displayColors: true,
+						callbacks:{
+							mode: 'x',
+						},
+					},
+					scales: {
+						xAxes: [{
+							stacked: true,
+							gridLines: {
+								display: false,
+							}
+						}],
+						yAxes: [{
+							stacked: true,
+							ticks: {
+								beginAtZero: true,
+							},
+							type: 'linear',
+							ticks: {
+								callback: function(value, index, values) {
+									return value+"%";
+								}
+							}
+						}]
+					},
+					responsive: true
+				}
+			}
+			))
 		},
 		createAreaGraph(chartInfo) {
 			let self = this
@@ -634,7 +711,7 @@ export default {
 	padding-bottom: 1rem;
 	overflow-y: scroll;
 }
-#courseChart {
+canvas:only-of-type {
 	margin-top: 3rem;
 }
 
