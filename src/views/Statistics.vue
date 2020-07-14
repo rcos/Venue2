@@ -31,6 +31,7 @@
 		<div id="stats-right">
 			<div id="stats-right-top">
 				<div id="top-panel" class="stats-panel">
+					<ToggleSwitch v-if="lectures.active.length != 1 && courses.active" label="Stacked" :start="stacked" @toggle="handleToggleStacked"/>
 				</div>
 			</div>
 			<div id="stats-right-bottom">
@@ -55,6 +56,7 @@ import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
 import chartjs from 'chart.js'
 
 import MultiSelectDropdown from '@/components/MultiSelectDropdown.vue'
+import ToggleSwitch from '@/components/ToggleSwitch.vue'
 
 export default {
 	name: 'Statistics',
@@ -63,7 +65,8 @@ export default {
 	computed: {
 	},
 	components: {
-		MultiSelectDropdown
+		MultiSelectDropdown,
+		ToggleSwitch
 	},
 	data(){
 		return {
@@ -89,7 +92,7 @@ export default {
 			colors: {
 				green: {
 					fill: '#bfffc6',
-					stroke: '#00ff83',
+					stroke: '#04dd74',
 				},
 				blue: {
 					fill: '#92bed2',
@@ -97,10 +100,11 @@ export default {
 				},
 				red: {
 					fill: '#ff8787',
-					stroke: '#ff6363'
+					stroke: '#e95454'
 				}
 			},
-			charts: []
+			charts: [],
+			stacked: true
 		}
 	},
 	created() {
@@ -321,6 +325,7 @@ export default {
 					})
 					let lectAttendance = this.getAttendanceForLecture(lecture)
 					live.push(lectAttendance.live)
+					console.log(lectAttendance.playback)
 					playback.push(lectAttendance.playback)
 					absent.push(lectAttendance.absent)
 					if(lecture.start_time) {
@@ -335,7 +340,7 @@ export default {
 					chartID: "courseChart",
 					title: this.courses.active.name + " Attendance",	
 					live: live,
-					playbac: playback,
+					playback: playback,
 					absent: absent,
 					dates: dates
 				})
@@ -454,13 +459,13 @@ export default {
 					},
 					scales: {
 						xAxes: [{
-							stacked: true,
+							stacked: this.stacked,
 							gridLines: {
 								display: false,
 							}
 						}],
 						yAxes: [{
-							stacked: true,
+							stacked: this.stacked,
 							ticks: {
 								beginAtZero: true,
 							},
@@ -479,6 +484,7 @@ export default {
 		},
 		createAreaGraph(chartInfo) {
 			let self = this
+			// console.log(chartInfo.playback)
 			let ctx = document.getElementById(chartInfo.chartID).getContext('2d')
 			this.charts.push(new Chart(ctx, {
 				type: 'line',
@@ -658,6 +664,10 @@ export default {
 			} else {
 				return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours-12) + ":" + (datetime.getMinutes()) + " PM")
 			}
+		},
+		handleToggleStacked(stacked) {
+			this.stacked = stacked
+			console.log(this.stacked)
 		}
 	}
 }
@@ -709,7 +719,7 @@ export default {
 	bottom: 0;
 	padding: 0rem 1rem;
 	padding-bottom: 1rem;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 canvas:only-of-type {
 	margin-top: 3rem;
@@ -726,6 +736,9 @@ canvas:only-of-type {
 }
 #side-panel {
 	right: 0;
+}
+#top-panel {
+	text-align: left;
 }
 
 .side-panel-section {

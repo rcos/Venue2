@@ -1,21 +1,19 @@
 <template>
 	<div class="multiselect">
-		<div class="multiselect-box">
-			<div class="multiselect-toggle float-right" @click="open = !open">
-				V
+		<div :class="'multiselect-box z'+(999-(2*n)+1)" @click="open = !open">
+			<div class="multiselect-toggle float-right">
+				{{"\u23F7"}}
 			</div>
-			<div v-for="(selection,i) in selected" :key="i">
-				<div :class="'multiselect-selected ' + (i==0?'first ':'') + (i==selected.length-1?'last ':'')">
-					<div class="multiselect-selected-text" :title="selection[property]">
-						{{selection[property]}}
-					</div>
-					<div v-if="max > 1" class="multiselect-selected-remove">
-						<button class="btn btn-danger" @click="removeSelection(i)">X</button>
-					</div>
+			<div v-for="(selection,i) in selected" :class="'multiselect-selected ' + (i==0?'first ':'') + (i==selected.length-1?'last ':'')" :key="i">
+				<div class="multiselect-selected-text" :title="selection[property]">
+					{{selection[property]}}
+				</div>
+				<div v-if="max > 1" class="multiselect-selected-remove">
+					<button class="btn btn-danger" @click="removeSelection(i)">X</button>
 				</div>
 			</div>
 		</div>
-		<div v-if="open" :class="'multiselect-dropdown z'+(999-n)">
+		<div v-if="open" :class="'multiselect-dropdown z'+(999-(2*n))">
 			<div v-for="(option,i) in unselected" :key="i" class="multiselect-option" @click="addSelection(option)">
 				{{option[property]}}
 			</div>
@@ -30,7 +28,7 @@
 import CourseAPI from '@/services/CourseAPI.js';
 
 export default {
-	name: 'Statistics',
+	name: 'MultiSelectDropdown',
 	props: {
 		options: Array,
 		property: String,
@@ -99,13 +97,15 @@ export default {
 	display: inline-block;
 }
 .multiselect-box {
+	position: relative;
 	border-radius: 0.25rem;
 	min-height: 2.5rem;
 	width: 10rem;
 	/* margin: 0.5rem; */
 	padding: 0.25rem;
-	padding-bottom: 0;
-	background: rgb(255, 255, 255)
+	/* padding-bottom: 0; */
+	background: rgb(255, 255, 255);
+	cursor: pointer;
 }
 .multiselect-toggle {
 	position: relative;
@@ -113,16 +113,18 @@ export default {
 	text-align: center;
 	top: 0;
 	right: 0;
-	margin: 0.25rem 0.5rem;
+	margin: 0.25rem;
+	margin-left: 0rem;
+	margin-top: 0.3rem;
 	width: 1rem;
-	cursor: pointer;
 }
 .multiselect-selected {
 	position: relative;
 	display: inline-flex;
 	background:#c4c4c4;
-	margin-bottom: 0.25rem;
-	max-width: 9.5rem;
+	border-radius: 0.2rem;
+	margin: 0.25rem;
+	max-width: 9rem;
 }
 .multiselect-selected.first {
 	max-width: 7.5rem;
@@ -141,33 +143,39 @@ export default {
 	position: absolute;
 	/* margin-top: -0.25rem; */
 	background: rgb(255, 255, 255);
-	border: 1px solid black;
+	border-top: 1px solid black;
+	border-radius: 0.25rem;
+	box-shadow: 0rem 0.2rem 1rem 0.2rem black;
 }
-.multiselect-dropdown.z999 {
+.z1000 {
+	z-index: 1000;
+}
+.z999 {
 	z-index: 999;
 }
-.multiselect-dropdown.z998 {
+.z998 {
 	z-index: 998;
 }
-.multiselect-dropdown.z997 {
+.z997 {
 	z-index: 997;
 }
-.multiselect-dropdown.z996 {
+.z996 {
 	z-index: 996;
 }
-.multiselect-dropdown.z995 {
+.z995 {
 	z-index: 995;
 }
-.multiselect-dropdown.z994 {
+.z994 {
 	z-index: 994;
 }
-.multiselect-dropdown.z993 {
+.z993 {
 	z-index: 993;
 }
 .multiselect-option {
 	margin: 0.5rem;
 	padding: 0.25rem;
 	background:#c4c4c4;
+	border-radius: 0.3rem;
 	border: 1px black solid;
 	cursor: pointer;
 }
