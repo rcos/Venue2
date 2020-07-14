@@ -745,8 +745,17 @@ export default {
 	padding-bottom: 1rem;
 	overflow-y: auto;
 }
+#stats-render {
+	padding: 0rem 10%;
+}
 canvas:only-of-type {
-	margin-top: 3rem;
+	margin-top: 10%;
+}
+canvas:not(:first-of-type) {
+	margin-top: 1rem;
+}
+canvas:last-of-type {
+	margin-bottom: 2rem;
 }
 
 .stats-panel {
