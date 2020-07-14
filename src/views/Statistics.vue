@@ -534,7 +534,7 @@ export default {
 					},
 					scales: {
 						yAxes: [{
-							stacked: true,
+							stacked: this.stacked,
 							ticks: {
 								callback: function(value, index, values) {
 									return value+"%";
@@ -556,9 +556,7 @@ export default {
 			}))
 		},
 		handleCourseChange(data) {
-			this.charts.forEach(chart => {
-				chart.destroy()
-			})
+			this.clearCharts()
 			this.lectures.active = []
 			this.sections.active = []
 			this.courses.active = data[0]
@@ -572,17 +570,13 @@ export default {
 			})
 		},
 		handleSectionsChange(data) {
-			this.charts.forEach(chart => {
-				chart.destroy()
-			})
+			this.clearCharts()
 			this.lectures.active = []
 			this.sections.active = data
 			this.execLecturesForSections(data)
 		},
 		handleLecturesChange(data) {
-			this.charts.forEach(chart => {
-				chart.destroy()
-			})
+			this.clearCharts()
 			this.lectures.active = data
 			this.execSubmissionsForLectures(data)
 		},
@@ -665,9 +659,24 @@ export default {
 				return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours-12) + ":" + (datetime.getMinutes()) + " PM")
 			}
 		},
+		clearCharts() {
+			this.charts.forEach(chart => {
+				chart.destroy()
+			})
+			this.charts = []
+		},
 		handleToggleStacked(stacked) {
 			this.stacked = stacked
-			console.log(this.stacked)
+			this.charts.forEach(chart => {
+				if(chart.config.type == 'line') {
+					chart.options.scales.yAxes[0].stacked = stacked
+					chart.update()
+				} else if(chart.config.type == 'bar') {
+					chart.options.scales.xAxes[0].stacked = stacked
+					chart.options.scales.yAxes[0].stacked = stacked
+					chart.update()
+				}
+			})
 		}
 	}
 }
