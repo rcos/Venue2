@@ -32,11 +32,16 @@
 			<div id="stats-right-top">
 				<div id="top-panel" class="stats-panel">
 					<ToggleSwitch v-if="lectures.active.length != 1 && courses.active" label="Stacked" :start="stacked" @toggle="handleToggleStacked"/>
+					<ToggleSwitch v-if="lectures.active.length == 1 && courses.active" label="Half" :start="half" @toggle="handleToggleHalf"/>
 				</div>
 			</div>
 			<div id="stats-right-bottom">
 				<div id="stats-render">
-						<canvas v-if="lectures.active.length > 0" id="lectureChart"></canvas>
+					<div v-if="lectures.active.length > 0">
+						<canvas id="lectureChart"></canvas>
+						<a v-if="lectures.active.length == 1 && this.half" class="pie-label half">Hey</a>
+						<a v-if="lectures.active.length == 1 && this.half" class="pie-label half">Hey</a>
+					</div>
 					<div v-else-if="sections.active.length > 0">
 						<canvas v-for="section in sections.active" :id="'sectionChart_'+section.number" :key="section.number"></canvas>
 					</div>
@@ -104,7 +109,8 @@ export default {
 				}
 			},
 			charts: [],
-			stacked: true
+			stacked: true,
+			half: true
 		}
 	},
 	created() {
@@ -325,7 +331,6 @@ export default {
 					})
 					let lectAttendance = this.getAttendanceForLecture(lecture)
 					live.push(lectAttendance.live)
-					console.log(lectAttendance.playback)
 					playback.push(lectAttendance.playback)
 					absent.push(lectAttendance.absent)
 					if(lecture.start_time) {
@@ -414,8 +419,8 @@ export default {
 					},
 					cutoutPercentage: 65,
 					responsive: true,
-					rotation: 1 * Math.PI,
-					circumference: 1 * Math.PI
+					rotation: (this.half ? 1*Math.PI : 1.5*Math.PI),
+					circumference: (this.half ? 1*Math.PI : 2*Math.PI)
 				}
 			}))
 		},
@@ -484,7 +489,6 @@ export default {
 		},
 		createAreaGraph(chartInfo) {
 			let self = this
-			// console.log(chartInfo.playback)
 			let ctx = document.getElementById(chartInfo.chartID).getContext('2d')
 			this.charts.push(new Chart(ctx, {
 				type: 'line',
@@ -674,6 +678,21 @@ export default {
 				} else if(chart.config.type == 'bar') {
 					chart.options.scales.xAxes[0].stacked = stacked
 					chart.options.scales.yAxes[0].stacked = stacked
+					chart.update()
+				}
+			})
+		},
+		handleToggleHalf(half) {
+			this.half = half
+			this.charts.forEach(chart => {
+				if(chart.config.type == 'pie') {
+					if(half) {
+						chart.options.rotation = 1 * Math.PI
+						chart.options.circumference = 1 * Math.PI
+					} else {
+						chart.options.rotation = 1.5 * Math.PI
+						chart.options.circumference = 2 * Math.PI
+					}
 					chart.update()
 				}
 			})

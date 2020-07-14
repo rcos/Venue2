@@ -4,7 +4,7 @@
 			<div class="multiselect-toggle float-right">
 				{{"\u23F7"}}
 			</div>
-			<div v-for="(selection,i) in selected" :class="'multiselect-selected ' + (i==0?'first ':'') + (i==selected.length-1?'last ':'')" :key="i">
+			<div v-for="(selection,i) in selected" :class="'multiselect-selected ' + (i==0?'first ':'') + (i==selected.length-1?'last ':'')" :key="i" v-on:click.stop>
 				<div class="multiselect-selected-text" :title="selection[property]">
 					{{selection[property]}}
 				</div>
