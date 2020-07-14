@@ -36,6 +36,9 @@
 			<div id="stats-right-bottom">
 				<div id="stats-render">
 					<canvas v-if="courses.active && sections.active.length == 0 && lectures.active.length == 0" id="courseChart"></canvas>
+					<div v-else-if="courses.active && sections.active.length > 0 && lectures.active.length == 0">
+						<canvas v-for="section in sections.active" :id="'sectionChart_'+section.number" :key="section.number"></canvas>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -95,7 +98,8 @@ export default {
 					fill: '#ff8787',
 					stroke: '#ff6363'
 				}
-			}
+			},
+			charts: []
 		}
 	},
 	created() {
@@ -144,6 +148,65 @@ export default {
 				//calculate lectures graphs data
 			} else if(this.sections.active.length > 0) {
 				//calculate sections graphs data
+				let sections = {}
+				this.sections.active.sort((a,b) => a.number > b.number ? 1 : -1)
+				this.sections.active.forEach(section => {
+					sections[section.number] = {
+						live: [],
+						playback: [],
+						absent: [],
+						dates: []
+					}
+					this.lectures.filtered.sort((a, b) => 
+						(a.start_time > b.start_time || a.playback_submission_start_time > b.playback_submission_start_time ||
+						a.start_time > b.playback_submission_start_time || a.playback_submission_start_time > b.start_time) ? 1 : -1
+					)
+					this.lectures.filtered.forEach(lecture => {
+						if(lecture.sections.includes(section._id)) {
+							lecture.students = {}
+							lecture.sections.forEach(sectID => {
+								let section = this.sections.all.find(section => section._id == sectID)
+								section.students.forEach(studID => {
+									lecture.students[studID] = {
+										live: [],
+										playback: null
+									}
+								})
+							})
+							let subsForLecture = this.lectureSubmissions.filtered.filter(a => a.lecture == lecture._id)
+							subsForLecture.forEach(sub => {
+								Object.keys(lecture.students).forEach(studID => {
+									if(sub.submitter._id == studID) {
+										if(sub.is_live_submission) {
+											lecture.students[studID].live.push(sub)
+										} else {
+											lecture.students[studID].playback = sub
+										}
+									}
+								})
+							})
+							let lectAttendance = this.getAttendanceForLecture(lecture)
+							sections[section.number].live.push(lectAttendance.live)
+							sections[section.number].playback.push(lectAttendance.playback)
+							sections[section.number].absent.push(lectAttendance.absent)
+							if(lecture.start_time) {
+								sections[section.number].dates.push(lecture.start_time)
+							} else if(lecture.playback_submission_start_time) {
+								sections[section.number].dates.push(lecture.playback_submission_start_time)
+							} else {
+								sections[section.number].dates.push(null)
+							}
+						}
+					})
+					this.createAreaGraph({
+						chartID: "sectionChart_"+section.number,
+						title: this.courses.active.name + " - Section " + section.number + " Attendance",
+						live: sections[section.number].live,
+						playback: sections[section.number].playback,
+						absent: sections[section.number].absent,
+						dates: sections[section.number].dates
+					})
+				})
 			} else if(this.courses.active) {
 				//calculate course graph data
 				let live = []
@@ -177,41 +240,10 @@ export default {
 							}
 						})
 					})
-					let lectureStudents = Object.keys(lecture.students)
-					let lectureLive = 0
-					let lecturePlayback = 0
-					let lectureAbsent = 0
-					lectureStudents.forEach(studID => {
-						let studSubmissions = lecture.students[studID]
-						if(studSubmissions.live.length > 0 && studSubmissions.playback != null) {
-							let percentage = Math.max(
-								studSubmissions.live.length / lecture.checkins.length * 100,
-								Math.ceil(studSubmissions.playback.video_percent * 100)
-							)
-							if(studSubmissions.live.length / lecture.checkins.length == percentage) {
-								lectureLive += percentage
-							} else {
-								lecturePlayback += percentage
-							}
-							lectureAbsent += (100 - percentage)
-						} else if(studSubmissions.live.length > 0) {
-							let percentage = studSubmissions.live.length / lecture.checkins.length * 100
-							lectureLive += percentage
-							lectureAbsent += (100 - percentage)
-						} else if(studSubmissions.playback != null) {
-							let percentage = Math.ceil(studSubmissions.playback.video_percent * 100)
-							lecturePlayback += percentage
-							lectureTotal += (100 - percentage)
-						} else {
-							lectureAbsent += 100
-						}
-					})
-					lectureLive /= lectureStudents.length
-					lecturePlayback /= lectureStudents.length
-					lectureAbsent /= lectureStudents.length
-					live.push(lectureLive)
-					playback.push(lecturePlayback)
-					absent.push(lectureAbsent)
+					let lectAttendance = this.getAttendanceForLecture(lecture)
+					live.push(lectAttendance.live)
+					playback.push(lectAttendance.playback)
+					absent.push(lectAttendance.absent)
 					if(lecture.start_time) {
 						dates.push(lecture.start_time)
 					} else if(lecture.playback_submission_start_time) {
@@ -220,15 +252,62 @@ export default {
 						dates.push(null)
 					}
 				})
-				this.createCourseGraph(live,playback,absent,dates)
+				this.createAreaGraph({
+					chartID: "courseChart",
+					title: this.courses.active.name + " Attendance",	
+					live: live,
+					playbac: playback,
+					absent: absent,
+					dates: dates
+				})
 			}
 		},
-		createCourseGraph(live,playback,absent,dates) {
-			let ctx = document.getElementById('courseChart').getContext('2d')
-			const courseChart = new Chart(ctx, {
+		getAttendanceForLecture(lecture) {
+			let lectureStudents = Object.keys(lecture.students)
+			let lectureLive = 0
+			let lecturePlayback = 0
+			let lectureAbsent = 0
+			lectureStudents.forEach(studID => {
+				let studSubmissions = lecture.students[studID]
+				if(studSubmissions.live.length > 0 && studSubmissions.playback != null) {
+					let percentage = Math.max(
+						studSubmissions.live.length / lecture.checkins.length * 100,
+						Math.ceil(studSubmissions.playback.video_percent * 100)
+					)
+					if(studSubmissions.live.length / lecture.checkins.length == percentage) {
+						lectureLive += percentage
+					} else {
+						lecturePlayback += percentage
+					}
+					lectureAbsent += (100 - percentage)
+				} else if(studSubmissions.live.length > 0) {
+					let percentage = studSubmissions.live.length / lecture.checkins.length * 100
+					lectureLive += percentage
+					lectureAbsent += (100 - percentage)
+				} else if(studSubmissions.playback != null) {
+					let percentage = Math.ceil(studSubmissions.playback.video_percent * 100)
+					lecturePlayback += percentage
+					lectureTotal += (100 - percentage)
+				} else {
+					lectureAbsent += 100
+				}
+			})
+			lectureLive /= lectureStudents.length
+			lecturePlayback /= lectureStudents.length
+			lectureAbsent /= lectureStudents.length
+			return {
+				live: lectureLive,
+				playback: lecturePlayback,
+				absent: lectureAbsent
+			}
+		},
+		createAreaGraph(chartInfo) {
+			let self = this
+			let ctx = document.getElementById(chartInfo.chartID).getContext('2d')
+			this.charts.push(new Chart(ctx, {
 				type: 'line',
 				data: {
-					labels: dates,
+					labels: chartInfo.dates,
 					datasets: [{
 						label: "Live",
 						fill: true,
@@ -239,7 +318,7 @@ export default {
 						borderCapStyle: 'butt',
 						pointRadius: 5,
 						pointHoverRadius: 10,
-						data: live,
+						data: chartInfo.live,
 					}, {
 						label: "Playback",
 						fill: true,
@@ -250,7 +329,7 @@ export default {
 						borderCapStyle: 'butt',
 						pointRadius: 5,
 						pointHoverRadius: 10,
-						data: playback,
+						data: chartInfo.playback,
 					}, {
 						label: "Absent",
 						fill: true,
@@ -261,23 +340,43 @@ export default {
 						borderCapStyle: 'butt',
 						pointRadius: 5,
 						pointHoverRadius: 10,
-						data: absent,
+						data: chartInfo.absent,
 					}]
 				},
 				options: {
 					responsive: true,
+					title: {
+						display: true,
+						text: chartInfo.title,
+						fontSize: 24
+					},
 					scales: {
 						yAxes: [{
 							stacked: true,
+							ticks: {
+								callback: function(value, index, values) {
+									return value+"%";
+								}
+							}
+						}],
+						xAxes: [{
+							ticks: {
+								callback: function(value, index, values) {
+									return self.getPrettyDateTime(value);
+								}
+							}
 						}]
 					},
 					animation: {
 						duration: 1000,
 					},
 				}
-			});
+			}))
 		},
 		handleCourseChange(data) {
+			this.charts.forEach(chart => {
+				chart.destroy()
+			})
 			this.courses.active = data[0]
 			this.getSectionsForCourse(data[0])
 			.then(sections => {
@@ -289,10 +388,16 @@ export default {
 			})
 		},
 		handleSectionsChange(data) {
+			this.charts.forEach(chart => {
+				chart.destroy()
+			})
 			this.sections.active = data
 			this.execLecturesForSections(data)
 		},
 		handleLecturesChange(data) {
+			this.charts.forEach(chart => {
+				chart.destroy()
+			})
 			this.lectures.active = data
 			this.execSubmissionsForLectures(data)
 		},
@@ -362,6 +467,18 @@ export default {
 				}
 			})
 			return Promise.all(submissions)
+		},
+		getPrettyDateTime(datetime) {
+			datetime = new Date(datetime)
+			if("Invalid Date" == datetime) {
+				return ("Not set")
+			}
+			let hours = datetime.getHours()
+			if(hours < 12) {
+				return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + (datetime.getMinutes()) + " AM")
+			} else {
+				return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours-12) + ":" + (datetime.getMinutes()) + " PM")
+			}
 		}
 	}
 }
@@ -413,6 +530,10 @@ export default {
 	bottom: 0;
 	padding: 0rem 1rem;
 	padding-bottom: 1rem;
+	overflow-y: scroll;
+}
+#courseChart {
+	margin-top: 3rem;
 }
 
 .stats-panel {
