@@ -35,10 +35,13 @@
 			</div>
 			<div id="stats-right-bottom">
 				<div id="stats-render">
-					<canvas v-if="courses.active && sections.active.length == 0 && lectures.active.length == 0" id="courseChart"></canvas>
-					<div v-else-if="courses.active && sections.active.length > 0 && lectures.active.length == 0">
+					<div v-if="lectures.active.length > 0">
+						<canvas v-for="lecture in lectures.active" :id="'lectureChart_'+lecture._id" :key="lecture._id"></canvas>
+					</div>
+					<div v-else-if="sections.active.length > 0">
 						<canvas v-for="section in sections.active" :id="'sectionChart_'+section.number" :key="section.number"></canvas>
 					</div>
+					<canvas v-else-if="courses.active" id="courseChart"></canvas>
 				</div>
 			</div>
 		</div>
@@ -146,6 +149,65 @@ export default {
 		setupGraphs() {
 			if(this.lectures.active.length > 0) {
 				//calculate lectures graphs data
+				this.lectures.active.sort((a, b) => 
+					(a.start_time > b.start_time || a.playback_submission_start_time > b.playback_submission_start_time ||
+					a.start_time > b.playback_submission_start_time || a.playback_submission_start_time > b.start_time) ? 1 : -1
+				)
+				let lecturesAttendance = {}
+				this.lectures.active.forEach(lecture => {
+					lecturesAttendance[lecture._id] = {
+						obj: {},
+						live: null,
+						playback: null,
+						absent: null,
+						date: null
+					}
+					lecture.students = {}
+					lecture.sections.forEach(sectID => {
+						let section = this.sections.all.find(section => section._id == sectID)
+						section.students.forEach(studID => {
+							lecture.students[studID] = {
+								live: [],
+								playback: null
+							}
+						})
+					})
+					let subsForLecture = this.lectureSubmissions.filtered.filter(a => a.lecture == lecture._id)
+					subsForLecture.forEach(sub => {
+						Object.keys(lecture.students).forEach(studID => {
+							if(sub.submitter._id == studID) {
+								if(sub.is_live_submission) {
+									lecture.students[studID].live.push(sub)
+								} else {
+									lecture.students[studID].playback = sub
+								}
+							}
+						})
+					})
+					let lectAttendance = this.getAttendanceForLecture(lecture)
+					lecturesAttendance[lecture._id].live = lectAttendance.live
+					lecturesAttendance[lecture._id].playback = lectAttendance.playback
+					lecturesAttendance[lecture._id].absent = lectAttendance.absent
+					if(lecture.start_time) {
+						lecturesAttendance[lecture._id].date = lecture.start_time
+					} else if(lecture.playback_submission_start_time) {
+						lecturesAttendance[lecture._id].date = lecture.playback_submission_start_time
+					}
+					lecturesAttendance[lecture._id].obj = lecture
+				})
+				let lectIDs = Object.keys(lecturesAttendance)
+				if(lectIDs.length == 1) {
+					this.createPieGraph({
+						chartID: "lectureChart_"+lectIDs[0],
+						title: lecturesAttendance[lectIDs[0]].obj.title + " Attendance",
+						live: lecturesAttendance[lectIDs[0]].live,
+						playback: lecturesAttendance[lectIDs[0]].playback,
+						absent: lecturesAttendance[lectIDs[0]].absent
+					})
+				} else {
+					//barCharts
+					console.log(">1")
+				}
 			} else if(this.sections.active.length > 0) {
 				//calculate sections graphs data
 				let sections = {}
@@ -301,6 +363,43 @@ export default {
 				absent: lectureAbsent
 			}
 		},
+		createPieGraph(chartInfo) {
+			let ctx = document.getElementById(chartInfo.chartID).getContext('2d')
+			this.charts.push(new Chart(ctx, {
+				type: 'pie',
+				data: {
+					labels: ['Live', 'Playback', 'Absent'],
+					datasets: [{
+						data: [chartInfo.live,chartInfo.playback,chartInfo.absent],
+						backgroundColor: [
+							this.colors.green.fill,
+							this.colors.blue.fill,
+							this.colors.red.fill
+						],
+						borderColor: [
+							this.colors.green.stroke,
+							this.colors.blue.stroke,
+							this.colors.red.stroke
+						],
+						borderWidth: 3
+					}]
+				},
+				options: {
+					title: {
+						text: chartInfo.title,
+						display: true,
+						fontSize: 24
+					},
+					cutoutPercentage: 65,
+					responsive: true,
+					rotation: 1 * Math.PI,
+					circumference: 1 * Math.PI
+				}
+			}))
+		},
+		createBarsGraph(chartInfo) {
+
+		},
 		createAreaGraph(chartInfo) {
 			let self = this
 			let ctx = document.getElementById(chartInfo.chartID).getContext('2d')
@@ -377,6 +476,8 @@ export default {
 			this.charts.forEach(chart => {
 				chart.destroy()
 			})
+			this.lectures.active = []
+			this.sections.active = []
 			this.courses.active = data[0]
 			this.getSectionsForCourse(data[0])
 			.then(sections => {
@@ -391,6 +492,7 @@ export default {
 			this.charts.forEach(chart => {
 				chart.destroy()
 			})
+			this.lectures.active = []
 			this.sections.active = data
 			this.execLecturesForSections(data)
 		},
