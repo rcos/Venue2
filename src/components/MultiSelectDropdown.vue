@@ -104,7 +104,7 @@ export default {
 	/* margin: 0.5rem; */
 	padding: 0.25rem;
 	/* padding-bottom: 0; */
-	background: rgb(255, 255, 255);
+	background: #ECECEC;
 	cursor: pointer;
 }
 .multiselect-toggle {
@@ -121,7 +121,7 @@ export default {
 .multiselect-selected {
 	position: relative;
 	display: inline-flex;
-	background:#c4c4c4;
+	/* background:#c4c4c4; */
 	border-radius: 0.2rem;
 	margin: 0.25rem;
 	max-width: 9rem;
@@ -142,7 +142,7 @@ export default {
 	overflow: auto;
 	position: absolute;
 	/* margin-top: -0.25rem; */
-	background: rgb(255, 255, 255);
+	background: #ECECEC;
 	border-top: 1px solid black;
 	border-radius: 0.25rem;
 	box-shadow: 0rem 0.2rem 1rem 0.2rem black;
@@ -176,7 +176,7 @@ export default {
 	padding: 0.25rem;
 	background:#c4c4c4;
 	border-radius: 0.3rem;
-	border: 1px black solid;
+	/* border: 1px black solid; */
 	cursor: pointer;
 }
 .btn-danger {
