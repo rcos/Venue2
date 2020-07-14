@@ -17,9 +17,6 @@
 			<div v-for="(option,i) in unselected" :key="i" class="multiselect-option" @click="addSelection(option)">
 				{{option[property]}}
 			</div>
-			<div v-if="unselected.length == 0">
-				None
-			</div>
 		</div>
 	</div>
 </template>
@@ -101,9 +98,7 @@ export default {
 	border-radius: 0.25rem;
 	min-height: 2.5rem;
 	width: 10rem;
-	/* margin: 0.5rem; */
 	padding: 0.25rem;
-	/* padding-bottom: 0; */
 	background: #ECECEC;
 	cursor: pointer;
 }
@@ -121,7 +116,6 @@ export default {
 .multiselect-selected {
 	position: relative;
 	display: inline-flex;
-	/* background:#c4c4c4; */
 	border-radius: 0.2rem;
 	margin: 0.25rem;
 	max-width: 9rem;
@@ -141,11 +135,11 @@ export default {
 	width: 10rem;
 	overflow: auto;
 	position: absolute;
-	/* margin-top: -0.25rem; */
 	background: #ECECEC;
 	border-top: 1px solid black;
 	border-radius: 0.25rem;
 	box-shadow: 0rem 0.2rem 1rem 0.2rem black;
+	min-height: 1rem;
 }
 .z1000 {
 	z-index: 1000;
@@ -173,10 +167,9 @@ export default {
 }
 .multiselect-option {
 	margin: 0.5rem;
-	padding: 0.25rem;
+	padding: 0.25rem 0.5rem;
 	background:#c4c4c4;
 	border-radius: 0.3rem;
-	/* border: 1px black solid; */
 	cursor: pointer;
 }
 .btn-danger {
