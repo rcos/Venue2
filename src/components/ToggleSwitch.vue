@@ -53,6 +53,7 @@ export default {
 	width: 5rem;
 	height: 2rem;
 	margin-left: 1rem;
+	cursor: pointer;
 }
 .toggle-background.left {
 	background: #ff8787;
