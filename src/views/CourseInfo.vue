@@ -29,13 +29,9 @@
               :class="'tab ' + (subview_section_id == 0 ? 'active' : '')"
               tabindex="0" role="tab" :aria-selected="(subview_section_id == 0 ? 'true' : 'false')" aria-controls="panel-1" aria-label="Show Attendance History">Attendance History</div>
             <div
-              v-on:click="subview_section_id = 2" v-on:keyup.enter="subview_section_id = 2"
-              :class="'tab ' + (subview_section_id == 2 ? 'active' : '')"
-              tabindex="0" role="tab" :aria-selected="(subview_section_id == 2 ? 'true' : 'false')" aria-controls="panel-3" aria-label="Show Upcoming Lectures">Upcoming</div>
-            <div
               v-on:click="subview_section_id = 1" v-on:keyup.enter="subview_section_id = 1"
               :class="'tab ' + (subview_section_id == 1 ? 'active' : '')"
-              tabindex="0" role="tab" :aria-selected="(subview_section_id == 1 ? 'true' : 'false')" aria-controls="panel-2" aria-label="Show Course Statistics">Statistics</div>
+              tabindex="0" role="tab" :aria-selected="(subview_section_id == 1 ? 'true' : 'false')" aria-controls="panel-2" aria-label="Show Upcoming Lectures">Upcoming</div>
           </div>
           <div v-if="this.current_user.is_instructor" class="right">
             <label id="section_select_label">Select Section</label>
@@ -58,10 +54,7 @@
           </div>
 
         </div>
-        <div v-else-if="subview_section_id == 1" :style="{marginTop: `20px`}" id="panel-2" role="tabpanel">
-          Coming Soon...
-        </div>
-        <div v-else-if="subview_section_id == 2" :style="{marginTop: '20px'}" id="panel-3" role="tabpanel">
+        <div v-else-if="subview_section_id == 1" :style="{marginTop: '20px'}" id="panel-2" role="tabpanel">
           <show-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" :lecture_data="upcoming_lectures"/></show-at>
           <hide-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" :lecture_data="upcoming_lectures" mobileMode/></hide-at>
         </div>

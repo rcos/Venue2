@@ -7,9 +7,7 @@
 				role="tab" aria-selected="false" aria-controls="playback_submit"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
 			<button id="absent_btn" class="tab_btn" tabindex="0" @click="selectTab(2)" aria-label="Show Absent"
 				role="tab" aria-selected="false" aria-controls="no_submit"><h5>Absent ({{absent.length}}/{{all_students.length}})</h5></button>
-			<button id="stats_btn" class="tab_btn" tabindex="0" @click="selectTab(3)" aria-label="Show Statistics"
-				role="tab" aria-selected="false" aria-controls="stats"><h5>Statistics</h5></button>
-			<button id="instructors_only_btn" class="tab_btn" tabindex="0" @click="selectTab(4)" aria-label="Show Instructors Only"
+			<button id="instructors_only_btn" class="tab_btn" tabindex="0" @click="selectTab(3)" aria-label="Show Instructors Only"
 				role="tab" aria-selected="false" aria-controls="instructors_only"><h5>Instructors Only</h5></button>
 		</div>
 		<div class="tabs" v-else>
@@ -19,8 +17,6 @@
 				role="tab" aria-selected="false" aria-controls="playback_submit"><h5>Playback</h5></button>
 			<button id="absent_btn" class="tab_btn" @click="selectTab(2)" tabindex="0" aria-label="Show Absent"
 				role="tab" aria-selected="false" aria-controls="no_submit"><h5>Absent</h5></button>
-			<button id="stats_btn" class="tab_btn" @click="selectTab(3)" tabindex="0" aria-label="Show Statistics"
-				role="tab" aria-selected="false" aria-controls="stats"><h5>Statistics</h5></button>
 		</div>
 		<div v-if="selected_tab === 0" role="tabpanel" aria-labelledby="live_btn" id="live_submit" class="tab_section">
 			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :live_submissions="live_submissions" :is_live="true" />
@@ -31,10 +27,7 @@
 		<div v-if="selected_tab === 2" role="tabpanel" aria-labelledby="absent_btn" id="no_submit" class="tab_section">
 			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="absent" :is_absent="true" />
 		</div>
-		<div v-if="selected_tab === 3" role="tabpanel" aria-labelledby="stats_btn" id="stats" class="tab_section">
-			<p>Statistics Graphs Coming Soon...</p>
-		</div>
-		<div v-if="selected_tab === 4" role="tabpanel" aria-labelledby="instructors_only_btn" id="instructors_only" class="tab_section">
+		<div v-if="selected_tab === 3" role="tabpanel" aria-labelledby="instructors_only_btn" id="instructors_only" class="tab_section">
 			<div id="manual-override-container">
 				<div v-if="override_err_msg != ''" id="override-err-msg">
 					<p class="err-msg">{{override_err_msg}}</p>
@@ -102,8 +95,7 @@
     	  let btns = [
     	    document.getElementById("live_btn"),
     	    document.getElementById("playback_btn"),
-    	    document.getElementById("absent_btn"),
-    	    document.getElementById("stats_btn")
+    	    document.getElementById("absent_btn")
     	  ]
 				if(this.all_students) {
 					btns.push(document.getElementById("instructors_only_btn"))
