@@ -793,6 +793,8 @@ canvas:last-of-type {
 
 .selector-label {
 	text-align: right;
+	margin-right: 0.5rem;
+	padding-top: 0.5rem;
 }
 
 .selector-col {
