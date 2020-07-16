@@ -24,7 +24,7 @@
 					<div class="col selector-label">
 						Students:
 					</div>
-					<MultiSelectDropdown id="students-selector" :options="students.filtered" sortBy="last_name" @update="handleStudentsChange" :max="4" :n="3" ref="studentsSelector"/>
+					<MultiSelectDropdown id="students-selector" :options="students.filtered" sortBy="last_name" :displayAs="['last_name','first_name']" @update="handleStudentsChange" :max="4" :n="3" ref="studentsSelector"/>
 				</div>
 			</div>
 		</div>
@@ -54,6 +54,7 @@
 import CourseAPI from '@/services/CourseAPI.js'
 import SectionAPI from '@/services/SectionAPI.js'
 import LectureAPI from '@/services/LectureAPI.js'
+import UserAPI from '@/services/UserAPI.js'
 import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
 
 import chartjs from 'chart.js'
@@ -126,11 +127,29 @@ export default {
 			CourseAPI.getInstructorCourses(this.current_user._id)
 			.then(res => {
 				this.courses.all = res.data
+				let allStudents = []
 				this.courses.all.forEach(course => {
 					SectionAPI.getSectionsForCourse(course._id)
 					.then(res2 => {
 						this.sections.all = this.sections.all.concat(res2.data)
 					})
+					allStudents = allStudents.concat(new Promise((resolve,reject) => {
+						UserAPI.getStudentsForCourse(course._id)
+						.then(res2 => {
+							let students = []
+							res2.data.forEach(student => {
+								students.push(new Promise((resolve2,reject2) => {
+									resolve2(student)
+								}))
+							})
+							Promise.all(students).then(resolved => {
+								resolve(resolved)
+							})
+						})
+					}))
+				})
+				Promise.all(allStudents).then(resolved => {
+					this.students.all = ([].concat.apply([], resolved)).uniqueByProp("_id")
 				})
 			})
 			LectureAPI.getLecturesForUser(this.current_user._id,'none')
@@ -586,20 +605,32 @@ export default {
 			this.clearCharts()
 			this.students.active = []
 			this.lectures.active = data
+			this.execStudentsForLectures(data)
 			this.execSubmissionsForLectures(data)
 		},
 		handleStudentsChange(data) {
-			this.clearCharts()
+			// this.clearCharts()
 		},
-		execLecturesForSections(data) {
-			this.getLecturesForSections(data)
+		execLecturesForSections(sections) {
+			this.getLecturesForSections(sections)
 			.then(lectures => {
 				let clean = lectures.filter(a => undefined != a)
 				if(undefined != this.lectures.filtered && this.lectures.filtered.length > 0) {
 					this.$refs.lecturesSelector.repopulate(clean)
 				}
 				this.lectures.filtered = clean
+				this.execStudentsForLectures(clean)
 				this.execSubmissionsForLectures(clean)
+			})
+		},
+		execStudentsForLectures(lectures) {
+			this.getStudentsForLectures(lectures)
+			.then(students => {
+				let noDups = students.uniqueByProp("_id")
+				if(undefined != this.students.filtered && this.students.filtered.length > 0) {
+					this.$refs.studentsSelector.repopulate(noDups)
+				}
+				this.students.filtered =  noDups
 			})
 		},
 		execSubmissionsForLectures(lectures) {
@@ -638,6 +669,31 @@ export default {
 				}
 			})
 			return Promise.all(lecturesForSections)
+		},
+		async getStudentsForLectures(lectures) {
+			let students = []
+			let toIterate
+			if(lectures.length == 0) {
+				toIterate = this.lectures.all
+			} else {
+				toIterate = lectures
+			}
+			toIterate.forEach(lecture => {
+				lecture.sections.forEach(sectID => {
+					this.sections.filtered.forEach(section => {
+						if(section._id == sectID) {
+							this.students.all.forEach(student => {
+								if(section.students.includes(student._id)) {
+									students.push(new Promise((resolve,reject) => {
+										resolve(student)
+									}))
+								}
+							})
+						}
+					})
+				})
+			})
+			return Promise.all(students)
 		},
 		async getSubmissionsForLectures(lectures) {
 			let submissions = []
@@ -789,9 +845,11 @@ canvas:last-of-type {
 	margin: 0rem 2rem;
 	width: 15rem;
 	padding: 2rem 0rem;
-	border-bottom: 1px solid black;
 	min-height: 2.75rem;
 	text-align: center;
+}
+.side-panel-section:not(:first-of-type) {
+	border-top: 1px solid black;
 }
 
 #course-selector {
