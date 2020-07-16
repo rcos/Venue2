@@ -1,5 +1,5 @@
 <template>
-	<div class="multiselect">
+	<div class="multiselect" v-click-outside="handleClickOutside">
 		<div :class="'multiselect-box z'+(999-(2*n)+1)" @click="open = !open">
 			<div class="multiselect-toggle float-right">
 				{{"\u23F7"}}
@@ -14,7 +14,7 @@
 			</div>
 		</div>
 		<div v-if="open" :class="'multiselect-dropdown z'+(999-(2*n))">
-			<div v-for="(option,i) in unselected" :key="i" class="multiselect-option" @click="addSelection(option)">
+			<div v-for="(option,i) in unselected" :key="i" class="multiselect-option" @click="addSelection(option)" v-on:click.stop>
 				{{option[property]}}
 			</div>
 		</div>
@@ -83,6 +83,9 @@ export default {
 				this.unselected.push(option)
 			})
 			this.unselected.sort((a,b) => a[this.property] > b[this.property] ? 1 : -1)
+		},
+		handleClickOutside(event) {
+			this.open = false
 		}
 	}
 }
@@ -129,6 +132,7 @@ export default {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	cursor: text;
 }
 .multiselect-dropdown {
 	max-height: 10rem;

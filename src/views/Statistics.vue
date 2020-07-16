@@ -749,7 +749,7 @@ export default {
 	padding: 0rem 10%;
 }
 canvas:only-of-type {
-	margin-top: 10%;
+	margin-top: 5%;
 }
 canvas:not(:first-of-type) {
 	margin-top: 1rem;
