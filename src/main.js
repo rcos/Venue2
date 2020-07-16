@@ -11,7 +11,22 @@ Vue.use(VueAxios, axios);
 
 Vue.config.productionTip = false;
 
-//custom directive to detect when a click happens outsite a component
+//Custom Functions START
+Number.prototype.toFixedDecimals = function(digits) {
+    var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
+        m = this.toString().match(re);
+    return m ? parseFloat(m[1]) : this.valueOf();
+};
+
+Array.prototype.uniqueByProp = function(prop){
+	const thisP = this.map( el => el[prop]); // I only need to do that one time;
+	return this.filter( (obj, index) => {
+		return thisP.indexOf(obj[prop]) === index;
+	})
+}
+//Custom Functions END
+
+//Custom Directives START
 Vue.directive('click-outside', {
   bind: function (el, binding, vnode) {
     el.clickOutsideEvent = function (event) {
@@ -27,6 +42,7 @@ Vue.directive('click-outside', {
     document.body.removeEventListener('click', el.clickOutsideEvent)
   },
 });
+//Custom Directives END
 
 new Vue({
     router,

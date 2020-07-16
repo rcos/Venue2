@@ -5,8 +5,8 @@
 				{{"\u23F7"}}
 			</div>
 			<div v-for="(selection,i) in selected" :class="'multiselect-selected ' + (i==0?'first ':'') + (i==selected.length-1?'last ':'')" :key="i" v-on:click.stop>
-				<div class="multiselect-selected-text" :title="selection[sortBy]">
-					{{selection[sortBy]}}
+				<div class="multiselect-selected-text" :title="getDisplayText(selection)">
+					{{getDisplayText(selection)}}
 				</div>
 				<div v-if="max > 1" class="multiselect-selected-remove">
 					<button class="btn btn-danger" @click="removeSelection(i)">X</button>
@@ -14,8 +14,8 @@
 			</div>
 		</div>
 		<div v-if="open" :class="'multiselect-dropdown z'+(999-(2*n))">
-			<div v-for="(option,i) in unselected" :key="i" class="multiselect-option" @click="addSelection(option)" v-on:click.stop>
-				{{option[sortBy]}}
+			<div v-for="(option,i) in unselected" :key="i" class="multiselect-option" :title="getDisplayText(option)" @click="addSelection(option)" v-on:click.stop>
+				{{getDisplayText(option)}}
 			</div>
 		</div>
 	</div>
@@ -29,6 +29,7 @@ export default {
 	props: {
 		options: Array,
 		sortBy: String,
+		displayAs: Array,
 		max: { type: Number, default: 999 },
 		n: { type: Number, default: 0 }
 	},
@@ -70,8 +71,19 @@ export default {
 		removeSelection(i) {
 			this.unselected.push(this.selected[i])
 			this.selected.splice(i,1)
-			this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
+			this.unselected.sort((a,b) => {a[this.sortBy] > b[this.sortBy] ? 1 : -1})
 			this.sendUpdates()
+		},
+		getDisplayText(option) {
+			let display = ""
+			if(this.displayAs) {
+				this.displayAs.forEach((prop,i) => {
+					display += (i>0 ? ", "+option[prop]  : option[prop])
+				})
+			} else {
+				display +=  option[this.sortBy]
+			}
+			return display
 		},
 		sendUpdates() {
 			this.$emit('update',this.selected)
