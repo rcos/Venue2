@@ -5,8 +5,8 @@
 				{{"\u23F7"}}
 			</div>
 			<div v-for="(selection,i) in selected" :class="'multiselect-selected ' + (i==0?'first ':'') + (i==selected.length-1?'last ':'')" :key="i" v-on:click.stop>
-				<div class="multiselect-selected-text" :title="selection[property]">
-					{{selection[property]}}
+				<div class="multiselect-selected-text" :title="selection[sortBy]">
+					{{selection[sortBy]}}
 				</div>
 				<div v-if="max > 1" class="multiselect-selected-remove">
 					<button class="btn btn-danger" @click="removeSelection(i)">X</button>
@@ -15,7 +15,7 @@
 		</div>
 		<div v-if="open" :class="'multiselect-dropdown z'+(999-(2*n))">
 			<div v-for="(option,i) in unselected" :key="i" class="multiselect-option" @click="addSelection(option)" v-on:click.stop>
-				{{option[property]}}
+				{{option[sortBy]}}
 			</div>
 		</div>
 	</div>
@@ -28,7 +28,7 @@ export default {
 	name: 'MultiSelectDropdown',
 	props: {
 		options: Array,
-		property: String,
+		sortBy: String,
 		max: { type: Number, default: 999 },
 		n: { type: Number, default: 0 }
 	},
@@ -44,18 +44,18 @@ export default {
 		this.options.forEach(option => {
 			this.unselected.push(option)
 		})
-		this.unselected.sort((a,b) => a[this.property] > b[this.property] ? 1 : -1)
+		this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
 	},
 	methods: {
 		addSelection(option) {
 			if(this.selected.length < this.max) {
 				this.selected.push(option)
-				this.selected.sort((a,b) => a[this.property] > b[this.property] ? 1 : -1)
+				this.selected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
 				let index = this.unselected.indexOf(option);
 				if (index > -1) {
 					this.unselected.splice(index, 1);
 				}
-				this.unselected.sort((a,b) => a[this.property] > b[this.property] ? 1 : -1)
+				this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
 			} else if(this.max == 1 && this.selected[0] != option) {
 				this.unselected.push(this.selected[0])
 				this.selected[0] = option;
@@ -63,14 +63,14 @@ export default {
 				if (index > -1) {
 					this.unselected.splice(index, 1);
 				}
-				this.unselected.sort((a,b) => a[this.property] > b[this.property] ? 1 : -1)
+				this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
 			}
 			this.sendUpdates()
 		},
 		removeSelection(i) {
 			this.unselected.push(this.selected[i])
 			this.selected.splice(i,1)
-			this.unselected.sort((a,b) => a[this.property] > b[this.property] ? 1 : -1)
+			this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
 			this.sendUpdates()
 		},
 		sendUpdates() {
@@ -82,7 +82,7 @@ export default {
 			data.forEach(option => {
 				this.unselected.push(option)
 			})
-			this.unselected.sort((a,b) => a[this.property] > b[this.property] ? 1 : -1)
+			this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
 		},
 		handleClickOutside(event) {
 			this.open = false
@@ -99,7 +99,7 @@ export default {
 .multiselect-box {
 	position: relative;
 	border-radius: 0.25rem;
-	min-height: 2.5rem;
+	min-height: 2.75rem;
 	width: 10rem;
 	padding: 0.25rem;
 	background: #ECECEC;

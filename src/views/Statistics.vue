@@ -2,29 +2,29 @@
 	<div id="stats-container">
 		<div id="stats-left">
 			<div id="side-panel" class="stats-panel">
-				<div class="row side-panel-section">
+				<div class="row side-panel-section justify-content-end" v-if="courses.all.length > 0">
 					<div class="col selector-label">
 						Course:
 					</div>
-					<div class="col col-8 selector-col">
-						<MultiSelectDropdown id="course-selector" v-if="courses.all.length > 0" :options="courses.all" property="name" @update="handleCourseChange" :max="1" :n="0" ref="courseSelector"/>
-					</div>
+					<MultiSelectDropdown id="course-selector" :options="courses.all" sortBy="name" @update="handleCourseChange" :max="1" :n="0" ref="courseSelector"/>
 				</div>
-				<div class="row side-panel-section">
+				<div class="row side-panel-section justify-content-end" v-if="sections.filtered.length > 0">
 					<div class="col selector-label">
 						Sections:
 					</div>
-					<div class="col col-8 selector-col">
-						<MultiSelectDropdown id="sections-selector" v-if="sections.filtered.length > 0" :options="sections.filtered" property="number" @update="handleSectionsChange" :max="4" :n="1" ref="sectionsSelector"/>
-					</div>
+					<MultiSelectDropdown id="sections-selector" :options="sections.filtered" sortBy="number" @update="handleSectionsChange" :max="4" :n="1" ref="sectionsSelector"/>
 				</div>
-				<div class="row side-panel-section">
-					<div class="col selector-label">
+				<div class="row side-panel-section justify-content-end" v-if="lectures.filtered.length > 0">
+					<div class="selector-label">
 						Lectures:
 					</div>
-					<div class="col col-8 selector-col">
-						<MultiSelectDropdown id="lectures-selector" v-if="lectures.filtered.length > 0" :options="lectures.filtered" property="title" @update="handleLecturesChange" :max="4" :n="2" ref="lecturesSelector"/>
+					<MultiSelectDropdown id="lectures-selector" :options="lectures.filtered" sortBy="title" @update="handleLecturesChange" :max="4" :n="2" ref="lecturesSelector"/>
+				</div>
+				<div class="row side-panel-section justify-content-end" v-if="students.filtered.length > 0">
+					<div class="col selector-label">
+						Students:
 					</div>
+					<MultiSelectDropdown id="students-selector" :options="students.filtered" sortBy="last_name" @update="handleStudentsChange" :max="4" :n="3" ref="studentsSelector"/>
 				</div>
 			</div>
 		</div>
@@ -86,6 +86,11 @@ export default {
 			lectures: {
 				all: [],
 				filtered: [], //for sections/course
+				active: [] //selected from dropdown
+			},
+			students: {
+				all: [],
+				filtered: [], //for lectures/sections/course
 				active: [] //selected from dropdown
 			},
 			lectureSubmissions: {
@@ -557,6 +562,7 @@ export default {
 		},
 		handleCourseChange(data) {
 			this.clearCharts()
+			this.students.active = []
 			this.lectures.active = []
 			this.sections.active = []
 			this.courses.active = data[0]
@@ -571,14 +577,19 @@ export default {
 		},
 		handleSectionsChange(data) {
 			this.clearCharts()
+			this.students.active = []
 			this.lectures.active = []
 			this.sections.active = data
 			this.execLecturesForSections(data)
 		},
 		handleLecturesChange(data) {
 			this.clearCharts()
+			this.students.active = []
 			this.lectures.active = data
 			this.execSubmissionsForLectures(data)
+		},
+		handleStudentsChange(data) {
+			this.clearCharts()
 		},
 		execLecturesForSections(data) {
 			this.getLecturesForSections(data)
@@ -779,13 +790,10 @@ canvas:last-of-type {
 	width: 15rem;
 	padding: 2rem 0rem;
 	border-bottom: 1px solid black;
+	min-height: 2.75rem;
+	text-align: center;
 }
 
-#course-section {
-	height: 2.5rem;
-	width: 18rem;
-	padding: 1rem;
-}
 #course-selector {
 	position: relative;
 	top: 0;
@@ -795,9 +803,5 @@ canvas:last-of-type {
 	text-align: right;
 	margin-right: 0.5rem;
 	padding-top: 0.5rem;
-}
-
-.selector-col {
-	width: 10rem;
 }
 </style>
