@@ -192,9 +192,20 @@ export default {
 					lecture.sections.forEach(sectID => {
 						let section = this.sections.all.find(section => section._id == sectID)
 						section.students.forEach(studID => {
-							lecture.students[studID] = {
-								live: [],
-								playback: null
+							if(this.students.active.length > 0) {
+								this.students.active.forEach(stud => {
+									if(stud._id == studID) {
+										lecture.students[studID] = {
+											live: [],
+											playback: null
+										}
+									}
+								})
+							} else {
+								lecture.students[studID] = {
+									live: [],
+									playback: null
+								}
 							}
 						})
 					})
@@ -277,9 +288,20 @@ export default {
 							lecture.sections.forEach(sectID => {
 								let section = this.sections.all.find(section => section._id == sectID)
 								section.students.forEach(studID => {
-									lecture.students[studID] = {
-										live: [],
-										playback: null
+									if(this.students.active.length > 0) {
+										this.students.active.forEach(stud => {
+											if(stud._id == studID) {
+												lecture.students[studID] = {
+													live: [],
+													playback: null
+												}
+											}
+										})
+									} else {
+										lecture.students[studID] = {
+											live: [],
+											playback: null
+										}
 									}
 								})
 							})
@@ -295,16 +317,18 @@ export default {
 									}
 								})
 							})
-							let lectAttendance = this.getAttendanceForLecture(lecture)
-							sections[section.number].live.push(lectAttendance.live)
-							sections[section.number].playback.push(lectAttendance.playback)
-							sections[section.number].absent.push(lectAttendance.absent)
-							if(lecture.start_time) {
-								sections[section.number].dates.push(lecture.start_time)
-							} else if(lecture.playback_submission_start_time) {
-								sections[section.number].dates.push(lecture.playback_submission_start_time)
-							} else {
-								sections[section.number].dates.push(null)
+							if(Object.keys(lecture.students).length > 0) {
+								let lectAttendance = this.getAttendanceForLecture(lecture)
+								sections[section.number].live.push(lectAttendance.live)
+								sections[section.number].playback.push(lectAttendance.playback)
+								sections[section.number].absent.push(lectAttendance.absent)
+								if(lecture.start_time) {
+									sections[section.number].dates.push(lecture.start_time)
+								} else if(lecture.playback_submission_start_time) {
+									sections[section.number].dates.push(lecture.playback_submission_start_time)
+								} else {
+									sections[section.number].dates.push(null)
+								}
 							}
 						}
 					})
@@ -331,9 +355,20 @@ export default {
 					lecture.sections.forEach(sectID => {
 						let section = this.sections.all.find(section => section._id == sectID)
 						section.students.forEach(studID => {
-							lecture.students[studID] = {
-								live: [],
-								playback: null
+							if(this.students.active.length > 0) {
+								this.students.active.forEach(stud => {
+									if(stud._id == studID) {
+										lecture.students[studID] = {
+											live: [],
+											playback: null
+										}
+									}
+								})
+							} else {
+								lecture.students[studID] = {
+									live: [],
+									playback: null
+								}
 							}
 						})
 					})
@@ -349,16 +384,18 @@ export default {
 							}
 						})
 					})
-					let lectAttendance = this.getAttendanceForLecture(lecture)
-					live.push(lectAttendance.live)
-					playback.push(lectAttendance.playback)
-					absent.push(lectAttendance.absent)
-					if(lecture.start_time) {
-						dates.push(lecture.start_time)
-					} else if(lecture.playback_submission_start_time) {
-						dates.push(lecture.playback_submission_start_time)
-					} else {
-						dates.push(null)
+					if(Object.keys(lecture.students).length > 0) {
+						let lectAttendance = this.getAttendanceForLecture(lecture)
+						live.push(lectAttendance.live)
+						playback.push(lectAttendance.playback)
+						absent.push(lectAttendance.absent)
+						if(lecture.start_time) {
+							dates.push(lecture.start_time)
+						} else if(lecture.playback_submission_start_time) {
+							dates.push(lecture.playback_submission_start_time)
+						} else {
+							dates.push(null)
+						}
 					}
 				})
 				this.createAreaGraph({
@@ -606,10 +643,11 @@ export default {
 			this.students.active = []
 			this.lectures.active = data
 			this.execStudentsForLectures(data)
-			this.execSubmissionsForLectures(data)
 		},
 		handleStudentsChange(data) {
-			// this.clearCharts()
+			this.clearCharts()
+			this.students.active = data
+			this.setupGraphs()
 		},
 		execLecturesForSections(sections) {
 			this.getLecturesForSections(sections)
@@ -620,7 +658,6 @@ export default {
 				}
 				this.lectures.filtered = clean
 				this.execStudentsForLectures(clean)
-				this.execSubmissionsForLectures(clean)
 			})
 		},
 		execStudentsForLectures(lectures) {
@@ -631,9 +668,10 @@ export default {
 					this.$refs.studentsSelector.repopulate(noDups)
 				}
 				this.students.filtered =  noDups
+				this.execSubmissionsForLectures(lectures,students)
 			})
 		},
-		execSubmissionsForLectures(lectures) {
+		execSubmissionsForLectures(lectures,students) {
 			this.getSubmissionsForLectures(lectures)
 			.then(submissions => {
 				this.lectureSubmissions.filtered = submissions

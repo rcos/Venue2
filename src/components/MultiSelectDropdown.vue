@@ -52,26 +52,21 @@ export default {
 			if(this.selected.length < this.max) {
 				this.selected.push(option)
 				this.selected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
-				let index = this.unselected.indexOf(option);
-				if (index > -1) {
-					this.unselected.splice(index, 1);
-				}
-				this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
 			} else if(this.max == 1 && this.selected[0] != option) {
 				this.unselected.push(this.selected[0])
 				this.selected[0] = option;
-				let index = this.unselected.indexOf(option);
-				if (index > -1) {
-					this.unselected.splice(index, 1);
-				}
-				this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
 			}
+			let index = this.unselected.indexOf(option);
+			if (index > -1) {
+				this.unselected.splice(index, 1);
+			}
+			this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
 			this.sendUpdates()
 		},
 		removeSelection(i) {
 			this.unselected.push(this.selected[i])
 			this.selected.splice(i,1)
-			this.unselected.sort((a,b) => {a[this.sortBy] > b[this.sortBy] ? 1 : -1})
+			this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
 			this.sendUpdates()
 		},
 		getDisplayText(option) {
