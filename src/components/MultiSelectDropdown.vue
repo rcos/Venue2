@@ -31,7 +31,7 @@ export default {
 		sortBy: String,
 		displayAs: Array,
 		max: { type: Number, default: 999 },
-		n: { type: Number, default: 0 }
+		n: { type: Number, default: 0 },
 	},
 	components: {},
 	data(){
