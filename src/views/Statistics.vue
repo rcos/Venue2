@@ -31,13 +31,17 @@
 		<div id="stats-right">
 			<div id="stats-right-top">
 				<div id="top-panel" class="stats-panel">
-					<ToggleSwitch v-if="lectures.active.length != 1 && courses.active" label="Stacked" :start="stacked" @toggle="handleToggleStacked"/>
-					<ToggleSwitch v-if="lectures.active.length == 1 && courses.active" label="Half" :start="half" @toggle="handleToggleHalf"/>
+					<ToggleSwitch :class="(lectures.active.length != 1 && courses.active?'':'hidden')" label="Stacked" :start="stacked" @toggle="handleToggleStacked"/>
+					<ToggleSwitch :class="(lectures.active.length == 1 && courses.active?'':'hidden')" label="Half" :start="half" :disabled="polls" @toggle="handleToggleHalf"/>
+					<ToggleSwitch :class="(lectures.active.length > 0 && courses.active?'':'hidden')" label="Polls" :start="polls" @toggle="handleTogglePolls"/>
 				</div>
 			</div>
 			<div id="stats-right-bottom">
 				<div id="stats-render">
-					<div v-if="lectures.active.length > 0">
+					<div v-if="lectures.active.length > 0 && polls">
+						<canvas v-for="(poll,i) in playbackPolls.displayed" :id="'pollsChart_'+i" :key="i"></canvas>
+					</div>
+					<div v-else-if="lectures.active.length > 0">
 						<canvas id="lectureChart"></canvas>
 					</div>
 					<div v-else-if="sections.active.length > 0">
@@ -56,6 +60,7 @@ import SectionAPI from '@/services/SectionAPI.js'
 import LectureAPI from '@/services/LectureAPI.js'
 import UserAPI from '@/services/UserAPI.js'
 import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
+import PlaybackPollAPI from '@/services/PlaybackPollAPI.js'
 
 import chartjs from 'chart.js'
 
@@ -98,23 +103,19 @@ export default {
 				all: [],
 				filtered: [] //for lectures/sections/course
 			},
+			playbackPolls: {
+				all: [],
+				displayed: []
+			},
 			colors: {
-				green: {
-					fill: '#bfffc6',
-					stroke: '#04dd74',
-				},
-				blue: {
-					fill: '#92bed2',
-					stroke: '#3282bf',
-				},
-				red: {
-					fill: '#ff8787',
-					stroke: '#e95454'
-				}
+				green: { fill: '#bfffc6', stroke: '#04dd74' },
+				blue: { fill: '#92bed2', stroke: '#3282bf' },
+				red: { fill: '#ff8787', stroke: '#e95454' }
 			},
 			charts: [],
 			stacked: true,
 			half: true,
+			polls: false,
 			pieLabel: 0
 		}
 	},
@@ -156,6 +157,7 @@ export default {
 			.then(res => {
 				this.lectures.all = res.data
 				let all_submissions = []
+				let all_playbackpolls = []
 				this.lectures.all.forEach(lecture => {
 					all_submissions = all_submissions.concat(new Promise((resolve,reject) => {
 						LectureSubmissionAPI.getLectureSubmissionsForLecture(lecture._id)
@@ -171,23 +173,35 @@ export default {
 							})
 						})
 					}))
+					all_playbackpolls = all_playbackpolls.concat(new Promise((resolve,reject) => {
+						PlaybackPollAPI.getByLecture(lecture._id)
+						.then(res => {
+							let polls = []
+							res.data.forEach(poll => {
+								polls.push(new Promise((resolve2,reject2) => {
+									resolve2(poll)
+								}))
+							})
+							Promise.all(polls).then(resolved => {
+								this.playbackPolls[lecture._id] = resolved
+								resolve(resolved)
+							})
+						})
+					}))
 				})
 				Promise.all(all_submissions).then(resolved => {
 					this.lectureSubmissions.all = [].concat.apply([], resolved)
 				})
+				Promise.all(all_playbackpolls).then(resolved => {
+					this.playbackPolls.all = [].concat.apply([], resolved)
+				})
 			})
 		},
-		setupGraphs() {
+		setupCharts() {
 			if(this.lectures.active.length > 0) {
+				let currentSubmissions = {}
 				let lecturesAttendance = {}
 				this.lectures.active.forEach(lecture => {
-					lecturesAttendance[lecture._id] = {
-						obj: {},
-						live: null,
-						playback: null,
-						absent: null,
-						date: null
-					}
 					lecture.students = {}
 					lecture.sections.forEach(sectID => {
 						let section = this.sections.all.find(section => section._id == sectID)
@@ -217,23 +231,47 @@ export default {
 									lecture.students[studID].live.push(sub)
 								} else {
 									lecture.students[studID].playback = sub
+									if(undefined == currentSubmissions[studID]) {
+										currentSubmissions[lecture._id] = []
+									}
+									currentSubmissions[lecture._id].push(sub)
 								}
 							}
 						})
 					})
-					let lectAttendance = this.getAttendanceForLecture(lecture)
-					lecturesAttendance[lecture._id].live = lectAttendance.live
-					lecturesAttendance[lecture._id].playback = lectAttendance.playback
-					lecturesAttendance[lecture._id].absent = lectAttendance.absent
-					if(lecture.start_time) {
-						lecturesAttendance[lecture._id].date = lecture.start_time
-					} else if(lecture.playback_submission_start_time) {
-						lecturesAttendance[lecture._id].date = lecture.playback_submission_start_time
+					if(Object.keys(lecture.students).length > 0) {
+						let lectAttendance = this.getAttendanceForLecture(lecture)
+						lecturesAttendance[lecture._id] = {
+							obj: lecture,
+							live: lectAttendance.live,
+							playback: lectAttendance.playback,
+							absent: lectAttendance.absent,
+							date: null
+						}
+						if(lecture.start_time) {
+							lecturesAttendance[lecture._id].date = lecture.start_time
+						} else if(lecture.playback_submission_start_time) {
+							lecturesAttendance[lecture._id].date = lecture.playback_submission_start_time
+						}
 					}
-					lecturesAttendance[lecture._id].obj = lecture
 				})
 				let lectIDs = Object.keys(lecturesAttendance)
-				if(lectIDs.length == 1) {
+				if(this.polls) {
+					let data = this.processPollsData(currentSubmissions)
+					Object.keys(data).forEach(lectID => {
+						Object.keys(data[lectID]).forEach(subID => {
+							this.playbackPolls.displayed.push(data[lectID][subID])
+							this.$nextTick(function() {
+								this.createHorBarsGraph({
+									chartID: "pollsChart_"+data[lectID][subID].n,
+									labels: data[lectID][subID].labels,
+									counts: data[lectID][subID].counts,
+									title: data[lectID][subID].question
+								})
+							})
+						})
+					})
+				} else if(lectIDs.length == 1) {
 					this.createPieGraph({
 						chartID: "lectureChart",
 						title: lecturesAttendance[lectIDs[0]].obj.title + " Attendance",
@@ -481,6 +519,60 @@ export default {
 				}
 			}))
 		},
+		createHorBarsGraph(chartInfo) {
+			let ctx = document.getElementById(chartInfo.chartID).getContext('2d')
+			this.charts.push(new Chart(ctx, {
+				type: 'horizontalBar',
+				data: {
+					labels: chartInfo.labels,
+					datasets: [{
+						// label: chartInfo.question,
+						data: chartInfo.counts,
+						// backgroundColor: this.colors.green.fill,
+						// borderColor: this.colors.green.stroke,
+						borderWidth: 3
+					}],
+				},
+				options: {
+					title: {
+						text: chartInfo.title,
+						display: true,
+						fontSize: 24
+					},
+					tooltips: {
+						displayColors: true,
+						callbacks:{
+							mode: 'x',
+						},
+					},
+					legend: {
+						display: false
+					},
+					scales: {
+						xAxes: [{
+							stacked: this.stacked,
+							gridLines: {
+								display: false,
+							},
+							ticks: {
+								maxRotation: 90,
+								minRotation: 80
+							}
+						}],
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+								// callback: function(value, index, values) {
+								// 	return value+"%";
+								// }
+							}
+						}]
+					},
+					responsive: true
+				}
+			}
+			))
+		},
 		createBarsGraph(chartInfo) {
 			let ctx = document.getElementById(chartInfo.chartID).getContext('2d')
 			this.charts.push(new Chart(ctx, {
@@ -616,8 +708,50 @@ export default {
 				}
 			}))
 		},
+		processPollsData(submissions) {
+			let data = {}
+			let n = 0
+			Object.keys(submissions).forEach(lectID => { //for each lecture to be displayed
+				if(undefined == data[lectID]) {
+					data[lectID] = {}
+				}
+				this.playbackPolls[lectID].forEach((playbackPoll,i) => { //for each question per lecture
+					if(undefined == data[lectID][playbackPoll._id]) {
+						data[lectID][playbackPoll._id] = {
+							labels: [],
+							counts: [],
+							question: playbackPoll.question,
+							n: n
+						}
+						n++
+					}
+					submissions[lectID].forEach(submission => { //for each student
+						submission.student_poll_answers.forEach((student_question,j) => { //for each question answered
+							if(i == j) {
+								let student_answers = []
+								student_question.forEach((is_marked,k) => { //for each marked option
+									if(is_marked) {
+										student_answers.push(this.playbackPolls[lectID][j].possible_answers[k])
+									}
+								})
+								let stringified = student_answers.join(', ')
+								let idx = data[lectID][playbackPoll._id].labels.findIndex(a => a == stringified)
+								if(idx >= 0) {
+									data[lectID][playbackPoll._id].counts[idx]++
+								} else {
+									data[lectID][playbackPoll._id].labels.push(stringified)
+									data[lectID][playbackPoll._id].counts.push(1)
+								}
+							}
+						})
+					})
+				})
+			})
+			return data
+		},
 		handleCourseChange(data) {
 			this.clearCharts()
+			this.playbackPolls.displayed = []
 			this.students.active = []
 			this.lectures.active = []
 			this.sections.active = []
@@ -633,6 +767,7 @@ export default {
 		},
 		handleSectionsChange(data) {
 			this.clearCharts()
+			this.playbackPolls.displayed = []
 			this.students.active = []
 			this.lectures.active = []
 			this.sections.active = data
@@ -640,14 +775,16 @@ export default {
 		},
 		handleLecturesChange(data) {
 			this.clearCharts()
+			this.playbackPolls.displayed = []
 			this.students.active = []
 			this.lectures.active = data
 			this.execStudentsForLectures(data)
 		},
 		handleStudentsChange(data) {
 			this.clearCharts()
+			this.playbackPolls.displayed = []
 			this.students.active = data
-			this.setupGraphs()
+			this.setupCharts()
 		},
 		execLecturesForSections(sections) {
 			this.getLecturesForSections(sections)
@@ -675,7 +812,7 @@ export default {
 			this.getSubmissionsForLectures(lectures)
 			.then(submissions => {
 				this.lectureSubmissions.filtered = submissions
-				this.setupGraphs()
+				this.setupCharts()
 			})
 		},
 		async getSectionsForCourse(course) {
@@ -797,6 +934,14 @@ export default {
 					chart.update()
 				}
 			})
+		},
+		handleTogglePolls(polls) {
+			this.clearCharts()
+			this.playbackPolls.displayed = []
+			this.polls = polls
+			this.$nextTick(function() {
+				this.setupCharts()
+			})
 		}
 	}
 }
@@ -899,5 +1044,9 @@ canvas:last-of-type {
 	text-align: right;
 	margin-right: 0.5rem;
 	padding-top: 0.5rem;
+}
+
+.hidden {
+	display: none;
 }
 </style>

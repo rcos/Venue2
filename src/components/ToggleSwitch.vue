@@ -3,7 +3,10 @@
 		<span class='toggle-label'>
 			{{label}}
 			</span>
-			<div :class="'toggle-background '+(state?'right':'left')" @click="toggle">
+			<div v-if="disabled" :class="'toggle-background disabled '+(state?'right':'left')">
+				<div :class="'toggle-switch disabled '+(state?'right':'left')"></div>
+			</div>
+			<div v-else :class="'toggle-background '+(state?'right':'left')" @click="toggle">
 				<div :class="'toggle-switch '+(state?'right':'left')"></div>
 			</div>
 	</div>
@@ -16,7 +19,8 @@ export default {
 	name: 'ToggleSwitch',
 	props: {
 		label: String,
-		start: Boolean
+		start: Boolean,
+		disabled: {type: Boolean, default: false}
 	},
 	components: {},
 	data(){
@@ -24,7 +28,7 @@ export default {
 			state: false
 		}
 	},
-	created() {
+	mounted() {
 		this.state = this.start
 	},
 	methods: {
@@ -74,5 +78,11 @@ export default {
 .toggle-switch.right {
 	background: #04dd74;
 	margin-left: 3.25rem;
+}
+.toggle-background.disabled {
+	background: #7E7E7E;
+}
+.toggle-switch.disabled {
+	background: #4F4F4F;
 }
 </style>
