@@ -182,6 +182,7 @@ body, * {
 .course-info-sub-tab {
   margin-left: 44px;
   margin-top: 32px;
+  height: 2.5rem;
 }
 
 .course-info-sub-tab.mobile {
@@ -250,6 +251,7 @@ body, * {
 
 .student-attendance-pill .date-area {
   width: 50px;
+  /* margin-left: -15px; */
   background-color: red;
   height: 100%;
   text-align: center;
@@ -293,8 +295,8 @@ body, * {
 .instructor-attendance-history-pill {
   border: 2px solid red;
   border-radius: 5px;
-  margin-right: 40px;
-  margin-bottom: 25px;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
   position: relative;
   width: 340px;
   height: 65px;
@@ -304,6 +306,18 @@ body, * {
 
 .instructor-attendance-history-pill .date-area {
   width: 20%;
+  /* margin-left: -15px; */
+  background-color: red;
+  height: 100%;
+  text-align: center;
+  color: white;
+  line-height: 22px;
+  margin-right: 15px;
+}
+
+.student-attendance .instructor-attendance-history-pill .date-area {
+  width: 20%;
+  /* margin-left: -15px; */
   background-color: red;
   height: 100%;
   text-align: center;
@@ -435,6 +449,7 @@ body, * {
 }
 
 .attendance-history-container {
+  text-align: center;
   margin-left: 50px;
   margin-right: 50px;
 }
@@ -445,7 +460,8 @@ body, * {
   margin-right: 0rem;
 }
 
-.instructor-attendance .event-pills-area {
+.event-pills-area {
+  /* text-align: center; */
   margin-left: 50px;
 }
 
@@ -634,7 +650,7 @@ a:hover {
 .lecture-pills-min-container {
   padding-left: 4rem;
   box-sizing: border-box;
-  width: 70%;
+  /* width: 70%; */
 }
 
 .lecture-pills-min-container .label {
@@ -699,13 +715,17 @@ a:hover {
   font-size: 0.9rem;
 }
 
+.mobile-event-pill-area {
+  /* text-align: center; */
+}
+
 .mobile-event-pill-area .mobile-pill {
   display: inline-block;
   border: 3px solid black;
   width: 60px;
   height: 60px;
-  margin-right: 15px;
-  margin-bottom: 15px;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
   text-align: center;
   box-sizing: border-box;
   padding: 3px 0px;
