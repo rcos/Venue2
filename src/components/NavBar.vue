@@ -33,16 +33,20 @@
             Courses
           </router-link>
         </div>
-        <!-- Attendance -->
-        <!-- <hide-at breakpoint="small">
-          <div v-if="this.$route.name === 'attendance'" class="venue-nav-link-container">
-            <a class="venue-nav-link active-link" href="#">Attendance</a>
+        <!-- Statistics -->
+        <div v-if="is_instructor" class="venue-nav-link-container">
+          <div v-if="this.$route.name === 'statistics'">
+            <router-link class="venue-nav-link active-link" :to="{name: 'statistics'}">
+              Statistics
+            </router-link>
             <div class="active-link-underline"></div>
           </div>
-          <div v-else class="venue-nav-link-container">
-            <a class="venue-nav-link" href="#">Attendance</a>
+          <div v-else>
+            <router-link class="venue-nav-link" :to="{name: 'statistics'}">
+              Statistics
+            </router-link>
           </div>
-        </hide-at> -->
+        </div>
       </div>
       <!-- Name -->
       <hide-at breakpoint="mediumAndBelow">
