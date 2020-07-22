@@ -59,7 +59,7 @@ export default {
 							if(undefined != playback && playback.video_percent == 1) {
 								this.unrestricted = true
 								this.needs_decision = false
-							} else if(live.length == this.lecture.checkins.length) {
+							} else if(this.lecture.checkins.length > 0 && live.length == this.lecture.checkins.length) {
 								this.unrestricted = true
 								this.needs_decision = false
 							}
