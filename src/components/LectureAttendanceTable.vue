@@ -210,17 +210,6 @@
 					})
 				})
 			},
-			getPrettyDateTime(datetime) {
-				if("Invalid Date" == datetime) {
-					return ("Not set")
-				}
-				let hours = datetime.getHours()
-				if(hours < 12) {
-					return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + (datetime.getMinutes()) + " AM")
-				} else {
-					return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours-12) + ":" + (datetime.getMinutes()) + " PM")
-				}
-			}
 		}
 	}
 </script>
