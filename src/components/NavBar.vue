@@ -188,11 +188,11 @@
   }
 
   .dropdown-content a:hover {
-    background-color: #ededed;
-    border: solid #097bac thin;
-    -webkit-transition: background-color 250ms linear;
-    -ms-transition: background-color 250ms linear;
-    transition: background-color 250ms linear;
+    background-color: #4BCC69;
+    color: white;
+    -webkit-transition: all 150ms linear;
+    -ms-transition: all 150ms linear;
+    transition: all 150ms linear;
   }
 
   #course-dropdown:hover .dropdown-content {
