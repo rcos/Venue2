@@ -22,8 +22,7 @@ let PlaybackPoll = new Schema({
 		default: ""
 	},
 	checkin: Number,
-	timestamp: Number,
-	code: Number
+	timestamp: Number
 });
 
 module.exports = mongoose.model('PlaybackPoll', PlaybackPoll);
