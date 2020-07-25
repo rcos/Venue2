@@ -16,8 +16,8 @@
         </div>
         <!-- Courses Link -->
         <div class="venue-nav-link-container" id="course-dropdown">
-          <p class="venue-nav-link" style="cursor:pointer;">Courses</p>
-          <div v-if="is_courses" class="active-link-underline"></div>
+          <p class="venue-nav-link" :class="{'active-link':is_course_info}" style="cursor:pointer;">Courses</p>
+          <div v-if="is_course_info" class="active-link-underline"></div>
           <div class="dropdown-content">
             <!-- <a href="#" v-for="course in user_courses">{{ course.name }}</a> -->
             <div v-if="is_instructor">
@@ -68,8 +68,8 @@
       is_dashboard: function () {
         return this.$route.name === 'dashboard'
       },
-      is_courses: function () {
-        return this.$route.name === 'user_courses'
+      is_course_info: function () {
+        return this.$route.name === 'course_info'
       },
       is_statistics: function () {
         return this.$route.name === 'statistics'
