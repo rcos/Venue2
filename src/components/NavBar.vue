@@ -15,23 +15,30 @@
           <div v-if="is_dashboard" class="active-link-underline"></div>
         </div>
         <!-- Courses Link -->
+
         <div class="venue-nav-link-container" id="course-dropdown">
-          <p class="venue-nav-link" :class="{'active-link':is_course_info}" style="cursor:pointer;">Courses</p>
+          <a data-toggle="collapse" href="#collapseExample" class="venue-nav-link" :class="{'active-link':is_course_info}" style="cursor:pointer;">Courses</a>
+
+          <hide-at breakpoint="mediumAndBelow">
+            <div class="dropdown-content">
+              <div v-if="is_instructor">
+                <router-link v-for="course in user_courses" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
+                  <p>{{ course.name }}</p>
+                </router-link>
+              </div>
+              <div v-else>
+                <router-link v-for="section in user_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
+                  <p>{{ section.course.name }}</p>
+                </router-link>
+              </div>
+            </div>
+          </hide-at>
+
+
+
           <div v-if="is_course_info" class="active-link-underline"></div>
-          <div class="dropdown-content">
-            <!-- <a href="#" v-for="course in user_courses">{{ course.name }}</a> -->
-            <div v-if="is_instructor">
-              <router-link v-for="course in user_courses" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
-                <p>{{ course.name }}</p>
-              </router-link>
-            </div>
-            <div v-else>
-              <router-link v-for="section in user_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
-                <p>{{ section.course.name }}</p>
-              </router-link>
-            </div>
-          </div>
         </div>
+
         <!-- Statistics Link -->
         <div v-if="is_instructor" class="venue-nav-link-container">
           <router-link class="venue-nav-link" :class="{'active-link':is_statistics}" :to="{name: 'statistics'}">
@@ -52,7 +59,25 @@
           <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
         </div>
       </router-link>
+
+<!--       <show-at breakpoint="mediumAndBelow">
+        <div class="collapse" id="collapseExample">
+          <div class="card card-body">
+            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+          </div>
+        </div>
+      </show-at> -->
+
     </nav>
+
+    <show-at breakpoint="mediumAndBelow">
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+        </div>
+      </div>
+    </show-at>
+
   </div>
 </template>
 
@@ -123,6 +148,7 @@
     height: 4rem;
     padding: 1rem 2rem;
     background: white;
+    display: block;
   }
 
   #nav-logo {
