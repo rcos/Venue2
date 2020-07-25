@@ -27,3 +27,7 @@ yarn-error.log*
 
 # video storage
 /public/videos/
+
+# cypress testing videos and screenshots
+/cypress/screenshots
+/cypress/videos

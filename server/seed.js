@@ -33,7 +33,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 		let ls = []
 		let p = []
 
-		u.push(new User({
+		u.push(new User({ // 0
 			first_name: "Numfor",
 			last_name: "Mbiziwo-Tiapo",
 			user_id: "mbizin",
@@ -45,11 +45,11 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			submissions: []
 		}))
 
-		u.push(new User({
-			first_name: "Kakashi",
-			last_name: "Sensei",
-			user_id: "kakashi",
-			email: "kakashi@rpi.edu",
+		u.push(new User({ // 1
+			first_name: "John",
+			last_name: "Doe",
+			user_id: "testinst",
+			email: "testinst@rpi.edu",
 			password: "password",
 			is_instructor: true,
 			is_admin: false,
@@ -57,7 +57,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			submissions: []
 		}))
 
-		for(let i=0;i<26;i++) {
+		for(let i=0;i<26;i++) {  // 2-27 (a-z)
 			var chr = String.fromCharCode(97 + i);
 			u.push(new User({
 				first_name: "Student",
@@ -71,35 +71,42 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			}))
 		}
 
-		c.push(new Course({
+		c.push(new Course({ // 0
 			name: "RCOS",
 			dept: "CSCI",
 			course_number: 2961,
 			instructor: u[0]
 		}))
 
-		c.push(new Course({
+		c.push(new Course({ // 1
 			name: "Data Structures",
 			dept: "CSCI",
 			course_number: 1200,
 			instructor: u[0]._id
 		}))
 
-		c.push(new Course({
+		c.push(new Course({ // 2
 			name: "Multiletiable Calculus",
 			dept: "MATH",
 			course_number: 2010,
 			instructor: u[0]._id
 		}))
 
-		c.push(new Course({
+		c.push(new Course({ // 3
 			name: "Physics I",
 			dept: "PHYS",
 			course_number: 1100,
 			instructor: u[0]._id
 		}))
 
-		s.push(new Section({
+		c.push(new Course({ // 4
+			name: "Testing Course",
+			dept: "TEST",
+			course_number: 1000,
+			instructor: u[1]._id
+		}))
+
+		s.push(new Section({ // 0
 			course: c[0]._id,
 			number: 1,
 			students: [
@@ -114,7 +121,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 				u[10]._id,
 				u[11]._id,
 				u[12]._id,
-				u[12]._id,
+				u[13]._id,
 				u[14]._id,
 				u[15]._id,
 				u[16]._id,
@@ -131,21 +138,79 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			teaching_assistants: [u[27]._id,u[26]._id]
 		}))
 
-		s.push(new Section({
+		s.push(new Section({ // 1
 			course: c[1]._id,
 			number: 1,
 			students: [u[2]._id, u[3]._id],
 			teaching_assistants: [u[0]._id]
 		}))
 
-		s.push(new Section({
+		s.push(new Section({ // 2
 			course: c[1]._id,
 			number: 2,
 			students: [u[2]._id, u[4]._id],
 			teaching_assistants: [u[0]._id]
 		}))
 
-		l.push(new Lecture({
+		s.push(new Section({ // 3
+			course: c[4]._id,
+			number: 1,
+			students: [
+				u[2]._id,
+				u[3]._id,
+				u[4]._id,
+				u[5]._id,
+				u[6]._id,
+				u[7]._id,
+				u[8]._id,
+				u[9]._id,
+				u[10]._id,
+				u[11]._id,
+				u[12]._id,
+				u[13]._id
+				// u[14]._id,
+				// u[15]._id,
+				// u[16]._id,
+				// u[17]._id,
+				// u[18]._id,
+				// u[19]._id,
+				// u[20]._id,
+				// u[21]._id,
+				// u[22]._id,
+				// u[23]._id,
+				// u[24]._id,
+				// u[25]._id
+			],
+			teaching_assistants: [
+				u[26]._id
+				// u[27]._id
+			]
+		}))
+
+		s.push(new Section({ // 4
+			course: c[4]._id,
+			number: 2,
+			students: [
+				u[2]._id,
+				u[14]._id,
+				u[15]._id,
+				u[16]._id,
+				u[17]._id,
+				u[18]._id,
+				u[19]._id,
+				u[20]._id,
+				u[21]._id,
+				u[22]._id,
+				u[23]._id,
+				u[24]._id,
+				u[25]._id
+			],
+			teaching_assistants: [
+				u[27]._id
+			]
+		}))
+
+		l.push(new Lecture({ // 0
 			title: "Live Lecture",
 			sections: [s[1]._id],
 			allow_live_submissions: true,
@@ -164,7 +229,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			num_playback_polls: 0
 		}))
 
-		l.push(new Lecture({
+		l.push(new Lecture({ // 1
 			title: "Playback Lecture",
 			sections: [s[1]._id,s[2]._id],
 			allow_live_submissions: false,
@@ -184,7 +249,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			num_playback_polls: 2
 		}))
 
-		l.push(new Lecture({
+		l.push(new Lecture({ // 2
 			title: "Upcoming Playback Lecture",
 			sections: [s[1]._id],
 			allow_live_submissions: false,
@@ -195,7 +260,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			num_playback_polls: 2
 		}))
 
-		l.push(new Lecture({
+		l.push(new Lecture({ // 3
 			title: "How to use Venue",
 			sections: [s[0]._id],
 			allow_live_submissions: true,
@@ -210,7 +275,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			num_playback_polls: 2
 		}))
 
-		ls.push(new LectureSubmission({
+		ls.push(new LectureSubmission({ // 0
 			lecture: l[1]._id,
 			submitter: u[2]._id,
 			is_live_submission: true,
@@ -218,7 +283,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			live_submission_time: Date.now() - (3.5*60*1000)
 		}))
 
-		p.push(new PlaybackPoll({
+		p.push(new PlaybackPoll({ // 0
 			lecture: l[1]._id,
 			question: "Where is my super suit?",
 			possible_answers: [
@@ -231,7 +296,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			timestamp: 5
 		}))
 
-		p.push(new PlaybackPoll({
+		p.push(new PlaybackPoll({ // 1
 			lecture: l[1]._id,
 			question: "Speed of light?",
 			possible_answers: [
@@ -244,7 +309,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			timestamp: 15
 		}))
 
-		p.push(new PlaybackPoll({
+		p.push(new PlaybackPoll({ // 2
 			lecture: l[2]._id,
 			question: "What's 9 + 10?",
 			possible_answers: [
@@ -257,7 +322,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			timestamp: 10
 		}))
 
-		p.push(new PlaybackPoll({
+		p.push(new PlaybackPoll({ // 3
 			lecture: l[2]._id,
 			question: "Are you smart m8?",
 			possible_answers: [
@@ -271,7 +336,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			timestamp: 15
 		}))
 
-		p.push(new PlaybackPoll({
+		p.push(new PlaybackPoll({ // 4
 			lecture: l[3]._id,
 			question: "What is this planet?",
 			possible_answers: [
@@ -336,19 +401,7 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 				})
 			})
 			.catch(err => {
-
+				console.log("ERROR IN RESOLVING HASHED PASSWORDS",err)
 			})
-
-		// 	bcrypt.hash(u[1].password, saltRounds, (err, hash) => {
-		// 		u[1].password = hash
-		// 		bcrypt.hash(u[2].password, saltRounds, (err, hash) => {
-		// 			u[2].password = hash
-		// 			bcrypt.hash(u[3].password, saltRounds, (err, hash) => {
-		// 				u[3].password = hash
-
-		// 			});
-		// 		});
-		// 	});
-		// });
 	});
 });

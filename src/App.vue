@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <NavBar class="main_navbar" v-if="this.$route.name != 'landing_page' && this.$route.name != 'set_permanent_password' && current_user"></NavBar>
-    <div id="main-content">
+    <main id="main-content">
       <router-view />
-    </div>
+    </main>
     <Footer />
   </div>
 </template>

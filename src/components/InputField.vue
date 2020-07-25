@@ -1,8 +1,8 @@
 <template>
   <div class="input-field-container">
     <div class="input-field">
-      <div class="input-label">{{label}}</div>
-      <input v-on:keyup="change" v-on:change="change" v-model="input_value" :type="type">
+      <div class="input-label"><label class="input-field-label" :id="label+'-label'">{{label}}</label></div>
+      <input v-on:keyup="change" v-on:change="change" v-model="input_value" :type="type" :aria-labelledby="label+'-label'">
     </div>
   </div>
 </template>
@@ -36,3 +36,9 @@
     }
   }
 </script>
+
+<style scoped>
+.input-field-label {
+  margin: 0;
+}
+</style>
