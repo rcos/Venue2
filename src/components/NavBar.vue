@@ -146,6 +146,7 @@
   }
 
   .dropdown-content {
+    margin-top: 2px;
     display: block;
     position: absolute;
     background-color: #f7f7f7;
