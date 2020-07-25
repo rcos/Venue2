@@ -895,10 +895,14 @@ export default {
 				return ("Not set")
 			}
 			let hours = datetime.getHours()
+			let minutes = datetime.getMinutes()
+			if(minutes < 10) {
+				minutes = "0" + minutes
+			}
 			if(hours < 12) {
-				return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + (datetime.getMinutes()) + " AM")
+				return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + minutes + " AM")
 			} else {
-				return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours-12) + ":" + (datetime.getMinutes()) + " PM")
+				return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==12 ? hours : hours-12) + ":" + minutes + " PM")
 			}
 		},
 		clearCharts() {
