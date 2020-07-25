@@ -20,9 +20,16 @@
           <div v-if="is_courses" class="active-link-underline"></div>
           <div class="dropdown-content">
             <!-- <a href="#" v-for="course in user_courses">{{ course.name }}</a> -->
-            <router-link v-for="course in user_courses" :to="{name: 'course_info', params: { id: course._id }}">
-              <p>{{ course.name }}</p>
-            </router-link>
+            <div v-if="is_instructor">
+              <router-link v-for="course in user_courses" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
+                <p>{{ course.name }}</p>
+              </router-link>
+            </div>
+            <div v-else>
+              <router-link v-for="section in user_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
+                <p>{{ section.course.name }}</p>
+              </router-link>
+            </div>
           </div>
         </div>
         <!-- Statistics Link -->
@@ -76,7 +83,8 @@
       return {
         current_user: {},
         is_instructor: Boolean,
-        user_courses: []
+        user_courses: [],
+        user_sections: []
       }
     },
     created() {
@@ -94,10 +102,17 @@
       async getInstructorCourses() {
         const response = await CourseAPI.getInstructorCourses(this.current_user._id)
         this.user_courses = response.data
-        console.log(this.courses)
       },
       async getSectionsWithCourses() {
         const response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
+        let temp_sections = response.data
+        let temp_course_ids = []
+        temp_sections.forEach(section => {
+          if(!temp_course_ids.includes(section.course._id)){
+            this.user_sections.push(section)
+            temp_course_ids.push(section.course._id)
+          }
+        })
       }
     }
   }
