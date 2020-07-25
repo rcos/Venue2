@@ -24,10 +24,7 @@
     name: 'CourseInfoTitle',
     components: {},
     props: {
-      course: {
-        type: Object,
-        required: true
-      },
+      course: Object,
       mobileMode: Boolean,
       section_number: Number
     },
