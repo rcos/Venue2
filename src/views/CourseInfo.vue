@@ -29,46 +29,32 @@
               :class="'tab ' + (subview_section_id == 0 ? 'active' : '')"
               tabindex="0" role="tab" :aria-selected="(subview_section_id == 0 ? 'true' : 'false')" aria-controls="panel-1" aria-label="Show Attendance History">Attendance History</div>
             <div
-              v-on:click="subview_section_id = 2" v-on:keyup.enter="subview_section_id = 2"
-              :class="'tab ' + (subview_section_id == 2 ? 'active' : '')"
-              tabindex="0" role="tab" :aria-selected="(subview_section_id == 2 ? 'true' : 'false')" aria-controls="panel-3" aria-label="Show Upcoming Lectures">Upcoming</div>
-            <div
-              v-if="data_to_show" v-on:click="subview_section_id = 1" v-on:keyup.enter="subview_section_id = 1"
+              v-on:click="subview_section_id = 1" v-on:keyup.enter="subview_section_id = 1"
               :class="'tab ' + (subview_section_id == 1 ? 'active' : '')"
-              tabindex="0" role="tab" :aria-selected="(subview_section_id == 1 ? 'true' : 'false')" aria-controls="panel-2" aria-label="Show Course Statistics">Statistics</div>
+              tabindex="0" role="tab" :aria-selected="(subview_section_id == 1 ? 'true' : 'false')" aria-controls="panel-2" aria-label="Show Upcoming Lectures">Upcoming</div>
           </div>
           <div v-if="this.current_user.is_instructor" class="right">
             <label id="section_select_label">Select Section</label>
-            <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label">
-              <option v-for="(section_,i) in section_arr" :key="i" :value="section_[1]">Section {{ section_[0] }}</option>
-              <option :value="null" selected>All Sections</option>
+            <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange">
+              <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">Section {{section.number}}</option>
+              <option :value="'all'" selected>All Sections</option>
             </select>
           </div>
         </div>
 
         <!-- Attendance History -->
-        <div v-if="subview_section_id == 0" id="panel-1" role="tabpanel">
+        <div v-if="subview_section_id == 0" id="panel-1" role="tabpanel" class="panel">
 
           <InstructorAttendanceHistory
-            :informSections="this.informSections"
-            :course_id="course_id"
-            :selected_section="selected_section"
-            :showData="showData"
-            :selected_section_info="all_sections[ selected_section ] == undefined ? null : all_sections[ selected_section ]"
-            v-if="this.current_user.is_instructor" />
-          <StudentAttendanceHistory :section_id="section_id" :showData="showData" v-else />
+            v-if="this.current_user.is_instructor && lectures_loaded"
+            :lectures="selected_section == 'all' ? all_lectures : sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded"/>
+          <StudentAttendanceHistory v-else-if="lectures_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded"/>
+          <div v-else :style='{textAlign: "center"}'>
+            <SquareLoader />
+          </div>
 
         </div>
-        <div v-else-if="subview_section_id == 1" :style="{marginTop: `20px`}" id="panel-2" role="tabpanel">
-          <SectionAttendanceGraph v-if="this.current_user.is_instructor && selected_section != null" :section_id="selected_section" />
-          <SectionAttendanceGraph v-else-if="this.current_user.is_instructor && selected_section == null" :section_id="null" />
-
-          <StudentAttendanceGraph v-else
-            :student_id="this.current_user._id"
-            :section_id="section_id"
-          />
-        </div>
-        <div v-else-if="subview_section_id == 2" :style="{marginTop: '20px'}" id="panel-3" role="tabpanel">
+        <div v-else-if="subview_section_id == 1" :style="{marginTop: '20px'}" id="panel-2" role="tabpanel">
           <show-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" :lecture_data="upcoming_lectures"/></show-at>
           <hide-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" :lecture_data="upcoming_lectures" mobileMode/></hide-at>
         </div>
@@ -78,28 +64,26 @@
     <hide-at breakpoint="mediumAndAbove">
       <div>
         <!-- Mobile View -->
-        <CourseInfoTitle :course="course" class="inline-block" mobileMode />
+        <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" mobileMode />
         <div class="course-info-sub-tab mobile">
           <div class="left">
             <div class="tab active">Attendance History</div>
           </div>
           <div class="right"  v-if="this.current_user.is_instructor">
             <label id="section_select_label">Select Section</label>
-            <select v-model="selected_section" aria-labelledby="section_select_label">
-              <option v-for="(section_,i) in section_arr" :key="i" :value="section_[1]">Section {{ section_[0] }}</option>
-              <option :value="null" selected>All Sections</option>
+            <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange">
+              <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">Section {{section.number}}</option>
+              <option :value="'all'" selected>All Sections</option>
             </select>
           </div>
           <div>
             <InstructorAttendanceHistory
-              :informSections="this.informSections"
-              :course_id="course_id"
-              :selected_section="selected_section"
-              :showData="showData"
-              :selected_section_info="all_sections[ selected_section ] == undefined ? null : all_sections[ selected_section ]"
-              v-if="this.current_user.is_instructor"
-              mobileMode />
-              <StudentAttendanceHistory :section_id="section_id" :showData="showData" mobileMode v-else />
+            v-if="this.current_user.is_instructor && lectures_loaded && scores_loaded"
+            :lectures="selected_section == 'all' ? all_lectures : sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded" mobileMode/>
+            <StudentAttendanceHistory v-else-if="lectures_loaded && scores_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
+            <div v-else :style='{textAlign: "center"}'>
+              <SquareLoader />
+            </div>
           </div>
         </div>
       </div>
@@ -113,19 +97,19 @@
   import CourseAPI from '@/services/CourseAPI.js';
   import UserAPI from '@/services/UserAPI.js';
   import SectionAPI from '@/services/SectionAPI.js';
-  import {showAt, hideAt} from 'vue-breakpoints';
   import LectureAPI from '@/services/LectureAPI.js';
+  import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
   import {getLiveLectures,getRecentLectures,getUpcomingLectures,getActivePlaybackLectures,getPastLectures} from '@/services/GlobalFunctions.js'
 
+  import {showAt, hideAt} from 'vue-breakpoints';
   import CourseInfoTitle from '@/components/CourseInfoTitle.vue'
-  import AverageWeeklyAttendanceBar from '@/components/AverageWeeklyAttendanceBar.vue'
   import EventHistoryList from '@/components/EventHistoryList.vue';
   import InstructorAttendanceHistory from '@/components/InstructorAttendanceHistory.vue'
   import StudentAttendanceHistory from '@/components/StudentAttendanceHistory.vue'
-  import SectionAttendanceGraph from '@/components/SectionAttendanceGraph.vue'
-  import StudentAttendanceGraph from '@/components/StudentAttendanceGraph.vue'
   import LecturePillList from '@/components/LecturePillList.vue'
   import UpcomingLecturesList from '@/components/UpcomingLecturesList.vue'
+
+  import SquareLoader from '@/components/Loaders/SquareLoader.vue'
 
   import '@/assets/css/venue-core.css'
   import '@/assets/icon-font.css'
@@ -141,88 +125,69 @@ export default {
     showAt,
     hideAt,
     CourseInfoTitle,
-    AverageWeeklyAttendanceBar,
     StudentAttendanceHistory,
     InstructorAttendanceHistory,
-    SectionAttendanceGraph,
-    StudentAttendanceGraph,
     LecturePillList,
-    UpcomingLecturesList
+    UpcomingLecturesList,
+    SquareLoader
   },
   data(){
     return {
-      data_to_show: Boolean,
       course: Object,
       section: Object,
-      active_events: [],
       all_lectures: [],
       upcoming_lectures: [],
       live_lectures: [],
       past_lectures: [],
       playback_lectures: [],
-      section_id: String,
       course_students: [],
-      course_has_loaded: false,
-      sort_ascending: true,
-      event_sorting_fn: Function,
-      grid_view: true,
       subview_section_id: 0,
-      section_arr: [],
-      selected_section: String,
-      all_sections: Object
+      sections: Object,
+      sorted_sections: [],
+      selected_section: "all",
+      sorted_lectures: {},
+      lectures_loaded: false,
+      scores_loaded: false
     }
   },
   created() {
     // when the component is created/loaded
-    this.data_to_show = false
-    this.selected_section = null
-    this.section_arr = []
-    this.getCurrentUser ()
+    this.getCurrentUser()
     this.section_id = null
 
     if (this.current_user.is_instructor) {
       this.course_id = this.$route.params.id
-      this.getCourse()
-      this.getStudentsForCourse()
-      this.getAllLecturesForCourse()
       this.getAllSections()
+      this.getStudentsForCourse()
+      this.getCourse()
     }
     else {
-
       this.section_id = this.$route.params.id
-      this.getCourse ()
-      this.getCourseFromSection ()
-
       this.getSectionWithCourse()
-      this.getAllLecturesForSection()
     }
   },
   methods: {
-    getAllSections () {
+    async getAllSections () {
       SectionAPI.getSectionsForCourse(this.course_id)
       .catch(err => { console.log(`Problem getting sections for course ${this.course_id}`); console.log(err);})
       .then(response => {
-        let all_sections_arr = response.data
-        let sections_obj = {}
-        all_sections_arr.forEach(section_ => {
-          sections_obj[section_._id] = section_
+        response.data.forEach(section_ => {
+          this.sections[section_._id] = section_
+          this.sorted_sections.push(section_)
         })
-
-        this.all_sections = sections_obj
+        this.sorted_sections.sort((a, b) => (a.number > b.number) ? 1 : -1)
+        this.getAllLecturesForCourse()
       })
     },
-    showData (new_val) {
-      this.data_to_show = new_val
+    async getSectionWithCourse() {
+      const response = await SectionAPI.getSectionWithCourse(this.section_id)
+      this.sections[response.data._id] = response.data
+      this.course = this.sections[response.data._id].course
+      this.getAllLecturesForSection()
     },
     async getStudentsForCourse() {
       const response = await UserAPI.getStudentsForCourse(this.course_id)
       this.course_students = response.data
-    },
-    async getSectionWithCourse() {
-      const response = await SectionAPI.getSectionWithCourse(this.section_id)
-      this.section = response.data
-      this.course = this.section.course
-      this.course_has_loaded = true
     },
     getCurrentUser() {
       this.current_user = this.$store.state.user.current_user
@@ -243,24 +208,33 @@ export default {
       LectureAPI.getLecturesForCourse(this.course_id)
       .then(response => {
         this.all_lectures = response.data
+        this.all_lectures.sort((a, b) => 
+          (a.start_time > b.start_time || a.playback_submission_start_time > b.playback_submission_start_time ||
+          a.start_time > b.playback_submission_start_time || a.playback_submission_start_time > b.start_time) ? 1 : -1
+        )
         this.parseUpcomingLectures(this.all_lectures)
         this.parseLiveLectures(this.all_lectures)
         this.parsePastLectures(this.all_lectures)
         this.parseActivePlaybackLectures(this.all_lectures)
+        this.sortLecturesBySectionAndBuildTimeLine({instructor: true})
       })
     },
     async getAllLecturesForSection() {
       LectureAPI.getLecturesForSection(this.section_id)
       .then(response => {
         this.all_lectures = response.data
+        this.all_lectures.sort((a, b) =>
+          (a.start_time > b.start_time || a.playback_submission_start_time > b.playback_submission_start_time ||
+          a.start_time > b.playback_submission_start_time || a.playback_submission_start_time > b.start_time) ? 1 : -1
+        )
         this.parseUpcomingLectures(this.all_lectures)
         this.parseLiveLectures(this.all_lectures)
         this.parsePastLectures(this.all_lectures)
         this.parseActivePlaybackLectures(this.all_lectures)
+        this.sortLecturesBySectionAndBuildTimeLine({instructor: false})
       })
     },
     getCourse () {
-
       CourseAPI.getCourse(this.course_id)
       .then(response => {
         this.course = response.data
@@ -269,23 +243,152 @@ export default {
         console.log(`Error getting course from course_id`)
       })
     },
-    getCourseFromSection () {
-
-      SectionAPI.getCourse(this.section_id)
-      .then(response => {
-        this.course = response.data
+    sortLecturesBySectionAndBuildTimeLine(options) {
+      let sorted = {}
+      sorted["all"] = {}
+      sorted["all"].lectures = []
+      this.all_lectures.forEach(lect => {
+        sorted["all"].lectures.push(lect)
+        lect.sections.forEach(sectID => {
+          if(undefined != this.sections[sectID]) {
+            if(undefined == lect.students) {
+              lect.students = [...this.sections[sectID].students]
+            } else {
+              for(let i=0;i<this.sections[sectID].students.length;i++) {
+                if(!lect.students.includes(this.sections[sectID].students[i])) {
+                  lect.students.push(this.sections[sectID].students[i])
+                }
+              }
+            }
+          }
+          if(undefined == sorted[sectID]) {
+            sorted[sectID] = {}
+            sorted[sectID].lectures = []
+          }
+          sorted[sectID].lectures.push(lect)
+        })
       })
-      .catch(err => {
-        console.log(`Error getting course from section_id`)
+      Object.keys(sorted).forEach(sectID => {
+        sorted[sectID].timeline = {}
+        sorted[sectID].lectures.sort((a, b) => (a.start_time > b.start_time) ? 1 : -1)
+        for(let i=0;i<sorted[sectID].lectures.length;i++) {
+          let lect = sorted[sectID].lectures[i]
+          if(undefined == lect.start_time || "Invalid Date" == lect.start_time || null == lect.start_time) {
+            lect.start_time = new Date(lect.playback_submission_start_time)
+          } else {
+            lect.start_time = new Date(lect.start_time)
+          }
+          let year = lect.start_time.getFullYear()
+          let month = lect.start_time.getMonth()
+          if(!sorted[sectID].timeline[year]) {
+            sorted[sectID].timeline[year] = {}
+          }
+          if(!sorted[sectID].timeline[year][month]) {
+            sorted[sectID].timeline[year][month] = []
+          }
+          sorted[sectID].timeline[year][month].push(i)
+        }
+      })
+      this.sorted_lectures = sorted
+      this.lectures_loaded = true
+      if(options.instructor) {
+        this.calculateInstructorAttendances()
+      } else {
+        this.calculateStudentAttendances()
+      }
+    },
+    calculateInstructorAttendances() {
+      let promise_tracker = []
+      this.all_lectures.forEach(lecture_ => {
+        promise_tracker.push(
+          LectureSubmissionAPI.getLectureSubmissionsForLecture(lecture_._id)
+          .catch(err => { console.log('error retrieving lecture submissions for lecture ' + lecture_._id); console.log(err); })
+          .then(response => {
+            let submissions = response.data == undefined ? [] : response.data
+            let students = lecture_.students
+            let running_total = 0
+            students.forEach(stud => {
+              let live = []
+              let playback = null
+              submissions.forEach(sub => {
+                if(sub.submitter._id == stud) {
+                  if(sub.is_live_submission) {
+                    live.push(sub)
+                  } else {
+                    playback = sub
+                  }
+                }
+              })
+              if(live.length > 0 && playback != null) {
+                running_total += Math.max(
+                  live.length / lecture_.checkins.length,
+                  Math.ceil(playback.video_percent * 100) / 100
+                )
+              } else if(live.length > 0) {
+                running_total += live.length / lecture_.checkins.length
+              } else if(playback != null) {
+                running_total += Math.ceil(playback.video_percent * 100) / 100
+              }
+            })
+            lecture_.percentage = running_total / students.length * 100
+            lecture_.color = this.getHTMLClassByAttendance(lecture_.percentage)
+          })
+        )
+      })
+      Promise.all(promise_tracker)
+      .then(res => {
+        this.scores_loaded = true
       })
     },
-    informSections (section_number_arr) {
-      this.section_arr = section_number_arr
-      // try to select the highest section once loaded
-      if (this.section_arr.length > 0) {
-        this.$set(this, 'selected_section', this.section_arr[0][1])
-        // this.selected_section = this.section_arr[0][0]
-      }
+    calculateStudentAttendances() {
+      let promise_tracker = []
+
+      this.sorted_lectures[this.section_id].lectures.forEach(lecture_data => {
+        promise_tracker.push(
+          LectureSubmissionAPI.getLectureSubmissionsForStudent(lecture_data._id, this.current_user._id)
+          .catch(err => { console.log(`error retrieving lecture submissions for student ${this.current_user._id}`); console.log(err); })
+          .then(response => {
+            if (response.data == null || response.data == []) {
+              lecture_data.percentage = 0
+            } else {
+              let live = []
+              let playback = null
+              response.data.forEach(sub => {
+                if(sub.submitter == this.current_user._id) {
+                  if(sub.is_live_submission) {
+                    live.push(sub)
+                  } else {
+                    playback = sub
+                  }
+                }
+              })
+              if(live.length > 0 && playback != null) {
+                lecture_data.percentage = Math.max(
+                  live.length / lecture_data.checkins.length * 100,
+                  Math.ceil(playback.video_percent * 100)
+                )
+              } else if(live.length > 0) {
+                lecture_data.percentage = live.length / lecture_data.checkins.length * 100
+              } else if(playback != null) {
+                lecture_data.percentage = Math.ceil(playback.video_percent * 100)
+              }
+              lecture_data.color = this.getHTMLClassByAttendance(lecture_data.percentage)
+            }
+          })
+        )
+      })
+      Promise.all(promise_tracker)
+      .then(res => {
+        this.scores_loaded = true
+      })
+    },
+    onSectionChange() {
+      this.$forceUpdate()
+    },
+    getHTMLClassByAttendance (percent) {
+      if (undefined == percent || percent <= 60) return 'bad'
+      else if (percent <= 75) return 'medium'
+      return 'good'
     }
   }
 }
@@ -397,5 +500,9 @@ export default {
     display: inline-block;
     float: left;
     cursor: pointer;
+  }
+
+  .panel {
+    height: 100%;
   }
 </style>

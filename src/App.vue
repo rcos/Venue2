@@ -7,6 +7,7 @@
     <Footer />
   </div>
 </template>
+
 <script>
 
 import NavBar from "./components/NavBar.vue";
@@ -46,7 +47,6 @@ export default {
         LectureAPI.getLecturesForUser(this.current_user._id, "none") 
           .then(res => {
             let liveAndUpcoming = getLiveLectures(res.data).concat(getUpcomingLectures(res.data))
-            console.log(liveAndUpcoming)
             if (!("Notification" in window)) {
               alert("This browser does not support desktop notification");
             } else if (Notification.permission === "granted") {
