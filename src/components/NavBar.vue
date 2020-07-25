@@ -142,25 +142,33 @@
 
   #course-dropdown {
     position: relative;
+    border-radius: 5px;
   }
 
   .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f1f1f1;
+    background-color: #f7f7f7;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 10;
   }
 
   .dropdown-content a {
-    color: black;
+    color: #2C3E50;
+    font-weight: bold;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
   }
 
-  .dropdown-content a:hover {background-color: #ddd;}
+  .dropdown-content a:hover {
+    background-color: #ededed;
+    border: solid #097bac thin;
+    -webkit-transition: background-color 250ms linear;
+    -ms-transition: background-color 250ms linear;
+    transition: background-color 250ms linear;
+  }
 
   #course-dropdown:hover .dropdown-content {display: block;}
 
