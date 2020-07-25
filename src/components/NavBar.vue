@@ -15,11 +15,17 @@
           <div v-if="is_dashboard" class="active-link-underline"></div>
         </div>
         <!-- Courses Link -->
-        <div class="venue-nav-link-container">
-          <router-link class="venue-nav-link" :class="{'active-link':is_courses}"  :to="{name: 'user_courses'}">
+        <div class="venue-nav-link-container" id="course-dropdown">
+          <router-link class="venue-nav-link" :class="{'active-link':is_courses}" id="course-link" :to="{name: 'user_courses'}">
             Courses
           </router-link>
           <div v-if="is_courses" class="active-link-underline"></div>
+          <div class="dropdown-content">
+            <!-- <a href="#" v-for="course in user_courses">{{ course.name }}</a> -->
+            <router-link v-for="course in user_courses" :to="{name: 'course_info', params: { id: course._id }}">
+              <p>{{ course.name }}</p>
+            </router-link>
+          </div>
         </div>
         <!-- Statistics Link -->
         <div v-if="is_instructor" class="venue-nav-link-container">
@@ -48,6 +54,8 @@
 <script>
   import {showAt, hideAt} from 'vue-breakpoints'
   import UserAPI from '@/services/UserAPI.js';
+  import CourseAPI from '@/services/CourseAPI.js'
+  import SectionAPI from '@/services/SectionAPI.js'
 
   export default {
     name: 'NavBar',
@@ -69,17 +77,30 @@
     data(){
       return {
         current_user: {},
-        is_instructor: Boolean
+        is_instructor: Boolean,
+        user_courses: []
       }
     },
     created() {
       this.getCurrentUser()
+      if(this.is_instructor)
+        this.getInstructorCourses()
+      else
+        this.getSectionsWithCourses()
     },
     methods: {
       getCurrentUser() {
         this.current_user = this.$store.state.user.current_user
         this.is_instructor = this.current_user.is_instructor
       },
+      async getInstructorCourses() {
+        const response = await CourseAPI.getInstructorCourses(this.current_user._id)
+        this.user_courses = response.data
+        console.log(this.courses)
+      },
+      async getSectionsWithCourses() {
+        const response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
+      }
     }
   }
 </script>
@@ -89,21 +110,7 @@
     height: 4rem;
     padding: 1rem 2rem;
     background: white;
-    overflow: hidden;
   }
-
-  /* @media (min-width: 577px) {
-    #venue-nav{
-      padding-top: 1rem;
-    }
-  } */
-
-  /*Small devices (landscape phones, 576px and up)*/
-  /* @media (max-width: 575.98px) {
-    #venue-nav {
-      padding-top: 1.5rem;
-    }
-  } */
 
   #nav-logo {
     float: left;
@@ -119,6 +126,30 @@
     margin-left: 1.5rem;
     display: inline-block;
   }
+
+  #course-dropdown {
+    position: relative;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-content a:hover {background-color: #ddd;}
+
+  #course-dropdown:hover .dropdown-content {display: block;}
 
   .venue-nav-link{
     text-decoration: none;
