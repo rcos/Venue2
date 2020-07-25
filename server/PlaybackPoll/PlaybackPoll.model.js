@@ -9,8 +9,10 @@ let PlaybackPoll = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Lecture'
 	},
-	// poll_type: String,
-	question: String,
+	question: {
+		type: String,
+		default: ""
+	},
 	possible_answers: {
 		type: [String],
 		default: ""
@@ -19,10 +21,9 @@ let PlaybackPoll = new Schema({
 		type: [String],
 		default: ""
 	},
-	timestamp: {
-		type: Number,
-		default: 0
-	}
+	checkin: Number,
+	timestamp: Number,
+	code: Number
 });
 
 module.exports = mongoose.model('PlaybackPoll', PlaybackPoll);
