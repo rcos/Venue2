@@ -167,7 +167,7 @@
   }
 
   .dropdown-content {
-    margin-top: 2px;
+    /*margin-top: 3px;*/
     display: block;
     position: absolute;
     background-color: #f7f7f7;
@@ -188,7 +188,7 @@
   }
 
   .dropdown-content a:hover {
-    background-color: #4BCC69;
+    background-color: #466D85;
     color: white;
     -webkit-transition: all 150ms linear;
     -ms-transition: all 150ms linear;
