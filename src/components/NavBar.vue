@@ -7,46 +7,29 @@
       </router-link>
       <!-- Nav Links -->
       <div id="venue-nav-links">
-        <!-- Dashboard -->
-        <div class="venue-nav-link-container" v-if="this.$route.name === 'dashboard'">
-          <router-link class="venue-nav-link active-link" :to="{name: 'dashboard'}">
+        <!-- Dashboard Link -->
+        <div class="venue-nav-link-container">
+          <router-link class="venue-nav-link" :class="{'active-link':is_dashboard}" :to="{name: 'dashboard'}">
             <p>Dashboard</p>
           </router-link>
-          <div class="active-link-underline"></div>
+          <div v-if="is_dashboard" class="active-link-underline"></div>
         </div>
-        <div v-else class="venue-nav-link-container">
-          <router-link class="venue-nav-link" :to="{name: 'dashboard'}">
-            <p>Dashboard</p>
-          </router-link>
-        </div>
-        <!-- Courses -->
-        <div v-if="this.$route.name === 'user_courses'" class="venue-nav-link-container">
-          <router-link class="venue-nav-link active-link" :to="{name: 'user_courses'}">
+        <!-- Courses Link -->
+        <div class="venue-nav-link-container">
+          <router-link class="venue-nav-link" :class="{'active-link':is_courses}"  :to="{name: 'user_courses'}">
             Courses
           </router-link>
-          <div class="active-link-underline"></div>
+          <div v-if="is_courses" class="active-link-underline"></div>
         </div>
-        <div v-else class="venue-nav-link-container">
-          <router-link class="venue-nav-link" :to="{name: 'user_courses'}">
-            Courses
-          </router-link>
-        </div>
-        <!-- Statistics -->
+        <!-- Statistics Link -->
         <div v-if="is_instructor" class="venue-nav-link-container">
-          <div v-if="this.$route.name === 'statistics'">
-            <router-link class="venue-nav-link active-link" :to="{name: 'statistics'}">
-              Statistics
-            </router-link>
-            <div class="active-link-underline"></div>
-          </div>
-          <div v-else>
-            <router-link class="venue-nav-link" :to="{name: 'statistics'}">
-              Statistics
-            </router-link>
-          </div>
+          <router-link class="venue-nav-link" :class="{'active-link':is_statistics}" :to="{name: 'statistics'}">
+            Statistics
+          </router-link>
+          <div v-if="is_statistics" class="active-link-underline"></div>
         </div>
       </div>
-      <!-- Name -->
+      <!-- Settings Link -->
       <router-link :to="{name: 'settings'}" role="link" aria-label="User Settings" class="settings_link">
         <div class="user-name float-right">
           <hide-at breakpoint="small">
@@ -69,6 +52,15 @@
   export default {
     name: 'NavBar',
     computed: {
+      is_dashboard: function () {
+        return this.$route.name === 'dashboard'
+      },
+      is_courses: function () {
+        return this.$route.name === 'user_courses'
+      },
+      is_statistics: function () {
+        return this.$route.name === 'statistics'
+      }
     },
     components: {
       hideAt,
