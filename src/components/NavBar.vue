@@ -10,15 +10,13 @@
         <!-- Dashboard -->
         <div class="venue-nav-link-container" v-if="this.$route.name === 'dashboard'">
           <router-link class="venue-nav-link active-link" :to="{name: 'dashboard'}">
-            <p v-if="is_instructor">Instructor Dashboard</p>
-            <p v-else>Student Dashboard</p>
+            <p>Dashboard</p>
           </router-link>
           <div class="active-link-underline"></div>
         </div>
         <div v-else class="venue-nav-link-container">
           <router-link class="venue-nav-link" :to="{name: 'dashboard'}">
-            <p v-if="is_instructor">Instructor Dashboard</p>
-            <p v-else>Student Dashboard</p>
+            <p>Dashboard</p>
           </router-link>
         </div>
         <!-- Courses -->
