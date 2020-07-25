@@ -6,9 +6,9 @@
 		<div v-else-if="!unrestricted && !needs_decision && lecture_loaded">
 			<RestrictedPlayback :lecture="lecture"/>
 		</div>
-		<div v-else-if="needs_decision">
-			<button class="btn btn-primary" @click="handleOptIntoRestricted">Watch lecture with restrictions, and improve my attendance grade</button>
-			<button class="btn btn-secondary" @click="handleOptIntoUnrestricted">Watch lecture without restrictions, and ignore my attendance grade</button>
+		<div v-else-if="needs_decision" id="playback-opt">
+			<button class="btn btn-secondary" id="opt-unrestricted" @click="handleOptIntoUnrestricted">Watch lecture without restrictions, and ignore my attendance grade</button>
+			<button class="btn btn-primary" id="opt-restricted" @click="handleOptIntoRestricted">Watch lecture with restrictions, and improve my attendance grade</button>
 		</div>
 	</div>
 </template>
@@ -59,7 +59,10 @@ export default {
 							if(undefined != playback && playback.video_percent == 1) {
 								this.unrestricted = true
 								this.needs_decision = false
-							} else if(live.length == this.lecture.checkins.length) {
+							} else if(live.length == 0) {
+								this.unrestricted = false
+								this.needs_decision = false
+							} else if(this.lecture.checkins.length > 0 && live.length == this.lecture.checkins.length) {
 								this.unrestricted = true
 								this.needs_decision = false
 							}
@@ -100,5 +103,23 @@ export default {
 	background: white;
 	z-index: 999;
 	padding: 20px;
+}
+#playback-opt {
+	position: absolute;
+	top: 25%;
+	height: 50%;
+	left: 25%;
+	right: 25%;
+	padding: 1rem
+}
+#opt-restricted,
+#opt-unrestricted {
+	display: inline-block;
+	height: calc(100% - 2rem);
+	width: calc(50% - 2rem);
+	margin-top: 1rem;
+}
+#opt-unrestricted {
+	margin-right: 1rem;
 }
 </style>

@@ -136,10 +136,10 @@ userRoutes.route('/update/:id').post(function (req, res) {
 userRoutes.route('/delete/:id').delete(function (req, res) {
   User.findByIdAndRemove({_id: req.params.id}, function(err){
     if(err) {
-      console.log("<ERROR> Deleting user by ID:",id)
+      console.log("<ERROR> Deleting user by ID:",req.params.id)
       res.json(err);
     } else {
-      console.log("<SUCCESS> Deleting user by ID:",id)
+      console.log("<SUCCESS> Deleting user by ID:",req.params.id)
       res.json('Successfully removed');
     }
   });
@@ -190,15 +190,21 @@ userRoutes.route('/student_sections/:id').get(function (req, res) {
       res.json(err);
     } else {
       let student_sections = []
+      let n = 0
       sections.forEach((section) => {
+        n++
+        let m = 0
         section.students.forEach((section_student) => {
+          m++
           if(section_student._id == student_id){
             student_sections.push(section);
           }
+          if(n == sections.length && m == section.students.length) {
+            console.log("<SUCCESS> Getting sections for student with ID:",student_id)
+            res.json(student_sections);
+          }
         });
       });
-      console.log("<SUCCESS> Getting sections for student with ID:",student_id)
-      res.json(student_sections);
     }
   });
 });

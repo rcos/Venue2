@@ -1,8 +1,8 @@
 <template>
   <div>
     <form class="login-form">
-      <InputField ref="user_id_field" v-on:set-input-value="setUserId" label="user id" />
-      <InputField ref="password_field" v-on:set-input-value="setPassword" label="password" type="password" />
+      <InputField ref="user_id_field" v-on:set-input-value="setUserId" label="user-id" id="username"/>
+      <InputField ref="password_field" v-on:set-input-value="setPassword" label="password" id="password" type="password" />
       <div v-if="show_invalid_login" id="invalid-login">Invalid user id or password</div>
     </form>
   </div>
