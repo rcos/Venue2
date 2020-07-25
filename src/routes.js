@@ -235,15 +235,15 @@ const router = new VueRouter({
         requiresAuth: true
       }
     },
-    {
-      name: 'user_courses',
-      path: '/user_courses',
-      component: CourseList,
-      meta: {
-        title: "Venue - Courses",
-        requiresAuth: true
-      }
-    },
+    // {
+    //   name: 'user_courses',
+    //   path: '/user_courses',
+    //   component: CourseList,
+    //   meta: {
+    //     title: "Venue - Courses",
+    //     requiresAuth: true
+    //   }
+    // },
     {
       name: 'course_info',
       path: '/course_info/:id',
