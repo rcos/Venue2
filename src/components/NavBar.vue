@@ -179,6 +179,5 @@
   .venue-nav-link:focus p,
   .venue-nav-link:hover p {
     color: #466D85;
-    font-weight: 900;
   }
 </style>
