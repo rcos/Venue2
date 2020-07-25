@@ -16,9 +16,7 @@
         </div>
         <!-- Courses Link -->
         <div class="venue-nav-link-container" id="course-dropdown">
-          <router-link class="venue-nav-link" :class="{'active-link':is_courses}" id="course-link" :to="{name: 'user_courses'}">
-            Courses
-          </router-link>
+          <p class="venue-nav-link" style="cursor:pointer;">Courses</p>
           <div v-if="is_courses" class="active-link-underline"></div>
           <div class="dropdown-content">
             <!-- <a href="#" v-for="course in user_courses">{{ course.name }}</a> -->
