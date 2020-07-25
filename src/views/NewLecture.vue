@@ -62,7 +62,7 @@
                 </div>
                 <div class="checkin-options col my-auto" v-else-if="checkin.activation == 'Random Time'">
                   <label>Minutes Long:</label>
-                  <input type="number" min="1" v-model.lazy="checkins[i].minutes"/>
+                  <input type="number" min="1" v-model.lazy="checkin.minutes"/>
                 </div>
                 <div class="checkin-options col my-auto" v-else-if="checkin.activation == 'Manual Activation'">
                 </div>
@@ -96,10 +96,9 @@ import Sections from "@/components/Sections";
 import QRCode from "qrcode";
 import GoogleMap from "@/components/GoogleMap";
 import LectureUploadModal from "@/components/LectureUploadModal";
-import MultiSelectDropdown from "@/components/MultiSelectDropdown"
+import MultiSelectDropdown from "@/components/MultiSelectDropdown";
 import flatpickr from "flatpickr";
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-import { min } from 'moment';
 require("flatpickr/dist/themes/material_blue.css");
 // DatePicker themes options:
 // "material_blue","material_green","material_red","material_orange",
@@ -158,26 +157,30 @@ export default {
           let hasEnd = this.lecture.end_time != null && this.lecture.end_time != ""
           let validRange = this.lecture.start_time < this.lecture.end_time
           if(hasStart && hasEnd && validRange) {
-            let checkins = this.getPresetCheckins()
-            checkins.sort((a, b) => (a.start_time > b.start_time) ? 1 : -1)
-            if(checkins.length > 0) {
-              if(checkins[0].start_time == null || checkins[0].end_time == null || checkins[0].start_time == "" || checkins[0].end_time == "") {
-                this.setErrorMessage("Missing start or end time for check-in number: 1")
-                allGood = false
-              } else if(this.lecture.start_time <= checkins[0].start_time && checkins[checkins.length-1].end_time <= this.lecture.end_time) {
-                for(let i=0;i<checkins.length-1;i++) {
-                  if(checkins[i+1].start_time == null || checkins[i+1].end_time == null || checkins[i+1].start_time == "" || checkins[i+1].end_time == "") {
-                    this.setErrorMessage("Missing start or end time for check-in number: "+(i+2))
-                    allGood = false
-                  } else if(checkins[i].end_time > checkins[i+1].start_time) {
-                    this.setErrorMessage("Time conflict for check-in numbers "+(i+1)+" and " +(i+2))
-                    allGood = false
-                  }
-                }
-              } else {
-                this.setErrorMessage("Check-in times must be between lecture start and end times")
-                allGood = false
-              }
+            let presets = this.getPresetCheckins()
+            let randoms = this.getRandomCheckins()
+            let manuals = this.getManualCheckins()
+            if(this.checkins.map(a=>a.activation).includes(null)) {
+              this.setErrorMessage("One or more checkins missing an activation type")
+              allGood = false
+            } else if(presets.map(a => a.start_time).includes(null)) {
+              this.setErrorMessage("One or more pre-set check-ins is missing a start time")
+              allGood = false
+            } else if(presets.map(a => a.end_time).includes(null)) {
+              this.setErrorMessage("One or more pre-set check-ins is missing an end time")
+              allGood = false
+            } else if(randoms.map(a => a.minutes).includes(null)) {
+              this.setErrorMessage("One or more random check-ins is missing a duration")
+              allGood = false
+            } else if(this.hasOverlaps(presets)) {
+              this.setErrorMessage("One or more pre-set check-ins are overlapping")
+              allGood = false
+            } else if(presets.filter(a => a.start_time < this.lecture.start_time).length > 0) {
+              this.setErrorMessage("One or more pre-set check-ins starts before the lecture does")
+              allGood = false
+            } else if(presets.filter(a => a.end_time > this.lecture.end_time).length > 0) {
+              this.setErrorMessage("One or more pre-set check-ins ends after the lecture does")
+              allGood = false
             }
           } else if(!hasStart) {
             this.setErrorMessage("Missing start time")
@@ -213,7 +216,7 @@ export default {
       this.lecture.sections = this.lecture_sections;
       this.lecture.allow_live_submissions = this.allow_live_submissions
       this.lecture.allow_playback_submissions = this.allow_playback_submissions
-      this.lecture.checkins = this.checkins
+      this.lecture.checkins = this.checkins.filter(a => !(a.start_time==null && a.activation=='Random Time'))
       // generate attendance codes for live lectures
       if(this.lecture.allow_live_submissions) {
         this.generateRandomCheckinTimes()
@@ -237,7 +240,7 @@ export default {
       this.course_sections_have_loaded = true;
     },
     hasOverlaps(checkins) {
-      checkins.sort(function(a,b){return a.start_time-b.start_time})
+      checkins = checkins.concat([]).sort(function(a,b){return a.start_time-b.start_time})
       if(checkins.length < 2) {
         return false
       } else {
@@ -399,6 +402,9 @@ export default {
     },
     handleUpdateCheckin(data,i) {
       this.checkins[i].activation = data[0]
+      this.checkins[i].start_time = null
+      this.checkins[i].end_time = null
+      this.checkins[i].minutes = null
       this.$nextTick(function() {
         this.updatePickers()
       })
