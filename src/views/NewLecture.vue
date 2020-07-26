@@ -69,7 +69,18 @@
                 <div class="checkin-options col my-auto" v-else>
                 </div>
                 <div class="checkin-poll col-2 my-auto">
-                  <button type="button" class="btn btn-secondary">Add Poll</button>
+                  <div v-if="null != polls[i]">
+                    {{polls[''+i].question}}
+                    <button type="button" class="btn btn-secondary" @click="add_poll_index = i" title="Edit">Edit</button>
+                    <button type="button" class="btn btn-danger" @click="polls[i] = null">X</button>
+                  </div>
+                  <button v-else type="button" class="btn btn-secondary" @click="add_poll_index = i">Add Poll</button>
+                </div>
+                <div id="add-poll-modal" v-if="add_poll_index >= 0">
+                  <div class="modal-contents">
+                    <CreatePoll :playback_only="false" :checkin="i" @addPoll="handleAddPoll" :poll="polls[i]"/>
+                    <button style="margin-top: -1rem; margin-bottom: 1rem" type="button" class="btn btn-secondary" @click="add_poll_index = -1">Cancel</button>
+                  </div>
                 </div>
                 <div class="checkin-remove col-1 my-auto">
                   <button type="button" class="btn btn-danger" @click="handleRemoveCheckin(i)">X</button>
@@ -98,6 +109,7 @@ import GoogleMap from "@/components/GoogleMap";
 import LectureUploadModal from "@/components/LectureUploadModal";
 import MultiSelectDropdown from "@/components/MultiSelectDropdown";
 import flatpickr from "flatpickr";
+import CreatePoll from '@/components/CreatePoll';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 require("flatpickr/dist/themes/material_blue.css");
 // DatePicker themes options:
@@ -110,7 +122,8 @@ export default {
     Sections,
     GoogleMap,
     LectureUploadModal,
-    MultiSelectDropdown
+    MultiSelectDropdown,
+    CreatePoll
   },
   data() {
     return {
@@ -125,7 +138,9 @@ export default {
       checkins: [],
       pickers: [],
       input_error_message: "",
-      modal_open: false
+      modal_open: false,
+      add_poll_index: -1,
+      polls: []
     };
   },
   created() {
@@ -223,6 +238,7 @@ export default {
         this.generateAttendanceCodes()
         let response = await LectureAPI.addLecture(this.lecture);
         this.lecture = response.data
+        //TODO populate polls with lecture._id
         this.$router.push({
           name: "course_info",
           params: { id: this.course_id }
@@ -330,6 +346,7 @@ export default {
         activation: null,
         minutes: null
       })
+      this.polls.push(null)
     },
     updatePickers() {
       this.pickers.forEach(picker => {
@@ -398,7 +415,6 @@ export default {
           this.pickers.push(null)
         }
       })
-      console.log(this.pickers)
     },
     handleUpdateCheckin(data,i) {
       this.checkins[i].activation = data[0]
@@ -411,6 +427,7 @@ export default {
     },
     handleRemoveCheckin(i) {
       this.checkins.splice(i,1)
+      this.polls.splice(i,1)
       let self = this
       this.$nextTick(function() {
         this.updatePickers()
@@ -431,6 +448,9 @@ export default {
     },
     getManualCheckins() {
       return this.checkins.filter(a => a.activation == 'Manual Activation')
+    },
+    handleAddPoll(poll) {
+      this.polls[poll.checkin] = poll
     },
     handleModalChange(isOpen) {
       this.modal_open = isOpen
@@ -498,5 +518,29 @@ export default {
   height: 5rem;
   width: 100%;
   border-radius: 0.5rem;
+}
+
+#add-poll-modal {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.60);
+}
+
+.modal-contents {
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  right: 25%;
+  bottom: 25%;
+  background: white;
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: left;
+  overflow: auto;
 }
 </style>
