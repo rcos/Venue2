@@ -1,38 +1,35 @@
 <template>
   <div id="lecture-info-container-root">
-    <div class="spinner-border" role="status" v-if="!lecture_has_loaded">
-      <span class="sr-only">Loading...</span>
-    </div>
+    <SquareLoader role="status" v-if="!lecture_has_loaded || !polls_loaded"/>
     <div v-else>
-      <InstructorLectureInfo v-if="is_instructor" :lecture="lecture" :is_instructor="is_instructor" />
-      <StudentLectureInfo v-else :lecture="lecture" :is_instructor="is_instructor" />
+      <InstructorLectureInfo v-if="is_instructor" :lecture="lecture" :is_instructor="is_instructor" :polls="polls" />
+      <StudentLectureInfo v-else :lecture="lecture" :is_instructor="is_instructor" :polls="polls" />
     </div>
   </div>
 </template>
 
 <script>
-  import UserAPI from '@/services/UserAPI.js';
-  import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js';
   import LectureAPI from '@/services/LectureAPI.js';
+  import PlaybackPollAPI from '@/services/PlaybackPollAPI.js'
+
   import InstructorLectureInfo from '@/components/InstructorLectureInfo.vue';
   import StudentLectureInfo from '@/components/StudentLectureInfo.vue';
+  import SquareLoader from '@/components/Loaders/SquareLoader.vue'
 
   export default {
     name: 'LectureInfo',
     components: {
       InstructorLectureInfo,
-      StudentLectureInfo
+      StudentLectureInfo,
+      SquareLoader
     },
     data(){
       return {
         lecture: {},
-        all_students: [],
-        live_submissions: [],
-        playback_submissions: [],
-        absent: [],
         lecture_has_loaded: false,
-        show_checkin_qr: -1,
-        is_instructor: Boolean
+        polls_loaded: false,
+        is_instructor: Boolean,
+        polls: []
       }
     },
     async created() {
@@ -45,6 +42,11 @@
       async getLecture() {
         const response = await LectureAPI.getLectureWithSectionsAndCourse(this.lecture_id)
         this.lecture = response.data
+        PlaybackPollAPI.getByLecture(this.lecture_id)
+        .then(res => {
+          this.polls = res.data
+          this.polls_loaded = true
+        })
       },
       setLectureAndCheckinWindowStatus() {
         let current_time = Date.now()
@@ -96,26 +98,6 @@
           this.lecture.checkin_window_status = "closed"
         }
         this.lecture_has_loaded = true
-      },
-      setSubmissionWindowStatus() {
-        let current_time = Date.now()
-        for(let i=0;i<this.lecture.checkins.length;i++) {
-          let start = new Date(this.lecture.checkins[i].start_time)
-          let end = new Date(this.lecture.checkins[i].end_time)
-          let self = this
-          if(current_time < end) {
-            if(start < current_time) {
-              this.show_checkin_qr = i
-            } else {
-              setTimeout(function() {
-                self.show_checkin_qr = i
-              }, start-current_time);
-            }
-            setTimeout(function() {
-              self.show_checkin_qr = -1
-            }, end-current_time);
-          }
-        }
       }
     }
   }

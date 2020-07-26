@@ -2,44 +2,48 @@
   <div>
     <!-- TODO: Check if student submitted already -->
     <div id="qr-sccanning-container" v-if="qr_scanning_window_open">
-      <button @click="closeQRScanningWindow" id="exit_preview_btn" tabindex="0" aria-label="Close QR Scanner">X</button>
+      <button @click="qr_scanning_window_open = false" id="exit_preview_btn" tabindex="0" aria-label="Close QR Scanner">X</button>
       <qrcode-stream id="video_preview" @decode="checkForQRMatch"></qrcode-stream>
     </div>
     <div id="table-header">
       <h2>Attendance</h2>
-      <button v-if="student_can_submit_live" @click="showQRScanningWindow" class="header-btn btn btn-primary">Scan QR</button>
+      <button v-if="student_can_submit_live" @click="qr_scanning_window_open = true" class="header-btn btn btn-primary">Scan QR</button>
       <router-link class="header-btn btn btn-secondary" v-else-if="student_can_watch_playback" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
         Watch Playback
       </router-link>
     </div>
     <LectureAttendanceTable :is_instructor="false" :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" />
+    <AnswerPoll v-if="answering_poll" :poll="current_poll" @answer="handleAnswerPoll" @cancel="handleCancelPoll"/>
   </div>
 </template>
 
 
 <script>
-  import QRCode from "qrcode";
-  import { QrcodeStream } from 'vue-qrcode-reader'
   import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js';
+
+  import { QrcodeStream } from 'vue-qrcode-reader';
   import LectureAttendanceTable from "@/components/LectureAttendanceTable.vue";
+  import AnswerPoll from '@/components/AnswerPoll.vue';
 
   export default {
     name: 'StudentLectureAttendanceContainer',
     props: {
       lecture: Object,
-      live_submissions: Object,
-      playback_submissions: Array,
-      absent: Array
+      submission: Object,
+      polls: Array
     },
     components: {
       QrcodeStream,
-      LectureAttendanceTable
+      LectureAttendanceTable,
+      AnswerPoll
     },
     data(){
       return {
         qr_scanning_window_open: false,
         student_can_submit_live: false,
-        student_can_watch_playback: false
+        student_can_watch_playback: false,
+        answering_poll: false,
+        current_poll: null
       }
     },
     created() {
@@ -47,49 +51,61 @@
       this.checkIfStudentCanWatchPlayback()
     },
     methods: {
-      showQRScanningWindow() {
-        this.qr_scanning_window_open = true
+      checkIfStudentCanSubmitLive() {
+        this.student_can_submit_live = this.lecture.lecture_status === 'is_live' && this.lecture.checkin_window_status === 'open' && !this.studentSubmittedToCheckin()
       },
-      closeQRScanningWindow() {
-        this.qr_scanning_window_open = false
+      checkIfStudentCanWatchPlayback() {
+        this.student_can_watch_playback = this.lecture.lecture_status === 'is_active_playback' || this.lecture.lecture_status === 'is_over_playback'
+      },
+      getPollForCheckin(i) {
+        return this.polls.find(a => a.checkin == i)
       },
       checkForQRMatch(scanned_str) {
-        if(this.lecture.current_checkin.code === scanned_str){
-          this.createLiveSubmission()
-          this.closeQRScanningWindow()
+        if(this.lecture.current_checkin.code === scanned_str) {
+          this.current_poll = this.getPollForCheckin(this.lecture.checkin_index)
+          if(this.current_poll) {
+            this.answering_poll = true
+          } else {
+            this.createLiveSubmission()
+          }
+          this.qr_scanning_window_open = false
         } else {
           alert("Scanned incorrect code!")
         }
       },
       async createLiveSubmission() {
-        let lecture_submission = {
-          lecture: this.lecture,
-          submitter: this.$store.state.user.current_user,
-          is_live_submission: true,
-          live_submission_time: new Date(),
-          code: this.lecture.current_checkin.code
+        if(!this.submission.live_progress) {
+          this.submission.live_progress = 0
         }
-        const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
-        this.live_submissions[this.$store.state.user.current_user._id].push(lecture_submission)
+        this.submission.live_progress++
+        this.submission.live_percent = this.submission.live_progress / this.lecture.checkins.length
+        this.submission.live_submission_time = new Date()
+        const response = await LectureSubmissionAPI.update(this.submission)
         this.student_can_submit_live = false
         alert("Live Submission Recorded")
       },
-      checkIfStudentCanSubmitLive() {
-        this.student_can_submit_live = this.lecture.lecture_status === 'is_live' && this.lecture.checkin_window_status === 'open' && !this.studentSubmittedToCheckin()
-      },
       studentSubmittedToCheckin() {
-        let student_submitted_to_checkin = false
-        let current_checkin_code = this.lecture.checkins[this.lecture.checkin_index].code
-        for(let i = 0; i < this.live_submissions[this.$store.state.user.current_user._id].length; i++) {
-          if(this.live_submissions[this.$store.state.user.current_user._id][i].code === current_checkin_code){
-            student_submitted_to_checkin = true
-            break
+        if(this.submission.live_submission_time && this.lecture.current_checkin) {
+          if(this.submission.live_submission_time >= this.lecture.current_checkin.start_time &&
+            this.submission.live_submission_time <= this.lecture.current_checkin.end_time) {
+              return true
+          } else {
+            return false
           }
         }
-        return student_submitted_to_checkin
       },
-      checkIfStudentCanWatchPlayback() {
-        this.student_can_watch_playback = this.lecture.lecture_status === 'is_active_playback' || this.lecture.lecture_status === 'is_over_playback'
+      handleAnswerPoll(student_answers) {
+        for(let i=this.submission.student_poll_answers.length-1;i<this.lecture.checkin_index;i++) {
+          this.submission.student_poll_answers.push([])
+        }
+        this.submission.student_poll_answers[this.lecture.checkin_index] = student_answers
+        this.current_poll = null
+        this.answering_poll = false
+        this.createLiveSubmission()
+      },
+      handleCancelPoll() {
+        this.current_poll = null
+        this.answering_poll = false
       }
     }
   }
