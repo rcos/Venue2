@@ -1,6 +1,5 @@
 <template>
   <div id="dashboard-container">
-    <h1>Lectures</h1>
     <div class="spinner-border" role="status" v-if="!live_lectures_loaded && !playback_lectures_loaded && !recent_lectures_loaded && !upcoming_lectures_loaded">
       <span class="sr-only">Loading...</span>
     </div>
