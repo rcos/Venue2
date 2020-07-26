@@ -78,7 +78,7 @@
                 </div>
                 <div id="add-poll-modal" v-if="add_poll_index >= 0">
                   <div class="modal-contents">
-                    <CreatePoll :playback_only="false" :checkin="i" @addPoll="handleAddPoll" :poll="polls[i]"/>
+                    <CreatePoll :playback_only="false" :checkin="add_poll_index" @addPoll="handleAddPoll" :poll="polls[add_poll_index]"/>
                     <button style="margin-top: -1rem; margin-bottom: 1rem" type="button" class="btn btn-secondary" @click="add_poll_index = -1">Cancel</button>
                   </div>
                 </div>
@@ -103,6 +103,7 @@
 import LectureAPI from "@/services/LectureAPI.js";
 import CourseAPI from "@/services/CourseAPI.js";
 import SectionAPI from "@/services/SectionAPI.js";
+import PlaybackPollAPI from "@/services/PlaybackPollAPI.js";
 import Sections from "@/components/Sections";
 import QRCode from "qrcode";
 import GoogleMap from "@/components/GoogleMap";
@@ -231,17 +232,35 @@ export default {
       this.lecture.sections = this.lecture_sections;
       this.lecture.allow_live_submissions = this.allow_live_submissions
       this.lecture.allow_playback_submissions = this.allow_playback_submissions
-      this.lecture.checkins = this.checkins.filter(a => !(a.start_time==null && a.activation=='Random Time'))
+      this.lecture.checkins = this.checkins
       // generate attendance codes for live lectures
       if(this.lecture.allow_live_submissions) {
         this.generateRandomCheckinTimes()
         this.generateAttendanceCodes()
+        this.lecture.checkins = this.lecture.checkins.filter(a => !(a.start_time==null && a.activation=='Random Time'))
         let response = await LectureAPI.addLecture(this.lecture);
         this.lecture = response.data
-        //TODO populate polls with lecture._id
-        this.$router.push({
-          name: "course_info",
-          params: { id: this.course_id }
+        
+        let poll_promises = []
+        this.polls.forEach(poll => {
+          if(poll) {
+            poll.lecture = this.lecture._id
+            poll_promises.push(
+              new Promise((resolve,reject) => {
+                PlaybackPollAPI.addPoll(poll)
+                .then(res => {
+                  resolve(res.data)
+                })
+              })
+            )
+          }
+        })
+
+        Promise.all(poll_promises).then(resolved => {
+          this.$router.push({
+            name: "course_info",
+            params: { id: this.course_id }
+          })
         })
       }
       else if(this.lecture.allow_playback_submissions) {
@@ -450,6 +469,7 @@ export default {
       return this.checkins.filter(a => a.activation == 'Manual Activation')
     },
     handleAddPoll(poll) {
+      this.add_poll_index = -1
       this.polls[poll.checkin] = poll
     },
     handleModalChange(isOpen) {
