@@ -14,15 +14,16 @@ let LectureSubmission = new Schema({
 		ref: 'User'
 	},
 	code: String,
+	live_progress: Number,
+	live_percent: Number,
 	video_progress: Number,
 	video_percent: Number,
 	student_poll_answers: [
 		[{
-			type: Boolean,
+			type: String,
 			default: ""
 		}]
 	],
-	is_live_submission: { type: Boolean, default: false },
 	live_submission_time: Date,
 	playback_submission_time: Date
 });

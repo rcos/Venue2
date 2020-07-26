@@ -97,85 +97,77 @@ lectureSubmissionRoutes.route('/:id').get(function (req, res) {
 });
 
 lectureSubmissionRoutes.route('/update').post(function (req, res) {
-  let updated = req.body.lectureSubmission
-  LectureSubmission.findByIdAndUpdate(updated._id,
-    {
-      video_progress: updated.video_progress,
-      video_percent: updated.video_percent,
-      student_poll_answers: updated.student_poll_answers,
-      playback_submission_time: new Date()
-    },
-    function (err, updatedSubmission) {
-      if (err || updatedSubmission == null) {
-        console.log("<ERROR> Updating lecture submission by ID:",updated._id,"with:",updated)
-        res.json(err);
-      } else {
-        console.log("<SUCCESS> Updating lecture submission by ID:",updated._id,"with:",updated)
-        res.json(updated);
-      }
+  let updated = {}
+  if(req.body.lectureSubmission && req.body.lectureSubmission._id) {
+    updated._id = req.body.lectureSubmission._id
+    if(req.body.lectureSubmission.live_progress) {
+      updated.live_progress = req.body.lectureSubmission.live_progress
     }
-  );
+    if(req.body.lectureSubmission.live_percent) {
+      updated.live_percent = req.body.lectureSubmission.live_percent
+    }
+    if(req.body.lectureSubmission.video_progress) {
+      updated.video_progress = req.body.lectureSubmission.video_progress
+    }
+    if(req.body.lectureSubmission.video_percent) {
+      updated.video_percent = req.body.lectureSubmission.video_percent
+    }
+    if(req.body.lectureSubmission.live_submission_time) {
+      updated.live_submission_time = new Date()
+    }
+    if(req.body.lectureSubmission.playback_submission_time) {
+      updated.playback_submission_time = new Date()
+    }
+    if(req.body.lectureSubmission.code) {
+      updated.code = req.body.lectureSubmission.code
+    }
+    if(req.body.lectureSubmission.student_poll_answers) {
+      updated.student_poll_answers = req.body.lectureSubmission.student_poll_answers
+    }
+    LectureSubmission.findByIdAndUpdate(updated._id,
+      updated,
+      function (err, updatedSubmission) {
+        if (err || updatedSubmission == null) {
+          console.log("<ERROR> Updating lecture submission by ID:",updated._id,"with:",updated)
+          res.json(err);
+        } else {
+          console.log("<SUCCESS> Updating lecture submission by ID:",updated._id,"with:",updated)
+          res.json(updated);
+        }
+      }
+    );
+  } else {
+    res.status(400).send("Missing a real lectureSubmission in request")
+  }
 });
 
 lectureSubmissionRoutes.route('/get_or_make').post(function (req, res) {
   let lecture_id = req.body.lecture_id
   let submitter_id = req.body.submitter_id
-  LectureSubmission.find(
+  LectureSubmission.findOne(
     {
       lecture: lecture_id,
       submitter: submitter_id
     },
-    function (err, lectureSubmissions) {
-      if (err || lectureSubmissions == null) {
+    function (err, lectureSubmission) {
+      if (err) {
         console.log("<ERROR> Getting lecture submission with lecture ID:",lecture_id,"and submitter ID:",submitter_id)
         res.json(err);
-      } else if (lectureSubmissions.length == 0){
-        let lectureSubmission = new LectureSubmission({
+      } else if (null != lectureSubmission) { // get
+        console.log("<SUCCESS> Getting lecture submission with lecture ID:",lecture_id,"and submitter ID:",submitter_id)
+        res.status(200).json(lectureSubmission)
+      } else { // make
+        let lecture_submission = new LectureSubmission({
           lecture: lecture_id,
-          submitter: submitter_id,
-          video_progress: 0,
-          video_percent: 0,
-          playback_submission_time: new Date(),
-          student_poll_answers: []
+          submitter: submitter_id
         });
-        lectureSubmission.save()
-          .then(() => {
-            console.log("<SUCCESS> Adding lecture submission:",lectureSubmission)
-            res.status(200).json(lectureSubmission);
-          })
-          .catch(() => {
-            console.log("<ERROR> Adding lecture submission:",lectureSubmission)
-            res.status(400).send("unable to save lectureSubmission to database");
-          });
-      } else {
-        let n = 0;
-        let found = false;
-        lectureSubmissions.forEach(sub => {
-          n++;
-          if(!sub.is_live_submission) {
-            found = true
-            console.log("<SUCCESS> Getting lecture submission with lecture ID:",lecture_id,"and submitter ID:",submitter_id)
-            res.status(200).json(sub);
-          } else if(n == lectureSubmissions.length && !found) {
-            let lectureSubmission = new LectureSubmission({
-              lecture: lecture_id,
-              submitter: submitter_id,
-              video_progress: 0,
-              video_percent: 0,
-              playback_submission_time: new Date(),
-              student_poll_answers: []
-            });
-            lectureSubmission.save()
-              .then(() => {
-                console.log("<SUCCESS> Adding lecture submission:",lectureSubmission)
-                res.status(200).json(lectureSubmission);
-              })
-              .catch(() => {
-                console.log("<ERROR> Adding lecture submission:",lectureSubmission)
-                res.status(400).send("unable to save lectureSubmission to database");
-              });
-          }
-        })
+        lecture_submission.save().then(() => {
+          console.log("<SUCCESS> Making lecture submission:",lecture_submission)
+          res.status(200).json(lecture_submission);
+        }).catch(() => {
+          console.log("<ERROR> Making lecture submission:",lecture_submission)
+          res.status(400).send("unable to save lectureSubmission to database");
+        });
       }
     }
   );
