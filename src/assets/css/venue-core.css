@@ -659,11 +659,11 @@ a:hover {
 
 .lecture-pill-min {
   width: 310px;
-  height: 35px;
+  /* height: 35px; */
   line-height: 28px;
-  display: inline-block;
+  display: inline;
   margin-right: 15px;
-  padding-left: 10px;
+  padding: 0.5rem 0.75rem;
   border-radius: 4px;
   color: white;
   cursor: pointer;
@@ -689,30 +689,6 @@ a:hover {
 
 .lecture-pills-min-container .lecture-pill-holder {
   /* border: 1px solid black; */
-}
-
-.lecture-pill-min .left,
-.lecture-pill-min .middle,
-.lecture-pill-min .right {
-  display: inline-block;
-  position: relative;
-  top: 3px;
-}
-
-.lecture-pill-min .left {
-  width: 50%;
-  font-size: 0.95rem;
-}
-.lecture-pill-min .middle {
-  width: 20%;
-  text-align: center;
-  font-size: 0.9rem;
-}
-
-.lecture-pill-min .right {
-  width: 30%;
-  text-align: center;
-  font-size: 0.9rem;
 }
 
 .mobile-event-pill-area {

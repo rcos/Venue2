@@ -1,18 +1,18 @@
 <template>
   <div>
     <!-- TODO: Check if student submitted already -->
-    <div id="qr-sccanning-container" v-if="qr_scanning_window_open">
+    <div id="qr-scanning-container" v-if="qr_scanning_window_open">
       <button @click="qr_scanning_window_open = false" id="exit_preview_btn" tabindex="0" aria-label="Close QR Scanner">X</button>
       <qrcode-stream id="video_preview" @decode="checkForQRMatch"></qrcode-stream>
     </div>
     <div id="table-header">
       <h2>Attendance</h2>
-      <button v-if="student_can_submit_live" @click="qr_scanning_window_open = true" class="header-btn btn btn-primary">Scan QR</button>
-      <router-link class="header-btn btn btn-secondary" v-else-if="student_can_watch_playback" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+      <button v-if="lectureIsOngoing()" @click="qr_scanning_window_open = true" class="header-btn btn btn-primary">Scan QR</button>
+      <router-link class="header-btn btn btn-secondary" v-else-if="lectureIsOver() && lecture.allow_playback_submissions" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
         Watch Playback
       </router-link>
     </div>
-    <LectureAttendanceTable :is_instructor="false" :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" />
+    <LectureAttendanceTable :is_instructor="false" :lecture="lecture" :submissions="[submission]" />
     <AnswerPoll v-if="answering_poll" :poll="current_poll" @answer="handleAnswerPoll" @cancel="handleCancelPoll"/>
   </div>
 </template>
@@ -43,35 +43,42 @@
         student_can_submit_live: false,
         student_can_watch_playback: false,
         answering_poll: false,
-        current_poll: null
+        current_poll: null,
+        current_code: ""
       }
     },
     created() {
-      this.checkIfStudentCanSubmitLive()
-      this.checkIfStudentCanWatchPlayback()
+      this.lectureIsOngoing()
     },
     methods: {
-      checkIfStudentCanSubmitLive() {
-        this.student_can_submit_live = this.lecture.lecture_status === 'is_live' && this.lecture.checkin_window_status === 'open' && !this.studentSubmittedToCheckin()
+      lectureIsOngoing() {
+        let now = Date.now()
+        return (this.lecture.start_time && Date.parse(this.lecture.start_time) <= now && Date.parse(this.lecture.end_time) >= now)
       },
-      checkIfStudentCanWatchPlayback() {
-        this.student_can_watch_playback = this.lecture.lecture_status === 'is_active_playback' || this.lecture.lecture_status === 'is_over_playback'
-      },
+      lectureIsOver() {
+        let now = Date.now()
+				return (!this.lecture.end_time || Date.parse(this.lecture.end_time) < now)
+			},
       getPollForCheckin(i) {
         return this.polls.find(a => a.checkin == i)
       },
       checkForQRMatch(scanned_str) {
-        if(this.lecture.current_checkin.code === scanned_str) {
-          this.current_poll = this.getPollForCheckin(this.lecture.checkin_index)
-          if(this.current_poll) {
-            this.answering_poll = true
-          } else {
-            this.createLiveSubmission()
+        this.qr_scanning_window_open = false
+        this.lecture.checkins.forEach((checkin,i) => {
+          if(checkin.code === scanned_str) {
+            if(!this.studentSubmittedToCheckin(checkin)) {
+              this.current_code = scanned_str
+              this.current_poll = this.getPollForCheckin(i)
+              if(this.current_poll) {
+                this.answering_poll = true
+              } else {
+                this.createLiveSubmission()
+              }
+            } else {
+              alert("Already submitted for this check-in")
+            }
           }
-          this.qr_scanning_window_open = false
-        } else {
-          alert("Scanned incorrect code!")
-        }
+        })
       },
       async createLiveSubmission() {
         if(!this.submission.live_progress) {
@@ -80,25 +87,24 @@
         this.submission.live_progress++
         this.submission.live_percent = this.submission.live_progress / this.lecture.checkins.length
         this.submission.live_submission_time = new Date()
+        this.submission.codes.push(this.current_code)
+        this.current_code = ""
         const response = await LectureSubmissionAPI.update(this.submission)
-        this.student_can_submit_live = false
         alert("Live Submission Recorded")
+        location.reload();
       },
-      studentSubmittedToCheckin() {
-        if(this.submission.live_submission_time && this.lecture.current_checkin) {
-          if(this.submission.live_submission_time >= this.lecture.current_checkin.start_time &&
-            this.submission.live_submission_time <= this.lecture.current_checkin.end_time) {
-              return true
-          } else {
-            return false
-          }
+      studentSubmittedToCheckin(checkin) {
+        if(this.submission.codes) {
+          return this.submission.codes.includes(checkin.code)
+        } else {
+          return false
         }
       },
-      handleAnswerPoll(student_answers) {
-        for(let i=this.submission.student_poll_answers.length-1;i<this.lecture.checkin_index;i++) {
-          this.submission.student_poll_answers.push([])
+      handleAnswerPoll(student_answers,code) {
+        if(!this.submission.student_poll_answers) {
+          this.submission.student_poll_answers = {}
         }
-        this.submission.student_poll_answers[this.lecture.checkin_index] = student_answers
+        this.submission.student_poll_answers[code] = student_answers
         this.current_poll = null
         this.answering_poll = false
         this.createLiveSubmission()
@@ -193,12 +199,13 @@
     display: none;
   }
 
-  #qr-sccanning-container {
-    position: absolute;
-    width: 100%;
-    height: 90%;
+  #qr-scanning-container {
+    position: fixed;
     top: 0;
-    z-index: 1;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
     background-color: white;
   }
 </style>

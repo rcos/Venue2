@@ -2,11 +2,17 @@
 	<div id="lecture-attendance-table">
 		<div class="tabs" v-if="all_students">
 			<button id="live_btn" class="tab_btn selected_tab" tabindex="0" @click="selectTab(0)" aria-label="Show Live Attendance"
-				role="tab" aria-selected="true" aria-controls="live_submit"><h5>Live ({{Object.keys(live_submissions).length}}/{{all_students.length}})</h5></button>
+				role="tab" aria-selected="true" aria-controls="live_submit"><h5>
+					Live ({{(live_percent*100).toFixedDecimals(1)}}%)
+				</h5></button>
 			<button id="playback_btn" class="tab_btn" tabindex="0" @click="selectTab(1)" aria-label="Show Playback Attendance"
-				role="tab" aria-selected="false" aria-controls="playback_submit"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
+				role="tab" aria-selected="false" aria-controls="playback_submit"><h5>
+					Recording ({{(playback_percent*100).toFixedDecimals(1)}}%)
+				</h5></button>
 			<button id="absent_btn" class="tab_btn" tabindex="0" @click="selectTab(2)" aria-label="Show Absent"
-				role="tab" aria-selected="false" aria-controls="no_submit"><h5>Absent ({{absent.length}}/{{all_students.length}})</h5></button>
+				role="tab" aria-selected="false" aria-controls="no_submit"><h5>
+					Absent ({{(submissions_with_nothing.length/all_students.length*100).toFixedDecimals(1)}}%)
+				</h5></button>
 			<button id="instructors_only_btn" class="tab_btn" tabindex="0" @click="selectTab(3)" aria-label="Show Instructors Only"
 				role="tab" aria-selected="false" aria-controls="instructors_only"><h5>Instructors Only</h5></button>
 		</div>
@@ -14,18 +20,18 @@
 			<button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)" tabindex="0" aria-label="Show Live Attendance"
 				role="tab" aria-selected="true" aria-controls="live_submit"><h5>Live</h5></button>
 			<button id="playback_btn" class="tab_btn" @click="selectTab(1)" tabindex="0" aria-label="Show Playback Attendance"
-				role="tab" aria-selected="false" aria-controls="playback_submit"><h5>Playback</h5></button>
+				role="tab" aria-selected="false" aria-controls="playback_submit"><h5>Recording</h5></button>
 			<button id="absent_btn" class="tab_btn" @click="selectTab(2)" tabindex="0" aria-label="Show Absent"
 				role="tab" aria-selected="false" aria-controls="no_submit"><h5>Absent</h5></button>
 		</div>
 		<div v-if="selected_tab === 0" role="tabpanel" aria-labelledby="live_btn" id="live_submit" class="tab_section">
-			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :live_submissions="live_submissions" :is_live="true" />
+			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions_with_live="submissions_with_live" :is_live="true" />
 		</div>
 		<div v-if="selected_tab === 1" role="tabpanel" aria-labelledby="playback_btn" id="playback_submit" class="tab_section">
-			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="playback_submissions" :is_playback="true" />
+			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions_with_playback="submissions_with_playback" :is_playback="true" />
 		</div>
 		<div v-if="selected_tab === 2" role="tabpanel" aria-labelledby="absent_btn" id="no_submit" class="tab_section">
-			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="absent" :is_absent="true" />
+			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions_with_nothing="submissions_with_nothing" :is_absent="true" />
 		</div>
 		<div v-if="selected_tab === 3" role="tabpanel" aria-labelledby="instructors_only_btn" id="instructors_only" class="tab_section">
 			<div id="manual-override-container">
@@ -72,9 +78,7 @@
     name: 'LectureAttendanceTable',
     props: {
       lecture: Object,
-    	live_submissions: Object,
-    	playback_submissions: Array,
-    	absent: Array,
+    	submissions: Array,
     	all_students: Array,
       is_instructor: Boolean
     },
@@ -85,13 +89,52 @@
       return {
         selected_tab: 0,
 				overrides: "",
-				override_err_msg: ""
+				override_err_msg: "",
+				submissions_with_live: [],
+				submissions_with_playback: [],
+				submissions_with_nothing: [],
+				live_percent: 0,
+				playback_percent: 0,
+				absent_percent: 0
       }
     },
     created() {
+			this.parseSubmissions()
     },
     methods: {
-    	selectTab(i) {
+			parseSubmissions() {
+				let livesum = 0
+				let playsum = 0
+				this.submissions.forEach(submission => {
+					let hasAttendance = false
+					if(submission.live_progress) {
+						this.submissions_with_live.push(submission)
+						hasAttendance = true
+						livesum += submission.live_percent
+					}
+					if(submission.video_progress) {
+						this.submissions_with_playback.push(submission)
+						hasAttendance = true
+						playsum += submission.video_percent
+					}
+					if(!hasAttendance) {
+						this.submissions_with_nothing.push(submission)
+					}
+				})
+				if(this.all_students) {
+					this.live_percent = livesum / this.all_students.length
+					this.playback_percent = playsum / this.all_students.length
+					let submitted_student_ids = this.submissions.map(a=>a.submitter._id)
+					this.all_students.forEach(stud => {
+						if(!submitted_student_ids.includes(stud._id)) {
+							this.submissions_with_nothing.push({
+								lecture: this.lecture._id,
+								submitter: stud
+							})
+						}
+					})
+				}
+			},selectTab(i) {
     	  let btns = [
     	    document.getElementById("live_btn"),
     	    document.getElementById("playback_btn"),

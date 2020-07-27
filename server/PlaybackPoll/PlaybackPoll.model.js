@@ -22,6 +22,7 @@ let PlaybackPoll = new Schema({
 		default: ""
 	},
 	checkin: Number,
+	code: String,
 	timestamp: Number
 });
 

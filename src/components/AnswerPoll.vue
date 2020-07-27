@@ -48,7 +48,7 @@ export default {
 					student_answers.push(this.poll.possible_answers[i])
 				} 
 			})
-			this.$emit('answer',student_answers)
+			this.$emit('answer',student_answers,this.poll.code)
 		},
 		cancel() {
 			this.$emit('cancel')

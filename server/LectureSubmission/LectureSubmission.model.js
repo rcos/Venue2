@@ -13,17 +13,12 @@ let LectureSubmission = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
-	code: String,
+	codes: [String],
 	live_progress: Number,
 	live_percent: Number,
 	video_progress: Number,
 	video_percent: Number,
-	student_poll_answers: [
-		[{
-			type: String,
-			default: ""
-		}]
-	],
+	student_poll_answers: Object,
 	live_submission_time: Date,
 	playback_submission_time: Date
 });
