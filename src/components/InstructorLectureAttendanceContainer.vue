@@ -1,20 +1,24 @@
 <template>
 	<div>
 		<div v-if="current_checkin" id="qr_modal">
-			<qrcode v-bind:value="current_checkin.code" :options="{ width: 600 }"></qrcode>
+			<qrcode v-bind:value="current_checkin.code" :options="{ width: 400 }"></qrcode>
 		  <button class="btn btn-secondary" id="close_qr_btn" @click="hideQR" aria-label="Hide QR">Hide</button>
 		</div>
 		<div id="container-header">
 			<h2>Attendance</h2>
 			<!-- Pre-set/Random Checkins -->
-			<div v-for="(checkin,i) in lecture.checkins" :key="i" class="header-btn">
-				<button v-if="checkin.activation != 'Manual Activation' && checkinIsOpen(checkin)" type="button" class="header-btn btn btn-secondary" @click="showQR(i)">Show QR</button>
+			<div v-for="(checkin,i) in lecture.checkins" :key="i" class="inline-block">
+				<button v-if="checkin.activation != 'Manual Activation' && checkinIsOpen(checkin)" type="button" class="header-btn btn btn-secondary" @click="showQR(i)">
+					<img src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
+				</button>
 			</div>
 			<LectureUploadModal v-if="lectureIsOver() && !lecture.allow_playback_submissions && polls_loaded" :lecture="lecture" :need_timestamp="polls" :update_lecture="true" />
 			<router-link class="header-btn btn btn-secondary" v-else-if="lecture.allow_playback_submissions" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}" aria-label="Watch Playback">
 				Watch Playback
 			</router-link>
-			<button class="header-btn btn btn-primary" @click="download_submitty_csv" id="submitty_export">Export for Submitty...</button>
+			<button class="header-btn btn btn-primary" @click="download_submitty_csv" id="submitty_export">
+				<img src="@/assets/icons8-database-export-64.png" width="60" alt="QR Code" aria-label="QR Code">
+			</button>
 			<!-- Manual Checkins -->
 			<div class="float-right" v-for="(checkin,i) in lecture.checkins" :key="'Live'+i">
 				<button v-if="checkin.activation == 'Manual Activation'" class="btn btn-secondary" @click="showQR(i)">Open Check-in {{i+1}}</button>
@@ -120,9 +124,13 @@
 		background-color: white;
 	}
 
+	.inline-block {
+		display:inline-block;
+	}
+
 	#container-header {
 	  position: relative;
-	  top: 3rem;
+	  top: 1.5rem;
 	  bottom: 0;
 	  text-align: left;
 	}
