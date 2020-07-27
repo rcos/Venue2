@@ -317,6 +317,9 @@ export default {
           result += alnums[Math.floor(Math.random() * alnums.length)];
         }
         this.lecture.checkins[i].code = result;
+        if(this.polls[i]) {
+          this.polls[i].code = result
+        }
       }
     },
     setAllowLiveSubmissions() {

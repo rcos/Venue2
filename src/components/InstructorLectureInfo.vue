@@ -1,10 +1,10 @@
 <template>
   <div>
     <LectureInfoHeader :lecture="lecture" :is_instructor="true" />
-    <div class="spinner-border" role="status" v-if="!attendance_calculated">
+    <div class="spinner-border" role="status" v-if="!submissions_loaded">
       <span class="sr-only">Loading...</span>
     </div>
-    <InstructorLectureAttendanceContainer v-else :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" v-bind:all_students="all_students" />
+    <InstructorLectureAttendanceContainer v-else :lecture="lecture" :submissions="submissions" v-bind:all_students="all_students" />
   </div>
 </template>
 
@@ -28,11 +28,8 @@
     data(){
       return {
         all_students: [],
-        live_submissions: {},
-        playback_submissions: [],
-        absent: [],
-        show_checkin_qr: -1,
-        attendance_calculated: false
+        submissions: [],
+        submissions_loaded: false
       }
     },
     async created() {
@@ -47,26 +44,8 @@
       },
       async getAttendanceForLecture() {
         const response = await LectureSubmissionAPI.getLectureSubmissionsForLecture(this.lecture_id)
-        let lecture_submissions = response.data
-        for(let i=0;i<this.all_students.length;i++) {
-          let did_attend = false;
-          for(let j=0;j<lecture_submissions.length;j++) {
-            let subID = lecture_submissions[j].submitter._id
-            if(this.all_students[i]._id == subID) {
-              if(lecture_submissions[j].is_live_submission) {
-                this.live_submissions[subID] = this.live_submissions[subID] || [];
-                this.live_submissions[subID].push(lecture_submissions[j]);
-              } else {
-                this.playback_submissions.push(lecture_submissions[j])
-              }
-              did_attend = true;
-            }
-          }
-          if(!did_attend) {
-            this.absent.push(this.all_students[i])
-          }
-        }
-        this.attendance_calculated = true
+        this.submissions = response.data
+        this.submissions_loaded = true
       }
     }
   }

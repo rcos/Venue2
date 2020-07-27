@@ -9,6 +9,11 @@ export default {
       poll: poll // add our data to the request body
     })
   },
+  update(poll) {
+    return API().post('polls/update', {
+      poll: poll // add our data to the request body
+    })
+  },
   getByLecture(lecture_id) {
     return API().get('polls/by_lecture/' + lecture_id)
   }

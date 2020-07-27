@@ -1,19 +1,26 @@
 <template>
 	<div>
-		<div v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" id="qr_modal" class="hidden">
-			<qrcode v-bind:value="lecture.current_checkin.code" :options="{ width: 600 }"></qrcode>
+		<div v-if="current_checkin" id="qr_modal">
+			<qrcode v-bind:value="current_checkin.code" :options="{ width: 600 }"></qrcode>
 		  <button class="btn btn-secondary" id="close_qr_btn" @click="hideQR" aria-label="Hide QR">Hide</button>
 		</div>
 		<div id="container-header">
 			<h2>Attendance</h2>
-			<button v-if="lecture.lecture_status === 'is_live' && lecture.checkin_window_status === 'open'" @click="showQR" class="header-btn btn btn-secondary">Show QR</button>
-			<LectureUploadModal v-else-if="lecture.lecture_status === 'is_over' && !lecture.allow_playback_submissions" :lecture="lecture" :update_lecture="true" />
+			<!-- Pre-set/Random Checkins -->
+			<div v-for="(checkin,i) in lecture.checkins" :key="i" class="header-btn">
+				<button v-if="checkin.activation != 'Manual Activation' && checkinIsOpen(checkin)" type="button" class="header-btn btn btn-secondary" @click="showQR(i)">Show QR</button>
+			</div>
+			<LectureUploadModal v-if="lectureIsOver() && !lecture.allow_playback_submissions && polls_loaded" :lecture="lecture" :need_timestamp="polls" :update_lecture="true" />
 			<router-link class="header-btn btn btn-secondary" v-else-if="lecture.allow_playback_submissions" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}" aria-label="Watch Playback">
 				Watch Playback
 			</router-link>
 			<button class="header-btn btn btn-primary" @click="download_submitty_csv" id="submitty_export">Export for Submitty...</button>
+			<!-- Manual Checkins -->
+			<div class="float-right" v-for="(checkin,i) in lecture.checkins" :key="'Live'+i">
+				<button v-if="checkin.activation == 'Manual Activation'" class="btn btn-secondary" @click="showQR(i)">Open Check-in {{i+1}}</button>
+			</div>
 	  </div>
-	  <LectureAttendanceTable :is_instructor="true" :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" :all_students="all_students" />
+	  <LectureAttendanceTable :is_instructor="true" :lecture="lecture" :submissions="submissions" :all_students="all_students" />
 	</div>
 </template>
 
@@ -24,14 +31,13 @@
 	import LectureSubmissionAPI from "@/services/LectureSubmissionAPI.js"
 	import SectionAPI from '@/services/SectionAPI.js'
 	import qrcode from '@chenfengyuan/vue-qrcode';
+	import PlaybackPollAPI from '@/services/PlaybackPollAPI';
 
   export default {
     name: 'InstructorLectureAttendanceContainer',
     props: {
     	lecture: Object,
-    	live_submissions: Object,
-    	playback_submissions: Array,
-    	absent: Array,
+    	submissions: Array,
     	all_students: Array,
     },
     components: {
@@ -42,109 +48,75 @@
     data(){
       return {
 				modal_open: false,
-				lecture_has_checkin: false
+				lecture_has_checkin: false,
+				manual_checkins: [],
+				current_checkin: null,
+				polls: [],
+				polls_loaded: false
       }
     },
     created() {
+			this.manual_checkins = this.getManualCheckins()
+			PlaybackPollAPI.getByLecture(this.lecture._id)
+			.then(res => {
+				this.polls = res.data
+				this.polls_loaded = true
+			})
     },
     methods: {
-    	showQR() {
-    	  document.getElementById("qr_modal").classList.remove("hidden")
+    	showQR(i) {
+				this.current_checkin = this.lecture.checkins[i]
     	},
     	hideQR() {
-    	  document.getElementById("qr_modal").classList.add("hidden")
+				this.current_checkin = null
     	},
-		download_submitty_csv() {
-			let data = []
+			checkinIsOpen(checkin) {
+				let now = new Date()
+				return (Date.parse(checkin.start_time) <= now && Date.parse(checkin.end_time) >= now)
+			},
+			lectureIsOver() {
+				return (!this.lecture.end_time || Date.parse(this.lecture.end_time) < Date.now())
+			},
+			getManualCheckins() {
+				return this.lecture.checkins.filter(a => a.activation == 'Manual Activation')
+			},
+			manuallyOpenCheckin(i) {
+				this.lecture.manual_checkin = this.lecture.checkins[i]
+			},
+			download_submitty_csv() {
+				let data = []
 
-			SectionAPI.getSectionsForCourse(this.lecture.sections[0].course._id)
-			.then(res => {
-				let course_sections = res.data
+				SectionAPI.getSectionsForCourse(this.lecture.sections[0].course._id)
+				.then(res => {
+					let course_sections = res.data
 
-				let self = this
-				this.all_students.forEach(function(student) {
-					course_sections.forEach(function(section) {
-						if(section.students.includes(student._id)) {
-							let stud_data = []
-							
-							let live = self.live_submissions[student._id]
-							let playback = self.playback_submissions.find(x => x.submitter._id == student._id)
-							
-							if(undefined != live && undefined != playback) {
-								if(live.length / self.lecture.checkins.length >= playback.video_percent) {
-									stud_data.push(live[live.length-1].live_submission_time)
-									stud_data.push(student.user_id)
-									stud_data.push(student.first_name)
-									stud_data.push(student.last_name)
-									stud_data.push(section.number)
-									stud_data.push("Live")
-									stud_data.push(live.length / self.lecture.checkins.length)
-								} else {
-									stud_data.push(playback.playback_submission_time)
-									stud_data.push(student.user_id)
-									stud_data.push(student.first_name)
-									stud_data.push(student.last_name)
-									stud_data.push(section.number)
-									stud_data.push("Playback")
-									stud_data.push(playback.video_percent)
-								}
-							} else if(undefined != live) {
-								stud_data.push(live[live.length-1].live_submission_time)
-								stud_data.push(student.user_id)
-								stud_data.push(student.first_name)
-								stud_data.push(student.last_name)
-								stud_data.push(section.number)
-								stud_data.push("Live")
-								stud_data.push(live.length / self.lecture.checkins.length)
-							} else if(undefined != playback) {
-								stud_data.push(playback.playback_submission_time)
-								stud_data.push(student.user_id)
-								stud_data.push(student.first_name)
-								stud_data.push(student.last_name)
-								stud_data.push(section.number)
-								stud_data.push("Playback")
-								stud_data.push(playback.video_percent)
-							} else {
-								stud_data.push(null)
-								stud_data.push(student.user_id)
-								stud_data.push(student.first_name)
-								stud_data.push(student.last_name)
-								stud_data.push(section.number)
-								stud_data.push(null)
-								stud_data.push(0)
-							}
+					let csv = 'Submission Timestamp,User ID,First Name,Last Name,Registration Section,Submission Type,Grade\n';
+					data.forEach(function(row) {
+						csv += row.join(',');
+						csv += "\n";
+					});
 
-							data.push(stud_data)
-						}
-					})
+					let downloadname = this.lecture.sections[0].course.name + '_' + this.lecture.title + '_attendance.csv'
+
+					var hiddenElement = document.createElement('a');
+					hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+					hiddenElement.target = '_blank';
+					hiddenElement.download = downloadname;
+					hiddenElement.click();
 				})
-
-				let csv = 'Submission Timestamp,User ID,First Name,Last Name,Registration Section,Submission Type,Grade\n';
-				data.forEach(function(row) {
-					csv += row.join(',');
-					csv += "\n";
-				});
-
-				let downloadname = self.lecture.sections[0].course.name + '_' + self.lecture.title + '_attendance.csv'
-
-				var hiddenElement = document.createElement('a');
-				hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-				hiddenElement.target = '_blank';
-				hiddenElement.download = downloadname;
-				hiddenElement.click();
-			})
-		}
+			}
     }
   }
 </script>
 
 <style scoped>
 	#qr_modal {
-		position: absolute;
-		width: 100%;
-		height: 100%;
+		position: fixed;
+		top: 4rem;
+		left: 0;
+		right: 0;
+		bottom: 2rem;
 		z-index: 115;
-		top: 0;
 		background-color: white;
 	}
 

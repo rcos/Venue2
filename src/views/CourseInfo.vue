@@ -308,29 +308,24 @@ export default {
             let students = lecture_.students
             let running_total = 0
             students.forEach(stud => {
-              let live = []
-              let playback = null
-              submissions.forEach(sub => {
-                if(sub.submitter._id == stud) {
-                  if(sub.is_live_submission) {
-                    live.push(sub)
-                  } else {
-                    playback = sub
+              submissions.forEach(submission => {
+                if(submission.submitter._id == stud) {
+                  if(submission.live_percent) {
+                    if(submission.video_percent) {
+                      running_total += Math.max(
+                        submission.live_percent * 100,
+                        submission.video_percent * 100
+                      )
+                    } else {
+                      running_total += submission.live_percent * 100
+                    }
+                  } else if(submission.video_percent) {
+                    running_total += submission.video_percent * 100
                   }
                 }
               })
-              if(live.length > 0 && playback != null) {
-                running_total += Math.max(
-                  live.length / lecture_.checkins.length,
-                  Math.ceil(playback.video_percent * 100) / 100
-                )
-              } else if(live.length > 0) {
-                running_total += live.length / lecture_.checkins.length
-              } else if(playback != null) {
-                running_total += Math.ceil(playback.video_percent * 100) / 100
-              }
             })
-            lecture_.percentage = running_total / students.length * 100
+            lecture_.percentage = running_total / students.length
             lecture_.color = this.getHTMLClassByAttendance(lecture_.percentage)
           })
         )
@@ -345,32 +340,26 @@ export default {
 
       this.sorted_lectures[this.section_id].lectures.forEach(lecture_data => {
         promise_tracker.push(
-          LectureSubmissionAPI.getLectureSubmissionsForStudent(lecture_data._id, this.current_user._id)
-          .catch(err => { console.log(`error retrieving lecture submissions for student ${this.current_user._id}`); console.log(err); })
+          LectureSubmissionAPI.getOrMake(lecture_data._id, this.current_user._id)
+          .catch(err => { console.log(`error retrieving lecture submission for student ${this.current_user._id}`); console.log(err); })
           .then(response => {
             if (response.data == null || response.data == []) {
               lecture_data.percentage = 0
             } else {
-              let live = []
-              let playback = null
-              response.data.forEach(sub => {
-                if(sub.submitter == this.current_user._id) {
-                  if(sub.is_live_submission) {
-                    live.push(sub)
-                  } else {
-                    playback = sub
-                  }
+              let submission = response.data
+              if(submission.live_percent) {
+                if(submission.video_percent) {
+                  lecture_data.percentage = Math.max(
+                    submission.live_percent * 100,
+                    submission.video_percent * 100
+                  )
+                } else {
+                  lecture_data.percentage = submission.live_percent * 100
                 }
-              })
-              if(live.length > 0 && playback != null) {
-                lecture_data.percentage = Math.max(
-                  live.length / lecture_data.checkins.length * 100,
-                  Math.ceil(playback.video_percent * 100)
-                )
-              } else if(live.length > 0) {
-                lecture_data.percentage = live.length / lecture_data.checkins.length * 100
-              } else if(playback != null) {
-                lecture_data.percentage = Math.ceil(playback.video_percent * 100)
+              } else if(submission.video_percent) {
+                lecture_data.percentage = submission.video_percent * 100
+              } else {
+                lecture_data.percentage = 0
               }
               lecture_data.color = this.getHTMLClassByAttendance(lecture_data.percentage)
             }

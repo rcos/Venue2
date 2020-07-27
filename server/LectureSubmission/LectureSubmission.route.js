@@ -118,8 +118,8 @@ lectureSubmissionRoutes.route('/update').post(function (req, res) {
     if(req.body.lectureSubmission.playback_submission_time) {
       updated.playback_submission_time = new Date()
     }
-    if(req.body.lectureSubmission.code) {
-      updated.code = req.body.lectureSubmission.code
+    if(req.body.lectureSubmission.codes) {
+      updated.codes = req.body.lectureSubmission.codes
     }
     if(req.body.lectureSubmission.student_poll_answers) {
       updated.student_poll_answers = req.body.lectureSubmission.student_poll_answers

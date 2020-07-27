@@ -2,12 +2,12 @@
 	<div>
     <div v-if="is_instructor">
       <div v-if="is_live">
-        <div v-if="Object.keys(live_submissions).length > 0">
-          <div class="namecard-edging live-color" v-for="(submission,i) in Object.keys(live_submissions)" :key="i">
+        <div v-if="submissions_with_live.length > 0">
+          <div class="namecard-edging live-color" v-for="(submission,i) in submissions_with_live" :key="i">
             <div class="namecard">
-              <p>{{live_submissions[submission][0].submitter.first_name}} {{live_submissions[submission][0].submitter.last_name}}</p>
-              <p>{{live_submissions[submission][0].submitter.email}}</p>
-              <p>{{live_submissions[submission].length / lecture.checkins.length * 100}}%</p>
+              <p>{{submission.submitter.first_name}} {{submission.submitter.last_name}}</p>
+              <p>{{submission.submitter.email}}</p>
+              <p>{{submission.live_percent * 100}}%</p>
             </div>
           </div>
         </div>
@@ -16,12 +16,12 @@
         </div>
       </div>
       <div v-else-if="is_playback">
-        <div v-if="submissions.length > 0">
-          <div class="namecard-edging playback-color" v-for="(submission,i) in submissions" :key="i">
+        <div v-if="submissions_with_playback.length > 0">
+          <div class="namecard-edging playback-color" v-for="(submission,i) in submissions_with_playback" :key="i">
             <div class="namecard">
               <p>{{submission.submitter.first_name}} {{submission.submitter.last_name}}</p>
               <p>{{submission.submitter.email}}</p>
-              <p>{{Math.ceil(submission.video_percent * 100)}}%</p>
+              <p>{{submission.video_percent * 100}}%</p>
             </div>
           </div>
         </div>
@@ -30,11 +30,12 @@
         </div>
       </div>
       <div v-else-if="is_absent">
-        <div v-if="submissions.length > 0">
-          <div class="namecard-edging absent-color" v-for="(absentee,i) in submissions" :key="i">
+        <div v-if="submissions_with_nothing.length > 0">
+          <div class="namecard-edging absent-color" v-for="(absentee,i) in submissions_with_nothing" :key="i">
             <div class="namecard">
-              <p>{{absentee.first_name}} {{absentee.last_name}}</p>
-              <p>{{absentee.email}}</p>
+              <p>{{absentee.submitter.first_name}} {{absentee.submitter.last_name}}</p>
+              <p>{{absentee.submitter.email}}</p>
+              <p>0%</p>
             </div>
           </div>
         </div>
@@ -46,11 +47,12 @@
     <!-- Student -->
     <div v-else>
       <div v-if="is_live">
-        <div v-if="live_submissions[this.$store.state.user.current_user._id].length > 0">
-          <div class="namecard-edging live-color" v-for="submission in live_submissions[this.$store.state.user.current_user._id]" :key="submission._id">
+        <div v-if="submissions_with_live[0] && submissions_with_live[0].live_percent">
+          <div class="namecard-edging live-color">
             <div class="namecard">
               <p>Submission Time:</p>
-              <p>{{getPrettyDateTimeWithMS(new Date(submission.live_submission_time))}}</p>
+              <p>{{getPrettyDateTimeWithMS(new Date(submissions_with_live[0].live_submission_time))}}</p>
+              <p>{{ submissions_with_live[0].live_percent * 100 }}%</p>
             </div>
           </div>
         </div>
@@ -59,12 +61,25 @@
         </div>
       </div>
       <div v-else-if="is_playback">
-        <div v-if="submissions.length > 0">
-          <div class="namecard-edging playback-color" v-for="submission in submissions" :key="submission._id">
+        <div v-if="submissions_with_playback[0] && submissions_with_playback[0].video_percent">
+          <div class="namecard-edging playback-color">
             <div class="namecard">
               <p>Submission Time:</p>
-              <p>{{getPrettyDateTimeWithMS(new Date(submission.live_submission_time))}}</p>
-              <p>{{ submission.video_percent * 100 }}%</p>
+              <p>{{getPrettyDateTimeWithMS(new Date(submissions_with_playback[0].playback_submission_time))}}</p>
+              <p>{{ submissions_with_playback[0].video_percent * 100 }}%</p>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          None
+        </div>
+      </div>
+      <div v-else-if="is_absent">
+        <div v-if="submissions_with_nothing[0]">
+          <div class="namecard-edging absent-color">
+            <div class="namecard">
+              <p>Absent</p>
+              <p>0%</p>
             </div>
           </div>
         </div>
@@ -82,8 +97,9 @@
   export default {
     name: 'LectureAttendanceList',
     props: {
-      live_submissions: Object,
-      submissions: Array,
+      submissions_with_live: Array,
+      submissions_with_playback: Array,
+      submissions_with_nothing: Array,
       lecture: Object,
       is_live: {
         type: Boolean,
@@ -105,8 +121,6 @@
       return {
         selected_tab: 0
       }
-    },
-    created() {
     },
     methods: {
       getPrettyDateTimeWithMS(datetime) {
