@@ -209,17 +209,11 @@ export default {
 							if(this.students.active.length > 0) {
 								this.students.active.forEach(stud => {
 									if(stud._id == studID) {
-										lecture.students[studID] = {
-											live: [],
-											playback: null
-										}
+										lecture.students[studID] = {}
 									}
 								})
 							} else {
-								lecture.students[studID] = {
-									live: [],
-									playback: null
-								}
+								lecture.students[studID] = {}
 							}
 						})
 					})
@@ -227,15 +221,11 @@ export default {
 					subsForLecture.forEach(sub => {
 						Object.keys(lecture.students).forEach(studID => {
 							if(sub.submitter._id == studID) {
-								if(sub.is_live_submission) {
-									lecture.students[studID].live.push(sub)
-								} else {
-									lecture.students[studID].playback = sub
-									if(undefined == currentSubmissions[studID]) {
-										currentSubmissions[lecture._id] = []
-									}
-									currentSubmissions[lecture._id].push(sub)
+								lecture.students[studID] = sub
+								if(undefined == currentSubmissions[studID]) {
+									currentSubmissions[lecture._id] = []
 								}
+								currentSubmissions[lecture._id].push(sub)
 							}
 						})
 					})
@@ -329,17 +319,11 @@ export default {
 									if(this.students.active.length > 0) {
 										this.students.active.forEach(stud => {
 											if(stud._id == studID) {
-												lecture.students[studID] = {
-													live: [],
-													playback: null
-												}
+												lecture.students[studID] = {}
 											}
 										})
 									} else {
-										lecture.students[studID] = {
-											live: [],
-											playback: null
-										}
+										lecture.students[studID] = {}
 									}
 								})
 							})
@@ -347,11 +331,7 @@ export default {
 							subsForLecture.forEach(sub => {
 								Object.keys(lecture.students).forEach(studID => {
 									if(sub.submitter._id == studID) {
-										if(sub.is_live_submission) {
-											lecture.students[studID].live.push(sub)
-										} else {
-											lecture.students[studID].playback = sub
-										}
+										lecture.students[studID] = sub
 									}
 								})
 							})
@@ -396,17 +376,11 @@ export default {
 							if(this.students.active.length > 0) {
 								this.students.active.forEach(stud => {
 									if(stud._id == studID) {
-										lecture.students[studID] = {
-											live: [],
-											playback: null
-										}
+										lecture.students[studID] = {}
 									}
 								})
 							} else {
-								lecture.students[studID] = {
-									live: [],
-									playback: null
-								}
+								lecture.students[studID] = {}
 							}
 						})
 					})
@@ -414,11 +388,7 @@ export default {
 					subsForLecture.forEach(sub => {
 						Object.keys(lecture.students).forEach(studID => {
 							if(sub.submitter._id == studID) {
-								if(sub.is_live_submission) {
-									lecture.students[studID].live.push(sub)
-								} else {
-									lecture.students[studID].playback = sub
-								}
+								lecture.students[studID] = sub
 							}
 						})
 					})
@@ -452,26 +422,21 @@ export default {
 			let lecturePlayback = 0
 			let lectureAbsent = 0
 			lectureStudents.forEach(studID => {
-				let studSubmissions = lecture.students[studID]
-				if(studSubmissions.live.length > 0 && studSubmissions.playback != null) {
-					let percentage = Math.max(
-						studSubmissions.live.length / lecture.checkins.length * 100,
-						Math.ceil(studSubmissions.playback.video_percent * 100)
-					)
-					if(studSubmissions.live.length / lecture.checkins.length == percentage) {
-						lectureLive += percentage
+				let studSubmission = lecture.students[studID]
+				if(studSubmission.live_percent && studSubmission.video_percent) {
+					let percentage = Math.max(studSubmission.live_percent, studSubmission.video_percent)
+					if(studSubmission.live_percent  == percentage) {
+						lectureLive += percentage * 100
 					} else {
-						lecturePlayback += percentage
+						lecturePlayback += percentage * 100
 					}
-					lectureAbsent += (100 - percentage)
-				} else if(studSubmissions.live.length > 0) {
-					let percentage = studSubmissions.live.length / lecture.checkins.length * 100
-					lectureLive += percentage
-					lectureAbsent += (100 - percentage)
-				} else if(studSubmissions.playback != null) {
-					let percentage = Math.ceil(studSubmissions.playback.video_percent * 100)
-					lecturePlayback += percentage
-					lectureTotal += (100 - percentage)
+					lectureAbsent += (1 - percentage) * 100
+				} else if(studSubmission.live_percent) {
+					lectureLive += studSubmission.live_percent * 100
+					lectureAbsent += (1 - studSubmission.live_percent) * 100
+				} else if(studSubmission.video_percent) {
+					lecturePlayback += studSubmission.video_percent * 100
+					lectureAbsent += (1 - studSubmission.video_percent) * 100
 				} else {
 					lectureAbsent += 100
 				}
@@ -726,12 +691,12 @@ export default {
 						n++
 					}
 					submissions[lectID].forEach(submission => { //for each student
-						submission.student_poll_answers.forEach((student_question,j) => { //for each question answered
-							if(i == j) {
+						Object.keys(submission.student_poll_answers).forEach(poll_retrieval => { //for each question answered
+							if((playbackPoll.code && playbackPoll.code == poll_retrieval) || (playbackPoll.timestamp && playbackPoll.timestamp == poll_retrieval)) {
 								let student_answers = []
-								student_question.forEach((is_marked,k) => { //for each marked option
+								submission.student_poll_answers[poll_retrieval].forEach((is_marked,k) => { //for each marked option
 									if(is_marked) {
-										student_answers.push(this.playbackPolls[lectID][j].possible_answers[k])
+										student_answers.push(playbackPoll.possible_answers[k])
 									}
 								})
 								let stringified = student_answers.join(', ')

@@ -7,7 +7,9 @@
     </div>
     <div id="table-header">
       <h2>Attendance</h2>
-      <button v-if="lectureIsOngoing()" @click="qr_scanning_window_open = true" class="header-btn btn btn-primary">Scan QR</button>
+      <button v-if="lectureIsOngoing()" @click="qr_scanning_window_open = true" class="header-btn btn btn-primary">
+        <img src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
+      </button>
       <router-link class="header-btn btn btn-secondary" v-else-if="lectureIsOver() && lecture.allow_playback_submissions" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
         Watch Playback
       </router-link>
@@ -120,7 +122,7 @@
 <style scoped>
   #table-header {
     position: relative;
-    top: 3rem;
+    top: 1.5rem;
     bottom: 0;
     text-align: left;
     /* padding-left: 5rem;

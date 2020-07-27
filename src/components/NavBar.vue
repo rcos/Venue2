@@ -60,7 +60,6 @@
       <show-at breakpoint="mediumAndBelow">
         <router-link :to="{name: 'settings'}" role="link" aria-label="User Settings" class="settings_link">
           <div class="user-name float-right">
-            <p class="d-inline-block mr-2" aria-label="User Name">{{ current_user.first_name }}</p>
             <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
           </div>
         </router-link>

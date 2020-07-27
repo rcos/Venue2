@@ -259,13 +259,11 @@
 
 <style scoped>
 	#lecture-attendance-table {
-		margin-top: 2rem;
+		margin-top: 3rem;
 		text-align: start;
 	}
 
 	.tabs {
-	  margin-top: 5rem;
-		margin-left: 2rem;
 	}
 
 	.tab_btn {
