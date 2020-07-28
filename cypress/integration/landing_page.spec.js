@@ -8,7 +8,7 @@ describe('The Landing Page', () => {
     cy.checkAccessibility()
   })
   it('has a CAS "Login" button', function () {
-    cy.get(".venue-btn").contains("CAS Login")
+    cy.get(".venue-btn").contains("Login")
   })
   it('has a "Get Started" button', function () {
     cy.get(".venue-btn").contains("Get Started").click()

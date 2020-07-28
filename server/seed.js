@@ -289,8 +289,9 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 		ls.push(new LectureSubmission({ // 0
 			lecture: l[1]._id,
 			submitter: u[2]._id,
-			is_live_submission: true,
-			code: "abcdefghijklmnopqrstuvwxyz",
+			codes: ["abcdefghijklmnopqrstuvwxyz"],
+			live_progress: 1,
+			live_percent: 0.5,
 			live_submission_time: Date.now() - (3.5*60*1000)
 		}))
 
