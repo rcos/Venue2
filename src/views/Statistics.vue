@@ -12,26 +12,26 @@
 					<div class="col selector-label">
 						Sections:
 					</div>
-					<MultiSelectDropdown id="sections-selector" :options="sections.filtered" sortBy="number" @update="handleSectionsChange" :max="4" :n="1" ref="sectionsSelector"/>
+					<MultiSelectDropdown id="sections-selector" :options="sections.filtered" sortBy="number" @update="handleSectionsChange" :n="1" ref="sectionsSelector"/>
 				</div>
 				<div class="row side-panel-section justify-content-end" v-if="lectures.filtered.length > 0">
 					<div class="selector-label">
 						Lectures:
 					</div>
-					<MultiSelectDropdown id="lectures-selector" :options="lectures.filtered" sortBy="title" @update="handleLecturesChange" :max="4" :n="2" ref="lecturesSelector"/>
+					<MultiSelectDropdown id="lectures-selector" :options="lectures.filtered" sortBy="title" @update="handleLecturesChange" :n="2" ref="lecturesSelector"/>
 				</div>
 				<div class="row side-panel-section justify-content-end" v-if="students.filtered.length > 0">
 					<div class="col selector-label">
 						Students:
 					</div>
-					<MultiSelectDropdown id="students-selector" :options="students.filtered" sortBy="last_name" :displayAs="['last_name','first_name']" @update="handleStudentsChange" :max="4" :n="3" ref="studentsSelector"/>
+					<MultiSelectDropdown id="students-selector" :options="students.filtered" sortBy="last_name" :displayAs="['last_name','first_name']" @update="handleStudentsChange" :n="3" ref="studentsSelector"/>
 				</div>
 			</div>
 		</div>
 		<div id="stats-right">
 			<div id="stats-right-top">
 				<div id="top-panel" class="stats-panel">
-					<ToggleSwitch :class="(lectures.active.length != 1 && courses.active?'':'hidden')" label="Stacked" :start="stacked" @toggle="handleToggleStacked"/>
+					<ToggleSwitch :class="(lectures.active.length != 1 && courses.active?'':'hidden')" label="Cumulative" :start="stacked" @toggle="handleToggleStacked"/>
 					<ToggleSwitch :class="(lectures.active.length == 1 && courses.active?'':'hidden')" label="Half" :start="half" :disabled="polls" @toggle="handleToggleHalf"/>
 					<ToggleSwitch :class="(lectures.active.length > 0 && courses.active?'':'hidden')" label="Polls" :start="polls" @toggle="handleTogglePolls"/>
 				</div>

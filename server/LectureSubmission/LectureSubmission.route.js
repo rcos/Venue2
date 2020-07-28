@@ -40,31 +40,43 @@ lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
               res.json(bad_ids)
             }
           } else {
-            let m = 0
-            lecture.checkins.forEach(checkin => {
-              let subobj = {
-                lecture: lecture._id,
-                video_progress: 0,
-                video_percent: 0,
-                is_live_submission: true,
-                submitter: user._id,
-                code: checkin.code
-              }
-              let lectureSubmission = new LectureSubmission(subobj);
-              lectureSubmission.save()
-                .then(() => {
-                  m++
-                  console.log(m)
-                  console.log("<SUCCESS> Adding lecture submission for user with RCS:",rcs)
-                  if(m == lecture.checkins.length && n == rcsids.length) {
+            //try to find and update a submission
+            let updated_info = {
+              live_percent: 1,
+              live_progress: lecture.checkins.length,
+              live_submission_time: new Date()
+            }
+            LectureSubmission.findOneAndUpdate(
+              {
+                lecture: req.body.lecture_id,
+                submitter: user._id
+              },
+              updated_info,
+              function (err, lectureSubmission) {
+                if (err) {
+                  console.log("<ERROR> Manually overriding lecture submission with lecture ID:",req.body.lecture_id,"and submitter ID:",user._id)
+                  res.json(err);
+                } else if (null != lectureSubmission) { // get
+                  console.log("<SUCCESS> Manually overriding lecture submission with lecture ID:",req.body.lecture_id,"and submitter ID:",user._id)
+                  if(n == rcsids.length) {
                     res.json(bad_ids)
                   }
-                })
-                .catch(() => {
-                  console.log("<ERROR> Adding lecture submission for user with RCS:",rcs)
-                  res.status(400).send("unable to save submission to database");
-                });
-            })
+                } else { // make
+                  updated_info.lecture = req.body.lecture_id
+                  updated_info.submitter = user._id
+                  let updated = new LectureSubmission(updated_info);
+                  updated.save().then(() => {
+                    console.log("<SUCCESS> Adding lecture submission for user with RCS:",rcs)
+                    if(n == rcsids.length) {
+                      res.json(bad_ids)
+                    }
+                  }).catch(() => {
+                    console.log("<ERROR> Adding lecture submission for user with RCS:",rcs)
+                    res.status(400).send("unable to save lectureSubmission to database");
+                  });
+                }
+              }
+            );
           }
         })
       })
