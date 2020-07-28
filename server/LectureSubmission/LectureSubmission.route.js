@@ -36,7 +36,7 @@ lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
           } else if(user == null) {
             bad_ids.push(rcs)
             if(n == rcsids.length) {
-              console.log("<SUCCESS> Getting some user(s) with RCS")
+              console.log("<SUCCESS> Getting some user(s) with RCS. Bad RCS IDs:",bad_ids)
               res.json(bad_ids)
             }
           } else {
