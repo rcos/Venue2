@@ -173,7 +173,7 @@
     background-color: #f7f7f7;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 10;
+    z-index: 9999;
     overflow: hidden;
     max-height:0;
     transition: max-height 0.2s ease-in; 
