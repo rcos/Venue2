@@ -59,8 +59,10 @@
 						</thead>
 						<tbody>
 							<tr v-for="(checkin,i) in lecture.checkins" :key="i">
-								<td>{{ getPrettyDateTime(new Date(checkin.start_time)) }}</td>
-								<td>{{ getPrettyDateTime(new Date(checkin.end_time)) }}</td>
+								<td v-if="checkin.start_time">{{ getPrettyDateTime(new Date(checkin.start_time)) }}</td>
+								<td v-else>Manual</td>
+								<td v-if="checkin.end_time">{{ getPrettyDateTime(new Date(checkin.end_time)) }}</td>
+								<td v-else>Manual</td>
 								<td>
 									<div id="edit-poll-modal-container" v-if="edit_poll_index != -1 && edit_poll_index == i">
 										<div id="edit-poll-modal-contents">
@@ -68,7 +70,7 @@
 										</div>
 									</div>
 									{{polls[i].question}}
-									<button type="button" v-if="Date.parse(polls[i].start_time) < Date.now()" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
+									<button type="button" v-if="!polls[i].start_time || (polls[i].start_time && Date.parse(polls[i].start_time) < Date.now())" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
 										<img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
 									</button>
 								</td>
