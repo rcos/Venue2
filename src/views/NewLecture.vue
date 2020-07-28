@@ -70,7 +70,9 @@
                 </div>
                 <div class="checkin-poll col-2 my-auto">
                   <div v-if="null != polls[i]">
-                    <button type="button" class="btn btn-secondary" @click="add_poll_index = i" :title="'Edit '+polls[i].question"><img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit"></button>
+                    <button type="button" class="btn btn-secondary" @click="add_poll_index = i" :title="'Edit '+polls[i].question">
+                      <img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
+                    </button>
                     <button type="button" class="btn btn-danger" @click="polls[i] = null" :title="'Remove ' +polls[i].question">X</button>
                   </div>
                   <button v-else type="button" class="btn btn-secondary" @click="add_poll_index = i">Add Poll</button>

@@ -24,7 +24,7 @@
 				<button v-if="checkin.activation == 'Manual Activation'" class="btn btn-secondary" @click="showQR(i)">Open Check-in {{i+1}}</button>
 			</div>
 	  </div>
-	  <LectureAttendanceTable :is_instructor="true" :lecture="lecture" :submissions="submissions" :all_students="all_students" />
+	  <LectureAttendanceTable v-if="polls_loaded" :is_instructor="true" :lecture="lecture" :submissions="submissions" :all_students="all_students" :polls="polls"/>
 	</div>
 </template>
 

@@ -54,12 +54,24 @@
 							<tr>
 								<th>Start Time</th>
 								<th>End Time</th>
+								<th>Poll</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr v-for="(checkin,i) in lecture.checkins" :key="i">
 								<td>{{ getPrettyDateTime(new Date(checkin.start_time)) }}</td>
 								<td>{{ getPrettyDateTime(new Date(checkin.end_time)) }}</td>
+								<td>
+									<div id="edit-poll-modal-container" v-if="edit_poll_index != -1 && edit_poll_index == i">
+										<div id="edit-poll-modal-contents">
+											<CreatePoll :playback_only="false" :checkin="i" :poll="polls[i]" @cancel="handleCancelEditPoll" @addPoll="handleEditPoll"/>
+										</div>
+									</div>
+									{{polls[i].question}}
+									<button type="button" v-if="Date.parse(polls[i].start_time) < Date.now()" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
+										<img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
+									</button>
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -72,7 +84,10 @@
 
 <script>
 	import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
+	import PlaybackPollAPI from '@/services/PlaybackPollAPI'
+
   import LectureAttendanceList from '@/components/LectureAttendanceList.vue'
+	import CreatePoll from '@/components/CreatePoll.vue'
 
   export default {
     name: 'LectureAttendanceTable',
@@ -80,10 +95,12 @@
       lecture: Object,
     	submissions: Array,
     	all_students: Array,
-      is_instructor: Boolean
+      is_instructor: Boolean,
+			polls: Array
     },
     components: {
-      LectureAttendanceList
+      LectureAttendanceList,
+			CreatePoll
     },
     data(){
       return {
@@ -95,7 +112,8 @@
 				submissions_with_nothing: [],
 				live_percent: 0,
 				playback_percent: 0,
-				absent_percent: 0
+				absent_percent: 0,
+				edit_poll_index: -1
       }
     },
     created() {
@@ -253,6 +271,12 @@
 					})
 				})
 			},
+			handleCancelEditPoll() {
+				this.edit_poll_index = -1
+			},
+			handleEditPoll(poll) {
+				PlaybackPollAPI.update(poll).then(res => {location.reload()})
+			}
 		}
 	}
 </script>
@@ -261,6 +285,27 @@
 	#lecture-attendance-table {
 		margin-top: 3rem;
 		text-align: start;
+	}
+
+	#edit-poll-modal-container {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: rgba(255, 255, 255, 0.65);
+	}
+
+	#edit-poll-modal-contents {
+		position: fixed;
+		top: 25%;
+		bottom: 25%;
+		left: 25%;
+		right: 25%;
+		background: white;
+		border: 1px solid gray;
+		padding: 1rem;
+		border-radius: 1rem;
 	}
 
 	.tabs {

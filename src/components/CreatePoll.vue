@@ -1,48 +1,49 @@
 <template>
 	<div id="add-poll-container">
-		<h2>Add Poll</h2>
+		<h2>Edit Poll</h2>
 		<div class="poll_card">
-		<div class="row questionrow">
-			<label id="question_label">Question</label>
-			<textarea id="question" class="col" type="text" placeholder="eg. Which of the following...?" aria-labelledby="question_label" v-model.lazy="question"/>
-		</div>
-		<div class="row timestamprow" v-if="playback_only">
-			<div class="col-4">
-			<!-- <label for="hour">Hour:</label> -->
-				<label id="hour_label">Hour</label>
-				<input type="number" id="hour" min="0" max="5" aria-labelledby="hour_label"/>
+			<div class="row questionrow">
+				<label id="question_label">Question</label>
+				<textarea id="question" class="col" type="text" placeholder="eg. Which of the following...?" aria-labelledby="question_label" v-model.lazy="question"/>
 			</div>
-			<div class="col-4">
-			<!-- <label for="min">Minute:</label> -->
-				<label id="minute_label">Min</label>
-				<input type="number" id="min" min="0" max="59" aria-labelledby="minute_label"/>
+			<div class="row timestamprow" v-if="playback_only">
+				<div class="col-4">
+				<!-- <label for="hour">Hour:</label> -->
+					<label id="hour_label">Hour</label>
+					<input type="number" id="hour" min="0" max="5" aria-labelledby="hour_label"/>
+				</div>
+				<div class="col-4">
+				<!-- <label for="min">Minute:</label> -->
+					<label id="minute_label">Min</label>
+					<input type="number" id="min" min="0" max="59" aria-labelledby="minute_label"/>
+				</div>
+				<div class="col-4">
+				<!-- <label for="sec">Second:</label> -->
+					<label id="seconds_label">Sec</label>
+					<input type="number" id="sec" min="0" max="59" aria-labelledby="seconds_label"/>
+				</div>
 			</div>
-			<div class="col-4">
-			<!-- <label for="sec">Second:</label> -->
-				<label id="seconds_label">Sec</label>
-				<input type="number" id="sec" min="0" max="59" aria-labelledby="seconds_label"/>
+			<h4>Possible Answers</h4>
+			<div class="row">
+				<label id="spacer1">Number</label>
+				<label id="a_label">Answer</label>
+				<label id="correct_label">Correct</label>
 			</div>
-		</div>
-		<h4>Possible Answers</h4>
-		<div class="row">
-			<label id="spacer1">Number</label>
-			<label id="a_label">Answer</label>
-			<label id="correct_label">Correct</label>
-		</div>
-		<ol class="row possible_answer">
-			<li v-for="(current_answer,i) in possible_answers" v-bind:key="i">
-			<!-- <p class="answernumber">{{i + 1}}</p> -->
-			<input class="answerfield" type="text" v-model.lazy="possible_answers[i]" aria-labelledby="a_label"/>
-			<input class="iscorrectfield" type="checkbox" v-model.lazy="current_is_correct[i]" aria-labelledby="correct_label"/>
-			<button type="button" class="btn btn-danger removeanswer" @click="possible_answers.splice(i,1);current_is_correct.splice(i,1)" :aria-label="'Remove Answer '+(i+1)">X</button>
-			</li>
-		</ol>
-		<div class="row addanswerrow">
-			<button type="button" id="add_answer_btn" class="btn btn-secondary" @click="possible_answers.push('');current_is_correct.push(false)">Add Option</button>
-		</div>
-		<div class="row">
-			<button type="button" id="add_poll_btn" class="btn btn-primary" @click="addPoll">Save Poll</button>
-		</div>
+			<ol class="row possible_answer">
+				<li v-for="(current_answer,i) in possible_answers" v-bind:key="i">
+				<!-- <p class="answernumber">{{i + 1}}</p> -->
+				<input class="answerfield" type="text" v-model.lazy="possible_answers[i]" aria-labelledby="a_label"/>
+				<input class="iscorrectfield" type="checkbox" v-model.lazy="current_is_correct[i]" aria-labelledby="correct_label"/>
+				<button type="button" class="btn btn-danger removeanswer" @click="possible_answers.splice(i,1);current_is_correct.splice(i,1)" :aria-label="'Remove Answer '+(i+1)">X</button>
+				</li>
+			</ol>
+			<div class="row addanswerrow">
+				<button type="button" id="add_answer_btn" class="btn btn-secondary" @click="possible_answers.push('');current_is_correct.push(false)">Add Option</button>
+			</div>
+			<div class="row">
+				<button type="button" id="cancel_add_poll_btn" class="btn btn-secondary" @click="cancel">Cancel</button>
+				<button type="button" id="add_poll_btn" class="btn btn-primary" @click="addPoll">Save Poll</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -91,6 +92,7 @@ export default {
 				this.$emit('addPoll',{})
 			} else {
 				this.$emit('addPoll',{
+					_id: (self.poll?self.poll._id:null),
 					question: self.question,
 					possible_answers: self.possible_answers,
 					correct_answers: correct_answers,
@@ -100,6 +102,9 @@ export default {
 			this.question = ""
 			this.possible_answers = []
 			this.current_is_correct = []
+		},
+		cancel() {
+			this.$emit('cancel')
 		}
 	}
 }
