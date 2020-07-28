@@ -13,10 +13,10 @@
 				</button>
 			</div>
 			<LectureUploadModal v-if="lectureIsOver() && !lecture.allow_playback_submissions && polls_loaded" :lecture="lecture" :need_timestamp="polls" :update_lecture="true" />
-			<router-link class="header-btn btn btn-secondary" v-else-if="lecture.allow_playback_submissions" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}" aria-label="Watch Playback">
+			<router-link class="header-btn btn btn-secondary" v-else-if="lecture.allow_playback_submissions" title="Watch Recording" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}" aria-label="Watch Recording">
 				<img src="@/assets/icons8-video-64.png" width="60" alt="Video" aria-label="Video">
 			</router-link>
-			<button class="header-btn btn btn-primary" @click="download_submitty_csv" id="submitty_export">
+			<button class="header-btn btn btn-primary" @click="download_submitty_csv" id="submitty_export" title="CSV Export">
 				<img src="@/assets/icons8-database-export-64.png" width="60" alt="QR Code" aria-label="QR Code">
 			</button>
 			<!-- Manual Checkins -->
