@@ -14,7 +14,7 @@
 			</div>
 			<LectureUploadModal v-if="lectureIsOver() && !lecture.allow_playback_submissions && polls_loaded" :lecture="lecture" :need_timestamp="polls" :update_lecture="true" />
 			<router-link class="header-btn btn btn-secondary" v-else-if="lecture.allow_playback_submissions" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}" aria-label="Watch Playback">
-				Watch Playback
+				<img src="@/assets/icons8-video-64.png" width="60" alt="Video" aria-label="Video">
 			</router-link>
 			<button class="header-btn btn btn-primary" @click="download_submitty_csv" id="submitty_export">
 				<img src="@/assets/icons8-database-export-64.png" width="60" alt="QR Code" aria-label="QR Code">
@@ -93,6 +93,54 @@
 				SectionAPI.getSectionsForCourse(this.lecture.sections[0].course._id)
 				.then(res => {
 					let course_sections = res.data
+					let self = this
+					this.all_students.forEach(function(student) {
+						course_sections.forEach(function(section) {
+							if(section.students.includes(student._id)) {
+								let stud_data = []
+
+								let submission = self.submissions.find(a => a.submitter._id == student._id)
+								console.log(submission)
+
+								let percent = 0;
+								if(submission && submission.live_percent && submission.video_percent) {
+									percent = Math.max(submission.live_percent,submission.video_percent)
+								} else if(submission && submission.live_percent) {
+									percent = submission.live_percent
+								} else if(submission && submission.video_percent) {
+									percent = submission.video_percent
+								}
+
+								if(submission && percent == submission.live_percent) {
+									stud_data.push(submission.live_submission_time)
+									stud_data.push(student.user_id)
+									stud_data.push(student.first_name)
+									stud_data.push(student.last_name)
+									stud_data.push(section.number)
+									stud_data.push("Live")
+									stud_data.push(percent)
+								} else if(submission && percent == submission.video_percent) {
+									stud_data.push(submission.playback_submission_time)
+									stud_data.push(student.user_id)
+									stud_data.push(student.first_name)
+									stud_data.push(student.last_name)
+									stud_data.push(section.number)
+									stud_data.push("Recording")
+									stud_data.push(percent)
+								} else {
+									stud_data.push(null)
+									stud_data.push(student.user_id)
+									stud_data.push(student.first_name)
+									stud_data.push(student.last_name)
+									stud_data.push(section.number)
+									stud_data.push(null)
+									stud_data.push(0)
+								}
+								
+								data.push(stud_data)
+							}
+						})
+					})
 
 					let csv = 'Submission Timestamp,User ID,First Name,Last Name,Registration Section,Submission Type,Grade\n';
 					data.forEach(function(row) {
