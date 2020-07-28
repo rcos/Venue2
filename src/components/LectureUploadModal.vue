@@ -1,6 +1,8 @@
 <template>
   <div id="lecture-upload-modal">
-    <button type="button" class="btn btn-primary" @click="handleShowModal" :tabindex="(modal_open ? '-1' : '0')">Upload Lecture Video...</button>
+    <button type="button" class="btn btn-primary" @click="handleShowModal" :tabindex="(modal_open ? '-1' : '0')" title="Upload Recording">
+      <img src="@/assets/icons8-upload-96.png" width="60" alt="QR Code" aria-label="QR Code">
+    </button>
     <div id="lecture_modal_viewable" class="hiddenModal">
       <div class="row titlerow">
         <h1 id="banner_title" aria-label="New Lecture Video">New Lecture Video <button type="button" v-if="update_lecture" id="cancel_upload_btn" class="btn btn-secondary" @click="hideModal" aria-label="Cancel Video Upload">Cancel</button>
