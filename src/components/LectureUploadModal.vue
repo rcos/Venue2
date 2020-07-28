@@ -74,9 +74,9 @@
       </div>
       <div class="row" id="bottomrow">
         <label id="playback_start_label">Playback Submission Start</label>
-        <input id="playback_start" v-model.lazy="lecture.playback_submission_start_time" aria-labelledby="playback_start_label" type="datetime-local"/>
+        <input id="playback_start" aria-labelledby="playback_start_label" type="datetime-local"/>
         <label id="playback_end_label">Playback Submission End</label>
-        <input id="playback_end" v-model.lazy="lecture.playback_submission_end_time" aria-labelledby="playback_end_label" type="datetime-local"/>
+        <input id="playback_end" aria-labelledby="playback_end_label" type="datetime-local"/>
         <button type="button" v-if="update_lecture" id="video_upload_btn" class="btn btn-secondary" @click="updateLecture()" disabled>Upload</button>
         <button type="button" v-else id="video_upload_btn" class="btn btn-secondary" @click="hideModal()" disabled>Upload</button>
       </div>
