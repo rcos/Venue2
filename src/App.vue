@@ -4,6 +4,7 @@
     <div id="main-content">
       <router-view :key="$route.fullPath" />
     </div>
+    <Footer/>
   </div>
 </template>
 
