@@ -342,7 +342,7 @@ export default {
       })
     },
     calculateStudentAttendances() {
-      if(this.sorted_lectures[this.secion_id]) {
+      if(this.sorted_lectures[this.section_id]) {
         let promise_tracker = []
         this.sorted_lectures[this.section_id].lectures.forEach(lecture_data => {
           promise_tracker.push(
