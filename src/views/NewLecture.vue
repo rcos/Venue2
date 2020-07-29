@@ -79,8 +79,7 @@
                 </div>
                 <div id="add-poll-modal" v-if="add_poll_index >= 0">
                   <div class="modal-contents">
-                    <CreatePoll :playback_only="false" :checkin="add_poll_index" @addPoll="handleAddPoll" :poll="polls[add_poll_index]"/>
-                    <button style="margin-top: -1rem; margin-bottom: 1rem" type="button" class="btn btn-secondary" @click="add_poll_index = -1">Cancel</button>
+                    <CreatePoll :playback_only="false" :checkin="add_poll_index" @addPoll="handleAddPoll" :poll="polls[add_poll_index]" @cancel="add_poll_index = -1"/>
                   </div>
                 </div>
                 <div class="checkin-remove col-1 my-auto">
