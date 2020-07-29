@@ -56,6 +56,9 @@ export default {
 		if(!this.submission.video_percent) {
 			this.submission.video_percent = 0
 		}
+		if(!this.submission.student_poll_answers) {
+			this.submission.student_poll_answers = {}
+		}
 	},
 	mounted() {
 		let self = this
@@ -74,7 +77,6 @@ export default {
 					if(currTime - self.prevTime < 0.5 && currTime >= self.prevTime) {
 						//Considered NOT a 'seek', video is playing normally
 						if(self.submission.video_progress < Math.floor(currTime)) {
-							console.log('here')
 							self.submission.video_progress = Math.floor(currTime)
 							self.submission.video_percent = currTime / vid.duration()
 							if(self.submission.video_progress%5 == 0) {
@@ -84,9 +86,10 @@ export default {
 						}
 						for (let i = 0; i < self.polls.length; i++) {
 							if (currTime > self.polls[i].timestamp) {
-								if(self.polls[i].code && !self.submission.student_poll_answers[self.polls[i].code] &&
-								self.polls[i].timestamp && !self.submission.student_poll_answers[self.polls[i].timestamp]) {
-									//THERE IS NO ANSWER FROM THE STUDENT YET
+								
+								//if there is not an answer for the code, and there is not an answer for the timestamp, show the poll
+								if(!(self.polls[i].code && !self.submission.student_poll_answers[self.polls[i].code]) &&
+								!(self.polls[i].timestamp && self.submission.student_poll_answers[self.polls[i].timestamp])) {
 									vid.currentTime(self.polls[i].timestamp)
 									vid.pause()
 									self.startPoll(i)
