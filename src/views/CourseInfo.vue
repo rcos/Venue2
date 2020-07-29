@@ -46,11 +46,14 @@
         <div v-if="subview_section_id == 0" id="panel-1" role="tabpanel" class="panel">
 
           <InstructorAttendanceHistory
-            v-if="this.current_user.is_instructor && lectures_loaded"
-            :lectures="selected_section == 'all' ? all_lectures : sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded"/>
-          <StudentAttendanceHistory v-else-if="lectures_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded"/>
-          <div v-else :style='{textAlign: "center"}'>
+            v-if="this.current_user.is_instructor && lectures_loaded && sorted_lectures[selected_section]"
+            :lectures="sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded"/>
+          <StudentAttendanceHistory v-else-if="!this.current_user.is_instructor && lectures_loaded && sorted_lectures[section_id]" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded"/>
+          <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
             <SquareLoader />
+          </div>
+          <div v-else>
+            None
           </div>
 
         </div>
@@ -78,11 +81,14 @@
           </div>
           <div>
             <InstructorAttendanceHistory
-            v-if="this.current_user.is_instructor && lectures_loaded && scores_loaded"
-            :lectures="selected_section == 'all' ? all_lectures : sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded" mobileMode/>
-            <StudentAttendanceHistory v-else-if="lectures_loaded && scores_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
-            <div v-else :style='{textAlign: "center"}'>
+              v-if="this.current_user.is_instructor && lectures_loaded && sorted_lectures[selected_section] && scores_loaded"
+              :lectures="sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded" mobileMode/>
+            <StudentAttendanceHistory v-else-if="!this.current_user.is_instructor && lectures_loaded && sorted_lectures[section_id] && scores_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
+            <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
               <SquareLoader />
+            </div>
+            <div v-else>
+              None
             </div>
           </div>
         </div>
@@ -336,40 +342,41 @@ export default {
       })
     },
     calculateStudentAttendances() {
-      let promise_tracker = []
-
-      this.sorted_lectures[this.section_id].lectures.forEach(lecture_data => {
-        promise_tracker.push(
-          LectureSubmissionAPI.getOrMake(lecture_data._id, this.current_user._id)
-          .catch(err => { console.log(`error retrieving lecture submission for student ${this.current_user._id}`); console.log(err); })
-          .then(response => {
-            if (response.data == null || response.data == []) {
-              lecture_data.percentage = 0
-            } else {
-              let submission = response.data
-              if(submission.live_percent) {
-                if(submission.video_percent) {
-                  lecture_data.percentage = Math.max(
-                    submission.live_percent * 100,
-                    submission.video_percent * 100
-                  )
-                } else {
-                  lecture_data.percentage = submission.live_percent * 100
-                }
-              } else if(submission.video_percent) {
-                lecture_data.percentage = submission.video_percent * 100
-              } else {
+      if(this.sorted_lectures[this.secion_id]) {
+        let promise_tracker = []
+        this.sorted_lectures[this.section_id].lectures.forEach(lecture_data => {
+          promise_tracker.push(
+            LectureSubmissionAPI.getOrMake(lecture_data._id, this.current_user._id)
+            .catch(err => { console.log(`error retrieving lecture submission for student ${this.current_user._id}`); console.log(err); })
+            .then(response => {
+              if (response.data == null || response.data == []) {
                 lecture_data.percentage = 0
+              } else {
+                let submission = response.data
+                if(submission.live_percent) {
+                  if(submission.video_percent) {
+                    lecture_data.percentage = Math.max(
+                      submission.live_percent * 100,
+                      submission.video_percent * 100
+                    )
+                  } else {
+                    lecture_data.percentage = submission.live_percent * 100
+                  }
+                } else if(submission.video_percent) {
+                  lecture_data.percentage = submission.video_percent * 100
+                } else {
+                  lecture_data.percentage = 0
+                }
+                lecture_data.color = this.getHTMLClassByAttendance(lecture_data.percentage)
               }
-              lecture_data.color = this.getHTMLClassByAttendance(lecture_data.percentage)
-            }
-          })
-        )
-      })
-      Promise.all(promise_tracker)
-      .then(res => {
-        this.scores_loaded = true
-      })
+            })
+          )
+        })
+        Promise.all(promise_tracker)
+        .then(res => {
+          this.scores_loaded = true
+        })
+      }
     },
     onSectionChange() {
       this.$forceUpdate()

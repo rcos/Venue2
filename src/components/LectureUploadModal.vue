@@ -327,11 +327,15 @@ export default {
       }
     },
     isComplete() {
-      return (
-        document.getElementById("playback_start").value != "" && document.getElementById("playback_end").value != ""
-        &&
-        this.need_timestamp.every(poll => poll.timestamp && poll.timestamp <= this.vjs.duration())
-      )
+      if(this.need_timestamp) {
+        return (
+          document.getElementById("playback_start").value != "" && document.getElementById("playback_end").value != ""
+          &&
+          this.need_timestamp.every(poll => poll.timestamp && poll.timestamp <= this.vjs.duration())
+        )
+      } else {
+        return document.getElementById("playback_start").value != "" && document.getElementById("playback_end").value != ""
+      }
     },
     secondsToHHMMSS(seconds) {
       return (new Date(seconds * 1000).toISOString().substr(11, 8))
@@ -379,7 +383,7 @@ h2 {
   right: 0rem;
   bottom: 2rem;
   overflow-y: auto;
-  z-index: 999;
+  z-index: 1001;
   padding-left: 1rem;
   padding-right: 1rem;
 }
