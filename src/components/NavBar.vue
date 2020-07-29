@@ -16,7 +16,7 @@
         </div>
         <!-- Courses Link -->
         <div class="venue-nav-link-container" id="course-dropdown">
-          <a data-toggle="collapse" href="#collapseExample" class="venue-nav-link" :class="{'active-link':is_course_info}" style="cursor:pointer;">Courses ▼</a>
+          <a data-toggle="collapse" href="#collapseExample" class="venue-nav-link" :class="{'active-link':is_course_info}" style="cursor:pointer;">Courses {{"\u23F7"}}</a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
               <div v-if="is_instructor">
