@@ -47,13 +47,14 @@
 				</div>
 			</div>
 			<div class="row justify-content-center">
-				<div id="table-container">
+				<div id="table-container" v-if="lecture.checkins.length > 0">
 					<label id="checkin-table-label">Check-in Windows</label>
 					<table id="checkins-container" aria-labelledby="checkin-table-label">
 						<thead>
 							<tr>
 								<th>Start Time</th>
 								<th>End Time</th>
+								<th>Timestamp</th>
 								<th>Poll</th>
 							</tr>
 						</thead>
@@ -63,6 +64,8 @@
 								<td v-else>Manual</td>
 								<td v-if="checkin.end_time">{{ getPrettyDateTime(new Date(checkin.end_time)) }}</td>
 								<td v-else>Manual</td>
+								<td v-if="polls[i].timestamp">{{ polls[i].timestamp }}</td>
+								<td v-else>Not Set</td>
 								<td>
 									<div id="edit-poll-modal-container" v-if="edit_poll_index != -1 && edit_poll_index == i">
 										<div id="edit-poll-modal-contents">
@@ -70,7 +73,34 @@
 										</div>
 									</div>
 									{{polls[i].question}}
-									<button type="button" v-if="!polls[i].start_time || (polls[i].start_time && Date.parse(polls[i].start_time) < Date.now())" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
+									<button type="button" v-if="!checkin.start_time || (checkin.start_time && Date.parse(checkin.start_time) > Date.now())" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
+										<img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div id="table-container" v-else-if="polls.length > 0">
+					<label id="checkin-table-label">Video Polls</label>
+					<table id="checkins-container" aria-labelledby="checkin-table-label">
+						<thead>
+							<tr>
+								<th>Seconds In</th>
+								<th>Poll</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="(poll,i) in polls" :key="i">
+								<td>{{poll.timestamp}}</td>
+								<td>
+									<div id="edit-poll-modal-container" v-if="edit_poll_index != -1 && edit_poll_index == i">
+										<div id="edit-poll-modal-contents">
+											<CreatePoll :playback_only="false" :checkin="i" :poll="polls[i]" @cancel="handleCancelEditPoll" @addPoll="handleEditPoll"/>
+										</div>
+									</div>
+									{{polls[i].question}}
+									<button type="button" v-if="Date.parse(lecture.playback_submission_start_time) > Date.now()" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
 										<img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
 									</button>
 								</td>
