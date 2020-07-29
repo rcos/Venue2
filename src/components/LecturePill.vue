@@ -1,6 +1,6 @@
 <template>
 
-  <div :class="'lecture-pill-min ' + color">
+  <div :class="'lecture-pill-min ' + color" :title="name">
     <div class="left">{{ name }}</div>
     <!-- <div class="middle">{{ middle }}</div> -->
     <div class="right">{{ right }}</div>
@@ -34,7 +34,7 @@ export default {
 }
 
 .left {
-  width: 70%;
+  width: 65%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -45,7 +45,7 @@ export default {
 }
 
 .right {
-  width: 30%;
+  width: 35%;
   text-align: right;
 }
 </style>
