@@ -16,45 +16,22 @@
         <div class="row">
           <h1 id="lecture-title-mobile">{{lecture.title}} - Info</h1>
         </div>
-        <div class="row start-end-row">
+        <div v-if="lecture.start_time" class="row start-end-row">
           <div class="row-half">
-            <h5>Start Time</h5>
+            <h5>Lecture Window</h5>
             <p>{{getPrettyDateTime(new Date(lecture.start_time))}}</p>
-          </div>
-          <div class="row-half">
-            <h5>End Time</h5>
+            <p>-</p>
             <p>{{getPrettyDateTime(new Date(lecture.end_time))}}</p>
           </div>
         </div>
-        <div class="row playback-row">
+        <div v-if="lecture.playback_submission_start_time" class="row playback-row">
           <div class="row-half">
-            <h5>Playback Start Time</h5>
+            <h5>Video Attendance Window</h5>
             <p>{{getPrettyDateTime(new Date(lecture.playback_submission_start_time))}}</p>
-          </div>
-          <div class="row-half">
-            <h5>Playback End Time</h5>
+            <p>-</p>
             <p>{{getPrettyDateTime(new Date(lecture.playback_submission_end_time))}}</p>
           </div>
         </div>
-        <!-- <div class="col" v-if="is_instructor">
-          <h5 class="underline">Checkins</h5>
-          <div id="table-container">
-            <table id="checkins-container">
-              <thead>
-                <tr>
-                  <th>Start Time</th>
-                  <th>End Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(checkin,i) in lecture.checkins" :key="i">
-                  <td>{{ getPrettyDateTime(new Date(checkin.start_time)) }}</td>
-                  <td>{{ getPrettyDateTime(new Date(checkin.end_time)) }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div> -->
       </div>
     </show-at>
     <!-- Tablet & Up -->
@@ -78,21 +55,13 @@
           </div>
         </div>
         <div class="row">
-          <div class="col">
-            <h5>Start Time</h5>
-            <p>{{getPrettyDateTime(new Date(lecture.start_time))}}</p>
+          <div v-if="lecture.start_time" class="col">
+            <h5>Lecture Window</h5>
+            <p>{{getPrettyDateTime(new Date(lecture.start_time))}} - {{getPrettyDateTime(new Date(lecture.end_time))}}</p>
           </div>
-          <div class="col">
-            <h5>End Time</h5>
-            <p>{{getPrettyDateTime(new Date(lecture.end_time))}}</p>
-          </div>
-          <div class="col">
-            <h5>Playback Start Time</h5>
-            <p>{{getPrettyDateTime(new Date(lecture.playback_submission_start_time))}}</p>
-          </div>
-          <div class="col">
-            <h5>Playback End Time</h5>
-            <p>{{getPrettyDateTime(new Date(lecture.playback_submission_end_time))}}</p>
+          <div v-if="lecture.playback_submission_start_time" class="col">
+            <h5>Video Attendance Window</h5>
+            <p>{{getPrettyDateTime(new Date(lecture.playback_submission_start_time))}} - {{getPrettyDateTime(new Date(lecture.playback_submission_end_time))}}</p>
           </div>
         </div>
       </div>

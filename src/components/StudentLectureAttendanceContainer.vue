@@ -10,7 +10,7 @@
       <button v-if="lectureIsOngoing()" @click="qr_scanning_window_open = true" class="header-btn btn btn-primary" title="Scan QR">
         <img src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
       </button>
-      <router-link class="header-btn btn btn-secondary" v-else-if="lectureIsOver() && lecture.allow_playback_submissions" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+      <router-link class="header-btn btn btn-secondary" v-else-if="canWatchRecording()" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
         <img src="@/assets/icons8-video-64.png" width="60" alt="Video" aria-label="Video" title="Watch Recording">
       </router-link>
     </div>
@@ -56,6 +56,9 @@
       lectureIsOngoing() {
         let now = Date.now()
         return (this.lecture.start_time && Date.parse(this.lecture.start_time) <= now && Date.parse(this.lecture.end_time) >= now)
+      },
+      canWatchRecording() {
+        return (this.lecture.playback_submission_start_time && Date.parse(this.lecture.playback_submission_start_time) < Date.now())
       },
       lectureIsOver() {
         let now = Date.now()
