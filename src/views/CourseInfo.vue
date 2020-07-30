@@ -5,7 +5,6 @@
 
         <!-- Title -->
         <div class="title">
-          <div class="inline-block">Course Info</div>
           <router-link v-if="this.current_user.is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}" tabindex="-1">
             <div class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Create New Lecture for {{ course.dept }} {{ course.course_number }}</div>
           </router-link>

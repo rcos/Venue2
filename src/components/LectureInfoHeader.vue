@@ -2,19 +2,16 @@
   <div id="lecture-info-section">
     <show-at breakpoint="small">
       <!-- Mobile -->
-      <div id="lecture-data">
-        <div class="row" id="main-info">
-          <h3>{{lecture.sections[0].course.name}}</h3>
-          <p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p>
-          <p>Sections:
+      <div id="lecture-data-mobile">
+        <div id="main-info-mobile">
+          <h3 class="lecture-title">{{lecture.title}}</h3>
+          <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p></div>
+          <p class="sections">Sections:
             <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
               <a v-if="i > 0">,{{ section.number }}</a>
               <a v-else>{{ section.number }}</a>
             </a>
           </p>
-        </div>
-        <div class="row">
-          <h1 id="lecture-title-mobile">{{lecture.title}} - Info</h1>
         </div>
         <div v-if="lecture.start_time" class="row start-end-row">
           <div class="row-half">
@@ -36,25 +33,18 @@
     </show-at>
     <!-- Tablet & Up -->
     <show-at breakpoint="mediumAndAbove">
-      <div>
-        <div class="row" id="lecture-data">
-          <div class="col-3">
-            <div id="main-info">
-              <h3>{{lecture.sections[0].course.name}}</h3>
-              <p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p>
-              <p class="sections">Sections:
-                <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
-                  <a v-if="i > 0">,{{ section.number }}</a>
-                  <a v-else>{{ section.number }}</a>
-                </a>
-              </p>
-            </div>
-          </div>
-          <div class="col">
-            <h1 id="lecture-title">{{lecture.title}} - Info</h1>
-          </div>
+      <div id="lecture-data">
+        <div id="main-info">
+          <h3 class="lecture-title">{{lecture.title}}</h3>
+          <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p></div>
+          <p class="sections">Sections:
+            <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
+              <a v-if="i > 0">,{{ section.number }}</a>
+              <a v-else>{{ section.number }}</a>
+            </a>
+          </p>
         </div>
-        <div class="row">
+        <div id="time-windows">
           <div v-if="lecture.start_time" class="col">
             <h5>Lecture Window</h5>
             <p>{{getPrettyDateTime(new Date(lecture.start_time))}} - {{getPrettyDateTime(new Date(lecture.end_time))}}</p>
@@ -114,6 +104,7 @@
     bottom: 0;
     text-align: left;
     margin-left: 1rem;
+    display: inline-block;
   }
 
   #lecture-title-mobile {
@@ -127,7 +118,11 @@
   #lecture-data {
     position: relative;
     margin-top: 2rem;
-    text-align: center;
+    text-align: left;
+  }
+
+  #lecture-data-mobile {
+    margin-top: 2rem;
   }
 
   .col {
@@ -142,11 +137,32 @@
     width: 50%;
   }
 
+  .lecture-title {
+    font-size: 2rem;
+  }
+
+  #time-windows {
+    text-align: center;
+    display: inline-block;
+  }
+
   #main-info {
+    display: inline-block;
     border-radius: .5rem;
-    box-shadow: 0 5px 10px -1px gray;
-    padding: 1rem;
+    padding: 2rem 4rem;
     margin: 0;
+    text-align: left;
+    box-shadow: 0px 3px 6px rgba(0, 62, 123, 0.2);
+  }
+
+  #main-info-mobile {
+    display: inline-block;
+    border-radius: .5rem;
+    padding: 2rem 3rem;
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    box-shadow: 0px 3px 6px rgba(0, 62, 123, 0.2);
   }
 
   .row-half h5,
@@ -155,14 +171,20 @@
   }
 
   .dept-and-number {
+    display: inline-block;
     background: black;
     color: white;
-    border-radius: 1rem;
-    padding: 0.5rem;
+    font-size: 0.8rem;
+    padding: 0.1rem 0.5rem;
+    margin-left: 0.5rem;
+  }
+
+  p {
+    margin: 0;
   }
 
   .sections {
-    padding: 0.5rem;
+    margin-top: 0.5rem;
   }
 
   #checkins-container {
