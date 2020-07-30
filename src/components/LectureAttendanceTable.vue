@@ -64,9 +64,9 @@
 								<td v-else>Manual</td>
 								<td v-if="checkin.end_time">{{ getPrettyDateTime(new Date(checkin.end_time)) }}</td>
 								<td v-else>Manual</td>
-								<td v-if="polls[i].timestamp">{{ polls[i].timestamp }}</td>
-								<td v-else>Not Set</td>
-								<td>
+								<td v-if="polls[i] && polls[i].timestamp">{{ polls[i].timestamp }}</td>
+								<td v-else>X</td>
+								<td v-if="polls[i]">
 									<div id="edit-poll-modal-container" v-if="edit_poll_index != -1 && edit_poll_index == i">
 										<div id="edit-poll-modal-contents">
 											<CreatePoll :playback_only="false" :checkin="i" :poll="polls[i]" @cancel="handleCancelEditPoll" @addPoll="handleEditPoll"/>
@@ -77,6 +77,7 @@
 										<img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
 									</button>
 								</td>
+								<td v-else>X</td>
 							</tr>
 						</tbody>
 					</table>
