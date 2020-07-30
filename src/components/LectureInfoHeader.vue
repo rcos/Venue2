@@ -148,7 +148,7 @@
 
   #main-info {
     display: inline-block;
-    border-radius: .5rem;
+    border-radius: .25rem;
     padding: 2rem 4rem;
     margin: 0;
     text-align: left;
@@ -157,7 +157,7 @@
 
   #main-info-mobile {
     display: inline-block;
-    border-radius: .5rem;
+    border-radius: .25rem;
     padding: 2rem 3rem;
     width: 100%;
     margin: 0;
