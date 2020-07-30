@@ -1,10 +1,29 @@
 <template>
   <div id="lecture-info-container-root">
-    <SquareLoader role="status" v-if="!lecture_has_loaded || !polls_loaded"/>
-    <div v-else>
-      <InstructorLectureInfo v-if="is_instructor" :lecture="lecture" :is_instructor="is_instructor" :polls="polls" />
-      <StudentLectureInfo v-else :lecture="lecture" :is_instructor="is_instructor" :polls="polls" />
-    </div>
+    <!-- mobile -->
+    <show-at breakpoint="small">
+      <div class="lecture-info-container mobile">
+        <div class="spinner-border" role="status" v-if="!lecture_has_loaded">
+          <span class="sr-only">Loading...</span>
+        </div>
+        <div v-else>
+          <InstructorLectureInfo v-if="is_instructor" :lecture="lecture" :is_instructor="is_instructor" />
+          <StudentLectureInfo v-else :lecture="lecture" :is_instructor="is_instructor" />
+        </div>
+      </div>
+    </show-at>
+    <!-- tablet and up -->
+    <show-at breakpoint="mediumAndAbove">
+      <div class="lecture-info-container">
+        <div class="spinner-border" role="status" v-if="!lecture_has_loaded">
+          <span class="sr-only">Loading...</span>
+        </div>
+        <div v-else>
+          <InstructorLectureInfo v-if="is_instructor" :lecture="lecture" :is_instructor="is_instructor" />
+          <StudentLectureInfo v-else :lecture="lecture" :is_instructor="is_instructor" />
+        </div>
+      </div>
+    </show-at>
   </div>
 </template>
 
@@ -16,12 +35,15 @@
   import StudentLectureInfo from '@/components/StudentLectureInfo.vue';
   import SquareLoader from '@/components/Loaders/SquareLoader.vue'
 
+  import {showAt, hideAt} from 'vue-breakpoints';
+
   export default {
     name: 'LectureInfo',
     components: {
       InstructorLectureInfo,
       StudentLectureInfo,
-      SquareLoader
+      SquareLoader,
+      showAt
     },
     data(){
       return {
@@ -55,5 +77,13 @@
 <style scoped>
   #lecture-info-container-root {
     padding: 0 2rem;
+  }
+
+  .lecture-info-container {
+    margin: 0rem 8rem;
+  }
+
+  .lecture-info-container.mobile {
+    margin: 0rem;
   }
 </style>
