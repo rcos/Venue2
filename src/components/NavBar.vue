@@ -84,7 +84,7 @@
           {{current_course.name}}
         </router-link>
       </div>
-      <div v-if="current_section" class="crumb">
+      <div v-else-if="current_section" class="crumb">
         {{"\u23F5"}}
         <router-link :to="{name: 'course_info', params: { id: current_section._id }}">
           {{current_section.course.name}}
@@ -171,7 +171,9 @@
       async getInstructorCourses() {
         const response = await CourseAPI.getInstructorCourses(this.current_user._id)
         this.user_courses = response.data
-        this.current_course = response.data.find(a=>a._id == this.$route.params.id)
+        if(this.$route.params.id) {
+          this.current_course = response.data.find(a=>a._id == this.$route.params.id)
+        }
       },
       async getSectionsWithCourses() {
         const response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
@@ -192,8 +194,10 @@
         .then(res => {
           this.user_lectures = res.data
           this.current_lecture = res.data.find(a=>a._id == this.$route.params.lecture_id)
-          if(this.current_lecture) {
+          if(this.current_lecture && !this.is_instructor) {
             this.current_section = this.current_lecture.sections[0]
+          } else if(this.current_lecture) {
+            this.current_course = this.current_lecture.sections[0].course
           }
         })
       }
