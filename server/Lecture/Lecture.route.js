@@ -437,4 +437,18 @@ lectureRoutes.post('/process_emails', (req,res) => {
 	}
 })
 
+lectureRoutes.post('/end_early', (req,res) => {
+	let now = new Date()
+	Lecture.findByIdAndUpdate(req.body.lecture_id, {end_time: now} ,function(err,lecture) {
+		if(err || !lecture) {
+			console.log("<ERROR> Ending lecture early for lecture with ID: "+req.body.lecture_id)
+			res.status(404).send("<ERROR> Ending lecture early for lecture with ID: "+req.body.lecture_id)
+		} else {
+			lecture.end_time = now
+			console.log("<SUCCESS> Ending lecture early for lecture with ID: "+req.body.lecture_id)
+			res.json(lecture)
+		}
+	})
+})
+
 module.exports = lectureRoutes
