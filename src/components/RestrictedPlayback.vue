@@ -1,6 +1,6 @@
 <template>
 	<div id="restricted_playback">
-		<video id="video_player" class="video-js vjs-big-play-centered" controls>
+		<video id="video_player" class="video-js vjs-big-play-centered" controls playsinline>
 			<source v-bind:src="lecture.video_ref" type="">
 		</video>
 		<div id="polls" class="hide">
