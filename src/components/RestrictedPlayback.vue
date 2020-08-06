@@ -157,9 +157,9 @@ export default {
 
 <style scoped>
 #restricted_playback {
-	position: absolute;
+	position: fixed;
 	top: 4rem;
-	bottom: 2rem;
+	bottom: 0rem;
 }
 #video_player {
 	width: 100%;
