@@ -51,10 +51,23 @@ export default {
 	},
 	mounted() {
 		let self = this
-		videojs("video_player", {}, function() {
+		
+		const vidOptions = {
+			controlBar: {
+				fullscreenToggle: false
+			}
+		}
+
+		videojs("video_player", vidOptions, function() {
 			self.vjs = this
 
 			let vid = this;
+
+			vid.on("fullscreenchange", function(){
+				if(vid.isFullscreen()){
+					vid.exitFullscreen();
+				}
+			});
 
 			self.currentUser = self.$store.state.user.current_user
 			LectureSubmissionAPI.getOrMake(self.lecture._id,self.currentUser._id)
