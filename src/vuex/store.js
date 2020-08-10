@@ -20,6 +20,7 @@ export default new Vuex.Store({
         axios.defaults.headers.common['Authorization'] = `Bearer ${
           userData.token
         }`
+        axios.defaults.headers.common['User'] = JSON.stringify(userData.current_user)
       }
     },
     CLEAR_USER_DATA() {
