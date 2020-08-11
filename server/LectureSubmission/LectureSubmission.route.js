@@ -241,4 +241,77 @@ lectureSubmissionRoutes.get('/for_student/:lecture_id/:student_id', (req, res) =
   )
 })
 
+lectureSubmissionRoutes.get('/update_all_to_new_model', (req, res) => {
+  Lecture.find(function(err,lectures) {
+    if(err) {
+      console.log("<ERROR> Getting all lectures")
+      res.json(err)
+    } else {
+      User.find(function(err,users) {
+        if(err) {
+          console.log("<ERROR> Getting all users")
+          res.json(err)
+        } else {
+          let submission_promises = []
+
+          users.forEach(user => {
+            lectures.forEach(lecture => {
+              submission_promises.push(new Promise((resolve,reject) => {
+                LectureSubmission.find(
+                {
+                  lecture: lecture._id,
+                  submitter: user._id
+                }, function(err,submissions){
+
+                  if(submissions && submissions.length) {
+                    let new_submission_data = {
+                      lecture: lecture._id,
+                      submitter: user._id
+                    }
+
+                    let live = submissions.filter(a => a.is_live_submission)
+                    let playback = submissions.filter(a => !a.is_live_submission)
+
+                    if(live && live.length > 0) {
+                      new_submission_data.live_progress = live.length
+                      new_submission_data.live_percent = live.length / lecture.checkins.length
+                      new_submission_data.codes = live.map(a => a.code)
+                      new_submission_data.live_submission_time = live.map(a => a.live_submission_time)[0]
+                    }
+
+                    if(playback && playback.length > 0) {
+                      new_submission_data.video_progress = playback[0].video_progress
+                      new_submission_data.video_percent = playback[0].video_percent
+                      new_submission_data.playback_submission_time = playback[0].playback_submission_time
+                    }
+
+                    let old_ids = submissions.map(a => a._id)
+
+                    LectureSubmission.deleteMany({_id: {$in: old_ids}},function(err) {
+                      if(err) {
+                        console.log("<ERROR> Removing old submissions")
+                        res.json(err)
+                      } else {
+                        let lecture_submission = new LectureSubmission(new_submission_data)
+                        lecture_submission.save()
+                        .then(() => {
+                          resolve(lecture_submission)
+                        })
+                      }
+                    })
+                  }
+                })
+              }))
+            })
+          })
+
+          Promise.all(submission_promises).then(resolved => {
+            res.json(resolved)
+          })
+        }
+      })
+    }
+  })
+})
+
 module.exports = lectureSubmissionRoutes;
