@@ -1,6 +1,6 @@
 <template>
 	<div id="restricted_playback">
-		<video id="video_player" class="video-js vjs-big-play-centered" controls>
+		<video id="video_player" class="video-js vjs-big-play-centered" controls playsinline>
 			<source v-bind:src="lecture.video_ref" type="">
 		</video>
 		<div id="polls" class="hide">
@@ -51,10 +51,23 @@ export default {
 	},
 	mounted() {
 		let self = this
-		videojs("video_player", {}, function() {
+		
+		const vidOptions = {
+			controlBar: {
+				fullscreenToggle: false
+			}
+		}
+
+		videojs("video_player", vidOptions, function() {
 			self.vjs = this
 
 			let vid = this;
+
+			vid.on("fullscreenchange", function(){
+				if(vid.isFullscreen()){
+					vid.exitFullscreen();
+				}
+			});
 
 			self.currentUser = self.$store.state.user.current_user
 			LectureSubmissionAPI.getOrMake(self.lecture._id,self.currentUser._id)
@@ -144,9 +157,9 @@ export default {
 
 <style scoped>
 #restricted_playback {
-	position: absolute;
+	position: fixed;
 	top: 4rem;
-	bottom: 2rem;
+	bottom: 0rem;
 }
 #video_player {
 	width: 100%;
