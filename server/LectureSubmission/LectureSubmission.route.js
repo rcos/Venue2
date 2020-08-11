@@ -257,12 +257,12 @@ lectureSubmissionRoutes.post('/update_all_to_new_model', (req, res) => {
 
           users.forEach(user => {
             lectures.forEach(lecture => {
-              LectureSubmission.find(
-              {
-                lecture: lecture._id,
-                submitter: user._id
-              }, function(err,submissions){
-                submission_promises.push(new Promise((resolve,reject) => {
+              submission_promises.push(new Promise((resolve,reject) => {
+                LectureSubmission.find(
+                {
+                  lecture: lecture._id,
+                  submitter: user._id
+                }, function(err,submissions){
                   console.log("SUBMISSIONS FOR USER",user.user_id,"AND LECTURE",lecture.title)
                   if(submissions && submissions.length) {
                     let new_submission_data = {
@@ -300,9 +300,11 @@ lectureSubmissionRoutes.post('/update_all_to_new_model', (req, res) => {
                         })
                       }
                     })
+                  } else {
+                    resolve(null)
                   }
-                }))
-              })
+                })
+              }))
             })
           })
 
