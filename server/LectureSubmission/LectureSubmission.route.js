@@ -273,8 +273,10 @@ lectureSubmissionRoutes.post('/update_all_to_new_model', (req, res) => {
                     let live = submissions.filter(a => a.is_live_submission)
                     let playback = submissions.filter(a => !a.is_live_submission)
 
+                    console.log(live)
+                    console.log(playback)
+
                     if(live && live.length > 0) {
-                      console.log(live)
                       new_submission_data.live_progress = live.length
                       new_submission_data.live_percent = live.length / lecture.checkins.length
                       new_submission_data.codes = live.map(a => a.code)
