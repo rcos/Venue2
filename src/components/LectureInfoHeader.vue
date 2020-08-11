@@ -1,6 +1,6 @@
 <template>
   <div id="lecture-info-section">
-    <show-at breakpoint="small">
+    <show-at breakpoint="mediumAndBelow">
       <!-- Mobile -->
       <div id="lecture-data-mobile">
         <div id="main-info-mobile">
@@ -30,27 +30,27 @@
       </div>
     </show-at>
     <!-- Tablet & Up -->
-    <show-at breakpoint="mediumAndAbove">
-      <div id="lecture-data">
-        <div id="main-info">
-          <h3 class="lecture-title">{{lecture.title}}</h3>
-          <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p></div>
-          <p class="sections">Sections:
-            <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
-              <a v-if="i > 0">,{{ section.number }}</a>
-              <a v-else>{{ section.number }}</a>
-            </a>
-          </p>
+    <show-at breakpoint="large">
+      <div id="lecture-data" class="row">
+        <div class="col-6">
+          <div id="main-info">
+            <h3 class="lecture-title">{{lecture.title}}</h3>
+            <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p></div>
+            <p class="sections">Sections:
+              <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
+                <a v-if="i > 0">,{{ section.number }}</a>
+                <a v-else>{{ section.number }}</a>
+              </a>
+            </p>
+          </div>
         </div>
-        <div id="time-windows">
-          <div v-if="lecture.start_time" class="col">
-            <h5>Live Lecture Window</h5>
-            <p>{{getPrettyDateTime(new Date(lecture.start_time))}} - {{getPrettyDateTime(new Date(lecture.end_time))}}</p>
-          </div>
-          <div v-if="lecture.playback_submission_start_time" class="col">
-            <h5>Video Attendance Window</h5>
-            <p>{{getPrettyDateTime(new Date(lecture.playback_submission_start_time))}} - {{getPrettyDateTime(new Date(lecture.playback_submission_end_time))}}</p>
-          </div>
+        <div v-if="lecture.start_time" class="col time-window my-auto">
+          <h5>Live Lecture Window</h5>
+          <p>{{getPrettyDateTime(new Date(lecture.start_time))}} - {{getPrettyDateTime(new Date(lecture.end_time))}}</p>
+        </div>
+        <div v-if="lecture.playback_submission_start_time" class="col time-window my-auto">
+          <h5>Video Attendance Window</h5>
+          <p>{{getPrettyDateTime(new Date(lecture.playback_submission_start_time))}} - {{getPrettyDateTime(new Date(lecture.playback_submission_end_time))}}</p>
         </div>
       </div>
     </show-at>
@@ -143,11 +143,6 @@
     font-size: 2rem;
   }
 
-  #time-windows {
-    text-align: center;
-    display: inline-block;
-  }
-
   #main-info {
     display: inline-block;
     border-radius: .25rem;
@@ -155,6 +150,7 @@
     margin: 0;
     text-align: left;
     box-shadow: 0px 3px 6px rgba(0, 62, 123, 0.2);
+    max-width: 100%;
   }
 
   #main-info-mobile {
@@ -179,6 +175,7 @@
     font-size: 0.8rem;
     padding: 0.1rem 0.5rem;
     margin-left: 0.5rem;
+    border-radius: 2px;
   }
 
   p {
@@ -199,6 +196,10 @@
     text-align: center;
     width:50%;
     border: grey solid thin;
+  }
+
+  .time-window {
+    text-align: center;
   }
 
 </style>
