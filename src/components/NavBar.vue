@@ -74,7 +74,7 @@
       </div>
     </show-at>
     <!-- Breadcrumbs -->
-    <div id="breadcrumb-container" v-if="$route.name != 'dashboard'">
+    <div id="breadcrumb-container" v-if="$route.name != 'dashboard' && $route.name != 'settings'">
       <router-link :to="{name: 'dashboard'}">
         Venue
       </router-link>

@@ -1,4 +1,6 @@
 /* Custom Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
+
 @font-face {
   font-family: Oxygen;
   src: url(../fonts/Oxygen/Oxygen-Regular.ttf);
@@ -53,7 +55,7 @@
 
 /* CSS Style */
 body, * {
-  font-family: Arial, NotoSans;
+  font-family: Comfortaa, Arial, NotoSans;
   font-weight: normal;
 }
 

@@ -101,7 +101,7 @@ lectureRoutes.post('/add_playback_video/:lecture_id', upload.single('video'),fun
 lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) {
 	let lecture_id = req.params.lecture_id
 	let lecture = req.body.lecture
-	console.log("Received lecture",lecture)
+	
 	Lecture.findByIdAndUpdate(lecture_id,
 		{
 			playback_submission_start_time: lecture.playback_submission_start_time,
@@ -435,6 +435,20 @@ lectureRoutes.post('/process_emails', (req,res) => {
 		console.log("<SUCCESS> Notification emails sent to:",toEmail);
 		res.json(lectures)
 	}
+})
+
+lectureRoutes.post('/end_early', (req,res) => {
+	let now = new Date()
+	Lecture.findByIdAndUpdate(req.body.lecture_id, {end_time: now} ,function(err,lecture) {
+		if(err || !lecture) {
+			console.log("<ERROR> Ending lecture early for lecture with ID: "+req.body.lecture_id)
+			res.status(404).send("<ERROR> Ending lecture early for lecture with ID: "+req.body.lecture_id)
+		} else {
+			lecture.end_time = now
+			console.log("<SUCCESS> Ending lecture early for lecture with ID: "+req.body.lecture_id)
+			res.json(lecture)
+		}
+	})
 })
 
 module.exports = lectureRoutes

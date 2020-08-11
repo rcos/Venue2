@@ -12,6 +12,7 @@
 					<img src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
 				</button>
 			</div>
+			<button class="header-btn btn btn-primary" v-if="lectureIsOver() && !lecture.allow_playback_submissions" @click="handleEndEarly">End Now</button>
 			<LectureUploadModal v-if="lectureIsOver() && !lecture.allow_playback_submissions && polls_loaded" :lecture="lecture" :need_timestamp="polls" :update_lecture="true" />
 			<router-link class="header-btn btn btn-secondary" v-else-if="lecture.allow_playback_submissions" title="Watch Recording" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}" aria-label="Watch Recording">
 				<img src="@/assets/icons8-video-64.png" width="60" alt="Video" aria-label="Video">
@@ -32,6 +33,7 @@
 <script>
   import LectureUploadModal from "@/components/LectureUploadModal";
   import LectureAttendanceTable from "@/components/LectureAttendanceTable.vue";
+  import LectureAPI from '@/services/LectureAPI.js';
 	import LectureSubmissionAPI from "@/services/LectureSubmissionAPI.js"
 	import SectionAPI from '@/services/SectionAPI.js'
 	import qrcode from '@chenfengyuan/vue-qrcode';
@@ -155,6 +157,12 @@
 					hiddenElement.target = '_blank';
 					hiddenElement.download = downloadname;
 					hiddenElement.click();
+				})
+			},
+			handleEndEarly() {
+				LectureAPI.endEarly(this.lecture._id)
+				.then(res => {
+					location.reload()
 				})
 			}
     }
