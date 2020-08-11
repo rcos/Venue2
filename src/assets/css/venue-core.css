@@ -54,9 +54,13 @@
 }
 
 /* CSS Style */
-body, * {
+* {
   font-family: Comfortaa, Arial, NotoSans;
   font-weight: normal;
+}
+
+body {
+  background: white;
 }
 
 .venue-body-container {

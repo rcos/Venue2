@@ -209,7 +209,6 @@
   #venue-nav {
     height: 4rem;
     padding: 1rem 2rem;
-    background: white;
     display: block;
   }
 
