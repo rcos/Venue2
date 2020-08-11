@@ -89,10 +89,10 @@ authRoutes.route('/login').post(function (req, res) {
         res.status(404).json({ error: 'Invalid Login Credentials. Please try again' })
       }
       else {
-        console.log(current_user)
         bcrypt.compare(user.password, current_user.password, function(err, result) {
           if(result == true){
             const token = jwt.sign({ current_user }, process.env.AUTH_KEY)
+            console.log("<SUCCESS> Login for user with User ID:",current_user.user_id)
             res.json({token, current_user})
           } else {
             res.status(404).json({ error: 'Invalid Login Credentials. Please try again' })
