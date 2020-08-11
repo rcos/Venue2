@@ -150,7 +150,7 @@
     margin: 0;
     text-align: left;
     box-shadow: 0px 3px 6px rgba(0, 62, 123, 0.2);
-    max-width: 100%;
+    width: 100%;
   }
 
   #main-info-mobile {
