@@ -34,7 +34,7 @@ export default {
 }
 
 .left {
-  width: 65%;
+  width: 60%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -45,7 +45,7 @@ export default {
 }
 
 .right {
-  width: 35%;
+  width: 40%;
   text-align: right;
 }
 </style>
