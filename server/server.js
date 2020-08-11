@@ -30,6 +30,7 @@ function start() {
       const bearer = bearerHeader.split(' ')
       const bearerToken = bearer[1]
       req.token = bearerToken
+      req.user = JSON.parse(req.headers['user'])
       jwt.verify(req.token, process.env.AUTH_KEY, err => {
         if(err)
           res.sendStatus(401).send("Unauthorized access")
