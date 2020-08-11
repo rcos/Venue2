@@ -241,7 +241,8 @@ lectureSubmissionRoutes.get('/for_student/:lecture_id/:student_id', (req, res) =
   )
 })
 
-lectureSubmissionRoutes.get('/update_all_to_new_model', (req, res) => {
+lectureSubmissionRoutes.post('/update_all_to_new_model', (req, res) => {
+  console.log("STARTED")
   Lecture.find(function(err,lectures) {
     if(err) {
       console.log("<ERROR> Getting all lectures")
@@ -262,7 +263,7 @@ lectureSubmissionRoutes.get('/update_all_to_new_model', (req, res) => {
                   lecture: lecture._id,
                   submitter: user._id
                 }, function(err,submissions){
-
+                  console.log("SUBMISSIONS FOR USER",user.user_id,"AND LECTURE",lecture.title)
                   if(submissions && submissions.length) {
                     let new_submission_data = {
                       lecture: lecture._id,
@@ -306,6 +307,7 @@ lectureSubmissionRoutes.get('/update_all_to_new_model', (req, res) => {
           })
 
           Promise.all(submission_promises).then(resolved => {
+            console.log("RESOLVED",resolved)
             res.json(resolved)
           })
         }
