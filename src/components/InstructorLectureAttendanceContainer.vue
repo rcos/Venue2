@@ -12,6 +12,7 @@
 				Watch Playback
 			</router-link>
 			<button class="header-btn btn btn-primary" @click="download_submitty_csv" id="submitty_export">Export for Submitty...</button>
+			<button class="header-btn btn btn-primary" v-if="lecture.lecture_status === 'is_live'" @click="handleEndEarly">End Now</button>
 	  </div>
 	  <LectureAttendanceTable :is_instructor="true" :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" :all_students="all_students" />
 	</div>
@@ -21,6 +22,7 @@
 <script>
   import LectureUploadModal from "@/components/LectureUploadModal";
   import LectureAttendanceTable from "@/components/LectureAttendanceTable.vue";
+  import LectureAPI from '@/services/LectureAPI.js';
 	import LectureSubmissionAPI from "@/services/LectureSubmissionAPI.js"
 	import SectionAPI from '@/services/SectionAPI.js'
 	import qrcode from '@chenfengyuan/vue-qrcode';
@@ -132,6 +134,12 @@
 				hiddenElement.target = '_blank';
 				hiddenElement.download = downloadname;
 				hiddenElement.click();
+			})
+		},
+		handleEndEarly() {
+			LectureAPI.endEarly(this.lecture._id)
+			.then(res => {
+				location.reload()
 			})
 		}
     }
