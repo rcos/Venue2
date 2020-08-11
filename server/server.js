@@ -26,10 +26,14 @@ function start() {
 
   function jwtVerify(req,res,next) {
     const bearerHeader = req.headers['authorization']
+    const userHeader = req.headers['user']
     if (typeof bearerHeader !== 'undefined') {
       const bearer = bearerHeader.split(' ')
       const bearerToken = bearer[1]
       req.token = bearerToken
+      if(userHeader) {
+        req.user = JSON.parse(userHeader)
+      }
       jwt.verify(req.token, process.env.AUTH_KEY, err => {
         if(err)
           res.sendStatus(401).send("Unauthorized access")

@@ -49,4 +49,9 @@ export default {
       toEmail: toEmail
     })
   },
+  endEarly(lecture_id) {
+    return API().post('lectures/end_early', {
+      lecture_id: lecture_id
+    })
+  }
 }

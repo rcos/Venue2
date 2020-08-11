@@ -13,16 +13,14 @@
             </a>
           </p>
         </div>
-        <div v-if="lecture.start_time" class="row start-end-row">
-          <div class="row-half">
-            <h5>Lecture Window</h5>
+        <div class="row">
+          <div v-if="lecture.start_time" class="col">
+            <h5>Live Lecture Window</h5>
             <p>{{getPrettyDateTime(new Date(lecture.start_time))}}</p>
             <p>-</p>
             <p>{{getPrettyDateTime(new Date(lecture.end_time))}}</p>
           </div>
-        </div>
-        <div v-if="lecture.playback_submission_start_time" class="row playback-row">
-          <div class="row-half">
+          <div v-if="lecture.playback_submission_start_time" class="col">
             <h5>Video Attendance Window</h5>
             <p>{{getPrettyDateTime(new Date(lecture.playback_submission_start_time))}}</p>
             <p>-</p>
@@ -46,7 +44,7 @@
         </div>
         <div id="time-windows">
           <div v-if="lecture.start_time" class="col">
-            <h5>Lecture Window</h5>
+            <h5>Live Lecture Window</h5>
             <p>{{getPrettyDateTime(new Date(lecture.start_time))}} - {{getPrettyDateTime(new Date(lecture.end_time))}}</p>
           </div>
           <div v-if="lecture.playback_submission_start_time" class="col">
@@ -105,6 +103,10 @@
     text-align: left;
     margin-left: 1rem;
     display: inline-block;
+  }
+
+  p {
+    max-width: 100%;
   }
 
   #lecture-title-mobile {
