@@ -101,7 +101,7 @@ lectureRoutes.post('/add_playback_video/:lecture_id', upload.single('video'),fun
 lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) {
 	let lecture_id = req.params.lecture_id
 	let lecture = req.body.lecture
-	console.log("Received lecture",lecture)
+	
 	Lecture.findByIdAndUpdate(lecture_id,
 		{
 			playback_submission_start_time: lecture.playback_submission_start_time,
