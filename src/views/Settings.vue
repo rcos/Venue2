@@ -5,7 +5,7 @@
           <div class="name-area">
               <div class="name-div">{{ current_user.first_name }} {{ current_user.last_name }}</div>
               <div class="logout-div"><div class="logout-button" v-on:click="logoutUser" tabindex="0" role="button">Logout</div></div>
-              <button v-if="current_user.user_id == 'mbizin'" @click="handleUpdateSubmissions">
+              <button v-if="current_user.user_id == 'whitte3'" @click="handleUpdateSubmissions">
                 Do it
               </button>
           </div>

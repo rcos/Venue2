@@ -216,7 +216,7 @@
     margin: 0;
     width: 100%;
     text-align: left;
-    padding-left: calc(8rem);
+    padding-left: 4rem;
     margin-top: 1rem;
     font-size: 0.9rem;
   }
