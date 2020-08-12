@@ -242,7 +242,6 @@ lectureSubmissionRoutes.get('/for_student/:lecture_id/:student_id', (req, res) =
 })
 
 lectureSubmissionRoutes.post('/update_all_to_new_model', (req, res) => {
-  console.log("STARTED")
   Lecture.find(function(err,lectures) {
     if(err) {
       console.log("<ERROR> Getting all lectures")
@@ -263,23 +262,18 @@ lectureSubmissionRoutes.post('/update_all_to_new_model', (req, res) => {
                   lecture: lecture._id,
                   submitter: user._id
                 }, function(err,submissions){
-                  console.log("SUBMISSIONS FOR USER",user.user_id,"AND LECTURE",lecture.title)
                   if(submissions && submissions.length) {
                     let new_submission_data = {
                       lecture: lecture._id,
                       submitter: user._id
                     }
 
-                    let live = submissions.filter(a => a.is_live_submission)
-                    let playback = submissions.filter(a => !a.is_live_submission)
-
-                    console.log(live)
-                    console.log(playback)
+                    let live = submissions.filter(a => a.live_submission_time)
+                    let playback = submissions.filter(a => a.playback_submission_time || !a.live_submission_time)
 
                     if(live && live.length > 0) {
                       new_submission_data.live_progress = live.length
                       new_submission_data.live_percent = live.length / lecture.checkins.length
-                      new_submission_data.codes = live.map(a => a.code)
                       new_submission_data.live_submission_time = live.map(a => a.live_submission_time)[0]
                     }
 
@@ -312,7 +306,6 @@ lectureSubmissionRoutes.post('/update_all_to_new_model', (req, res) => {
           })
 
           Promise.all(submission_promises).then(resolved => {
-            console.log("RESOLVED",resolved)
             res.json(resolved)
           })
         }
