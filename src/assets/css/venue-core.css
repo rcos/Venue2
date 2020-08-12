@@ -262,15 +262,6 @@ body {
   color: white;
 }
 
-.student-attendance-pill .date-area .day-of-week {
-  font-size: 0.7rem;
-  margin-top: 3px;
-}
-
-.student-attendance-pill .date-area .day-of-month {
-  font-size: 1.3rem;
-}
-
 .student-attendance-pill .event-info-area {
   margin-left: 10px;
   line-height: 17px;
@@ -334,13 +325,12 @@ body {
   height: 100%;
   text-align: center;
   color: white;
-  line-height: 22px;
   margin-right: 15px;
 }
 
 .instructor-attendance-history-pill .date-area .day-of-week {
   font-size: 0.8rem;
-  margin-top: 5px;
+  margin-top: 0.3rem;
 }
 
 .instructor-attendance-history-pill .date-area .day-of-month {
