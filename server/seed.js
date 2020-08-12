@@ -34,9 +34,9 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 		let p = []
 
 		u.push(new User({ // 0
-			first_name: "Numfor",
-			last_name: "Mbiziwo-Tiapo",
-			user_id: "mbizin",
+			first_name: "Ethan",
+			last_name: "Whitton",
+			user_id: "whitte3",
 			email: "venue@rpi.edu",
 			password: "nimda",
 			is_instructor: true,
