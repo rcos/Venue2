@@ -295,6 +295,10 @@ body {
   margin-bottom: 20px;
 }
 
+.instructor-attendance {
+  /* padding-left: 50px; */
+}
+
 .instructor-attendance-history-pill {
   border: 2px solid red;
   border-radius: 5px;
@@ -302,19 +306,24 @@ body {
   margin-bottom: 1rem;
   position: relative;
   width: 340px;
-  height: 65px;
+  max-width: 100%;
+  height: 4rem;
   cursor: pointer;
   color: #2c3e50;
 }
 
 .instructor-attendance-history-pill .date-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
   width: 20%;
-  /* margin-left: -15px; */
+  padding-top: 0.15rem;
   background-color: red;
   height: 100%;
   text-align: center;
   color: white;
-  line-height: 22px;
+  font-size: 1rem;
   margin-right: 15px;
 }
 
@@ -339,9 +348,12 @@ body {
 }
 
 .instructor-attendance-history-pill .name-area {
-  width: 55%;
-  position: relative;
-  top: 5px;
+  width: 60%;
+  position: absolute;
+  top: 0.5rem;
+  left: 20%;
+  bottom: 0;
+  padding-left: 1rem;
 }
 
 .instructor-attendance-history-pill .name-area .event-name {
@@ -355,13 +367,14 @@ body {
 }
 
 .instructor-attendance-history-pill .percentage-area {
-  background-color: green;
-  float: right;
-  height: 100%;
-  width: 55px;
-  position: relative;
+  /* background-color: #d13e34; */
+  position: absolute;
+  width: 20%;
+  right: 0;
+  top: 0;
+  bottom: 0;
   text-align: center;
-  line-height: 55px;
+  line-height: 3.6rem;
   color: white;
   font-size: 1.2rem;
 }
@@ -369,11 +382,11 @@ body {
 .instructor-attendance-history-pill .percentage-area::before {
   content: '';
   position: absolute;
-  border-right: 15px solid green;
-  border-bottom: 31px solid green;
-  border-top: 31px solid transparent;
-  border-left: 15px solid transparent;
-  left: -30px;
+  /* border-right: 0rem solid #d13e34; */
+  /* border-bottom: 3.8rem solid #d13e34; */
+  border-top: 0rem solid transparent;
+  border-left: 2rem solid transparent;
+  right: 100%;
 }
 
 
@@ -389,8 +402,8 @@ body {
 }
 
 .instructor-attendance-history-pill.good .percentage-area::before {
-  border-right: 15px solid #04852f;
-  border-bottom: 31px solid #04852f;
+  border-right: 0rem solid #04852f;
+  border-bottom: 3.8rem solid #04852f;
 }
 
 .instructor-attendance-history-pill.good:hover,
@@ -411,8 +424,8 @@ body {
 }
 
 .instructor-attendance-history-pill.medium .percentage-area::before {
-  border-right: 15px solid #b95726;
-  border-bottom: 31px solid #b95726;
+  border-right: 0rem solid #b95726;
+  border-bottom: 3.8rem solid #b95726;
 }
 
 .instructor-attendance-history-pill.medium:hover,
@@ -433,8 +446,8 @@ body {
 }
 
 .instructor-attendance-history-pill.bad .percentage-area::before {
-  border-right: 15px solid #d13e34;
-  border-bottom: 31px solid #d13e34;
+  border-right: 0rem solid #d13e34;
+  border-bottom: 3.8rem solid #d13e34;
 }
 
 .instructor-attendance-history-pill.bad:hover,
@@ -446,7 +459,7 @@ body {
 .instructor-attendance .month-area,
 .student-attendance .month-area {
   margin-bottom: 20px;
-  margin-left: 50px;
+  /* margin-left: 50px; */
   margin-right: 50px;
   margin-top: 20px;
 }
@@ -465,7 +478,7 @@ body {
 
 .event-pills-area {
   /* text-align: center; */
-  margin-left: 50px;
+  /* margin-left: 50px; */
 }
 
 .line-graph {
