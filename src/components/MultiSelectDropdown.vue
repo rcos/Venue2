@@ -9,7 +9,7 @@
 					{{getDisplayText(selection)}}
 				</div>
 				<div v-if="max > 1" class="multiselect-selected-remove">
-					<button class="btn btn-danger" @click="removeSelection(i)">X</button>
+					<button type="button" class="btn btn-danger" @click="removeSelection(i)">X</button>
 				</div>
 			</div>
 		</div>
@@ -45,7 +45,9 @@ export default {
 		this.options.forEach(option => {
 			this.unselected.push(option)
 		})
-		this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
+		if(this.sortBy) {
+			this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
+		}
 	},
 	methods: {
 		addSelection(option) {
@@ -75,13 +77,15 @@ export default {
 				this.displayAs.forEach((prop,i) => {
 					display += (i>0 ? ", "+option[prop]  : option[prop])
 				})
-			} else {
+			} else if(this.sortBy){
 				display +=  option[this.sortBy]
+			} else {
+				display += option
 			}
 			return display
 		},
 		sendUpdates() {
-			this.$emit('update',this.selected)
+			this.$emit('update',this.selected,this.n)
 		},
 		repopulate(data) {
 			this.unselected = []
@@ -90,6 +94,15 @@ export default {
 				this.unselected.push(option)
 			})
 			this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
+		},
+		setSelected(selections) {
+			this.unselected = []
+			this.options.forEach(option => {
+				if(!selections.includes(option)) {
+					this.unselected.push(option)
+				}
+			})
+			this.selected = selections
 		},
 		handleClickOutside(event) {
 			this.open = false

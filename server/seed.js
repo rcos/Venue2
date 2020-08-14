@@ -34,9 +34,9 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 		let p = []
 
 		u.push(new User({ // 0
-			first_name: "Numfor",
-			last_name: "Mbiziwo-Tiapo",
-			user_id: "mbizin",
+			first_name: "Ethan",
+			last_name: "Whitton",
+			user_id: "whitte3",
 			email: "venue@rpi.edu",
 			password: "nimda",
 			is_instructor: true,
@@ -192,6 +192,17 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 			number: 2,
 			students: [
 				u[2]._id,
+				// u[3]._id,
+				// u[4]._id,
+				// u[5]._id,
+				// u[6]._id,
+				// u[7]._id,
+				// u[8]._id,
+				// u[9]._id,
+				// u[10]._id,
+				// u[11]._id,
+				// u[12]._id,
+				// u[13]._id
 				u[14]._id,
 				u[15]._id,
 				u[16]._id,
@@ -278,8 +289,9 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 		ls.push(new LectureSubmission({ // 0
 			lecture: l[1]._id,
 			submitter: u[2]._id,
-			is_live_submission: true,
-			code: "abcdefghijklmnopqrstuvwxyz",
+			codes: ["abcdefghijklmnopqrstuvwxyz"],
+			live_progress: 1,
+			live_percent: 0.5,
 			live_submission_time: Date.now() - (3.5*60*1000)
 		}))
 

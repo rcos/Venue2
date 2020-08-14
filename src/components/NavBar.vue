@@ -16,7 +16,7 @@
         </div>
         <!-- Courses Link -->
         <div class="venue-nav-link-container" id="course-dropdown">
-          <a data-toggle="collapse" href="#collapseExample" class="venue-nav-link" :class="{'active-link':is_course_info}" style="cursor:pointer;">Courses ▼</a>
+          <a data-toggle="collapse" href="#collapseExample" class="venue-nav-link" :class="{'active-link':is_course_info}" style="cursor:pointer;">Courses {{"\u23F7"}}</a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
               <div v-if="is_instructor">
@@ -73,14 +73,40 @@
         </ul>
       </div>
     </show-at>
+    <!-- Breadcrumbs -->
+    <div id="breadcrumb-container" v-if="$route.name != 'dashboard' && $route.name != 'settings'">
+      <router-link :to="{name: 'dashboard'}">
+        Venue
+      </router-link>
+      <div v-if="current_course" class="crumb">
+        {{"\u23F5"}}
+        <router-link :to="{name: 'course_info', params: { id: current_course._id }}">
+          {{current_course.name}}
+        </router-link>
+      </div>
+      <div v-else-if="current_section" class="crumb">
+        {{"\u23F5"}}
+        <router-link :to="{name: 'course_info', params: { id: current_section._id }}">
+          {{current_section.course.name}}
+        </router-link>
+      </div>
+      <div v-if="current_lecture" class="crumb">
+        {{"\u23F5"}}
+        <router-link :to="{name: 'lecture_info', params: { lecture_id: current_lecture._id }}">
+          {{current_lecture.title}}
+        </router-link>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
   import {showAt, hideAt} from 'vue-breakpoints'
-  import UserAPI from '@/services/UserAPI.js';
+
+  import UserAPI from '@/services/UserAPI.js'
   import CourseAPI from '@/services/CourseAPI.js'
   import SectionAPI from '@/services/SectionAPI.js'
+  import LectureAPI from '@/services/LectureAPI.js'
 
   export default {
     name: 'NavBar',
@@ -91,8 +117,26 @@
       is_course_info: function () {
         return this.$route.name === 'course_info'
       },
+      is_lecture_info: function () {
+        return this.$route.name === 'lecture_info'
+      },
       is_statistics: function () {
         return this.$route.name === 'statistics'
+      },
+    },
+    watch: {
+      $route (to, from){
+        this.user_courses = []
+        this.user_sections = [],
+        this.user_lectures = [],
+        this.current_course = null,
+        this.current_section = null,
+        this.current_lecture = null
+        this.getLectures()
+        if(this.is_instructor)
+          this.getInstructorCourses()
+        else
+          this.getSectionsWithCourses()
       }
     },
     components: {
@@ -104,11 +148,16 @@
         current_user: {},
         is_instructor: Boolean,
         user_courses: [],
-        user_sections: []
+        user_sections: [],
+        user_lectures: [],
+        current_course: null,
+        current_section: null,
+        current_lecture: null
       }
     },
     created() {
       this.getCurrentUser()
+      this.getLectures()
       if(this.is_instructor)
         this.getInstructorCourses()
       else
@@ -122,6 +171,9 @@
       async getInstructorCourses() {
         const response = await CourseAPI.getInstructorCourses(this.current_user._id)
         this.user_courses = response.data
+        if(this.$route.params.id) {
+          this.current_course = response.data.find(a=>a._id == this.$route.params.id)
+        }
       },
       async getSectionsWithCourses() {
         const response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
@@ -131,6 +183,21 @@
           if(!temp_course_ids.includes(section.course._id)){
             this.user_sections.push(section)
             temp_course_ids.push(section.course._id)
+          }
+          if(section._id == this.$route.params.id) {
+            this.current_section = section
+          }
+        })
+      },
+      async getLectures() {
+        LectureAPI.getLecturesForUser(this.current_user._id,'with_sections_and_course')
+        .then(res => {
+          this.user_lectures = res.data
+          this.current_lecture = res.data.find(a=>a._id == this.$route.params.lecture_id)
+          if(this.current_lecture && !this.is_instructor) {
+            this.current_section = this.current_lecture.sections[0]
+          } else if(this.current_lecture) {
+            this.current_course = this.current_lecture.sections[0].course
           }
         })
       }
@@ -142,8 +209,21 @@
   #venue-nav {
     height: 4rem;
     padding: 1rem 2rem;
-    background: white;
     display: block;
+  }
+
+  #breadcrumb-container {
+    margin: 0;
+    width: 100%;
+    text-align: left;
+    padding-left: 4rem;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .crumb {
+    display: inline-block;
+    margin-right: 0.5rem;
   }
 
   #nav-logo {
@@ -173,7 +253,7 @@
     background-color: #f7f7f7;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 10;
+    z-index: 9999;
     overflow: hidden;
     max-height:0;
     transition: max-height 0.2s ease-in; 

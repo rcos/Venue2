@@ -2,11 +2,17 @@
 	<div id="lecture-attendance-table">
 		<div class="tabs" v-if="all_students">
 			<button id="live_btn" class="tab_btn selected_tab" tabindex="0" @click="selectTab(0)" aria-label="Show Live Attendance"
-				role="tab" aria-selected="true" aria-controls="live_submit"><h5>Live ({{Object.keys(live_submissions).length}}/{{all_students.length}})</h5></button>
+				role="tab" aria-selected="true" aria-controls="live_submit"><h5>
+					Live ({{(live_percent*100).toFixedDecimals(1)}}%)
+				</h5></button>
 			<button id="playback_btn" class="tab_btn" tabindex="0" @click="selectTab(1)" aria-label="Show Playback Attendance"
-				role="tab" aria-selected="false" aria-controls="playback_submit"><h5>Playback ({{playback_submissions.length}}/{{all_students.length}})</h5></button>
+				role="tab" aria-selected="false" aria-controls="playback_submit"><h5>
+					Recording ({{(playback_percent*100).toFixedDecimals(1)}}%)
+				</h5></button>
 			<button id="absent_btn" class="tab_btn" tabindex="0" @click="selectTab(2)" aria-label="Show Absent"
-				role="tab" aria-selected="false" aria-controls="no_submit"><h5>Absent ({{absent.length}}/{{all_students.length}})</h5></button>
+				role="tab" aria-selected="false" aria-controls="no_submit"><h5>
+					Absent ({{(submissions_with_nothing.length/all_students.length*100).toFixedDecimals(1)}}%)
+				</h5></button>
 			<button id="instructors_only_btn" class="tab_btn" tabindex="0" @click="selectTab(3)" aria-label="Show Instructors Only"
 				role="tab" aria-selected="false" aria-controls="instructors_only"><h5>Instructors Only</h5></button>
 		</div>
@@ -14,18 +20,18 @@
 			<button id="live_btn" class="tab_btn selected_tab" @click="selectTab(0)" tabindex="0" aria-label="Show Live Attendance"
 				role="tab" aria-selected="true" aria-controls="live_submit"><h5>Live</h5></button>
 			<button id="playback_btn" class="tab_btn" @click="selectTab(1)" tabindex="0" aria-label="Show Playback Attendance"
-				role="tab" aria-selected="false" aria-controls="playback_submit"><h5>Playback</h5></button>
+				role="tab" aria-selected="false" aria-controls="playback_submit"><h5>Recording</h5></button>
 			<button id="absent_btn" class="tab_btn" @click="selectTab(2)" tabindex="0" aria-label="Show Absent"
 				role="tab" aria-selected="false" aria-controls="no_submit"><h5>Absent</h5></button>
 		</div>
 		<div v-if="selected_tab === 0" role="tabpanel" aria-labelledby="live_btn" id="live_submit" class="tab_section">
-			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :live_submissions="live_submissions" :is_live="true" />
+			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions_with_live="submissions_with_live" :is_live="true" />
 		</div>
 		<div v-if="selected_tab === 1" role="tabpanel" aria-labelledby="playback_btn" id="playback_submit" class="tab_section">
-			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="playback_submissions" :is_playback="true" />
+			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions_with_playback="submissions_with_playback" :is_playback="true" />
 		</div>
 		<div v-if="selected_tab === 2" role="tabpanel" aria-labelledby="absent_btn" id="no_submit" class="tab_section">
-			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions="absent" :is_absent="true" />
+			<LectureAttendanceList :is_instructor="is_instructor" :lecture="lecture" :submissions_with_nothing="submissions_with_nothing" :is_absent="true" />
 		</div>
 		<div v-if="selected_tab === 3" role="tabpanel" aria-labelledby="instructors_only_btn" id="instructors_only" class="tab_section">
 			<div id="manual-override-container">
@@ -41,19 +47,64 @@
 				</div>
 			</div>
 			<div class="row justify-content-center">
-				<div id="table-container">
+				<div id="table-container" v-if="lecture.checkins.length > 0">
 					<label id="checkin-table-label">Check-in Windows</label>
 					<table id="checkins-container" aria-labelledby="checkin-table-label">
 						<thead>
 							<tr>
 								<th>Start Time</th>
 								<th>End Time</th>
+								<th>Timestamp</th>
+								<th>Poll</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr v-for="(checkin,i) in lecture.checkins" :key="i">
-								<td>{{ getPrettyDateTime(new Date(checkin.start_time)) }}</td>
-								<td>{{ getPrettyDateTime(new Date(checkin.end_time)) }}</td>
+								<td v-if="checkin.start_time">{{ getPrettyDateTime(new Date(checkin.start_time)) }}</td>
+								<td v-else>Manual</td>
+								<td v-if="checkin.end_time">{{ getPrettyDateTime(new Date(checkin.end_time)) }}</td>
+								<td v-else>Manual</td>
+								<td v-if="polls[i] && polls[i].timestamp">{{ polls[i].timestamp }}</td>
+								<td v-else>X</td>
+								<td v-if="polls[i]">
+									<div id="edit-poll-modal-container" v-if="edit_poll_index != -1 && edit_poll_index == i">
+										<div id="edit-poll-modal-contents">
+											<CreatePoll :playback_only="false" :checkin="i" :poll="polls[i]" @cancel="handleCancelEditPoll" @addPoll="handleEditPoll"/>
+										</div>
+									</div>
+									{{polls[i].question}}
+									<button type="button" v-if="!checkin.start_time || (checkin.start_time && Date.parse(checkin.start_time) > Date.now())" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
+										<img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
+									</button>
+								</td>
+								<td v-else>X</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div id="table-container" v-else-if="polls.length > 0">
+					<label id="checkin-table-label">Video Polls</label>
+					<table id="checkins-container" aria-labelledby="checkin-table-label">
+						<thead>
+							<tr>
+								<th>Seconds In</th>
+								<th>Poll</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="(poll,i) in polls" :key="i">
+								<td>{{poll.timestamp}}</td>
+								<td>
+									<div id="edit-poll-modal-container" v-if="edit_poll_index != -1 && edit_poll_index == i">
+										<div id="edit-poll-modal-contents">
+											<CreatePoll :playback_only="false" :checkin="i" :poll="polls[i]" @cancel="handleCancelEditPoll" @addPoll="handleEditPoll"/>
+										</div>
+									</div>
+									{{polls[i].question}}
+									<button type="button" v-if="Date.parse(lecture.playback_submission_start_time) > Date.now()" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
+										<img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
+									</button>
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -66,32 +117,75 @@
 
 <script>
 	import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
+	import PlaybackPollAPI from '@/services/PlaybackPollAPI'
+
   import LectureAttendanceList from '@/components/LectureAttendanceList.vue'
+	import CreatePoll from '@/components/CreatePoll.vue'
 
   export default {
     name: 'LectureAttendanceTable',
     props: {
       lecture: Object,
-    	live_submissions: Object,
-    	playback_submissions: Array,
-    	absent: Array,
+    	submissions: Array,
     	all_students: Array,
-      is_instructor: Boolean
+      is_instructor: Boolean,
+			polls: Array
     },
     components: {
-      LectureAttendanceList
+      LectureAttendanceList,
+			CreatePoll
     },
     data(){
       return {
         selected_tab: 0,
 				overrides: "",
-				override_err_msg: ""
+				override_err_msg: "",
+				submissions_with_live: [],
+				submissions_with_playback: [],
+				submissions_with_nothing: [],
+				live_percent: 0,
+				playback_percent: 0,
+				absent_percent: 0,
+				edit_poll_index: -1
       }
     },
     created() {
+			this.parseSubmissions()
     },
     methods: {
-    	selectTab(i) {
+			parseSubmissions() {
+				let livesum = 0
+				let playsum = 0
+				this.submissions.forEach(submission => {
+					let hasAttendance = false
+					if(submission.live_progress) {
+						this.submissions_with_live.push(submission)
+						hasAttendance = true
+						livesum += submission.live_percent
+					}
+					if(submission.video_progress) {
+						this.submissions_with_playback.push(submission)
+						hasAttendance = true
+						playsum += submission.video_percent
+					}
+					if(!hasAttendance) {
+						this.submissions_with_nothing.push(submission)
+					}
+				})
+				if(this.all_students) {
+					this.live_percent = livesum / this.all_students.length
+					this.playback_percent = playsum / this.all_students.length
+					let submitted_student_ids = this.submissions.map(a=>a.submitter._id)
+					this.all_students.forEach(stud => {
+						if(!submitted_student_ids.includes(stud._id)) {
+							this.submissions_with_nothing.push({
+								lecture: this.lecture._id,
+								submitter: stud
+							})
+						}
+					})
+				}
+			},selectTab(i) {
     	  let btns = [
     	    document.getElementById("live_btn"),
     	    document.getElementById("playback_btn"),
@@ -210,19 +304,44 @@
 					})
 				})
 			},
+			handleCancelEditPoll() {
+				this.edit_poll_index = -1
+			},
+			handleEditPoll(poll) {
+				PlaybackPollAPI.update(poll).then(res => {location.reload()})
+			}
 		}
 	}
 </script>
 
 <style scoped>
 	#lecture-attendance-table {
-		margin-top: 2rem;
+		margin-top: 3rem;
 		text-align: start;
 	}
 
+	#edit-poll-modal-container {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: rgba(255, 255, 255, 0.65);
+	}
+
+	#edit-poll-modal-contents {
+		position: fixed;
+		top: 25%;
+		bottom: 25%;
+		left: 25%;
+		right: 25%;
+		background: white;
+		border: 1px solid gray;
+		padding: 1rem;
+		border-radius: 1rem;
+	}
+
 	.tabs {
-	  margin-top: 5rem;
-		margin-left: 2rem;
 	}
 
 	.tab_btn {

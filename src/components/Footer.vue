@@ -4,7 +4,7 @@
     	<a href="https://github.com/rcos/Venue2" target="_blank" aria-label="Github Repository">
     		<img class="github-mark" src="../assets/github_mark.png" aria-label="Github Icon" alt="Github Icon"/>
     	</a>
-    	| An RCOS project
+    	| An RCOS project | Icons by <a target="_blank" href="https://icons8.com">Icons8</a>
     </footer>
 </template>
 
@@ -16,7 +16,7 @@ export default {
 
 <style>
 .footer {
-	/*position: absolute;*/
+	position: absolute;
 	bottom: 0;
 	width: 100%;
 	height: 2rem;

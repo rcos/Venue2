@@ -31,5 +31,9 @@ export default {
   },
   getLectureSubmissionsForStudent(lecture_id, student_id) {
     return API().get('lecturesubmissions/for_student/' + lecture_id + '/' + student_id)
+  },
+
+  updateAllToNewModel() {
+    return API().post('lecturesubmissions/update_all_to_new_model')
   }
 }

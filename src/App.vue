@@ -1,9 +1,10 @@
 <template>
   <div id="app">
     <NavBar class="main_navbar" v-if="this.$route.name != 'landing_page' && this.$route.name != 'set_permanent_password' && current_user"></NavBar>
-    <div id="main-content">
+    <main id="main-content">
       <router-view :key="$route.fullPath" />
-    </div>
+    </main>
+    <!-- <Footer/> -->
   </div>
 </template>
 
@@ -102,5 +103,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   // min-height: 100%;
+}
+
+main {
+  padding-bottom: 2rem;
 }
 </style>
