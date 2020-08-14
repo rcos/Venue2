@@ -22,7 +22,7 @@
 							<input class="optioncheck" type="checkbox" :id="'student_answer_'+(i+1)+'_'+(j+1)" aria-labelledby="correct_label"/>
 						</li>
 					</ol>
-					<button class="answer_btn btn btn-primary" :id="'answer_btn_'+(i+1)" @click="answerPoll(i)">Submit</button>
+					<button class="answer_btn btn btn-primary" :id="'answer_btn_'+(i+1)" @click="answerPoll(i,poll)">Submit</button>
 				</div>
 			</div>
 			<!--Poll Modals End-->
@@ -38,15 +38,26 @@ import PlaybackPollAPI from "../services/PlaybackPollAPI";
 export default {
 	name: 'RestrictedPlayback',
 	props: {
-		lecture: Object
+		lecture: Object,
+		submission: Object
 	},
 	data(){
 		return {
 			vjs: null,
 			prevTime: 0,
 			currentUser: null,
-			lectureSubmission: null,
 			polls: []
+		}
+	},
+	created() {
+		if(!this.submission.video_progress) {
+			this.submission.video_progress = 0
+		}
+		if(!this.submission.video_percent) {
+			this.submission.video_percent = 0
+		}
+		if(!this.submission.student_poll_answers) {
+			this.submission.student_poll_answers = {}
 		}
 	},
 	mounted() {
@@ -70,52 +81,53 @@ export default {
 			});
 
 			self.currentUser = self.$store.state.user.current_user
-			LectureSubmissionAPI.getOrMake(self.lecture._id,self.currentUser._id)
-				.then(res => {
-					self.lectureSubmission = res.data
-					PlaybackPollAPI.getByLecture(self.lecture._id)
-						.then(resp => {
-							self.polls = resp.data
-							vid.on('timeupdate', function () {
-								let currTime = vid.currentTime()
-								if(currTime - self.prevTime < 0.5 && currTime >= self.prevTime) {
-									//Considered NOT a 'seek', video is playing normally
-									if(self.lectureSubmission.video_progress < Math.floor(currTime)) {
-										self.lectureSubmission.video_progress = Math.floor(currTime)
-										self.lectureSubmission.video_percent = currTime / vid.duration()
-										if(self.lectureSubmission.video_progress%5 == 0) {
-											LectureSubmissionAPI.update(self.lectureSubmission)
-										}
-									}
-									for (let i = 0; i < self.polls.length; i++) {
-										if (currTime > self.polls[i].timestamp) {
-											if(undefined == self.lectureSubmission.student_poll_answers[i] || self.lectureSubmission.student_poll_answers[i].length == 0) {
-												//THERE IS NO ANSWER FROM THE STUDENT YET
-												vid.currentTime(self.polls[i].timestamp)
-												vid.pause()
-												self.startPoll(i)
-											}
-										}
-									}
-								} else {
-									//Considered a 'seek'
-									if(currTime > self.lectureSubmission.video_progress) {
-										vid.currentTime(self.prevTime)
-									} else if(currTime < self.prevTime) {
-										for (let i = 0; i < self.polls.length; i++) {
-											self.hidePoll(i)
-										}
-									}
+			
+			PlaybackPollAPI.getByLecture(self.lecture._id)
+			.then(resp => {
+				self.polls = resp.data
+				vid.on('timeupdate', function () {
+					let currTime = vid.currentTime()
+					if(currTime - self.prevTime < 0.5 && currTime >= self.prevTime) {
+						//Considered NOT a 'seek', video is playing normally
+						if(self.submission.video_progress < Math.floor(currTime)) {
+							self.submission.video_progress = Math.floor(currTime)
+							self.submission.video_percent = currTime / vid.duration()
+							if(self.submission.video_progress%5 == 0) {
+								self.submission.playback_submission_time = new Date()
+								LectureSubmissionAPI.update(self.submission)
+							}
+						}
+						for (let i = 0; i < self.polls.length; i++) {
+							if (currTime > self.polls[i].timestamp) {
+								
+								//if there is not an answer for the code, and there is not an answer for the timestamp, show the poll
+								if(!(self.polls[i].code && !self.submission.student_poll_answers[self.polls[i].code]) &&
+								!(self.polls[i].timestamp && self.submission.student_poll_answers[self.polls[i].timestamp])) {
+									vid.currentTime(self.polls[i].timestamp)
+									vid.pause()
+									self.startPoll(i)
 								}
-								self.prevTime = vid.currentTime()
-							})
-							vid.on('ended', function() {
-								self.lectureSubmission.video_progress = vid.duration()
-								self.lectureSubmission.video_percent = 1
-								LectureSubmissionAPI.update(self.lectureSubmission)
-							});
-						})
+							}
+						}
+					} else {
+						//Considered a 'seek'
+						if(currTime > self.submission.video_progress) {
+							vid.currentTime(self.prevTime)
+						} else if(currTime < self.prevTime) {
+							for (let i = 0; i < self.polls.length; i++) {
+								self.hidePoll(i)
+							}
+						}
+					}
+					self.prevTime = vid.currentTime()
 				})
+				vid.on('ended', function() {
+					self.submission.video_progress = vid.duration()
+					self.submission.video_percent = 1
+					self.submission.playback_submission_time = new Date()
+					LectureSubmissionAPI.update(self.submission)
+				});
+			})
 		})
 	},
 	beforeDestroy() {
@@ -136,20 +148,19 @@ export default {
 			let poll = document.getElementById("poll"+(i+1))
 			poll.classList.add("hide")
 		},
-		answerPoll(i) {
+		answerPoll(i,poll) {
 			let student_answers = []
 			for(let j=0;j<this.polls[i].possible_answers.length;j++) {
-				student_answers.push(document.getElementById('student_answer_'+(i+1)+'_'+(j+1)).checked)
+				if(document.getElementById('student_answer_'+(i+1)+'_'+(j+1)).checked) {
+					student_answers.push(this.polls[i].possible_answers[j])
+				}
 			}
-			if(undefined == this.lectureSubmission.student_poll_answers[i]) {
-				this.lectureSubmission.student_poll_answers.push(student_answers)
-			} else {
-				this.lectureSubmission.student_poll_answers[i] = student_answers
-			}
-
-			LectureSubmissionAPI.update(this.lectureSubmission)
-
+			this.submission.student_poll_answers[poll.timestamp] = student_answers
+			this.submission.playback_submission_time = new Date()
+			LectureSubmissionAPI.update(this.submission)
+			
 			this.hidePoll(i)
+			this.vjs.play()
 		}
 	}
 }

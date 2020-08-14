@@ -4,9 +4,9 @@
 			<UnrestrictedPlayback :lecture="lecture"/>
 		</div>
 		<div v-else-if="!unrestricted && !needs_decision && lecture_loaded">
-			<RestrictedPlayback :lecture="lecture"/>
+			<RestrictedPlayback :lecture="lecture" :submission="submission"/>
 		</div>
-		<div v-else-if="needs_decision" id="playback-opt">
+		<div v-else-if="needs_decision && show_decision" id="playback-opt">
 			<button class="btn btn-secondary" id="opt-unrestricted" @click="handleOptIntoUnrestricted">Watch lecture without restrictions, and ignore my attendance grade</button>
 			<button class="btn btn-primary" id="opt-restricted" @click="handleOptIntoRestricted">Watch lecture with restrictions, and improve my attendance grade</button>
 		</div>
@@ -31,7 +31,9 @@ export default {
 			lecture: {},
 			lecture_loaded: false,
 			unrestricted: false,
-			needs_decision: true
+			needs_decision: true,
+			show_decision: false,
+			submission: null
 		}
 	},
 	created() {
@@ -44,27 +46,23 @@ export default {
 					this.unrestricted = true
 					this.needs_decision = false
 				} else {
-					LectureSubmissionAPI.getLectureSubmissionsForStudent(this.lecture._id,this.$store.state.user.current_user._id)
+					LectureSubmissionAPI.getOrMake(this.lecture._id,this.$store.state.user.current_user._id)
 						.then(res => {
-							let submissions = res.data
-							let live = []
-							let playback
-							submissions.forEach(sub => {
-								if(sub.is_live_submission) {
-									live.push(sub)
-								} else {
-									playback = sub
-								}
-							})
-							if(undefined != playback && playback.video_percent == 1) {
+							this.submission = res.data
+
+							if(this.submission.live_percent && this.submission.live_percent == 1) {
 								this.unrestricted = true
 								this.needs_decision = false
-							} else if(live.length == 0) {
+							} else if(this.submission.video_percent && this.submission.video_percent == 1) {
+								this.unrestricted = true
+								this.needs_decision = false
+							} else if(!this.submission.live_percent) {
 								this.unrestricted = false
 								this.needs_decision = false
-							} else if(this.lecture.checkins.length > 0 && live.length == this.lecture.checkins.length) {
-								this.unrestricted = true
-								this.needs_decision = false
+							}
+							
+							if(this.needs_decision) {
+								this.show_decision = true
 							}
 						})
 				}

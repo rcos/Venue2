@@ -1,4 +1,6 @@
 /* Custom Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
+
 @font-face {
   font-family: Oxygen;
   src: url(../fonts/Oxygen/Oxygen-Regular.ttf);
@@ -52,9 +54,13 @@
 }
 
 /* CSS Style */
-body, * {
-  font-family: Arial, NotoSans;
+* {
+  font-family: Comfortaa, Arial, NotoSans;
   font-weight: normal;
+}
+
+body {
+  background: white;
 }
 
 .venue-body-container {
@@ -86,7 +92,6 @@ body, * {
 .venue-body-container .course-info-title {
   width: 380px;
   padding: 40px 30px;
-  margin-left: 20px;
   box-shadow: 0px 3px 6px rgba(0, 62, 123, 0.2);
   border-radius: 5px;
 }
@@ -104,7 +109,6 @@ body, * {
   text-align: center;
   color: #C1EDFF;
   border-radius: 2px;
-  cursor: pointer;
 }
 
 .venue-body-container .course-info-title .course-time-block {
@@ -113,9 +117,8 @@ body, * {
 }
 
 .course-info-title.mobile {
-  width: 80%;
-  margin: 0 auto;
-  margin-top: 20px;
+  margin: 0rem 2rem;
+  margin-top: 1rem;
   padding: 2rem 0;
   border-radius: 5px;
   box-shadow: 0px 3px 6px rgba(0, 62, 123, 0.2);
@@ -137,7 +140,6 @@ body, * {
   margin-bottom: 5px;
   color: #C1EDFF;
   border-radius: 2px;
-  cursor: pointer;
 }
 
 .venue-body-container .weekly-attendance-bar {
@@ -259,15 +261,6 @@ body, * {
   color: white;
 }
 
-.student-attendance-pill .date-area .day-of-week {
-  font-size: 0.7rem;
-  margin-top: 3px;
-}
-
-.student-attendance-pill .date-area .day-of-month {
-  font-size: 1.3rem;
-}
-
 .student-attendance-pill .event-info-area {
   margin-left: 10px;
   line-height: 17px;
@@ -292,6 +285,10 @@ body, * {
   margin-bottom: 20px;
 }
 
+.instructor-attendance {
+  /* padding-left: 50px; */
+}
+
 .instructor-attendance-history-pill {
   border: 2px solid red;
   border-radius: 5px;
@@ -299,19 +296,24 @@ body, * {
   margin-bottom: 1rem;
   position: relative;
   width: 340px;
-  height: 65px;
+  max-width: 100%;
+  height: 4rem;
   cursor: pointer;
   color: #2c3e50;
 }
 
 .instructor-attendance-history-pill .date-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
   width: 20%;
-  /* margin-left: -15px; */
+  padding-top: 0.15rem;
   background-color: red;
   height: 100%;
   text-align: center;
   color: white;
-  line-height: 22px;
+  font-size: 1rem;
   margin-right: 15px;
 }
 
@@ -322,13 +324,12 @@ body, * {
   height: 100%;
   text-align: center;
   color: white;
-  line-height: 22px;
   margin-right: 15px;
 }
 
 .instructor-attendance-history-pill .date-area .day-of-week {
   font-size: 0.8rem;
-  margin-top: 5px;
+  margin-top: 0.3rem;
 }
 
 .instructor-attendance-history-pill .date-area .day-of-month {
@@ -336,9 +337,12 @@ body, * {
 }
 
 .instructor-attendance-history-pill .name-area {
-  width: 55%;
-  position: relative;
-  top: 5px;
+  width: 60%;
+  position: absolute;
+  top: 0.5rem;
+  left: 20%;
+  bottom: 0;
+  padding-left: 1rem;
 }
 
 .instructor-attendance-history-pill .name-area .event-name {
@@ -352,13 +356,14 @@ body, * {
 }
 
 .instructor-attendance-history-pill .percentage-area {
-  background-color: green;
-  float: right;
-  height: 100%;
-  width: 55px;
-  position: relative;
+  /* background-color: #d13e34; */
+  position: absolute;
+  width: 20%;
+  right: 0;
+  top: 0;
+  bottom: 0;
   text-align: center;
-  line-height: 55px;
+  line-height: 3.6rem;
   color: white;
   font-size: 1.2rem;
 }
@@ -366,11 +371,11 @@ body, * {
 .instructor-attendance-history-pill .percentage-area::before {
   content: '';
   position: absolute;
-  border-right: 15px solid green;
-  border-bottom: 31px solid green;
-  border-top: 31px solid transparent;
-  border-left: 15px solid transparent;
-  left: -30px;
+  /* border-right: 0rem solid #d13e34; */
+  /* border-bottom: 3.8rem solid #d13e34; */
+  border-top: 0rem solid transparent;
+  border-left: 2rem solid transparent;
+  right: 100%;
 }
 
 
@@ -386,8 +391,8 @@ body, * {
 }
 
 .instructor-attendance-history-pill.good .percentage-area::before {
-  border-right: 15px solid #04852f;
-  border-bottom: 31px solid #04852f;
+  border-right: 0rem solid #04852f;
+  border-bottom: 3.8rem solid #04852f;
 }
 
 .instructor-attendance-history-pill.good:hover,
@@ -408,8 +413,8 @@ body, * {
 }
 
 .instructor-attendance-history-pill.medium .percentage-area::before {
-  border-right: 15px solid #b95726;
-  border-bottom: 31px solid #b95726;
+  border-right: 0rem solid #b95726;
+  border-bottom: 3.8rem solid #b95726;
 }
 
 .instructor-attendance-history-pill.medium:hover,
@@ -430,8 +435,8 @@ body, * {
 }
 
 .instructor-attendance-history-pill.bad .percentage-area::before {
-  border-right: 15px solid #d13e34;
-  border-bottom: 31px solid #d13e34;
+  border-right: 0rem solid #d13e34;
+  border-bottom: 3.8rem solid #d13e34;
 }
 
 .instructor-attendance-history-pill.bad:hover,
@@ -443,7 +448,7 @@ body, * {
 .instructor-attendance .month-area,
 .student-attendance .month-area {
   margin-bottom: 20px;
-  margin-left: 50px;
+  /* margin-left: 50px; */
   margin-right: 50px;
   margin-top: 20px;
 }
@@ -462,7 +467,7 @@ body, * {
 
 .event-pills-area {
   /* text-align: center; */
-  margin-left: 50px;
+  /* margin-left: 50px; */
 }
 
 .line-graph {
@@ -623,6 +628,7 @@ custom-scrollbar::-webkit-scrollbar-thumb {
   box-shadow: 0px 3px 5px rgba(44, 62, 80, 0.1);
   cursor: pointer;
   transition: border 0.25s, box-shadow 0.25s;
+  margin: 0.5rem;
 }
 
 .big-button:hover,
@@ -659,11 +665,11 @@ a:hover {
 
 .lecture-pill-min {
   width: 310px;
-  height: 35px;
+  /* height: 35px; */
   line-height: 28px;
-  display: inline-block;
+  display: inline;
   margin-right: 15px;
-  padding-left: 10px;
+  padding: 0.5rem 0.75rem;
   border-radius: 4px;
   color: white;
   cursor: pointer;
@@ -689,30 +695,6 @@ a:hover {
 
 .lecture-pills-min-container .lecture-pill-holder {
   /* border: 1px solid black; */
-}
-
-.lecture-pill-min .left,
-.lecture-pill-min .middle,
-.lecture-pill-min .right {
-  display: inline-block;
-  position: relative;
-  top: 3px;
-}
-
-.lecture-pill-min .left {
-  width: 50%;
-  font-size: 0.95rem;
-}
-.lecture-pill-min .middle {
-  width: 20%;
-  text-align: center;
-  font-size: 0.9rem;
-}
-
-.lecture-pill-min .right {
-  width: 30%;
-  text-align: center;
-  font-size: 0.9rem;
 }
 
 .mobile-event-pill-area {
@@ -838,6 +820,7 @@ a:hover {
   color: white;
 } */
 
+.btn {}
 
 .btn.btn-primary {
   background: #0078c2;

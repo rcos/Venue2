@@ -1,12 +1,12 @@
 <template>
   <div id="lecture-info-section">
-    <show-at breakpoint="small">
+    <show-at breakpoint="mediumAndBelow">
       <!-- Mobile -->
-      <div id="lecture-data">
-        <div class="row" id="main-info">
-          <h3>{{lecture.sections[0].course.name}}</h3>
-          <p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p>
-          <p>Sections:
+      <div id="lecture-data-mobile">
+        <div id="main-info-mobile">
+          <h3 class="lecture-title">{{lecture.title}}</h3>
+          <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p></div>
+          <p class="sections">Sections:
             <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
               <a v-if="i > 0">,{{ section.number }}</a>
               <a v-else>{{ section.number }}</a>
@@ -14,86 +14,43 @@
           </p>
         </div>
         <div class="row">
-          <h1 id="lecture-title-mobile">{{lecture.title}} - Info</h1>
-        </div>
-        <div class="row start-end-row">
-          <div class="row-half">
-            <h5>Start Time</h5>
+          <div v-if="lecture.start_time" class="col">
+            <h5>Live Lecture Window</h5>
             <p>{{getPrettyDateTime(new Date(lecture.start_time))}}</p>
-          </div>
-          <div class="row-half">
-            <h5>End Time</h5>
+            <p>-</p>
             <p>{{getPrettyDateTime(new Date(lecture.end_time))}}</p>
           </div>
-        </div>
-        <div class="row playback-row">
-          <div class="row-half">
-            <h5>Playback Start Time</h5>
+          <div v-if="lecture.playback_submission_start_time" class="col">
+            <h5>Video Attendance Window</h5>
             <p>{{getPrettyDateTime(new Date(lecture.playback_submission_start_time))}}</p>
-          </div>
-          <div class="row-half">
-            <h5>Playback End Time</h5>
+            <p>-</p>
             <p>{{getPrettyDateTime(new Date(lecture.playback_submission_end_time))}}</p>
           </div>
         </div>
-        <!-- <div class="col" v-if="is_instructor">
-          <h5 class="underline">Checkins</h5>
-          <div id="table-container">
-            <table id="checkins-container">
-              <thead>
-                <tr>
-                  <th>Start Time</th>
-                  <th>End Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(checkin,i) in lecture.checkins" :key="i">
-                  <td>{{ getPrettyDateTime(new Date(checkin.start_time)) }}</td>
-                  <td>{{ getPrettyDateTime(new Date(checkin.end_time)) }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div> -->
       </div>
     </show-at>
     <!-- Tablet & Up -->
-    <show-at breakpoint="mediumAndAbove">
-      <div>
-        <div class="row" id="lecture-data">
-          <div class="col-3">
-            <div id="main-info">
-              <h3>{{lecture.sections[0].course.name}}</h3>
-              <p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p>
-              <p class="sections">Sections:
-                <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
-                  <a v-if="i > 0">,{{ section.number }}</a>
-                  <a v-else>{{ section.number }}</a>
-                </a>
-              </p>
-            </div>
-          </div>
-          <div class="col">
-            <h1 id="lecture-title">{{lecture.title}} - Info</h1>
+    <show-at breakpoint="large">
+      <div id="lecture-data" class="row">
+        <div class="col-6">
+          <div id="main-info">
+            <h3 class="lecture-title">{{lecture.title}}</h3>
+            <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p></div>
+            <p class="sections">Sections:
+              <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
+                <a v-if="i > 0">,{{ section.number }}</a>
+                <a v-else>{{ section.number }}</a>
+              </a>
+            </p>
           </div>
         </div>
-        <div class="row">
-          <div class="col">
-            <h5>Start Time</h5>
-            <p>{{getPrettyDateTime(new Date(lecture.start_time))}}</p>
-          </div>
-          <div class="col">
-            <h5>End Time</h5>
-            <p>{{getPrettyDateTime(new Date(lecture.end_time))}}</p>
-          </div>
-          <div class="col">
-            <h5>Playback Start Time</h5>
-            <p>{{getPrettyDateTime(new Date(lecture.playback_submission_start_time))}}</p>
-          </div>
-          <div class="col">
-            <h5>Playback End Time</h5>
-            <p>{{getPrettyDateTime(new Date(lecture.playback_submission_end_time))}}</p>
-          </div>
+        <div v-if="lecture.start_time" class="col time-window my-auto">
+          <h5>Live Lecture Window</h5>
+          <p>{{getPrettyDateTime(new Date(lecture.start_time))}} - {{getPrettyDateTime(new Date(lecture.end_time))}}</p>
+        </div>
+        <div v-if="lecture.playback_submission_start_time" class="col time-window my-auto">
+          <h5>Video Attendance Window</h5>
+          <p>{{getPrettyDateTime(new Date(lecture.playback_submission_start_time))}} - {{getPrettyDateTime(new Date(lecture.playback_submission_end_time))}}</p>
         </div>
       </div>
     </show-at>
@@ -145,6 +102,11 @@
     bottom: 0;
     text-align: left;
     margin-left: 1rem;
+    display: inline-block;
+  }
+
+  p {
+    max-width: 100%;
   }
 
   #lecture-title-mobile {
@@ -158,7 +120,11 @@
   #lecture-data {
     position: relative;
     margin-top: 2rem;
-    text-align: center;
+    text-align: left;
+  }
+
+  #lecture-data-mobile {
+    margin-top: 2rem;
   }
 
   .col {
@@ -173,11 +139,28 @@
     width: 50%;
   }
 
+  .lecture-title {
+    font-size: 2rem;
+  }
+
   #main-info {
-    border-radius: .5rem;
-    box-shadow: 0 5px 10px -1px gray;
-    padding: 1rem;
+    display: inline-block;
+    border-radius: .25rem;
+    padding: 2rem 4rem;
     margin: 0;
+    text-align: left;
+    box-shadow: 0px 3px 6px rgba(0, 62, 123, 0.2);
+    width: 100%;
+  }
+
+  #main-info-mobile {
+    display: inline-block;
+    border-radius: .25rem;
+    padding: 2rem 3rem;
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    box-shadow: 0px 3px 6px rgba(0, 62, 123, 0.2);
   }
 
   .row-half h5,
@@ -186,14 +169,21 @@
   }
 
   .dept-and-number {
+    display: inline-block;
     background: black;
     color: white;
-    border-radius: 1rem;
-    padding: 0.5rem;
+    font-size: 0.8rem;
+    padding: 0.1rem 0.5rem;
+    margin-left: 0.5rem;
+    border-radius: 2px;
+  }
+
+  p {
+    margin: 0;
   }
 
   .sections {
-    padding: 0.5rem;
+    margin-top: 0.5rem;
   }
 
   #checkins-container {
@@ -206,6 +196,10 @@
     text-align: center;
     width:50%;
     border: grey solid thin;
+  }
+
+  .time-window {
+    text-align: center;
   }
 
 </style>

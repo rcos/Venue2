@@ -1,8 +1,8 @@
 <template>
 
-  <div :class="'lecture-pill-min ' + color">
+  <div :class="'lecture-pill-min ' + color" :title="name">
     <div class="left">{{ name }}</div>
-    <div class="middle">{{ middle }}</div>
+    <!-- <div class="middle">{{ middle }}</div> -->
     <div class="right">{{ right }}</div>
   </div>
 
@@ -23,6 +23,29 @@ export default {
 
 <style scoped>
 .lecture-pill-min {
+  display: inline-flex;
+  border-radius: 0.25rem;
+}
+.left,
+.middle,
+.right {
   display: inline-block;
+  font-size: 0.9rem;
+}
+
+.left {
+  width: 60%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.middle {
+  width: 20%;
+}
+
+.right {
+  width: 40%;
+  text-align: right;
 }
 </style>

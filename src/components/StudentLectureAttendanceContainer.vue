@@ -1,95 +1,122 @@
 <template>
   <div>
     <!-- TODO: Check if student submitted already -->
-    <div id="qr-sccanning-container" v-if="qr_scanning_window_open">
-      <button @click="closeQRScanningWindow" id="exit_preview_btn" tabindex="0" aria-label="Close QR Scanner">X</button>
+    <div id="qr-scanning-container" v-if="qr_scanning_window_open">
+      <button @click="qr_scanning_window_open = false" id="exit_preview_btn" tabindex="0" aria-label="Close QR Scanner">X</button>
       <qrcode-stream id="video_preview" @decode="checkForQRMatch"></qrcode-stream>
     </div>
     <div id="table-header">
       <h2>Attendance</h2>
-      <button v-if="student_can_submit_live" @click="showQRScanningWindow" class="header-btn btn btn-primary">Scan QR</button>
-      <router-link class="header-btn btn btn-secondary" v-else-if="student_can_watch_playback" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
-        Watch Playback
+      <button v-if="lectureIsOngoing()" @click="qr_scanning_window_open = true" class="header-btn btn btn-primary" title="Scan QR">
+        <img src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
+      </button>
+      <router-link class="header-btn btn btn-secondary" v-else-if="canWatchRecording()" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
+        <img src="@/assets/icons8-video-64.png" width="60" alt="Video" aria-label="Video" title="Watch Recording">
       </router-link>
     </div>
-    <LectureAttendanceTable :is_instructor="false" :lecture="lecture" :live_submissions="live_submissions" :playback_submissions="playback_submissions" :absent="absent" />
+    <LectureAttendanceTable :is_instructor="false" :lecture="lecture" :submissions="[submission]" />
+    <AnswerPoll v-if="answering_poll" :poll="current_poll" @answer="handleAnswerPoll" @cancel="handleCancelPoll"/>
   </div>
 </template>
 
 
 <script>
-  import QRCode from "qrcode";
-  import { QrcodeStream } from 'vue-qrcode-reader'
   import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js';
+
+  import { QrcodeStream } from 'vue-qrcode-reader';
   import LectureAttendanceTable from "@/components/LectureAttendanceTable.vue";
+  import AnswerPoll from '@/components/AnswerPoll.vue';
 
   export default {
     name: 'StudentLectureAttendanceContainer',
     props: {
       lecture: Object,
-      live_submissions: Object,
-      playback_submissions: Array,
-      absent: Array
+      submission: Object,
+      polls: Array
     },
     components: {
       QrcodeStream,
-      LectureAttendanceTable
+      LectureAttendanceTable,
+      AnswerPoll
     },
     data(){
       return {
         qr_scanning_window_open: false,
         student_can_submit_live: false,
-        student_can_watch_playback: false
+        student_can_watch_playback: false,
+        answering_poll: false,
+        current_poll: null,
+        current_code: ""
       }
     },
     created() {
-      this.checkIfStudentCanSubmitLive()
-      this.checkIfStudentCanWatchPlayback()
+      this.lectureIsOngoing()
     },
     methods: {
-      showQRScanningWindow() {
-        this.qr_scanning_window_open = true
+      lectureIsOngoing() {
+        let now = Date.now()
+        return (this.lecture.start_time && Date.parse(this.lecture.start_time) <= now && Date.parse(this.lecture.end_time) >= now)
       },
-      closeQRScanningWindow() {
-        this.qr_scanning_window_open = false
+      canWatchRecording() {
+        return (this.lecture.playback_submission_start_time && Date.parse(this.lecture.playback_submission_start_time) < Date.now())
+      },
+      lectureIsOver() {
+        let now = Date.now()
+				return (!this.lecture.end_time || Date.parse(this.lecture.end_time) < now)
+			},
+      getPollForCheckin(i) {
+        return this.polls.find(a => a.checkin == i)
       },
       checkForQRMatch(scanned_str) {
-        if(this.lecture.current_checkin.code === scanned_str){
-          this.createLiveSubmission()
-          this.closeQRScanningWindow()
-        } else {
-          alert("Scanned incorrect code!")
-        }
+        this.qr_scanning_window_open = false
+        this.lecture.checkins.forEach((checkin,i) => {
+          if(checkin.code === scanned_str) {
+            if(!this.studentSubmittedToCheckin(checkin)) {
+              this.current_code = scanned_str
+              this.current_poll = this.getPollForCheckin(i)
+              if(this.current_poll) {
+                this.answering_poll = true
+              } else {
+                this.createLiveSubmission()
+              }
+            } else {
+              alert("Already submitted for this check-in")
+            }
+          }
+        })
       },
       async createLiveSubmission() {
-        let lecture_submission = {
-          lecture: this.lecture,
-          submitter: this.$store.state.user.current_user,
-          is_live_submission: true,
-          live_submission_time: new Date(),
-          code: this.lecture.current_checkin.code
+        if(!this.submission.live_progress) {
+          this.submission.live_progress = 0
         }
-        const response = await LectureSubmissionAPI.addLectureSubmission(lecture_submission)
-        this.live_submissions[this.$store.state.user.current_user._id].push(lecture_submission)
-        this.student_can_submit_live = false
+        this.submission.live_progress++
+        this.submission.live_percent = this.submission.live_progress / this.lecture.checkins.length
+        this.submission.live_submission_time = new Date()
+        this.submission.codes.push(this.current_code)
+        this.current_code = ""
+        const response = await LectureSubmissionAPI.update(this.submission)
         alert("Live Submission Recorded")
+        location.reload();
       },
-      checkIfStudentCanSubmitLive() {
-        this.student_can_submit_live = this.lecture.lecture_status === 'is_live' && this.lecture.checkin_window_status === 'open' && !this.studentSubmittedToCheckin()
-      },
-      studentSubmittedToCheckin() {
-        let student_submitted_to_checkin = false
-        let current_checkin_code = this.lecture.checkins[this.lecture.checkin_index].code
-        for(let i = 0; i < this.live_submissions[this.$store.state.user.current_user._id].length; i++) {
-          if(this.live_submissions[this.$store.state.user.current_user._id][i].code === current_checkin_code){
-            student_submitted_to_checkin = true
-            break
-          }
+      studentSubmittedToCheckin(checkin) {
+        if(this.submission.codes) {
+          return this.submission.codes.includes(checkin.code)
+        } else {
+          return false
         }
-        return student_submitted_to_checkin
       },
-      checkIfStudentCanWatchPlayback() {
-        this.student_can_watch_playback = this.lecture.lecture_status === 'is_active_playback' || this.lecture.lecture_status === 'is_over_playback'
+      handleAnswerPoll(student_answers,code) {
+        if(!this.submission.student_poll_answers) {
+          this.submission.student_poll_answers = {}
+        }
+        this.submission.student_poll_answers[code] = student_answers
+        this.current_poll = null
+        this.answering_poll = false
+        this.createLiveSubmission()
+      },
+      handleCancelPoll() {
+        this.current_poll = null
+        this.answering_poll = false
       }
     }
   }
@@ -98,7 +125,7 @@
 <style scoped>
   #table-header {
     position: relative;
-    top: 3rem;
+    top: 1.5rem;
     bottom: 0;
     text-align: left;
     /* padding-left: 5rem;
@@ -177,12 +204,13 @@
     display: none;
   }
 
-  #qr-sccanning-container {
-    position: absolute;
-    width: 100%;
-    height: 90%;
+  #qr-scanning-container {
+    position: fixed;
     top: 0;
-    z-index: 1;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
     background-color: white;
   }
 </style>

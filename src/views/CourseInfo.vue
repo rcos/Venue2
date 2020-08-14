@@ -5,7 +5,6 @@
 
         <!-- Title -->
         <div class="title">
-          <div class="inline-block">Course Info</div>
           <router-link v-if="this.current_user.is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}" tabindex="-1">
             <div class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Create New Lecture for {{ course.dept }} {{ course.course_number }}</div>
           </router-link>
@@ -46,11 +45,14 @@
         <div v-if="subview_section_id == 0" id="panel-1" role="tabpanel" class="panel">
 
           <InstructorAttendanceHistory
-            v-if="this.current_user.is_instructor && lectures_loaded"
-            :lectures="selected_section == 'all' ? all_lectures : sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded"/>
-          <StudentAttendanceHistory v-else-if="lectures_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded"/>
-          <div v-else :style='{textAlign: "center"}'>
+            v-if="this.current_user.is_instructor && lectures_loaded && sorted_lectures[selected_section]"
+            :lectures="sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded"/>
+          <StudentAttendanceHistory v-else-if="!this.current_user.is_instructor && lectures_loaded && sorted_lectures[section_id]" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded"/>
+          <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
             <SquareLoader />
+          </div>
+          <div v-else>
+            None
           </div>
 
         </div>
@@ -78,11 +80,14 @@
           </div>
           <div>
             <InstructorAttendanceHistory
-            v-if="this.current_user.is_instructor && lectures_loaded && scores_loaded"
-            :lectures="selected_section == 'all' ? all_lectures : sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded" mobileMode/>
-            <StudentAttendanceHistory v-else-if="lectures_loaded && scores_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
-            <div v-else :style='{textAlign: "center"}'>
+              v-if="this.current_user.is_instructor && lectures_loaded && sorted_lectures[selected_section] && scores_loaded"
+              :lectures="sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded" mobileMode/>
+            <StudentAttendanceHistory v-else-if="!this.current_user.is_instructor && lectures_loaded && sorted_lectures[section_id] && scores_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
+            <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
               <SquareLoader />
+            </div>
+            <div v-else>
+              None
             </div>
           </div>
         </div>
@@ -308,29 +313,24 @@ export default {
             let students = lecture_.students
             let running_total = 0
             students.forEach(stud => {
-              let live = []
-              let playback = null
-              submissions.forEach(sub => {
-                if(sub.submitter._id == stud) {
-                  if(sub.is_live_submission) {
-                    live.push(sub)
-                  } else {
-                    playback = sub
+              submissions.forEach(submission => {
+                if(submission.submitter._id == stud) {
+                  if(submission.live_percent) {
+                    if(submission.video_percent) {
+                      running_total += Math.max(
+                        submission.live_percent * 100,
+                        submission.video_percent * 100
+                      )
+                    } else {
+                      running_total += submission.live_percent * 100
+                    }
+                  } else if(submission.video_percent) {
+                    running_total += submission.video_percent * 100
                   }
                 }
               })
-              if(live.length > 0 && playback != null) {
-                running_total += Math.max(
-                  live.length / lecture_.checkins.length,
-                  Math.ceil(playback.video_percent * 100) / 100
-                )
-              } else if(live.length > 0) {
-                running_total += live.length / lecture_.checkins.length
-              } else if(playback != null) {
-                running_total += Math.ceil(playback.video_percent * 100) / 100
-              }
             })
-            lecture_.percentage = running_total / students.length * 100
+            lecture_.percentage = running_total / students.length
             lecture_.color = this.getHTMLClassByAttendance(lecture_.percentage)
           })
         )
@@ -341,46 +341,41 @@ export default {
       })
     },
     calculateStudentAttendances() {
-      let promise_tracker = []
-
-      this.sorted_lectures[this.section_id].lectures.forEach(lecture_data => {
-        promise_tracker.push(
-          LectureSubmissionAPI.getLectureSubmissionsForStudent(lecture_data._id, this.current_user._id)
-          .catch(err => { console.log(`error retrieving lecture submissions for student ${this.current_user._id}`); console.log(err); })
-          .then(response => {
-            if (response.data == null || response.data == []) {
-              lecture_data.percentage = 0
-            } else {
-              let live = []
-              let playback = null
-              response.data.forEach(sub => {
-                if(sub.submitter == this.current_user._id) {
-                  if(sub.is_live_submission) {
-                    live.push(sub)
+      if(this.sorted_lectures[this.section_id]) {
+        let promise_tracker = []
+        this.sorted_lectures[this.section_id].lectures.forEach(lecture_data => {
+          promise_tracker.push(
+            LectureSubmissionAPI.getOrMake(lecture_data._id, this.current_user._id)
+            .catch(err => { console.log(`error retrieving lecture submission for student ${this.current_user._id}`); console.log(err); })
+            .then(response => {
+              if (response.data == null || response.data == []) {
+                lecture_data.percentage = 0
+              } else {
+                let submission = response.data
+                if(submission.live_percent) {
+                  if(submission.video_percent) {
+                    lecture_data.percentage = Math.max(
+                      submission.live_percent * 100,
+                      submission.video_percent * 100
+                    )
                   } else {
-                    playback = sub
+                    lecture_data.percentage = submission.live_percent * 100
                   }
+                } else if(submission.video_percent) {
+                  lecture_data.percentage = submission.video_percent * 100
+                } else {
+                  lecture_data.percentage = 0
                 }
-              })
-              if(live.length > 0 && playback != null) {
-                lecture_data.percentage = Math.max(
-                  live.length / lecture_data.checkins.length * 100,
-                  Math.ceil(playback.video_percent * 100)
-                )
-              } else if(live.length > 0) {
-                lecture_data.percentage = live.length / lecture_data.checkins.length * 100
-              } else if(playback != null) {
-                lecture_data.percentage = Math.ceil(playback.video_percent * 100)
+                lecture_data.color = this.getHTMLClassByAttendance(lecture_data.percentage)
               }
-              lecture_data.color = this.getHTMLClassByAttendance(lecture_data.percentage)
-            }
-          })
-        )
-      })
-      Promise.all(promise_tracker)
-      .then(res => {
-        this.scores_loaded = true
-      })
+            })
+          )
+        })
+        Promise.all(promise_tracker)
+        .then(res => {
+          this.scores_loaded = true
+        })
+      }
     },
     onSectionChange() {
       this.$forceUpdate()

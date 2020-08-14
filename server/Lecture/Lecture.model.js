@@ -18,7 +18,9 @@ let Lecture = new Schema({
 	checkins: [{
 		start_time: Date,
 		end_time: Date,
-		code: String
+		code: String,
+		manually_activated: Boolean,
+		activation: String
 	}],
 	playback_submission_start_time: Date,
 	playback_submission_end_time: Date,

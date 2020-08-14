@@ -1,6 +1,8 @@
 <template>
   <div id="lecture-upload-modal">
-    <button type="button" class="btn btn-primary" @click="handleShowModal" :tabindex="(modal_open ? '-1' : '0')">Upload Lecture Video...</button>
+    <button type="button" class="btn btn-primary" @click="handleShowModal" :tabindex="(modal_open ? '-1' : '0')" title="Upload Recording">
+      <img src="@/assets/icons8-upload-96.png" width="60" alt="QR Code" aria-label="QR Code">
+    </button>
     <div id="lecture_modal_viewable" class="hiddenModal">
       <div class="row titlerow">
         <h1 id="banner_title" aria-label="New Lecture Video">New Lecture Video <button type="button" v-if="update_lecture" id="cancel_upload_btn" class="btn btn-secondary" @click="hideModal" aria-label="Cancel Video Upload">Cancel</button>
@@ -11,7 +13,7 @@
         <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn" role="button" tabindex="0" aria-label="Select Video and Show Poll Creation Options"/>
       </div>
       <div class="row" id="lecture_container" v-if="file_selected">
-        <div class="col">
+        <div class="col" v-if="!update_lecture">
           <h2>Add Poll</h2>
           <div class="poll_card">
             <div class="row questionrow">
@@ -61,14 +63,32 @@
           <h2>Current Polls</h2>
           <label v-if="polls.length > 0" id="pq_label">Question</label>
           <ol class="row pollrow">
-            <li v-for="(poll,i) in polls" :key="i" class="row prow">
+            <li v-for="(poll,i) in polls" :key="i" class="row">
               <p class="polltimestamp">{{secondsToHHMMSS(poll.timestamp)}}</p>
               <input class="pollquestion" :value="poll.question" readonly aria-labelledby="pq_label"/>
               <button type="button" class="removepollbtn btn btn-danger" @click="polls.splice(i,1)" :aria-label="'Remove Poll '+(i+1)">X</button>
             </li>
+            <li v-for="(poll,i) in need_timestamp" :key="i" class="row needs-timestamp-li">
+              <div class="col-3">
+                <label id="hour_label">Hour</label>
+                <input type="number" id="hour" min="0" max="5" v-model.lazy="poll.hour" aria-labelledby="hour_label"/>
+              </div>
+              <div class="col-3">
+                <label id="minute_label">Min</label>
+                <input type="number" id="min" min="0" max="59" v-model.lazy="poll.min" aria-labelledby="minute_label"/>
+              </div>
+              <div class="col-3">
+                <label id="seconds_label">Sec</label>
+                <input type="number" id="sec" min="0" max="59" v-model.lazy="poll.sec" aria-labelledby="seconds_label"/>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-primary get-time" aria-label="Set Time From Video" @click="getVideoTime(i)">Get Time</button>
+              </div>
+              <input class="needs-timestamp" :value="poll.question" readonly aria-labelledby="pq_label"/>
+            </li>
           </ol>
         </div>
-        <div class="col-5">
+        <div :class="(update_lecture?'col-6':'col-5')">
           <video id="video_player" class="video-js vjs-big-play-centered" controls></video>
         </div>
       </div>
@@ -99,7 +119,8 @@ export default {
   name: "LectureUploadModal",
   props: {
     lecture: Object,
-    update_lecture: Boolean
+    update_lecture: Boolean,
+    need_timestamp: Array
   },
   computed: {},
   components: {
@@ -117,12 +138,20 @@ export default {
       modal_open: false
     };
   },
+  created() {
+    this.getPollsIfNeeded()
+  },
   beforeDestroy() {
     if(this.vjs) {
       this.vjs.dispose()
     }
   },
   methods: {
+    getPollsIfNeeded() {
+      if(this.update_lecture) {
+        PlaybackPollAPI.getByLecture()
+      }
+    },
     async updateLecture() {
       if(this.isComplete()) {
         this.lecture.video_ref = "/videos/" + this.lecture._id + "/";
@@ -130,17 +159,17 @@ export default {
         await LectureAPI.addPlaybackVideo(this.lecture._id, lecture_video)
         await LectureAPI.updateToPlayback(this.lecture, lecture_video)
         let n_saved = 0
-        if(this.polls.length == 0) {
+        if(this.need_timestamp.length == 0) {
           this.hideModal()
           location.reload()
         } else {
-          for(let i=0;i<this.polls.length;i++) {
-            this.polls[i].lecture = this.lecture._id
-            PlaybackPollAPI.addPoll(this.polls[i])
+          for(let i=0;i<this.need_timestamp.length;i++) {
+            this.need_timestamp[i].lecture = this.lecture._id
+            PlaybackPollAPI.update(this.need_timestamp[i])
             .then(res => {
               n_saved++
-              if(n_saved == this.polls.length) {
-                this.polls = []
+              if(n_saved == this.need_timestamp.length) {
+                this.need_timestamp = []
                 this.hideModal()
                 location.reload()
               }
@@ -298,10 +327,26 @@ export default {
       }
     },
     isComplete() {
-      return (document.getElementById("playback_start").value != "" && document.getElementById("playback_end").value != "")
+      if(this.need_timestamp) {
+        return (
+          document.getElementById("playback_start").value != "" && document.getElementById("playback_end").value != ""
+          &&
+          this.need_timestamp.every(poll => poll.timestamp && poll.timestamp <= this.vjs.duration())
+        )
+      } else {
+        return document.getElementById("playback_start").value != "" && document.getElementById("playback_end").value != ""
+      }
     },
     secondsToHHMMSS(seconds) {
       return (new Date(seconds * 1000).toISOString().substr(11, 8))
+    },
+    getVideoTime(i) {
+      let seconds = Math.floor(this.vjs.currentTime())
+      this.need_timestamp[i].hour = Math.floor(seconds / 3600);
+      this.need_timestamp[i].min = Math.floor(seconds % 3600 / 60);
+      this.need_timestamp[i].sec = Math.floor(seconds % 3600 % 60);
+      this.need_timestamp[i].timestamp = seconds
+      this.$forceUpdate()
     }
   }
 };
@@ -319,7 +364,7 @@ export default {
   margin: 0;
 }
 .titlerow {
-  padding-top: 4rem;
+  padding-top: 2rem;
 }
 .filerow {
   height: 5rem;
@@ -333,12 +378,12 @@ h2 {
 #lecture_modal_viewable {
   position: fixed;
   background: white;
-  top: 6%;
+  top: 4rem;
   left: 0rem;
   right: 0rem;
   bottom: 2rem;
-  overflow-y: scroll;
-  z-index: 999;
+  overflow-y: auto;
+  z-index: 1001;
   padding-left: 1rem;
   padding-right: 1rem;
 }
@@ -365,9 +410,6 @@ h2 {
 #video_player {
   width: 100%;
   height: auto;
-}
-#toprow {
-  height: 4rem;
 }
 #bottomrow {
   padding-left: 3rem;
@@ -499,6 +541,25 @@ p {
   position: relative;
   width: 70%;
   margin: 0;
+}
+.needs-timestamp-li {
+  text-align: center;
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+.needs-timestamp-li:not(:first-of-type) {
+  border-top: 1px solid gray;
+}
+.needs-timestamp {
+  position: relative;
+  width: 100%;
+  margin-top: 1rem;
+}
+.get-time {
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  width: 70%;
 }
 .removepollbtn {
   position: relative;
