@@ -277,6 +277,7 @@
 
   #course-dropdown:hover .dropdown-content {
     max-height: 300px;
+    overflow-y: auto;
   }
 
   .mobile-course-list {
