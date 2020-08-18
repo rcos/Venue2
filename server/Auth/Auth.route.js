@@ -33,7 +33,7 @@ if(process.env.NODE_ENV === "production") {
   passport.use(new (require('passport-cas').Strategy)({
     version: 'CAS3.0',
     ssoBaseURL: 'https://cas-auth.rpi.edu/cas',
-    serverBaseURL: 'https://venue-attend.herokuapp.com'
+    serverBaseURL: 'https://venue-meetings.herokuapp.com'
   }, function(profile, done) {
     var login = profile.user.toLowerCase();
     User.findOne({user_id: login}, function (err, user) {
@@ -161,7 +161,7 @@ authRoutes.get("/loginCAS", (req, res, next) => {
     } else if (!user) {
       req.session.messages = info.message;
       if(process.env.NODE_ENV === "production") {
-        return res.redirect('https://venue-attend.herokuapp.com');
+        return res.redirect('https://venue-meetings.herokuapp.com');
       } else {
         return res.redirect('http://localhost:8080');
       }
@@ -180,7 +180,7 @@ authRoutes.get("/loginCAS", (req, res, next) => {
                 } else {
                   res.header("Set-Cookie","connect_sid="+resolvedSID)
                   if(process.env.NODE_ENV === "production") {
-                    return res.redirect('https://venue-attend.herokuapp.com/#/redirectCASLogin');
+                    return res.redirect('https://venue-meetings.herokuapp.com/#/redirectCASLogin');
                   } else {
                     return res.redirect('http://localhost:8080/#/redirectCASLogin');
                   }
