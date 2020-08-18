@@ -33,11 +33,11 @@ let Section = require('../Section/Section.model')
 // GCS Specific
 
 const storage = new Storage({
-  keyFilename: path.join(__dirname, 'venue-279902-649f22aa6e34.json'),
-  projectId: "venue-279902"
+  keyFilename: path.join(__dirname, 'Venue-5462ae6406ed.json'),
+  projectId: "bright-calculus-286816"
 })
 
-const bucket = storage.bucket('venue_videos')
+const bucket = storage.bucket('venue-meetings-recordings')
 
 const uploadVideo = (file) => new Promise((resolve, reject) => {
   const { originalname, buffer } = file
