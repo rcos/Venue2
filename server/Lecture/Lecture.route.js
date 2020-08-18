@@ -32,28 +32,58 @@ let Section = require('../Section/Section.model')
 
 // GCS Specific
 
-const storage = new Storage({
-  keyFilename: path.join(__dirname, 'Venue-5462ae6406ed.json'),
-  projectId: "bright-calculus-286816"
+const GCSJSON_filename = path.join(__dirname, 'Venue-5462ae6406ed.json')
+const GCS_project_id = "bright-calculus-286816"
+
+const checkAndSetGCSJSON = () => new Promise((resolve,reject) => {	
+    fs.exists(GCSJSON_filename, function (exists) {
+        if(exists) {
+            resolve(new Storage({
+				keyFilename: GCSJSON_filename,
+				projectId: GCS_project_id
+			}))
+        } else {
+			let data = ''
+			data += '{\n  "type": "' + process.env.GCS_TYPE
+			data += '",\n  "project_id": "' + process.env.GCS_PROJECT_ID
+			data += '",\n  "private_key_id": "' + process.env.GCS_PRIVATE_KEY_ID
+			data += '",\n  "private_key": "' + process.env.GCS_PRIVATE_KEY.replace(/\n/g, "\\n");
+			data += '",\n  "client_email": "' + process.env.GCS_CLIENT_EMAIL
+			data += '",\n  "client_id": "' + process.env.GCS_CLIENT_ID
+			data += '",\n  "auth_uri": "' + process.env.GCS_AUTH_URI
+			data += '",\n  "token_uri": "' + process.env.GCS_TOKEN_URI
+			data += '",\n  "auth_provider_x509_cert_url": "' + process.env.GCS_AUTH_PROVIDER_X509_CERT_URL
+			data += '",\n  "client_x509_cert_url": "' + process.env.GCS_CLIENT_X509_CERT_URL
+			data += '"\n}\n'
+            fs.writeFile(GCSJSON_filename, data, function (err) { 
+                resolve(new Storage({
+					keyFilename: GCSJSON_filename,
+					projectId: GCS_project_id
+				}))
+            })
+        }
+    });
 })
 
-const bucket = storage.bucket('venue-meetings-recordings')
+const storage = checkAndSetGCSJSON()
 
 const uploadVideo = (file) => new Promise((resolve, reject) => {
-  const { originalname, buffer } = file
 
-  const blob = bucket.file(originalname.replace(/ /g, "_"))
-  const blobStream = blob.createWriteStream({
-    resumable: false
-  })
-  blobStream.on('finish', () => {
-    const publicUrl = 'https://storage.googleapis.com/' + bucket.name + '/' + blob.name
-    resolve(publicUrl)
-  })
-  .on('error', () => {
-    reject(`Unable to upload video, something went wrong`)
-  })
-  .end(buffer)
+	const bucket = storage.bucket('venue-meetings-recordings')
+
+	const { originalname, buffer } = file
+	const blob = bucket.file(originalname.replace(/ /g, "_"))
+	const blobStream = blob.createWriteStream({
+		resumable: false
+	})
+	blobStream.on('finish', () => {
+		const publicUrl = 'https://storage.googleapis.com/' + bucket.name + '/' + blob.name
+		resolve(publicUrl)
+	})
+	.on('error', () => {
+		reject(`Unable to upload video, something went wrong`)
+	})
+	.end(buffer)
 })
 
 // Lecture Routes
