@@ -133,7 +133,7 @@ lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) 
 										//send email
 										let myhtml = ""
 										if(process.env.NODE_ENV === "production") {
-											myhtml = '<p>New Lecture available for playback <a href="https://venue-attend.herokuapp.com/#/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
+											myhtml = '<p>New Lecture available for playback <a href="https://venue-meetings.herokuapp.com/#/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
 										} else {
 											myhtml = '<p>New Lecture available for playback <a href="http://localhost:8080/#/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
 										}
@@ -409,7 +409,7 @@ lectureRoutes.post('/process_emails', (req,res) => {
 						} else {
 							let myhtml = ""
 							if(process.env.NODE_ENV === "production") {
-								myhtml = '<p>Click <a href="https://venue-attend.herokuapp.com/#/lecture_info/' + lect._id + '">here</a> to upload your lecture recording</p>'
+								myhtml = '<p>Click <a href="https://venue-meetings.herokuapp.com/#/lecture_info/' + lect._id + '">here</a> to upload your lecture recording</p>'
 							} else {
 								myhtml = '<p>Click <a href="http://localhost:8080/#/lecture_info/' + lect._id + '">here</a> to upload your lecture recording</p>'
 							}

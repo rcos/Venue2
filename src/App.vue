@@ -82,7 +82,7 @@ export default {
       notification.onclick = function(event) {
         event.preventDefault(); // prevent the browser from focusing the Notification's tab
         if(process.env.NODE_ENV === "production") {
-          window.open('https://venue-attend.herokuapp.com/#/lecture_info/'+lectureid, '_blank');
+          window.open('https://venue-meetings.herokuapp.com/#/lecture_info/'+lectureid, '_blank');
         } else {
           window.open('http://localhost:8080/#/lecture_info/'+lectureid, '_blank');
         }
