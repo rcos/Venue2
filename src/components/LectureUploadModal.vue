@@ -1,5 +1,6 @@
 <template>
   <div id="lecture-upload-modal">
+    <LoadingOverlay v-if="waiting"/>
     <button type="button" class="btn btn-primary" @click="handleShowModal" :tabindex="(modal_open ? '-1' : '0')" title="Upload Recording">
       <img src="@/assets/icons8-upload-96.png" width="60" alt="QR Code" aria-label="QR Code">
     </button>
@@ -97,8 +98,8 @@
         <input id="playback_start" aria-labelledby="playback_start_label" type="datetime-local"/>
         <label id="playback_end_label">Playback Submission End</label>
         <input id="playback_end" aria-labelledby="playback_end_label" type="datetime-local"/>
-        <button type="button" v-if="update_lecture" id="video_upload_btn" class="btn btn-secondary" @click="updateLecture()" disabled>Upload</button>
-        <button type="button" v-else id="video_upload_btn" class="btn btn-secondary" @click="hideModal()" disabled>Upload</button>
+        <button type="button" v-if="update_lecture" id="video_upload_btn" class="btn btn-secondary" @click="updateLecture()">Upload</button>
+        <button type="button" v-else id="video_upload_btn" class="btn btn-secondary" @click="hideModal()">Upload</button>
       </div>
     </div>
   </div>
@@ -109,6 +110,7 @@ import LectureAPI from "../services/LectureAPI";
 import PlaybackPollAPI from "../services/PlaybackPollAPI";
 import flatpickr from "flatpickr";
 import videojs from 'video.js';
+import LoadingOverlay from '@/components/LoadingOverlay.vue';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 require("flatpickr/dist/themes/material_blue.css");
 // DatePicker themes options:
@@ -124,6 +126,7 @@ export default {
   },
   computed: {},
   components: {
+    LoadingOverlay
   },
   data() {
     return {
@@ -135,7 +138,8 @@ export default {
       vjs: null,
       play_sub_start: null,
       play_sub_end: null,
-      modal_open: false
+      modal_open: false,
+      waiting: false
     };
   },
   created() {
@@ -154,12 +158,14 @@ export default {
     },
     async updateLecture() {
       if(this.isComplete()) {
+        this.waiting = true;
         this.lecture.video_ref = "/videos/" + this.lecture._id + "/";
         let lecture_video = document.getElementById("video_selector").files[0]
         await LectureAPI.addPlaybackVideo(this.lecture._id, lecture_video)
         await LectureAPI.updateToPlayback(this.lecture, lecture_video)
         let n_saved = 0
         if(this.need_timestamp.length == 0) {
+          this.waiting = false;
           this.hideModal()
           location.reload()
         } else {
@@ -170,6 +176,7 @@ export default {
               n_saved++
               if(n_saved == this.need_timestamp.length) {
                 this.need_timestamp = []
+                this.waiting = false;
                 this.hideModal()
                 location.reload()
               }
@@ -181,11 +188,13 @@ export default {
     async updateLectureFromParent(lect,course_id) {
       lect.video_ref = "/videos/" + lect._id + "/";
       let lecture_video = document.getElementById("video_selector").files[0]
+      this.waiting = true
       await LectureAPI.addPlaybackVideo(lect._id, lecture_video)
       await LectureAPI.updateToPlayback(lect, lecture_video)
       let n_saved = 0
       if(this.polls.length == 0) {
         this.hideModal()
+        this.waiting = false
         this.$router.push({
           name: "course_info",
           params: { id: course_id }
@@ -199,6 +208,7 @@ export default {
             if(n_saved == this.polls.length) {
               this.polls = []
               this.hideModal()
+              this.waiting = false
               this.$router.push({
                 name: "course_info",
                 params: { id: course_id }
