@@ -74,7 +74,7 @@
       </div>
     </show-at>
     <!-- Breadcrumbs -->
-    <div id="breadcrumb-container" v-if="$route.name != 'dashboard' && $route.name != 'settings'">
+    <div id="breadcrumb-container" v-if="showBreadcrumb()">
       <router-link :to="{name: 'dashboard'}">
         Venue
       </router-link>
@@ -164,6 +164,9 @@
         this.getSectionsWithCourses()
     },
     methods: {
+      showBreadcrumb() {
+        return !(this.$route.name === 'dashboard' || this.$route.name === 'settings' || this.$route.name === 'lecture_playback')
+      },
       getCurrentUser() {
         this.current_user = this.$store.state.user.current_user
         this.is_instructor = this.current_user.is_instructor

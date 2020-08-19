@@ -1,19 +1,15 @@
 <template>
-    <div class="loader-container">
-      <div class="loader-centerer">
-        <div class="self-building-square-spinner">
-          <div class="square even"></div>
-          <div class="square odd"></div>
-          <div class="square even"></div>
-          <div class="square clear odd"></div>
-          <div class="square even"></div>
-          <div class="square odd"></div>
-          <div class="square clear even"></div>
-          <div class="square odd"></div>
-          <div class="square even"></div>
-        </div>
-      </div>
-    </div>
+  <div class="square-loader">
+    <div class="square even"></div>
+    <div class="square odd"></div>
+    <div class="square even"></div>
+    <div class="square clear odd"></div>
+    <div class="square even"></div>
+    <div class="square odd"></div>
+    <div class="square clear even"></div>
+    <div class="square odd"></div>
+    <div class="square even"></div>
+  </div>
 </template>
 
 <script>
@@ -23,91 +19,74 @@
 </script>
 
 <style>
-  .self-building-square-spinner, .self-building-square-spinner div {
-      box-sizing: border-box;
+
+    .square-loader {
+      display: inline-block;
     }
 
-    .self-building-square-spinner {
-      height: 40px;
-      width: 40px;
-      top: calc( -10px * 2 / 3);
-    }
-
-    .loader-container {
-      width: 100%;
-      text-align: center;
-    }
-
-    .loader-centerer {
-      width: 37px;
-      margin: 0 auto;
-      padding-top: 9px;
-      padding-bottom: 9px;
-    }
-
-    .self-building-square-spinner .square {
+    .square-loader .square {
       height: 10px;
       width: 10px;
       top: calc( -10px * 2 / 3);
       margin-right: calc(10px / 3);
-      margin-top: calc(10px / 3);
+      margin-bottom: calc(10px / 3);
       float: left;
       position:relative;
       opacity: 0;
-      animation: self-building-square-spinner 3s infinite;
+      animation: square-loader 2s infinite;
     }
 
-    .self-building-square-spinner .square.even {
+    .square-loader .square.even {
       background: #4CC9FF;
-      transition: background 1000ms linear;
+      transition: background 250ms linear;
     }
 
-    .self-building-square-spinner .square.odd {
+    .square-loader .square.odd {
       background: #FC6E71;
-      transition: background 1000ms linear;
+      transition: background 250ms linear;
     }
 
-    .self-building-square-spinner .square:nth-child(1) {
-      animation-delay: calc(150ms * 6);
+    .square-loader .square:nth-child(1) {
+      animation-delay: calc(200ms * 6);
     }
 
-    .self-building-square-spinner .square:nth-child(2) {
-      animation-delay: calc(150ms * 7);
+    .square-loader .square:nth-child(2) {
+      animation-delay: calc(200ms * 7);
     }
 
-    .self-building-square-spinner .square:nth-child(3) {
-      animation-delay: calc(150ms * 8);
+    .square-loader .square:nth-child(3) {
+      animation-delay: calc(200ms * 8);
     }
 
-    .self-building-square-spinner .square:nth-child(4) {
-      animation-delay: calc(150ms * 3);
+    .square-loader .square:nth-child(4) {
+      animation-delay: calc(200ms * 3);
     }
 
-    .self-building-square-spinner .square:nth-child(5) {
-      animation-delay: calc(150ms * 4);
+    .square-loader .square:nth-child(5) {
+      animation-delay: calc(200ms * 4);
     }
 
-    .self-building-square-spinner .square:nth-child(6) {
-      animation-delay: calc(150ms * 5);
+    .square-loader .square:nth-child(6) {
+      animation-delay: calc(200ms * 5);
     }
 
-    .self-building-square-spinner .square:nth-child(7) {
-      animation-delay: calc(150ms * 0);
+    .square-loader .square:nth-child(7) {
+      animation-delay: calc(200ms * 0);
     }
 
-    .self-building-square-spinner .square:nth-child(8) {
-      animation-delay: calc(150ms * 1);
+    .square-loader .square:nth-child(8) {
+      animation-delay: calc(200ms * 1);
     }
 
-    .self-building-square-spinner .square:nth-child(9) {
-      animation-delay: calc(150ms * 2);
+    .square-loader .square:nth-child(9) {
+      animation-delay: calc(200ms * 2);
     }
 
-    .self-building-square-spinner .clear{
+    .square-loader .clear{
       clear: both;
     }
 
-    @keyframes self-building-square-spinner {
+    @keyframes square-loader {
       0% {
         opacity: 0;
       }
@@ -119,7 +98,7 @@
         opacity: 1;
         top: 0;
       }
-      55.9% {
+      95% {
         opacity: 0;
         top: inherit;
       }

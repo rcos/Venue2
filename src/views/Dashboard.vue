@@ -1,8 +1,6 @@
 <template>
   <div id="dashboard-container">
-    <div class="spinner-border" role="status" v-if="!live_lectures_loaded && !playback_lectures_loaded && !recent_lectures_loaded && !upcoming_lectures_loaded">
-      <span class="sr-only">Loading...</span>
-    </div>
+    <SquareLoader role="status" v-if="!live_lectures_loaded && !playback_lectures_loaded && !recent_lectures_loaded && !upcoming_lectures_loaded"/>
     <div v-else>
       <DashboardSection lecture_type="Live" :lecture_list="live_lectures" />
       <DashboardSection lecture_type="Playback" :lecture_list="playback_lectures" />
@@ -29,6 +27,8 @@
   import moment from 'moment'
   import DashboardSection from '@/components/DashboardSection.vue'
 
+  import SquareLoader from '@/components/Loaders/SquareLoader.vue'
+
   export default {
     name: 'Dashboard',
     computed: {
@@ -42,7 +42,8 @@
       PlaybackLectures,
       RecentLectures,
       UpcomingLectures,
-      CourseList
+      CourseList,
+      SquareLoader
     },
     data(){
       return {
