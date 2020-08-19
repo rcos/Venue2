@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "preinstall": "node gcsSetup.js",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && mkdir dist/dist && touch dist/dist/build.js",
     "lint": "vue-cli-service lint",
