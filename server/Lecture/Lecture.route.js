@@ -44,6 +44,8 @@ const bucket = storage.bucket('venue-meetings-recordings')
 
 const uploadVideo = (file) => new Promise((resolve, reject) => {
 
+	console.log(process.env.GCS_CRED)
+
 	const { originalname, buffer } = file
 	const blob = bucket.file(originalname.replace(/ /g, "_"))
 	const blobStream = blob.createWriteStream({
