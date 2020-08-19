@@ -79,8 +79,8 @@ function start() {
     });
   });
 
-  app.use(cors({ 
-      origin:['http://localhost:8080', 'https://venue-meetings.com'],
+  app.use(cors({
+      origin:['https://www.venue-meetings.com','http://localhost:8080'],
       methods:['GET','POST','DELETE'],
       credentials: true
   }));
