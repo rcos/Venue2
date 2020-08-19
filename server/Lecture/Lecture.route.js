@@ -78,29 +78,29 @@ lectureRoutes.route('/add').post(function (req, res) {
 
 lectureRoutes.post('/add_playback_video/:lecture_id', upload.single('video'),function (req, res) {
 	let lecture_id = req.params.lecture_id
-		try {
-		  const lecture_video = req.file
-		  // Why the heck is fields working?
-		  uploadVideo(lecture_video).then(public_video_url => {
-	  		// update the lecture with video
-	  		Lecture.findByIdAndUpdate(lecture_id,
-	  			{
-	  				video_ref: public_video_url,
-	  			},
-	  			function (err, updated_lecture) {
-	  				if (err || updated_lecture == null) {
-	  					console.log("<ERROR> Updating lecture by ID:",lecture_id,"with:",updated_lecture)
-	  					res.status(404).send("lecture not found");
-	  				} else {
+	try {
+		req.file.originalname = lecture_id + '-' + req.file.originalname
+		const lecture_video = req.file
+		
+		uploadVideo(lecture_video).then(public_video_url => {
+			// update the lecture with video
+			Lecture.findByIdAndUpdate(lecture_id,
+				{
+					video_ref: public_video_url,
+				},
+				function (err, updated_lecture) {
+					if (err || updated_lecture == null) {
+						console.log("<ERROR> Updating lecture by ID:",lecture_id,"with:",updated_lecture)
+						res.status(404).send("lecture not found");
+					} else {
 							console.log("<SUCCESS> Adding playback video at URL:",public_video_url)
-	  					res.status(200).json(updated_lecture)
-	  			}
-		  	})
-	  	})
-		} catch (error) {
-		  res.json(error)
-		}	
-
+						res.status(200).json(updated_lecture)
+				}
+			})
+		})
+	} catch (error) {
+		res.json(error)
+	}
 })
 
 lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) {
