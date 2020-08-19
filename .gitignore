@@ -6,7 +6,7 @@ node_modules
 .env.local
 .env.*.local
 
-server/Lecture/Venue-5462ae6406ed.json
+server/Lecture/gcsconfig.json
 
 # server env files
 variables.env
