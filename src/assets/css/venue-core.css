@@ -182,13 +182,12 @@ body {
 }
 
 .course-info-sub-tab {
-  margin-left: 44px;
-  margin-top: 32px;
+  margin: 1rem 0rem;
   height: 2.5rem;
 }
 
 .course-info-sub-tab.mobile {
-  margin: 20px 4rem;
+  margin: 1rem 2rem;
   text-align: left;
 }
 
@@ -343,6 +342,13 @@ body {
   left: 20%;
   bottom: 0;
   padding-left: 1rem;
+}
+
+.event-name {
+  padding-right: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .instructor-attendance-history-pill .name-area .event-name {
@@ -654,7 +660,6 @@ a:hover {
 }
 
 .lecture-pills-min-container {
-  padding-left: 4rem;
   box-sizing: border-box;
   /* width: 70%; */
 }
