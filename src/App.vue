@@ -102,16 +102,10 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
   // min-height: 100%;
 }
 
 main {
   padding-bottom: 2rem;
-  height: 100%;
 }
 </style>
