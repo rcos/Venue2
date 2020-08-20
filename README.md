@@ -1,6 +1,6 @@
 # Venue2
 
-## Secure attendance
+## Gauging Engagement
 
 ### Prerequisites
 
