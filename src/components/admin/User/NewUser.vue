@@ -21,6 +21,14 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
+            <label>user_id:</label>
+            <input class="form-control" v-model="user.user_id">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
             <label>email:</label>
             <input class="form-control" v-model="user.email">
           </div>
