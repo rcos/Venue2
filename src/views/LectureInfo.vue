@@ -1,5 +1,5 @@
 <template>
-  <div id="lecture-info-container-root">
+  <div>
     <!-- mobile -->
     <show-at breakpoint="small">
       <div class="lecture-info-container mobile">
@@ -84,6 +84,6 @@
   }
 
   .lecture-info-container.mobile {
-    margin: 0rem;
+    margin: 2rem;
   }
 </style>
