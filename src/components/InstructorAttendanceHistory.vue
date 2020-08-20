@@ -13,7 +13,7 @@
                   <div class="day-of-month">{{ getDayOfMonth(lectures[i]) }}</div>
                 </div>
                 <div class="inline-block name-area">
-                  <div class="event-name">{{ shortenString(lectures[i].title, 18) }}</div>
+                  <div class="event-name">{{ lectures[i].title }}</div>
                   <div class="event-location">Event Location</div>
                 </div>
                 <div class="inline-block percentage-area">
