@@ -2,10 +2,12 @@
   <div class="student-attendance">
     <div v-for="year in getStringsAscending(Object.keys(timeline))" :key="year">
       <div v-for="month in getStringsAscending(Object.keys(timeline[year]))" :key="month">
-
-          <div class="month-area">{{ STATIC_MONTHS[month] }} {{year}}</div>
-          <div class="event-pills-area">
-            <router-link v-for="i in timeline[year][month]" :key="lectures[i]._id" :to="{name: 'lecture_info', params: { lecture_id: lectures[i]._id }}" tabindex="-1">
+        <div class="month-area">
+          {{ STATIC_MONTHS[month] }} {{year}}
+        </div>
+        <div class="event-pills-area">
+          <router-link v-for="i in timeline[year][month]" :key="lectures[i]._id" :to="{name: 'lecture_info', params: { lecture_id: lectures[i]._id }}" tabindex="-1">
+            <div :class="'attendance-history-pill-background '+ (isLive(lectures[i])?'live-border':'') + (isPlayback(lectures[i])?'playback-border':'')">
               <div :class="'inline-block instructor-attendance-history-pill ' + lectures[i].color" :title="lectures[i].title" tabindex="0" :aria-label="'Lecture Info - '+lectures[i].title">
                 <div class="inline-block date-area">
                   <div class="day-of-week">{{ getDayOfWeek(lectures[i]) }}</div>
@@ -20,8 +22,9 @@
                   <SquareLoader v-else/>
                 </div>
               </div>
-            </router-link>
-          </div>
+            </div>
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -66,6 +69,14 @@
       },
       getStringsAscending(arr) {
         return arr.concat().sort((a,b) => parseInt(a) > parseInt(b) ? 1 : -1)
+      },
+      isLive(lecture) {
+        let now = Date.now()
+        return (lecture.start_time && Date.parse(lecture.start_time) <= now && Date.parse(lecture.end_time) >= now)
+      },
+      isPlayback(lecture) {
+        let now = Date.now()
+        return (lecture.playback_submission_start_time && Date.parse(lecture.playback_submission_start_time) <= now && Date.parse(lecture.playback_submission_end_time) >= now)
       }
     }
   }

@@ -45,6 +45,7 @@
     height: 4rem;
     text-align: left;
     padding-left: 2rem;
+    padding-top: 1rem;
   }
 
   .dashboard-section-title {
@@ -54,7 +55,7 @@
 
   .dashboard-section-body-container {
     min-height: 10rem;
-    max-height: 12rem;
+    max-height: 13rem;
     overflow-y: auto;
   }
 
