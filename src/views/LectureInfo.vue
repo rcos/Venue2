@@ -8,7 +8,7 @@
         </div>
         <div v-else>
           <InstructorLectureInfo v-if="is_instructor" :lecture="lecture" :is_instructor="is_instructor" />
-          <StudentLectureInfo v-else :lecture="lecture" :is_instructor="is_instructor" />
+          <StudentLectureInfo v-else-if="polls_loaded" :lecture="lecture" :is_instructor="is_instructor" :polls="polls" />
         </div>
       </div>
     </show-at>
@@ -20,7 +20,7 @@
         </div>
         <div v-else>
           <InstructorLectureInfo v-if="is_instructor" :lecture="lecture" :is_instructor="is_instructor" />
-          <StudentLectureInfo v-else :lecture="lecture" :is_instructor="is_instructor" />
+          <StudentLectureInfo v-else-if="polls_loaded" :lecture="lecture" :is_instructor="is_instructor" :polls="polls" />
         </div>
       </div>
     </show-at>
