@@ -64,17 +64,20 @@
         let now = Date.now()
 				return (!this.lecture.end_time || Date.parse(this.lecture.end_time) < now)
 			},
-      getPollForCheckin(i) {
-        return this.polls.find(a => a.checkin == i)
+      getPollForCheckin(code) {
+        return this.polls.find(a => a.code === code)
       },
       checkForQRMatch(scanned_str) {
         this.qr_scanning_window_open = false
-        this.lecture.checkins.forEach((checkin,i) => {
+        this.lecture.checkins.forEach(checkin => {
           if(checkin.code === scanned_str) {
+            console.log('here1', scanned_str, checkin)
             if(!this.studentSubmittedToCheckin(checkin)) {
+              console.log('here2')
               this.current_code = scanned_str
-              this.current_poll = this.getPollForCheckin(i)
+              this.current_poll = this.getPollForCheckin(scanned_str)
               if(this.current_poll) {
+                console.log('here3')
                 this.answering_poll = true
               } else {
                 this.createLiveSubmission()
