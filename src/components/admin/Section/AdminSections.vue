@@ -10,7 +10,7 @@
           <th>section number</th>
         </tr>
         </thead>
-        <div class="spinner-border" role="status" v-if="!instructors_have_loaded">
+        <div class="spinner-border" role="status" v-if="!instructors_have_loaded && !courses_loaded">
           <span class="sr-only">Loading...</span>
         </div>
         <tbody v-else>
@@ -38,6 +38,7 @@
       return {
         sections: [],
         instructors_have_loaded: false,
+        courses_loaded: false,
         is_section_view: Boolean
       }
     },
@@ -53,19 +54,31 @@
         this.getCourseForSections()
       },
       async getInstructorForSections(){
-        let counter = 0
-        this.sections.forEach(async section => {
-            const response = await SectionAPI.getInstructor(section._id)
-            section.instructor = response.data
-            counter++
-            if(counter == this.sections.length)
-              this.instructors_have_loaded = true
+        let promises = []
+        this.sections.forEach(section => {
+          promises.push(new Promise((resolve,reject) => {
+            SectionAPI.getInstructor(section._id).then(res => {
+              section.instructor = res.data
+              resolve(res.data)
+            })
+          }))
+        })
+        Promise.all(promises).then(resolved => {
+          this.instructors_have_loaded = true
         })
       },
       async getCourseForSections(){
-        this.sections.forEach(async section => {
-            const response = await SectionAPI.getCourse(section._id)
-            section.course = response.data
+        let promises = []
+        this.sections.forEach(section => {
+          promises.push(new Promise((resolve,reject) => {
+            SectionAPI.getCourse(section._id).then(res => {
+              section.course = res.data
+              resolve(res.data)
+            })
+          }))
+        })
+        Promise.all(promises).then(resolved => {
+          this.courses_loaded = true
         })
       },
       async deleteSection(id){
