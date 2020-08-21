@@ -336,12 +336,15 @@ export default {
         sec.value = ""
       }
     },
+    smhToTimestamp(poll) {
+      return (parseInt(poll.sec) + (parseInt(poll.min)*60) + (parseInt(poll.hour)*60*60))
+    },
     isComplete() {
       if(this.need_timestamp) {
         return (
           document.getElementById("playback_start").value != "" && document.getElementById("playback_end").value != ""
           &&
-          this.need_timestamp.every(poll => poll.timestamp && poll.timestamp <= this.vjs.duration())
+          this.need_timestamp.every(poll => undefined != poll.sec && undefined != poll.min && undefined != poll.hour && this.smhToTimestamp(poll) < this.vjs.duration())
         )
       } else {
         return document.getElementById("playback_start").value != "" && document.getElementById("playback_end").value != ""
