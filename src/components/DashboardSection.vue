@@ -1,7 +1,9 @@
 <template>
   <div class="dashboard-section">
     <div class="dashboard-section-title-container">
-      <h4 class="dashboard-section-title">{{ lecture_type }}</h4>
+      <h4 v-if="lecture_type === 'Live'"class="dashboard-section-title"> Synchronous</h4>
+      <h4 v-else-if="lecture_type === 'Playback'"class="dashboard-section-title">Asynchronous</h4>
+      <h4 v-else class="dashboard-section-title">{{ lecture_type }}</h4>
     </div>
     <div class="dashboard-section-body-container">
       <LectureList :lecture_type="lecture_type" :lecture_list="lecture_list" />
