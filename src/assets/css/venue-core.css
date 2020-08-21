@@ -291,13 +291,12 @@ body {
 }
 
 .attendance-history-pill-background {
-  width: 30rem;
+  width: 25rem;
   max-width: 100%;
   height: 5rem;
   padding: 0.25rem;
   margin: 0.25rem;
   background: none;
-  border-radius: 0.25rem;
   border: 0.25rem solid rgba(0,0,0,0);
   display: inline-block;
 }
@@ -305,19 +304,19 @@ body {
 .courseinfo-legend {
   display: inline-block;
   margin: 0.25rem;
+  margin-top: 2rem;
   padding: 0.25rem 0.5rem;
-}
-
-.courseinfo-legend.mobile {
-  margin-top: 3rem;
+  font-size: 0.8rem;
 }
 
 .live-border {
   border: 0.25rem dashed #04852f;
+  border-radius: 0.25rem;
 }
 
 .playback-border {
   border: 0.25rem dotted #683eca;
+  border-radius: 0.25rem;
 }
 
 .courseinfo-attendance-listing {
@@ -488,13 +487,9 @@ body {
   box-shadow: 0px 0px 10px 7px rgba(255, 99, 88, 0.36);
 }
 
-.instructor-attendance-history-pill.live {
-  outline: 0.25rem solid #04852f;
-  outline-offset: 0.5rem;
-}
-
 .instructor-attendance .month-area,
 .student-attendance .month-area {
+  text-align: left;
   margin-bottom: 20px;
   /* margin-left: 50px; */
   margin-right: 50px;

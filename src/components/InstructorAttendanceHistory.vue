@@ -15,7 +15,8 @@
                 </div>
                 <div class="inline-block name-area">
                   <div class="event-name">{{ lectures[i].title }}</div>
-                  <div class="event-location">Event Location</div>
+                  <div v-if="lectures[i].start_time" class="event-location">{{getPrettyTime(lectures[i].start_time)}} - {{getPrettyTime(lectures[i].end_time)}}</div>
+                  <div v-else class="event-location">{{getPrettyTime(lectures[i].playback_submission_start_time) + ' - ' + getPrettyTime(lectures[i].playback_submission_end_time)}}</div>
                 </div>
                 <div class="inline-block percentage-area">
                   <div v-if="scores_loaded">{{lectures[i].percentage == undefined ? 0 : lectures[i].percentage.toFixedDecimals(0)}}%</div>
@@ -75,7 +76,23 @@
       isPlayback(lecture) {
         let now = Date.now()
         return (lecture.playback_submission_start_time && Date.parse(lecture.playback_submission_start_time) <= now && Date.parse(lecture.playback_submission_end_time) >= now)
-      }
+      },
+      getPrettyTime(datetime) {
+        datetime = new Date(datetime)
+				if("Invalid Date" == datetime) {
+					return ("Not set")
+				}
+				let hours = datetime.getHours()
+				let minutes = datetime.getMinutes()
+				if(minutes < 10) {
+					minutes = "0" + minutes
+				}
+				if(hours < 12) {
+					return ((hours==0 ? "12" : hours) + ":" + minutes + " AM")
+				} else {
+					return ((hours==12 ? hours : hours-12) + ":" + minutes + " PM")
+				}
+			}
     }
   }
 
