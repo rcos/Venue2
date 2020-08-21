@@ -1,6 +1,6 @@
 <template>
   <div>
-    <show-at breakpoint="mediumAndAbove">
+    <show-at breakpoint="large">
       <div class="venue-body-container">
 
         <!-- Title -->
@@ -9,82 +9,57 @@
             <div class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Create New Lecture for {{ course.dept }} {{ course.course_number }}</div>
           </router-link>
         </div>
+        <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" :section_number="this.current_user.is_instructor ? -1 : section.number" />
+
+
+        <!-- Attendance History -->
         <div>
-          <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" :section_number="this.current_user.is_instructor ? -1 : section.number" />
-
-          <!-- Lecture Pills -->
-
-        </div>
-
-        <!-- Attendance History Tab Button / Statistics Tab Button Bar -->
-        <div class="course-info-sub-tab">
-          <div class="left">
-            <div
-              v-on:click="subview_section_id = 0" v-on:keyup.enter="subview_section_id = 0"
-              :class="'tab ' + (subview_section_id == 0 ? 'active' : '')"
-              tabindex="0" role="tab" :aria-selected="(subview_section_id == 0 ? 'true' : 'false')" aria-controls="panel-1" aria-label="Show Attendance History">Attendance History</div>
-            <div
-              v-on:click="subview_section_id = 1" v-on:keyup.enter="subview_section_id = 1"
-              :class="'tab ' + (subview_section_id == 1 ? 'active' : '')"
-              tabindex="0" role="tab" :aria-selected="(subview_section_id == 1 ? 'true' : 'false')" aria-controls="panel-2" aria-label="Show Upcoming Lectures">Upcoming</div>
-          </div>
-          <div v-if="this.current_user.is_instructor" class="right">
+          <div v-if="this.current_user.is_instructor" class="section-select-container float-right">
             <label id="section_select_label">Section(s):</label>
             <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange">
               <option :value="'all'" selected>All</option>
               <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">{{section.number}}</option>
             </select>
           </div>
-        </div>
-
-        <!-- Attendance History -->
-        <div v-if="subview_section_id == 0" id="panel-1" role="tabpanel" class="panel">
           <div class="courseinfo-legend">Legend:</div>
-          <div class="courseinfo-legend live-border">Live</div>
-          <div class="courseinfo-legend playback-border">Playback</div>
-          <InstructorAttendanceHistory
-            v-if="this.current_user.is_instructor && lectures_loaded && sorted_lectures[selected_section]"
-            :lectures="sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded"/>
-          <StudentAttendanceHistory v-else-if="!this.current_user.is_instructor && lectures_loaded && sorted_lectures[section_id]" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded"/>
-          <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
-            <SquareLoader />
-          </div>
-          <div v-else>
-            None
-          </div>
-
+          <div class="courseinfo-legend live-border">Synchronous</div>
+          <div class="courseinfo-legend playback-border">Asynchronous</div>
         </div>
-        <div v-else-if="subview_section_id == 1" :style="{marginTop: '20px'}" id="panel-2" role="tabpanel">
-          <show-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" :lecture_data="upcoming_lectures"/></show-at>
-          <hide-at breakpoint="mediumAndAbove"><UpcomingLecturesList :selected_section="selected_section" :section_id="section_id" :lecture_data="upcoming_lectures" mobileMode/></hide-at>
+        <InstructorAttendanceHistory
+          v-if="this.current_user.is_instructor && lectures_loaded && sorted_lectures[selected_section]"
+          :lectures="sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded"/>
+        <StudentAttendanceHistory v-else-if="!this.current_user.is_instructor && lectures_loaded && sorted_lectures[section_id]" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded"/>
+        <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
+          <SquareLoader />
+        </div>
+        <div v-else>
+          None
         </div>
 
       </div>
     </show-at>
-    <hide-at breakpoint="mediumAndAbove">
+    <hide-at breakpoint="large">
       <div>
         <!-- Mobile View -->
         <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" mobileMode />
-        <div class="course-info-sub-tab mobile">
-          <div class="left">
-            <div class="tab active">Attendance History</div>
-          </div>
-          <div class="right"  v-if="this.current_user.is_instructor">
+        <router-link v-if="this.current_user.is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}" tabindex="-1">
+            <div class="inline-block big-button" tabindex="0">Create New Lecture for {{ course.dept }} {{ course.course_number }}</div>
+          </router-link>
+        <div class="courseinfo-attendance-listing">
+          <div v-if="this.current_user.is_instructor" class="section-select-container mobile float-right">
             <label id="section_select_label">Section(s):</label>
             <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange">
               <option :value="'all'" selected>All</option>
               <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">{{section.number}}</option>
             </select>
           </div>
-        </div>
-        <div class="courseinfo-attendance-listing">
           <div class="courseinfo-legend">Legend:</div>
-          <div class="courseinfo-legend live-border">Live</div>
-          <div class="courseinfo-legend playback-border">Playback</div>
-          <InstructorAttendanceHistory
+          <div class="courseinfo-legend live-border">Synchronous</div>
+          <div class="courseinfo-legend playback-border">Asynchronous</div>
+          <InstructorAttendanceHistory :style='{textAlign: "center"}'
             v-if="this.current_user.is_instructor && lectures_loaded && sorted_lectures[selected_section] && scores_loaded"
             :lectures="sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded" mobileMode/>
-          <StudentAttendanceHistory v-else-if="!this.current_user.is_instructor && lectures_loaded && sorted_lectures[section_id] && scores_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
+          <StudentAttendanceHistory :style='{textAlign: "center"}' v-else-if="!this.current_user.is_instructor && lectures_loaded && sorted_lectures[section_id] && scores_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
           <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
             <SquareLoader />
           </div>
@@ -500,5 +475,18 @@ export default {
 
   .panel {
     height: 100%;
+  }
+
+  .section-select-container {
+    display: inline-block;
+  }
+
+  .section-select-container.mobile {
+    margin-top: 1rem;
+  }
+
+  .big-button {
+    margin: 1rem 2rem;
+    margin-bottom: 0rem;
   }
 </style>
