@@ -38,6 +38,7 @@
         <tr>
           <th>First Name</th>
           <th>Last Name</th>
+          <th>User ID</th>
           <th>is_instructor</th>
           <th>is_ta</th>
         </tr>
@@ -46,6 +47,7 @@
             <tr v-for="student in students" :key="student._id">
               <td>{{ student.first_name }}</td>
               <td>{{ student.last_name }}</td>
+              <td>{{ student.user_id }}</td>
               <td>{{ student.is_instructor }}</td>
               <td>{{ student.is_ta }}</td>
               <td><button class="btn btn-danger" @click.prevent="removeStudent(student)">Remove</button></td>
@@ -77,8 +79,7 @@
         section: {},
         course: {},
         instructor: {},
-        students: [],
-        new_students: []
+        students: []
       }
     },
     created() {
