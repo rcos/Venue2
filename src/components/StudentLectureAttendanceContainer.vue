@@ -6,7 +6,6 @@
       <qrcode-stream id="video_preview" @decode="checkForQRMatch"></qrcode-stream>
     </div>
     <div id="table-header">
-      <h2>Attendance</h2>
       <button v-if="lectureIsOngoing()" @click="qr_scanning_window_open = true" class="header-btn btn btn-primary" title="Scan QR">
         <img src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
       </button>
@@ -141,7 +140,7 @@
 
   .header-btn {
     display: inline-block;
-    margin-left: 2rem;
+    margin-right: 2rem;
   }
 
   .show-qr-btn {

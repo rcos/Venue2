@@ -362,7 +362,7 @@ export default {
 <style scoped>
 #lecture-upload-modal {
   display: inline-flex;
-  margin-left: 2rem;
+  margin-right: 2rem;
 }
 .row {
   padding: 0;
