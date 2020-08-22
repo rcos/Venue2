@@ -108,11 +108,8 @@ import QRCode from "qrcode";
 import GoogleMap from "@/components/GoogleMap";
 import LectureUploadModal from "@/components/LectureUploadModal";
 import MultiSelectDropdown from "@/components/MultiSelectDropdown";
-import flatpickr from "flatpickr";
 import Picker from 'pickerjs';
 import CreatePoll from '@/components/CreatePoll';
-import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-require("flatpickr/dist/themes/material_blue.css");
 import '../../node_modules/pickerjs/src/index.css';
 // DatePicker themes options:
 // "material_blue","material_green","material_red","material_orange",

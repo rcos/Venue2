@@ -60,9 +60,9 @@
             </div>
           </div>
         </div>
-        <div class="col">
+        <div class="col" v-if="(polls && polls.length) || (need_timestamp && need_timestamp.length)">
           <h2>Current Polls</h2>
-          <label v-if="polls.length > 0" id="pq_label">Question</label>
+          <label v-if="polls.length" id="pq_label">Question</label>
           <ol class="row pollrow">
             <li v-for="(poll,i) in polls" :key="i" class="row">
               <p class="polltimestamp">{{secondsToHHMMSS(poll.timestamp)}}</p>
@@ -89,17 +89,24 @@
             </li>
           </ol>
         </div>
+        <div class="col-3" v-else>
+        </div>
         <div :class="(update_lecture?'col-6':'col-5')">
           <video id="video_player" class="video-js vjs-big-play-centered" controls></video>
         </div>
       </div>
       <div class="row" id="bottomrow">
-        <label id="playback_start_label">Playback Submission Start</label>
-        <input id="playback_start" aria-labelledby="playback_start_label" type="datetime-local"/>
-        <label id="playback_end_label">Playback Submission End</label>
-        <input id="playback_end" aria-labelledby="playback_end_label" type="datetime-local"/>
-        <button type="button" v-if="update_lecture" id="video_upload_btn" class="btn btn-secondary" @click="updateLecture()">Upload</button>
-        <button type="button" v-else id="video_upload_btn" class="btn btn-secondary" @click="hideModal()">Upload</button>
+        <div class="col">
+        <label id="playback_start_label">Video Attendance Start</label>
+        <div id="playback_start" aria-labelledby="playback_start_label" type="datetime-local"></div>
+        </div>
+        <div class="col">
+        <label id="playback_end_label">Video Attendance End</label>
+        <div id="playback_end" class="" aria-labelledby="playback_end_label" type="datetime-local"></div>
+        </div>
+        
+        <button type="button" v-if="update_lecture" id="video_upload_btn" class="btn btn-secondary uploadbtn" @click="updateLecture()">Upload</button>
+        <button type="button" v-else id="video_upload_btn" class="btn btn-secondary uploadbtn" @click="hideModal()">Upload</button>
       </div>
     </div>
   </div>
@@ -108,11 +115,10 @@
 <script>
 import LectureAPI from "../services/LectureAPI";
 import PlaybackPollAPI from "../services/PlaybackPollAPI";
-import flatpickr from "flatpickr";
 import videojs from 'video.js';
 import LoadingOverlay from '@/components/LoadingOverlay.vue';
-import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-require("flatpickr/dist/themes/material_blue.css");
+import Picker from 'pickerjs';
+import '../../node_modules/pickerjs/src/index.css';
 // DatePicker themes options:
 // "material_blue","material_green","material_red","material_orange",
 // "dark","airbnb","confetti"
@@ -136,10 +142,10 @@ export default {
       polls: [],
       video_ref: "",
       vjs: null,
-      play_sub_start: null,
-      play_sub_end: null,
+      play_sub_start_picker: null,
+      play_sub_end_picker: null,
       modal_open: false,
-      waiting: false
+      waiting: false,
     };
   },
   created() {
@@ -248,29 +254,16 @@ export default {
                 self.vjs.src({ type: vid_selector.files[0].type, src: URL.createObjectURL(vid_selector.files[0]) })
                 self.vjs.load()
               }
-              self.play_sub_start = flatpickr(document.getElementById("playback_start"),{
-                enableTime: true,
-                dateFormat: "h:i K, M d, Y",
-                minDate: Date.now(),
-                minuteIncrement: 1,
-                onChange: function(selectedDates, dateStr, instance) {
-                  self.lecture.playback_submission_start_time = Date.parse(dateStr)
-                  self.play_sub_end.set("minDate",self.lecture.playback_submission_start_time)
-                  if(self.lecture.playback_submission_start_time > self.lecture.playback_submission_end_time) {
-                    self.lecture.playback_submission_end_time = Date.parse(dateStr)
-                    self.play_sub_end.setDate(self.lecture.playback_submission_start_time)
-                  }
-                }
-              })
-              self.play_sub_end = flatpickr(document.getElementById("playback_end"),{
-                enableTime: true,
-                dateFormat: "h:i K, M d, Y",
-                minDate: Date.now(),
-                minuteIncrement: 1,
-                onChange: function(selectedDates, dateStr, instance) {
-                  self.lecture.playback_submission_end_time = Date.parse(dateStr)
-                }
-              })
+              self.play_sub_start_picker = new Picker(document.querySelector("#playback_start"), {
+                inline: true,
+                rows: 1,
+                headers: true
+              });
+              self.play_sub_end_picker = new Picker(document.querySelector("#playback_end"), {
+                inline: true,
+                rows: 1,
+                headers: true
+              });
             })
           }
         });
@@ -340,14 +333,15 @@ export default {
       return (parseInt(poll.sec) + (parseInt(poll.min)*60) + (parseInt(poll.hour)*60*60))
     },
     isComplete() {
+      this.lecture.playback_submission_start_time = this.play_sub_start_picker.pick().date
+      this.lecture.playback_submission_end_time = this.play_sub_end_picker.pick().date
+      if(this.lecture.playback_submission_start_time > this.lecture.playback_submission_end_time) {
+        return false
+      }
       if(this.need_timestamp) {
-        return (
-          document.getElementById("playback_start").value != "" && document.getElementById("playback_end").value != ""
-          &&
-          this.need_timestamp.every(poll => undefined != poll.sec && undefined != poll.min && undefined != poll.hour && this.smhToTimestamp(poll) < this.vjs.duration())
-        )
+        return this.need_timestamp.every(poll => undefined != poll.sec && undefined != poll.min && undefined != poll.hour && this.smhToTimestamp(poll) < this.vjs.duration())
       } else {
-        return document.getElementById("playback_start").value != "" && document.getElementById("playback_end").value != ""
+        return true
       }
     },
     secondsToHHMMSS(seconds) {
@@ -370,6 +364,11 @@ export default {
   display: inline-flex;
   margin-left: 2rem;
 }
+.row {
+  padding: 0;
+  width: 100%;
+  margin: 0;
+}
 #banner_title {
   text-align: center;
   position: relative;
@@ -391,14 +390,14 @@ h2 {
 #lecture_modal_viewable {
   position: fixed;
   background: white;
-  top: 4rem;
-  left: 0rem;
-  right: 0rem;
+  top: 7rem;
+  left: 2rem;
+  right: 2rem;
   bottom: 2rem;
+  border: 1px solid rgba(120,120,120,1);
   overflow-y: auto;
   z-index: 1001;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding: 1rem;
 }
 #close_lecture_modal {
   position: absolute;
@@ -411,8 +410,7 @@ h2 {
 #lecture_container {
   position: relative;
   padding-top: 2rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
+  width: 100%;
 }
 #video_selector {
   position: relative;
@@ -425,34 +423,35 @@ h2 {
   height: auto;
 }
 #bottomrow {
-  padding-left: 3rem;
-  padding-right: 3rem;
-  padding-top: 3rem;
+  padding: 2rem;
+  padding-bottom: 3rem;
   margin: 0;
   width: 100%;
 }
 #playback_start {
   height: 4rem;
-  width: 20%;
+  width: 100%;
   font-size: 1.5rem;
 }
 #playback_end {
   height: 4rem;
-  width: 20%;
+  width: 100%;
   font-size: 1.5rem;
 }
 #playback_start_label {
   height: 4rem;
-  width: 20%;
+  width: 100%;
   font-size: 1.5rem;
+  text-align: center;
 }
 #playback_end_label {
   height: 4rem;
-  width: 20%;
+  width: 100%;
   font-size: 1.5rem;
+  text-align: center;
 }
 #video_upload_btn {
-  height: 4rem;
+  height: 10rem;
   width: 20%;
 }
 li {
