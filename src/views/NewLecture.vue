@@ -487,7 +487,7 @@ h1 {
 }
 
 .new-lecture-form {
-  width: 50rem;
+  width: 60rem;
   margin: auto;
   padding: 0rem 2rem;
   max-width: 100%;
@@ -580,15 +580,14 @@ h1 {
 }
 
 .time-container {
-  min-width: 15rem;
-  max-width: 100%;
+  min-width: 50%;
+  max-width: 25rem;
   margin: auto;
   display: inline-block;
 }
 
 .picker {
   width: 100%;
-  min-width: 20rem;
   padding: 0.5rem;
   background: none;
   color: rgba(100,100,100,1);
