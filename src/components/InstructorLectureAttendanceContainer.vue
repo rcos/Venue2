@@ -5,7 +5,6 @@
 		  <button class="btn btn-secondary" id="close_qr_btn" @click="hideQR" aria-label="Hide QR">Hide</button>
 		</div>
 		<div id="container-header">
-			<h2>Attendance</h2>
 			<!-- Pre-set/Random Checkins -->
 			<div v-for="(checkin,i) in lecture.checkins" :key="i" class="inline-block">
 				<button v-if="checkin.activation != 'Manual Activation' && checkinIsOpen(checkin)" type="button" class="header-btn btn btn-secondary" @click="showQR(i)">
@@ -22,7 +21,7 @@
 			</button>
 			<!-- Manual Checkins -->
 			<div class="float-right" v-for="(checkin,i) in lecture.checkins" :key="'Live'+i">
-				<button v-if="checkin.activation == 'Manual Activation'" class="btn btn-secondary" @click="showQR(i)">Open Check-in {{i+1}}</button>
+				<button v-if="checkin.activation == 'Manual Activation'" class="btn btn-secondary manualbtn" @click="showQR(i)">Open Check-in {{i+1}}</button>
 			</div>
 	  </div>
 	  <LectureAttendanceTable v-if="polls_loaded" :is_instructor="true" :lecture="lecture" :submissions="submissions" :all_students="all_students" :polls="polls"/>
@@ -202,7 +201,7 @@
 
 	.header-btn {
 		display: inline-block;
-		margin-left: 2rem;
+		margin-right: 2rem;
 	}
 
 	.show-qr-btn {
@@ -278,6 +277,10 @@
 
 	.hidden {
 	  display: none;
+	}
+
+	.manualbtn {
+		height: calc(60px + .75rem);
 	}
 
 </style>
