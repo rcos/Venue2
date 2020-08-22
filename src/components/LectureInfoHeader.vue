@@ -146,7 +146,7 @@
   #main-info {
     display: inline-block;
     border-radius: .25rem;
-    padding: 2rem 4rem;
+    padding: 2rem;
     margin: 0;
     text-align: left;
     box-shadow: 0px 3px 6px rgba(0, 62, 123, 0.2);
