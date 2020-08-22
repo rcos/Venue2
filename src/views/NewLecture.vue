@@ -1,8 +1,8 @@
 <template>
   <!-- ADDING USER -->
   <div>
-    <h1>New Lecture For {{ course.name }}</h1>
     <form class="new-lecture-form" @submit.prevent="handleAttemptSubmit">
+      <h1>New Lecture For {{ course.name }}</h1>
       <div class="form-group">
         <!-- Lecture Info -->
         <div class="input-wrapper">
@@ -35,40 +35,27 @@
         </div>
         <!-- Times -->
         <div v-if="allow_live_submissions">
-          <div class="input-wrapper">
-            <label id="start_time_label">Start Time</label>
-            <input id="lecture_start" aria-labelledby="start_time_label" :tabindex="(modal_open ? '-1' : '0')" type="datetime-local"/>
-            <br>
-            <label id="end_time_label">End Time</label>
-            <input id="lecture_end" aria-labelledby="end_time_label" :tabindex="(modal_open ? '-1' : '0')" type="datetime-local"/>
+          <div class="input-wrapper row">
+            <div class="time-container">
+              <label id="start_time_label">Start Time</label>
+              <div id="lecture_start" class="js-inline-picker" aria-labelledby="start_time_label" :tabindex="(modal_open ? '-1' : '0')"></div>
+            </div>
+            <div class="time-container">
+              <label id="end_time_label">End Time</label>
+              <div id="lecture_end" class="js-inline-picker" aria-labelledby="start_time_label" :tabindex="(modal_open ? '-1' : '0')"></div>
+            </div>
           </div>
           <div class="input-wrapper">
             <label>Check-in(s):</label>
             <div>
               <div v-for="(checkin,i) in checkins" class="checkin-container row" :key="i">
-                <div class="checkin-number col-1 my-auto">
+                <div class="checkin-number col col-1 my-auto">
                   #{{i+1}}
                 </div>
-                <div class="checkin-type col-3 my-auto">
+                <div class="checkin-type col col-5 my-auto">
                   <MultiSelectDropdown :options="['Pre-set Time','Random Time','Manual Activation']" @update="handleUpdateCheckin" :max="1" :n="i" :ref="'checkinSelector-'+i"/>
                 </div>
-                <div class="checkin-options col my-auto" v-if="checkin.activation == 'Pre-set Time'">
-                  <label>Start</label>
-                  <input :id="'checkin_start_'+i" class="checkin-time" :tabindex="(modal_open ? '-1' : '0')" type="datetime-local"/>
-                </div>
-                <div class="checkin-options col my-auto" v-if="checkin.activation == 'Pre-set Time'">
-                  <label>End</label>
-                  <input :id="'checkin_end_'+i" class="checkin-time" :tabindex="(modal_open ? '-1' : '0')" type="datetime-local"/>
-                </div>
-                <div class="checkin-options col my-auto" v-else-if="checkin.activation == 'Random Time'">
-                  <label>Minutes Long:</label>
-                  <input type="number" min="1" v-model.lazy="checkin.minutes"/>
-                </div>
-                <div class="checkin-options col my-auto" v-else-if="checkin.activation == 'Manual Activation'">
-                </div>
-                <div class="checkin-options col my-auto" v-else>
-                </div>
-                <div class="checkin-poll col-2 my-auto">
+                <div class="checkin-poll col col-4 my-auto">
                   <div v-if="null != polls[i]">
                     <button type="button" class="btn btn-secondary" @click="add_poll_index = i" :title="'Edit '+polls[i].question">
                       <img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
@@ -82,8 +69,20 @@
                     <CreatePoll :playback_only="false" :checkin="add_poll_index" @addPoll="handleAddPoll" :poll="polls[add_poll_index]" @cancel="add_poll_index = -1"/>
                   </div>
                 </div>
-                <div class="checkin-remove col-1 my-auto">
-                  <button type="button" class="btn btn-danger" @click="handleRemoveCheckin(i)">X</button>
+                <div class="checkin-remove col col-2 my-auto">
+                  <button type="button" class="btn btn-danger remove-checkin-btn float-right" @click="handleRemoveCheckin(i)">X</button>
+                </div>
+                <div class="checkin-options col my-auto" v-if="checkin.activation == 'Pre-set Time'">
+                  <label>Start</label>
+                  <div :id="'checkin_start_'+i" class="checkin-time js-inline-picker" :tabindex="(modal_open ? '-1' : '0')" type="datetime-local"></div>
+                </div>
+                <div class="checkin-options col my-auto" v-if="checkin.activation == 'Pre-set Time'">
+                  <label>End</label>
+                  <div :id="'checkin_end_'+i" class="checkin-time js-inline-picker" :tabindex="(modal_open ? '-1' : '0')" type="datetime-local"></div>
+                </div>
+                <div class="checkin-options col my-auto" v-else-if="checkin.activation == 'Random Time'">
+                  <label>Minutes Long:</label>
+                  <input type="number" min="1" v-model.lazy="checkin.minutes"/>
                 </div>
               </div>
               <button type="button" id="add-checkin-btn" class="btn btn-secondary" @click="handleAddCheckin">Add Check-in</button>
@@ -109,10 +108,9 @@ import QRCode from "qrcode";
 import GoogleMap from "@/components/GoogleMap";
 import LectureUploadModal from "@/components/LectureUploadModal";
 import MultiSelectDropdown from "@/components/MultiSelectDropdown";
-import flatpickr from "flatpickr";
+import Picker from 'pickerjs';
 import CreatePoll from '@/components/CreatePoll';
-import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-require("flatpickr/dist/themes/material_blue.css");
+import '../../node_modules/pickerjs/src/index.css';
 // DatePicker themes options:
 // "material_blue","material_green","material_red","material_orange",
 // "dark","airbnb","confetti"
@@ -141,7 +139,9 @@ export default {
       input_error_message: "",
       modal_open: false,
       add_poll_index: -1,
-      polls: []
+      polls: [],
+      start_time_picker: null,
+      end_time_picker: null
     };
   },
   created() {
@@ -169,10 +169,16 @@ export default {
       let hasType = this.allow_live_submissions || this.allow_playback_submissions
       if(hasTitle && hasSections && hasType) {
         if(this.allow_live_submissions) {
-          let hasStart = this.lecture.start_time != null && this.lecture.start_time != ""
-          let hasEnd = this.lecture.end_time != null && this.lecture.end_time != ""
-          let validRange = this.lecture.start_time < this.lecture.end_time
-          if(hasStart && hasEnd && validRange) {
+          this.lecture.start_time = this.start_time_picker.pick().date
+          this.lecture.end_time = this.end_time_picker.pick().date
+          let validRange = this.start_time_picker.pick().date <= this.end_time_picker.pick().date
+          this.pickers.forEach((picker,i) => {
+            if(picker) {
+              this.checkins[i].start_time = picker.start.pick().date
+              this.checkins[i].end_time = picker.end.pick().date
+            }
+          })
+          if(validRange) {
             let presets = this.getPresetCheckins()
             let randoms = this.getRandomCheckins()
             let manuals = this.getManualCheckins()
@@ -198,12 +204,6 @@ export default {
               this.setErrorMessage("One or more pre-set check-ins ends after the lecture does")
               allGood = false
             }
-          } else if(!hasStart) {
-            this.setErrorMessage("Missing start time")
-            allGood = false
-          } else if(!hasEnd) {
-            this.setErrorMessage("Missing end time")
-            allGood = false
           } else if(!validRange) {
             this.setErrorMessage("Invalid lecture time range")
             allGood = false
@@ -325,31 +325,20 @@ export default {
     setAllowLiveSubmissions() {
       this.allow_live_submissions = true
       this.allow_playback_submissions = false
+      this.lecture.start_time = new Date()
+      this.lecture.end_time = new Date()
       this.$nextTick(() => {
         let self = this
-        var fp0 = flatpickr(document.getElementById("lecture_start"),{
-          enableTime: true,
-          dateFormat: "h:i K, M d, Y",
-          minDate: Date.now(),
-          minuteIncrement: 1,
-          onChange: function(selectedDates, dateStr, instance) {
-            self.lecture.start_time = Date.parse(dateStr)
-            fp1.set("minDate",self.lecture.start_time)
-            if(self.lecture.start_time > self.lecture.end_time || !self.lecture.end_time) {
-              self.lecture.end_time = Date.parse(dateStr)
-              fp1.setDate(self.lecture.start_time)
-            }
-          }
-        })
-        var fp1 = flatpickr(document.getElementById("lecture_end"),{
-          enableTime: true,
-          dateFormat: "h:i K, M d, Y",
-          minDate: Date.now(),
-          minuteIncrement: 1,
-          onChange: function(selectedDates, dateStr, instance) {
-            self.lecture.end_time = Date.parse(dateStr)
-          }
-        })
+        this.start_time_picker = new Picker(document.querySelector('#lecture_start'), {
+          inline: true,
+          controls: true,
+          headers: true
+        });
+        this.end_time_picker = new Picker(document.querySelector('#lecture_end'), {
+          inline: true,
+          controls: true,
+          headers: true
+        });
       })
     },
     setAllowPlaybackSubmissions() {
@@ -360,15 +349,22 @@ export default {
       this.lecture_sections = data.map(a=>a._id)
     },
     handleAddCheckin() {
+      this.pickers.forEach((picker,i) => {
+        if(picker) {
+          this.checkins[i].start_time = picker.start.pick().date
+          this.checkins[i].end_time = picker.end.pick().date
+        }
+      })
       this.checkins.push({
-        start_time: null,
-        end_time: null,
+        start_time: new Date(),
+        end_time: new Date(),
         manually_activated: null,
         code: null,
         activation: null,
         minutes: null
       })
       this.polls.push(null)
+      this.updatePickers
     },
     updatePickers() {
       this.pickers.forEach(picker => {
@@ -379,59 +375,32 @@ export default {
       })
       this.pickers = []
       this.checkins.forEach((checkin,i) => {
-        let minDate = Number.MAX_VALUE
-        let maxDate = 0
-        if(this.lecture.start_time) {
-          minDate = Math.min(minDate,this.lecture.start_time)
-          maxDate = Math.max(maxDate,this.lecture.end_time)
-        }
-        if(checkin.start_time) {
-          minDate = Math.min(minDate,checkin.start_time)
-          maxDate = Math.max(maxDate,checkin.end_time)
-        }
-        if(maxDate==0) {
-          maxDate = undefined
-        }
-        minDate = Math.min(minDate,Date.now())
         if(checkin.activation == 'Pre-set Time') {
           let self = this
           let pickers = {
             start: null,
             end: null
           }
-          pickers.start = flatpickr(document.getElementById("checkin_start_"+i),{
-            enableTime: true,
-            dateFormat: "h:i K, M d, Y",
-            minDate: minDate,
-            maxDate: maxDate,
-            defaultDate: checkin.start_time,
-            minuteIncrement: 1,
-            onChange: function(selectedDates, dateStr, instance) {
-              checkin.start_time = Date.parse(dateStr)
-              pickers.end.set("minDate",checkin.start_time)
-              if(checkin.start_time > checkin.end_time) {
-                checkin.end_time = Date.parse(dateStr)
-                pickers.end.setDate(checkin.start_time)
-              }
-            }
-          })
-          pickers.end = flatpickr(document.getElementById("checkin_end_"+i),{
-            enableTime: true,
-            dateFormat: "h:i K, M d, Y",
-            minDate: minDate,
-            maxDate: maxDate,
-            defaultDate: checkin.end_time,
-            minuteIncrement: 1,
-            onChange: function(selectedDates, dateStr, instance) {
-              checkin.end_time = Date.parse(dateStr)
-            }
-          })
+          let startdate = null
+          let enddate = null
           if(checkin.start_time) {
-            pickers.start.setDate(checkin.start_time)
+            startdate = checkin.start_time
           }
           if(checkin.end_time) {
-            pickers.end.setDate(checkin.end_time)
+            enddate = checkin.end_time
           }
+          pickers.start = new Picker(document.querySelector("#checkin_start_"+i), {
+            inline: true,
+            rows: 1,
+            headers: true,
+            date: startdate
+          });
+          pickers.end = new Picker(document.querySelector("#checkin_end_"+i), {
+            inline: true,
+            rows: 1,
+            headers: true,
+            date: enddate
+          });
           this.pickers.push(pickers)
         } else {
           this.pickers.push(null)
@@ -448,6 +417,12 @@ export default {
       })
     },
     handleRemoveCheckin(i) {
+      this.pickers.forEach((picker,i) => {
+        if(picker) {
+          this.checkins[i].start_time = picker.start.pick().date
+          this.checkins[i].end_time = picker.end.pick().date
+        }
+      })
       this.checkins.splice(i,1)
       this.polls.splice(i,1)
       let self = this
@@ -483,11 +458,35 @@ export default {
 </script>
 
 <style>
+h1 {
+  text-align: center;
+}
+
+.col {
+  padding: 1rem;
+  padding-top: 0rem;
+  display: inline-block;
+}
+
+.remove-checkin-btn {
+  width: 3rem;
+  max-width: 100%;
+}
+
+.new-lecture-form {
+  width: 60rem;
+  margin: auto;
+  padding: 0rem 2rem;
+  max-width: 100%;
+}
+
 .input-wrapper {
-  width: 80%;
+  width: 100%;
+  max-width: 100%;
   margin: auto;
   margin-top: 3rem;
   padding: 0;
+  text-align: center;
   /*border: blue solid;*/
 }
 
@@ -524,9 +523,9 @@ export default {
 
 .checkin-container {
   border: 1px solid gray;
-  height: 5rem;
   margin: 0.25rem 0rem;
   border-radius: 0.5rem;
+  padding-top: 1rem;
 }
 
 .vertically-centered {
@@ -534,7 +533,7 @@ export default {
 }
 
 .checkin-time {
-  width: 12rem;
+  width: 100%;
 }
 
 #add-checkin-btn {
@@ -565,5 +564,52 @@ export default {
   padding: 1rem;
   text-align: left;
   overflow: auto;
+}
+
+.time-container {
+  min-width: 50%;
+  max-width: 25rem;
+  margin: auto;
+  display: inline-block;
+}
+
+.picker {
+  width: 100%;
+  padding: 0.5rem;
+  background: none;
+  color: rgba(100,100,100,1);
+}
+
+.picker-dialog {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(100,100,100,1);
+}
+
+.picker-item {
+  color: rgba(100,100,100,1);
+}
+.picker-cell__control,
+.picker-cell__control::before,
+.picker-cell__header {
+  color: rgba(100,100,100,1);
+  text-align: center;
+}
+
+.picker-picked {
+  color: rgba(20,75,250,1);
+  font-weight: 900;
+}
+
+.picker-cell__control--prev::before {
+  content: '⏶';
+}
+
+.picker-cell__control--next::before {
+  content: '⏷';
+}
+
+.picker-cell__header {
+  border-bottom: 1px solid rgba(100,100,100,1);
 }
 </style>
