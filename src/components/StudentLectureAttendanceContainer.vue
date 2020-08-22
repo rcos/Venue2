@@ -141,6 +141,7 @@
   .header-btn {
     display: inline-block;
     margin-right: 2rem;
+    height: calc(60px + .75rem);
   }
 
   .show-qr-btn {
