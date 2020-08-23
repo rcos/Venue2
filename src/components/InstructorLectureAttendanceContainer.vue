@@ -97,13 +97,9 @@ export default {
 			this.current_checkin = this.lecture.checkins[i]
 			this.$nextTick(function() {
 				let canvas = document.getElementById('qr_canvas')
-				// canvas.hidden = document.pictureInPictureEnabled && !video.disablePictureInPicture
-				//TODO start canvas stream
 
 				let video = document.getElementById('qr_video')
 				video.hidden = true
-
-				console.log(Date.parse(this.lecture.checkins[i].end_time) - Date.now())
 
 				if(document.pictureInPictureEnabled && !video.disablePictureInPicture && !document.pictureInPictureElement) {
 					let self = this
@@ -137,13 +133,10 @@ export default {
 						// })
 					})
 				}
-				//TODO start PiP if it exists
 			})
 		},
 		hideQR() {
-			let video = document.getElementById('qr_video')
 			this.current_checkin = null
-			//TODO cancel PiP if it exists
 		},
 		checkinIsOpen(checkin) {
 			let now = new Date()
