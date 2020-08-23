@@ -41,7 +41,6 @@ import SectionAPI from '@/services/SectionAPI.js'
 import PlaybackPollAPI from '@/services/PlaybackPollAPI';
 
 import qrcode from '@chenfengyuan/vue-qrcode';
-import videojs from 'video.js';
 
 export default {
 	name: 'InstructorLectureAttendanceContainer',
@@ -75,29 +74,11 @@ export default {
 			this.polls_loaded = true
 		})
 	},
-	// mounted() {
-	// 	let self = this
-	// 	let vid = videojs("qr_video", {}, function() {
-	// 		self.vjs = this
-	// 		self.vjs.on('timeupdate',function() {
-	// 			if(document.pictureInPictureEnabled && !video.disablePictureInPicture && !document.pictureInPictureElement) {
-	// 				video.requestPictureInPicture()
-	// 			}
-	// 		})
-	// 		self.vjs.on('ended',function() {
-	// 			if(document.pictureInPictureEnabled && !video.disablePictureInPicture && document.pictureInPictureElement) {
-	// 				document.exitPictureInPicture();
-	// 				location.reload()
-	// 			}
-	// 		})
-	// 	})
-	// },
 	methods: {
 		showQR(i) {
 			this.current_checkin = this.lecture.checkins[i]
 			this.$nextTick(function() {
 				let canvas = document.getElementById('qr_canvas')
-
 				let video = document.getElementById('qr_video')
 				video.hidden = true
 
@@ -116,21 +97,6 @@ export default {
 								},(Date.parse(self.lecture.checkins[i].end_time) - Date.now()))
 							}
 						})
-						
-						// let vid = videojs("qr_video", {autoplay: true}, function() {
-						// 	self.vjs = this	
-						// 	self.vjs.on('timeupdate',function() {
-						// 		if(document.pictureInPictureEnabled && !video.disablePictureInPicture && !document.pictureInPictureElement) {
-						// 			video.requestPictureInPicture()
-						// 		}
-						// 	})
-						// 	self.vjs.on('ended',function() {
-						// 		if(document.pictureInPictureEnabled && !video.disablePictureInPicture && document.pictureInPictureElement) {
-						// 			document.exitPictureInPicture();
-						// 			location.reload()
-						// 		}
-						// 	})
-						// })
 					})
 				}
 			})
