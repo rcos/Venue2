@@ -93,7 +93,7 @@ export default {
 								video.requestPictureInPicture()
 								setTimeout(function() {
 									document.exitPictureInPicture();
-									location.reload()
+									self.current_checkin = null
 								},(Date.parse(self.lecture.checkins[i].end_time) - Date.now()))
 							}
 						})
