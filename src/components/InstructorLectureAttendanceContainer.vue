@@ -92,12 +92,16 @@ export default {
 							if(document.pictureInPictureEnabled && !video.disablePictureInPicture && !document.pictureInPictureElement) {
 								video.requestPictureInPicture()
 								setTimeout(function() {
-									document.exitPictureInPicture();
-									self.current_checkin = null
+									if(document.pictureInPictureEnabled && !video.disablePictureInPicture && document.pictureInPictureElement) {
+										document.exitPictureInPicture();
+									}
+									location.reload()
 								},(Date.parse(self.lecture.checkins[i].end_time) - Date.now()))
 							}
 						})
 					})
+				} else if (video.webkitSupportsPresentationMode && typeof video.webkitSetPresentationMode === "function") {
+					video.webkitSetPresentationMode(video.webkitPresentationMode === "picture-in-picture" ? "inline" : "picture-in-picture");
 				}
 			})
 		},
