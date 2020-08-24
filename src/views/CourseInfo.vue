@@ -43,7 +43,7 @@
         <!-- Mobile View -->
         <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" mobileMode />
         <router-link v-if="this.current_user.is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}" tabindex="-1">
-            <div class="inline-block big-button" tabindex="0">Create New Lecture for {{ course.dept }} {{ course.course_number }}</div>
+            <div class="inline-block big-button mobile" tabindex="0">Create New Lecture for {{ course.dept }} {{ course.course_number }}</div>
           </router-link>
         <div class="courseinfo-attendance-listing">
           <div v-if="this.current_user.is_instructor" class="section-select-container mobile float-right">
@@ -486,6 +486,12 @@ export default {
   }
 
   .big-button {
+    margin: 1rem 2rem;
+    margin-right: 0rem;
+    margin-bottom: 0rem;
+  }
+
+  .big-button.mobile {
     margin: 1rem 2rem;
     margin-bottom: 0rem;
   }

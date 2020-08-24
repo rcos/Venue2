@@ -1,7 +1,7 @@
 <template>
   <div id="lecture-upload-modal">
     <LoadingOverlay v-if="waiting"/>
-    <button type="button" class="btn btn-primary" @click="handleShowModal" :tabindex="(modal_open ? '-1' : '0')" title="Upload Recording">
+    <button type="button" id="video-upload-btn" class="btn btn-primary" @click="handleShowModal" :tabindex="(modal_open ? '-1' : '0')" title="Upload Recording">
       <img src="@/assets/icons8-upload-96.png" width="60" alt="QR Code" aria-label="QR Code">
     </button>
     <div id="lecture_modal_viewable" class="hiddenModal">
@@ -363,6 +363,11 @@ export default {
 #lecture-upload-modal {
   display: inline-flex;
   margin-right: 2rem;
+}
+#video-upload-btn {
+  min-height: calc(60px + .75rem);
+  padding: .375rem 1.5rem;
+  border-radius: 1.5rem;
 }
 .row {
   padding: 0;
