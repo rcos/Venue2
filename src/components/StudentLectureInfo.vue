@@ -32,7 +32,6 @@
       }
     },
     async created() {
-      console.log(this.polls)
       this.lecture_id = this.lecture._id
       this.user_id = this.$store.state.user.current_user._id
       await this.getStudentLectureSubmission()
