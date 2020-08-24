@@ -235,7 +235,9 @@ export default {
 	.header-btn {
 		display: inline-block;
 		margin-right: 2rem;
-		height: calc(60px + .75rem);
+		min-height: calc(60px + .75rem);
+		padding: .375rem .375rem;
+		border-radius: 0.75rem;
 	}
 
 	.show-qr-btn {
