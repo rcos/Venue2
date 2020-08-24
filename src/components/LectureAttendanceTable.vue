@@ -5,13 +5,13 @@
 
 			<button v-if="all_students" id="live_btn" class="tab_btn" tabindex="0" @click="selectTab(0)" aria-label="Show Live Attendance"
 				role="tab" aria-selected="true" aria-controls="live_submit">
-				<div id="live-progress-bar" class="progress-bar">
+				<div id="live-progress-bar" :style="{width: live_percent * 100 + '%'}" class="progress-bar">
 					<h5>Live - {{(live_percent*100).toFixedDecimals(1)}}%</h5>
 				</div>
 			</button>
 			<button v-else id="live_btn" class="tab_btn" @click="selectTab(0)" tabindex="0" aria-label="Show Live Attendance"
 				role="tab" aria-selected="true" aria-controls="live_submit">
-				<div id="live-progress-bar" class="progress-bar">
+				<div id="live-progress-bar" :style="{width: live_percent * 100 + '%'}" class="progress-bar">
 					<h5>Synchronous - {{(live_percent*100).toFixedDecimals(1)}}%</h5>
 				</div>
 			</button>
@@ -21,13 +21,13 @@
 
 			<button v-if="all_students" id="playback_btn" class="tab_btn" tabindex="0" @click="selectTab(1)" aria-label="Show Playback Attendance"
 				role="tab" aria-selected="false" aria-controls="playback_submit">
-				<div id="playback-progress-bar" class="progress-bar">
+				<div id="playback-progress-bar" :style="{width: playback_percent * 100 + '%'}" class="progress-bar">
 					<h5>Recording - {{(playback_percent*100).toFixedDecimals(1)}}%</h5>
 				</div>
 			</button>
 			<button v-else id="playback_btn" class="tab_btn" @click="selectTab(1)" tabindex="0" aria-label="Show Playback Attendance"
 				role="tab" aria-selected="false" aria-controls="playback_submit">
-				<div id="playback-progress-bar" class="progress-bar">
+				<div id="playback-progress-bar" :style="{width: playback_percent * 100 + '%'}" class="progress-bar">
 					<h5>Asynchronous - {{(playback_percent*100).toFixedDecimals(1)}}%</h5>
 				</div>
 			</button>
@@ -37,13 +37,13 @@
 
 			<button v-if="all_students" id="absent_btn" class="tab_btn" tabindex="0" @click="selectTab(2)" aria-label="Show Absent"
 				role="tab" aria-selected="false" aria-controls="no_submit">
-				<div id="absent-progress-bar" class="progress-bar">
+				<div id="absent-progress-bar" :style="{width: absent_percent * 100 + '%'}" class="progress-bar">
 					<h5>Absent - {{(submissions_with_nothing.length/all_students.length*100).toFixedDecimals(1)}}%</h5>
 				</div>
 			</button>
 			<button v-else id="absent_btn" class="tab_btn" @click="selectTab(2)" tabindex="0" aria-label="Show Absent"
 				role="tab" aria-selected="false" aria-controls="no_submit">
-				<div id="absent-progress-bar" class="progress-bar">
+				<div id="absent-progress-bar" :style="{width: absent_percent * 100 + '%'}" class="progress-bar">
 					<h5>Absent - {{(absent_percent*100).toFixedDecimals(1)}}%</h5>
 				</div>
 			</button>
@@ -213,11 +213,6 @@ export default {
 				this.playback_percent = playsum
 				this.absent_percent = 1 - Math.max(livesum,playsum)
 			}
-			this.$nextTick(function() {
-				document.getElementById('live-progress-bar').style.width = this.live_percent * 100 + '%'
-				document.getElementById('playback-progress-bar').style.width = this.playback_percent * 100 + '%'
-				document.getElementById('absent-progress-bar').style.width = this.absent_percent * 100 + '%'
-			})
 		},
 		selectTab(i) {
 			let btns = [
@@ -401,14 +396,17 @@ export default {
 
 	#live-progress-bar {
 		background: rgb(0, 128, 0);
+		transition: width 0s linear;
 	}
 
 	#playback-progress-bar {
 		background: rgb(128, 0, 128);
+		transition: width 0s linear;
 	}
 
 	#absent-progress-bar {
 		background: rgb(128, 0, 0);
+		transition: width 0s linear;
 	}
 
 	.tab_btn h5 {
