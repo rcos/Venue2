@@ -362,12 +362,12 @@ export default {
 <style scoped>
 #lecture-upload-modal {
   display: inline-flex;
-  margin-right: 2rem;
+  margin-right: 0.75rem;
 }
 #video-upload-btn {
   min-height: calc(60px + .75rem);
-  padding: .375rem 1.5rem;
-  border-radius: 1.5rem;
+  padding: 0.375rem 0.375rem;
+  border-radius: 0.75rem;
 }
 .row {
   padding: 0;
