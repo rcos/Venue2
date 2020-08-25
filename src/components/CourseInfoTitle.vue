@@ -7,10 +7,10 @@
     <div>
 
       <!-- Course Dept # -->
-      <div class="course-dept-number inline-block" v-if="course.hasOwnProperty('dept') && course.hasOwnProperty('course_number')">{{course.dept}} {{course.course_number}}</div>
+      <div class="course-dept-number inline-block" v-if="course.hasOwnProperty('prefix') && course.hasOwnProperty('suffix')">{{course.prefix}} {{course.suffix}}</div>
 
       <!-- Time Block -->
-      <div v-if="course.hasOwnProperty('name') && section_number != -1">Section {{ section_number }}</div>
+      <div v-if="course.hasOwnProperty('name') && section_name != -1">Section {{ section_name }}</div>
 
     </div>
 
@@ -25,7 +25,7 @@
     props: {
       course: Object,
       mobileMode: Boolean,
-      section_number: Number
+      section_name: String
     },
     created () {},
     methods: {}

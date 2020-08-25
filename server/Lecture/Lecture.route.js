@@ -200,7 +200,6 @@ lectureRoutes.route('/:id').get(function (req, res) {
 });
 
 lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
-	let user_id = req.params.user_id
 	let preference = req.params.preference
 	
 	if(!legal_preferences.includes(preference)) {
@@ -209,12 +208,13 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 		return
 	}
 
-	User.findById(user_id, (error, user) => {
-		if(error || user == null)
-			res.json(error)
-		else if(user.is_instructor) {
+	let all_lectures = []
+	let promises = []
+
+	if(req.user.instructor_courses.length) {
+		promises.push(new Promise((resolve,reject) => {
 			//get courses instructor teaches
-			Course.find({instructor: user._id}, (error, instructor_courses) => {
+			Course.find({_id: {$in: req.user.instructor_courses}}, (error, instructor_courses) => {
 				if(error || instructor_courses == null) {
 					console.log("<ERROR> Getting courses with instructor ID:",user._id)
 					res.json(error)
@@ -231,25 +231,31 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 									console.log("<ERROR> Getting lectures for sections:",instructor_sections)
 									res.json(error)
 								} else {
-									console.log("<SUCCESS> Getting lectures for instructor ID: " + user_id +
+									console.log("<SUCCESS> Getting lectures for instructor ID: " + req.user._id +
 										", with preference: " + preference)
 									// attach sections or courses to lectures based on preference
 									if(preference === "none")
-										res.json(instructor_lectures)
+										resolve(instructor_lectures)
 									else {
+										let promises2 = []
 										instructor_lectures.forEach(instructor_lecture => {
 											for(let i = 0; i < instructor_lecture.sections.length; i++) {
 												lecture_section = instructor_lecture.sections[i]
 												instructor_sections.forEach(instructor_section => {
 													if(lecture_section.equals(instructor_section._id)) {
-														instructor_lecture.sections[i] = instructor_section
-														if(preference === "with_sections_and_course")
-															instructor_lecture.sections[i].course = instructor_courses[0]
+														promises2.push(new Promise((resolve2,reject2) => {
+															instructor_lecture.sections[i] = instructor_section
+															if(preference === "with_sections_and_course")
+																instructor_lecture.sections[i].course = instructor_courses[0]
+															resolve2(instructor_lecture)
+														}))
 													}
 												})
 											}
 										})
-										res.json(instructor_lectures)
+										Promise.all(promises2).then(resolved => {
+											resolve(instructor_lectures)
+										})
 									}
 								}
 							})
@@ -257,15 +263,87 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 					})
 				}
 			})
-		} else {
-			// User is a student
-			Section.find({'students': user_id}, (error, student_sections) => {
-				Lecture.find({sections: {$in: student_sections}}, (error, student_lectures) => {
-					if(error || student_sections == null) {
-						console.log("<ERROR> Getting sections for student:",user_id)
+		}))
+	}
+	if(req.user.ta_sections.length) {
+		promises.push(new Promise((resolve,reject) => {
+			// User is a ta
+			Section.find({_id: {$in: req.user.ta_sections}}, (error, ta_sections) => {
+				Lecture.find({sections: {$in: ta_sections}}, (error, ta_lectures) => {
+					if(error || ta_sections == null) {
+						console.log("<ERROR> Getting sections for ta:",req.user._id)
 						res.json(error)
 					} else {
-						console.log("<SUCCESS> Getting lectures for student ID: " + user_id +
+						console.log("<SUCCESS> Getting lectures for ta ID: " + req.user._id +
+							", with preference: " + preference)
+						ta_sections.forEach(ta_section => {
+							if(ta_section.course == null)
+								console.log("section course is null")
+						})
+
+						// attach sections or courses to lectures based on preference
+						if(preference === "none")
+							resolve(ta_lectures)
+						else {
+							let course_promises = []
+							// attach sections to lectures and make asnc call for courses if requested
+							ta_lectures.forEach(ta_lecture => {
+								for(let i = 0; i < ta_lecture.sections.length; i++) {
+									lecture_section_id = ta_lecture.sections[i]
+									// get the actual section object for the section reference
+									lecture_section = ta_sections.find(section => section._id.equals(lecture_section_id))
+									ta_lecture.sections[i] = lecture_section
+									if(preference === "with_sections_and_course"){
+										course_promises.push(new Promise((resolve2,reject2) => {
+											Course.findById(lecture_section.course, (error, lecture_course) => {
+												if(error || lecture_course == null) {
+													console.log("<ERROR> Getting course for section:",lecture_section)
+													resolve2(null)
+												} else {
+													console.log(lecture_course)
+													resolve2(lecture_course)
+												}
+											})
+										}))
+									}
+								}
+							})
+							// if courses were requested attach courses to sections once they have all been fetched
+							if(preference === "with_sections_and_course"){
+								Promise.all(course_promises).then(resolved => {
+									lecture_courses = resolved.filter(lecture_course => lecture_course != null)
+									for (let i = 0; i < ta_lectures.length; i++){
+										ta_lecture = ta_lectures[i]
+										for(let j = 0; j < ta_lecture.sections.length; j++){
+											lecture_section = ta_lecture.sections[j]
+											lecture_courses.forEach(lecture_course => {
+												if(lecture_course._id.equals(lecture_section.course))
+													ta_lectures[i].sections[j].course = lecture_course
+											})
+										}
+									}
+									console.log(ta_lectures)
+									resolve(ta_lectures)
+								})
+							} else {
+								resolve(ta_lectures)
+							}
+						}
+					}
+				})
+			})
+		}))
+	}
+	if(req.user.student_sections.length) {
+		promises.push(new Promise((resolve,reject) => {
+			// User is a student
+			Section.find({_id: {$in: req.user.student_sections}}, (error, student_sections) => {
+				Lecture.find({sections: {$in: student_sections}}, (error, student_lectures) => {
+					if(error || student_sections == null) {
+						console.log("<ERROR> Getting sections for student:",req.user._id)
+						res.json(error)
+					} else {
+						console.log("<SUCCESS> Getting lectures for student ID: " + req.user._id +
 							", with preference: " + preference)
 						student_sections.forEach(student_section => {
 							if(student_section.course == null)
@@ -274,7 +352,7 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 
 						// attach sections or courses to lectures based on preference
 						if(preference === "none")
-							res.json(student_lectures)
+							resolve(student_lectures)
 						else {
 							let course_promises = []
 							// attach sections to lectures and make asnc call for courses if requested
@@ -285,13 +363,14 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 									lecture_section = student_sections.find(section => section._id.equals(lecture_section_id))
 									student_lecture.sections[i] = lecture_section
 									if(preference === "with_sections_and_course"){
-										course_promises.push(new Promise((resolve,reject) => {
+										course_promises.push(new Promise((resolve2,reject2) => {
+											console.log(lecture_section.course)
 											Course.findById(lecture_section.course, (error, lecture_course) => {
 												if(error || lecture_course == null) {
 													console.log("<ERROR> Getting course for section:",lecture_section)
-													resolve(null)
+													resolve2(null)
 												} else {
-													resolve(lecture_course)
+													resolve2(lecture_course)
 												}
 											})
 										}))
@@ -301,27 +380,31 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 							// if courses were requested attach courses to sections once they have all been fetched
 							if(preference === "with_sections_and_course"){
 								Promise.all(course_promises).then(resolved => {
-								lecture_courses = resolved.filter(lecture_course => lecture_course != null)
-								for (let i = 0; i < student_lectures.length; i++){
-									student_lecture = student_lectures[i]
-									for(let j = 0; j < student_lecture.sections.length; j++){
-										lecture_section = student_lecture.sections[j]
-										lecture_courses.forEach(lecture_course => {
-											if(lecture_course._id.equals(lecture_section.course))
-												student_lectures[i].sections[j].course = lecture_course
-										})
+									lecture_courses = resolved.filter(lecture_course => lecture_course != null)
+									for (let i = 0; i < student_lectures.length; i++){
+										student_lecture = student_lectures[i]
+										for(let j = 0; j < student_lecture.sections.length; j++){
+											lecture_section = student_lecture.sections[j]
+											lecture_courses.forEach(lecture_course => {
+												if(lecture_course._id.equals(lecture_section.course))
+													student_lectures[i].sections[j].course = lecture_course
+											})
+										}
 									}
-								}
-								res.json(student_lectures)
+									console.log(student_lectures)
+									resolve(student_lectures)
 								})
 							} else {
-								res.json(student_lectures)
+								resolve(student_lectures)
 							}
 						}
 					}
 				})
 			})
-		}
+		}))
+	}
+	Promise.all(promises).then(resolved => {
+		res.json(resolved[0].concat(resolved[1]).concat(resolved[3]).filter(a => a))
 	})
 })
 

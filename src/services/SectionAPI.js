@@ -37,5 +37,11 @@ export default {
   },
   getSectionsForCourse(course_id) {
     return API().get('sections/get_for_course/' + course_id)
+  },
+  getTASections() {
+    return API().get('sections/get_ta_sections')
+  },
+  getStudentSections() {
+    return API().get('sections/get_student_sections')
   }
 }

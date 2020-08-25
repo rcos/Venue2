@@ -101,14 +101,13 @@ courseRoutes.route('/getInstructor/:id').get(function (req, res) {
   });
 });
 
-courseRoutes.route('/get_instructor_courses/:user_id').get(function (req, res) {
-  let user_id = req.params.user_id;
-  Course.find({instructor: user_id}, function(err, instructor_courses) {
+courseRoutes.route('/get_instructor_courses').get(function (req, res) {
+  Course.find({_id: {$in: req.user.instructor_courses}}, function(err, instructor_courses) {
     if(err || instructor_courses == null) {
-      console.log("<ERROR> Getting course by instructor with ID:",user_id)
+      console.log("<ERROR> Getting instructor courses by user with ID:",req.user._id)
       res.json(err)
     } else {
-      console.log("<SUCCESS> Getting course by instructor with ID:",user_id)
+      console.log("<SUCCESS> Getting instructor courses by user with ID:",req.user._id)
       res.json(instructor_courses)
     }
   })
