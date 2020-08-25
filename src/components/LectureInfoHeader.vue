@@ -5,13 +5,8 @@
       <div id="lecture-data-mobile">
         <div id="main-info-mobile">
           <h3 class="lecture-title">{{lecture.title}}</h3>
-          <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p></div>
-          <p class="sections">Sections:
-            <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
-              <a v-if="i > 0">,{{ section.number }}</a>
-              <a v-else>{{ section.number }}</a>
-            </a>
-          </p>
+          <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.prefix}} {{lecture.sections[0].course.suffix}}</p></div>
+          <p class="sections">Sections: {{lecture.sections.map(a => a.name).join(', ')}}</p>
         </div>
         <div class="row">
           <div v-if="lecture.start_time" class="col">
@@ -35,13 +30,8 @@
         <div class="col-6">
           <div id="main-info">
             <h3 class="lecture-title">{{lecture.title}}</h3>
-            <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</p></div>
-            <p class="sections">Sections:
-              <a class="section-numbers" role="text" v-for="(section,i) in lecture.sections" :key="i">
-                <a v-if="i > 0">,{{ section.number }}</a>
-                <a v-else>{{ section.number }}</a>
-              </a>
-            </p>
+            <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.prefix}} {{lecture.sections[0].course.suffix}}</p></div>
+            <p class="sections">Sections: {{lecture.sections.map(a => a.name).join(', ')}}</p>
           </div>
         </div>
         <div v-if="lecture.start_time" class="col time-window my-auto">

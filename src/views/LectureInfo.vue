@@ -7,8 +7,8 @@
           <span class="sr-only">Loading...</span>
         </div>
         <div v-else>
-          <InstructorLectureInfo v-if="is_instructor" :lecture="lecture" :is_instructor="is_instructor" />
-          <StudentLectureInfo v-else-if="polls_loaded" :lecture="lecture" :is_instructor="is_instructor" :polls="polls" />
+          <InstructorLectureInfo v-if="is_instructor || is_ta" :lecture="lecture" :is_instructor="is_instructor || is_ta" />
+          <StudentLectureInfo v-else-if="is_student && polls_loaded" :lecture="lecture" :is_instructor="is_instructor || is_ta" :polls="polls" />
         </div>
       </div>
     </show-at>
@@ -19,8 +19,8 @@
           <span class="sr-only">Loading...</span>
         </div>
         <div v-else>
-          <InstructorLectureInfo v-if="is_instructor" :lecture="lecture" :is_instructor="is_instructor" />
-          <StudentLectureInfo v-else-if="polls_loaded" :lecture="lecture" :is_instructor="is_instructor" :polls="polls" />
+          <InstructorLectureInfo v-if="is_instructor || is_ta" :lecture="lecture" :is_instructor="is_instructor || is_ta" />
+          <StudentLectureInfo v-else-if="is_student && polls_loaded" :lecture="lecture" :is_instructor="is_instructor || is_ta" :polls="polls" />
         </div>
       </div>
     </show-at>
@@ -47,7 +47,10 @@
     },
     data(){
       return {
-        is_instructor: Boolean,
+        current_user: null,
+        is_instructor: false,
+        is_ta: false,
+        is_student: false,
         lecture: {},
         lecture_has_loaded: false,
         polls_loaded: false,
@@ -56,7 +59,7 @@
     },
     async created() {
       this.lecture_id = this.$route.params.lecture_id
-      this.is_instructor = this.$store.state.user.current_user.is_instructor
+      this.current_user = this.$store.state.user.current_user
       await this.getLecture()
     },
     methods: {
@@ -64,6 +67,9 @@
         const response = await LectureAPI.getLectureWithSectionsAndCourse(this.lecture_id)
         this.lecture = response.data
         this.lecture_has_loaded = true
+        this.is_instructor = this.current_user.instructor_courses.some(a => a == this.lecture.sections[0].course._id)
+        this.is_ta = this.current_user.ta_sections.some(a => this.lecture.sections.map(b=>b._id).includes(a))
+        this.is_student = this.current_user.student_sections.some(a => this.lecture.sections.map(b=>b._id).includes(a))
         PlaybackPollAPI.getByLecture(this.lecture_id)
         .then(res => {
           this.polls = res.data

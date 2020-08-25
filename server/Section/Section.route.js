@@ -233,4 +233,50 @@ sectionRoutes.get('/get_for_course/:course_id', (req, res) => {
   })
 })
 
+sectionRoutes.get('/get_ta_sections', (req, res) => {
+  Section.find({_id: {$in: req.user.ta_sections}}, function(err, ta_sections) {
+    if(err || ta_sections == null) {
+      console.log("<ERROR> Getting ta sections by user with ID:",req.user._id)
+      res.json(err)
+    } else {
+      let promises = []
+      ta_sections.forEach(section => {
+        promises.push(new Promise((resolve,reject) => {
+          Course.findById(section.course,function(err,course) {
+            section.course = course
+            resolve(course)
+          })
+        }))
+      })
+      Promise.all(promises).then(resolved => {
+        console.log("<SUCCESS> Getting ta sections by user with ID:",req.user._id)
+        res.json(ta_sections)
+      })
+    }
+  })
+})
+
+sectionRoutes.get('/get_student_sections', (req, res) => {
+  Section.find({_id: {$in: req.user.student_sections}}, function(err, student_sections) {
+    if(err || student_sections == null) {
+      console.log("<ERROR> Getting ta sections by user with ID:",req.user._id)
+      res.json(err)
+    } else {
+      let promises = []
+      student_sections.forEach(section => {
+        promises.push(new Promise((resolve,reject) => {
+          Course.findById(section.course,function(err,course) {
+            section.course = course
+            resolve(course)
+          })
+        }))
+      })
+      Promise.all(promises).then(resolved => {
+        console.log("<SUCCESS> Getting student sections by user with ID:",req.user._id)
+        res.json(student_sections)
+      })
+    }
+  })
+})
+
 module.exports = sectionRoutes;

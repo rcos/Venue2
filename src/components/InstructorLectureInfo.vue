@@ -45,6 +45,7 @@
       async getAttendanceForLecture() {
         const response = await LectureSubmissionAPI.getLectureSubmissionsForLecture(this.lecture_id)
         this.submissions = response.data
+        console.log(this.submissions)
         this.submissions_loaded = true
       }
     }

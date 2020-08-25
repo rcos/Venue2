@@ -20,17 +20,17 @@ let User = new Schema({
 		type: Boolean,
 		default: false
 	},
-	is_instructor: {
-		type: Boolean,
-		default: false
-	},
+	instructor_courses: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Course'
+	}],
 	ta_sections: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Section'
 	}],
-	submissions: [{
+	student_sections: [{
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Submission'
+		ref: 'Section'
 	}]
 });
 
