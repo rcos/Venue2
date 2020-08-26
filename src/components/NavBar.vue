@@ -96,7 +96,7 @@
           <ul class="mobile-course-list">
             <li class="mobile-course-link" v-for="section in student_sections" :key="section._id">
               <router-link :to="{name: 'course_info', params: { id: section._id }}">
-                <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>ein
+                <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
               </router-link>
             </li>
           </ul>
@@ -233,10 +233,15 @@
     height: 4rem;
     padding: 1rem 2rem;
     display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
   }
 
   #breadcrumb-container {
-    margin: 0;
+    position: relative;
+    margin: 1rem 0rem;
     width: 100%;
     text-align: left;
     padding-left: 4rem;

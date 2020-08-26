@@ -5,7 +5,7 @@
 
         <!-- Title -->
         <div class="title">
-          <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: course._id }}" tabindex="-1">
+          <router-link v-if="is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}" tabindex="-1">
             <div class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Create New Lecture for {{ course.dept }} {{ course.course_number }}</div>
           </router-link>
         </div>
@@ -46,7 +46,7 @@
             <div class="inline-block big-button mobile" tabindex="0">Create New Lecture for {{ course.dept }} {{ course.course_number }}</div>
           </router-link>
         <div class="courseinfo-attendance-listing">
-          <div v-if="is_instructor || is_ta" class="section-select-container mobile float-right">
+          <div v-if="is_instructor" class="section-select-container mobile float-right">
             <label id="section_select_label">Section(s):</label>
             <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange">
               <option :value="'all'" selected>All</option>
