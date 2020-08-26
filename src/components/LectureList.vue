@@ -35,8 +35,8 @@
 <style scoped>
   .lecture-list {
     height: 100%;
-    width: 85%;
-    margin: auto;
+    width: 95%;
+    margin: 1rem;
   }
 
   .no-lecture-text {
