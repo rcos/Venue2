@@ -139,13 +139,12 @@ export default {
     this.getCurrentUser()
     this.section_id = null
 
-    if (this.current_user.instructor_courses.includes(this.$route.params.id)) {
+    if (this.is_instructor) {
       this.course_id = this.$route.params.id
       this.getAllSections()
       this.getStudentsForCourse()
       this.getCourse()
-    }
-    else {
+    } else {
       this.section_id = this.$route.params.id
       this.getSectionWithCourse()
     }
@@ -278,7 +277,7 @@ export default {
       })
       this.sorted_lectures = sorted
       this.lectures_loaded = true
-      if(options.instructor) {
+      if(this.is_instructor || this.is_ta) {
         this.calculateInstructorAttendances()
       } else {
         this.calculateStudentAttendances()
@@ -326,32 +325,36 @@ export default {
       if(this.sorted_lectures[this.section_id]) {
         let promise_tracker = []
         this.sorted_lectures[this.section_id].lectures.forEach(lecture_data => {
-          promise_tracker.push(
-            LectureSubmissionAPI.getOrMake(lecture_data._id, this.current_user._id)
-            .catch(err => { console.log(`error retrieving lecture submission for student ${this.current_user._id}`); console.log(err); })
-            .then(response => {
-              if (response.data == null || response.data == []) {
-                lecture_data.percentage = 0
-              } else {
-                let submission = response.data
-                if(submission.live_percent) {
-                  if(submission.video_percent) {
-                    lecture_data.percentage = Math.max(
-                      submission.live_percent * 100,
-                      submission.video_percent * 100
-                    )
-                  } else {
-                    lecture_data.percentage = submission.live_percent * 100
-                  }
-                } else if(submission.video_percent) {
-                  lecture_data.percentage = submission.video_percent * 100
-                } else {
+          if(this.is_student) {
+
+            promise_tracker.push(
+              LectureSubmissionAPI.getOrMake(lecture_data._id, this.current_user._id)
+              .catch(err => { console.log(`error retrieving lecture submission for student ${this.current_user._id}`); console.log(err); })
+              .then(response => {
+                if (response.data == null || response.data == []) {
                   lecture_data.percentage = 0
+                } else {
+                  let submission = response.data
+                  if(submission.live_percent) {
+                    if(submission.video_percent) {
+                      lecture_data.percentage = Math.max(
+                        submission.live_percent * 100,
+                        submission.video_percent * 100
+                      )
+                    } else {
+                      lecture_data.percentage = submission.live_percent * 100
+                    }
+                  } else if(submission.video_percent) {
+                    lecture_data.percentage = submission.video_percent * 100
+                  } else {
+                    lecture_data.percentage = 0
+                  }
+                  lecture_data.color = this.getHTMLClassByAttendance(lecture_data.percentage)
                 }
-                lecture_data.color = this.getHTMLClassByAttendance(lecture_data.percentage)
-              }
-            })
-          )
+              })
+            )
+
+          }
         })
         Promise.all(promise_tracker)
         .then(res => {

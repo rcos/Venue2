@@ -3,9 +3,7 @@
     <!-- mobile -->
     <show-at breakpoint="small">
       <div class="lecture-info-container mobile">
-        <div class="spinner-border" role="status" v-if="!lecture_has_loaded">
-          <span class="sr-only">Loading...</span>
-        </div>
+        <SquareLoader role="status" v-if="!lecture_has_loaded"/>
         <div v-else>
           <InstructorLectureInfo v-if="is_instructor || is_ta" :lecture="lecture" :is_instructor="is_instructor || is_ta" />
           <StudentLectureInfo v-else-if="is_student && polls_loaded" :lecture="lecture" :is_instructor="is_instructor || is_ta" :polls="polls" />
@@ -15,9 +13,7 @@
     <!-- tablet and up -->
     <show-at breakpoint="mediumAndAbove">
       <div class="lecture-info-container">
-        <div class="spinner-border" role="status" v-if="!lecture_has_loaded">
-          <span class="sr-only">Loading...</span>
-        </div>
+        <SquareLoader role="status" v-if="!lecture_has_loaded"/>
         <div v-else>
           <InstructorLectureInfo v-if="is_instructor || is_ta" :lecture="lecture" :is_instructor="is_instructor || is_ta" />
           <StudentLectureInfo v-else-if="is_student && polls_loaded" :lecture="lecture" :is_instructor="is_instructor || is_ta" :polls="polls" />

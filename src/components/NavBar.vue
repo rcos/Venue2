@@ -38,7 +38,7 @@
           <div v-if="is_ta_section_info()" class="active-link-underline"></div>
         </div>
         <div class="venue-nav-link-container" id="student-section-dropdown" v-if="student_sections.length">
-          <a data-toggle="collapse" href="#ta-collapse" class="venue-nav-link" :class="{'active-link':is_student_section_info()}" style="cursor:pointer;">Student Sections {{"\u23F7"}}</a>
+          <a data-toggle="collapse" href="#student-collapse" class="venue-nav-link" :class="{'active-link':is_student_section_info()}" style="cursor:pointer;">Student Sections {{"\u23F7"}}</a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
               <router-link v-for="section in student_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
@@ -49,21 +49,23 @@
           <div v-if="is_student_section_info()" class="active-link-underline"></div>
         </div>
         <!-- Statistics Link -->
-        <div v-if="instructor_courses.length" class="venue-nav-link-container">
-          <router-link class="venue-nav-link" :class="{'active-link':is_statistics()}" :to="{name: 'statistics'}">
-            Statistics
-          </router-link>
-          <div v-if="is_statistics()" class="active-link-underline"></div>
-        </div>
+        <show-at breakpoint="large">
+          <div v-if="instructor_courses.length" class="venue-nav-link-container">
+            <router-link class="venue-nav-link" :class="{'active-link':is_statistics()}" :to="{name: 'statistics'}">
+              Statistics
+            </router-link>
+            <div v-if="is_statistics()" class="active-link-underline"></div>
+          </div>
+        </show-at>
       </div>
       <!-- Settings Link -->
       <router-link :to="{name: 'settings'}" role="link" aria-label="User Settings" class="settings_link">
         <div class="user-name float-right">
-          <hide-at breakpoint="small">
+          <show-at breakpoint="large">
             <p class="d-inline-block mr-2" aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }}</p>
-          </hide-at>
-          <show-at breakpoint="small">
-            <p class="d-inline-block mr-2" aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }}</p>
+          </show-at>
+          <show-at breakpoint="medium">
+            <p class="d-inline-block mr-2" aria-label="User Name">{{ current_user.first_name }}</p>
           </show-at>
           <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
         </div>
@@ -71,32 +73,34 @@
     </nav>
     <!-- Mobile Course Dropdown -->
     <show-at breakpoint="mediumAndBelow">
-      <div class="collapse" id="instructor-collapse">
-        <ul class="mobile-course-list">
-          <li class="mobile-course-link" v-for="course in instructor_courses" :key="course._id">
-            <router-link :to="{name: 'course_info', params: { id: course._id }}">
-              <p class="mobile-course-link-name">{{ course.name }}</p>
-            </router-link>
-          </li>
-        </ul>
-      </div>
-      <div class="collapse" id="ta-collapse">
-        <ul class="mobile-course-list">
-          <li class="mobile-course-link" v-for="section in ta_sections" :key="section._id">
-            <router-link :to="{name: 'course_info', params: { id: section._id }}">
-              <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
-            </router-link>
-          </li>
-        </ul>
-      </div>
-      <div class="collapse" id="student-collapse">
-        <ul class="mobile-course-list">
-          <li class="mobile-course-link" v-for="section in student_sections" :key="section._id">
-            <router-link :to="{name: 'course_info', params: { id: section._id }}">
-              <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>ein
-            </router-link>
-          </li>
-        </ul>
+      <div>
+        <div class="collapse" id="instructor-collapse">
+          <ul class="mobile-course-list">
+            <li class="mobile-course-link" v-for="course in instructor_courses" :key="course._id">
+              <router-link :to="{name: 'course_info', params: { id: course._id }}">
+                <p class="mobile-course-link-name">{{ course.name }}</p>
+              </router-link>
+            </li>
+          </ul>
+        </div>
+        <div class="collapse" id="ta-collapse">
+          <ul class="mobile-course-list">
+            <li class="mobile-course-link" v-for="section in ta_sections" :key="section._id">
+              <router-link :to="{name: 'course_info', params: { id: section._id }}">
+                <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
+              </router-link>
+            </li>
+          </ul>
+        </div>
+        <div class="collapse" id="student-collapse">
+          <ul class="mobile-course-list">
+            <li class="mobile-course-link" v-for="section in student_sections" :key="section._id">
+              <router-link :to="{name: 'course_info', params: { id: section._id }}">
+                <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>ein
+              </router-link>
+            </li>
+          </ul>
+        </div>
       </div>
     </show-at>
     <!-- Breadcrumbs -->
@@ -196,7 +200,6 @@
           }
         } else {
           this.current_section = sections.find(section => section._id == this.$route.params.id)
-          console.log(this.current_section)
           if(!this.current_section) {
             this.current_course = this.instructor_courses.find(course => course._id == this.$route.params.id)
           }
@@ -253,6 +256,7 @@
   #venue-nav-links {
     margin-top: 5px;
     float: left;
+    display: inline-flex;
     /*padding: 1px;*/
   }
 
@@ -311,6 +315,8 @@
 
   .mobile-course-link {
     height: 2rem;
+    width: 100%;
+    display: inline-block;
   }
 
   .mobile-course-link-name {

@@ -300,7 +300,6 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 													console.log("<ERROR> Getting course for section:",lecture_section)
 													resolve2(null)
 												} else {
-													console.log(lecture_course)
 													resolve2(lecture_course)
 												}
 											})
@@ -322,7 +321,6 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 											})
 										}
 									}
-									console.log(ta_lectures)
 									resolve(ta_lectures)
 								})
 							} else {
@@ -391,7 +389,6 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 											})
 										}
 									}
-									console.log(student_lectures)
 									resolve(student_lectures)
 								})
 							} else {
