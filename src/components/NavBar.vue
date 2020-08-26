@@ -9,46 +9,63 @@
       <div id="venue-nav-links">
         <!-- Dashboard Link -->
         <div class="venue-nav-link-container">
-          <router-link class="venue-nav-link" :class="{'active-link':is_dashboard}" :to="{name: 'dashboard'}">
+          <router-link class="venue-nav-link" :class="{'active-link':is_dashboard()}" :to="{name: 'dashboard'}">
             <p>Dashboard</p>
           </router-link>
-          <div v-if="is_dashboard" class="active-link-underline"></div>
+          <div v-if="is_dashboard()" class="active-link-underline"></div>
         </div>
         <!-- Courses Link -->
-        <div class="venue-nav-link-container" id="course-dropdown">
-          <a data-toggle="collapse" href="#collapseExample" class="venue-nav-link" :class="{'active-link':is_course_info}" style="cursor:pointer;">Courses {{"\u23F7"}}</a>
+        <div class="venue-nav-link-container" id="instructor-course-dropdown" v-if="instructor_courses.length">
+          <a data-toggle="collapse" href="#instructor-collapse" class="venue-nav-link" :class="{'active-link':is_instructor_course_info()}" style="cursor:pointer;">Instructor Courses {{"\u23F7"}}</a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
-              <div v-if="is_instructor">
-                <router-link v-for="course in user_courses" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
-                  <p>{{ course.name }}</p>
-                </router-link>
-              </div>
-              <div v-else>
-                <router-link v-for="section in user_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
-                  <p>{{ section.course.name }}</p>
-                </router-link>
-              </div>
+              <router-link v-for="course in instructor_courses" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
+                <p>{{ course.name }}</p>
+              </router-link>
             </div>
           </hide-at>
-          <div v-if="is_course_info" class="active-link-underline"></div>
+          <div v-if="is_instructor_course_info()" class="active-link-underline"></div>
+        </div>
+        <div class="venue-nav-link-container" id="ta-section-dropdown" v-if="ta_sections.length">
+          <a data-toggle="collapse" href="#ta-collapse" class="venue-nav-link" :class="{'active-link':is_ta_section_info()}" style="cursor:pointer;">TA Sections {{"\u23F7"}}</a>
+          <hide-at breakpoint="mediumAndBelow">
+            <div class="dropdown-content">
+              <router-link v-for="section in ta_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
+                <p>{{ section.course.name }} {{section.name}}</p>
+              </router-link>
+            </div>
+          </hide-at>
+          <div v-if="is_ta_section_info()" class="active-link-underline"></div>
+        </div>
+        <div class="venue-nav-link-container" id="student-section-dropdown" v-if="student_sections.length">
+          <a data-toggle="collapse" href="#student-collapse" class="venue-nav-link" :class="{'active-link':is_student_section_info()}" style="cursor:pointer;">Student Sections {{"\u23F7"}}</a>
+          <hide-at breakpoint="mediumAndBelow">
+            <div class="dropdown-content">
+              <router-link v-for="section in student_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
+                <p>{{ section.course.name }} {{ section.name }}</p>
+              </router-link>
+            </div>
+          </hide-at>
+          <div v-if="is_student_section_info()" class="active-link-underline"></div>
         </div>
         <!-- Statistics Link -->
-        <div v-if="is_instructor" class="venue-nav-link-container">
-          <router-link class="venue-nav-link" :class="{'active-link':is_statistics}" :to="{name: 'statistics'}">
-            Statistics
-          </router-link>
-          <div v-if="is_statistics" class="active-link-underline"></div>
-        </div>
+        <!-- <show-at breakpoint="large">
+          <div v-if="instructor_courses.length" class="venue-nav-link-container">
+            <router-link class="venue-nav-link" :class="{'active-link':is_statistics()}" :to="{name: 'statistics'}">
+              Statistics
+            </router-link>
+            <div v-if="is_statistics()" class="active-link-underline"></div>
+          </div>
+        </show-at> -->
       </div>
       <!-- Settings Link -->
       <router-link :to="{name: 'settings'}" role="link" aria-label="User Settings" class="settings_link">
         <div class="user-name float-right">
-          <hide-at breakpoint="small">
+          <show-at breakpoint="large">
             <p class="d-inline-block mr-2" aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }}</p>
-          </hide-at>
-          <show-at breakpoint="small">
-            <p v-if="!is_instructor" class="d-inline-block mr-2" aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }}</p>
+          </show-at>
+          <show-at breakpoint="medium">
+            <p class="d-inline-block mr-2" aria-label="User Name">{{ current_user.first_name }}</p>
           </show-at>
           <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
         </div>
@@ -56,21 +73,34 @@
     </nav>
     <!-- Mobile Course Dropdown -->
     <show-at breakpoint="mediumAndBelow">
-      <div class="collapse" id="collapseExample">
-        <ul class="mobile-course-list" v-if="is_instructor">
-          <li class="mobile-course-link" v-for="course in user_courses" :key="course._id">
-            <router-link :to="{name: 'course_info', params: { id: course._id }}">
-              <p class="mobile-course-link-name">{{ course.name }}</p>
-            </router-link>
-          </li>
-        </ul>
-        <ul class="mobile-course-list" v-else>
-          <li class="mobile-course-link" v-for="section in user_sections" :key="section._id">
-            <router-link :to="{name: 'course_info', params: { id: section._id }}">
-              <p class="mobile-course-link-name">{{ section.course.name }}</p>
-            </router-link>
-          </li>
-        </ul>
+      <div>
+        <div class="collapse" id="instructor-collapse">
+          <ul class="mobile-course-list">
+            <li class="mobile-course-link" v-for="course in instructor_courses" :key="course._id">
+              <router-link :to="{name: 'course_info', params: { id: course._id }}">
+                <p class="mobile-course-link-name">{{ course.name }}</p>
+              </router-link>
+            </li>
+          </ul>
+        </div>
+        <div class="collapse" id="ta-collapse">
+          <ul class="mobile-course-list">
+            <li class="mobile-course-link" v-for="section in ta_sections" :key="section._id">
+              <router-link :to="{name: 'course_info', params: { id: section._id }}">
+                <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
+              </router-link>
+            </li>
+          </ul>
+        </div>
+        <div class="collapse" id="student-collapse">
+          <ul class="mobile-course-list">
+            <li class="mobile-course-link" v-for="section in student_sections" :key="section._id">
+              <router-link :to="{name: 'course_info', params: { id: section._id }}">
+                <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
+              </router-link>
+            </li>
+          </ul>
+        </div>
       </div>
     </show-at>
     <!-- Breadcrumbs -->
@@ -78,16 +108,16 @@
       <router-link :to="{name: 'dashboard'}">
         Venue
       </router-link>
-      <div v-if="current_course" class="crumb">
-        {{"\u23F5"}}
-        <router-link :to="{name: 'course_info', params: { id: current_course._id }}">
-          {{current_course.name}}
-        </router-link>
-      </div>
-      <div v-else-if="current_section" class="crumb">
+      <div v-if="current_section" class="crumb">
         {{"\u23F5"}}
         <router-link :to="{name: 'course_info', params: { id: current_section._id }}">
           {{current_section.course.name}}
+        </router-link>
+      </div>
+      <div v-else-if="current_course" class="crumb">
+        {{"\u23F5"}}
+        <router-link :to="{name: 'course_info', params: { id: current_course._id }}">
+          {{current_course.name}}
         </router-link>
       </div>
       <div v-if="current_lecture" class="crumb">
@@ -111,32 +141,13 @@
   export default {
     name: 'NavBar',
     computed: {
-      is_dashboard: function () {
-        return this.$route.name === 'dashboard'
-      },
-      is_course_info: function () {
-        return this.$route.name === 'course_info'
-      },
-      is_lecture_info: function () {
-        return this.$route.name === 'lecture_info'
-      },
-      is_statistics: function () {
-        return this.$route.name === 'statistics'
-      },
     },
     watch: {
       $route (to, from){
-        this.user_courses = []
-        this.user_sections = [],
-        this.user_lectures = [],
         this.current_course = null,
         this.current_section = null,
-        this.current_lecture = null
-        this.getLectures()
-        if(this.is_instructor)
-          this.getInstructorCourses()
-        else
-          this.getSectionsWithCourses()
+        this.current_lecture = null,
+        this.loadBreadcrumb()
       }
     },
     components: {
@@ -146,9 +157,9 @@
     data(){
       return {
         current_user: {},
-        is_instructor: Boolean,
-        user_courses: [],
-        user_sections: [],
+        instructor_courses: [],
+        ta_sections: [],
+        student_sections: [],
         user_lectures: [],
         current_course: null,
         current_section: null,
@@ -156,54 +167,63 @@
       }
     },
     created() {
-      this.getCurrentUser()
-      this.getLectures()
-      if(this.is_instructor)
-        this.getInstructorCourses()
-      else
-        this.getSectionsWithCourses()
+      this.current_user = this.$store.state.user.current_user
+      this.loadData()
     },
     methods: {
       showBreadcrumb() {
         return !(this.$route.name === 'dashboard' || this.$route.name === 'settings' || this.$route.name === 'lecture_playback')
       },
-      getCurrentUser() {
-        this.current_user = this.$store.state.user.current_user
-        this.is_instructor = this.current_user.is_instructor
+      async loadData() {
+        const response1 = await CourseAPI.getInstructorCourses()
+        this.instructor_courses = response1.data
+
+        const response2 = await SectionAPI.getTASections()
+        this.ta_sections = response2.data
+
+        const response3 = await SectionAPI.getStudentSections()
+        this.student_sections = response3.data
+
+        const response4 = await LectureAPI.getLecturesForUser(this.current_user._id,'with_sections_and_course')
+        this.user_lectures = response4.data
+        
+        this.loadBreadcrumb()
       },
-      async getInstructorCourses() {
-        const response = await CourseAPI.getInstructorCourses(this.current_user._id)
-        this.user_courses = response.data
-        if(this.$route.params.id) {
-          this.current_course = response.data.find(a=>a._id == this.$route.params.id)
-        }
-      },
-      async getSectionsWithCourses() {
-        const response = await SectionAPI.getSectionsWithCoursesForStudent(this.current_user._id)
-        let temp_sections = response.data
-        let temp_course_ids = []
-        temp_sections.forEach(section => {
-          if(!temp_course_ids.includes(section.course._id)){
-            this.user_sections.push(section)
-            temp_course_ids.push(section.course._id)
-          }
-          if(section._id == this.$route.params.id) {
-            this.current_section = section
-          }
-        })
-      },
-      async getLectures() {
-        LectureAPI.getLecturesForUser(this.current_user._id,'with_sections_and_course')
-        .then(res => {
-          this.user_lectures = res.data
-          this.current_lecture = res.data.find(a=>a._id == this.$route.params.lecture_id)
-          if(this.current_lecture && !this.is_instructor) {
-            this.current_section = this.current_lecture.sections[0]
-          } else if(this.current_lecture) {
+      loadBreadcrumb() {
+        this.current_lecture = this.user_lectures.find(a=>this.$route.params.lecture_id && a && a._id == this.$route.params.lecture_id)
+        let sections = this.ta_sections.concat(this.student_sections)
+
+        if(this.current_lecture) {
+          this.current_section = this.current_lecture.sections.find(section => sections.map(a => a._id).includes(section._id))
+          if(!this.current_section) {
             this.current_course = this.current_lecture.sections[0].course
           }
-        })
-      }
+        } else {
+          this.current_section = sections.find(section => section._id == this.$route.params.id)
+          if(!this.current_section) {
+            this.current_course = this.instructor_courses.find(course => course._id == this.$route.params.id)
+          }
+        }
+        
+      },
+      is_dashboard() {
+        return this.$route.name === 'dashboard'
+      },
+      is_instructor_course_info() {
+        return this.$route.name === 'course_info' && this.instructor_courses.some(a => a._id == this.$route.params.id)
+      },
+      is_ta_section_info() {
+        return this.$route.name === 'course_info' && this.ta_sections.some(a => a._id == this.$route.params.id)
+      },
+      is_student_section_info() {
+        return this.$route.name === 'course_info' && this.student_sections.some(a => a._id == this.$route.params.id)
+      },
+      is_lecture_info() {
+        return this.$route.name === 'lecture_info'
+      },
+      is_statistics() {
+        return this.$route.name === 'statistics'
+      },
     }
   }
 </script>
@@ -213,10 +233,15 @@
     height: 4rem;
     padding: 1rem 2rem;
     display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
   }
 
   #breadcrumb-container {
-    margin: 0;
+    position: relative;
+    margin: 1rem 0rem;
     width: 100%;
     text-align: left;
     padding-left: 4rem;
@@ -236,6 +261,7 @@
   #venue-nav-links {
     margin-top: 5px;
     float: left;
+    display: inline-flex;
     /*padding: 1px;*/
   }
 
@@ -244,7 +270,9 @@
     display: inline-block;
   }
 
-  #course-dropdown {
+  #instructor-course-dropdown,
+  #ta-section-dropdown,
+  #student-section-dropdown {
     position: relative;
     border-radius: 5px;
   }
@@ -278,7 +306,9 @@
     transition: all 150ms linear;
   }
 
-  #course-dropdown:hover .dropdown-content {
+  #instructor-course-dropdown:hover .dropdown-content,
+  #ta-section-dropdown:hover .dropdown-content,
+  #student-section-dropdown:hover .dropdown-content {
     max-height: 300px;
     overflow-y: auto;
   }
@@ -290,6 +320,8 @@
 
   .mobile-course-link {
     height: 2rem;
+    width: 100%;
+    display: inline-block;
   }
 
   .mobile-course-link-name {

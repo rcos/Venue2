@@ -1,9 +1,7 @@
 <template>
   <div>
     <LectureInfoHeader :lecture="lecture" :is_instructor="true" />
-    <div class="spinner-border" role="status" v-if="!submissions_loaded">
-      <span class="sr-only">Loading...</span>
-    </div>
+    <SquareLoader role="status" v-if="!submissions_loaded"/>
     <InstructorLectureAttendanceContainer v-else :lecture="lecture" :submissions="submissions" v-bind:all_students="all_students" />
   </div>
 </template>
@@ -15,6 +13,8 @@
   import LectureInfoHeader from '@/components/LectureInfoHeader.vue';
   import InstructorLectureAttendanceContainer from '@/components/InstructorLectureAttendanceContainer.vue';
 
+  import SquareLoader from "@/components/Loaders/SquareLoader.vue";
+
   export default {
     name: 'InstructorLectureInfo',
     props: {
@@ -23,7 +23,8 @@
     },
     components: {
       LectureInfoHeader,
-      InstructorLectureAttendanceContainer
+      InstructorLectureAttendanceContainer,
+      SquareLoader
     },
     data(){
       return {

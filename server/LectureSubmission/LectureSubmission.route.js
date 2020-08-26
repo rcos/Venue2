@@ -140,10 +140,10 @@ lectureSubmissionRoutes.route('/update').post(function (req, res) {
       updated,
       function (err, updatedSubmission) {
         if (err || updatedSubmission == null) {
-          console.log("<ERROR> Updating lecture submission by ID:",updated._id,"with:",updated)
+          console.log("<ERROR> Updating lecture submission by ID:",updated._id)
           res.json(err);
         } else {
-          console.log("<SUCCESS> Updating lecture submission by ID:",updated._id,"with:",updated)
+          console.log("<SUCCESS> Updating lecture submission by ID:",updated._id)
           res.json(updated);
         }
       }

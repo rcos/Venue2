@@ -28,6 +28,8 @@ export default {
 	data(){
 		return {
 			is_instructor: false,
+			is_ta: false,
+			is_student: false,
 			lecture: {},
 			lecture_loaded: false,
 			unrestricted: false,
@@ -37,12 +39,15 @@ export default {
 		}
 	},
 	created() {
-		this.is_instructor = this.$store.state.user.current_user.is_instructor
-		LectureAPI.getLecture(this.$route.params.lecture_id)
+		LectureAPI.getLectureWithSectionsAndCourse(this.$route.params.lecture_id)
 			.then(res => {
 				this.lecture = res.data
+				this.is_instructor = this.$store.state.user.current_user.instructor_courses.includes(this.lecture.sections[0].course._id)
+				let lect_sect_ids = this.lecture.sections.map(a => a._id)
+				this.is_ta = this.$store.state.user.current_user.ta_sections.some( a => lect_sect_ids.includes(a) )
+				this.is_student = this.$store.state.user.current_user.student_sections.some( a => lect_sect_ids.includes(a) )
 				this.lecture_loaded = true
-				if(new Date() > new Date(this.lecture.playback_submission_end_time) || this.is_instructor) {
+				if(new Date() > new Date(this.lecture.playback_submission_end_time) || this.is_instructor || this.is_ta) {
 					this.unrestricted = true
 					this.needs_decision = false
 				} else {

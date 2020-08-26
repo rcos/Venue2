@@ -942,10 +942,10 @@ export default {
 }
 #stats-left {
 	left: 0;
-	width: 20rem;
+	width: 22rem;
 }
 #stats-right {
-	left: 20rem;
+	left: 22rem;
 	right: 0;
 }
 #stats-right-top,
@@ -995,7 +995,7 @@ canvas:last-of-type {
 
 .side-panel-section {
 	margin: 0rem 2rem;
-	width: 15rem;
+	width: 17rem;
 	padding: 2rem 0rem;
 	min-height: 2.75rem;
 	text-align: center;
