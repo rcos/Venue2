@@ -105,12 +105,12 @@
 
   .lecture-card-background {
     height: 4rem;
-    width: 100%;
+    width: 95%;
     margin-left: 0;
     border-radius: 5px;
-    -webkit-transition: height 300ms, width 300ms, margin-left 300ms;
-    -ms-transition: height 300ms, width 300ms, margin-left 300ms;
-    transition: height 300ms, width 300ms, margin-left 300ms;
+    -webkit-transition: all 300ms cubic-bezier(0.19, 1, 0.22, 1);
+    -ms-transition: all 300ms cubic-bezier(0.19, 1, 0.22, 1);
+    transition: all 300ms cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   .live-lecture-open {
@@ -136,7 +136,7 @@
   .lecture-card-foreground {
     position: absolute;
     height: 4rem;
-    width: 96.5%;
+    width: 91%;
     margin-top: -3.5rem;
     margin-left: 1.7%;
     background-color: white;
@@ -147,12 +147,12 @@
 
   .lecture-card:hover .lecture-card-background,
   .lecture-card:focus-within .lecture-card-background{
-    height: 4.5rem;
-    width: 102.5%;
-    margin-left: -1.25%;
-    -webkit-transition: height 300ms, width 300ms, margin-left 300ms;
-    -ms-transition: height 300ms, width 300ms, margin-left 300ms;
-    transition: height 300ms, width 300ms, margin-left 300ms;
+    /* height: 4.5rem; */
+    width: 100%;
+    /* margin-left: -1.25%; */
+    -webkit-transition: all 300ms cubic-bezier(0.19, 1, 0.22, 1);
+    -ms-transition: all 300ms cubic-bezier(0.19, 1, 0.22, 1);
+    transition: all 300ms cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   .lecture_card_link:focus {
