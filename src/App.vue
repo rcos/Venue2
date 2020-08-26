@@ -1,10 +1,12 @@
 <template>
-  <div id="app">
-    <NavBar class="main_navbar" v-if="this.$route.name != 'landing_page' && this.$route.name != 'set_permanent_password' && current_user"></NavBar>
-    <main id="main-content">
-      <router-view :key="$route.fullPath" />
-    </main>
-    <!-- <Footer/> -->
+  <div>
+    <div id="app">
+      <NavBar class="main_navbar" v-if="this.$route.name != 'landing_page' && this.$route.name != 'set_permanent_password' && current_user"></NavBar>
+      <main id="main-content">
+        <router-view :key="$route.fullPath" />
+      </main>
+    </div>
+    <Footer/>
   </div>
 </template>
 
@@ -102,10 +104,16 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  min-height: calc(100vh - 2rem);
   // min-height: 100%;
 }
 
 main {
+  position: relative;
+  width: 100%;
+  top: 0;
+  bottom: 0rem;
+  overflow-y: auto;
   padding-bottom: 2rem;
 }
 </style>

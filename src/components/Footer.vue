@@ -1,6 +1,6 @@
 <template>
     <footer class="footer">
-    	© 2020 Venue v2.0 | 
+    	Venue | 
     	<a href="https://github.com/rcos/Venue2" target="_blank" aria-label="Github Repository">
     		<img class="github-mark" src="../assets/github_mark.png" aria-label="Github Icon" alt="Github Icon"/>
     	</a>
@@ -16,11 +16,16 @@ export default {
 
 <style>
 .footer {
-	position: absolute;
-	bottom: 0;
+	position: relative;
+	bottom: 0;	
 	width: 100%;
 	height: 2rem;
 	border-top: #e0e0e0 solid thin;
+	border-bottom: #e0e0e0 solid thin;
+	background: white;
+	font-size: 1rem;
+	padding-top: 0.2rem;
+	text-align: center;
 }
 
 .github-mark {
