@@ -5,16 +5,16 @@
 
         <!-- Title -->
         <div class="title">
-          <router-link v-if="this.current_user.is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}" tabindex="-1">
+          <router-link v-if="is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}" tabindex="-1">
             <div class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Create New Lecture for {{ course.dept }} {{ course.course_number }}</div>
           </router-link>
         </div>
-        <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" :section_number="this.current_user.is_instructor ? -1 : section.number" />
+        <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" :section_name="section.name" />
 
 
         <!-- Attendance History -->
         <div>
-          <div v-if="this.current_user.is_instructor" class="section-select-container float-right">
+          <div v-if="is_instructor" class="section-select-container float-right">
             <label id="section_select_label">Section(s):</label>
             <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange">
               <option :value="'all'" selected>All</option>
@@ -26,9 +26,9 @@
           <div class="courseinfo-legend playback-border">Asynchronous</div>
         </div>
         <InstructorAttendanceHistory
-          v-if="this.current_user.is_instructor && lectures_loaded && sorted_lectures[selected_section]"
+          v-if="(is_instructor || is_ta) && lectures_loaded && sorted_lectures[selected_section]"
           :lectures="sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded"/>
-        <StudentAttendanceHistory v-else-if="!this.current_user.is_instructor && lectures_loaded && sorted_lectures[section_id]" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded"/>
+        <StudentAttendanceHistory v-else-if="is_student && lectures_loaded && sorted_lectures[section_id]" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded"/>
         <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
           <SquareLoader />
         </div>
@@ -42,11 +42,11 @@
       <div>
         <!-- Mobile View -->
         <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" mobileMode />
-        <router-link v-if="this.current_user.is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}" tabindex="-1">
+        <router-link v-if="is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}" tabindex="-1">
             <div class="inline-block big-button mobile" tabindex="0">Create New Lecture for {{ course.dept }} {{ course.course_number }}</div>
           </router-link>
         <div class="courseinfo-attendance-listing">
-          <div v-if="this.current_user.is_instructor" class="section-select-container mobile float-right">
+          <div v-if="is_instructor" class="section-select-container mobile float-right">
             <label id="section_select_label">Section(s):</label>
             <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange">
               <option :value="'all'" selected>All</option>
@@ -57,9 +57,9 @@
           <div class="courseinfo-legend live-border">Synchronous</div>
           <div class="courseinfo-legend playback-border">Asynchronous</div>
           <InstructorAttendanceHistory :style='{textAlign: "center"}'
-            v-if="this.current_user.is_instructor && lectures_loaded && sorted_lectures[selected_section] && scores_loaded"
+            v-if="(is_instructor || is_ta) && lectures_loaded && sorted_lectures[selected_section] && scores_loaded"
             :lectures="sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded" mobileMode/>
-          <StudentAttendanceHistory :style='{textAlign: "center"}' v-else-if="!this.current_user.is_instructor && lectures_loaded && sorted_lectures[section_id] && scores_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
+          <StudentAttendanceHistory :style='{textAlign: "center"}' v-else-if="is_student && lectures_loaded && sorted_lectures[section_id] && scores_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
           <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
             <SquareLoader />
           </div>
@@ -114,8 +114,8 @@ export default {
   },
   data(){
     return {
-      course: Object,
-      section: Object,
+      course: {},
+      section: {},
       all_lectures: [],
       upcoming_lectures: [],
       live_lectures: [],
@@ -128,7 +128,10 @@ export default {
       selected_section: "all",
       sorted_lectures: {},
       lectures_loaded: false,
-      scores_loaded: false
+      scores_loaded: false,
+      is_instructor: false,
+      is_ta: false,
+      is_student: false
     }
   },
   created() {
@@ -136,13 +139,12 @@ export default {
     this.getCurrentUser()
     this.section_id = null
 
-    if (this.current_user.is_instructor) {
+    if (this.is_instructor) {
       this.course_id = this.$route.params.id
       this.getAllSections()
       this.getStudentsForCourse()
       this.getCourse()
-    }
-    else {
+    } else {
       this.section_id = this.$route.params.id
       this.getSectionWithCourse()
     }
@@ -172,6 +174,9 @@ export default {
     },
     getCurrentUser() {
       this.current_user = this.$store.state.user.current_user
+      this.is_instructor = this.current_user.instructor_courses.includes(this.$route.params.id)
+      this.is_ta = this.current_user.ta_sections.includes(this.$route.params.id)
+      this.is_student = this.current_user.student_sections.includes(this.$route.params.id)
     },
     parseActivePlaybackLectures(all_lectures) {
       this.playback_lectures = getActivePlaybackLectures(all_lectures)
@@ -272,7 +277,7 @@ export default {
       })
       this.sorted_lectures = sorted
       this.lectures_loaded = true
-      if(options.instructor) {
+      if(this.is_instructor || this.is_ta) {
         this.calculateInstructorAttendances()
       } else {
         this.calculateStudentAttendances()
@@ -320,32 +325,36 @@ export default {
       if(this.sorted_lectures[this.section_id]) {
         let promise_tracker = []
         this.sorted_lectures[this.section_id].lectures.forEach(lecture_data => {
-          promise_tracker.push(
-            LectureSubmissionAPI.getOrMake(lecture_data._id, this.current_user._id)
-            .catch(err => { console.log(`error retrieving lecture submission for student ${this.current_user._id}`); console.log(err); })
-            .then(response => {
-              if (response.data == null || response.data == []) {
-                lecture_data.percentage = 0
-              } else {
-                let submission = response.data
-                if(submission.live_percent) {
-                  if(submission.video_percent) {
-                    lecture_data.percentage = Math.max(
-                      submission.live_percent * 100,
-                      submission.video_percent * 100
-                    )
-                  } else {
-                    lecture_data.percentage = submission.live_percent * 100
-                  }
-                } else if(submission.video_percent) {
-                  lecture_data.percentage = submission.video_percent * 100
-                } else {
+          if(this.is_student) {
+
+            promise_tracker.push(
+              LectureSubmissionAPI.getOrMake(lecture_data._id, this.current_user._id)
+              .catch(err => { console.log(`error retrieving lecture submission for student ${this.current_user._id}`); console.log(err); })
+              .then(response => {
+                if (response.data == null || response.data == []) {
                   lecture_data.percentage = 0
+                } else {
+                  let submission = response.data
+                  if(submission.live_percent) {
+                    if(submission.video_percent) {
+                      lecture_data.percentage = Math.max(
+                        submission.live_percent * 100,
+                        submission.video_percent * 100
+                      )
+                    } else {
+                      lecture_data.percentage = submission.live_percent * 100
+                    }
+                  } else if(submission.video_percent) {
+                    lecture_data.percentage = submission.video_percent * 100
+                  } else {
+                    lecture_data.percentage = 0
+                  }
+                  lecture_data.color = this.getHTMLClassByAttendance(lecture_data.percentage)
                 }
-                lecture_data.color = this.getHTMLClassByAttendance(lecture_data.percentage)
-              }
-            })
-          )
+              })
+            )
+
+          }
         })
         Promise.all(promise_tracker)
         .then(res => {

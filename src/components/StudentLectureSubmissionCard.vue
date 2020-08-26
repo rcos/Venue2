@@ -1,8 +1,6 @@
 <template>
   <div class="student-lecture-submission-card">
-    <div class="spinner-border" role="status" v-if="!lecture_submission_has_loaded">
-      <span class="sr-only">Loading...</span>
-    </div>
+    <SquareLoader role="status" v-if="!lecture_submission_has_loaded"/>
     <div v-else>
       <div v-if="lecture_submission">
         <h3>Submission</h3>
@@ -18,8 +16,13 @@
 <script>
   import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js';
 
+  import SquareLoader from '@/components/Loaders/SquareLoader.vue'
+
   export default {
     name: 'StudentLectureSubmissionCard',
+    components: {
+      SquareLoader
+    },
     props: {
       lecture_id: String
     },
