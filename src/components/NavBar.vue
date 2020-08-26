@@ -49,14 +49,14 @@
           <div v-if="is_student_section_info()" class="active-link-underline"></div>
         </div>
         <!-- Statistics Link -->
-        <show-at breakpoint="large">
+        <!-- <show-at breakpoint="large">
           <div v-if="instructor_courses.length" class="venue-nav-link-container">
             <router-link class="venue-nav-link" :class="{'active-link':is_statistics()}" :to="{name: 'statistics'}">
               Statistics
             </router-link>
             <div v-if="is_statistics()" class="active-link-underline"></div>
           </div>
-        </show-at>
+        </show-at> -->
       </div>
       <!-- Settings Link -->
       <router-link :to="{name: 'settings'}" role="link" aria-label="User Settings" class="settings_link">
