@@ -12,7 +12,7 @@
 					<div class="col selector-label">
 						Sections:
 					</div>
-					<MultiSelectDropdown id="sections-selector" :options="sections.filtered" sortBy="number" @update="handleSectionsChange" :n="1" ref="sectionsSelector"/>
+					<MultiSelectDropdown id="sections-selector" :options="sections.filtered" sortBy="name" @update="handleSectionsChange" :n="1" ref="sectionsSelector"/>
 				</div>
 				<div class="row side-panel-section justify-content-end" v-if="lectures.filtered.length > 0">
 					<div class="selector-label">
