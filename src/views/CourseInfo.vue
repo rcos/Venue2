@@ -307,9 +307,9 @@ export default {
           g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
           b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
       };
-      // if(pct == 1.0) {
-      //   return 'linear-gradient(90deg, rgba(62,73,202,1) 0%, rgba(143,62,202,1) 20%, rgba(209,62,52,1) 40%, rgba(176,95,22,1) 60%, rgba(121,136,23,1) 80%, rgba(4,133,47,1) 100%)'
-      // }
+      if(pct == 1.0) {
+        return 'linear-gradient(90deg, rgba(62,73,202,1) 0%, rgba(143,62,202,1) 20%, rgba(209,62,52,1) 40%, rgba(176,95,22,1) 60%, rgba(121,136,23,1) 80%, rgba(4,133,47,1) 100%)'
+      }
       return 'rgb(' + [color.r, color.g, color.b].join(',') + ')';
     },
     calculateInstructorAttendances() {
