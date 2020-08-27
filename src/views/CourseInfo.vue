@@ -284,7 +284,6 @@ export default {
       }
     },
     perc2color(pct) {
-      pct = 1
       var percentColors = [
         { pct: 0.0, color: { r: 0xd1, g: 0x3e, b: 0x34 } },
         { pct: 0.6, color: { r: 0xd1, g: 0x3e, b: 0x34 } },
