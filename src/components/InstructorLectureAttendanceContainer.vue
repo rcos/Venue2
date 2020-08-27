@@ -134,7 +134,6 @@ export default {
 							let stud_data = []
 
 							let submission = self.submissions.find(a => a.submitter._id == student._id)
-							console.log(submission)
 
 							let percent = 0;
 							if(submission && submission.live_percent && submission.video_percent) {
@@ -150,7 +149,7 @@ export default {
 								stud_data.push(student.user_id)
 								stud_data.push(student.first_name)
 								stud_data.push(student.last_name)
-								stud_data.push(section.number)
+								stud_data.push(section.name)
 								stud_data.push("Live")
 								stud_data.push(percent)
 							} else if(submission && percent == submission.video_percent) {
@@ -158,7 +157,7 @@ export default {
 								stud_data.push(student.user_id)
 								stud_data.push(student.first_name)
 								stud_data.push(student.last_name)
-								stud_data.push(section.number)
+								stud_data.push(section.name)
 								stud_data.push("Recording")
 								stud_data.push(percent)
 							} else {
@@ -166,7 +165,7 @@ export default {
 								stud_data.push(student.user_id)
 								stud_data.push(student.first_name)
 								stud_data.push(student.last_name)
-								stud_data.push(section.number)
+								stud_data.push(section.name)
 								stud_data.push(null)
 								stud_data.push(0)
 							}
@@ -176,7 +175,7 @@ export default {
 					})
 				})
 
-				let csv = 'Submission Timestamp,User ID,First Name,Last Name,Registration Section,Submission Type,Grade\n';
+				let csv = 'Submission Timestamp,User ID,First Name,Last Name,Registration Section,Submission Type,Grade,Percent Questions Answered,Percent Questions Answered Correctly\n';
 				data.forEach(function(row) {
 					csv += row.join(',');
 					csv += "\n";

@@ -53,8 +53,8 @@ sectionRoutes.route('/update/:id').post(function (req, res) {
     if(req.body.updated_section.course) {
       updated_section.course = req.body.updated_section.course
     }
-    if(req.body.updated_section.number) {
-      updated_section.number = req.body.updated_section.number
+    if(req.body.updated_section.name) {
+      updated_section.name = req.body.updated_section.name
     }
     if(req.body.updated_section.students) {
       updated_section.students = req.body.updated_section.students

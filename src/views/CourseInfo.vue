@@ -18,7 +18,7 @@
             <label id="section_select_label">Section(s):</label>
             <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange">
               <option :value="'all'" selected>All</option>
-              <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">{{section.number}}</option>
+              <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">{{section.name}}</option>
             </select>
           </div>
           <div class="courseinfo-legend">Legend:</div>
@@ -50,7 +50,7 @@
             <label id="section_select_label">Section(s):</label>
             <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange">
               <option :value="'all'" selected>All</option>
-              <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">{{section.number}}</option>
+              <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">{{section.name}}</option>
             </select>
           </div>
           <div class="courseinfo-legend">Legend:</div>
@@ -158,7 +158,7 @@ export default {
           this.sections[section_._id] = section_
           this.sorted_sections.push(section_)
         })
-        this.sorted_sections.sort((a, b) => (a.number > b.number) ? 1 : -1)
+        this.sorted_sections.sort((a, b) => (a.name > b.name) ? 1 : -1)
         this.getAllLecturesForCourse()
       })
     },
@@ -284,11 +284,12 @@ export default {
       }
     },
     perc2color(pct) {
+      pct = 1
       var percentColors = [
         { pct: 0.0, color: { r: 0xd1, g: 0x3e, b: 0x34 } },
         { pct: 0.6, color: { r: 0xd1, g: 0x3e, b: 0x34 } },
-        { pct: 0.7, color: { r: 0xb9, g: 0x57, b: 0x26 } },
-        { pct: 0.8, color: { r: 0x82, g: 0x90, b: 0x25 } },
+        { pct: 0.8, color: { r: 0xb9, g: 0x57, b: 0x26 } },
+        // { pct: 0.85, color: { r: 0x82, g: 0x90, b: 0x25 } },
         { pct: 1.0, color: { r: 0x04, g: 0x85, b: 0x2f } }
       ];
       for (var i = 1; i < percentColors.length - 1; i++) {
@@ -308,7 +309,7 @@ export default {
           b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
       };
       if(pct == 1.0) {
-        return 'linear-gradient(90deg, rgba(62,73,202,1) 0%, rgba(143,62,202,1) 20%, rgba(209,62,52,1) 40%, rgba(176,95,22,1) 60%, rgba(121,136,23,1) 80%, rgba(4,133,47,1) 100%)'
+        return 'linear-gradient(90deg, rgba(62,73,202,1) 0%, rgba(143,62,202,1) 20%, rgba(209,62,52,1) 40%, rgba(176,95,22,1) 70%, rgba(4,133,47,1) 100%)'
       }
       return 'rgb(' + [color.r, color.g, color.b].join(',') + ')';
     },

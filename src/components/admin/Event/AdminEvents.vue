@@ -20,7 +20,7 @@
           <tr v-for="event in events" :key="event._id">
             <td>{{ event.title }}</td>
             <td>{{ event.location }}</td>
-            <td> {{ event.section.course.name }} {{ event.section.number }}</td>
+            <td> {{ event.section.course.name }} {{ event.section.name }}</td>
             <td> {{ new Date(event.start_time) }}</td>
             <td> {{ new Date(event.end_time) }}</td>
             <td> {{ new Date(event.submission_start_time) }}</td>

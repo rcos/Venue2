@@ -18,7 +18,7 @@
               <div class="row main-info">
                 <h3>{{lecture.sections[0].course.name}}</h3>
                 <h5 class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</h5>
-                <h5>Sections: <a class="section-numbers" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></h5>
+                <h5>Sections: <a class="section-numbers" v-for="(section,i) in lecture.sections" :key="i">{{ section.name }}</a></h5>
               </div>
               <div class="row">
                 <h5>Start Time:<h6>{{new Date(lecture.start_time)}}</h6></h5>
@@ -41,7 +41,7 @@
               <div class="col main-info">
                 <h3>{{lecture.sections[0].course.name}}</h3>
                 <h5 class="dept-and-number">{{lecture.sections[0].course.dept}} {{lecture.sections[0].course.course_number}}</h5>
-                <h5>Sections: <a class="section-numbers" v-for="(section,i) in lecture.sections" :key="i">{{ section.number }}</a></h5>
+                <h5>Sections: <a class="section-numbers" v-for="(section,i) in lecture.sections" :key="i">{{ section.name }}</a></h5>
               </div>
               <div class="col">
                 <h5>Start Time</h5>

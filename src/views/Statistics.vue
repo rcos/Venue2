@@ -45,7 +45,7 @@
 						<canvas id="lectureChart"></canvas>
 					</div>
 					<div v-else-if="sections.active.length > 0">
-						<canvas v-for="section in sections.active" :id="'sectionChart_'+section.number" :key="section.number"></canvas>
+						<canvas v-for="section in sections.active" :id="'sectionChart_'+section.name" :key="section.name"></canvas>
 					</div>
 					<canvas v-else-if="courses.active" id="courseChart"></canvas>
 				</div>
@@ -298,9 +298,9 @@ export default {
 				}
 			} else if(this.sections.active.length > 0) {
 				let sections = {}
-				this.sections.active.sort((a,b) => a.number > b.number ? 1 : -1)
+				this.sections.active.sort((a,b) => a.name > b.name ? 1 : -1)
 				this.sections.active.forEach(section => {
-					sections[section.number] = {
+					sections[section.name] = {
 						live: [],
 						playback: [],
 						absent: [],
@@ -337,26 +337,26 @@ export default {
 							})
 							if(Object.keys(lecture.students).length > 0) {
 								let lectAttendance = this.getAttendanceForLecture(lecture)
-								sections[section.number].live.push(lectAttendance.live)
-								sections[section.number].playback.push(lectAttendance.playback)
-								sections[section.number].absent.push(lectAttendance.absent)
+								sections[section.name].live.push(lectAttendance.live)
+								sections[section.name].playback.push(lectAttendance.playback)
+								sections[section.name].absent.push(lectAttendance.absent)
 								if(lecture.start_time) {
-									sections[section.number].dates.push(lecture.start_time)
+									sections[section.name].dates.push(lecture.start_time)
 								} else if(lecture.playback_submission_start_time) {
-									sections[section.number].dates.push(lecture.playback_submission_start_time)
+									sections[section.name].dates.push(lecture.playback_submission_start_time)
 								} else {
-									sections[section.number].dates.push(null)
+									sections[section.name].dates.push(null)
 								}
 							}
 						}
 					})
 					this.createAreaGraph({
-						chartID: "sectionChart_"+section.number,
-						title: this.courses.active.name + " - Section " + section.number + " Attendance",
-						live: sections[section.number].live,
-						playback: sections[section.number].playback,
-						absent: sections[section.number].absent,
-						dates: sections[section.number].dates
+						chartID: "sectionChart_"+section.name,
+						title: this.courses.active.name + " - Section " + section.name + " Attendance",
+						live: sections[section.name].live,
+						playback: sections[section.name].playback,
+						absent: sections[section.name].absent,
+						dates: sections[section.name].dates
 					})
 				})
 			} else if(this.courses.active) {

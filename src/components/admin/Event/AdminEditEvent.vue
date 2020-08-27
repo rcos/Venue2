@@ -20,7 +20,7 @@
               <div class="form-group">
                 <label>Section:</label>
                 <input class="form-control" v-model="event.section.course.name" readonly />
-                <input class="form-control" v-model="event.section.number" readonly />
+                <input class="form-control" v-model="event.section.name" readonly />
               </div>
             </div>
           </div>

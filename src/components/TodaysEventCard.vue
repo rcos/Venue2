@@ -9,7 +9,7 @@
           </div>
           <div v-else>
             <div class="event-title desktop-event-title">{{ event.title }}</div>
-            <div class="course-title desktop-course-title">{{ event.section.course.dept }} {{ event.section.course.course_number }}-{{ event.section.number}}</div>
+            <div class="course-title desktop-course-title">{{ event.section.course.dept }} {{ event.section.course.course_number }}-{{ event.section.name}}</div>
           </div>
         </div>
       </div>
@@ -24,7 +24,7 @@
           </div>
           <div v-else>
             <div class="event-title mobile-event-title">{{ event.title }}</div>
-            <div class="course-title mobile-course-title">{{ event.section.course.dept }} {{ event.section.course.course_number }}-{{ event.section.number}}</div>
+            <div class="course-title mobile-course-title">{{ event.section.course.dept }} {{ event.section.course.course_number }}-{{ event.section.name}}</div>
           </div>
         </div>
       </div>

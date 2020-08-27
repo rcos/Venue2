@@ -29,7 +29,7 @@ describe('API - Section Accessors',function() {
 					}
 				}).then(res2 => {
 					expect(section.course).to.equal(res2.body.course)
-					expect(section.number).to.equal(res2.body.number)
+					expect(section.name).to.equal(res2.body.name)
 					section.students.forEach((stud,index) => {
 						expect(stud).to.deep.equal(res2.body.students[index])
 					})
@@ -149,7 +149,7 @@ describe('API - Section Modifiers',function() {
 			}
 		}).then(res => {
 			addedSection = res.body
-			expect(addedSection.number).to.equal(999)
+			expect(addedSection.name).to.equal(999)
 			expect(addedSection.students.length).to.equal(0)
 			expect(addedSection.teaching_assistants.length).to.equal(0)
 		})
@@ -179,7 +179,7 @@ describe('API - Section Modifiers',function() {
 				}
 			}).then(res => {
 				let updatedSection = res.body
-				expect(updatedSection.number).to.equal(998)
+				expect(updatedSection.name).to.equal(998)
 				expect(updatedSection.students).to.equal(null)
 				expect(updatedSection.teaching_assistants).to.equal(null)
 			})

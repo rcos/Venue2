@@ -1,7 +1,7 @@
 <template>
   <div class="info-container">
     <div v-if="course_info">
-      <div>{{ section.course.dept }} {{ section.course.course_number }}-{{ section.number }}</div>
+      <div>{{ section.course.dept }} {{ section.course.course_number }}-{{ section.name }}</div>
       <div class="percentage-text">67% attendance</div>
       <div class="progress pg-bar">
         <div class="progress-bar bg-success " role="progressbar" style="width:67%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>

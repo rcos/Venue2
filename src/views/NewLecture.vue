@@ -23,7 +23,7 @@
         <!-- <Sections v-else v-bind:sections="course_sections" v-on:select-section="addSection" :disable_tabbing="(modal_open ? true : false)"/> -->
         <div class="input-wrapper">
           <label>Section(s):</label><br>
-          <!-- <input v-for="(section,i) in lecture_sections" :key="i" type="text" class="form-control new-lecture-input" v-model="section.number" readonly :tabindex="(modal_open ? '-1' : '0')"/> -->
+          <!-- <input v-for="(section,i) in lecture_sections" :key="i" type="text" class="form-control new-lecture-input" v-model="section.name" readonly :tabindex="(modal_open ? '-1' : '0')"/> -->
           <MultiSelectDropdown v-if="course_sections.length > 0" :options="course_sections" sortBy="name" @update="handleSectionsChange"/>
         </div>
         <div class="input-wrapper">

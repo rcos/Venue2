@@ -9,7 +9,7 @@
       <h1 class="event-title">{{ event.title }}</h1>
       <h6>{{ event.location }}</h6>
       <h3 class="course-name">{{ event.section.course.name }}</h3>
-      <h5 class="section-numbers">Section {{ event.section.number }}</h5>
+      <h5 class="section-numbers">Section {{ event.section.name }}</h5>
       <div class="time-info-container">
         <h4 class="time-info">Start time: {{ new Date(event.start_time) }}</h4>
         <h4 class="time-info">End time: {{ new Date(event.end_time) }}</h4>
