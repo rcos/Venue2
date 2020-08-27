@@ -42,9 +42,6 @@
           </div>
         </div>
       </div>
-      <div>
-        is_instructor: <input type="checkbox" v-model="user.is_instructor">
-      </div><br/>
       <div class="form-group">
         <button class="btn btn-primary">Create</button>
       </div>
