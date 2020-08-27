@@ -20,8 +20,8 @@ export default {
   deleteSection(id) {
     return API().delete('sections/delete/' + id)
   },
-  getInstructor (section_id) {
-    return API().get('sections/getInstructor/' + section_id)
+  getInstructors (section_id) {
+    return API().get('sections/getInstructors/' + section_id)
   },
   getCourse (section_id) {
     return API().get('sections/getCourse/' + section_id)

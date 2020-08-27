@@ -80,7 +80,7 @@ sectionRoutes.route('/delete/:id').delete(function (req, res) {
   });
 });
 
-sectionRoutes.route('/getInstructor/:id').get(function (req, res) {
+sectionRoutes.route('/getInstructors/:id').get(function (req, res) {
   let id = req.params.id;
   Section.findById(id, function (err, section){
       if(err || section == null) {
@@ -93,14 +93,14 @@ sectionRoutes.route('/getInstructor/:id').get(function (req, res) {
             console.log("<ERROR> Getting course with ID:",course_id)
             res.json(error);
           } else {
-            let instructor_id = course.instructor;
-            User.findById(instructor_id, function(error, instructor){
-              if(error || instructor == null) {
-                console.log("<ERROR> Getting user with ID:",instructor_id)
-                res.json(error);
+            let instructor_ids = course.instructors;
+            User.find({_id: {$in: instructor_ids}}, function(error, instructors){
+              if(error || instructors == null) {
+                console.log("<ERROR> Getting instructors with IDs:",instructor_id)
+                res.json(error)
               } else {
-                console.log("<SUCCESS> Getting instructor for section with ID:",id)
-                res.json(instructor);
+                console.log("<SUCCESS> Getting instructors for section with ID:",id)
+                res.json(instructors)
               }
             });
           }
