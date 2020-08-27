@@ -47,15 +47,25 @@ sectionRoutes.route('/edit/:id').get(function (req, res) {
 
 sectionRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
-  let updated_section = req.body.updated_section;
+  let updated_section = {}
+  
+  if(req.body.updated_section) {
+    if(req.body.updated_section.course) {
+      updated_section.course = req.body.updated_section.course
+    }
+    if(req.body.updated_section.number) {
+      updated_section.number = req.body.updated_section.number
+    }
+    if(req.body.updated_section.students) {
+      updated_section.students = req.body.updated_section.students
+    }
+    if(req.body.updated_section.teaching_assistants) {
+      updated_section.teaching_assistants = req.body.updated_section.teaching_assistants
+    }
+  }
+
   Section.findByIdAndUpdate(id,
-    {
-      course: updated_section.course,
-      number: updated_section.number,
-      students: updated_section.students,
-      teaching_assistants: updated_section.teaching_assistants,
-      events: updated_section.events
-    },
+    updated_section,
     function(err, section) {
       if (err || section == null) {
         console.log("<ERROR> Updating section by ID:",id,"with:",updated_section)
@@ -276,6 +286,23 @@ sectionRoutes.get('/get_student_sections', (req, res) => {
         res.json(student_sections)
       })
     }
+  })
+})
+
+sectionRoutes.post('/add_students/:id', (req, res) => {
+  let student_emails = req.body.students
+  let section_id = req.params.id
+  Section.findById(section_id,function(err,section) {
+    User.find({email: {$in: student_emails}},function(err,students) {
+      let student_ids = students.map(a => a._id)
+      console.log(student_ids)
+      Promise.all([
+        User.updateMany( {_id: {$in: student_ids}}, {$push: {student_sections: [section_id]}}),
+        Section.findByIdAndUpdate( section_id, {$push: {students: {$each: student_ids}}})
+      ]).then(resolved => {
+        res.json()
+      })
+    })
   })
 })
 

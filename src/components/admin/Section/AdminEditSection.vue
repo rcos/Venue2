@@ -38,8 +38,6 @@
           <th>First Name</th>
           <th>Last Name</th>
           <th>User ID</th>
-          <th>is_instructor</th>
-          <th>is_ta</th>
         </tr>
         </thead>
         <tbody>
@@ -47,15 +45,15 @@
               <td>{{ student.first_name }}</td>
               <td>{{ student.last_name }}</td>
               <td>{{ student.user_id }}</td>
-              <td>{{ student.is_instructor }}</td>
-              <td>{{ student.is_ta }}</td>
               <td><button class="btn btn-danger" @click.prevent="removeStudent(student)">Remove</button></td>
               <!-- <td v-if="is_section_view"><button class="btn btn-secondary" @click.prevent="$emit('select-student', student)">Select</button></td> -->
             </tr>
         </tbody>
     </table>
 
-    <Students v-on:select-student="addStudent" v-bind:is_section_view="true" />
+    <label>Add students by RCS</label>
+    <input type="text" v-model="students_to_add"/>
+    <button @click="addStudentsToSection()">Update</button>
 
   </div>
 </template>
@@ -78,7 +76,9 @@
         section: {},
         course: {},
         instructors: [],
-        students: []
+        students: [],
+        students_to_add: [],
+        tas_to_add: []
       }
     },
     created() {
@@ -112,6 +112,8 @@
       },
       removeStudent(student){
         this.students.splice(this.students.indexOf(student),1)
+        this.section.students = this.students
+        SectionAPI.updateSection(this.$route.params.id, this.section)
       },
       async updateSection() {
         let section_id = this.$route.params.id
@@ -119,6 +121,12 @@
         this.section.students = this.students
         const response = await SectionAPI.updateSection(section_id, this.section)
         this.$router.push({name: 'admin_sections'})
+      },
+      addStudentsToSection() {
+        let studs = this.students_to_add.split(',')
+        SectionAPI.addStudents(this.section._id,studs).then(res => {
+          location.reload()
+        })
       }
     }
   }

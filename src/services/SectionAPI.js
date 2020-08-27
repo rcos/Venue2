@@ -43,5 +43,15 @@ export default {
   },
   getStudentSections() {
     return API().get('sections/get_student_sections')
+  },
+  addStudents(section_id, students) {
+    return API().post('sections/add_students/'+section_id, {
+      students: students
+    })
+  },
+  addTAs(section_id,tas) {
+    return API().post('sections/add_tas/'+section_id, {
+      tas: tas
+    })
   }
 }
