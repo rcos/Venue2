@@ -69,7 +69,7 @@
         <!-- Section -->
         <div class="input-wrapper">
           <label>Section</label>
-          <input type="text" class="form-control new-event-input" v-model="section.number" readonly />
+          <input type="text" class="form-control new-event-input" v-model="section.name" readonly />
         </div>
       </div>
       <div class="spinner-border" role="status" v-if="!sections_have_loaded">

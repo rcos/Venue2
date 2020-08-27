@@ -22,7 +22,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>section_number:</label>
-            <input type="number" class="form-control" v-model="section.number">
+            <input type="number" class="form-control" v-model="section.name">
           </div>
           <div class="form-group">
             <button class="btn btn-primary">Update</button>

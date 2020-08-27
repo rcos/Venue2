@@ -27,7 +27,7 @@
         <div v-if="mobile" class="course-card-mobile">
           <div class="color-box"  :style="{backgroundColor: box_color}"></div>
           <div class="course-info">
-            <div class="course-title">{{ section.course.dept }} {{ section.course.course_number }}-{{ section.number }}</div>
+            <div class="course-title">{{ section.course.dept }} {{ section.course.course_number }}-{{ section.name }}</div>
             <div v-if="section.course.name.length > 21" class="course-name">{{ section.course.name.substring(0,18) + "..." }}</div>
             <div v-else class="course-name">{{ section.course.name }}</div>
           </div>
@@ -35,7 +35,7 @@
         <div v-else class="course-card">
           <div class="color-box" :style="{backgroundColor: box_color}"></div>
           <div class="course-info">
-            <div class="course-title">{{ section.course.dept }} {{ section.course.course_number }}-{{ section.number }}</div>
+            <div class="course-title">{{ section.course.dept }} {{ section.course.course_number }}-{{ section.name }}</div>
             <div v-if="section.course.name.length > 21" class="course-name">{{ section.course.name.substring(0,18) + "..." }}</div>
             <div v-else class="course-name">{{ section.course.name }}</div>
           </div>
