@@ -287,6 +287,7 @@ body {
   width: 25rem;
   max-height: 5rem;
   height: 5rem;
+  border-radius: 1.5rem;
   transition: all 0.15s cubic-bezier(0.19, 1, 0.22, 1);
   outline: none;
 }
@@ -343,6 +344,7 @@ body {
 .instructor-attendance-history-pill:hover .name-area,
 .instructor-attendance-history-pill:focus .name-area {
   padding-top: 0.8rem;
+  border-radius: 1rem;
   transition: all 0.15s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
