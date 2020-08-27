@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="new-user-container">
     <h2>Create A User</h2>
     <form @submit.prevent="addUser">
       <div class="row">
@@ -42,6 +42,7 @@
           </div>
         </div>
       </div>
+      <br>
       <div class="form-group">
         <button class="btn btn-primary">Create</button>
       </div>
@@ -71,3 +72,9 @@
     }
   }
 </script>
+
+<style scoped>
+#new-user-container {
+  padding: 2rem;
+}
+</style>
