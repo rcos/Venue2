@@ -127,7 +127,7 @@
 
     .name-area {
         font-size: 2rem;
-        margin-bottom: 40px;
+        /* margin-bottom: 40px; */
     }
 
     .name-area .name-div {

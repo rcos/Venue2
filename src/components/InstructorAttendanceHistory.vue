@@ -8,7 +8,7 @@
         <div class="event-pills-area">
           <router-link v-for="i in timeline[year][month]" :key="lectures[i]._id" :to="{name: 'lecture_info', params: { lecture_id: lectures[i]._id }}" tabindex="-1">
             <div :class="'attendance-history-pill-background '+ (isLive(lectures[i])?'live-border':'') + (isPlayback(lectures[i])?'playback-border':'')">
-              <div :class="'inline-block instructor-attendance-history-pill ' + lectures[i].color" :title="lectures[i].title" tabindex="0" :aria-label="'Lecture Info - '+lectures[i].title">
+              <div :class="'inline-block instructor-attendance-history-pill ' + lectures[i].color" :style="{backgroundColor: lectures[i].color}" :title="lectures[i].title" tabindex="0" :aria-label="'Lecture Info - '+lectures[i].title">
                 <div class="inline-block date-area my-auto">
                   <div class="day-of-week">{{ getDayOfWeek(lectures[i]) }}</div>
                   <div class="day-of-month">{{ getDayOfMonth(lectures[i]) }}</div>
@@ -52,6 +52,19 @@
       }
     },
     methods: {
+      perc2color(perc) {
+        var r, g, b = 0;
+        if(perc < 50) {
+          r = 255;
+          g = Math.round(5.1 * perc);
+        }
+        else {
+          g = 255;
+          r = Math.round(510 - 5.10 * perc);
+        }
+        var h = r * 0x10000 + g * 0x100 + b * 0x1;
+        return '#' + ('000000' + h.toString(16)).slice(-6);
+      },
       shortenString (string, max_length) {
         if (string.length < max_length) {
           return string
