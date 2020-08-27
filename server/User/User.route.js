@@ -10,23 +10,35 @@ let Lecture = require('../Lecture/Lecture.model');
 
 userRoutes.route('/add').post(function (req, res) {
   let user = new User(req.body.user);
-  bcrypt.hash(user.password, saltRounds, (err, hash) => {
-    if(err || hash == null) {
-      console.log("<ERROR> Hashing password for user:",user)
-      res.json(err)
-    } else {
-      user.password = hash
-      user.save()
-        .then(() => {
-          console.log("<SUCCESS> Adding user:",user)
-          res.status(200).json(user);
-        })
-        .catch(() => {
-          console.log("<ERROR> Adding user:",user)
-          res.status(400).send("unable to save user to database");
-        });
-    }
-  });
+  if(user.password && user.password.length) {
+    bcrypt.hash(user.password, saltRounds, (err, hash) => {
+      if(err || hash == null) {
+        console.log("<ERROR> Hashing password for user:",user)
+        res.json(err)
+      } else {
+        user.password = hash
+        user.save()
+          .then(() => {
+            console.log("<SUCCESS> Adding user:",user)
+            res.status(200).json(user);
+          })
+          .catch(() => {
+            console.log("<ERROR> Adding user:",user)
+            res.status(400).send("unable to save user to database");
+          });
+      }
+    });
+  } else {
+    user.save()
+      .then(() => {
+        console.log("<SUCCESS> Adding user:",user)
+        res.status(200).json(user);
+      })
+      .catch(() => {
+        console.log("<ERROR> Adding user:",user)
+        res.status(400).send("unable to save user to database");
+      });
+  }
 });
 
 userRoutes.route('/onboard').post(function (req, res) {
