@@ -14,8 +14,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>instructor:</label>
-            <input class="form-control" v-model="instructor.first_name" readonly>
-            <input class="form-control" v-model="instructor.last_name" readonly>
+            <div v-for="(instructor,i) in instructors" :key="i" class="form-control">{{instructor.first_name}} {{instructor.last_name}}</div>
           </div>
         </div>
       </div>
@@ -78,7 +77,7 @@
       return {
         section: {},
         course: {},
-        instructor: {},
+        instructors: [],
         students: []
       }
     },
@@ -96,8 +95,8 @@
         this.getCurrentSectionStudents()
       },
       async getCurrentSectionInstructor(){
-        const response = await SectionAPI.getInstructor(this.section._id)
-        this.instructor = response.data
+        const response = await SectionAPI.getInstructors(this.section._id)
+        this.instructors = response.data
       },
       async getCurrentSectionCourse(){
         const response = await SectionAPI.getCourse(this.section._id)

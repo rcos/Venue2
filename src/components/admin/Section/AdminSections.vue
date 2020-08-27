@@ -6,8 +6,8 @@
         <thead>
         <tr>
           <th>course</th>
-          <th>instructor</th>
-          <th>section number</th>
+          <th>instructors</th>
+          <th>section name</th>
         </tr>
         </thead>
         <div class="spinner-border" role="status" v-if="!instructors_have_loaded && !courses_loaded">
@@ -16,8 +16,12 @@
         <tbody v-else>
           <tr v-for="section in sections" :key="section._id">
             <td>{{ section.course.name }}</td>
-            <td>{{ section.instructor.first_name }} {{ section.instructor.last_name }}</td>
-            <td>{{ section.number }}</td>
+            <td>
+              <div v-for="(instructor,i) in section.instructors" :key="i">
+                {{ instructor.first_name }} {{ instructor.last_name }}
+              </div>
+            </td>
+            <td>{{ section.name }}</td>
             <div v-if="is_section_view">
               <td><router-link :to="{name: 'admin_edit_section', params: { id: section._id }}" class="btn btn-primary">Edit</router-link></td>
               <td><button class="btn btn-danger" @click.prevent="deleteSection(section._id)">Delete</button></td>
@@ -57,8 +61,8 @@
         let promises = []
         this.sections.forEach(section => {
           promises.push(new Promise((resolve,reject) => {
-            SectionAPI.getInstructor(section._id).then(res => {
-              section.instructor = res.data
+            SectionAPI.getInstructors(section._id).then(res => {
+              section.instructors = res.data
               resolve(res.data)
             })
           }))
