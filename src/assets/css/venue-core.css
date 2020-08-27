@@ -247,12 +247,12 @@ body {
 
 .live-border {
   border: 0.25rem dashed #04852f;
-  border-radius: 0.25rem;
+  border-radius: 1.5rem;
 }
 
 .playback-border {
   border: 0.25rem dotted #683eca;
-  border-radius: 0.25rem;
+  border-radius: 1.5rem;
 }
 
 .courseinfo-attendance-listing {
@@ -261,8 +261,8 @@ body {
 }
 
 .instructor-attendance-history-pill {
-  border: 2px solid #d13e34;
-  border-radius: 5px;
+  /* border: 2px solid #d13e34; */
+  border-radius: 1rem;
   margin-right: 1rem;
   margin-bottom: 1rem;
   position: relative;
@@ -271,6 +271,7 @@ body {
   height: 100%;
   cursor: pointer;
   color: #2c3e50;
+  box-shadow: 0px 3px 3px 1px rgba(109, 109, 109, 0.644);
 }
 
 .instructor-attendance-history-pill .date-area {
@@ -280,7 +281,7 @@ body {
   bottom: 0;
   width: 20%;
   padding-top: 0.15rem;
-  background-color: #d13e34;
+  /* background-color: #d13e34; */
   height: 100%;
   text-align: center;
   color: white;
@@ -291,29 +292,36 @@ body {
 .student-attendance .instructor-attendance-history-pill .date-area {
   width: 20%;
   /* margin-left: -15px; */
-  background-color: #d13e34;
+  /* background-color: #d13e34; */
   height: 100%;
   text-align: center;
   color: white;
   margin-right: 15px;
 }
 
+.instructor-attendance-history-pill .name-area {
+  width: 60%;
+  position: absolute;
+  top: 0;
+  padding-top: 0.25rem;
+  left: 20%;
+  bottom: 0;
+  padding-left: 1rem;
+  background: white;
+  margin: 0.5rem 0rem;
+  border-radius: 0.75rem;
+  /* color: white; */
+  box-shadow: 0px 3px 3px 1px rgba(109, 109, 109, 0.644) inset;
+  text-align: left;
+}
+
 .instructor-attendance-history-pill .date-area .day-of-week {
   font-size: 0.8rem;
-  margin-top: 0.3rem;
+  margin-top: 0.4rem;
 }
 
 .instructor-attendance-history-pill .date-area .day-of-month {
   font-size: 1.3rem;
-}
-
-.instructor-attendance-history-pill .name-area {
-  width: 60%;
-  position: absolute;
-  top: 0.5rem;
-  left: 20%;
-  bottom: 0;
-  padding-left: 1rem;
 }
 
 .event-name {
@@ -329,7 +337,7 @@ body {
 
 .instructor-attendance-history-pill .name-area .event-location {
   font-size: 0.8rem;
-  color: rgba(0, 0, 0, 0.7);
+  /* color: rgba(0, 0, 0, 0.7); */
   line-height: 15px;
 }
 
@@ -341,7 +349,7 @@ body {
   top: 0;
   bottom: 0;
   text-align: center;
-  line-height: 3.6rem;
+  line-height: 4rem;
   color: white;
   font-size: 1.2rem;
 }

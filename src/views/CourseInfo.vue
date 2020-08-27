@@ -283,6 +283,35 @@ export default {
         this.calculateStudentAttendances()
       }
     },
+    perc2color(pct) {
+      var percentColors = [
+        { pct: 0.0, color: { r: 0xd1, g: 0x3e, b: 0x34 } },
+        { pct: 0.6, color: { r: 0xd1, g: 0x3e, b: 0x34 } },
+        { pct: 0.7, color: { r: 0xb9, g: 0x57, b: 0x26 } },
+        { pct: 0.8, color: { r: 0x82, g: 0x90, b: 0x25 } },
+        { pct: 1.0, color: { r: 0x04, g: 0x85, b: 0x2f } }
+      ];
+      for (var i = 1; i < percentColors.length - 1; i++) {
+          if (pct < percentColors[i].pct) {
+              break;
+          }
+      }
+      var lower = percentColors[i - 1];
+      var upper = percentColors[i];
+      var range = upper.pct - lower.pct;
+      var rangePct = (pct - lower.pct) / range;
+      var pctLower = 1 - rangePct;
+      var pctUpper = rangePct;
+      var color = {
+          r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
+          g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
+          b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
+      };
+      // if(pct == 1.0) {
+      //   return 'linear-gradient(90deg, rgba(62,73,202,1) 0%, rgba(143,62,202,1) 20%, rgba(209,62,52,1) 40%, rgba(176,95,22,1) 60%, rgba(121,136,23,1) 80%, rgba(4,133,47,1) 100%)'
+      // }
+      return 'rgb(' + [color.r, color.g, color.b].join(',') + ')';
+    },
     calculateInstructorAttendances() {
       let promise_tracker = []
       this.all_lectures.forEach(lecture_ => {
@@ -312,7 +341,8 @@ export default {
               })
             })
             lecture_.percentage = running_total / students.length
-            lecture_.color = this.getHTMLClassByAttendance(lecture_.percentage)
+            // lecture_.color = this.getHTMLClassByAttendance(lecture_.percentage)
+            lecture_.color = this.perc2color(lecture_.percentage / 100)
           })
         )
       })
@@ -349,7 +379,7 @@ export default {
                   } else {
                     lecture_data.percentage = 0
                   }
-                  lecture_data.color = this.getHTMLClassByAttendance(lecture_data.percentage)
+                  lecture_data.color = this.perc2color(lecture_data.percentage / 100)
                 }
               })
             )
