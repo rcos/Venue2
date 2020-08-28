@@ -37,7 +37,7 @@ export default {
 #unrestricted_playback {
 	position: fixed;
 	top: 4rem;
-	bottom: 0rem;
+	bottom: 2rem;
 }
 #video_player {
 	width: 100%;
