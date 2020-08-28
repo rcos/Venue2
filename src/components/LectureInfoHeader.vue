@@ -139,7 +139,7 @@
     padding: 2rem;
     margin: 0;
     text-align: left;
-    box-shadow: 0px 3px 6px rgba(0, 62, 123, 0.2);
+    box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
     width: 100%;
   }
 
@@ -150,7 +150,7 @@
     width: 100%;
     margin: 0;
     text-align: center;
-    box-shadow: 0px 3px 6px rgba(0, 62, 123, 0.2);
+    box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
   }
 
   .row-half h5,
