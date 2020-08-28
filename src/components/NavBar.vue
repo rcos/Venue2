@@ -279,41 +279,95 @@
 
   .dropdown-content {
     /*margin-top: 3px;*/
-    display: block;
     position: absolute;
     background-color: #f7f7f7;
-    min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 9999;
-    overflow: hidden;
-    max-height:0;
-    transition: max-height 0.2s ease-in; 
+
+    /* transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1); */
   }
 
   .dropdown-content a {
+    opacity: 0;
     color: #2C3E50;
+    background-color: #f7f7f7;
     font-weight: bold;
-    padding: 12px 16px;
-    text-decoration: none;
+    text-decoration: none;  
     display: block;
+    max-height: 0px;
+    width: 0px;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  #instructor-course-dropdown:hover .dropdown-content a:nth-of-type(1),
+  #ta-section-dropdown:hover .dropdown-content a:nth-of-type(1),
+  #student-section-dropdown:hover .dropdown-content a:nth-of-type(1) {
+    opacity: 1;
+    max-height: 3rem;
+    width: 15rem;
+    padding: 12px 16px;
+    transition: opacity 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), width 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(2),
+  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(2),
+  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(2) {
+    opacity: 1;
+    max-height: 3rem;
+    width: 15rem;
+    padding: 12px 16px;
+    transition: opacity 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1), width 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(3),
+  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(3),
+  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(3) {
+    opacity: 1;
+    max-height: 3rem;
+    width: 15rem;
+    padding: 12px 16px;
+    transition: opacity 0.25s 0.1s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.1s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.1s cubic-bezier(0.19, 1, 0.22, 1), width 0.25s 0.10s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(4),
+  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(4),
+  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(4) {
+    opacity: 1;
+    max-height: 3rem;
+    width: 15rem;
+    padding: 12px 16px;
+    transition: opacity 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1), width 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(5),
+  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(5),
+  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(5) {
+    opacity: 1;
+    max-height: 3rem;
+    width: 15rem;
+    padding: 12px 16px;
+    transition: opacity 0.25s 0.20s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.20s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.20s cubic-bezier(0.19, 1, 0.22, 1), width 0.25s 0.20s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(6),
+  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(6),
+  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(6) {
+    opacity: 1;
+    max-height: 3rem;
+    width: 15rem;
+    padding: 12px 16px;
+    transition: opacity 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), width 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   .dropdown-content a:hover {
     background-color: #466D85;
     color: white;
-    -webkit-transition: all 150ms linear;
-    -ms-transition: all 150ms linear;
-    transition: all 150ms linear;
-  }
-
-  #instructor-course-dropdown:hover .dropdown-content,
-  #ta-section-dropdown:hover .dropdown-content,
-  #student-section-dropdown:hover .dropdown-content {
-    max-height: 300px;
-    overflow-y: auto;
+    transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   .mobile-course-list {
+    display: block;
     list-style-type: none;
     padding: 0;
   }
