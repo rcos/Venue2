@@ -281,7 +281,7 @@
     /*margin-top: 3px;*/
     position: absolute;
     background-color: #f7f7f7;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
     z-index: 9999;
 
     /* transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1); */
