@@ -169,6 +169,31 @@ export default {
 								stud_data.push(null)
 								stud_data.push(0)
 							}
+
+							if(submission && submission.student_poll_answers) {
+								let pollsum = 0
+								stud_data.push(Object.keys(submission.student_poll_answers).length / self.polls.length)
+								self.polls.forEach( poll => {
+									if(poll.code && submission.student_poll_answers[poll.code]) {
+										console.log('here')
+										let answers = submission.student_poll_answers[poll.code]
+										if(answers.every(a => poll.correct_answers.includes(a)) && answers.length == poll.correct_answers.length) {
+											pollsum+=1
+										}
+									} else if(poll.timestamp && submission.student_poll_answers[poll.timestamp]) {
+										console.log('here')
+										let answers = submission.student_poll_answers[poll.timestamp]
+										if(answers.every(a => poll.correct_answers.includes(a)) && answers.length == poll.correct_answers.length) {
+											pollsum+=1
+										}
+									}
+								})
+								stud_data.push(pollsum / self.polls.length)
+
+							} else {
+								stud_data.push(0)
+								stud_data.push(0)
+							}
 							
 							data.push(stud_data)
 						}
