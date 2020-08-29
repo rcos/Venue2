@@ -45,10 +45,12 @@ export default {
   },
   methods: {
     afterUser() {
-      if(this.current_user.is_instructor) {
-        LectureAPI.getLecturesForUser(this.current_user._id, "none") 
+      if((this.current_user.instructor_courses && this.current_user.instructor_courses.length) || (this.current_user.ta_sections && this.current_user.ta_sections.length)) {
+        LectureAPI.getLecturesForUser(this.current_user._id, "with_sections_and_course")
           .then(res => {
-            let liveAndUpcoming = getLiveLectures(res.data).concat(getUpcomingLectures(res.data))
+            let inst_lects = res.data.filter(lect => this.current_user.instructor_courses.includes(lect.sections[0].course._id)
+              || lect.sections.some(sect => this.current_user.ta_sections.includes(sect._id)))
+            let liveAndUpcoming = getLiveLectures(inst_lects).concat(getUpcomingLectures(inst_lects))
             if (!("Notification" in window)) {
               alert("This browser does not support desktop notification");
             } else if (Notification.permission === "granted") {
@@ -60,7 +62,7 @@ export default {
                 }
               });
             }
-            this.processInstructorEmails(getPastLectures(res.data))
+            this.processInstructorEmails(getPastLectures(inst_lects))
           })
       } else {
         

@@ -281,8 +281,9 @@
     /*margin-top: 3px;*/
     position: absolute;
     background-color: #f7f7f7;
-    box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+    
     z-index: 9999;
+    border-radius: 0.5rem;
 
     /* transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1); */
   }
@@ -298,11 +299,27 @@
     width: 0px;
     margin: 0px;
     padding: 0px;
+    box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
   }
 
-  #instructor-course-dropdown:hover .dropdown-content a:nth-of-type(1),
-  #ta-section-dropdown:hover .dropdown-content a:nth-of-type(1),
-  #student-section-dropdown:hover .dropdown-content a:nth-of-type(1) {
+  .dropdown-content a:first-of-type {
+    border-radius: 0.5rem 0.5rem 0rem 0rem;
+  }
+
+  .dropdown-content a:last-of-type {
+    border-radius: 0rem 0rem 0.5rem 0.5rem;
+  }
+
+  .dropdown-content a:not(:first-of-type) {
+    border-top: 0.1rem solid rgba(0, 0, 0, 0.15);
+  }
+
+  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(1),
+  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(1),
+  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(1),
+  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(1),
+  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(1),
+  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(1) {
     opacity: 1;
     max-height: 3rem;
     width: 15rem;
@@ -312,7 +329,10 @@
 
   #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(2),
   #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(2),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(2) {
+  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(2),
+  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(2),
+  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(2),
+  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(2) {
     opacity: 1;
     max-height: 3rem;
     width: 15rem;
@@ -322,7 +342,10 @@
 
   #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(3),
   #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(3),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(3) {
+  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(3),
+  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(3),
+  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(3),
+  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(3) {
     opacity: 1;
     max-height: 3rem;
     width: 15rem;
@@ -332,7 +355,10 @@
 
   #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(4),
   #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(4),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(4) {
+  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(4),
+  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(4),
+  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(4),
+  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(4) {
     opacity: 1;
     max-height: 3rem;
     width: 15rem;
@@ -342,7 +368,10 @@
 
   #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(5),
   #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(5),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(5) {
+  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(5),
+  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(5),
+  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(5),
+  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(5) {
     opacity: 1;
     max-height: 3rem;
     width: 15rem;
@@ -352,7 +381,10 @@
 
   #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(6),
   #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(6),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(6) {
+  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(6),
+  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(6),
+  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(6),
+  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(6) {
     opacity: 1;
     max-height: 3rem;
     width: 15rem;
@@ -360,10 +392,12 @@
     transition: opacity 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), width 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
-  .dropdown-content a:hover {
+  .dropdown-content a:hover,
+  .dropdown-content a:focus {
     background-color: #466D85;
     color: white;
     transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+    outline: none;
   }
 
   .mobile-course-list {
