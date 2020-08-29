@@ -118,12 +118,13 @@ export default {
 }
 .multiselect-box {
 	position: relative;
-	border-radius: 0.25rem;
+	border-radius: 0.5rem;
 	min-height: 2.75rem;
 	width: 10rem;
 	padding: 0.25rem;
 	background: #ECECEC;
 	cursor: pointer;
+	box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644) inset;
 }
 .multiselect-toggle {
 	position: relative;
@@ -160,9 +161,9 @@ export default {
 	overflow: auto;
 	position: absolute;
 	background: #ECECEC;
-	border-top: 1px solid black;
-	border-radius: 0.25rem;
-	box-shadow: 0rem 0.2rem 1rem 0.2rem black;
+	/* border-top: 1px solid black; */
+	border-radius: 0.5rem;
+	box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
 	min-height: 1rem;
 }
 .z1000 {
