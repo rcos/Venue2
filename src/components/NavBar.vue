@@ -314,6 +314,14 @@
     border-top: 0.1rem solid rgba(0, 0, 0, 0.15);
   }
 
+  .dropdown-content a:last-of-type {
+    border-radius: 0rem 0rem 0.5rem 0.5rem;
+  }
+
+  .dropdown-content a:only-of-type {
+    border-radius: 0.5rem;
+  }
+
   #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(1),
   #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(1),
   #student-section-dropdown:hover > .dropdown-content a:nth-of-type(1),
