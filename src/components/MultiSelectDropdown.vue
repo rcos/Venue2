@@ -1,8 +1,9 @@
 <template>
-	<div class="multiselect" v-click-outside="handleClickOutside">
+	<div class="multiselect" v-click-outside="handleClickOutside" @mouseover="open = true"
+      @mouseleave="open = false">
 		<div :class="'multiselect-box z'+(999-(2*n)+1)" @click="open = !open">
 			<div class="multiselect-toggle float-right">
-				{{"\u23F7"}}
+				{{"&#x23F7;"}}
 			</div>
 			<div v-for="(selection,i) in selected" :class="'multiselect-selected ' + (i==0?'first ':'') + (i==selected.length-1?'last ':'')" :key="i" v-on:click.stop>
 				<div class="multiselect-selected-text" :title="getDisplayText(selection)">
@@ -122,7 +123,7 @@ export default {
 	min-height: 2.75rem;
 	width: 10rem;
 	padding: 0.25rem;
-	background: #ECECEC;
+	background: #f7f7f7;
 	cursor: pointer;
 	box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644) inset;
 }
@@ -160,7 +161,7 @@ export default {
 	width: 10rem;
 	overflow: auto;
 	position: absolute;
-	background: #ECECEC;
+	background: #f7f7f7;
 	/* border-top: 1px solid black; */
 	border-radius: 0.5rem;
 	box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
@@ -191,11 +192,17 @@ export default {
 	z-index: 993;
 }
 .multiselect-option {
-	margin: 0.5rem;
-	padding: 0.25rem 0.5rem;
-	background:#c4c4c4;
-	border-radius: 0.3rem;
+	margin: 0rem;
+	width: 100%;
+	padding: 0.5rem 1rem;
+	background:#f7f7f7;
+}
+
+.multiselect-option:hover,
+.multiselect-option:focus {
+	background:#466D85;
 	cursor: pointer;
+	box-shadow: 0px 3px 3px 0px rgba(85, 85, 85, 0.644) inset, 0px -3px 3px 0px rgba(179, 179, 179, 0.644) inset;
 }
 .btn-danger {
 	border-radius: 0.25rem;
