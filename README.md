@@ -1,4 +1,4 @@
-![Alt text](https://github.com/rcos/Venue2/blob/master/src/assets/venue-logo.svg)
+![Alt text](https://github.com/rcos/Venue2/blob/master/src/assets/venue-logo.svg | width=100)
 
 # Venue2
 
