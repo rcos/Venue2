@@ -1,6 +1,8 @@
-# Venue2
+<p align="center"><img src="https://github.com/rcos/Venue2/blob/master/src/assets/venue-logo.svg" alt="alt text" width="150" height="150"></p>
 
-## Gauging Engagement
+# Venue
+
+## Gauging Engagement | venue-meetings.com
 
 ### Prerequisites
 
