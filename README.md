@@ -1,4 +1,4 @@
-# Venue2
+# ![Alt text](https://github.com/rcos/Venue2/blob/master/src/assets/venue-logo.svg) Venue2
 
 ## Gauging Engagement | venue-meetings.com
 
