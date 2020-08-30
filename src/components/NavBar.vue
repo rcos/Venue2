@@ -16,7 +16,9 @@
         </div>
         <!-- Courses Link -->
         <div class="venue-nav-link-container" id="instructor-course-dropdown" v-if="instructor_courses.length">
-          <a data-toggle="collapse" href="#instructor-collapse" class="venue-nav-link" :class="{'active-link':is_instructor_course_info()}" style="cursor:pointer;">Instructor Courses {{"&#x23F7;"}}</a>
+          <a data-toggle="collapse" href="#instructor-collapse" class="venue-nav-link" :class="{'active-link':is_instructor_course_info()}" style="cursor:pointer;">
+            Instructor Courses <img src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+          </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
               <router-link v-for="course in instructor_courses" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
@@ -27,7 +29,9 @@
           <div v-if="is_instructor_course_info()" class="active-link-underline"></div>
         </div>
         <div class="venue-nav-link-container" id="ta-section-dropdown" v-if="ta_sections.length">
-          <a data-toggle="collapse" href="#ta-collapse" class="venue-nav-link" :class="{'active-link':is_ta_section_info()}" style="cursor:pointer;">TA Sections {{"&#x23F7;"}}</a>
+          <a data-toggle="collapse" href="#ta-collapse" class="venue-nav-link" :class="{'active-link':is_ta_section_info()}" style="cursor:pointer;">
+            TA Sections <img src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+          </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
               <router-link v-for="section in ta_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
@@ -38,7 +42,9 @@
           <div v-if="is_ta_section_info()" class="active-link-underline"></div>
         </div>
         <div class="venue-nav-link-container" id="student-section-dropdown" v-if="student_sections.length">
-          <a data-toggle="collapse" href="#student-collapse" class="venue-nav-link" :class="{'active-link':is_student_section_info()}" style="cursor:pointer;">Student Sections {{"&#x23F7;"}}</a>
+          <a data-toggle="collapse" href="#student-collapse" class="venue-nav-link" :class="{'active-link':is_student_section_info()}" style="cursor:pointer;">
+            Student Sections <img src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+          </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
               <router-link v-for="section in student_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
@@ -109,19 +115,19 @@
         Venue
       </router-link>
       <div v-if="current_section" class="crumb">
-        {{"&#x23F5;"}}
+        <img class="rotate-arrow" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
         <router-link :to="{name: 'course_info', params: { id: current_section._id }}">
           {{current_section.course.name}}
         </router-link>
       </div>
       <div v-else-if="current_course" class="crumb">
-        {{"&#x23F5;"}}
+        <img class="rotate-arrow" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
         <router-link :to="{name: 'course_info', params: { id: current_course._id }}">
           {{current_course.name}}
         </router-link>
       </div>
       <div v-if="current_lecture" class="crumb">
-        {{"&#x23F5;"}}
+        <img class="rotate-arrow" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
         <router-link :to="{name: 'lecture_info', params: { lecture_id: current_lecture._id }}">
           {{current_lecture.title}}
         </router-link>
@@ -470,5 +476,10 @@
   .venue-nav-link:focus p,
   .venue-nav-link:hover p {
     color: #466D85;
+  }
+
+  .rotate-arrow {
+    transform: rotateZ(-90deg);
+    margin-bottom: 0.1rem;
   }
 </style>
