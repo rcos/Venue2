@@ -1,6 +1,4 @@
-<img src="https://github.com/rcos/Venue2/blob/master/src/assets/venue-logo.svg" alt="alt text" width="200" height="200">
-
-# Venue2
+# Venue2 <img src="https://github.com/rcos/Venue2/blob/master/src/assets/venue-logo.svg" alt="alt text" width="200" height="200">
 
 ## Gauging Engagement | venue-meetings.com
 
