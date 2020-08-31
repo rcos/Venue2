@@ -286,7 +286,7 @@
   .dropdown-content {
     /*margin-top: 3px;*/
     position: absolute;
-    background-color: #f7f7f7;
+    /* background-color: #f7f7f7; */
     
     z-index: 9999;
     border-radius: 0.5rem;
