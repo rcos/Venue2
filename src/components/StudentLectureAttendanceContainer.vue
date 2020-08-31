@@ -180,15 +180,15 @@
   }
 
   .namecard-edging.live-color {
-    background: green;
+    background: #04852f;
   }
 
   .namecard-edging.playback-color {
-    background: blueviolet;
+    background: #8f3eca;
   }
 
   .namecard-edging.absent-color {
-    background: red;
+    background: #d13e34;
   }
 
   .namecard {
@@ -200,7 +200,7 @@
     margin-left: 0.5rem;
     width: 11rem;
     height: 4rem;
-    box-shadow: 0 5px 10px -1px gray;
+    box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
     padding-top: 0.5rem;
     z-index: 100;
   }
