@@ -91,7 +91,7 @@ export default {
 						//Considered NOT a 'seek', video is playing normally
 						if(self.submission.video_progress < Math.floor(currTime)) {
 							self.submission.video_progress = Math.floor(currTime)
-							self.submission.video_percent = currTime / vid.duration()
+							self.submission.video_percent = Math.floor(currTime) / vid.duration()
 							if(self.submission.video_progress%5 == 0) {
 								self.submission.playback_submission_time = new Date()
 								LectureSubmissionAPI.update(self.submission)
