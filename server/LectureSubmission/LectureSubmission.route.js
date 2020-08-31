@@ -136,18 +136,69 @@ lectureSubmissionRoutes.route('/update').post(function (req, res) {
     if(req.body.lectureSubmission.student_poll_answers) {
       updated.student_poll_answers = req.body.lectureSubmission.student_poll_answers
     }
-    LectureSubmission.findByIdAndUpdate(updated._id,
-      updated,
-      function (err, updatedSubmission) {
-        if (err || updatedSubmission == null) {
-          console.log("<ERROR> Updating lecture submission by ID:",updated._id)
-          res.json(err);
-        } else {
-          console.log("<SUCCESS> Updating lecture submission by ID:",updated._id)
-          res.json(updated);
-        }
+    Lecture.findById(req.body.lectureSubmission.lecture,function(err,lecture) {
+      if(err || !lecture) {
+        console.log("<ERROR> Getting lecture with ID:",req.body.lectureSubmission.lecture)
+        res.json(err)
+      } else {
+        LectureSubmission.findById(updated._id,
+          function (err, oldSubmission) {
+            if (err || oldSubmission == null) {
+              console.log("<ERROR> Getting lecture submission with ID:",updated._id)
+              res.json(err);
+            } else {
+              let valid = true
+              if(updated.codes || updated.live_progress || updated.live_percent) {
+                if(updated.codes && updated.live_progress && updated.live_percent) {
+                  if(!( updated.codes.every(code => lecture.checkins.map(check => check.code).includes(code))
+                  && updated.live_progress == updated.codes.length
+                  && updated.live_percent == updated.live_progress / lecture.checkins.length)) {
+                    console.log(!( updated.codes.every(code => lecture.checkins.map(check => check.code).includes(code))
+                    && updated.live_progress == updated.codes.length
+                    && updated.live_percent == updated.live_progress / lecture.checkins.length))
+                    valid = false
+                  }
+                } else {
+                  valid = false
+                }
+              }
+              if(updated.video_percent || updated.video_progress) {
+                if(updated.video_percent && updated.video_progress) {
+                  if(oldSubmission.video_progress) {
+                    if(updated.video_progress - 5 > oldSubmission.video_progress || updated.video_progress > lecture.video_length) {
+                      valid = false
+                    } else {
+                      updated.video_percent = updated.video_progress / lecture.video_length
+                    }
+                  } else if(updated.video_progress != 5) {
+                    valid = false
+                  }
+                } else {
+                  valid = false
+                }
+              }
+              if(!valid) {
+                console.log("<ERROR> Updating lecture submission by ID:",updated._id)
+                res.sendStatus(400)
+              } else {
+                LectureSubmission.findByIdAndUpdate(updated._id,
+                  updated,
+                  function (err, updatedSubmission) {
+                    if (err || updatedSubmission == null) {
+                      console.log("<ERROR> Updating lecture submission by ID:",updated._id)
+                      res.json(err);
+                    } else {
+                      console.log("<SUCCESS> Updating lecture submission by ID:",updated._id)
+                      res.json(updated);
+                    }
+                  }
+                );
+              }
+            }
+          }
+        );
       }
-    );
+    })
   } else {
     res.status(400).send("Missing a real lectureSubmission in request")
   }
