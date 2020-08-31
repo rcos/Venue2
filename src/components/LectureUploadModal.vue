@@ -166,6 +166,7 @@ export default {
       if(this.isComplete()) {
         this.waiting = true;
         this.lecture.video_ref = "/videos/" + this.lecture._id + "/";
+        this.lecture.video_length = this.vjs.duration()
         let lecture_video = document.getElementById("video_selector").files[0]
         await LectureAPI.addPlaybackVideo(this.lecture._id, lecture_video)
         await LectureAPI.updateToPlayback(this.lecture, lecture_video)
@@ -193,6 +194,7 @@ export default {
     },
     async updateLectureFromParent(lect,course_id) {
       lect.video_ref = "/videos/" + lect._id + "/";
+      lect.video_length = this.vjs.duration()
       let lecture_video = document.getElementById("video_selector").files[0]
       this.waiting = true
       await LectureAPI.addPlaybackVideo(lect._id, lecture_video)
