@@ -318,6 +318,7 @@ export default {
 	  background: rgb(110, 110, 110);
 	  margin: 0.5rem 0rem;
 	  border-radius: 0.25rem;
+	  box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
 	}
 
 	.progress-bar {
@@ -329,17 +330,17 @@ export default {
 	}
 
 	#live-progress-bar {
-		background: rgb(0, 128, 0);
+		background: #04852f;
 		transition: width 0s linear;
 	}
 
 	#playback-progress-bar {
-		background: rgb(128, 0, 128);
+		background: rgba(143,62,202,1);
 		transition: width 0s linear;
 	}
 
 	#absent-progress-bar {
-		background: rgb(128, 0, 0);
+		background: #d13e34;
 		transition: width 0s linear;
 	}
 
