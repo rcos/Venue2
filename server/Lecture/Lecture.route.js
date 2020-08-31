@@ -241,7 +241,7 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 										let promises2 = []
 										instructor_lectures.forEach(instructor_lecture => {
 											for(let i = 0; i < instructor_lecture.sections.length; i++) {
-												lecture_section = instructor_lecture.sections[i]
+												let lecture_section = instructor_lecture.sections[i]
 												instructor_sections.forEach(instructor_section => {
 													if(lecture_section.equals(instructor_section._id)) {
 														promises2.push(new Promise((resolve2,reject2) => {
@@ -290,9 +290,9 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 							// attach sections to lectures and make asnc call for courses if requested
 							ta_lectures.forEach(ta_lecture => {
 								for(let i = 0; i < ta_lecture.sections.length; i++) {
-									lecture_section_id = ta_lecture.sections[i]
+									let lecture_section_id = ta_lecture.sections[i]
 									// get the actual section object for the section reference
-									lecture_section = ta_sections.find(section => section._id.equals(lecture_section_id))
+									let lecture_section = ta_sections.find(section => section._id.equals(lecture_section_id))
 									ta_lecture.sections[i] = lecture_section
 									if(preference === "with_sections_and_course"){
 										course_promises.push(new Promise((resolve2,reject2) => {
@@ -313,9 +313,9 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 								Promise.all(course_promises).then(resolved => {
 									lecture_courses = resolved.filter(lecture_course => lecture_course != null)
 									for (let i = 0; i < ta_lectures.length; i++){
-										ta_lecture = ta_lectures[i]
+										let ta_lecture = ta_lectures[i]
 										for(let j = 0; j < ta_lecture.sections.length; j++){
-											lecture_section = ta_lecture.sections[j]
+											let lecture_section = ta_lecture.sections[j]
 											lecture_courses.forEach(lecture_course => {
 												if(lecture_course._id.equals(lecture_section.course))
 													ta_lectures[i].sections[j].course = lecture_course
@@ -357,9 +357,9 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 							// attach sections to lectures and make asnc call for courses if requested
 							student_lectures.forEach(student_lecture => {
 								for(let i = 0; i < student_lecture.sections.length; i++) {
-									lecture_section_id = student_lecture.sections[i]
+									let lecture_section_id = student_lecture.sections[i]
 									// get the actual section object for the section reference
-									lecture_section = student_sections.find(section => section._id.equals(lecture_section_id))
+									let lecture_section = student_sections.find(section => section._id.equals(lecture_section_id))
 									student_lecture.sections[i] = lecture_section
 									if(preference === "with_sections_and_course"){
 										course_promises.push(new Promise((resolve2,reject2) => {
@@ -381,9 +381,9 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 								Promise.all(course_promises).then(resolved => {
 									lecture_courses = resolved.filter(lecture_course => lecture_course != null)
 									for (let i = 0; i < student_lectures.length; i++){
-										student_lecture = student_lectures[i]
+										let student_lecture = student_lectures[i]
 										for(let j = 0; j < student_lecture.sections.length; j++){
-											lecture_section = student_lecture.sections[j]
+											let lecture_section = student_lecture.sections[j]
 											lecture_courses.forEach(lecture_course => {
 												if(lecture_course._id.equals(lecture_section.course))
 													student_lectures[i].sections[j].course = lecture_course
