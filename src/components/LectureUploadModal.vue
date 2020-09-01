@@ -178,6 +178,7 @@ export default {
         } else {
           for(let i=0;i<this.need_timestamp.length;i++) {
             this.need_timestamp[i].lecture = this.lecture._id
+            this.updateTimestamp(i)
             PlaybackPollAPI.update(this.need_timestamp[i])
             .then(res => {
               n_saved++
@@ -350,6 +351,9 @@ export default {
     },
     secondsToHHMMSS(seconds) {
       return (new Date(seconds * 1000).toISOString().substr(11, 8))
+    },
+    updateTimestamp(i) {
+      this.need_timestamp[i].timestamp = (parseInt(this.need_timestamp[i].hour) * 3600) + (parseInt(this.need_timestamp[i].min) * 60) + parseInt(this.need_timestamp[i].sec)
     },
     getVideoTime(i) {
       let seconds = Math.floor(this.vjs.currentTime())

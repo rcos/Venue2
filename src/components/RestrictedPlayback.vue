@@ -99,10 +99,10 @@ export default {
 						}
 						for (let i = 0; i < self.polls.length; i++) {
 							if (currTime > self.polls[i].timestamp) {
-								
 								//if there is not an answer for the code, and there is not an answer for the timestamp, show the poll
-								if(!(self.polls[i].code && !self.submission.student_poll_answers[self.polls[i].code]) &&
-								!(self.polls[i].timestamp && self.submission.student_poll_answers[self.polls[i].timestamp])) {
+								if(	!((self.polls[i].code && self.submission.student_poll_answers[self.polls[i].code])
+								 ||	(self.polls[i].timestamp && self.submission.student_poll_answers[self.polls[i].timestamp]))
+								) {
 									vid.currentTime(self.polls[i].timestamp)
 									vid.pause()
 									self.startPoll(i)

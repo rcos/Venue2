@@ -158,7 +158,7 @@ lectureSubmissionRoutes.route('/update').post(function (req, res) {
                     && updated.live_percent == updated.live_progress / lecture.checkins.length))
                     valid = false
                   }
-                } else {
+                } else if(!updated.codes) {
                   valid = false
                 }
               }
