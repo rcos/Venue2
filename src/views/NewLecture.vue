@@ -393,13 +393,15 @@ export default {
             inline: true,
             rows: 1,
             headers: true,
-            date: startdate
+            date: startdate,
+            controls: true
           });
           pickers.end = new Picker(document.querySelector("#checkin_end_"+i), {
             inline: true,
             rows: 1,
             headers: true,
-            date: enddate
+            date: enddate,
+            controls: true
           });
           this.pickers.push(pickers)
         } else {
