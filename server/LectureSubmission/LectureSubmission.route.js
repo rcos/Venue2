@@ -167,6 +167,8 @@ lectureSubmissionRoutes.route('/update').post(function (req, res) {
                   if(oldSubmission.video_progress) {
                     if(updated.video_progress - 5 > oldSubmission.video_progress || updated.video_progress > lecture.video_length) {
                       valid = false
+                    } else if(Math.abs(updated.video_progress - lecture.video_length) < 1) {
+                      updated.video_percent = 1
                     } else {
                       updated.video_percent = updated.video_progress / lecture.video_length
                     }
