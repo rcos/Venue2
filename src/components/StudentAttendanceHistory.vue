@@ -15,10 +15,11 @@
                 </div>
                 <div class="inline-block name-area">
                   <div class="event-name">{{ lectures[i].title }}</div>
-                  <div class="event-location">{{getPrettyTime(lectures[i].playback_submission_start_time) + ' - ' + getPrettyTime(lectures[i].playback_submission_end_time)}}</div>
+                  <div v-if="lectures[i].start_time" class="event-location">{{getPrettyTime(lectures[i].start_time)}} - {{getPrettyTime(lectures[i].end_time)}}</div>
+                  <div v-else class="event-location">{{getPrettyTime(lectures[i].playback_submission_start_time) + ' - ' + getPrettyTime(lectures[i].playback_submission_end_time)}}</div>
                 </div>
                 <div class="inline-block percentage-area">
-                  <div v-if="scores_loaded">{{lectures[i].percentage == undefined ? 0 : lectures[i].percentage}}%</div>
+                  <div v-if="scores_loaded">{{lectures[i].percentage == undefined ? 0 : lectures[i].percentage.toFixedDecimals(0)}}%</div>
                   <SquareLoader v-else/>
                 </div>
               </div>
