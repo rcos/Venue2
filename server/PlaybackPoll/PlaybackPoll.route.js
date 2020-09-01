@@ -42,6 +42,7 @@ pollRoutes.route('/update').post(function (req, res) {
       poll.code = req.body.poll.code
     }
     if(req.body.poll.timestamp) {
+      console.log(req.body.poll.timestamp)
       poll.timestamp = req.body.poll.timestamp
     }
     PlaybackPoll.findByIdAndUpdate(poll._id,
