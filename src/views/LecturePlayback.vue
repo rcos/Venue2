@@ -87,6 +87,9 @@ export default {
 </script>
 
 <style scoped>
+#lecture_playback {
+	height: calc(100vh - 8rem)
+}
 #video_player {
 	width: 100%;
 	height: 100%;
@@ -111,9 +114,8 @@ export default {
 	position: absolute;
 	top: 25%;
 	height: 50%;
-	left: 25%;
-	right: 25%;
-	padding: 1rem
+	min-width: 25rem;
+	width: 100%;
 }
 #opt-restricted,
 #opt-unrestricted {
