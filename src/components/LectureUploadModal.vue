@@ -259,12 +259,14 @@ export default {
               self.play_sub_start_picker = new Picker(document.querySelector("#playback_start"), {
                 inline: true,
                 rows: 1,
-                headers: true
+                headers: true,
+                controls: true
               });
               self.play_sub_end_picker = new Picker(document.querySelector("#playback_end"), {
                 inline: true,
                 rows: 1,
-                headers: true
+                headers: true,
+                controls: true
               });
             })
           }
