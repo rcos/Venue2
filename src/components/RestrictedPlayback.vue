@@ -168,9 +168,9 @@ export default {
 
 <style scoped>
 #restricted_playback {
-	position: fixed;
-	top: 4rem;
-	bottom: 2rem;
+	position: absolute;
+	top: 0rem;
+	bottom: 0rem;
 }
 #video_player {
 	width: 100%;
@@ -181,20 +181,26 @@ export default {
 }
 #polls {
 	position: absolute;
-	top: 25%;
-	left: 25%;
-	right: 25%;
+	/* display: inline-block; */
+	top: 1rem;
+	height: calc(100vh - 10rem);
+	min-width: 25rem;
+	width: 50%;
+	left: -2rem;
 	background: lightskyblue;
-	border-radius: 1rem;
+	border-radius: 1.25rem;
 	z-index: 999;
 }
 #poll_contents {
 	position: relative;
 	background: white;
 	border-radius: 1rem;
+	height: 100%;
 	padding: 1rem;
-	margin: 1rem;
+	padding-left: 2rem;
+	margin: 0.5rem;
 	margin-bottom: -1rem;
+	overflow-y: auto;
 }
 .poll {
 	margin: 1rem;
