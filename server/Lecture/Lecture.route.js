@@ -347,9 +347,13 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 						else {
 							let course_promises = []
 							// attach sections to lectures and make asnc call for courses if requested
+							console.log("User Sections:",req.user.student_sections)
+							console.log("Stud Sections:",student_sections)
+							console.log("Stud Lectures:",student_lectures)
 							student_lectures.forEach(student_lecture => {
 								for(let i = 0; i < student_lecture.sections.length; i++) {
 									let lecture_section_id = student_lecture.sections[i]
+									console.log("FINDING ID:",lecture_section_id)
 									// get the actual section object for the section reference
 									let lecture_section = student_sections.find(section => section._id.equals(lecture_section_id))
 									student_lecture.sections[i] = lecture_section
