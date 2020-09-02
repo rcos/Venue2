@@ -285,23 +285,20 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 							let course_promises = []
 							// attach sections to lectures and make asnc call for courses if requested
 							ta_lectures.forEach(ta_lecture => {
-								for(let i = 0; i < ta_lecture.sections.length; i++) {
-									let lecture_section_id = ta_lecture.sections[i]
-									// get the actual section object for the section reference
-									let lecture_section = ta_sections.find(section => section._id.equals(lecture_section_id))
-									ta_lecture.sections[i] = lecture_section
-									if(preference === "with_sections_and_course"){
-										course_promises.push(new Promise((resolve2,reject2) => {
-											Course.findById(lecture_section.course, (error, lecture_course) => {
-												if(error || lecture_course == null) {
-													console.log("<ERROR> Getting course for section:",lecture_section)
-													resolve2(null)
-												} else {
-													resolve2(lecture_course)
-												}
-											})
-										}))
-									}
+								// get the actual section object for the section reference
+								let lecture_sections = ta_sections.filter(section => ta_lecture.sections.includes(section._id))
+								ta_lecture.sections = lecture_sections
+								if(preference === "with_sections_and_course"){
+									course_promises.push(new Promise((resolve2,reject2) => {
+										Course.findById(lecture_sections[0].course, (error, lecture_course) => {
+											if(error || lecture_course == null) {
+												console.log("<ERROR> Getting course for section:",lecture_section)
+												resolve2(null)
+											} else {
+												resolve2(lecture_course)
+											}
+										})
+									}))
 								}
 							})
 							// if courses were requested attach courses to sections once they have all been fetched
@@ -347,30 +344,21 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 						else {
 							let course_promises = []
 							// attach sections to lectures and make asnc call for courses if requested
-							console.log("User Sections:",req.user.student_sections)
-							console.log("Stud Sections:",student_sections)
-							console.log("Stud Lectures:",student_lectures)
 							student_lectures.forEach(student_lecture => {
-								for(let i = 0; i < student_lecture.sections.length; i++) {
-									let lecture_section_id = student_lecture.sections[i]
-									console.log("FINDING ID:",lecture_section_id,typeof(lecture_section_id))
-									// get the actual section object for the section reference
-									console.log("\tsection._id's:",student_sections.map(a=>a._id),typeof(student_sections[0]._id))
-									let lecture_section = student_sections.find(section => section._id.toString() == lecture_section_id.toString())
-									console.log('FOUND SECT:',lecture_section)
-									console.log('FOUND COURSE',lecture_section.course)
-									if(preference === "with_sections_and_course"){
-										course_promises.push(new Promise((resolve2,reject2) => {
-											Course.findById(lecture_section.course, (error, lecture_course) => {
-												if(error || lecture_course == null) {
-													console.log("<ERROR> Getting course for section:",lecture_section)
-													resolve2(null)
-												} else {
-													resolve2(lecture_course)
-												}
-											})
-										}))
-									}
+								// get the actual section object for the section reference
+								let lecture_sections = student_sections.filter(section => student_lecture.sections.includes(section._id))
+								student_lecture.sections = lecture_sections
+								if(preference === "with_sections_and_course"){
+									course_promises.push(new Promise((resolve2,reject2) => {
+										Course.findById(lecture_sections[0].course, (error, lecture_course) => {
+											if(error || lecture_course == null) {
+												console.log("<ERROR> Getting course for section:",lecture_section)
+												resolve2(null)
+											} else {
+												resolve2(lecture_course)
+											}
+										})
+									}))
 								}
 							})
 							// if courses were requested attach courses to sections once they have all been fetched
