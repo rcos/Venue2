@@ -357,8 +357,8 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 									// get the actual section object for the section reference
 									console.log("\tsection._id's:",student_sections.map(a=>a._id),typeof(student_sections[0]._id))
 									let lecture_section = student_sections.find(section => section._id.toString() == lecture_section_id.toString())
-									console.log('FOUND SECT:',lecture_section,lecture_section.course)
-									student_lecture.sections[i] = lecture_section
+									console.log('FOUND SECT:',lecture_section)
+									console.log('FOUND COURSE',lecture_section.course)
 									if(preference === "with_sections_and_course"){
 										course_promises.push(new Promise((resolve2,reject2) => {
 											Course.findById(lecture_section.course, (error, lecture_course) => {
