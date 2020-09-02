@@ -356,7 +356,7 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 									console.log("FINDING ID:",lecture_section_id)
 									// get the actual section object for the section reference
 									let lecture_section = student_sections.find(section => section._id == lecture_section_id)
-									if(lecture_section) {
+									if(lecture_section)
 										console.log('LECT SECT',lecture_section)
 									student_lecture.sections[i] = lecture_section
 									if(preference === "with_sections_and_course"){
