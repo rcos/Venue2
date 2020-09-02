@@ -353,8 +353,9 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 							student_lectures.forEach(student_lecture => {
 								for(let i = 0; i < student_lecture.sections.length; i++) {
 									let lecture_section_id = student_lecture.sections[i]
-									console.log("FINDING ID:",lecture_section_id)
+									console.log("FINDING ID:",lecture_section_id,typeof(lecture_section_id))
 									// get the actual section object for the section reference
+									console.log("\tsection._id's:",student_sections.map(a=>a._id),typeof(student_sections[0]._id))
 									let lecture_section = student_sections.find(section => section._id == lecture_section_id)
 									console.log('FOUND SECT:',lecture_section)
 									student_lecture.sections[i] = lecture_section
