@@ -79,28 +79,28 @@
     </nav>
     <!-- Mobile Course Dropdown -->
     <show-at breakpoint="mediumAndBelow">
-      <div>
-        <div class="collapse" id="instructor-collapse">
+      <div id="all-collapse">
+        <div class="collapse" id="instructor-collapse" data-parent="#all-collapse">
           <ul class="mobile-course-list">
-            <li class="mobile-course-link" v-for="course in instructor_courses" :key="course._id">
+            <li class="mobile-course-link" href="#instructor-collapse" data-toggle="collapse" v-for="course in instructor_courses" :key="course._id">
               <router-link :to="{name: 'course_info', params: { id: course._id }}">
                 <p class="mobile-course-link-name">{{ course.name }}</p>
               </router-link>
             </li>
           </ul>
         </div>
-        <div class="collapse" id="ta-collapse">
+        <div class="collapse" id="ta-collapse" data-parent="#all-collapse">
           <ul class="mobile-course-list">
-            <li class="mobile-course-link" v-for="section in ta_sections" :key="section._id">
+            <li class="mobile-course-link" href="#ta-collapse" data-toggle="collapse" v-for="section in ta_sections" :key="section._id">
               <router-link :to="{name: 'course_info', params: { id: section._id }}">
                 <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
               </router-link>
             </li>
           </ul>
         </div>
-        <div class="collapse" id="student-collapse">
+        <div class="collapse" id="student-collapse" data-parent="#all-collapse">
           <ul class="mobile-course-list">
-            <li class="mobile-course-link" v-for="section in student_sections" :key="section._id">
+            <li class="mobile-course-link" href="#student-collapse" data-toggle="collapse" v-for="section in student_sections" :key="section._id">
               <router-link :to="{name: 'course_info', params: { id: section._id }}">
                 <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
               </router-link>
