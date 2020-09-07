@@ -119,6 +119,7 @@ import videojs from 'video.js';
 import LoadingOverlay from '@/components/LoadingOverlay.vue';
 import Picker from 'pickerjs';
 import '../../node_modules/pickerjs/src/index.css';
+import axios from 'axios';
 // DatePicker themes options:
 // "material_blue","material_green","material_red","material_orange",
 // "dark","airbnb","confetti"
@@ -165,66 +166,96 @@ export default {
     async updateLecture() {
       if(this.isComplete()) {
         this.waiting = true;
-        this.lecture.video_ref = "/videos/" + this.lecture._id + "/";
         this.lecture.video_length = this.vjs.duration()
         let lecture_video = document.getElementById("video_selector").files[0]
-        await LectureAPI.addPlaybackVideo(this.lecture._id, lecture_video)
-        await LectureAPI.updateToPlayback(this.lecture, lecture_video)
-        let n_saved = 0
-        if(this.need_timestamp.length == 0) {
-          this.waiting = false;
-          this.hideModal()
-          location.reload()
-        } else {
-          for(let i=0;i<this.need_timestamp.length;i++) {
-            this.need_timestamp[i].lecture = this.lecture._id
-            this.updateTimestamp(i)
-            PlaybackPollAPI.update(this.need_timestamp[i])
-            .then(res => {
-              n_saved++
-              if(n_saved == this.need_timestamp.length) {
-                this.need_timestamp = []
+        let result = await LectureAPI.addPlaybackVideo(this.lecture._id, this.lecture._id.toString() +'-'+ lecture_video.name)
+        if(result.data) {
+          // lecture_video.name = this.lecture._id.toString() +'-'+ lecture_video.name
+          axios.put(result.data,lecture_video,{
+            headers: {
+              'Access-Control-Allow-Origin' : 'http://localhost:8080',
+              'Content-Type' : lecture_video.type
+            }
+          }).then(res => {
+            LectureAPI.updateToPlayback(this.lecture).then(res2 => {
+              let n_saved = 0
+              if(this.need_timestamp.length == 0) {
                 this.waiting = false;
                 this.hideModal()
                 location.reload()
+              } else {
+                for(let i=0;i<this.need_timestamp.length;i++) {
+                  this.need_timestamp[i].lecture = this.lecture._id
+                  this.updateTimestamp(i)
+                  PlaybackPollAPI.update(this.need_timestamp[i])
+                  .then(res => {
+                    n_saved++
+                    if(n_saved == this.need_timestamp.length) {
+                      this.need_timestamp = []
+                      this.waiting = false;
+                      this.hideModal()
+                      location.reload()
+                    }
+                  })
+                }
               }
             })
-          }
+          }).catch(err => {
+            console.log("Error:",err)
+          })
         }
       }
     },
     async updateLectureFromParent(lect,course_id) {
-      lect.video_ref = "/videos/" + lect._id + "/";
+      this.waiting = true
       lect.video_length = this.vjs.duration()
       let lecture_video = document.getElementById("video_selector").files[0]
-      this.waiting = true
-      await LectureAPI.addPlaybackVideo(lect._id, lecture_video)
-      await LectureAPI.updateToPlayback(lect, lecture_video)
-      let n_saved = 0
-      if(this.polls.length == 0) {
-        this.hideModal()
-        this.waiting = false
-        this.$router.push({
-          name: "course_info",
-          params: { id: course_id }
-        })
-      } else {
-        for(let i=0;i<this.polls.length;i++) {
-          this.polls[i].lecture = lect._id
-          PlaybackPollAPI.addPoll(this.polls[i])
-          .then(res => {
-            n_saved++
-            if(n_saved == this.polls.length) {
-              this.polls = []
+      let result = await LectureAPI.addPlaybackVideo(lect._id, lect._id.toString() +'-'+ lecture_video.name)
+      if(result.data) {
+        // lecture_video.name = lect._id.toString() +'-'+ lecture_video.name
+        console.log(result)
+        let name = lect._id + '-'  + lecture_video.name;
+        // Instantiate copy of file, giving it new name.
+        lecture_video = new File([lecture_video], name, { type: lecture_video.type });
+        console.log(lecture_video)
+        axios.put(result.data,lecture_video,{
+          headers: {
+            "content-type": "video/mp4",
+		        "host": "https://storage.googleapis.com"
+          }
+        }).then(res => {
+          console.log(res)
+          LectureAPI.updateToPlayback(lect).then(res2 => {
+            let n_saved = 0
+            if(this.polls.length == 0) {
               this.hideModal()
               this.waiting = false
               this.$router.push({
                 name: "course_info",
                 params: { id: course_id }
               })
+            } else {
+              for(let i=0;i<this.polls.length;i++) {
+                this.polls[i].lecture = lect._id
+                PlaybackPollAPI.addPoll(this.polls[i])
+                .then(res => {
+                  n_saved++
+                  if(n_saved == this.polls.length) {
+                    this.polls = []
+                    this.hideModal()
+                    this.waiting = false
+                    this.$router.push({
+                      name: "course_info",
+                      params: { id: course_id }
+                    })
+                  }
+                })
+              }
             }
           })
-        }
+        }).catch(err => {
+          console.log("Error")
+        })
       }
     },
     setLectureSubmissionVariables() {
