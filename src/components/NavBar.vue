@@ -199,7 +199,9 @@
         this.current_lecture = this.user_lectures.find(a=>this.$route.params.lecture_id && a && a._id == this.$route.params.lecture_id)
         let sections = this.ta_sections.concat(this.student_sections)
 
-        if(this.current_lecture) {
+        if(this.$route.name == 'new_lecture') {
+          this.current_course = this.instructor_courses.find(a=>this.$route.params.course_id && a._id == this.$route.params.course_id)
+        } else if(this.current_lecture) {
           this.current_section = this.current_lecture.sections.find(section => sections.map(a => a._id).includes(section._id))
           if(!this.current_section) {
             this.current_course = this.current_lecture.sections[0].course
