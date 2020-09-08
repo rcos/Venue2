@@ -1,7 +1,7 @@
 <template>
 	<div id="restricted_playback">
 		<video id="video_player" class="video-js vjs-big-play-centered" controls playsinline>
-			<source v-bind:src="lecture.video_ref" type="">
+			<source v-bind:src="lecture.video_ref" :type="lecture.video_type">
 		</video>
 		<div id="polls" class="hide">
 			<!--Poll Modals Start-->
@@ -34,6 +34,7 @@
 import videojs from "video.js";
 import LectureSubmissionAPI from "../services/LectureSubmissionAPI";
 import PlaybackPollAPI from "../services/PlaybackPollAPI";
+require('videojs-youtube')
 
 export default {
 	name: 'RestrictedPlayback',
@@ -170,6 +171,8 @@ export default {
 #restricted_playback {
 	position: absolute;
 	top: 0rem;
+	left: 0rem;
+	right: 0rem;
 	bottom: 0rem;
 }
 #video_player {
