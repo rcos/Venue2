@@ -1,7 +1,8 @@
 <template>
 	<div id="restricted_playback">
 		<video id="video_player" class="video-js vjs-big-play-centered" controls playsinline>
-			<source v-bind:src="lecture.video_ref" type="">
+			<source v-if="isProduction" v-bind:src="lecture.video_ref + '?showinfo=0&enablejsapi=1&origin=https://www.venue-meetings.com'" :type="lecture.video_type">
+			<source v-else v-bind:src="lecture.video_ref + '?showinfo=0&enablejsapi=1&origin=http://localhost:8080'" :type="lecture.video_type">
 		</video>
 		<div id="polls" class="hide">
 			<!--Poll Modals Start-->
@@ -31,9 +32,11 @@
 </template>
 
 <script>
+require('dotenv')
 import videojs from "video.js";
 import LectureSubmissionAPI from "../services/LectureSubmissionAPI";
 import PlaybackPollAPI from "../services/PlaybackPollAPI";
+require('videojs-youtube')
 
 export default {
 	name: 'RestrictedPlayback',
@@ -41,12 +44,16 @@ export default {
 		lecture: Object,
 		submission: Object
 	},
+	computed: {
+		isProduction(){ process.env.NODE_ENV === 'production' }
+	},
 	data(){
 		return {
 			vjs: null,
 			prevTime: 0,
 			currentUser: null,
-			polls: []
+			polls: [],
+			bigbrotherinstance: null
 		}
 	},
 	created() {
@@ -66,7 +73,8 @@ export default {
 		const vidOptions = {
 			controlBar: {
 				fullscreenToggle: false
-			}
+			},
+			forceSSL: true
 		}
 
 		videojs("video_player", vidOptions, function() {
@@ -85,16 +93,23 @@ export default {
 			PlaybackPollAPI.getByLecture(self.lecture._id)
 			.then(resp => {
 				self.polls = resp.data
-				vid.on('timeupdate', function () {
+
+				// vid.on('timeupdate',
+				var bigbrother = () => {
 					let currTime = vid.currentTime()
-					if(currTime - self.prevTime < 0.5 && currTime >= self.prevTime) {
+					let committed = false
+					if(currTime - self.prevTime < 1.5 && currTime >= self.prevTime) {
 						//Considered NOT a 'seek', video is playing normally
 						if(self.submission.video_progress < Math.floor(currTime)) {
 							self.submission.video_progress = Math.floor(currTime)
-							self.submission.video_percent = Math.floor(currTime) / vid.duration()
+							self.submission.video_percent = Math.floor(currTime) / self.lecture.video_length
 							if(self.submission.video_progress%5 == 0) {
 								self.submission.playback_submission_time = new Date()
-								LectureSubmissionAPI.update(self.submission)
+								LectureSubmissionAPI.update(self.submission).then(res => {
+									if(res.data.rewindTo) {
+										vid.currentTime(res.data.rewindTo)
+									}
+								})
 							}
 						}
 						for (let i = 0; i < self.polls.length; i++) {
@@ -106,6 +121,7 @@ export default {
 									vid.currentTime(self.polls[i].timestamp)
 									vid.pause()
 									self.startPoll(i)
+									committed = true
 								}
 							}
 						}
@@ -113,16 +129,20 @@ export default {
 						//Considered a 'seek'
 						if(currTime > self.submission.video_progress) {
 							vid.currentTime(self.prevTime)
+							committed = true
 						} else if(currTime < self.prevTime) {
 							for (let i = 0; i < self.polls.length; i++) {
 								self.hidePoll(i)
 							}
 						}
 					}
-					self.prevTime = vid.currentTime()
-				})
+					if(!committed) {
+						self.prevTime = vid.currentTime()
+					}
+				}
+				this.bigbrotherinstance = setInterval(function() {bigbrother()},1000)
 				vid.on('ended', function() {
-					self.submission.video_progress = vid.duration()
+					self.submission.video_progress = self.lecture.video_length
 					self.submission.video_percent = 1
 					self.submission.playback_submission_time = new Date()
 					LectureSubmissionAPI.update(self.submission)
@@ -133,6 +153,9 @@ export default {
 	beforeDestroy() {
 		if(this.vjs) {
 			this.vjs.dispose()
+		}
+		if(this.bigbrotherinstance) {
+			clearInterval(this.bigbrotherinstance)
 		}
 	},
 	methods: {
@@ -170,7 +193,10 @@ export default {
 #restricted_playback {
 	position: absolute;
 	top: 0rem;
+	left: 0rem;
+	right: 0rem;
 	bottom: 0rem;
+	padding: 0rem 2rem;
 }
 #video_player {
 	width: 100%;

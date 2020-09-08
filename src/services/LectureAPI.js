@@ -33,7 +33,7 @@ export default {
       }
     )
   },
-  updateToPlayback(lecture, video) {
+  updateToPlayback(lecture) {
     return API().post('lectures/update_to_playback/' + lecture._id,
       {
         lecture: lecture
