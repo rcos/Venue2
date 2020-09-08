@@ -181,7 +181,9 @@ lectureSubmissionRoutes.route('/update').post(function (req, res) {
               }
               if(!valid) {
                 console.log("<ERROR> Updating lecture submission by ID:",updated._id)
-                res.sendStatus(400)
+                res.json({
+                  rewindTo: oldSubmission.video_progress
+                })
               } else {
                 LectureSubmission.findByIdAndUpdate(updated._id,
                   updated,
