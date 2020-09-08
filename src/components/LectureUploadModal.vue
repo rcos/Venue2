@@ -10,6 +10,10 @@
           <button type="button" v-else id="cancel_upload_btn" class="btn btn-secondary" @click="hideModal()" aria-label="Cancel Video Upload">Cancel</button>
         </h1>
       </div>
+      <div class="row youtuberow">
+        <label id="youtube_label">Youtube URL:</label>
+        <input id="youtube_selector" type="text" class="form-control" role="input" tabindex="0" aria-labelledby="youtube_label"/>
+      </div>
       <div class="row filerow">
         <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn" role="button" tabindex="0" aria-label="Select Video and Show Poll Creation Options"/>
       </div>
@@ -119,6 +123,8 @@ import videojs from 'video.js';
 import LoadingOverlay from '@/components/LoadingOverlay.vue';
 import Picker from 'pickerjs';
 import '../../node_modules/pickerjs/src/index.css';
+require('videojs-youtube')
+const validator = require('youtube-url')
 // DatePicker themes options:
 // "material_blue","material_green","material_red","material_orange",
 // "dark","airbnb","confetti"
@@ -141,6 +147,7 @@ export default {
       current_is_correct: [],
       polls: [],
       video_ref: "",
+      video_type: "",
       vjs: null,
       play_sub_start_picker: null,
       play_sub_end_picker: null,
@@ -165,11 +172,19 @@ export default {
     async updateLecture() {
       if(this.isComplete()) {
         this.waiting = true;
-        this.lecture.video_ref = "/videos/" + this.lecture._id + "/";
+        let lecture_video
+        if(this.video_type != 'video/youtube') {
+          lecture_video = document.getElementById("video_selector").files[0]
+        } else {
+          lect.video_ref = this.video_ref
+        }
+        this.lecture.video_type = this.video_type
         this.lecture.video_length = this.vjs.duration()
-        let lecture_video = document.getElementById("video_selector").files[0]
-        await LectureAPI.addPlaybackVideo(this.lecture._id, lecture_video)
-        await LectureAPI.updateToPlayback(this.lecture, lecture_video)
+        if(!this.lecture.video_type) {
+          let response = await LectureAPI.addPlaybackVideo(this.lecture._id, lecture_video)
+          this.lecture.video_ref = response.data
+        }
+        await LectureAPI.updateToPlayback(this.lecture)
         let n_saved = 0
         if(this.need_timestamp.length == 0) {
           this.waiting = false;
@@ -194,12 +209,20 @@ export default {
       }
     },
     async updateLectureFromParent(lect,course_id) {
-      lect.video_ref = "/videos/" + lect._id + "/";
-      lect.video_length = this.vjs.duration()
-      let lecture_video = document.getElementById("video_selector").files[0]
       this.waiting = true
-      await LectureAPI.addPlaybackVideo(lect._id, lecture_video)
-      await LectureAPI.updateToPlayback(lect, lecture_video)
+      let lecture_video
+      if(this.video_type != 'video/youtube') {
+        lecture_video = document.getElementById("video_selector").files[0]
+      } else {
+        lect.video_ref = this.video_ref
+      }
+      lect.video_type = this.video_type
+      lect.video_length = this.vjs.duration()
+      if(!lect.video_type) {
+        let response = await LectureAPI.addPlaybackVideo(lect._id, lecture_video)
+        lect.video_ref = response.data
+      }
+      await LectureAPI.updateToPlayback(lect)
       let n_saved = 0
       if(this.polls.length == 0) {
         this.hideModal()
@@ -234,11 +257,12 @@ export default {
     handleShowModal() {
       this.showModal()
       this.$nextTick(() => {
+        let youtube_selector = document.getElementById("youtube_selector");
         let vid_selector = document.getElementById("video_selector");
         let vid_upload_btn = document.getElementById("video_upload_btn");
         let self = this;
-        vid_selector.addEventListener("change", function() {
-          if (vid_selector.files.length == 0) {
+        const handleVidSelection = (url,vjs_type) => {
+          if (vid_selector.files.length == 0 && !url) {
             vid_upload_btn.setAttribute("disabled","true");
             self.file_selected = false;
           } else {
@@ -250,11 +274,11 @@ export default {
               if(self.vjs == null) {
                 videojs("video_player", {}, function() {
                   self.vjs = this
-                  self.vjs.src({ type: vid_selector.files[0].type, src: URL.createObjectURL(vid_selector.files[0]) })
+                  self.vjs.src({ type: (vjs_type?vjs_type:vid_selector.files[0].type), src: (url?url:URL.createObjectURL(vid_selector.files[0])) })
                   self.vjs.load()
                 })
               } else {
-                self.vjs.src({ type: vid_selector.files[0].type, src: URL.createObjectURL(vid_selector.files[0]) })
+                self.vjs.src({ type: (vjs_type?vjs_type:vid_selector.files[0].type), src: (url?url:URL.createObjectURL(vid_selector.files[0])) })
                 self.vjs.load()
               }
               self.play_sub_start_picker = new Picker(document.querySelector("#playback_start"), {
@@ -270,6 +294,21 @@ export default {
                 controls: true
               });
             })
+          }
+        }
+        vid_selector.addEventListener("change", function(e) {
+          e.preventDefault()
+          handleVidSelection()
+        });
+        youtube_selector.addEventListener("input", function(e) {
+          e.preventDefault()
+          //TODO validate URL e.target.value
+          if(validator.valid(e.target.value)) {
+            self.video_ref = e.target.value
+            self.video_type = 'video/youtube'
+            handleVidSelection(self.video_ref,self.video_type)
+          } else {
+            console.log("nope")
           }
         });
       })
@@ -433,7 +472,7 @@ h2 {
 }
 #video_player {
   width: 100%;
-  height: auto;
+  height: 100%;
 }
 #bottomrow {
   padding: 2rem;

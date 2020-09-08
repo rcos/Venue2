@@ -91,8 +91,8 @@ lectureRoutes.post('/add_playback_video/:lecture_id', upload.single('video'),fun
 						console.log("<ERROR> Updating lecture by ID:",lecture_id,"with:",updated_lecture)
 						res.status(404).send("lecture not found");
 					} else {
-							console.log("<SUCCESS> Adding playback video at URL:",public_video_url)
-						res.status(200).json(updated_lecture)
+						console.log("<SUCCESS> Adding playback video at URL:",public_video_url)
+						res.status(200).json(public_video_url)
 				}
 			})
 		})
@@ -112,7 +112,9 @@ lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) 
 			allow_playback_submissions: true,
 			allow_live_submissions: false,
 			email_sent: true,
-			video_length: lecture.video_length
+			video_length: lecture.video_length,
+			video_type: lecture.video_type,
+			video_ref: lecture.video_ref
 		},
 		function (err, updated_lecture) {
 			if (err || updated_lecture == null) {
