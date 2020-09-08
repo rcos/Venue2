@@ -52,7 +52,8 @@ export default {
 			vjs: null,
 			prevTime: 0,
 			currentUser: null,
-			polls: []
+			polls: [],
+			bigbrotherinstance: null
 		}
 	},
 	created() {
@@ -139,7 +140,7 @@ export default {
 						self.prevTime = vid.currentTime()
 					}
 				}
-				setInterval(function() {bigbrother()},1000)
+				this.bigbrotherinstance = setInterval(function() {bigbrother()},1000)
 				vid.on('ended', function() {
 					self.submission.video_progress = self.lecture.video_length
 					self.submission.video_percent = 1
@@ -152,6 +153,9 @@ export default {
 	beforeDestroy() {
 		if(this.vjs) {
 			this.vjs.dispose()
+		}
+		if(this.bigbrotherinstance) {
+			clearInterval(this.bigbrotherinstance)
 		}
 	},
 	methods: {
