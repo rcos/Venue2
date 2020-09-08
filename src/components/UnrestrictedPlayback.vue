@@ -41,8 +41,8 @@ export default {
 <style scoped>
 #unrestricted_playback {
 	position: fixed;
-	left: 0;
-	right: 0;
+	left: 2rem;
+	right: 2rem;
 	top: 4rem;
 	bottom: 2rem;
 }

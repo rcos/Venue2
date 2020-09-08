@@ -192,6 +192,7 @@ export default {
 	left: 0rem;
 	right: 0rem;
 	bottom: 0rem;
+	padding: 0rem 2rem;
 }
 #video_player {
 	width: 100%;
