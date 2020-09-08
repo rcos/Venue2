@@ -2,11 +2,12 @@
   <div>
     <nav id="venue-nav">
       <!-- Logo -->
-      <router-link id="nav-logo" :to="{name: 'dashboard'}" role="link" aria-label="Dashboard">
-        <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="Venue Logo" aria-label="Venue Logo">
-      </router-link>
+      
       <!-- Nav Links -->
       <div id="venue-nav-links">
+        <router-link id="nav-logo" :to="{name: 'dashboard'}" role="link" aria-label="Dashboard">
+          <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="Venue Logo" aria-label="Venue Logo">
+        </router-link>
         <!-- Dashboard Link -->
         <div class="venue-nav-link-container">
           <router-link class="venue-nav-link" :class="{'active-link':is_dashboard()}" :to="{name: 'dashboard'}">
@@ -63,19 +64,21 @@
             <div v-if="is_statistics()" class="active-link-underline"></div>
           </div>
         </show-at> -->
-      </div>
-      <!-- Settings Link -->
-      <router-link :to="{name: 'settings'}" role="link" aria-label="User Settings" class="settings_link">
-        <div class="user-name float-right">
-          <show-at breakpoint="large">
-            <p class="d-inline-block mr-2" aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }}</p>
-          </show-at>
-          <show-at breakpoint="medium">
-            <p class="d-inline-block mr-2" aria-label="User Name">{{ current_user.first_name }}</p>
-          </show-at>
-          <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
+        <div class="venue-nav-link-container">
+          <router-link class="venue-nav-link" :class="{'active-link':is_settings()}" :to="{name: 'settings'}">
+            <show-at breakpoint="large">
+              <p aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon"></p>
+            </show-at>
+            <show-at breakpoint="medium">
+              <p aria-label="User Name">{{ current_user.first_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon"></p>
+            </show-at>
+            <show-at breakpoint="small">
+              <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
+            </show-at>
+          </router-link>
+          <div v-if="is_settings()" class="active-link-underline"></div>
         </div>
-      </router-link>
+      </div>
     </nav>
     <!-- Mobile Course Dropdown -->
     <show-at breakpoint="mediumAndBelow">
@@ -232,6 +235,9 @@
       is_statistics() {
         return this.$route.name === 'statistics'
       },
+      is_settings() {
+        return this.$route.name === 'settings'
+      },
     }
   }
 </script>
@@ -239,12 +245,16 @@
 <style scoped>
   #venue-nav {
     height: 4rem;
-    padding: 1rem 2rem;
-    display: block;
+    padding: 1rem 0rem;
     position: relative;
     top: 0;
     left: 0;
-    right: 0;
+  }
+
+  #venue-nav-links {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
   }
 
   #breadcrumb-container {
@@ -253,7 +263,6 @@
     width: 100%;
     text-align: left;
     padding-left: 4rem;
-    margin-top: 1rem;
     font-size: 0.9rem;
   }
 
@@ -263,25 +272,29 @@
   }
 
   #nav-logo {
-    float: left;
-  }
-
-  #venue-nav-links {
-    margin-top: 5px;
-    float: left;
-    display: inline-flex;
-    /*padding: 1px;*/
+    margin-left: 1.5rem;
+    display: inline-block;
   }
 
   .venue-nav-link-container {
     margin-left: 1.5rem;
     display: inline-block;
+    border-radius: 0.3rem;
+    /* height: 2rem; */
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    border-bottom: none;
+    transition: border-bottom 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  .venue-nav-link-container.active {
+    border-bottom: 0.2rem solid #466D85;
+    transition: border-bottom 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   #instructor-course-dropdown,
   #ta-section-dropdown,
   #student-section-dropdown {
-    position: relative;
     border-radius: 5px;
   }
 
@@ -434,10 +447,13 @@
 
   }
 
-  .venue-nav-link{
+  .venue-nav-link {
     text-decoration: none;
     color: #575757;
     font-weight: 100;
+    margin: 0;
+    padding: 0;
+    height: 2rem;
   }
 
   .active-link {
@@ -457,13 +473,15 @@
   }
 
   .user-name {
-    margin-top: 5px;
-    font-weight: 100;
+    /* margin-top: 5px; */
+    /* font-weight: 100; */
   }
 
   .settings {
     cursor: pointer;
-    margin-top: 2px;
+    margin-top: 0.1rem;
+    margin-left: 0.25rem;
+    margin-right: 1.5rem;
   }
 
   .venue-nav-link:focus,
@@ -483,5 +501,9 @@
   .rotate-arrow {
     transform: rotateZ(-90deg);
     margin-bottom: 0.1rem;
+  }
+
+  img {
+    display: inline-block;
   }
 </style>
