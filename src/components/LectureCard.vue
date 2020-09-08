@@ -8,7 +8,7 @@
       <router-link class="lecture_card_link" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}" :aria-label="'Lecture Info - '+ lecture_course.name +' - '+lecture.title">
         <div class="lecture-card-section" id="left-section">
           <p class="course-name">{{ lecture_course.name }}</p>
-          <p class="course-title">{{ lecture_course.dept }} {{ lecture_course.course_number }}</p>
+          <p class="course-title">{{ lecture_course.prefix }} {{ lecture_course.suffix }}</p>
         </div>
         <div class="lecture-card-section" id="middle-section">
           <p class="lecture-name">{{ lecture.title }}</p>
