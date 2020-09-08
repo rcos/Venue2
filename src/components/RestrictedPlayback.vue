@@ -120,6 +120,7 @@ export default {
 									vid.currentTime(self.polls[i].timestamp)
 									vid.pause()
 									self.startPoll(i)
+									committed = true
 								}
 							}
 						}
