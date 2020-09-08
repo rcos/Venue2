@@ -1,7 +1,8 @@
 <template>
 	<div id="unrestricted_playback">
 		<video id="video_player" class="video-js vjs-big-play-centered" controls>
-			<source v-bind:src="lecture.video_ref" :type="lecture.video_type">
+			<source v-if="isProduction" v-bind:src="lecture.video_ref + '?showinfo=0&enablejsapi=1&origin=https://www.venue-meetings.com'" :type="lecture.video_type">
+			<source v-else v-bind:src="lecture.video_ref + '?showinfo=0&enablejsapi=1&origin=http://localhost:8080'" :type="lecture.video_type">
 		</video>
 	</div>
 </template>
@@ -14,6 +15,9 @@ export default {
 	name: 'RestrictedPlayback',
 	props: {
 		lecture: Object
+	},
+	computed: {
+		isProduction(){ process.env.NODE_ENV === 'production' }
 	},
 	data() {
 		return {
