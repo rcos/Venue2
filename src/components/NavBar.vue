@@ -13,7 +13,7 @@
           <router-link class="venue-nav-link" :class="{'active-link':is_dashboard()}" :to="{name: 'dashboard'}">
             <p>Dashboard</p>
           </router-link>
-          <div v-if="is_dashboard()" class="active-link-underline"></div>
+          <div :class="'active-link-underline ' + (is_dashboard()?'active':'')"></div>
         </div>
         <!-- Courses Link -->
         <div class="venue-nav-link-container" id="instructor-course-dropdown" v-if="instructor_courses.length">
@@ -27,7 +27,7 @@
               </router-link>
             </div>
           </hide-at>
-          <div v-if="is_instructor_course_info()" class="active-link-underline"></div>
+          <div :class="'active-link-underline ' + (is_instructor_course_info()?'active':'')"></div>
         </div>
         <div class="venue-nav-link-container" id="ta-section-dropdown" v-if="ta_sections.length">
           <a data-toggle="collapse" href="#ta-collapse" class="venue-nav-link" :class="{'active-link':is_ta_section_info()}" style="cursor:pointer;">
@@ -40,7 +40,7 @@
               </router-link>
             </div>
           </hide-at>
-          <div v-if="is_ta_section_info()" class="active-link-underline"></div>
+          <div :class="'active-link-underline ' + (is_ta_section_info()?'active':'')"></div>
         </div>
         <div class="venue-nav-link-container" id="student-section-dropdown" v-if="student_sections.length">
           <a data-toggle="collapse" href="#student-collapse" class="venue-nav-link" :class="{'active-link':is_student_section_info()}" style="cursor:pointer;">
@@ -53,7 +53,7 @@
               </router-link>
             </div>
           </hide-at>
-          <div v-if="is_student_section_info()" class="active-link-underline"></div>
+          <div :class="'active-link-underline ' + (is_student_section_info()?'active':'')"></div>
         </div>
         <!-- Statistics Link -->
         <!-- <show-at breakpoint="large">
@@ -76,7 +76,7 @@
               <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
             </show-at>
           </router-link>
-          <div v-if="is_settings()" class="active-link-underline"></div>
+          <div :class="'active-link-underline ' + (is_settings()?'active':'')"></div>
         </div>
       </div>
     </nav>
@@ -466,10 +466,17 @@
   }
 
   .active-link-underline {
-    height: 2px;
-    width: 80%;
+    height: 0rem;
+    width: 0rem;
     background-color: #466D85;
     margin: auto;
+    transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  .active-link-underline.active {
+    height: 0.15rem;
+    width: 80%;
+    transition: all 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   .user-name {
