@@ -358,6 +358,7 @@ router.beforeEach((to, from, next) => {
       } else if (to.matched.some(record => record.meta.requiresInstructor)) {
 
         if (to.name == 'new_lecture' && user_data.current_user.instructor_courses.includes(to.params.course_id)
+        || to.name == 'new_lecture' && user_data.current_user.ta_sections.includes(to.params.course_id)
         || to.name == 'statistics' && user_data.current_user.instructor_courses.length > 0) {
           next()
         } else {
