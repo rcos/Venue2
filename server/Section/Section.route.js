@@ -150,22 +150,25 @@ sectionRoutes.route('/getStudents/:id').get(function (req, res) {
       let student_ids = section.students;
       let students = [];
       let num_iterations = 0;
-      console.log("student_ids: " + student_ids);
-      student_ids.forEach(student_id => {
-        User.findById(student_id, function(err, student) {
-          if(err || student == null){
-            console.log("<ERROR> Getting user with ID:",student_id)
-            res.json(err);
-          } else {
-            students.push(student);
-            num_iterations++;
-            if(num_iterations === student_ids.length) {
-              console.log("<SUCCESS> Getting students for section with ID:",id)
-              res.json(students);
+      if(student_ids.length) {
+        student_ids.forEach(student_id => {
+          User.findById(student_id, function(err, student) {
+            if(err || student == null){
+              console.log("<ERROR> Getting user with ID:",student_id)
+              res.json(err);
+            } else {
+              students.push(student);
+              num_iterations++;
+              if(num_iterations === student_ids.length) {
+                console.log("<SUCCESS> Getting students for section with ID:",id)
+                res.json(students);
+              }
             }
-          }
+          })
         })
-      })
+      } else {
+        res.json([])
+      }
     }
   })
 })
@@ -295,7 +298,6 @@ sectionRoutes.post('/add_students/:id', (req, res) => {
   Section.findById(section_id,function(err,section) {
     User.find({email: {$in: student_emails}},function(err,students) {
       let student_ids = students.map(a => a._id)
-      console.log(student_ids)
       Promise.all([
         User.updateMany( {_id: {$in: student_ids}}, {$push: {student_sections: [section_id]}}),
         Section.findByIdAndUpdate( section_id, {$push: {students: {$each: student_ids}}})
