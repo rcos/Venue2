@@ -9,36 +9,38 @@
             <input type="text" class="form-control" v-model="course.name">
           </div>
         </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>dept</label>
-              <input class="form-control" v-model="course.dept" rows="5">
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>dept</label>
-              <input type="number" class="form-control" v-model="course.course_number" rows="5">
-            </div>
-          </div>
-        </div><br />
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>instructor</label>
-                <input class="form-control" v-model="instructor.first_name" rows="5" readonly>
-                <input class="form-control" v-model="instructor.last_name" rows="5" readonly>
-            </div>
+      </div><br />
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>dept</label>
+            <input class="form-control" v-model="course.prefix" rows="5">
           </div>
         </div>
-        <div class="form-group">
-          <button class="btn btn-primary">Update</button>
+      </div><br />
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>number</label>
+            <input class="form-control" v-model="course.suffix" rows="5">
+          </div>
         </div>
+      </div><br />
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>instructors</label>
+            <input v-for="(instructor,i) in instructors" :key="i" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name" rows="5" readonly>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary">Update</button>
+      </div>
     </form>
-
-    <Instructors v-on:select-instructor="selectInstructor" />
+    <label>Add instructors by email</label>
+    <input type="text" v-model="instructors_to_add"/>
+    <button @click="addInstructorsToCourse()">Update</button>
   </div>
 </template>
 
@@ -55,7 +57,8 @@
     data() {
       return {
         course: {},
-        instructor: {}
+        instructors: [],
+        instructors_to_add: ""
       }
     },
     created() {
@@ -69,22 +72,23 @@
         this.getCurrentCourseInstructor()
       },
       async getCurrentCourseInstructor(){
-        const response = await CourseAPI.getInstructor(this.course._id)
+        const response = await UserAPI.getInstructorsForCourse(this.course._id)
         if(response.data)
-          this.instructor = response.data
+          this.instructors = response.data
       },
       async updateCourse() {
         let course_id = this.$route.params.id
-        this.course.instructor = this.instructor
+        this.course.instructors = this.instructors.map(a=>a._id)
         const response = await CourseAPI.updateCourse(course_id, this.course)
         this.$router.push({name: 'courses'})
-      }, 
-      selectInstructor(instructor){
-        this.instructor = instructor
-        this.course.instructor = instructor
       },
-      instructorIsNull(){
-        return this.instructor == null
+      addInstructorsToCourse() {
+        let insts = this.instructors_to_add.split(',')
+        if(insts.length) {
+          CourseAPI.addInstructors(this.course._id,insts).then(res => {
+            location.reload()
+          })
+        }
       }
     }
   }

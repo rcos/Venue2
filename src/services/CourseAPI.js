@@ -26,4 +26,9 @@ export default {
   getInstructorCourses() {
     return API().get('courses/get_instructor_courses')
   },
+  addInstructors(course_id,instructors) {
+    return API().post('courses/add_instructors/'+course_id,{
+      instructors: instructors
+    })
+  }
 }

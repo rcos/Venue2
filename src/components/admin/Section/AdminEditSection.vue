@@ -13,16 +13,16 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>instructor:</label>
-            <div v-for="(instructor,i) in instructors" :key="i" class="form-control">{{instructor.first_name}} {{instructor.last_name}}</div>
+            <label>instructors:</label>
+            <input v-for="(instructor,i) in instructors" :key="i" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name"/>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>section_number:</label>
-            <input type="number" class="form-control" v-model="section.name">
+            <label>section's name:</label>
+            <input type="text" class="form-control" v-model="section.name">
           </div>
           <div class="form-group">
             <button class="btn btn-primary">Update</button>
@@ -51,7 +51,7 @@
         </tbody>
     </table>
 
-    <label>Add students by RCS</label>
+    <label>Add students by email</label>
     <input type="text" v-model="students_to_add"/>
     <button @click="addStudentsToSection()">Update</button>
 
