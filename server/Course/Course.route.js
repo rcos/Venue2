@@ -113,4 +113,20 @@ courseRoutes.route('/get_instructor_courses').get(function (req, res) {
   })
 });
 
+courseRoutes.post('/add_instructors/:id', (req, res) => {
+  let instructor_emails = req.body.instructors
+  let course_id = req.params.id
+  Course.findById(course_id,function(err,course) {
+    User.find({email: {$in: instructor_emails}},function(err,instructors) {
+      let instructor_ids = instructors.map(a => a._id)
+      Promise.all([
+        User.updateMany( {_id: {$in: instructor_ids}}, {$push: {instructor_courses: [course_id]}}),
+        Course.findByIdAndUpdate( course_id, {$push: {instructors: {$each: instructor_ids}}})
+      ]).then(resolved => {
+        res.json()
+      })
+    })
+  })
+})
+
 module.exports = courseRoutes;
