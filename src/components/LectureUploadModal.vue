@@ -244,7 +244,7 @@ export default {
         this.waiting = false
         this.$router.push({
           name: "course_info",
-          params: { id: course_id }
+          params: { id: (this.$store.state.user.current_user.ta_sections.includes(this.$route.params.course_id)?this.$route.params.course_id:course_id) }
         })
       } else {
         for(let i=0;i<this.polls.length;i++) {
@@ -258,7 +258,7 @@ export default {
               this.waiting = false
               this.$router.push({
                 name: "course_info",
-                params: { id: course_id }
+                params: { id: (this.$store.state.user.current_user.ta_sections.includes(this.$route.params.course_id)?this.$route.params.course_id:course_id) }
               })
             }
           })
