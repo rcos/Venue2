@@ -5,8 +5,8 @@
 
         <!-- Title -->
         <div class="title">
-          <router-link v-if="is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}" tabindex="-1">
-            <div class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Create New Lecture for {{ course.dept }} {{ course.course_number }}</div>
+          <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: (is_instructor?course._id:$route.params.id) }}" tabindex="-1">
+            <div class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
           </router-link>
         </div>
         <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" :section_name="section.name" />
@@ -42,9 +42,9 @@
       <div>
         <!-- Mobile View -->
         <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" mobileMode />
-        <router-link v-if="is_instructor" :to="{name: 'new_lecture', params: { course_id: course._id }}" tabindex="-1">
-            <div class="inline-block big-button mobile" tabindex="0">Create New Lecture for {{ course.dept }} {{ course.course_number }}</div>
-          </router-link>
+        <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: (is_instructor?course._id:$route.params.id) }}" tabindex="-1">
+          <div class="inline-block big-button mobile" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
+        </router-link>
         <div class="courseinfo-attendance-listing">
           <div v-if="is_instructor" class="section-select-container mobile float-right">
             <label id="section_select_label">Section(s):</label>
