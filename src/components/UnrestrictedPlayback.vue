@@ -1,15 +1,20 @@
 <template>
 	<div id="unrestricted_playback">
-		<video id="video_player" class="video-js vjs-big-play-centered" controls>
+		<!-- <video id="video_player" class="video-js vjs-big-play-centered" controls>
 			<source v-if="isProduction" v-bind:src="lecture.video_ref + '?showinfo=0&enablejsapi=1&origin=https://www.venue-meetings.com'" :type="lecture.video_type">
 			<source v-else v-bind:src="lecture.video_ref + '?showinfo=0&enablejsapi=1&origin=http://localhost:8080'" :type="lecture.video_type">
-		</video>
+		</video> -->
 	</div>
 </template>
 
 <script>
 import videojs from "video.js"
+import axios from 'axios'
 require('videojs-youtube')
+const Webex = require('webex');
+
+const webex = Webex.init();
+console.log(webex)
 
 export default {
 	name: 'RestrictedPlayback',
@@ -24,11 +29,16 @@ export default {
 			vjs: null
 		}
 	},
-	mounted() {
-		let self = this
-		videojs("video_player", {}, function() {
-			self.vjs = this
+	created() {
+		axios.get('https://webexapis.com/v1/recordings/d25117a0d586472e80303142ff62791c',{
+			
 		})
+	},
+	mounted() {
+		// let self = this
+		// videojs("video_player", {}, function() {
+		// 	self.vjs = this
+		// })
 	},
 	beforeDestroy() {
 		if(this.vjs) {
