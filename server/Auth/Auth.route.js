@@ -3,6 +3,7 @@ const authRoutes = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const axios = require('axios')
 
 let User = require('../User/User.model');
 
@@ -211,5 +212,33 @@ authRoutes.get("/logoutCAS", function(req, res) {
   res.header("Set-Cookie","connect_sid="+";expires=Thu, 01 Jan 1970 00:00:00 GMT")
   res.send()
 });
+
+authRoutes.get('/get_webex_src/:auth_code/:web_rec_id',function(req,res) {
+  let auth_code = req.params.auth_code
+  let web_rec_id = req.params.web_rec_id
+  axios.post('https://webexapis.com/v1/access_token?grant_type=authorization_code&client_id='+process.env.WEBEX_CLIENT_ID+'&client_secret='+process.env.WEBEX_CLIENT_SECRET+'&code='+auth_code+'&redirect_uri='+(process.env.NODE_ENV === 'production'?"https://venue-meetings.com":"http://localhost:8080")
+  ,{},{
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  }).then(resp => {
+    
+
+    axios.get('https://rensselaer.webex.com/webappng/api/v1/recordings/'+web_rec_id+'/stream',{
+      headers: {
+        "Authorization": "Bearer " + resp.data.access_token
+      }
+    }).then(resp2 => {
+      console.log(resp2.data.downloadRecordingInfo.downloadInfo.mp4URL)
+      res.json(resp2.data)
+    }).catch(err => {
+      res.json({})
+    })
+
+
+  }).catch(err => {
+    res.json({})
+  })
+})
 
 module.exports = authRoutes;

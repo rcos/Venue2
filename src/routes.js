@@ -35,6 +35,11 @@ import Settings from './views/Settings.vue';
 import RedirectCASLogin from './views/RedirectCASLogin.vue';
 import Statistics from './views/Statistics.vue';
 
+import AuthAPI from '@/services/AuthAPI.js'
+
+const url = require('url')
+const query = require('querystring')
+
 Vue.use(VueRouter);
 
 const router = new VueRouter({
@@ -51,7 +56,7 @@ const router = new VueRouter({
       path: '/settings',
       component: Settings,
       meta: {
-        title: "Venue - Settings",
+        title: "Settings",
         requiresAuth: true
       }
     },
@@ -231,7 +236,7 @@ const router = new VueRouter({
       path: '/dashboard',
       component: Dashboard,
       meta: {
-        title: "Venue - Dashboard",
+        title: "Dashboard",
         requiresAuth: true
       }
     },
@@ -240,7 +245,7 @@ const router = new VueRouter({
     //   path: '/user_courses',
     //   component: CourseList,
     //   meta: {
-    //     title: "Venue - Courses",
+    //     title: "Courses",
     //     requiresAuth: true
     //   }
     // },
@@ -249,7 +254,7 @@ const router = new VueRouter({
       path: '/course_info/:id',
       component: CourseInfo,
       meta: {
-        title: "Venue - Course Info",
+        title: "Course Info",
         requiresAuth: true
       }
     },
@@ -285,7 +290,7 @@ const router = new VueRouter({
       path: '/lecture_playback/:lecture_id',
       component: LecturePlayback,
       meta: {
-        title: "Venue - Lecture Playback",
+        title: "Lecture Playback",
         requiresAuth: true,
       }
     },
@@ -294,7 +299,7 @@ const router = new VueRouter({
       path: '/new_lecture/:course_id',
       component: NewLecture,
       meta: {
-        title: "Venue - New Lecture",
+        title: "New Lecture",
         requiresAuth: true,
         requiresInstructor: true
       }
@@ -304,7 +309,7 @@ const router = new VueRouter({
       path: '/lecture_info/:lecture_id',
       component: LectureInfo,
       meta: {
-        title: "Venue - Lecture Info",
+        title: "Lecture Info",
         requiresAuth: true,
       }
     },
@@ -321,7 +326,7 @@ const router = new VueRouter({
       path: '/redirectCASLogin',
       component: RedirectCASLogin,
       meta: {
-        title: "Venue - Redirecting",
+        title: "Redirecting",
         requiresNoLogin: true
       }
     },
@@ -330,7 +335,7 @@ const router = new VueRouter({
       path: '/statistics',
       component: Statistics,
       meta: {
-        title: "Venue - Statistics",
+        title: "Statistics",
         requiresAuth: true,
         requiresInstructor: true
       }
@@ -340,6 +345,16 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const loggedIn = localStorage.getItem('user')
+
+  if(to.name == 'landing_page') {
+    let url_query = query.parse(url.parse(window.location.href).query)
+		if(url_query.code) {
+      window.location.href="http://localhost:8080/#/lecture_playback/"+localStorage.getItem('last_webex')
+			AuthAPI.getWebexSrc(url_query.code,'57239a57ac4a4aeeb85861c05e4c4048').then(res => {
+				console.log(res.data)
+			})
+		}
+  }
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
 
