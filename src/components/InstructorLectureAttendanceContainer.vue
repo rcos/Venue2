@@ -91,12 +91,14 @@ export default {
 						video.addEventListener('loadedmetadata',function() {
 							if(document.pictureInPictureEnabled && !video.disablePictureInPicture && !document.pictureInPictureElement) {
 								video.requestPictureInPicture()
-								setTimeout(function() {
-									if(document.pictureInPictureEnabled && !video.disablePictureInPicture && document.pictureInPictureElement) {
-										document.exitPictureInPicture();
-									}
-									location.reload()
-								},(Date.parse(self.lecture.checkins[i].end_time) - Date.now()))
+								if(self.lecture.checkins[i].end_time && (Date.parse(self.lecture.checkins[i].end_time) - Date.now()) > 0) {
+									setTimeout(function() {
+										if(document.pictureInPictureEnabled && !video.disablePictureInPicture && document.pictureInPictureElement) {
+											document.exitPictureInPicture();
+										}
+										location.reload()
+									},(Date.parse(self.lecture.checkins[i].end_time) - Date.now()))
+								}
 							}
 						})
 					})
@@ -261,7 +263,7 @@ export default {
 		margin-right: 0.75rem;
 		min-height: calc(60px + .75rem);
 		padding: .375rem .375rem;
-		border-radius: 0.75rem;
+		border-radius: 0.25rem;
 	}
 
 	.show-qr-btn {
