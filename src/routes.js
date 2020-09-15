@@ -349,10 +349,7 @@ router.beforeEach((to, from, next) => {
   if(to.name == 'landing_page') {
     let url_query = query.parse(url.parse(window.location.href).query)
 		if(url_query.code) {
-      window.location.href="http://localhost:8080/#/lecture_playback/"+localStorage.getItem('last_webex')
-			AuthAPI.getWebexSrc(url_query.code,'57239a57ac4a4aeeb85861c05e4c4048').then(res => {
-				console.log(res.data)
-			})
+      window.location.href="http://localhost:8080/"+"?code="+url_query.code+"#/lecture_playback/"+localStorage.getItem('last_webex')
 		}
   }
 

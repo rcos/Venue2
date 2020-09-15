@@ -20,6 +20,16 @@
           <input class="col-4" type="number" id="yt_sec" min="0" max="59" value="0" aria-labelledby="yt_length_label" placeholder="0 sec"/>
         </div>
       </div>
+      <div class="row webexrow">
+        <label id="webex_label">Webex URL:</label>
+        <input id="webex_selector" type="text" class="form-control" role="input" tabindex="0" aria-labelledby="webex_label"/>
+        <div v-if="video_type == 'webex'">
+          <label id="webex_length_label" class="col-12">Length:</label>
+          <input class="col-4" type="number" id="webex_hour" min="0" max="5" value="0" aria-labelledby="webex_length_label" placeholder="0 hours"/>
+          <input class="col-4" type="number" id="webex_min" min="0" max="59" value="0" aria-labelledby="webex_length_label" placeholder="0 min"/>
+          <input class="col-4" type="number" id="webex_sec" min="0" max="59" value="0" aria-labelledby="webex_length_label" placeholder="0 sec"/>
+        </div>
+      </div>
       <div class="row filerow" v-if="video_type == ''">
         <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn" role="button" tabindex="0" aria-label="Select Video and Show Poll Creation Options"/>
       </div>
@@ -179,15 +189,21 @@ export default {
       if(this.isComplete()) {
         this.waiting = true;
         let lecture_video
-        if(this.video_type != 'video/youtube') {
-          lecture_video = document.getElementById("video_selector").files[0]
-          this.lecture.video_length = this.vjs.duration()
-        } else {
+        if(this.video_type == 'video/youtube') {
           this.lecture.video_ref = this.video_ref
           let ythour = parseInt(document.getElementById('yt_hour').value)
           let ytmin = parseInt(document.getElementById('yt_min').value)
           let ytsec = parseInt(document.getElementById('yt_sec').value)
           this.lecture.video_length = (ythour*60*60) + (ytmin*60) + ytsec
+        } else if(this.video_type == 'webex') {
+          this.lecture.video_ref = this.video_ref
+          let webexhour = parseInt(document.getElementById('webex_hour').value)
+          let webexmin = parseInt(document.getElementById('webex_min').value)
+          let webexsec = parseInt(document.getElementById('webex_sec').value)
+          this.lecture.video_length = (webexhour*60*60) + (webexmin*60) + webexsec
+        } else {
+          lecture_video = document.getElementById("video_selector").files[0]
+          this.lecture.video_length = this.vjs.duration()
         }
         this.lecture.video_type = this.video_type
         if(!this.lecture.video_type) {
@@ -221,15 +237,21 @@ export default {
     async updateLectureFromParent(lect,course_id) {
       this.waiting = true
       let lecture_video
-      if(this.video_type != 'video/youtube') {
-        lecture_video = document.getElementById("video_selector").files[0]
-        lect.video_length = this.vjs.duration()
-      } else {
+      if(this.video_type == 'video/youtube') {
         lect.video_ref = this.video_ref
         let ythour = parseInt(document.getElementById('yt_hour').value)
         let ytmin = parseInt(document.getElementById('yt_min').value)
         let ytsec = parseInt(document.getElementById('yt_sec').value)
         lect.video_length = (ythour*60*60) + (ytmin*60) + ytsec
+      } else if(this.video_type == 'webex') {
+        lect.video_ref = this.video_ref
+        let webexhour = parseInt(document.getElementById('webex_hour').value)
+        let webexmin = parseInt(document.getElementById('webex_min').value)
+        let webexsec = parseInt(document.getElementById('webex_sec').value)
+        lect.video_length = (webexhour*60*60) + (webexmin*60) + webexsec
+      } else {
+        lecture_video = document.getElementById("video_selector").files[0]
+        lect.video_length = this.vjs.duration()
       }
       lect.video_type = this.video_type
       if(!lect.video_type) {
@@ -272,6 +294,7 @@ export default {
       this.showModal()
       this.$nextTick(() => {
         let youtube_selector = document.getElementById("youtube_selector");
+        let webex_selector = document.getElementById("webex_selector");
         let vid_selector = document.getElementById("video_selector");
         let vid_upload_btn = document.getElementById("video_upload_btn");
         let self = this;
@@ -316,14 +339,17 @@ export default {
         });
         youtube_selector.addEventListener("input", function(e) {
           e.preventDefault()
-          //TODO validate URL e.target.value
           if(validator.valid(e.target.value)) {
             self.video_ref = e.target.value
             self.video_type = 'video/youtube'
             handleVidSelection(self.video_ref,self.video_type)
-          } else {
-            console.log("nope")
           }
+        });
+        webex_selector.addEventListener("input", function(e) {
+          e.preventDefault()
+          self.video_ref = e.target.value
+          self.video_type = 'webex'
+          handleVidSelection(self.video_ref,'video/mp4')
         });
       })
     },
