@@ -7,7 +7,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: null
+    user: null,
+    last_webex: null
   },
   mutations: {
     // Store the user in our vuex state, add their token to 
@@ -26,6 +27,15 @@ export default new Vuex.Store({
     CLEAR_USER_DATA() {
       localStorage.removeItem('user')
       location.reload()
+    },
+    SET_LAST_WEBEX(state, lecture_id) {
+      if(lecture_id != null) {
+        state.last_webex = lecture_id
+        localStorage.setItem('last_webex',lecture_id)
+      }
+    },
+    CLEAR_LAST_WEBEX() {
+      localStorage.removeItem('last_webex')
     }
   },
   actions: {
@@ -50,6 +60,9 @@ export default new Vuex.Store({
           commit('SET_USER_DATA', data)
         })
     },
+    setLastWebex({ commit },lecture_id) {
+      commit('SET_LAST_WEBEX',lecture_id)
+    }
   },
   getters: {
     loggedIn(state) {

@@ -2,7 +2,7 @@
 	<div id="restricted_playback">
 		<video id="video_player" class="video-js vjs-big-play-centered" controls playsinline>
 			<source v-if="isProduction" v-bind:src="lecture.video_ref + '?showinfo=0&enablejsapi=1&origin=https://www.venue-meetings.com'" :type="lecture.video_type">
-			<source v-else v-bind:src="lecture.video_ref + '?showinfo=0&enablejsapi=1&origin=http://localhost:8080'" :type="lecture.video_type">
+			<source v-else v-bind:src="lecture.video_ref + '?showinfo=0&enablejsapi=1&origin=https://www.youtube.com'" :type="lecture.video_type">
 		</video>
 		<div id="polls" class="hide">
 			<!--Poll Modals Start-->

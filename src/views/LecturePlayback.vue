@@ -47,6 +47,13 @@ export default {
 				this.is_ta = this.$store.state.user.current_user.ta_sections.some( a => lect_sect_ids.includes(a) )
 				this.is_student = this.$store.state.user.current_user.student_sections.some( a => lect_sect_ids.includes(a) )
 				this.lecture_loaded = true
+				if(localStorage.getItem('last_webex')) {
+					localStorage.removeItem('last_webex')
+					this.convertVideoTypeToSourceType(this.lecture)
+				} if(this.lecture.video_type == 'webex') {
+					this.$store.dispatch('setLastWebex',this.lecture._id)
+					window.location.href="https://webexapis.com/v1/authorize?client_id=C51b03a19e18dfd8ccb12e33224fd60be29d1554641b22aeb6b3c2cccad97d04d&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080&scope=spark%3Aall%20spark%3Akms&state=venue_state"
+				}
 				if(new Date() > new Date(this.lecture.playback_submission_end_time) || this.is_instructor || this.is_ta) {
 					this.unrestricted = true
 					this.needs_decision = false
@@ -81,6 +88,11 @@ export default {
 		handleOptIntoRestricted() {
 			this.unrestricted = false
 			this.needs_decision = false
+		},
+		convertVideoTypeToSourceType(lecture) {
+			if(lecture.video_type == 'webex') {
+				lecture.video_type = "video/mp4"
+			}
 		}
 	}
 }

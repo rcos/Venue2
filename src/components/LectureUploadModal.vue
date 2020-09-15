@@ -131,7 +131,6 @@ import Picker from 'pickerjs';
 import '../../node_modules/pickerjs/src/index.css';
 require('videojs-youtube')
 const validator = require('youtube-url')
-import YoutubePlayer from 'youtube-player'
 // DatePicker themes options:
 // "material_blue","material_green","material_red","material_orange",
 // "dark","airbnb","confetti"
