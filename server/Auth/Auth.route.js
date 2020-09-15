@@ -229,8 +229,8 @@ authRoutes.get('/get_webex_src/:auth_code/:web_rec_id',function(req,res) {
         "Authorization": "Bearer " + resp.data.access_token
       }
     }).then(resp2 => {
-      console.log(resp2.data.downloadRecordingInfo.downloadInfo.mp4URL)
-      res.json(resp2.data)
+      console.log(resp2.data)
+      res.json(resp2.data.downloadRecordingInfo.downloadInfo.mp4URL)
     }).catch(err => {
       res.json({})
     })
