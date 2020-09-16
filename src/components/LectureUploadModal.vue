@@ -318,18 +318,20 @@ export default {
                 self.vjs.src({ type: (vjs_type?vjs_type:vid_selector.files[0].type), src: (url?url:URL.createObjectURL(vid_selector.files[0])) })
                 self.vjs.load()
               }
-              self.play_sub_start_picker = new Picker(document.querySelector("#playback_start"), {
-                inline: true,
-                rows: 1,
-                headers: true,
-                controls: true
-              });
-              self.play_sub_end_picker = new Picker(document.querySelector("#playback_end"), {
-                inline: true,
-                rows: 1,
-                headers: true,
-                controls: true
-              });
+              if(self.play_sub_start_picker == null) {
+                self.play_sub_start_picker = new Picker(document.querySelector("#playback_start"), {
+                  inline: true,
+                  rows: 1,
+                  headers: true,
+                  controls: true
+                });
+                self.play_sub_end_picker = new Picker(document.querySelector("#playback_end"), {
+                  inline: true,
+                  rows: 1,
+                  headers: true,
+                  controls: true
+                });
+              }
             })
           }
         }
