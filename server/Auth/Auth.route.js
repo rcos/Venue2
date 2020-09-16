@@ -216,7 +216,7 @@ authRoutes.get("/logoutCAS", function(req, res) {
 authRoutes.get('/get_webex_src/:auth_code/:web_rec_id',function(req,res) {
   let auth_code = req.params.auth_code
   let web_rec_id = req.params.web_rec_id
-  axios.post('https://webexapis.com/v1/access_token?grant_type=authorization_code&client_id='+process.env.WEBEX_CLIENT_ID+'&client_secret='+process.env.WEBEX_CLIENT_SECRET+'&code='+auth_code+'&redirect_uri='+(process.env.NODE_ENV === 'production'?"https://venue-meetings.com":"http://localhost:8080")
+  axios.post('https://webexapis.com/v1/access_token?grant_type=authorization_code&client_id='+process.env.WEBEX_CLIENT_ID+'&client_secret='+process.env.WEBEX_CLIENT_SECRET+'&code='+auth_code+'&redirect_uri='+(process.env.NODE_ENV === 'production'?"https://www.venue-meetings.com":"http://localhost:8080")
   ,{},{
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"

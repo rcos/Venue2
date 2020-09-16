@@ -65,7 +65,7 @@ export default {
 				} else if(this.lecture.video_type == 'webex') {
 					this.$store.dispatch('setLastWebex',this.lecture._id)
 					if(process.env.NODE_ENV === 'production') {
-						window.location.href="https://webexapis.com/v1/authorize?client_id=C51b03a19e18dfd8ccb12e33224fd60be29d1554641b22aeb6b3c2cccad97d04d&response_type=code&redirect_uri=https%3A%2F%2Fvenue-meetings.com&scope=spark%3Aall%20spark%3Akms&state=venue_state"
+						window.location.href="https://webexapis.com/v1/authorize?client_id=C51b03a19e18dfd8ccb12e33224fd60be29d1554641b22aeb6b3c2cccad97d04d&response_type=code&redirect_uri=https%3A%2F%2Fwww.venue-meetings.com&scope=spark%3Aall%20spark%3Akms&state=venue_state"
 					} else {
 						window.location.href="https://webexapis.com/v1/authorize?client_id=C51b03a19e18dfd8ccb12e33224fd60be29d1554641b22aeb6b3c2cccad97d04d&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080&scope=spark%3Aall%20spark%3Akms&state=venue_state"
 					}
