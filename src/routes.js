@@ -346,9 +346,9 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const loggedIn = localStorage.getItem('user')
 
-  if(to.name == 'landing_page') {
+  if(to.name == 'landing_page' || to.name == dashboard) {
     let url_query = query.parse(url.parse(window.location.href).query)
-		if(url_query.code) {
+		if(url_query && url_query.code) {
       if(process.env.NODE_ENV === 'production') {
         console.log(url_query.code)
         console.log(localStorage.getItem('last_webex'))
