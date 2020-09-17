@@ -299,7 +299,8 @@
   }
 
   .dropdown-content {
-    /*margin-top: 3px;*/
+    margin-left: -1rem;
+    margin-top: 0.2rem;
     position: absolute;
     /* background-color: #f7f7f7; */
     
@@ -317,10 +318,11 @@
     text-decoration: none;  
     display: block;
     max-height: 0px;
-    width: 0px;
+    width: 15rem;
     margin: 0px;
     padding: 0px;
     box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+    transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   .dropdown-content a:first-of-type {
@@ -353,7 +355,8 @@
     max-height: 3rem;
     width: 15rem;
     padding: 12px 16px;
-    transition: opacity 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), width 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1);
+    transform: rotateY(0deg);
+    transition: all 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(2),
@@ -366,7 +369,8 @@
     max-height: 3rem;
     width: 15rem;
     padding: 12px 16px;
-    transition: opacity 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1), width 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1);
+    transform: rotateY(0deg);
+    transition: all 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.05s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(3),
@@ -379,7 +383,8 @@
     max-height: 3rem;
     width: 15rem;
     padding: 12px 16px;
-    transition: opacity 0.25s 0.1s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.1s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.1s cubic-bezier(0.19, 1, 0.22, 1), width 0.25s 0.10s cubic-bezier(0.19, 1, 0.22, 1);
+    transform: rotateY(0deg);
+    transition: all 0.25s 0.1s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.1s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(4),
@@ -392,7 +397,8 @@
     max-height: 3rem;
     width: 15rem;
     padding: 12px 16px;
-    transition: opacity 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1), width 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1);
+    transform: rotateY(0deg);
+    transition: all 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.15s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(5),
@@ -405,7 +411,8 @@
     max-height: 3rem;
     width: 15rem;
     padding: 12px 16px;
-    transition: opacity 0.25s 0.20s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.20s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.20s cubic-bezier(0.19, 1, 0.22, 1), width 0.25s 0.20s cubic-bezier(0.19, 1, 0.22, 1);
+    transform: rotateY(0deg);
+    transition: all 0.25s 0.20s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.2s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(6),
@@ -418,16 +425,19 @@
     max-height: 3rem;
     width: 15rem;
     padding: 12px 16px;
-    transition: opacity 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), width 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+    transform: rotateY(0deg);
+    transition: all 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), transform 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   .dropdown-content a:hover,
   .dropdown-content a:focus {
     background-color: #466D85;
     color: white;
-    transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
     outline: none;
     box-shadow: 0px 3px 3px 0px rgba(85, 85, 85, 0.644) inset, 0px -3px 3px 0px rgba(179, 179, 179, 0.644) inset;
+    -webkit-transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+    -ms-transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   .mobile-course-list {
@@ -506,7 +516,7 @@
   }
 
   .rotate-arrow {
-    transform: rotateZ(-90deg);
+    transform: rotateX(-90deg);
     margin-bottom: 0.1rem;
   }
 
