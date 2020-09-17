@@ -51,6 +51,7 @@ export default {
 				this.is_ta = this.$store.state.user.current_user.ta_sections.some( a => lect_sect_ids.includes(a) )
 				this.is_student = this.$store.state.user.current_user.student_sections.some( a => lect_sect_ids.includes(a) )
 				if(localStorage.getItem('last_webex')) {
+					console.log('last_webex')
 					localStorage.removeItem('last_webex')
 					this.convertVideoTypeToSourceType(this.lecture)
 					let url_query = query.parse(url.parse(window.location.href).query)
