@@ -56,8 +56,10 @@ export default {
 					let url_query = query.parse(url.parse(window.location.href).query)
 					if(url_query.code) {
 						let pieces = this.lecture.video_ref.split("/")
+						console.log("Rec id:",pieces[pieces.length-1])
 						AuthAPI.getWebexSrc(url_query.code,pieces[pieces.length-1]).then(res => {
 							this.lecture.video_ref = res.data
+							console.log("Video ref:",this.lecture.video_ref)
 							this.lecture.video_type = "video/mp4"
 							this.lecture_loaded = true
 						})
