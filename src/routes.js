@@ -350,9 +350,13 @@ router.beforeEach((to, from, next) => {
     let url_query = query.parse(url.parse(window.location.href).query)
 		if(url_query.code) {
       if(process.env.NODE_ENV === 'production') {
-        window.location.href="https://www.venue-meetings.com/"+"?code="+url_query.code+"#/lecture_playback/"+localStorage.getItem('last_webex')
+        console.log(url_query.code)
+        console.log(localStorage.getItem('last_webex'))
+        // window.location.href="https://www.venue-meetings.com/"+"?code="+url_query.code+"#/lecture_playback/"+localStorage.getItem('last_webex')
       } else {
-        window.location.href="http://localhost:8080/"+"?code="+url_query.code+"#/lecture_playback/"+localStorage.getItem('last_webex')
+        console.log(url_query.code)
+        console.log(localStorage.getItem('last_webex'))
+        // window.location.href="http://localhost:8080/"+"?code="+url_query.code+"#/lecture_playback/"+localStorage.getItem('last_webex')
       }
 		}
   }
