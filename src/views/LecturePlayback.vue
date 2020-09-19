@@ -59,6 +59,7 @@ export default {
 						AuthAPI.getWebexSrc(url_query.code,pieces[pieces.length-1]).then(res => {
 							this.lecture.video_ref = res.data
 							this.lecture.video_type = "video/mp4"
+							window.history.replaceState({}, document.title, "/#/lecture_playback/"+this.lecture._id);
 							this.lecture_loaded = true
 						})
 					}
