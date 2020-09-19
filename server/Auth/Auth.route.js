@@ -216,32 +216,22 @@ authRoutes.get("/logoutCAS", function(req, res) {
 authRoutes.get('/get_webex_src/:auth_code/:web_rec_id',function(req,res) {
   let auth_code = req.params.auth_code
   let web_rec_id = req.params.web_rec_id
-  console.log('https://webexapis.com/v1/access_token?grant_type=authorization_code&client_id='+process.env.WEBEX_CLIENT_ID+'&client_secret='+process.env.WEBEX_CLIENT_SECRET+'&code='+auth_code+'&redirect_uri='+(process.env.NODE_ENV === 'production'?"https://www.venue-meetings.com":"http://localhost:8080"))
   axios.post('https://webexapis.com/v1/access_token?grant_type=authorization_code&client_id='+process.env.WEBEX_CLIENT_ID+'&client_secret='+process.env.WEBEX_CLIENT_SECRET+'&code='+auth_code+'&redirect_uri='+(process.env.NODE_ENV === 'production'?"https://www.venue-meetings.com":"http://localhost:8080")
   ,{},{
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
     }
   }).then(resp => {
-    
-    console.log("THIS SHOULD NOT SHOW UP THOUGH XXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-
     axios.get('https://rensselaer.webex.com/webappng/api/v1/recordings/'+web_rec_id+'/stream',{
       headers: {
         "Authorization": "Bearer " + resp.data.access_token
       }
     }).then(resp2 => {
-      console.log(resp2.data)
       res.json(resp2.data.downloadRecordingInfo.downloadInfo.mp4URL)
     }).catch(err => {
-      console.log('this one')
       res.json({})
     })
-
-
   }).catch(err => {
-    console.log('this two')
-    console.log(err)
     res.json({})
   })
 })

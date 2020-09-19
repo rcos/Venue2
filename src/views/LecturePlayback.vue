@@ -51,16 +51,13 @@ export default {
 				this.is_ta = this.$store.state.user.current_user.ta_sections.some( a => lect_sect_ids.includes(a) )
 				this.is_student = this.$store.state.user.current_user.student_sections.some( a => lect_sect_ids.includes(a) )
 				if(localStorage.getItem('last_webex')) {
-					console.log('last_webex')
 					localStorage.removeItem('last_webex')
 					this.convertVideoTypeToSourceType(this.lecture)
 					let url_query = query.parse(url.parse(window.location.href).query)
 					if(url_query.code) {
 						let pieces = this.lecture.video_ref.split("/")
-						console.log("Rec id:",pieces[pieces.length-1])
 						AuthAPI.getWebexSrc(url_query.code,pieces[pieces.length-1]).then(res => {
 							this.lecture.video_ref = res.data
-							console.log("Video ref:",this.lecture.video_ref)
 							this.lecture.video_type = "video/mp4"
 							this.lecture_loaded = true
 						})

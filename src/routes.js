@@ -348,17 +348,11 @@ router.beforeEach((to, from, next) => {
 
   if(to.name == 'landing_page' || to.name == 'dashboard') {
     let url_query = query.parse(url.parse(window.location.href).query)
-    console.log('here, surely?')
 		if(url_query && url_query.code) {
-      console.log('made it')
       if(process.env.NODE_ENV === 'production') {
-        console.log(url_query.code)
-        console.log(localStorage.getItem('last_webex'))
-        // window.location.href="https://www.venue-meetings.com/"+"?code="+url_query.code+"#/lecture_playback/"+localStorage.getItem('last_webex')
+        window.location.href="https://www.venue-meetings.com/"+"?code="+url_query.code+"#/lecture_playback/"+localStorage.getItem('last_webex')
       } else {
-        console.log(url_query.code)
-        console.log(localStorage.getItem('last_webex'))
-        // window.location.href="http://localhost:8080/"+"?code="+url_query.code+"#/lecture_playback/"+localStorage.getItem('last_webex')
+        window.location.href="http://localhost:8080/"+"?code="+url_query.code+"#/lecture_playback/"+localStorage.getItem('last_webex')
       }
 		}
   }
