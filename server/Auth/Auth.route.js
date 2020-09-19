@@ -232,11 +232,13 @@ authRoutes.get('/get_webex_src/:auth_code/:web_rec_id',function(req,res) {
       console.log(resp2.data)
       res.json(resp2.data.downloadRecordingInfo.downloadInfo.mp4URL)
     }).catch(err => {
+      console.log('this one')
       res.json({})
     })
 
 
   }).catch(err => {
+    console.log('this two')
     res.json({})
   })
 })
