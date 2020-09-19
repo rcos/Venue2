@@ -516,7 +516,7 @@
   }
 
   .rotate-arrow {
-    transform: rotateX(-90deg);
+    transform: rotateZ(-90deg);
     margin-bottom: 0.1rem;
   }
 
