@@ -464,7 +464,7 @@ export default {
 #video-upload-btn {
   min-height: calc(60px + .75rem);
   padding: 0.375rem 0.375rem;
-  border-radius: 0.75rem;
+  border-radius: 0.25rem;
 }
 .row {
   padding: 0;
