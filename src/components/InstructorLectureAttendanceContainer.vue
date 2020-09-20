@@ -343,6 +343,7 @@ export default {
 
 	.manualbtn {
 		height: calc(60px + .75rem);
+		border-radius: 0.25rem;
 	}
 
 </style>
