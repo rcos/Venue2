@@ -225,8 +225,15 @@ export default {
 			}
 			for(let j=0;j<btns.length;j++) {
 				if(j==i) {
-					btns[j].classList.add("selected_tab")
-					btns[j].setAttribute("aria-selected","true")
+					if(i == this.selected_tab) {
+						btns[j].classList.remove("selected_tab")
+						btns[j].setAttribute("aria-selected","false")
+						i = -1
+						break
+					} else {
+						btns[j].classList.add("selected_tab")
+						btns[j].setAttribute("aria-selected","true")
+					}
 				} else {
 					btns[j].classList.remove("selected_tab")
 					btns[j].setAttribute("aria-selected","false")
