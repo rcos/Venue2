@@ -62,15 +62,18 @@
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
-              <router-link :to="{name: 'courses'}">
-                Courses
+              <router-link :to="{name: 'new_user'}">
+                New User
               </router-link>
               <router-link :to="{name: 'admin_sections'}">
                 Sections
               </router-link>
+              <router-link :to="{name: 'courses'}">
+                Courses
+              </router-link>
               <router-link :to="{name: 'users'}">
                 Users
-              </router-link>
+              </router-link>         
             </div>
           </hide-at>
         </div>
