@@ -124,6 +124,30 @@
             </li>
           </ul>
         </div>
+        <div class="collapse" id="admin-collapse" data-parent="#all-collapse">
+          <ul class="mobile-course-list">
+            <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
+              <router-link :to="{name: 'new_user'}">
+                <p class="mobile-course-link-name">New User</p>
+              </router-link>
+            </li>
+            <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
+              <router-link :to="{name: 'admin_sections'}">
+                <p class="mobile-course-link-name">Sections</p>
+              </router-link>
+            </li>
+            <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
+              <router-link :to="{name: 'courses'}">
+                <p class="mobile-course-link-name">Courses</p>
+              </router-link>
+            </li>
+            <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
+              <router-link :to="{name: 'users'}">
+                <p class="mobile-course-link-name">Users</p>
+              </router-link>
+            </li>
+          </ul>
+        </div>
       </div>
     </show-at>
     <!-- Breadcrumbs -->
