@@ -11,7 +11,7 @@
         <!-- Dashboard Link -->
         <div class="venue-nav-link-container">
           <router-link class="venue-nav-link" :class="{'active-link':is_dashboard()}" :to="{name: 'dashboard'}">
-            <p>Dashboard</p>
+            Dashboard
           </router-link>
           <div :class="'active-link-underline ' + (is_dashboard()?'active':'')"></div>
         </div>
@@ -23,7 +23,7 @@
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
               <router-link v-for="course in instructor_courses" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
-                <p>{{ course.name }}</p>
+                {{ course.name }}
               </router-link>
             </div>
           </hide-at>
@@ -36,7 +36,7 @@
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
               <router-link v-for="section in ta_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
-                <p>{{ section.course.name }} {{section.name}}</p>
+                {{ section.course.name }} {{section.name}}
               </router-link>
             </div>
           </hide-at>
@@ -49,21 +49,35 @@
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
               <router-link v-for="section in student_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
-                <p>{{ section.course.name }} {{ section.name }}</p>
+                {{ section.course.name }} {{ section.name }}
               </router-link>
             </div>
           </hide-at>
           <div :class="'active-link-underline ' + (is_student_section_info()?'active':'')"></div>
         </div>
-        <!-- Statistics Link -->
-        <!-- <show-at breakpoint="large">
-          <div v-if="instructor_courses.length" class="venue-nav-link-container">
-            <router-link class="venue-nav-link" :class="{'active-link':is_statistics()}" :to="{name: 'statistics'}">
-              Statistics
-            </router-link>
-            <div v-if="is_statistics()" class="active-link-underline"></div>
-          </div>
-        </show-at> -->
+        <!-- ADMIN -->
+        <div class="venue-nav-link-container" id="admin-dropdown" v-if="current_user.is_admin">
+          <a data-toggle="collapse" href="#admin-collapse" class="venue-nav-link" style="cursor:pointer;">
+            🔑 <img src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+          </a>
+          <hide-at breakpoint="mediumAndBelow">
+            <div class="dropdown-content">
+              <router-link :to="{name: 'new_user'}">
+                New User
+              </router-link>
+              <router-link :to="{name: 'admin_sections'}">
+                Sections
+              </router-link>
+              <router-link :to="{name: 'courses'}">
+                Courses
+              </router-link>
+              <router-link :to="{name: 'users'}">
+                Users
+              </router-link>         
+            </div>
+          </hide-at>
+        </div>
+        <!-- Settings -->
         <div class="venue-nav-link-container">
           <router-link class="venue-nav-link" :class="{'active-link':is_settings()}" :to="{name: 'settings'}">
             <show-at breakpoint="large">
@@ -284,18 +298,13 @@
     margin-top: 0.5rem;
     margin-bottom: 0;
     border-bottom: none;
+    border-radius: 5px;
     transition: border-bottom 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   .venue-nav-link-container.active {
     border-bottom: 0.2rem solid #466D85;
     transition: border-bottom 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1);
-  }
-
-  #instructor-course-dropdown,
-  #ta-section-dropdown,
-  #student-section-dropdown {
-    border-radius: 5px;
   }
 
   .dropdown-content {
@@ -346,12 +355,8 @@
     border-radius: 0.5rem;
   }
 
-  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(1),
-  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(1),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(1),
-  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(1),
-  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(1),
-  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(1) {
+  .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(1),
+  .venue-nav-link-container:focus-within > .dropdown-content a:nth-of-type(1) {
     visibility: visible;
     font-size: 1rem;
     max-height: 3rem;
@@ -361,12 +366,8 @@
     transition: font-size 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
-  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(2),
-  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(2),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(2),
-  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(2),
-  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(2),
-  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(2) {
+  .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(2),
+  .venue-nav-link-container:focus-within > .dropdown-content a:nth-of-type(2) {
     visibility: visible;
     font-size: 1rem;
     max-height: 3rem;
@@ -376,12 +377,8 @@
     transition: font-size 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.05s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
-  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(3),
-  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(3),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(3),
-  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(3),
-  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(3),
-  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(3) {
+  .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(3),
+  .venue-nav-link-container:focus-within > .dropdown-content a:nth-of-type(3) {
     visibility: visible;
     font-size: 1rem;
     max-height: 3rem;
@@ -391,12 +388,8 @@
     transition: font-size 0.25s 0.1s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.1s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.1s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.1s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
-  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(4),
-  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(4),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(4),
-  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(4),
-  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(4),
-  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(4) {
+  .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(4),
+  .venue-nav-link-container:focus-within > .dropdown-content a:nth-of-type(4) {
     visibility: visible;
     font-size: 1rem;
     max-height: 3rem;
@@ -406,12 +399,8 @@
     transition: font-size 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.15s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
-  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(5),
-  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(5),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(5),
-  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(5),
-  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(5),
-  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(5) {
+  .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(5),
+  .venue-nav-link-container:focus-within > .dropdown-content a:nth-of-type(5) {
     visibility: visible;
     font-size: 1rem;
     max-height: 3rem;
@@ -421,12 +410,8 @@
     transition: font-size 0.25s 0.2s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.2s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.2s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.2s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
-  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(6),
-  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(6),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(6),
-  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(6),
-  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(6),
-  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(6) {
+  .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(6),
+  .venue-nav-link-container:focus-within > .dropdown-content a:nth-of-type(6) {
     visibility: visible;
     font-size: 1rem;
     max-height: 3rem;
