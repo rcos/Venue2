@@ -2,7 +2,7 @@
   <div :class="'course-info-title ' + (this.mobileMode ? 'mobile' : '')">
 
     <!-- Course Name -->
-    <div class="course-name" v-if="course.hasOwnProperty('name')">{{course.name}} <button class="btn" title="Edit Course" id="edit-course" @click="handleEditCourse()" v-if="can_edit"><img id="edit-course" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit"></button></div>
+    <div class="course-name" v-if="course.hasOwnProperty('name')">{{course.name}} <button class="btn" title="Edit Course" id="edit-course" @click="handleEditCourse()" v-if="is_instructor || is_ta"><img id="edit-course" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit"></button></div>
 
     <div>
 
@@ -26,15 +26,23 @@
       course: Object,
       mobileMode: Boolean,
       section_name: String,
-      can_edit: Boolean
+      is_instructor: Boolean,
+      is_ta: Boolean
     },
     created () {},
     methods: {
       handleEditCourse() {
-        this.$router.push({
-          name: "edit_course",
-          params: { id: this.course._id }
-        })
+        if(this.is_instructor) {
+          this.$router.push({
+            name: "edit_course",
+            params: { id: this.course._id }
+          })
+        } else if(this.is_ta) {
+          this.$router.push({
+            name: "edit_section",
+            params: { id: this.$route.params.id }
+          })
+        }
       }
     }
   }
