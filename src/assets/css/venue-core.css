@@ -120,7 +120,7 @@ body {
 .course-info-title.mobile {
   margin: 0rem 2rem;
   margin-top: 1rem;
-  padding: 2rem 0;
+  padding: 2rem;
   border-radius: 5px;
   box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
 }
@@ -853,14 +853,15 @@ a:hover {
 
 .btn.btn-primary {
   background: #0078c2;
-  border: 0.1rem solid #005183;
+  /* border: 0.1rem solid #005183; */
   box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
 }
 
 .btn.btn-secondary {
   background: #727272;
-  border: 0.1rem solid #444444;
+  /* border: 0.1rem solid #444444; */
   box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+  transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .btn.btn-primary:hover,
@@ -870,6 +871,16 @@ a:hover {
   outline: none;
   border: 0.1rem solid #005183;
   background: #005183;
+  box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644) inset;
+  transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.btn.btn-primary:hover img,
+.btn.btn-primary:focus img,
+.btn.btn-primary:active img,
+.btn.btn-primary:target img {
+  filter: invert(1);
+  transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .btn.btn-secondary:hover,
@@ -879,4 +890,104 @@ a:hover {
   outline: none;
   border: 0.1rem solid #444444;
   background: #444444;
+  box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644) inset;
+  transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.btn.btn-secondary:hover img,
+.btn.btn-secondary:focus img,
+.btn.btn-secondary:active img,
+.btn.btn-secondary:target img {
+  filter: invert(1);
+  transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+
+
+input,select {
+  background: #f7f7f7 !important;
+  border-radius: 0.25rem !important;
+  transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.input-group input {
+  min-height:3rem;
+}
+
+/* ------------------ */
+
+.venue-modal-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.65);
+  z-index: 99;
+}
+
+.venue-modal-contents {
+  position: fixed;
+  width: 50%;
+  height: 50%;
+  margin: 12.5% 25%;
+  background: white;
+  border: 1px solid gray;
+  padding: 1rem;
+  border-radius: 1rem;
+  overflow-y: auto;
+}
+
+.fade-in,
+.venue-modal-container {
+  animation: fadeIn cubic-bezier(0.19, 1, 0.22, 1) 0.25s;
+  -webkit-animation: fadeIn cubic-bezier(0.19, 1, 0.22, 1) 0.25s;
+  -moz-animation: fadeIn cubic-bezier(0.19, 1, 0.22, 1) 0.25s;
+  -o-animation: fadeIn cubic-bezier(0.19, 1, 0.22, 1) 0.25s;
+  -ms-animation: fadeIn cubic-bezier(0.19, 1, 0.22, 1) 0.25s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
 }
