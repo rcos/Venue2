@@ -24,9 +24,6 @@
             <label>section's name:</label>
             <input type="text" class="form-control" v-model="section.name">
           </div>
-          <div class="form-group">
-            <button class="btn btn-primary">Update</button>
-          </div>
         </div>
       </div>
     </form>
@@ -45,7 +42,7 @@
               <td>{{ student.first_name }}</td>
               <td>{{ student.last_name }}</td>
               <td>{{ student.user_id }}</td>
-              <td><button class="btn btn-danger" @click.prevent="removeStudent(student)">Remove</button></td>
+              <!-- <td><button class="btn btn-danger" @click.prevent="removeStudent(student)">Remove</button></td> -->
               <!-- <td v-if="is_section_view"><button class="btn btn-secondary" @click.prevent="$emit('select-student', student)">Select</button></td> -->
             </tr>
         </tbody>
@@ -65,7 +62,7 @@
               <td>{{ ta.first_name }}</td>
               <td>{{ ta.last_name }}</td>
               <td>{{ ta.user_id }}</td>
-              <td><button class="btn btn-danger" @click.prevent="removeTA(ta)">Remove</button></td>
+              <!-- <td><button class="btn btn-danger" @click.prevent="removeTA(ta)">Remove</button></td> -->
               <!-- <td v-if="is_section_view"><button class="btn btn-secondary" @click.prevent="$emit('select-student', student)">Select</button></td> -->
             </tr>
         </tbody>
@@ -78,6 +75,10 @@
     <label>Add ta's by email</label>
     <input type="text" v-model="tas_to_add"/>
     <button @click="addTasToSection()">Update</button>
+
+    <div class="form-group">
+      <button class="btn btn-primary">Update</button>
+    </div>
 
   </div>
 </template>
