@@ -10,7 +10,13 @@ export default {
     })
   },
   addLiveSubmissionByRCS(rcs,lecture_id) {
-    return API().post('lecturesubmissions/add_by_rcs', {
+    return API().post('lecturesubmissions/add_live_by_rcs', {
+      rcs: rcs,
+      lecture_id: lecture_id // add our data to the request body
+    })
+  },
+  addPlaybackSubmissionByRCS(rcs,lecture_id) {
+    return API().post('lecturesubmissions/add_playback_by_rcs', {
       rcs: rcs,
       lecture_id: lecture_id // add our data to the request body
     })

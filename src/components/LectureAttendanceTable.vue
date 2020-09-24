@@ -56,15 +56,27 @@
 				<h5>Instructors Only</h5>
 			</button>
 			<div v-if="selected_tab === 3" role="tabpanel" aria-labelledby="instructors_only_btn" id="instructors_only" class="tab_section">
-				<div id="manual-override-container">
-					<div v-if="override_err_msg != ''" id="override-err-msg">
-						<p class="err-msg">{{override_err_msg}}</p>
+				<div class="override-container">
+					<div v-if="sync_override_err_msg != ''" id="sync-override-err-msg">
+						<p class="err-msg">{{sync_override_err_msg}}</p>
 					</div>
 					<div class="input-group">
-						<label for="rcs-ids" id="override-label">Manual override:</label>
-						<input id="rcs-ids" type="text" v-model.lazy="overrides" class="form-control" placeholder="eg: 'whitte3,mbizin'" aria-label="RCS IDs to override"/>
+						<label for="sync-rcs-ids" id="sync-override-label">Synchronous override:</label>
+						<input id="sync-rcs-ids" type="text" v-model.lazy="sync_overrides" class="form-control" placeholder="eg: 'whitte3,mbizin'" aria-label="RCS IDs to override"/>
 						<div class="input-group-append">
-							<button id="submit-manual-override" class="btn btn-primary" aria-label="Submit Override" @click="handleOverride">Override</button>
+							<button class="btn btn-primary" aria-label="Synchronous Submit Override" @click="handleSyncOverride">Override</button>
+						</div>
+					</div>
+				</div>
+				<div class="override-container">
+					<div v-if="async_override_err_msg != ''" id="async-override-err-msg">
+						<p class="err-msg">{{async_override_err_msg}}</p>
+					</div>
+					<div class="input-group">
+						<label for="async-rcs-ids" id="async-override-label">Asynchronous override:</label>
+						<input id="async-rcs-ids" type="text" v-model.lazy="async_overrides" class="form-control" placeholder="eg: 'whitte3,mbizin'" aria-label="RCS IDs to override"/>
+						<div class="input-group-append">
+							<button class="btn btn-primary" aria-label="Asynchronous Submit Override" @click="handleAsyncOverride">Override</button>
 						</div>
 					</div>
 				</div>
@@ -161,8 +173,10 @@ export default {
 	data(){
 		return {
 			selected_tab: -1,
-			overrides: "",
-			override_err_msg: "",
+			sync_overrides: "",
+			sync_override_err_msg: "",
+			async_overrides: "",
+			async_override_err_msg: "",
 			submissions_with_live: [],
 			submissions_with_playback: [],
 			submissions_with_nothing: [],
@@ -241,20 +255,38 @@ export default {
 			}
 			this.selected_tab = i
 		},
-		handleOverride() {
-			let rcs_list = this.overrides.replace(/\s/g,'').split(",")
+		handleSyncOverride() {
+			let rcs_list = this.sync_overrides.replace(/\s/g,'').split(",")
 			if(rcs_list.length == 1 && rcs_list[0]=="") {
-				this.overrides = ""
-				this.override_err_msg = "Empty"
+				this.sync_overrides = ""
+				this.sync_override_err_msg = "Empty"
 			} else {
 				LectureSubmissionAPI.addLiveSubmissionByRCS(rcs_list,this.lecture._id)
 				.then(res => {
 					if(res.data.length == 0) {
-						this.overrides = ""
-						this.override_err_msg = ""
+						this.sync_overrides = ""
+						this.sync_override_err_msg = ""
 					} else {
-						this.overrides = res.data.join(",")
-						this.override_err_msg = "Remaining are invalid"
+						this.sync_overrides = res.data.join(",")
+						this.sync_override_err_msg = "Remaining are invalid"
+					}
+				})
+			}
+		},
+		handleAsyncOverride() {
+			let rcs_list = this.async_overrides.replace(/\s/g,'').split(",")
+			if(rcs_list.length == 1 && rcs_list[0]=="") {
+				this.async_overrides = ""
+				this.async_override_err_msg = "Empty"
+			} else {
+				LectureSubmissionAPI.addPlaybackSubmissionByRCS(rcs_list,this.lecture._id)
+				.then(res => {
+					if(res.data.length == 0) {
+						this.async_overrides = ""
+						this.async_override_err_msg = ""
+					} else {
+						this.async_overrides = res.data.join(",")
+						this.async_override_err_msg = "Remaining are invalid"
 					}
 				})
 			}
@@ -407,7 +439,11 @@ export default {
 		height: 100%;
 	}
 
-	#override-label {
+	#sync-override-label {
+		margin: auto 1rem;
+		font-size: 1.2rem;
+	}
+	#async-override-label {
 		margin: auto 1rem;
 		font-size: 1.2rem;
 	}
@@ -416,12 +452,16 @@ export default {
 		height: 2rem;
 	}
 
-	#manual-override-container {
+	.override-container {
 		display: flex;
 		height: 3rem;
 	}
 
-	#override-err-msg {
+	#sync-override-err-msg {
+		color:#c40000;
+		padding: 0.5rem;
+	}
+	#async-override-err-msg {
 		color:#c40000;
 		padding: 0.5rem;
 	}

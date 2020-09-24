@@ -111,6 +111,7 @@
     -webkit-transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
     -ms-transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
     transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0px 3px 3px 1px rgba(109, 109, 109, 0.644);
   }
 
   .live-lecture-open {
