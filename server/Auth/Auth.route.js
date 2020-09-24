@@ -58,12 +58,26 @@ if(process.env.NODE_ENV === "production") {
     User.findOne({user_id: login}, function (err, user) {
       if (err) {
         return done(err);
+      } else if (!user) {
+        let creating_user = new User({
+          first_name: "New",
+          last_name: "User",
+          user_id: login,
+          email: login + "@rpi.edu"
+        })
+        creating_user.save()
+        .then(() => {
+          console.log("<SUCCESS> Creating first-time RPI account")
+          return done(null,creating_user)
+        })
+        .catch(() => {
+          console.log("<ERROR> Adding poll:",poll)
+          return done(null, false, {message: 'Unknown user'});
+        });
+      } else {
+        user.attributes = profile.attributes;
+        return done(null, user);
       }
-      if (!user) {
-        return done(null, false, {message: 'Unknown user'});
-      }
-      user.attributes = profile.attributes;
-      return done(null, user);
     });
   }));
 }

@@ -9,7 +9,7 @@
             <div class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
           </router-link>
         </div>
-        <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" :section_name="section.name" />
+        <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" :section_name="section.name" :can_edit="is_instructor"/>
 
 
         <!-- Attendance History -->
