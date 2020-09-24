@@ -173,6 +173,39 @@ sectionRoutes.route('/getStudents/:id').get(function (req, res) {
   })
 })
 
+sectionRoutes.route('/getTeachingAssistants/:id').get(function (req, res) {
+  let id = req.params.id;
+  Section.findById(id, function (err, section){
+    if(err || section == null) {
+      console.log("<ERROR> Getting section with ID:",id)
+      res.json(err);
+    } else {
+      let ta_ids = section.teaching_assistants;
+      let tas = [];
+      let num_iterations = 0;
+      if(ta_ids.length) {
+        ta_ids.forEach(ta_id => {
+          User.findById(ta_id, function(err, ta) {
+            if(err || ta == null){
+              console.log("<ERROR> Getting user with ID:",ta_id)
+              res.json(err);
+            } else {
+              tas.push(ta);
+              num_iterations++;
+              if(num_iterations === ta_ids.length) {
+                console.log("<SUCCESS> Getting teaching assistants for section with ID:",id)
+                res.json(tas);
+              }
+            }
+          })
+        })
+      } else {
+        res.json([])
+      }
+    }
+  })
+})
+
 sectionRoutes.get('/get_with_courses_for_student/:user_id', (req, res) => {
   let user_id = req.params.user_id
   user_sections = []
@@ -301,6 +334,22 @@ sectionRoutes.post('/add_students/:id', (req, res) => {
       Promise.all([
         User.updateMany( {_id: {$in: student_ids}}, {$push: {student_sections: [section_id]}}),
         Section.findByIdAndUpdate( section_id, {$push: {students: {$each: student_ids}}})
+      ]).then(resolved => {
+        res.json()
+      })
+    })
+  })
+})
+
+sectionRoutes.post('/add_tas/:id', (req, res) => {
+  let ta_emails = req.body.tas
+  let section_id = req.params.id
+  Section.findById(section_id,function(err,section) {
+    User.find({email: {$in: ta_emails}},function(err,tas) {
+      let ta_ids = tas.map(a => a._id)
+      Promise.all([
+        User.updateMany( {_id: {$in: ta_ids}}, {$push: {ta_sections: [section_id]}}),
+        Section.findByIdAndUpdate( section_id, {$push: {tas: {$each: ta_ids}}})
       ]).then(resolved => {
         res.json()
       })

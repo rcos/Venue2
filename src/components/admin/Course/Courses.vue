@@ -21,7 +21,7 @@
                 </div>
               </td>
               <div v-if="is_course_view">
-                <td><router-link :to="{name: 'editCourse', params: { id: course._id }}" class="btn btn-primary">Edit</router-link></td>
+                <td><router-link :to="{name: 'edit_course', params: { id: course._id }}" class="btn btn-primary">Edit</router-link></td>
                 <td><button class="btn btn-danger" @click.prevent="deleteCourse(course._id)">Delete</button></td>
               </div>
               <td v-else><button class="btn btn-secondary" @click.prevent="$emit('select-course', course)">Select</button></td>
