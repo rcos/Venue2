@@ -89,7 +89,6 @@
           this.instructors = response.data
       },
       async getCurrentCourseSections(){
-        console.log('here')
         const response = await SectionAPI.getSectionsForCourse(this.course._id)
         if(response.data)
           this.sections = response.data
