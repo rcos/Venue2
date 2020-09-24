@@ -40,9 +40,9 @@
      inkscape:window-height="1016"
      id="namedview933"
      showgrid="false"
-     inkscape:zoom="1.1387515"
-     inkscape:cx="433.6851"
-     inkscape:cy="331.39038"
+     inkscape:zoom="1.049973"
+     inkscape:cx="445.42702"
+     inkscape:cy="288.66643"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
@@ -185,6 +185,38 @@
          operator="atop"
          result="composite2"
          id="feComposite1010-9" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Drop Shadow"
+       id="filter1890">
+      <feFlood
+         flood-opacity="1"
+         flood-color="rgb(255,255,255)"
+         result="flood"
+         id="feFlood1880" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="out"
+         result="composite1"
+         id="feComposite1882" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="10"
+         result="blur"
+         id="feGaussianBlur1884" />
+      <feOffset
+         dx="0"
+         dy="0"
+         result="offset"
+         id="feOffset1886" />
+      <feComposite
+         in="offset"
+         in2="SourceGraphic"
+         operator="atop"
+         result="composite2"
+         id="feComposite1888" />
     </filter>
   </defs>
   <g
