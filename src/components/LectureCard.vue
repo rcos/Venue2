@@ -17,7 +17,7 @@
           <div v-if="lecture_type === 'Live'" class="right-container">
             <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
             <p v-if="lecture.checkin_window_status === 'open'" class="lecture-time-text open-text">{{ getTimeToWindowCloseString(false) }}</p>
-            <p v-else class="lecture-time-text closed-text">closed</p>
+            <p v-else class="lecture-time-text closed-text">waiting...</p>
           </div>
           <div v-else-if="lecture_type === 'Playback'" class="right-container">
             <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon" alt="Time Icon">

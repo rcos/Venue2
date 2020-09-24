@@ -6,11 +6,11 @@ import EditUser from './components/admin/User/EditUser.vue';
 import Instructors from './components/admin/User/Instructors.vue';
 import Students from './components/admin/User/Students.vue';
 import Course from './components/admin/Course/Course.vue';
-import EditCourse from './components/admin/Course/EditCourse.vue';
+import EditCourse from './components/EditCourse.vue';
 import NewCourse from './components/admin/Course/NewCourse.vue';
 import Courses from './components/admin/Course/Courses.vue';
 import AdminSections from './components/admin/Section/AdminSections.vue';
-import AdminEditSection from './components/admin/Section/AdminEditSection.vue';
+import EditSection from './components/EditSection.vue';
 import AdminNewSection from './components/admin/Section/AdminNewSection.vue';
 import NewUser from './components/admin/User/NewUser.vue';
 import OnboardUser from './views/OnboardUser.vue';
@@ -133,12 +133,11 @@ const router = new VueRouter({
       }
     },
     {
-      name: 'editCourse',
-      path: '/editCourse/:id',
+      name: 'edit_course',
+      path: '/edit_course/:id',
       component: EditCourse,
       meta: {
-        requiresAuth: true,
-        requiresAdmin: true
+        requiresAuth: true
       }
     },
     {
@@ -160,12 +159,11 @@ const router = new VueRouter({
       }
     },
     {
-      name: 'admin_edit_section',
-      path: '/admin/edit_section/:id',
-      component: AdminEditSection,
+      name: 'edit_section',
+      path: '/edit_section/:id',
+      component: EditSection,
       meta: {
-        requiresAuth: true,
-        requiresAdmin: true
+        requiresAuth: true
       }
     },
     {

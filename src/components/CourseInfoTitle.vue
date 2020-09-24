@@ -2,7 +2,7 @@
   <div :class="'course-info-title ' + (this.mobileMode ? 'mobile' : '')">
 
     <!-- Course Name -->
-    <div class="course-name" v-if="course.hasOwnProperty('name')">{{course.name}}</div>
+    <div class="course-name" v-if="course.hasOwnProperty('name')">{{course.name}} <button class="btn" title="Edit Course" id="edit-course" @click="handleEditCourse()" v-if="can_edit"><img id="edit-course" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit"></button></div>
 
     <div>
 
@@ -25,10 +25,31 @@
     props: {
       course: Object,
       mobileMode: Boolean,
-      section_name: String
+      section_name: String,
+      can_edit: Boolean
     },
     created () {},
-    methods: {}
+    methods: {
+      handleEditCourse() {
+        this.$router.push({
+          name: "edit_course",
+          params: { id: this.course._id }
+        })
+      }
+    }
   }
 
 </script>
+
+<style scoped>
+#edit-course {
+  float: right;
+  padding: 0;
+}
+#cancel-edit-btn {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin: 1rem;
+}
+</style>
