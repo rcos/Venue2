@@ -19,6 +19,15 @@
                 </div>
             </div>
 
+            <div class="setting-option-section">
+                <div class="left">
+                    <router-link :to="{name: 'teach_new_course'}"><button class="btn btn-primary">Teach New Course</button></router-link>
+                </div>
+                <div class="right">
+                    <!-- <div class="change-button">Change</div> -->
+                </div>
+            </div>
+
 <!--             <div class="setting-option-section">
                 <div class="left">
                     <div>Current Password: <span class="value-area">*********</span></div>

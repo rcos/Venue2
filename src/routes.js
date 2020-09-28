@@ -34,8 +34,10 @@ import LectureInfo from './views/LectureInfo.vue';
 import Settings from './views/Settings.vue';
 import RedirectCASLogin from './views/RedirectCASLogin.vue';
 import Statistics from './views/Statistics.vue';
+import TeachNewCourse from '@/components/TeachNewCourse.vue';
 
-import AuthAPI from '@/services/AuthAPI.js'
+import AuthAPI from '@/services/AuthAPI.js';
+import UserAPI from '@/services/UserAPI.js';
 
 const url = require('url')
 const query = require('querystring')
@@ -338,6 +340,15 @@ const router = new VueRouter({
         title: "Statistics",
         requiresAuth: true,
         requiresInstructor: true
+      }
+    },
+    {
+      name: 'teach_new_course',
+      path: '/teach_new_course',
+      component: TeachNewCourse,
+      meta: {
+        title: "Teach New Course",
+        requiresAuth: true
       }
     }
   ]
