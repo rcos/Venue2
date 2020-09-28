@@ -2,7 +2,7 @@
   <div :class="'course-info-title ' + (this.mobileMode ? 'mobile' : '')">
 
     <!-- Course Name -->
-    <div class="course-name" v-if="course.hasOwnProperty('name')">{{course.name}} <button class="btn" title="Edit Course" id="edit-course" @click="handleEditCourse()" v-if="is_instructor || is_ta"><img id="edit-course" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit"></button></div>
+    <div class="course-name" v-if="course.hasOwnProperty('name')"><div v-if="mobileMode" class="icon-spacer"/> {{course.name}} <button class="btn" title="Edit Course" id="edit-course" @click="handleEditCourse()" v-if="is_instructor || is_ta"><img id="edit-course" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit"></button></div>
 
     <div>
 
@@ -10,7 +10,7 @@
       <div class="course-dept-number inline-block" v-if="course.hasOwnProperty('prefix') && course.hasOwnProperty('suffix')">{{course.prefix}} {{course.suffix}}</div>
 
       <!-- Time Block -->
-      <div v-if="course.hasOwnProperty('name') && section_name != -1">Section {{ section_name }} <button class="btn" title="Delete Course" id="delete-course" @click="handleDeleteCourse()" v-if="is_instructor"><img id="delete-course" src="@/assets/icons8-delete.svg" alt="Delete" width="40" aria-label="Delete"></button></div>
+      <div v-if="course.hasOwnProperty('name') && section_name != -1"><div v-if="mobileMode" class="icon-spacer"/> Section {{ section_name }} <button class="btn" title="Delete Course" id="delete-course" @click="handleDeleteCourse()" v-if="is_instructor"><img id="delete-course" src="@/assets/icons8-delete.svg" alt="Delete" width="40" aria-label="Delete"></button></div>
 
     </div>
 
@@ -65,6 +65,10 @@
 #delete-course {
   float: right;
   padding: 0;
+}
+.icon-spacer {
+  width: 40px;
+  display: inline-block;
 }
 #cancel-edit-btn {
   position: absolute;
