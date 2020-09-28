@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <link href="https://vjs.zencdn.net/7.7.6/video-js.css" rel="stylesheet" />
+    <% if (process.env.NODE_ENV === 'production') { %>
+      <link rel="shortcut icon" href="https://www.venue-meetings.com/favicon.ico?v=2" />
+    <% } %>
+    <% if (process.env.NODE_ENV !== 'production') { %>
+      <link rel="shortcut icon" href="http://localhost:8080/favicon.ico?v=2" />
+    <% } %>
     <title>Venue</title>
   </head>
   <body>
