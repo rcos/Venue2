@@ -41,7 +41,10 @@
         <div class="col-md-6">
           <div class="form-group">
             <router-link v-for="section in sections" :key="section._id" :to="{name: 'edit_section', params: { id: section._id }}">
-                <button class="btn btn-primary">Edit Section {{section.name}}</button>
+                <button class="btn btn-secondary">Edit Section {{section.name}}</button>
+            </router-link>
+            <router-link :to="{name: 'new_section', params: { id: course._id }}">
+                <button class="btn btn-primary">Add Section</button>
             </router-link>
           </div>
         </div>

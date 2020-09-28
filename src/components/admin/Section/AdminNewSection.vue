@@ -14,7 +14,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>instructors:</label>
-            <input v-for="instructor in instructors" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name" readonly>
+            <input v-for="instructor in instructors" :key="instructor._id" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name" readonly>
           </div>
         </div>
       </div>
