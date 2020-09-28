@@ -62,6 +62,9 @@ export default new Vuex.Store({
     },
     setLastWebex({ commit },lecture_id) {
       commit('SET_LAST_WEBEX',lecture_id)
+    },
+    updateCurrentUser({ commit },data) {
+      commit('SET_USER_DATA', data)
     }
   },
   getters: {

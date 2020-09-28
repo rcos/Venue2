@@ -17,11 +17,17 @@ import Footer from "./components/Footer.vue";
 import LectureAPI from './services/LectureAPI';
 import {getLiveLectures,getUpcomingLectures,getPastLectures} from './services/GlobalFunctions.js'
 import '@/assets/css/venue.css';
+import UserAPI from '@/services/UserAPI.js';
 
 export default {
   watch: {
     '$route' (to, from) {
       document.title = to.meta.title || 'Venue'
+      if(this.$store.state.user) {
+        UserAPI.getUser(this.$store.state.user.current_user._id).then(res => {
+          this.$store.dispatch('updateCurrentUser',{token: this.$store.state.user.token, current_user: res.data})
+        })
+      }
     }
   },
   components: {
