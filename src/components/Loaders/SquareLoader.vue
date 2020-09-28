@@ -24,6 +24,7 @@
 
     .square-loader {
       vertical-align: middle;
+      position: relative;
       width: 100%;
       height: 100%;
     }
@@ -32,7 +33,7 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      margin: -1.2rem 0px 0px -1.2rem;
+      transform: translate(-50%, -50%);
     }
 
     .square-loader .square {
