@@ -288,7 +288,7 @@ body {
   max-height: 5rem;
   height: 5rem;
   border-radius: 1.5rem;
-  box-shadow: 0px 3px 3px 2px rgba(109, 109, 109, 0.644);
+  box-shadow: 0px 3px 5px 1px rgba(109, 109, 109, 0.644);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   outline: none;
 }
@@ -346,7 +346,7 @@ body {
 .instructor-attendance-history-pill:focus .name-area {
   padding-top: 0.8rem;
   border-radius: 1rem;
-  box-shadow: 0px 3px 3px 2px rgba(109, 109, 109, 0.644) inset;
+  box-shadow: 0px 3px 5px 1px rgba(109, 109, 109, 0.644) inset;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 

@@ -35,6 +35,7 @@ import Settings from './views/Settings.vue';
 import RedirectCASLogin from './views/RedirectCASLogin.vue';
 import Statistics from './views/Statistics.vue';
 import TeachNewCourse from '@/components/TeachNewCourse.vue';
+import NewSection from '@/components/NewSection.vue';
 
 import AuthAPI from '@/services/AuthAPI.js';
 import UserAPI from '@/services/UserAPI.js';
@@ -177,6 +178,15 @@ const router = new VueRouter({
       meta: {
         requiresAuth: true,
         requiresAdmin: true
+      }
+    },
+    {
+      name: 'new_section',
+      path: '/new_section/:id',
+      component: NewSection,
+      meta: {
+        requiresAuth: true,
+        requiresInstructor: true
       }
     },
     {
@@ -389,7 +399,8 @@ router.beforeEach((to, from, next) => {
         || (to.name == 'statistics' && user_data.current_user.instructor_courses.length > 0)
         || (to.name == 'edit_course' && user_data.current_user.instructor_courses.includes(to.params.id))
         || (to.name == 'edit_section' && user_data.current_user.ta_sections.includes(to.params.id))
-        || (to.name == 'edit_section' && from.name == 'edit_course')) {
+        || (to.name == 'edit_section' && from.name == 'edit_course')
+        || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))) {
           next()
         } else {
           next('/dashboard')

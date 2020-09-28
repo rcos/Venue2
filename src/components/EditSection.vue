@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="edit-section">
     <h2>Edit Section</h2>
     <form @submit.prevent="updateSection">
       <div class="row">
@@ -173,3 +173,9 @@
     }
   }
 </script>
+
+<style scoped>
+#edit-section {
+  padding: 2rem;
+}
+</style>
