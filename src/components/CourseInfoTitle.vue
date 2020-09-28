@@ -10,7 +10,7 @@
       <div class="course-dept-number inline-block" v-if="course.hasOwnProperty('prefix') && course.hasOwnProperty('suffix')">{{course.prefix}} {{course.suffix}}</div>
 
       <!-- Time Block -->
-      <div v-if="course.hasOwnProperty('name') && section_name != -1">Section {{ section_name }}</div>
+      <div v-if="course.hasOwnProperty('name') && section_name != -1">Section {{ section_name }} <button class="btn" title="Delete Course" id="delete-course" @click="handleDeleteCourse()" v-if="is_instructor"><img id="delete-course" src="@/assets/icons8-delete.svg" alt="Delete" width="40" aria-label="Delete"></button></div>
 
     </div>
 
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+  import CourseAPI from '@/services/CourseAPI.js'
 
   export default {
     name: 'CourseInfoTitle',
@@ -43,6 +44,16 @@
             params: { id: this.$route.params.id }
           })
         }
+      },
+      handleDeleteCourse() {
+        if (window.confirm("Are you sure you want to delete this course?")) {
+          CourseAPI.deleteCourse(this.course._id).then(res => {
+            this.$router.push({
+              name: "dashboard"
+            })
+            location.reload()
+          })
+        }
       }
     }
   }
@@ -50,7 +61,8 @@
 </script>
 
 <style scoped>
-#edit-course {
+#edit-course,
+#delete-course {
   float: right;
   padding: 0;
 }

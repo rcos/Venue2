@@ -71,10 +71,17 @@ courseRoutes.route('/delete/:id').delete(function (req, res) {
       console.log("<ERROR> Deleting course with ID:",req.params.id)
       res.json(err);
     } else {
-      console.log("<SUCCESS> Deleting course with ID:",req.params.id)
-      res.json('Successfully removed');
-    }
-  });
+      User.update({},{$pull: {instructor_courses: req.params.id}},function(err) {
+        if(err) {
+          console.log("<ERROR> Removing course from users with ID:",req.params.id)
+          res.json(err);
+        } else {
+          console.log("<SUCCESS> Deleting course with ID:",req.params.id)
+          res.json('Successfully removed');
+        }
+      });
+    } 
+  })
 });
 
 //Todo: change the id being passed to just be the instructor id
