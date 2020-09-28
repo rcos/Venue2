@@ -335,6 +335,7 @@
     margin-left: -1rem;
     margin-top: 0.2rem;
     position: absolute;
+    visibility: hidden;
     /* background-color: #f7f7f7; */
     
     z-index: 9999;
@@ -377,6 +378,11 @@
 
   .dropdown-content a:only-of-type {
     border-radius: 0.5rem;
+  }
+
+  .venue-nav-link-container:hover > .dropdown-content,
+  .venue-nav-link-container:focus-within > .dropdown-content {
+    visibility: visible;
   }
 
   .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(1),
