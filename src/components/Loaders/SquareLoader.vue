@@ -25,11 +25,16 @@
     .square-loader {
       vertical-align: middle;
       position: relative;
+      display:inline-block;
+      margin: 0;
+      padding: 0;
       width: 100%;
       height: 100%;
     }
 
     .square-loader-centerer {
+      height: 2.4rem;
+      width: 2.4rem;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -40,8 +45,8 @@
       height: 0.6rem;
       width: 0.6rem;
       top: 0;
-      margin-right: calc(0.6rem / 3);
-      margin-bottom: calc(0.6rem / 3);
+      margin-right: 0.2rem;
+      margin-bottom: 0.2rem;
       float: left;
       position:relative;
       opacity: 0;
