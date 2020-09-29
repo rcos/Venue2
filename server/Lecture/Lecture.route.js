@@ -387,7 +387,17 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 		}))
 	}
 	Promise.all(promises).then(resolved => {
-		res.json(resolved[0].concat(resolved[1]).concat(resolved[3]).filter(a => a))
+		let ret = []
+		if(resolved[0]) {
+			ret = ret.concat(resolved[0])
+		}
+		if(resolved[1]) {
+			ret = ret.concat(resolved[1])
+		}
+		if(resolved[2]) {
+			ret = ret.concat(resolved[2])
+		}
+		res.json(ret.filter(a => a))
 	})
 })
 
