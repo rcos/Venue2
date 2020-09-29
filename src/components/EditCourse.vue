@@ -61,7 +61,6 @@
   import SectionAPI from '@/services/SectionAPI.js';
   import UserAPI from '@/services/UserAPI.js';
   import Instructors from '@/components/admin/User/Instructors'
-  //hi :)
 
   export default {
     name: 'EditCourse',
