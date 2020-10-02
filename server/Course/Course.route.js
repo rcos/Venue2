@@ -128,7 +128,7 @@ courseRoutes.post('/add_instructors/:id', (req, res) => {
       let instructor_ids = instructors.map(a => a._id)
       Promise.all([
         User.updateMany( {_id: {$in: instructor_ids}}, {$push: {instructor_courses: [course_id]}}),
-        Course.findByIdAndUpdate( course_id, {$push: {instructors: {$each: instructor_ids}}})
+        Course.findByIdAndUpdate( course_id, {$push: {instructors: {$each: instructor_emails}}})
       ]).then(resolved => {
         res.json()
       })
