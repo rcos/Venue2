@@ -1,148 +1,91 @@
 <template>
-  <div class="dashboard-section" v-bind:class="{'active-section':active_section, 'today-section':today_section,
-    'courses-section':courses_section}">
-    <!-- Active Section -->
-    <div v-if="active_section">
-      <h4 class="section-title">Active</h4>
-      <ActiveEventList />
+  <div class="dashboard-section">
+    <div class="dashboard-section-title-container">
+      <h4 v-if="lecture_type === 'Live'" class="dashboard-section-title"> Synchronous</h4>
+      <h4 v-else-if="lecture_type === 'Playback'" class="dashboard-section-title">Asynchronous</h4>
+      <h4 v-else class="dashboard-section-title">{{ lecture_type }}</h4>
     </div>
-    <!-- Today Section -->
-    <div v-else-if="today_section">
-      <h4 class="section-title">Today's Events</h4>
-      <TodaysEventsList />
-<!--       <div v-if="todays_events.length > 0">
-        <h3 v-for="event in todays_events">{{ event.title }}</h3>
-      </div>
-      <div v-else>
-        <p class="no-container" id="no-today">No events today</p>
-      </div> -->
-    </div>
-    <!-- Courses Section -->
-    <div v-else-if="courses_section">
-      <div class="courses-section-title">
-        <div><h4  class="section-title">Courses</h4></div>
-        <div v-if="courses_loaded != 0" class="load-course-size">{{courses_loaded}} {{courses_loaded == 1 ? 'course' : 'courses'}} loaded</div>
-      </div>
-      <CourseList :sizeCallback="setCourseSize" />
+    <div class="dashboard-section-body-container">
+      <LectureList :lecture_type="lecture_type" :lecture_list="lecture_list" />
     </div>
   </div>
 </template>
 
 <script>
-  import {showAt, hideAt} from 'vue-breakpoints'
-  import ActiveEventList from '@/components/ActiveEventList.vue'
-  import TodaysEventsList from '@/components/TodaysEventsList.vue'
-  import CourseList from '@/components/CourseList.vue'
+  import LectureList from '@/components/LectureList'
 
   export default {
     name: 'DashboardSection',
     props: {
-      active_section: Boolean,
-      courses_section: Boolean,
-      today_section: Boolean
+      lecture_type: String,
+      lecture_list: Array
     },
     computed: {
     },
     components: {
-      hideAt,
-      showAt,
-      ActiveEventList,
-      TodaysEventsList,
-      CourseList
+      LectureList
     },
     data(){
       return {
-        courses_loaded: 0
       }
-    },
-    created() {
-      this.current_user = this.$store.state.user.current_user
     },
     methods: {
-      setCourseSize (_size_) {
-        console.log(`Course Size: ${_size_}`)
-        this.courses_loaded = _size_
-      }
+
     }
   }
 </script>
 
 <style scoped>
-.dashboard-section {
-  /*border: red solid;*/
-  text-align: left;
-  margin-top: 4rem;
-  display: inline-block;
-  vertical-align: top;
-  height: 15rem;
-}
-
-.active-section {
-  float: left;
-  margin-left: 8rem;
-  width: 30rem;
-}
-
-.today-section {
-  width: 30rem;
-  margin-left: -5rem;
-}
-
-.courses-section-title div {
-  display: inline-block;
-  font-family: "Segoe UI";
-}
-
-.courses-section {
-  display: block;
-  margin-left: 8rem;
-  margin-top: 2rem;
-}
-
-.section-title {
-  font-weight: bold;
-}
-
-.load-course-size {
-  font-size: 1.2rem;
-  margin-left: 0.9rem;
-  color: rgba(87, 140, 171, 0.8);
-}
-
-#no-active {
-  margin-left: 3rem;
-}
-
-#no-today {
-  margin-left: 3rem;
-}
-
-#no-courses {
-  margin-left: 3rem;
-}
-
-/*Medium devices (tablets and below)*/
-@media (max-width: 1128px) {
   .dashboard-section {
-    text-align: center;
-    height: auto;
+    width: 50%;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 1rem;
   }
-  .active-section {
-    margin-left: 0;
-    width: 100%;
+
+  .dashboard-section-title-container {
+    height: 4rem;
+    text-align: left;
+    padding-left: 2rem;
+    padding-top: 1rem;
   }
-  .dashboard-section {
-    width: 100%;
+
+  .dashboard-section-title {
+    color: #2C3E50;
+    font-weight: bold;
   }
-  .today-section {
-    margin-left: 0;
+
+  .dashboard-section-body-container {
+    min-height: 10rem;
+    max-height: 13rem;
+    overflow-y: auto;
   }
-  #no-active {
-    margin-left: auto;
+
+  .dashboard-section-body-container::-webkit-scrollbar {
+    width: 12px;
   }
-  #no-today {
-    margin-left: auto;
+
+  .dashboard-section-body-container::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  background-color: #F5F5F5; 
   }
-}
+
+  /*Ipad & below*/
+  @media only screen and (max-width: 800px) {
+    .dashboard-section {
+      width: 100%;
+      /*margin-top: 4rem;*/
+    }
+
+    .dashboard-section-title-container {
+      text-align: center;
+      padding: 0;
+    }
+
+    .dashboard-section-body-container {
+      min-height: 4rem;
+    }
+  }
 
 </style>

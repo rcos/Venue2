@@ -1,19 +1,17 @@
 <template>
-    <div class="loader-container">
-      <div class="loader-centerer">
-        <div class="self-building-square-spinner">
-          <div class="square even"></div>
-          <div class="square odd"></div>
-          <div class="square even"></div>
-          <div class="square clear odd"></div>
-          <div class="square even"></div>
-          <div class="square odd"></div>
-          <div class="square clear even"></div>
-          <div class="square odd"></div>
-          <div class="square even"></div>
-        </div>
-      </div>
+  <div class="square-loader">
+    <div class="square-loader-centerer">
+      <div class="square even"></div>
+      <div class="square odd"></div>
+      <div class="square even"></div>
+      <div class="square clear odd"></div>
+      <div class="square even"></div>
+      <div class="square odd"></div>
+      <div class="square clear even"></div>
+      <div class="square odd"></div>
+      <div class="square even"></div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -23,103 +21,99 @@
 </script>
 
 <style>
-  .self-building-square-spinner, .self-building-square-spinner div {
-      box-sizing: border-box;
-    }
 
-    .self-building-square-spinner {
-      height: 40px;
-      width: 40px;
-      top: calc( -10px * 2 / 3);
-    }
-
-    .loader-container {
+    .square-loader {
+      vertical-align: middle;
+      position: relative;
+      display:inline-block;
+      margin: 0;
+      padding: 0;
       width: 100%;
-      text-align: center;
+      height: 100%;
     }
 
-    .loader-centerer {
-      width: 37px;
-      margin: 0 auto;
-      padding-top: 50px;
-      padding-bottom: 50px;
+    .square-loader-centerer {
+      height: 2.4rem;
+      width: 2.4rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
 
-    .self-building-square-spinner .square {
-      height: 10px;
-      width: 10px;
-      top: calc( -10px * 2 / 3);
-      margin-right: calc(10px / 3);
-      margin-top: calc(10px / 3);
+    .square-loader .square {
+      height: 0.6rem;
+      width: 0.6rem;
+      top: 0;
+      margin-right: 0.2rem;
+      margin-bottom: 0.2rem;
       float: left;
       position:relative;
       opacity: 0;
-      animation: self-building-square-spinner 6s infinite;
+      border-radius: 0.15rem;
+      box-shadow: 0px 1px 2px 0px rgba(128, 128, 128, 0.5);
+      animation: square-loader 2s infinite;
     }
 
-    .self-building-square-spinner .square.even {
+    .square-loader .square.even {
       background: #4CC9FF;
+      transition: background 250ms cubic-bezier(0.19, 1, 0.22, 1);
     }
 
-    .self-building-square-spinner .square.odd {
+    .square-loader .square.odd {
       background: #FC6E71;
+      transition: background 250ms cubic-bezier(0.19, 1, 0.22, 1);
     }
 
-    .self-building-square-spinner .square:nth-child(1) {
-      animation-delay: calc(300ms * 6);
+    .square-loader .square:nth-child(1) {
+      animation-delay: calc(200ms * 6);
     }
 
-    .self-building-square-spinner .square:nth-child(2) {
-      animation-delay: calc(300ms * 7);
+    .square-loader .square:nth-child(2) {
+      animation-delay: calc(200ms * 7);
     }
 
-    .self-building-square-spinner .square:nth-child(3) {
-      animation-delay: calc(300ms * 8);
+    .square-loader .square:nth-child(3) {
+      animation-delay: calc(200ms * 8);
     }
 
-    .self-building-square-spinner .square:nth-child(4) {
-      animation-delay: calc(300ms * 3);
+    .square-loader .square:nth-child(4) {
+      animation-delay: calc(200ms * 3);
     }
 
-    .self-building-square-spinner .square:nth-child(5) {
-      animation-delay: calc(300ms * 4);
+    .square-loader .square:nth-child(5) {
+      animation-delay: calc(200ms * 4);
     }
 
-    .self-building-square-spinner .square:nth-child(6) {
-      animation-delay: calc(300ms * 5);
+    .square-loader .square:nth-child(6) {
+      animation-delay: calc(200ms * 5);
     }
 
-    .self-building-square-spinner .square:nth-child(7) {
-      animation-delay: calc(300ms * 0);
+    .square-loader .square:nth-child(7) {
+      animation-delay: calc(200ms * 0);
     }
 
-    .self-building-square-spinner .square:nth-child(8) {
-      animation-delay: calc(300ms * 1);
+    .square-loader .square:nth-child(8) {
+      animation-delay: calc(200ms * 1);
     }
 
-    .self-building-square-spinner .square:nth-child(9) {
-      animation-delay: calc(300ms * 2);
+    .square-loader .square:nth-child(9) {
+      animation-delay: calc(200ms * 2);
     }
 
-    .self-building-square-spinner .clear{
+    .square-loader .clear{
       clear: both;
     }
 
-    @keyframes self-building-square-spinner {
+    @keyframes square-loader {
       0% {
         opacity: 0;
       }
-      5% {
+      50% {
         opacity: 1;
-        top: 0;
       }
-      50.9% {
-        opacity: 1;
-        top: 0;
-      }
-      55.9% {
+      100% {
         opacity: 0;
-        top: inherit;
       }
     }
 </style>

@@ -1,12 +1,12 @@
 <template>
   <div class="container" style="padding:2rem;">
-    <button @click="$emit('button-clicked')" v-bind:class="{hidden:fade_out, visible:fade_in}" type="button" class="btn button shadow" id="venue-btn">
-      <div v-if="show_login_text">Login</div>
-      <div v-else>Get Started</div>
-    </button>
-
-<!--     <button type="button" v-bind:class="{hidden:fade_out, visible:fade_in}" class="btn button shadow" id="venue-btn" 
-      @click="$emit('button-clicked')">{{ btn_str }}</button> -->
+    <a :href="cas_url" tabindex="-1">
+      <button @click="$emit('button-clicked')" v-bind:class="{hidden:fade_out, visible:fade_in}" type="button" class="btn button shadow venue-btn" tabindex="0">
+        <!-- <div v-if="show_login_text">Login</div> -->
+        <!-- <div v-else>Get Started</div> -->
+        <div>{{ btn_text }}</div>
+      </button>
+    </a>
   </div>
 </template>
 
@@ -15,6 +15,8 @@
     name: 'Button',
     props: {
       // btn_str: String
+      cas_url: String,
+      btn_text: String
     },
     data() {
       return {
@@ -44,26 +46,27 @@
     background-color: white;
     font-size: 1.5rem;
     width: 12rem;
-    margin-top: 1.5rem;
-    border: #007bff solid;
-    color: #007bff;
+    /*margin-top: 1rem;*/
+    border: #0078c2 solid;
+    color: #0078c2;
     border-radius: 5px;
   }
 
-  #venue-btn:hover {
-    background-color: #007bff;
+  .venue-btn:hover,
+  .venue-btn:focus {
+    background-color: #0078c2;
     color: white;
   }
 
   .hidden {
     visibility: hidden;
     opacity: 0;
-    transition: visibility 0s 0.2s, opacity 0.2s linear;
+    transition: visibility 0.2s linear, opacity 0.2s linear;
   }
 
   .visible {
     visibility: visible;
     opacity: 1;
-    transition: opacity 1s linear;
+    transition: visibility 0.2s linear, opacity 0.2s linear;
   }
 </style>

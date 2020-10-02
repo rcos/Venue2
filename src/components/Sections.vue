@@ -1,9 +1,9 @@
 <template>
   <div>
     <h2>Select a Section</h2>
-    <div class="section-container" v-for="section in sections">
-      Section {{ section.number }}
-      <button @click.prevent="$emit('select-section', section)">Select</button>
+    <div class="section-container" v-for="(section,i) in sections" :key="i">
+      Section {{ section.name }}
+      <button class="btn btn-primary" @click.prevent="$emit('select-section', section)" :tabindex="(disable_tabbing ? '-1' : '0')">Select</button>
     </div>
   </div>
 </template>
@@ -14,7 +14,8 @@
   export default {
     name: 'Sections',
     props: {
-      sections: Array
+      sections: Array,
+      disable_tabbing: Boolean
     },
     data(){
       return {

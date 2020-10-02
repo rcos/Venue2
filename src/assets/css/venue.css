@@ -7,7 +7,6 @@ button:focus {
 
 html,body {
   background: #FCFEFF;
-  font-family: "Ubuntu Mono";
   font-weight: normal;
   height: 100%;
   /*font-size: 16px;*/
@@ -16,19 +15,19 @@ html,body {
 /* Change font size with screen size */
 
 /*Extra large devices (large desktops, 1200px and up)*/
-@media (min-width: 1199.98px) { 
+@media (min-width: 1199.98px) {
   html,body { font-size: 17px; }
   .venue-logo { margin-top: 2rem; }
 }
 
 /*Large devices (desktops, 992px and up)*/
-@media (max-width: 991.98px) { 
+@media (max-width: 991.98px) {
   html,body { font-size: 16px; }
   .venue-logo { margin-top: 4rem; }
 }
 
 /*Medium devices (tablets, 768px and up)*/
-@media (max-width: 767.98px) { 
+@media (max-width: 767.98px) {
   html, body { font-size: 15px; }
   .venue-logo { margin-top: 6rem; }
 }
@@ -103,6 +102,13 @@ html,body {
   /*font-size: 25px;*/
   position: relative;
   margin-top: -20px;
+  color: #2C3E50;
+}
+
+h1 {
+  /* font-family: "Exo"; */
+  font-weight: bold;
+  color: #2C3E50;
 }
 
 .sub-logo {
@@ -379,3 +385,83 @@ a:active {
     text-align: center;
   }
 }
+
+/*.dashboard-section {
+  text-align: left;
+  margin-top: 4rem;
+  display: inline-block;
+  vertical-align: top;
+  height: 15rem;
+  width: 100%;
+  margin: 0 8rem;
+}*/
+
+.active-section {
+  float: left;
+  margin-left: 8rem;
+  width: 30rem;
+}
+
+.today-section {
+  width: 30rem;
+  margin-left: -5rem;
+}
+
+.courses-section-title {
+  text-align: left;
+}
+
+.courses-section-title div {
+  display: inline-block;
+}
+
+.courses-section {
+  display: block;
+  margin-top: 2rem;
+}
+
+.section-title {
+  font-weight: bold;
+}
+
+.load-course-size {
+  font-size: 1.2rem;
+  margin-left: 0.9rem;
+  color: rgb(52, 89, 110);
+}
+
+#no-active {
+  margin-left: 3rem;
+}
+
+#no-today {
+  margin-left: 3rem;
+}
+
+#no-courses {
+  margin-left: 3rem;
+}
+
+/*Medium devices (tablets and below)*/
+/*@media (max-width: 1128px) {
+  .dashboard-section {
+    text-align: center;
+    height: auto;
+  }
+  .active-section {
+    margin-left: 0;
+    width: 100%;
+  }
+  .dashboard-section {
+    width: 100%;
+  }
+  .today-section {
+    margin-left: 0;
+  }
+  #no-active {
+    margin-left: auto;
+  }
+  #no-today {
+    margin-left: auto;
+  }
+}*/

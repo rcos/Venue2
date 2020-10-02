@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="new-user-container">
     <h2>Create A User</h2>
     <form @submit.prevent="addUser">
       <div class="row">
@@ -21,6 +21,14 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
+            <label>user_id:</label>
+            <input class="form-control" v-model="user.user_id">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
             <label>email:</label>
             <input class="form-control" v-model="user.email">
           </div>
@@ -34,9 +42,7 @@
           </div>
         </div>
       </div>
-      <div>
-        is_instructor: <input type="checkbox" v-model="user.is_instructor">
-      </div><br/>
+      <br>
       <div class="form-group">
         <button class="btn btn-primary">Create</button>
       </div>
@@ -66,3 +72,9 @@
     }
   }
 </script>
+
+<style scoped>
+#new-user-container {
+  padding: 2rem;
+}
+</style>

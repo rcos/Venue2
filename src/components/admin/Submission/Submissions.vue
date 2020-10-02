@@ -46,7 +46,6 @@
       async loadSubmissions () {
         const response = await SubmissionAPI.getSubmissions()
         this.submissions = response.data
-        console.log("Submissions: " + this.submissions)
         this.getEventsAndUsersForSubmissions()
       },
       getEventsAndUsersForSubmissions(){

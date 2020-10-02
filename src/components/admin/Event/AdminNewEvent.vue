@@ -20,7 +20,7 @@
             <div class="form-group" v-if="section.course">
               <label>Section:</label>
               <input class="form-control" v-model="section.course.name" readonly>
-              <input class="form-control" v-model="section.number" readonly>
+              <input class="form-control" v-model="section.name" readonly>
             </div>
             <div v-else>
               <label>Section:</label>
@@ -29,13 +29,13 @@
             </div>
           </div>
           <label>Start Time: </label>
-          <datetime type="datetime" use12-hour value-zone="local" title="Event Start" v-model="event.start_time"></datetime>
+          <!-- <datetime type="datetime" use12-hour value-zone="local" title="Event Start" v-model="event.start_time"></datetime> -->
           <label>End Time: </label>
-          <datetime type="datetime" use12-hour value-zone="local" title="Event End" v-model="event.end_time"></datetime>
+          <!-- <datetime type="datetime" use12-hour value-zone="local" title="Event End" v-model="event.end_time"></datetime> -->
           <label>Submission Start Time: </label>
-          <datetime type="datetime" use12-hour value-zone="local" title="Event Start" v-model="event.submission_start_time"></datetime>
+          <!-- <datetime type="datetime" use12-hour value-zone="local" title="Event Start" v-model="event.submission_start_time"></datetime> -->
           <label>Submission End Time: </label>
-          <datetime type="datetime" use12-hour value-zone="local" title="Event End" v-model="event.submission_end_time"></datetime>
+          <!-- <datetime type="datetime" use12-hour value-zone="local" title="Event End" v-model="event.submission_end_time"></datetime> -->
         </div>
         <div class="form-group">
           <button class="btn btn-primary">Create</button>
@@ -50,14 +50,11 @@
 <script>
   import EventAPI from '@/services/EventAPI.js';
   import AdminSections from '@/components/admin/Section/AdminSections';
-  import { Datetime } from 'vue-datetime';
-  import 'vue-datetime/dist/vue-datetime.css'
 
   export default {
     name: 'AdminNewEvent',
     components: {
-      AdminSections,
-      datetime: Datetime
+      AdminSections
     },
     data(){
       return {
@@ -75,7 +72,6 @@
       async addEvent(evt){
         evt.preventDefault();
         this.event.section = this.section
-        console.log("saving event with start_date " + this.event.start_date)
         const response = await EventAPI.addEvent(this.event);
         this.$router.push({name: 'admin_events'});
       }

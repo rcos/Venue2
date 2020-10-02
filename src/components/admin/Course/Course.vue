@@ -80,12 +80,9 @@
       async addCourse(evt){
         evt.preventDefault(); // prevents the form's default action from redirecting the page
         this.course.instructor = this.instructor;
-        console.log("About to add course with instructor: " + this.course.instructor.first_name + " " + 
-        	this.course.instructor.last_name);
         const response = await CourseAPI.addCourse(this.course);
         this.courses.push(response.data);
         let new_course = this.courses[this.courses.length - 1]
-        console.log("new course: " + new_course.instructor.first_name + " " + new_course.instructor.last_name)
         this.course = {}; // clear the input field
         this.instructor = {};
       },

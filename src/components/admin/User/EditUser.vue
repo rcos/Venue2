@@ -78,7 +78,7 @@
             <tr v-for="section in sections" :key="section._id">
               <td>{{ section.course.name }}</td>
               <td>{{ section.instructor.first_name }} {{ section.instructor.last_name }}</td>
-              <td>{{ section.number }}</td>
+              <td>{{ section.name }}</td>
               <td>
                 <router-link
                   :to="{name: 'editSection', params: { id: section._id }}"

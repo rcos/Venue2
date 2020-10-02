@@ -1,27 +1,16 @@
 <template>
-<!--   <div class="container shadow" style="border:#ededed solid thin; width:25rem; margin-top:1rem;">
-    <div @click="$emit('show-login-button')" class="back-arrow">←</div>
-    <form style=" padding-top:1rem; padding-bottom:1rem;" @submit.prevent="login">
-      <div class="form-group">
-        <input type="email" v-model="user.email" class="form-control login-form" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email">
-      </div>
-      <div class="form-group">
-        <input type="password" v-model="user.password" class="form-control login-form" id="exampleInputPassword1" placeholder="Password">
-      </div>
-      <button type="submit" class="btn shadow-sm login-btn">Login</button>
-    </form>
-  </div> -->
   <div>
     <form class="login-form">
-      <InputField ref="email_field" v-on:set-input-value="setEmail" label="username" />
-      <InputField ref="password_field" v-on:set-input-value="setPassword" label="password" type="password" />
-      <div class='forgot-password-container'><a href="#">Forgot password?</a></div>
+      <InputField ref="user_id_field" v-on:set-input-value="setUserId" label="user-id" id="username"/>
+      <InputField ref="password_field" v-on:set-input-value="setPassword" label="password" id="password" type="password" />
+      <div v-if="show_invalid_login" id="invalid-login">Invalid user id or password</div>
     </form>
   </div>
 </template>
 
 <script>
   import InputField from '@/components/InputField.vue'
+  import AuthAPI from '@/services/AuthAPI.js';
 
   export default {
     name: 'LoginForm',
@@ -31,31 +20,40 @@
     data() {
       return {
         user: {
-          email: '',
+          user_id: '',
           password: ''
-        }
+        },
+        show_invalid_login: false
       }
     },
     created() {
+      window.addEventListener("keypress", (e) => {
+        if (e.key == 'Enter') {
+          this.login ()
+        }
+      })
     },
     methods: {
       login() {
-        console.log("Login function was called.")
-        // console.log("Email: " + this.$refs.email_field.input_value + " Password: "
-        //   + this.$refs.password_field.input_value)
-        this.$refs.email_field.emitInputValue()
+        this.$refs.user_id_field.emitInputValue()
         this.$refs.password_field.emitInputValue()
-        console.log("Current User: " + this.user + " email: " + this.user.email + 
-          " password: " + this.user.password)
         this.$store.dispatch('login', this.user)
           .then(() => this.$router.push({name: 'dashboard'}))
+          .catch((err) => this.show_invalid_login = true)
       },
-      setEmail(email) {
-        console.log("Received email: " + email)
-        this.user.email = email
+      signup() {
+        this.$refs.user_id_field.emitInputValue()
+        this.$refs.password_field.emitInputValue()
+        AuthAPI.checkForTempUser(this.user.user_id, this.user.password).then(res => {
+          let temp_user = res.data
+          this.$router.push({name: 'set_permanent_password', params: {user_id: temp_user._id},
+            query: {user: temp_user}})
+        }).catch(err => { this.show_invalid_login = true})        
+      },
+      setUserId(user_id) {
+        this.user.user_id = user_id
       },
       setPassword(password) {
-        console.log("Received password: " + password)
         this.user.password = password
       }
     }
@@ -68,43 +66,11 @@
   /*border: black solid;*/
   padding-top: 30px;
   position: relative;
-  margin: auto; 
+  margin: auto;
   width: 28rem;
 }
 
-
-/*  .login-form {
-    border: black solid; 
-    margin: auto; 
-    width: 40rem;
-  }*/
-/*  .back-arrow {
-    text-align: left; 
-    cursor: pointer;
-    font-size: 1.5rem;
-  }
-
-  .login-form {
-    border-style: none none solid none;
-    border-radius: 0px;
-  }
-
-  .login-form:focus {
-      outline:none !important;
-      outline-width: 0 !important;
-      box-shadow: none;
-      -moz-box-shadow: none;
-      -webkit-box-shadow: none;
-      border-bottom:1px solid #00b818;
-  }
-
-  .login-btn {
-    border-radius: 0px;
-    border: white solid;
-  }
-
-  .login-btn:hover {
-    border: #00b818 solid;
-    color: #00b818;
-  }*/
+#invalid-login {
+  color: #ff1100;
+}
 </style>

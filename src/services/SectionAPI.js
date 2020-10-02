@@ -20,15 +20,18 @@ export default {
   deleteSection(id) {
     return API().delete('sections/delete/' + id)
   },
-  getInstructor (section_id) {
-    return API().get('sections/getInstructor/' + section_id)
+  getInstructors (section_id) {
+    return API().get('sections/getInstructors/' + section_id)
   },
   getCourse (section_id) {
     return API().get('sections/getCourse/' + section_id)
   },
   getStudents (section_id) {
     return API().get('sections/getStudents/' + section_id)
-  },  
+  },
+  getTeachingAssistants (section_id) {
+    return API().get('sections/getTeachingAssistants/' + section_id)
+  },
   getSectionsWithCoursesForStudent(user_id) {
     return API().get('sections/get_with_courses_for_student/' + user_id)
   },
@@ -37,5 +40,21 @@ export default {
   },
   getSectionsForCourse(course_id) {
     return API().get('sections/get_for_course/' + course_id)
+  },
+  getTASections() {
+    return API().get('sections/get_ta_sections')
+  },
+  getStudentSections() {
+    return API().get('sections/get_student_sections')
+  },
+  addStudents(section_id, students) {
+    return API().post('sections/add_students/'+section_id, {
+      students: students
+    })
+  },
+  addTAs(section_id,tas) {
+    return API().post('sections/add_tas/'+section_id, {
+      tas: tas
+    })
   }
 }

@@ -140,7 +140,6 @@
   text-align: left;
   padding-bottom: 20px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-  font-family: "Segoe UI";
 }
 
 .course-summary-mobile .summary-course-name {
@@ -230,12 +229,10 @@
 }
 
   .global {
-    font-family: "Segoe UI";
   }
 
   .info-section {
     display: inline-block;
-    font-family: "Segoe UI";
     margin-left: 0;
     vertical-align: top;
   }
@@ -358,7 +355,7 @@
   .new-event-btn {
     background-color: white;
     border: #007bff solid;
-    color: #black;
+    color: black;
     border-radius: 5px;
   }
   .active-event-pill {

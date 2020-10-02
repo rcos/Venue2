@@ -1,4 +1,4 @@
-import API from '@/services/API'
+import API from './API'
 
 export default {
   signUp(user) {
@@ -14,8 +14,20 @@ export default {
   getUsers() {
     return API().get('users')
   },
+  changePassword(user_id, old_password, new_password) {
+    return API().post('users/change_password', {
+      user_id: user_id,
+      old_password: old_password,
+      new_password: new_password
+    })
+  },
   addUser(user) {
     return API().post('users/add', {
+      user: user // add our data to the request body
+    })
+  },
+  onboardUser(user) {
+    return API().post('users/onboard', {
       user: user // add our data to the request body
     })
   },
@@ -41,5 +53,14 @@ export default {
   },
   getStudentSections(id) {
     return API().get('users/student_sections/' + id)
+  },
+  getInstructorsForCourse(course_id) {
+    return API().get('users/instructors_for_course/' + course_id)
+  },
+  getStudentsForCourse(course_id) {
+    return API().get('users/students_for_course/' + course_id)
+  },
+  getStudentsForLecture(lecture_id) {
+    return API().get('users/students_for_lecture/' + lecture_id)
   }
 }

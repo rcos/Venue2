@@ -8,27 +8,29 @@ let Section = require('../Section/Section.model');
 let User = new Schema({
 	first_name: String,
 	last_name: String,
-	email: String,
+	user_id: String,
+	email: {type: String, unique: true},
+	temp_password: String,
 	password: String,
+	connect_sid: {
+		type: String,
+		default: ""
+	},
 	is_admin: {
 		type: Boolean,
 		default: false
 	},
-	is_instructor: {
-		type: Boolean,
-		default: false
-	},
-	ta_sections: [{
-		section: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Section'
-		}
+	instructor_courses: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Course'
 	}],
-	submissions: [{
-		submission: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Submission'
-		}
+	ta_sections: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Section'
+	}],
+	student_sections: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Section'
 	}]
 });
 

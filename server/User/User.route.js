@@ -1,83 +1,78 @@
 const express = require('express');
 const userRoutes = express.Router();
-const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 let User = require('./User.model');
 let Course = require('../Course/Course.model');
 let Section = require('../Section/Section.model');
-
-userRoutes.route('/signup').post(function (req, res) {
-  console.log("Made it into the signup route")
-  console.log("Creating user with email: " + req.body.user.email + " password: " + req.body.user.password)
-  let user = new User(req.body.user);
-  user.save()
-    .then(() => {
-      console.log("Entered then block")
-      const token = jwt.sign({ user }, 'the_secret_key')
-      console.log("just signed token in then block: " + token)
-      res.status(200).json({token, user});
-    })
-    .catch(() => {
-      console.log("Entered catch block")
-      res.status(400).send("unable to save user to database");
-    });
-});
-
-userRoutes.route('/login').post(function (req, res) {
-  // console.log("Entered login route")
-  let user = req.body.user
-  // console.log("Received user: " + user)
-  // console.log("Outside if statement. User was passed to request body with email: " 
-  //   + user.email + " password: " + user.password)
-  if(user){
-    // console.log("Inside if statement. Searching for user with email: " + user.email
-    //  + " password: " + user.password)
-    User.findOne({ email: user.email, password: user.password }, function(error, current_user) {
-      if(error || !current_user){
-        console.log("Error unable to find user: " + user)
-        res.status(404).json({ error: 'Invalid Login Credentials. Please try again' })
-      }
-      else {
-        // console.log("Async call fetched user: " + current_user + " with email: " + current_user.email
-        //   + " and password: " + current_user.password)
-        const token = jwt.sign({ current_user }, 'the_secret_key')
-        // console.log("After signing, here is the user: " + current_user +
-        //   " with email " + current_user.email + " with password: " + current_user.password)
-        // console.log("Sending back user " + current_user + " with email: " + current_user.email +
-        //   " and password " + current_user.password + " with token: " + token)
-        res.json({token, current_user})
-      }
-    })
-  }else{
-    // console.log("Entered error block")
-    res.status(400).json({ error: 'Invalid login. Please try again.' })
-  }
-});
+let Lecture = require('../Lecture/Lecture.model');
 
 userRoutes.route('/add').post(function (req, res) {
   let user = new User(req.body.user);
-  user.save()
-    .then(() => {
-      res.status(200).json(user);
-    })
-    .catch(() => {
-      res.status(400).send("unable to save user to database");
+  if(user.password && user.password.length) {
+    bcrypt.hash(user.password, saltRounds, (err, hash) => {
+      if(err || hash == null) {
+        console.log("<ERROR> Hashing password for user:",user)
+        res.json(err)
+      } else {
+        user.password = hash
+        user.save()
+          .then(() => {
+            console.log("<SUCCESS> Adding user:",user)
+            res.status(200).json(user);
+          })
+          .catch(() => {
+            console.log("<ERROR> Adding user:",user)
+            res.status(400).send("unable to save user to database");
+          });
+      }
     });
+  } else {
+    user.save()
+      .then(() => {
+        console.log("<SUCCESS> Adding user:",user)
+        res.status(200).json(user);
+      })
+      .catch(() => {
+        console.log("<ERROR> Adding user:",user)
+        res.status(400).send("unable to save user to database");
+      });
+  }
 });
 
-userRoutes.get('/', verifyToken, (req, res) => {
-  jwt.verify(req.token, 'the_secret_key', err => {
-    if(err) {
-      console.log("Entered error block. req.token: " + req.token + " The error is:" + error)
-      res.sendStatus(401).send("Unauthorized access")
+userRoutes.route('/onboard').post(function (req, res) {
+  let new_user = new User(req.body.user);
+  User.find({user_id: new_user.user_id}, (error, existing_users) => {
+    if(error || existing_users == null){
+      console.log("<ERROR> Onboarding new user with user_id:", new_user.user_id)
+      res.json(error)
     } else {
-      User.find(function(err, users){
-        if(err){
-          res.json(err);
-        }else {
-          res.json(users);
-        }
-      })
+      if(existing_users.length === 0) {
+        new_user.save()
+          .then(() => {
+            console.log("<SUCCESS> Onboarding user:",new_user)
+            res.status(200).json(new_user);
+          })
+          .catch(() => {
+            console.log("<ERROR> Onboarding user:",new_user)
+            res.status(400).send("unable to save user to database");
+          });
+      } else {
+        res.status(403).json("User with user_id " + new_user.user_id + " already exists")
+      }
+    }
+  })
+});
+
+userRoutes.get('/', (req, res) => {
+  User.find(function(err, users){
+    if(err || users == null) {
+      console.log("<ERROR> Getting all users")
+      res.json(err);
+    } else {
+      console.log("<SUCCESS> Getting all users")
+      res.json(users);
     }
   })
 })
@@ -85,17 +80,50 @@ userRoutes.get('/', verifyToken, (req, res) => {
 userRoutes.route('/edit/:id').get(function (req, res) {
   let id = req.params.id;
   User.findById(id, function (err, user){
-      if(err) {
-        res.json(err);
-      }
+    if(err || user == null) {
+      console.log("<ERROR> Getting user by ID:",id)
+      res.json(err);
+    } else {
+      console.log("<SUCCESS> Getting user by ID:",id)
       res.json(user);
+    }
   });
 });
+
+userRoutes.route('/change_password/').post((req, res) => {
+
+  let user_id = req.body.user_id
+  let old_password = req.body.old_password
+  let new_password = req.body.new_password
+
+  User.findOne({_id: user_id}, (err, user) => {
+    if (err || user == null) {
+      console.log(`<ERROR> Error changing password for ${user_id}`)
+      res.json(false)
+    }
+    else {
+      bcrypt.compare(old_password, user.password, (err, result) => {
+        if (result) {
+          // update the password
+          bcrypt.hash(new_password, saltRounds, (err, hash) => {
+            user.password = hash
+            user.save ()
+            res.json(true)
+          })
+        }
+        else {
+          res.json(false)
+        }
+      })
+    }
+  })
+
+})
 
 userRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
   let updated_user = req.body.updated_user;
-  User.findByIdAndUpdate(id, 
+  User.findByIdAndUpdate(id,
     {
       first_name: updated_user.first_name,
       last_name: updated_user.last_name,
@@ -106,45 +134,48 @@ userRoutes.route('/update/:id').post(function (req, res) {
       submissions: updated_user.submissions
     },
     function(err, user) {
-      if (!user)
+      if (err || user == null) {
+        console.log("<ERROR> Updating user by ID:",id,"with:",updated_user)
         res.status(404).send("user not found");
-      res.json(user);    
+      } else {
+        console.log("<SUCCESS> Updating user by ID:",id,"with:",updated_user)
+        res.json(user);
+      }
     }
   );
 });
 
 userRoutes.route('/delete/:id').delete(function (req, res) {
-    User.findByIdAndRemove({_id: req.params.id}, function(err){
-        if(err) res.json(err);
-        else res.json('Successfully removed');
-    });
+  User.findByIdAndRemove({_id: req.params.id}, function(err){
+    if(err) {
+      console.log("<ERROR> Deleting user by ID:",req.params.id)
+      res.json(err);
+    } else {
+      console.log("<SUCCESS> Deleting user by ID:",req.params.id)
+      res.json('Successfully removed');
+    }
+  });
 });
 
 userRoutes.route('/instructors').get(function (req, res) {
-    User.find(function(err, users){
-    if(err){
+  User.find({is_instructor: true},function(err, instructors){
+    if(err || instructors == null) {
+      console.log("<ERROR> Getting instructors")
       res.json(err);
-    }else {
-      let instructors = [];
-      users.forEach(user => {
-        if(user.is_instructor)
-          instructors.push(user);
-      });
+    } else {
+      console.log("<SUCCESS> Getting instructors")
       res.json(instructors);
     }
   });
 });
 
 userRoutes.route('/students').get(function (req, res) {
-    User.find(function(err, users){
-    if(err){
+  User.find({is_instructor: false},function(err, students){
+    if(err || students == null) {
+      console.log("<ERROR> Getting students")
       res.json(err);
-    }else {
-      let students = [];
-      users.forEach(user => {
-        if(!user.is_instructor)
-          students.push(user);
-      });
+    } else {
+      console.log("<SUCCESS> Getting students")
       res.json(students);
     }
   });
@@ -152,64 +183,151 @@ userRoutes.route('/students').get(function (req, res) {
 
 userRoutes.route('/instructor_courses/:id').get(function (req, res) {
   let instructor_id = req.params.id;
-  console.log("instructor_id: " + instructor_id);
-  Course.find(function(err, courses){
-    if(err)
+  Course.find({instructor: instructor_id},function(err, courses){
+    if(err || courses == null) {
+      console.log("<ERROR> Getting courses for instructor with ID:",instructor_id)
       res.json(err);
-    let instructor_courses = []
-    courses.forEach((course) => {
-      if(typeof course.instructor !== 'undefined' && course.instructor._id == instructor_id)
-        instructor_courses.push(course);
-    });
-    res.json(instructor_courses);
-  });
-});
-
-userRoutes.route('/instructor_courses/:id').get(function (req, res) {
-  let instructor_id = req.params.id;
-  Course.find(function(err, courses){
-    if(err)
-      res.json(err);
-    let instructor_courses = []
-    courses.forEach((course) => {
-      if(typeof course.instructor !== 'undefined' && course.instructor._id == instructor_id)
-        instructor_courses.push(course);
-    });
-    res.json(instructor_courses);
+    } else {
+      console.log("<SUCCESS> Getting courses for instructor with ID:",instructor_id)
+      res.json(courses);
+    }
   });
 });
 
 userRoutes.route('/student_sections/:id').get(function (req, res) {
   let student_id = req.params.id;
   Section.find(function(err, sections){
-    if(err)
+    if(err || sections == null) {
+      console.log("<ERROR> Getting all sections")
       res.json(err);
-    let student_sections = []
-    sections.forEach((section) => {
-      section.students.forEach((section_student) => {
-        if(section_student._id == student_id){
-          student_sections.push(section);
-        }else{
-          console.log("Section student id: " + section_student._id + " != " + student_id);
-        }
+    } else {
+      let student_sections = []
+      let n = 0
+      sections.forEach((section) => {
+        n++
+        let m = 0
+        section.students.forEach((section_student) => {
+          m++
+          if(section_student._id == student_id){
+            student_sections.push(section);
+          }
+          if(n == sections.length && m == section.students.length) {
+            console.log("<SUCCESS> Getting sections for student with ID:",student_id)
+            res.json(student_sections);
+          }
+        });
       });
-    });
-    console.log("Student sections: " + student_sections);
-    res.json(student_sections);
+    }
   });
 });
 
-function verifyToken (req, res, next) {
-  const bearerHeader = req.headers['authorization']
+userRoutes.route('/instructors_for_course/:course_id').get(function (req, res) {
+  let course_id = req.params.course_id;
+  Course.findById(course_id,function(err,course) {
+    if(err || !course) {
+      console.log("<ERROR> Getting course with ID:",course_id)
+      res.json(err)
+    } else {
+      User.find({_id: {$in: course.instructors}},function(err,instructors) {
+        if(err || instructors == null) {
+          console.log("<ERROR> Getting instructors for course with ID:",course_id)
+          res.json(err)
+        } else {
+          res.json(instructors)
+        }
+      })
+    }
+  })
+});
 
-  if (typeof bearerHeader !== 'undefined') {
-    const bearer = bearerHeader.split(' ')
-    const bearerToken = bearer[1]
-    req.token = bearerToken
-    next()
-  } else {
-    res.sendStatus(401)
-  }
-}
+userRoutes.route('/students_for_course/:course_id').get(function (req, res) {
+  let course_id = req.params.course_id;
+  Section.find({course: course_id}, function(err, sections) {
+    if(err || sections == null) {
+      console.log("<ERROR> Getting students for course with ID:",course_id)
+      res.json(err)
+    } else {
+      let students = []
+      sections.forEach(section => {
+        students.push(new Promise((resolve,reject) => {
+          User.find({_id: {$in: section.students}},function(err,studs) {
+            if(err || studs == null) {
+              resolve(null)
+            } else {
+              resolve(studs)
+            }
+          })
+        }))
+      })
+      Promise.all(students)
+      .then(resolved => {
+        resolved = resolved.filter(stud => stud != null)
+        let studs = new Map()
+        let ret = []
+        resolved.forEach(section => {
+          section.forEach(student => {
+            if(!studs[student._id]) {
+              studs[student._id] = student
+              ret.push(student)
+            }
+          })
+        })
+        console.log("<SUCCESS> Getting students for course with ID:",course_id)
+        res.json(ret)
+      })
+    }
+  })
+});
+
+userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
+  let lecture_id = req.params.lecture_id;
+  Lecture.findById(lecture_id,function(err,lecture){
+    if(err || lecture == null) {
+      console.log("<ERROR> Getting lecture with ID:",lecture_id)
+    } else {
+      let sections = lecture.sections;
+      let sect_itr = 0;
+      let students = [];
+      sections.forEach(sect => {
+        Section.findById(sect, function (err, section) {
+          if(err || section == null) {
+            console.log("<ERROR> Getting section with ID:",id)
+            res.json(err);
+          } else {
+            let student_ids = section.students;
+            let num_iterations = 0;
+            student_ids.forEach(student_id => {
+              User.findById(student_id, function(err, student) {
+                if(err || student == null){
+                  console.log("<ERROR> Getting user with ID:",student_id)
+                  res.json(err);
+                } else {
+                  let found = false;
+                  for(let i = 0; i < students.length; i++) {
+                    if (students[i]._id.equals(student._id)) {
+                      found = true;
+                      break;
+                    }
+                  }
+                  if(!found) {
+                    students.push(student);
+                  }
+                  num_iterations++;
+                  if(num_iterations === student_ids.length) {
+                    sect_itr++
+                    if(sect_itr == sections.length) {
+                      console.log("<SUCCESS> Getting students for lecture with ID:",lecture_id)
+                      res.json(students);
+                    }
+                  }
+                }
+              })
+            })
+          }
+        })
+      })
+    }
+  })
+});
 
 module.exports = userRoutes;

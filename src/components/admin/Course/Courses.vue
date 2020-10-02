@@ -5,19 +5,23 @@
         <thead>
         <tr>
           <th>name</th>
-          <th>dept</th>
-          <th>course_number</th>
-          <th>instructor</th>
+          <th>prefix</th>
+          <th>suffix</th>
+          <th>instructors</th>
         </tr>
         </thead>
         <tbody>
             <tr v-for="course in courses" :key="course._id">
               <td>{{ course.name }}</td>
-              <td>{{ course.dept }}</td>
-              <td>{{ course.course_number }}</td>
-              <td v-if="course.instructor">{{ course.instructor.first_name }} {{ course.instructor.last_name }}</td>
+              <td>{{ course.prefix }}</td>
+              <td>{{ course.suffix }}</td>
+              <td>
+                <div v-for="(instructor,i) in course.instructors" :key="i">
+                {{ instructor.first_name }} {{ instructor.last_name }}
+                </div>
+              </td>
               <div v-if="is_course_view">
-                <td><router-link :to="{name: 'editCourse', params: { id: course._id }}" class="btn btn-primary">Edit</router-link></td>
+                <td><router-link :to="{name: 'edit_course', params: { id: course._id }}" class="btn btn-primary">Edit</router-link></td>
                 <td><button class="btn btn-danger" @click.prevent="deleteCourse(course._id)">Delete</button></td>
               </div>
               <td v-else><button class="btn btn-secondary" @click.prevent="$emit('select-course', course)">Select</button></td>
@@ -29,6 +33,7 @@
 
 <script>
   import CourseAPI from '@/services/CourseAPI.js';
+  import UserAPI from '@/services/UserAPI.js';
 
   export default {
     name: 'Courses',
@@ -50,8 +55,8 @@
       },
       async getInstructorsForCourses(){
         this.courses.forEach(async course => {
-          const response = await CourseAPI.getInstructor(course._id)
-          course.instructor = response.data
+          const response = await UserAPI.getInstructorsForCourse(course._id)
+          course.instructors = response.data
         })
       },
       async deleteCourse(id){
