@@ -206,7 +206,7 @@ userRoutes.route('/student_sections/:id').get(function (req, res) {
       sections.forEach((section) => {
         n++
         let m = 0
-        section.students.forEach((section_student) => {
+        section.students.forEach((section_student) => {//maybe fix
           m++
           if(section_student._id == student_id){
             student_sections.push(section);
@@ -225,58 +225,58 @@ userRoutes.route('/instructors_for_course/:course_id').get(function (req, res) {
   let course_id = req.params.course_id;
   Course.findById(course_id,function(err,course) {
     if(err || !course) {
-      console.log("<ERROR> Getting course with ID:",course_id)
-      res.json(err)
+      console.log("<ERROR> Getting course with ID:",course_id);
+      res.json(err);
     } else {
-      User.find({_id: {$in: course.instructors}},function(err,instructors) {
+      User.find({email: {$in: course.instructors}},function(err,instructors) {
         if(err || instructors == null) {
-          console.log("<ERROR> Getting instructors for course with ID:",course_id)
-          res.json(err)
+          console.log("<ERROR> Getting instructors for course with ID:",course_id);
+          res.json(err);
         } else {
-          res.json(instructors)
+          res.json(instructors);
         }
-      })
+      });
     }
-  })
+  });
 });
 
 userRoutes.route('/students_for_course/:course_id').get(function (req, res) {
   let course_id = req.params.course_id;
   Section.find({course: course_id}, function(err, sections) {
     if(err || sections == null) {
-      console.log("<ERROR> Getting students for course with ID:",course_id)
-      res.json(err)
+      console.log("<ERROR> Getting students for course with ID:",course_id);
+      res.json(err);
     } else {
-      let students = []
+      let students = [];
       sections.forEach(section => {
         students.push(new Promise((resolve,reject) => {
-          User.find({_id: {$in: section.students}},function(err,studs) {
+          User.find({email: {$in: section.students}},function(err,studs) {
             if(err || studs == null) {
-              resolve(null)
+              resolve(null);
             } else {
-              resolve(studs)
+              resolve(studs);
             }
-          })
-        }))
-      })
+          });
+        }));
+      });
       Promise.all(students)
       .then(resolved => {
-        resolved = resolved.filter(stud => stud != null)
-        let studs = new Map()
-        let ret = []
+        resolved = resolved.filter(stud => stud != null);
+        let studs = new Map();
+        let ret = [];
         resolved.forEach(section => {
           section.forEach(student => {
             if(!studs[student._id]) {
-              studs[student._id] = student
-              ret.push(student)
+              studs[student._id] = student;
+              ret.push(student);
             }
-          })
-        })
-        console.log("<SUCCESS> Getting students for course with ID:",course_id)
-        res.json(ret)
-      })
+          });
+        });
+        console.log("<SUCCESS> Getting students for course with ID:",course_id);
+        res.json(ret);
+      });
     }
-  })
+  });
 });
 
 userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
@@ -294,17 +294,17 @@ userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
             console.log("<ERROR> Getting section with ID:",id)
             res.json(err);
           } else {
-            let student_ids = section.students;
+            let student_emails = section.students;
             let num_iterations = 0;
-            student_ids.forEach(student_id => {
-              User.findById(student_id, function(err, student) {
+            student_emails.forEach(student_email => {
+              User.find({email: student_email}, function(err, student) {
                 if(err || student == null){
-                  console.log("<ERROR> Getting user with ID:",student_id)
+                  console.log("<ERROR> Getting user with Email:",student_email)
                   res.json(err);
                 } else {
                   let found = false;
                   for(let i = 0; i < students.length; i++) {
-                    if (students[i]._id.equals(student._id)) {
+                    if (students[i]._id.equals(student._id)) {//maybe fix
                       found = true;
                       break;
                     }
@@ -313,7 +313,7 @@ userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
                     students.push(student);
                   }
                   num_iterations++;
-                  if(num_iterations === student_ids.length) {
+                  if(num_iterations === student_emails.length) {
                     sect_itr++
                     if(sect_itr == sections.length) {
                       console.log("<SUCCESS> Getting students for lecture with ID:",lecture_id)
