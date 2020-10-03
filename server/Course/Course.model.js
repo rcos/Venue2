@@ -9,7 +9,6 @@ let Course = new Schema({
 	name: String,
 	dept: String,
 	course_number: Number,
-=======
 	prefix: String,
 	suffix: Number,
 	instructors: [{
