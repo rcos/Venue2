@@ -6,11 +6,11 @@ import EditUser from './components/admin/User/EditUser.vue';
 import Instructors from './components/admin/User/Instructors.vue';
 import Students from './components/admin/User/Students.vue';
 import Course from './components/admin/Course/Course.vue';
-import EditCourse from './components/admin/Course/EditCourse.vue';
+import EditCourse from './components/EditCourse.vue';
 import NewCourse from './components/admin/Course/NewCourse.vue';
 import Courses from './components/admin/Course/Courses.vue';
 import AdminSections from './components/admin/Section/AdminSections.vue';
-import AdminEditSection from './components/admin/Section/AdminEditSection.vue';
+import EditSection from './components/EditSection.vue';
 import AdminNewSection from './components/admin/Section/AdminNewSection.vue';
 import NewUser from './components/admin/User/NewUser.vue';
 import OnboardUser from './views/OnboardUser.vue';
@@ -34,6 +34,14 @@ import LectureInfo from './views/LectureInfo.vue';
 import Settings from './views/Settings.vue';
 import RedirectCASLogin from './views/RedirectCASLogin.vue';
 import Statistics from './views/Statistics.vue';
+import TeachNewCourse from '@/components/TeachNewCourse.vue';
+import NewSection from '@/components/NewSection.vue';
+
+import AuthAPI from '@/services/AuthAPI.js';
+import UserAPI from '@/services/UserAPI.js';
+
+const url = require('url')
+const query = require('querystring')
 
 Vue.use(VueRouter);
 
@@ -51,7 +59,7 @@ const router = new VueRouter({
       path: '/settings',
       component: Settings,
       meta: {
-        title: "Venue - Settings",
+        title: "Settings",
         requiresAuth: true
       }
     },
@@ -128,12 +136,12 @@ const router = new VueRouter({
       }
     },
     {
-      name: 'editCourse',
-      path: '/editCourse/:id',
+      name: 'edit_course',
+      path: '/edit_course/:id',
       component: EditCourse,
       meta: {
         requiresAuth: true,
-        requiresAdmin: true
+        requiresInstructor: true
       }
     },
     {
@@ -155,12 +163,12 @@ const router = new VueRouter({
       }
     },
     {
-      name: 'admin_edit_section',
-      path: '/admin/edit_section/:id',
-      component: AdminEditSection,
+      name: 'edit_section',
+      path: '/edit_section/:id',
+      component: EditSection,
       meta: {
         requiresAuth: true,
-        requiresAdmin: true
+        requiresInstructor: true
       }
     },
     {
@@ -170,6 +178,15 @@ const router = new VueRouter({
       meta: {
         requiresAuth: true,
         requiresAdmin: true
+      }
+    },
+    {
+      name: 'new_section',
+      path: '/new_section/:id',
+      component: NewSection,
+      meta: {
+        requiresAuth: true,
+        requiresInstructor: true
       }
     },
     {
@@ -231,7 +248,7 @@ const router = new VueRouter({
       path: '/dashboard',
       component: Dashboard,
       meta: {
-        title: "Venue - Dashboard",
+        title: "Dashboard",
         requiresAuth: true
       }
     },
@@ -240,7 +257,7 @@ const router = new VueRouter({
     //   path: '/user_courses',
     //   component: CourseList,
     //   meta: {
-    //     title: "Venue - Courses",
+    //     title: "Courses",
     //     requiresAuth: true
     //   }
     // },
@@ -249,7 +266,7 @@ const router = new VueRouter({
       path: '/course_info/:id',
       component: CourseInfo,
       meta: {
-        title: "Venue - Course Info",
+        title: "Course Info",
         requiresAuth: true
       }
     },
@@ -285,7 +302,7 @@ const router = new VueRouter({
       path: '/lecture_playback/:lecture_id',
       component: LecturePlayback,
       meta: {
-        title: "Venue - Lecture Playback",
+        title: "Lecture Playback",
         requiresAuth: true,
       }
     },
@@ -294,7 +311,7 @@ const router = new VueRouter({
       path: '/new_lecture/:course_id',
       component: NewLecture,
       meta: {
-        title: "Venue - New Lecture",
+        title: "New Lecture",
         requiresAuth: true,
         requiresInstructor: true
       }
@@ -304,7 +321,7 @@ const router = new VueRouter({
       path: '/lecture_info/:lecture_id',
       component: LectureInfo,
       meta: {
-        title: "Venue - Lecture Info",
+        title: "Lecture Info",
         requiresAuth: true,
       }
     },
@@ -321,7 +338,7 @@ const router = new VueRouter({
       path: '/redirectCASLogin',
       component: RedirectCASLogin,
       meta: {
-        title: "Venue - Redirecting",
+        title: "Redirecting",
         requiresNoLogin: true
       }
     },
@@ -330,9 +347,18 @@ const router = new VueRouter({
       path: '/statistics',
       component: Statistics,
       meta: {
-        title: "Venue - Statistics",
+        title: "Statistics",
         requiresAuth: true,
         requiresInstructor: true
+      }
+    },
+    {
+      name: 'teach_new_course',
+      path: '/teach_new_course',
+      component: TeachNewCourse,
+      meta: {
+        title: "Teach New Course",
+        requiresAuth: true
       }
     }
   ]
@@ -340,6 +366,17 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const loggedIn = localStorage.getItem('user')
+
+  if(to.name == 'landing_page' || to.name == 'dashboard') {
+    let url_query = query.parse(url.parse(window.location.href).query)
+		if(url_query && url_query.code) {
+      if(process.env.NODE_ENV === 'production') {
+        window.location.href="https://www.venue-meetings.com/"+"?code="+url_query.code+"#/lecture_playback/"+localStorage.getItem('last_webex')
+      } else {
+        window.location.href="http://localhost:8080/"+"?code="+url_query.code+"#/lecture_playback/"+localStorage.getItem('last_webex')
+      }
+		}
+  }
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
 
@@ -357,8 +394,13 @@ router.beforeEach((to, from, next) => {
 
       } else if (to.matched.some(record => record.meta.requiresInstructor)) {
 
-        if (to.name == 'new_lecture' && user_data.current_user.instructor_courses.includes(to.params.course_id)
-        || to.name == 'statistics' && user_data.current_user.instructor_courses.length > 0) {
+        if ((to.name == 'new_lecture' && user_data.current_user.instructor_courses.includes(to.params.course_id))
+        || (to.name == 'new_lecture' && user_data.current_user.ta_sections.includes(to.params.course_id))
+        || (to.name == 'statistics' && user_data.current_user.instructor_courses.length > 0)
+        || (to.name == 'edit_course' && user_data.current_user.instructor_courses.includes(to.params.id))
+        || (to.name == 'edit_section' && user_data.current_user.ta_sections.includes(to.params.id))
+        || (to.name == 'edit_section' && from.name == 'edit_course')
+        || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))) {
           next()
         } else {
           next('/dashboard')

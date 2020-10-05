@@ -8,7 +8,7 @@
       <router-link class="lecture_card_link" :to="{name: 'lecture_info', params: { lecture_id: lecture._id }}" :aria-label="'Lecture Info - '+ lecture_course.name +' - '+lecture.title">
         <div class="lecture-card-section" id="left-section">
           <p class="course-name">{{ lecture_course.name }}</p>
-          <p class="course-title">{{ lecture_course.dept }} {{ lecture_course.course_number }}</p>
+          <p class="course-title">{{ lecture_course.prefix }} {{ lecture_course.suffix }}</p>
         </div>
         <div class="lecture-card-section" id="middle-section">
           <p class="lecture-name">{{ lecture.title }}</p>
@@ -17,7 +17,7 @@
           <div v-if="lecture_type === 'Live'" class="right-container">
             <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
             <p v-if="lecture.checkin_window_status === 'open'" class="lecture-time-text open-text">{{ getTimeToWindowCloseString(false) }}</p>
-            <p v-else class="lecture-time-text closed-text">closed</p>
+            <p v-else class="lecture-time-text closed-text">waiting...</p>
           </div>
           <div v-else-if="lecture_type === 'Playback'" class="right-container">
             <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
@@ -111,6 +111,7 @@
     -webkit-transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
     -ms-transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
     transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0px 3px 3px 1px rgba(109, 109, 109, 0.644);
   }
 
   .live-lecture-open {

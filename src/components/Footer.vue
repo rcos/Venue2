@@ -20,8 +20,8 @@ export default {
 	bottom: 0;	
 	width: 100%;
 	height: 2rem;
-	border-top: #e0e0e0 solid thin;
-	border-bottom: #e0e0e0 solid thin;
+	/* border-top: #e0e0e0 solid thin; */
+	/* border-bottom: #e0e0e0 solid thin; */
 	background: white;
 	font-size: 1rem;
 	padding-top: 0.2rem;

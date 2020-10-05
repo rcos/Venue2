@@ -25,4 +25,7 @@ export default {
       user: user
     })
   },
+  getWebexSrc(auth_code,web_rec_id) {
+    return API().get('auth/get_webex_src/' + auth_code + '/' + web_rec_id)
+  }
 }

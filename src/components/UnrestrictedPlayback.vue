@@ -1,18 +1,24 @@
 <template>
 	<div id="unrestricted_playback">
 		<video id="video_player" class="video-js vjs-big-play-centered" controls>
-			<source v-bind:src="lecture.video_ref" type="">
+			<source v-if="isProduction" v-bind:src="lecture.video_ref + (lecture.video_type=='video/youtube'?'?showinfo=0&enablejsapi=1&origin=https://www.venue-meetings.com':'')" :type="lecture.video_type"/>
+			<source v-else v-bind:src="lecture.video_ref + (lecture.video_type=='video/youtube'?'?showinfo=0&enablejsapi=1&origin=http://localhost:8080':'')" :type="lecture.video_type"/>
 		</video>
 	</div>
 </template>
 
 <script>
 import videojs from "video.js"
+import axios from 'axios'
+require('videojs-youtube')
 
 export default {
-	name: 'RestrictedPlayback',
+	name: 'UnrestrictedPlayback',
 	props: {
 		lecture: Object
+	},
+	computed: {
+		isProduction(){ process.env.NODE_ENV === 'production' }
 	},
 	data() {
 		return {
@@ -36,6 +42,8 @@ export default {
 <style scoped>
 #unrestricted_playback {
 	position: fixed;
+	left: 2rem;
+	right: 2rem;
 	top: 4rem;
 	bottom: 2rem;
 }
