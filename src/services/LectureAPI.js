@@ -24,7 +24,7 @@ export default {
   addPlaybackVideo(lecture_id, video) {
     let formdata = new FormData()
     formdata.append('video', video)
-    return API().post('lectures/add_playback_video/' + lecture_id,
+    return API().post('lectures/add_playback/' + lecture_id,
       formdata,
       {
         headers: {

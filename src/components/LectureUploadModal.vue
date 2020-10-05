@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="row filerow" v-if="video_type == ''">
-        <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn" role="button" tabindex="0" aria-label="Select Video and Show Poll Creation Options" disabled/>
+        <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn" role="button" tabindex="0" aria-label="Select Video and Show Poll Creation Options"/>
       </div>
       <div class="row" id="lecture_container" v-if="file_selected">
         <div class="col" v-if="!update_lecture">
@@ -141,6 +141,7 @@ import Picker from 'pickerjs';
 import '../../node_modules/pickerjs/src/index.css';
 require('videojs-youtube')
 const validator = require('youtube-url')
+import axios from 'axios';
 // DatePicker themes options:
 // "material_blue","material_green","material_red","material_orange",
 // "dark","airbnb","confetti"
@@ -168,7 +169,7 @@ export default {
       play_sub_start_picker: null,
       play_sub_end_picker: null,
       modal_open: false,
-      waiting: false,
+      waiting: false
     };
   },
   created() {
@@ -228,7 +229,25 @@ export default {
                 this.waiting = false;
                 this.hideModal()
                 location.reload()
+              } else {
+                for(let i=0;i<this.need_timestamp.length;i++) {
+                  this.need_timestamp[i].lecture = this.lecture._id
+                  this.updateTimestamp(i)
+                  PlaybackPollAPI.update(this.need_timestamp[i])
+                  .then(res => {
+                    n_saved++
+                    if(n_saved == this.need_timestamp.length) {
+                      this.need_timestamp = []
+                      this.waiting = false;
+                      this.hideModal()
+                      location.reload()
+                    }
+                  })
+                }
               }
+            
+            }).catch(err => {
+              console.log("Error:",err)
             })
           }
         }
@@ -281,7 +300,26 @@ export default {
                 name: "course_info",
                 params: { id: (this.$store.state.user.current_user.ta_sections.includes(this.$route.params.course_id)?this.$route.params.course_id:course_id) }
               })
+            } else {
+              for(let i=0;i<this.polls.length;i++) {
+                this.polls[i].lecture = lect._id
+                PlaybackPollAPI.addPoll(this.polls[i])
+                .then(res => {
+                  n_saved++
+                  if(n_saved == this.polls.length) {
+                    this.polls = []
+                    this.hideModal()
+                    this.waiting = false
+                    this.$router.push({
+                      name: "course_info",
+                      params: { id: course_id }
+                    })
+                  }
+                })
+              }
             }
+          }).catch(err => {
+            console.log("Error")
           })
         }
       }
@@ -337,7 +375,7 @@ export default {
         }
         vid_selector.addEventListener("change", function(e) {
           e.preventDefault()
-          // handleVidSelection()
+          handleVidSelection()
         });
         youtube_selector.addEventListener("input", function(e) {
           e.preventDefault()
