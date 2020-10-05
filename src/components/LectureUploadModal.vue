@@ -11,7 +11,7 @@
         </h1>
       </div>
       <div class="row youtuberow">
-        <label id="youtube_label">Youtube URL:</label>
+        <label id="youtube_label">Youtube Video URL:</label>
         <input id="youtube_selector" type="text" class="form-control" role="input" tabindex="0" aria-labelledby="youtube_label"/>
         <div v-if="video_type == 'video/youtube'">
           <label id="yt_length_label" class="col-12">Length:</label>
@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="row webexrow">
-        <label id="webex_label">Webex URL:</label>
+        <label id="webex_label">Webex Recording URL:</label>
         <input id="webex_selector" type="text" class="form-control" role="input" tabindex="0" aria-labelledby="webex_label"/>
         <div v-if="video_type == 'webex'">
           <label id="webex_length_label" class="col-12">Length:</label>
@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="row filerow" v-if="video_type == ''">
-        <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn" role="button" tabindex="0" aria-label="Select Video and Show Poll Creation Options"/>
+        <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn" role="button" tabindex="0" aria-label="Select Video and Show Poll Creation Options" disabled/>
       </div>
       <div class="row" id="lecture_container" v-if="file_selected">
         <div class="col" v-if="!update_lecture">
