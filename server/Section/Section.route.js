@@ -12,7 +12,14 @@ sectionRoutes.route('/add').post(function (req, res) {
   section.save()
     .then(() => {
       console.log("<SUCCESS> Adding section:", section);
-      res.status(200).json(section);
+      Promise.all([
+        Course.updateOne({ _id: section.course }, { $push: { sections: [section._id] } })
+      ]).then(resolved => {
+        Course.findById(section.course, function (err, course) {
+          console.log(course);
+        });
+        res.status(200).json(section);
+      });
     })
     .catch(() => {
       console.log("<ERROR> Adding section:", section);
@@ -295,6 +302,7 @@ sectionRoutes.get('/get_ta_sections', (req, res) => {
     } else {
       let promises = [];
       ta_sections.forEach(section => {
+        console.log(section);
         promises.push(new Promise((resolve, reject) => {
           Course.findById(section.course, function (err, course) {
             section.course = course
@@ -326,7 +334,7 @@ sectionRoutes.get('/get_student_sections', (req, res) => {
         }))
       })
       Promise.all(promises).then(resolved => {
-        console.log("<SUCCESS> Getting student sections by user with ID:", req.user._id, "  ", student_sections)
+        console.log("<SUCCESS> Getting student sections by user with ID:", req.user._id)
         res.json(student_sections);
       });
     }
