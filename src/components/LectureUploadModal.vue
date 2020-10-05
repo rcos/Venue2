@@ -337,7 +337,7 @@ export default {
         }
         vid_selector.addEventListener("change", function(e) {
           e.preventDefault()
-          handleVidSelection()
+          // handleVidSelection()
         });
         youtube_selector.addEventListener("input", function(e) {
           e.preventDefault()
