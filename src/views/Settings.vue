@@ -3,8 +3,17 @@
     <h1>Settings</h1>
     <div class="settings-container">
           <div class="name-area">
-              <div class="name-div">{{ current_user.first_name }} {{ current_user.last_name }}</div>
-              <div class="logout-div"><div class="logout-button" v-on:click="logoutUser" tabindex="0" role="button">Logout</div></div>
+            <div class="name-div" v-if="editing_name">
+              <input v-model="edited_first_name" :placeholder="current_user.first_name"/>
+              <input v-model="edited_last_name" :placeholder="current_user.last_name"/>
+              <button v-if="waiting" class="btn btn-primary" disabled><SquareLoader/></button>
+              <div v-else>
+                <button class="btn btn-secondary" @click="editing_name = false">Cancel</button>
+                <button class="btn btn-primary" @click="saveName()">Save</button>
+              </div>
+            </div>
+            <div class="name-div" v-else>{{ current_user.first_name }} {{ current_user.last_name }} <button class="btn" title="Edit Course" id="edit-course" @click="editing_name = true"><img id="edit-course" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit"/></button></div>
+            <div class="logout-div"><div class="logout-button" v-on:click="logoutUser" tabindex="0" role="button">Logout</div></div>
           </div>
 
           <div v-if="mode == 'setting_options'">
@@ -13,6 +22,15 @@
                 <div class="left">
                     <div>Current Email: <span class="value-area">{{ current_user.email }}</span></div>
                     <div class="small-div">The email is used to login to Venue.</div>
+                </div>
+                <div class="right">
+                    <!-- <div class="change-button">Change</div> -->
+                </div>
+            </div>
+
+            <div class="setting-option-section">
+                <div class="left">
+                    <router-link :to="{name: 'teach_new_course'}"><button class="btn btn-primary">Teach New Course</button></router-link>
                 </div>
                 <div class="right">
                     <!-- <div class="change-button">Change</div> -->
@@ -47,6 +65,8 @@
   import ChangePassword from '@/components/ChangePassword.vue'
   import AuthAPI from '../services/AuthAPI';
 
+  import SquareLoader from '@/components/Loaders/SquareLoader.vue';
+
   import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
 
   export default {
@@ -57,12 +77,17 @@
     components: {
       hideAt,
       showAt,
-      ChangePassword
+      ChangePassword,
+      SquareLoader
     },
     data(){
       return {
         current_user: {},
-        mode: String
+        mode: String,
+        editing_name: false,
+        edited_first_name: '',
+        edited_last_name: '',
+        waiting: false
       }
     },
     created() {
@@ -85,6 +110,18 @@
         LectureSubmissionAPI.updateAllToNewModel()
         .then(res => {
           location.reload()
+        })
+      },
+      saveName() {
+        this.waiting = true
+        this.current_user.first_name = this.edited_first_name
+        this.current_user.last_name = this.edited_last_name
+        UserAPI.updateUser(this.current_user._id,this.current_user).then(res => {
+          this.$store.dispatch('updateCurrentUser',{token: this.$store.state.user.token, current_user: this.current_user})
+          this.edited_first_name = ''
+          this.edited_last_name = ''
+          this.waiting = false
+          this.editing_name = false
         })
       }
     }

@@ -14,10 +14,14 @@
 </template>
 
 <script>
-import LectureAPI from "../services/LectureAPI";
-import LectureSubmissionAPI from '../services/LectureSubmissionAPI';
-import RestrictedPlayback from "../components/RestrictedPlayback";
-import UnrestrictedPlayback from "../components/UnrestrictedPlayback";
+import LectureAPI from "@/services/LectureAPI";
+import LectureSubmissionAPI from '@/services/LectureSubmissionAPI';
+import RestrictedPlayback from "@/components/RestrictedPlayback";
+import UnrestrictedPlayback from "@/components/UnrestrictedPlayback";
+import AuthAPI from "@/services/AuthAPI";
+
+const query = require('querystring')
+const url = require('url')
 
 export default {
 	name: 'LecturePlayback',
@@ -46,7 +50,29 @@ export default {
 				let lect_sect_ids = this.lecture.sections.map(a => a._id)
 				this.is_ta = this.$store.state.user.current_user.ta_sections.some( a => lect_sect_ids.includes(a) )
 				this.is_student = this.$store.state.user.current_user.student_sections.some( a => lect_sect_ids.includes(a) )
-				this.lecture_loaded = true
+				if(localStorage.getItem('last_webex')) {
+					localStorage.removeItem('last_webex')
+					this.convertVideoTypeToSourceType(this.lecture)
+					let url_query = query.parse(url.parse(window.location.href).query)
+					if(url_query.code) {
+						let pieces = this.lecture.video_ref.split("/")
+						AuthAPI.getWebexSrc(url_query.code,pieces[pieces.length-1]).then(res => {
+							this.lecture.video_ref = res.data
+							this.lecture.video_type = "video/mp4"
+							window.history.replaceState({}, document.title, "/#/lecture_playback/"+this.lecture._id);
+							this.lecture_loaded = true
+						})
+					}
+				} else if(this.lecture.video_type == 'webex') {
+					this.$store.dispatch('setLastWebex',this.lecture._id)
+					if(process.env.NODE_ENV === 'production') {
+						window.location.href="https://webexapis.com/v1/authorize?client_id=C51b03a19e18dfd8ccb12e33224fd60be29d1554641b22aeb6b3c2cccad97d04d&response_type=code&redirect_uri=https%3A%2F%2Fwww.venue-meetings.com&scope=spark%3Aall%20spark%3Akms&state=venue_state"
+					} else {
+						window.location.href="https://webexapis.com/v1/authorize?client_id=C51b03a19e18dfd8ccb12e33224fd60be29d1554641b22aeb6b3c2cccad97d04d&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080&scope=spark%3Aall%20spark%3Akms&state=venue_state"
+					}
+				} else {
+					this.lecture_loaded = true
+				}
 				if(new Date() > new Date(this.lecture.playback_submission_end_time) || this.is_instructor || this.is_ta) {
 					this.unrestricted = true
 					this.needs_decision = false
@@ -81,6 +107,11 @@ export default {
 		handleOptIntoRestricted() {
 			this.unrestricted = false
 			this.needs_decision = false
+		},
+		convertVideoTypeToSourceType(lecture) {
+			if(lecture.video_type == 'webex') {
+				lecture.video_type = "video/mp4"
+			}
 		}
 	}
 }

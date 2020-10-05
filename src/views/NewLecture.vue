@@ -145,9 +145,17 @@ export default {
     };
   },
   created() {
-    this.course_id = this.$route.params.course_id;
-    this.getCourse();
-    this.getSectionsForCourse();
+    if(this.$store.state.user.current_user.ta_sections.includes(this.$route.params.course_id)) {
+      SectionAPI.getCourse(this.$route.params.course_id).then(res => {
+        this.course_id = res.data._id
+        this.course = res.data
+        this.getSectionsForCourse();
+      })
+    } else {
+      this.course_id = this.$route.params.course_id
+      this.getCourse();
+      this.getSectionsForCourse();
+    }
   },
   methods: {
     async getCourse() {
@@ -259,7 +267,7 @@ export default {
         Promise.all(poll_promises).then(resolved => {
           this.$router.push({
             name: "course_info",
-            params: { id: this.course_id }
+            params: { id: this.$route.params.course_id }
           })
         })
       }

@@ -221,6 +221,25 @@ userRoutes.route('/student_sections/:id').get(function (req, res) {
   });
 });
 
+userRoutes.route('/instructors_for_course/:course_id').get(function (req, res) {
+  let course_id = req.params.course_id;
+  Course.findById(course_id,function(err,course) {
+    if(err || !course) {
+      console.log("<ERROR> Getting course with ID:",course_id)
+      res.json(err)
+    } else {
+      User.find({_id: {$in: course.instructors}},function(err,instructors) {
+        if(err || instructors == null) {
+          console.log("<ERROR> Getting instructors for course with ID:",course_id)
+          res.json(err)
+        } else {
+          res.json(instructors)
+        }
+      })
+    }
+  })
+});
+
 userRoutes.route('/students_for_course/:course_id').get(function (req, res) {
   let course_id = req.params.course_id;
   Section.find({course: course_id}, function(err, sections) {

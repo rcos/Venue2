@@ -3,6 +3,7 @@ const authRoutes = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const axios = require('axios')
 
 let User = require('../User/User.model');
 
@@ -29,43 +30,37 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
   done(null, user);
 });
-if(process.env.NODE_ENV === "production") {
-  passport.use(new (require('passport-cas').Strategy)({
-    version: 'CAS3.0',
-    ssoBaseURL: 'https://cas-auth.rpi.edu/cas',
-    serverBaseURL: 'https://www.venue-meetings.com'
-  }, function(profile, done) {
-    var login = profile.user.toLowerCase();
-    User.findOne({user_id: login}, function (err, user) {
-      if (err) {
-        return done(err);
-      }
-      if (!user) {
+passport.use(new (require('passport-cas').Strategy)({
+  version: 'CAS3.0',
+  ssoBaseURL: 'https://cas-auth.rpi.edu/cas',
+  serverBaseURL: (process.env.NODE_ENV === "production"?'https://www.venue-meetings.com':'http://localhost:4000')
+}, function(profile, done) {
+  var login = profile.user.toLowerCase();
+  User.findOne({user_id: login}, function (err, user) {
+    if (err) {
+      return done(err);
+    } else if (!user) {
+      let creating_user = new User({
+        first_name: "New",
+        last_name: "User",
+        user_id: login,
+        email: login + "@rpi.edu"
+      })
+      creating_user.save()
+      .then(() => {
+        console.log("<SUCCESS> Creating first-time RPI account")
+        return done(null,creating_user)
+      })
+      .catch(() => {
+        console.log("<ERROR> Adding poll:",poll)
         return done(null, false, {message: 'Unknown user'});
-      }
+      });
+    } else {
       user.attributes = profile.attributes;
       return done(null, user);
-    });
-  }));
-} else {
-  passport.use(new (require('passport-cas').Strategy)({
-    version: 'CAS3.0',
-    ssoBaseURL: 'https://cas-auth.rpi.edu/cas',
-    serverBaseURL: 'http://localhost:4000'
-  }, function(profile, done) {
-    var login = profile.user.toLowerCase();
-    User.findOne({user_id: login}, function (err, user) {
-      if (err) {
-        return done(err);
-      }
-      if (!user) {
-        return done(null, false, {message: 'Unknown user'});
-      }
-      user.attributes = profile.attributes;
-      return done(null, user);
-    });
-  }));
-}
+    }
+  });
+}));
 //Passport setup END
 
 authRoutes.route('/signup').post(function (req, res) {
@@ -211,5 +206,28 @@ authRoutes.get("/logoutCAS", function(req, res) {
   res.header("Set-Cookie","connect_sid="+";expires=Thu, 01 Jan 1970 00:00:00 GMT")
   res.send()
 });
+
+authRoutes.get('/get_webex_src/:auth_code/:web_rec_id',function(req,res) {
+  let auth_code = req.params.auth_code
+  let web_rec_id = req.params.web_rec_id
+  axios.post('https://webexapis.com/v1/access_token?grant_type=authorization_code&client_id='+process.env.WEBEX_CLIENT_ID+'&client_secret='+process.env.WEBEX_CLIENT_SECRET+'&code='+auth_code+'&redirect_uri='+(process.env.NODE_ENV === 'production'?"https://www.venue-meetings.com":"http://localhost:8080")
+  ,{},{
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  }).then(resp => {
+    axios.get('https://rensselaer.webex.com/webappng/api/v1/recordings/'+web_rec_id+'/stream',{
+      headers: {
+        "Authorization": "Bearer " + resp.data.access_token
+      }
+    }).then(resp2 => {
+      res.json(resp2.data.downloadRecordingInfo.downloadInfo.mp4URL)
+    }).catch(err => {
+      res.json({})
+    })
+  }).catch(err => {
+    res.json({})
+  })
+})
 
 module.exports = authRoutes;

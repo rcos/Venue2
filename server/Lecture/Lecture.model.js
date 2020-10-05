@@ -31,6 +31,7 @@ let Lecture = new Schema({
 	},
 	video_ref: { type: String, default: "" },
 	video_length: Number,
+	video_type: { type: String, default: "" },
 	num_playback_polls: Number,
 	email_sent: {type: Boolean, default: false}
 });

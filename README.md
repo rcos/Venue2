@@ -2,7 +2,9 @@
 
 # Venue
 
-## Gauging Engagement | venue-meetings.com
+### Gauging Engagement | venue-meetings.com
+
+### <em>Every second LMS fails, we get one step closer</em>
 
 ### Prerequisites
 

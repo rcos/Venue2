@@ -71,10 +71,17 @@ courseRoutes.route('/delete/:id').delete(function (req, res) {
       console.log("<ERROR> Deleting course with ID:",req.params.id)
       res.json(err);
     } else {
-      console.log("<SUCCESS> Deleting course with ID:",req.params.id)
-      res.json('Successfully removed');
-    }
-  });
+      User.update({},{$pull: {instructor_courses: req.params.id}},function(err) {
+        if(err) {
+          console.log("<ERROR> Removing course from users with ID:",req.params.id)
+          res.json(err);
+        } else {
+          console.log("<SUCCESS> Deleting course with ID:",req.params.id)
+          res.json('Successfully removed');
+        }
+      });
+    } 
+  })
 });
 
 //Todo: change the id being passed to just be the instructor id
@@ -112,5 +119,21 @@ courseRoutes.route('/get_instructor_courses').get(function (req, res) {
     }
   })
 });
+
+courseRoutes.post('/add_instructors/:id', (req, res) => {
+  let instructor_emails = req.body.instructors
+  let course_id = req.params.id
+  Course.findById(course_id,function(err,course) {
+    User.find({email: {$in: instructor_emails}},function(err,instructors) {
+      let instructor_ids = instructors.map(a => a._id)
+      Promise.all([
+        User.updateMany( {_id: {$in: instructor_ids}}, {$push: {instructor_courses: [course_id]}}),
+        Course.findByIdAndUpdate( course_id, {$push: {instructors: {$each: instructor_ids}}})
+      ]).then(resolved => {
+        res.json()
+      })
+    })
+  })
+})
 
 module.exports = courseRoutes;
