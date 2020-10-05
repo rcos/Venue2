@@ -80,8 +80,8 @@ function start() {
   });
 
   app.use(cors({
-      origin:['https://www.venue-meetings.com','http://localhost:8080'],
-      methods:['GET','POST','DELETE'],
+      origin:['https://www.venue-meetings.com','http://localhost:8080','storage.googleapis.com/venue-meetings-recordings'],
+      methods:['GET','POST','DELETE','PUT'],
       credentials: true
   }));
   app.use(bodyParser.urlencoded({ extended: true }));
