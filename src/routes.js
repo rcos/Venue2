@@ -24,6 +24,7 @@ import SetPermanentPassword from './views/SetPermanentPassword.vue';
 import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
 import CourseList from './components/CourseList.vue';
+import CourseSettings from './views/CourseSettings.vue' //ADDED THIS
 import CourseInfo from './views/CourseInfo.vue';
 import NewEvent from './views/NewEvent.vue';
 import EventInfo from './views/EventInfo.vue';
@@ -61,6 +62,15 @@ const router = new VueRouter({
       meta: {
         title: "Settings",
         requiresAuth: true
+      }
+    },
+    {
+      name: 'course_settings',    //ADDED THIS
+      path: '/course_settings',
+      component: CourseSettings,
+      meta: {
+        title: "Course Settings",
+        requiresAdmin: true
       }
     },
     {
