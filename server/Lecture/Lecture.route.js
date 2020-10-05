@@ -2,10 +2,10 @@ const express = require('express');
 const lectureRoutes = express.Router();
 const formidable = require('formidable');
 const {Storage} = require("@google-cloud/storage")
+const multer = require('multer')
 var fs = require('fs');
 var path = require('path');
 var nodemailer = require('nodemailer');
-var multer = require("multer")
 var transporter = nodemailer.createTransport({
 	service: 'gmail',
 	auth: {
@@ -13,15 +13,6 @@ var transporter = nodemailer.createTransport({
 		pass: process.env.EMAIL_PASS
 	}
 });
-// var multer_storage = multer.diskStorage({
-//     destination: function(req, file, cb) {
-//         cb(null, './uploads');
-//      },
-//     filename: function (req, file, cb) {
-//         cb(null , file.originalname);
-//     }
-// });
-var upload = multer({ storage: multer.memoryStorage() })
 
 const legal_preferences = ["with_sections", "with_sections_and_course", "none"]
 
@@ -42,24 +33,25 @@ const storage = new Storage({
 	keyFilename: GCSJSON_filename,
 	projectId: GCS_project_id
 })
+const bucket = storage.bucket(BUCKET_NAME)
 
-const getSigned = (filename) => new Promise((resolve, reject) => {
-	let oneday = new Date()
-	oneday.setHours(oneday.getHours() + 24)
-	storage.bucket(BUCKET_NAME).file(filename).getSignedUrl({
-		action: 'write',
-		expires: oneday,
-		version: "v4",
-		contentType: "video/mp4",
-		host: "https://storage.googleapis.com"
-	}, function (err, url) {
-		if (err) {
-			reject(err)
-		} else {
-			console.log(url)
-			resolve(url)
-		}
-	});
+var upload = multer({ storage: multer.memoryStorage() })
+
+const uploadVideo = (file) => new Promise((resolve, reject) => {
+  const { originalname, buffer } = file
+
+  const blob = bucket.file(originalname.replace(/ /g, "_"))
+  const blobStream = blob.createWriteStream({
+    resumable: false
+  })
+  blobStream.on('finish', () => {
+    const publicUrl = 'https://storage.googleapis.com/' + bucket.name + '/' + blob.name
+    resolve(publicUrl)
+  })
+  .on('error', () => {
+    reject(`Unable to upload video, something went wrong`)
+  })
+  .end(buffer)
 })
 
 // Lecture Routes
@@ -77,7 +69,7 @@ lectureRoutes.route('/add').post(function (req, res) {
     });
 });
 
-lectureRoutes.post('/add_playback_video/:lecture_id/:filename',function (req, res) {
+lectureRoutes.post('/add_playback/:lecture_id', upload.single('video'),function (req, res) {
 	let lecture_id = req.params.lecture_id
 	let filename = req.params.filename
 	Lecture.findById(lecture_id,function(err,lecture) {
@@ -86,12 +78,16 @@ lectureRoutes.post('/add_playback_video/:lecture_id/:filename',function (req, re
 			res.json(error)
 		} else {
 			try {
-				getSigned(filename).then(signed_url => {
-					res.json(signed_url)
+				req.file.originalname = lecture_id+"-"+req.file.originalname
+				const lecture_video = req.file
+				uploadVideo(lecture_video).then(public_video_url => {
+					console.log("public_video_url", public_video_url)
+					res
+					.status(200)
+					.json(public_video_url)
 				})
 			} catch (error) {
-				console.log("<ERROR> Unable to get signed URL for filename:",filename)
-				res.json(error)
+				next(error)
 			}
 		}
 	})

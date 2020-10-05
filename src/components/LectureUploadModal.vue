@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="row filerow" v-if="video_type == ''">
-        <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn" role="button" tabindex="0" aria-label="Select Video and Show Poll Creation Options" disabled/>
+        <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn" role="button" tabindex="0" aria-label="Select Video and Show Poll Creation Options"/>
       </div>
       <div class="row" id="lecture_container" v-if="file_selected">
         <div class="col" v-if="!update_lecture">
@@ -141,6 +141,7 @@ import Picker from 'pickerjs';
 import '../../node_modules/pickerjs/src/index.css';
 require('videojs-youtube')
 const validator = require('youtube-url')
+import axios from 'axios';
 // DatePicker themes options:
 // "material_blue","material_green","material_red","material_orange",
 // "dark","airbnb","confetti"
@@ -168,7 +169,7 @@ export default {
       play_sub_start_picker: null,
       play_sub_end_picker: null,
       modal_open: false,
-      waiting: false,
+      waiting: false
     };
   },
   created() {
@@ -374,7 +375,7 @@ export default {
         }
         vid_selector.addEventListener("change", function(e) {
           e.preventDefault()
-          // handleVidSelection()
+          handleVidSelection()
         });
         youtube_selector.addEventListener("input", function(e) {
           e.preventDefault()
