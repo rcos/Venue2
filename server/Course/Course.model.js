@@ -11,6 +11,10 @@ let Course = new Schema({
 	instructors: [{
 		type: String,
 		ref: 'User'
+	}],
+	sections: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Section'
 	}]
 });
 

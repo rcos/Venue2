@@ -66,23 +66,40 @@ courseRoutes.route('/update/:id').post(function (req, res) {
 });
 
 courseRoutes.route('/delete/:id').delete(function (req, res) {
-  Course.findByIdAndRemove({ _id: req.params.id }, function (err) {
+  Course.findById({ _id: req.params.id }, function (err, course) {
     if (err) {
-      console.log("<ERROR> Deleting course with ID:", req.params.id);
+      console.log("<ERROR> Finding course with ID:", req.params.id);
       res.json(err);
     } else {
-      User.update({}, { $pull: { instructor_courses: req.params.id } }, function (err) {
-        if (err) {
-          console.log("<ERROR> Removing course from users with ID:", req.params.id);
-          res.json(err);
-        } else {
-          console.log("<SUCCESS> Deleting course with ID:", req.params.id);
-          res.json('Successfully removed');
-        }
+      course.sections.forEach(section_id => {
+        Section.findByIdAndRemove(section_id, function (err) {
+          if (err) {
+            console.log("<ERROR> Deleting section with ID:", section_id);
+            res.json(err);
+          } else {
+            console.log("<SUCCESS> Deleting section with ID:", section_id);          }
+        });
       });
     }
+    Course.findByIdAndRemove({ _id: req.params.id }, function (err) {
+      if (err) {
+        console.log("<ERROR> Deleting course with ID:", req.params.id);
+        res.json(err);
+      } else {
+        User.updateMany({}, { $pull: { instructor_courses: req.params.id } }, function (err) {
+          if (err) {
+            console.log("<ERROR> Removing course from users with ID:", req.params.id);
+            res.json(err);
+          } else {
+            console.log("<SUCCESS> Deleting course with ID:", req.params.id);
+            res.json('Successfully removed');
+          }
+        });
+      }
+    });
   });
 });
+
 
 //Todo: change the id being passed to just be the instructor id
 //and search for the instructor or remove this function entirely and use
