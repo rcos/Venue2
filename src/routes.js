@@ -271,6 +271,15 @@ const router = new VueRouter({
       }
     },
     {
+      name: 'join_course',
+      path: '/course_info/:id',
+      component: CourseInfo,
+      meta: {
+        title: "Join Course",
+        requiresAuth: true
+      }
+    },
+    {
       name: 'new_event',
       path: '/new_event/:course_id',
       component: NewEvent,

@@ -45,6 +45,9 @@
         <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: (is_instructor?course._id:$route.params.id) }}" tabindex="-1">
           <div class="inline-block big-button mobile" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
         </router-link>
+        <router-link v-if="is_instructor || is_ta" :to="{name: 'join_course', params: { course_id: (is_instructor?course._id:$route.params.id) }}" tabindex="-1">
+          <div class="inline-block big-button mobile" tabindex="0">Link to Join {{ course.prefix }} {{ course.suffix }}</div>
+        </router-link>
         <div class="courseinfo-attendance-listing">
           <div v-if="is_instructor" class="section-select-container mobile float-right">
             <label id="section_select_label">Section(s):</label>
