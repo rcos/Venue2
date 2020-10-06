@@ -272,7 +272,7 @@ const router = new VueRouter({
     },
     {
       name: 'join_course',
-      path: '/course_info/:id',
+      path: '/course_info/:id/join',
       component: CourseInfo,
       meta: {
         title: "Join Course",
