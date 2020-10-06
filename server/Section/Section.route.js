@@ -86,13 +86,26 @@ sectionRoutes.route('/update/:id').post(function (req, res) {
 });
 
 sectionRoutes.route('/delete/:id').delete(function (req, res) {
-  Section.findByIdAndRemove({ _id: req.params.id }, function (err) {
+  Section.findByIdAndRemove(section_id, function (err) {//copied logic from course delete route. not sure if most efficient.
     if (err) {
-      console.log("<ERROR> Deleting section with ID:", req.params.id);
+      console.log("<ERROR> Deleting section with ID:", section_id);
       res.json(err);
     } else {
-      console.log("<SUCCESS> Deleting section with ID:", req.params.id);
-      res.json('Successfully removed');
+      User.updateMany({}, { $pull: { ta_sections: section_id } }, function (err) {
+        if (err) {
+          console.log("<ERROR> Removing section from ta users with ID:", section_id);
+          res.json(err);
+        } else {
+          User.updateMany({}, { $pull: { student_sections: section_id } }, function (err) {
+            if (err) {
+              console.log("<ERROR> Removing section from student users with ID:", section_id);
+              res.json(err);
+            } else {
+              console.log("<SUCCESS> Deleting section with ID:", section_id);
+            }
+          });
+        }
+      });
     }
   });
 });

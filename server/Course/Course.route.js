@@ -65,7 +65,7 @@ courseRoutes.route('/update/:id').post(function (req, res) {
   );
 });
 
-courseRoutes.route('/delete/:id').delete(function (req, res) {
+courseRoutes.route('/delete/:id').delete(function (req, res) {//copied how old code did it which is to search through the all users and remove from there. Not sure if most efficient
   Course.findById({ _id: req.params.id }, function (err, course) {
     if (err) {
       console.log("<ERROR> Finding course with ID:", req.params.id);
@@ -77,7 +77,22 @@ courseRoutes.route('/delete/:id').delete(function (req, res) {
             console.log("<ERROR> Deleting section with ID:", section_id);
             res.json(err);
           } else {
-            console.log("<SUCCESS> Deleting section with ID:", section_id);          }
+            User.updateMany({}, { $pull: { ta_sections: section_id } }, function (err) {
+              if (err) {
+                console.log("<ERROR> Removing section from ta users with ID:", section_id);
+                res.json(err);
+              } else {
+                User.updateMany({}, { $pull: { student_sections: section_id } }, function (err) {
+                  if (err) {
+                    console.log("<ERROR> Removing section from student users with ID:", section_id);
+                    res.json(err);
+                  } else {
+                    console.log("<SUCCESS> Deleting section with ID:", section_id);
+                  }
+                });
+              }
+            });
+          }
         });
       });
     }
