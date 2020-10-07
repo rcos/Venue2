@@ -1,4 +1,4 @@
-###__Added ability to change color of widgets__###
+###Added ability to change color of widgets###
 
 ```
 +Added 3 new variables to control the color of the dark mode switch in settings
@@ -6,9 +6,9 @@
 +Fixed jiggle on playback button hover whilst in lecture_info page
 ```
 
-##__-Removed '10/2' branch from master__##
+##-Removed '10/2' branch from master##
 
-#__Did quadruple bypass surgery on the rainbow__#
+#Did quadruple bypass surgery on the rainbow#
 
 ```
 +Added new variables to control the color of lecture pills in CourseInfo.vue ("Student Sections") on the website
