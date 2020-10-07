@@ -1,47 +1,18 @@
-<p align="center"><img src="https://github.com/rcos/Venue2/blob/master/src/assets/venue-logo.svg" alt="alt text" width="150" height="150"></p>
+##Added ability to change color of widgets ##
++Added 3 new variables to control the color of the dark mode switch in settings
++Added --widgets-color
++Fixed jiggle on playback button hover whilst in lecture_info page
 
-# Venue
+-Removed '10/2' branch from master
 
-### Gauging Engagement | venue-meetings.com
+*#Did quadruple bypass surgery on the rainbow#*
 
-### <em>Every second LMS fails, we get one step closer</em>
++Added new variables to control the color of lecture pills in CourseInfo.vue ("Student Sections") on the website
++These variables will get blended exactly like the old ones
++Uses the same colors as (--red-pill) (--yellow-pill) and (--green-pill)
++5 new variables that correspond to each rainbow component
 
-### Prerequisites
 
-- Git
-- Vue.js
-- Node.js and NPM
-- MongoDB
-
-### Developing
-
-Run `npm install`
-
-#### Front-End
-
-Run `npm run serve` 
-
-#### Back-End
-
-1. In a separate shell navigate to the 'server' directory `cd server`
-2. Start the mongodb daemon `mongod` (might need to run with root priveleges depending on installation)
-3. In a separate shell navigate to the 'server' directory again
-4. Start the node server `nodemon server`
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Forward TODO's:
+*Integrate dark mode for instructors
+*Consolidate/ expand as need be
