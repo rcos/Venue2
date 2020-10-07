@@ -919,8 +919,8 @@ export default {
 <style scoped>
 #stats-container {
 	position: absolute;
-	top: 4rem;
-	bottom: 2rem;
+	top: 0rem;
+	bottom: 0rem;
 	left: 0;
 	right: 0;
 }
