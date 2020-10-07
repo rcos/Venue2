@@ -1,4 +1,4 @@
-### Added ability to change color of widgets
+# Added ability to change color of widgets
 
 ```
 +Added 3 new variables to control the color of the dark mode switch in settings
@@ -8,7 +8,9 @@
 
 ## -Removed '10/2' branch from master
 
-# Did quadruple bypass surgery on the rainbow
+## Last changes from '10/2' are listed below: 
+
+### Did quadruple bypass surgery on the rainbow
 
 ```
 +Added new variables to control the color of lecture pills in CourseInfo.vue ("Student Sections") on the website
