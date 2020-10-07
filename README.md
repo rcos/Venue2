@@ -1,18 +1,24 @@
-##Added ability to change color of widgets ##
+###__Added ability to change color of widgets__###
+
+```
 +Added 3 new variables to control the color of the dark mode switch in settings
 +Added --widgets-color
 +Fixed jiggle on playback button hover whilst in lecture_info page
+```
 
--Removed '10/2' branch from master
+##__-Removed '10/2' branch from master__##
 
-*#Did quadruple bypass surgery on the rainbow#*
+#__Did quadruple bypass surgery on the rainbow__#
 
+```
 +Added new variables to control the color of lecture pills in CourseInfo.vue ("Student Sections") on the website
 +These variables will get blended exactly like the old ones
 +Uses the same colors as (--red-pill) (--yellow-pill) and (--green-pill)
 +5 new variables that correspond to each rainbow component
+```
 
-
-Forward TODO's:
+__Forward TODO's:__
+```
 *Integrate dark mode for instructors
 *Consolidate/ expand as need be
+```
