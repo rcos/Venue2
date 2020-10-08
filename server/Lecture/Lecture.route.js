@@ -93,6 +93,24 @@ lectureRoutes.post('/add_playback/:lecture_id', upload.single('video'),function 
 	})
 })
 
+lectureRoutes.post('/update/:id', function(req,res) {
+	let lecture_id = req.params.id
+	let updated_lecture = req.body.updated
+	if(lecture_id && updated_lecture) {
+		Lecture.findByIdAndUpdate(lecture_id,updated_lecture,function(err,lecture){
+			if(err || !lecture) {
+				console.log("<ERROR> Updating lecture with ID:", lecture_id)
+				res.json(err)
+			} else {
+				console.log("<SUCCESS> Updating lecture with ID:", lecture_id)
+				res.json(lecture)
+			}
+		})
+	} else {
+		res.json({})
+	}
+})
+
 // Lecture.findByIdAndUpdate(lecture_id,
 // 	{
 // 		video_ref: public_video_url,
