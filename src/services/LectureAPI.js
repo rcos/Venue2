@@ -21,6 +21,11 @@ export default {
       lecture: lecture
     })
   },
+  update(lecture) {
+    return API().post('lectures/update/'+lecture._id, {
+      updated: lecture
+    })
+  },
   addPlaybackVideo(lecture_id, video) {
     let formdata = new FormData()
     formdata.append('video', video)
