@@ -8,9 +8,9 @@
           <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: (is_instructor?course._id:$route.params.id) }}" tabindex="-1">
             <div class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
           </router-link>
-          <router-link v-if="is_instructor || is_ta" :to="{name: 'join_course', params: { course_id: (is_instructor?course._id:$route.params.id) }}" tabindex="-1">
-            <div class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Link to Join {{ course.prefix }} {{ course.suffix }}</div>
-          </router-link>
+
+          
+          <button v-if="is_instructor || is_ta" class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Link to Join {{ course.prefix }} {{ course.suffix }}</button>
         </div>
         <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" :section_name="section.name" :is_instructor="is_instructor" :is_ta="is_ta"/>
 
@@ -18,7 +18,7 @@
         <!-- Attendance History -->
         <div>
           <div v-if="is_instructor" class="section-select-container float-right">
-            <label id="section_select_label">Sectsion(s):</label>
+            <label id="section_select_label">Section(s):</label>
             <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange">
               <option :value="'all'" selected>All</option>
               <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">{{section.name}}</option>
