@@ -6,7 +6,7 @@
         <div id="main-info-mobile">
           <h3 class="lecture-title">
             {{lecture.title}}
-            <router-link :to="{name: 'edit_lecture',params:{id: lecture._id}}" role="link" aria-label="Edit Lecture">
+            <router-link v-if="is_instructor" :to="{name: 'edit_lecture',params:{id: lecture._id}}" role="link" aria-label="Edit Lecture">
               <img src="@/assets/settings.svg" width="30" height="30" class="d-inline-block align-top" alt="Settings" aria-label="Settings">
             </router-link>
           </h3>
@@ -36,7 +36,7 @@
           <div id="main-info">
             <h3 class="lecture-title">
               {{lecture.title}}
-              <router-link :to="{name: 'edit_lecture',params:{id: lecture._id}}" role="link" aria-label="Edit Lecture">
+              <router-link v-if="is_instructor" :to="{name: 'edit_lecture',params:{id: lecture._id}}" role="link" aria-label="Edit Lecture">
                 <img src="@/assets/settings.svg" width="30" height="30" class="d-inline-block align-top" alt="Settings" aria-label="Settings">
               </router-link>
             </h3>
