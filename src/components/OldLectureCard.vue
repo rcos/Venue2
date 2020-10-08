@@ -37,7 +37,6 @@
 
 <script>
 import SectionAPI from "@/services/SectionAPI.js";
-import SubmissionAPI from "@/services/SubmissionAPI.js";
 
 export default {
   name: "LectureCard",

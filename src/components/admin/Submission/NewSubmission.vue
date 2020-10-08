@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import SubmissionAPI from "@/services/SubmissionAPI.js";
 import Events from "../Event/AdminEvents";
 import Students from "../User/Students";
 
