@@ -25,8 +25,6 @@
 </template>
 
 <script>
-  import SubmissionAPI from '@/services/SubmissionAPI.js';
-  import EventAPI from '@/services/EventAPI.js';
   import UserAPI from '@/services/UserAPI.js';
 
   export default {
