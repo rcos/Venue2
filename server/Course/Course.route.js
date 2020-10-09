@@ -136,4 +136,32 @@ courseRoutes.post('/add_instructors/:id', (req, res) => {
   })
 })
 
+courseRoutes.route('/toggleOpenEnrollment/:id').post(function (req, res) {
+  let id = req.params.id;
+  Course.findByIdAndUpdate(id,
+    {is_public: true}, {$set: {is_public: false}},
+      function (err, course) {
+        if (err || course == null) {
+          console.log("<ERROR> Changing course (ID:",id, ") status to private")
+          res.status(404).send("course not found");
+        } else {
+          console.log("<SUCCESS> Changing course (ID:",id, ") status to private")
+          res.json(course);
+        }
+      }
+    );
+    Course.findByIdAndUpdate(id,
+      {is_public: false}, {$set: {is_public: true}},
+        function (err, course) {
+          if (err || course == null) {
+            console.log("<ERROR> Changing course (ID:",id, ") status to open enrollment")
+            res.status(404).send("course not found");
+          } else {
+            console.log("<SUCCESS> Changing course (ID:",id, ") status to open enrollment")
+            res.json(course);
+          }
+        }
+      );
+});
+
 module.exports = courseRoutes;
