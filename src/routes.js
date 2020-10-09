@@ -429,6 +429,7 @@ router.beforeEach((to, from, next) => {
         || user_data.current_user.student_sections.includes(to.params.id)) {
           next('/course_info/' + to.params.id)
         }
+        
         else if (to.name == "join_course" && !(user_data.current_user.student_sections.includes(to.params.id)) ) {
           next('/dashboard')
         }
