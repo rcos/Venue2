@@ -468,6 +468,14 @@ export default {
 </script>
 
 <style>
+:root {
+  --calendar-background: lime;
+  --calendar-border: rgba(100,100,100,1);
+  --checkins-border: gray;
+  --calendar-selected: rgba(20,75,250,1); 
+  --add-poll-tint: rgba(255, 255, 255, 0.60);
+  --add-poll-background: white;
+}
 h1 {
   text-align: center;
 }
@@ -517,6 +525,7 @@ h1 {
   display: inline-block;
   margin-left: 1rem;
   margin-right: 1rem;
+
 }
 
 .create-lecture-btn {
@@ -532,7 +541,7 @@ h1 {
 }
 
 .checkin-container {
-  border: 1px solid gray;
+  border: 1px solid var(--checkins-border);
   margin: 0.25rem 0rem;
   border-radius: 0.5rem;
   padding-top: 1rem;
@@ -559,7 +568,7 @@ h1 {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.60);
+  background: var(--add-poll-tint);
 }
 
 .modal-contents {
@@ -568,8 +577,8 @@ h1 {
   left: 25%;
   right: 25%;
   bottom: 25%;
-  background: white;
-  border: 1px solid gray;
+  background: var(--add-poll-background);
+  border: 1px solid var(--checkins-border);
   border-radius: 0.5rem;
   padding: 1rem;
   text-align: left;
@@ -587,27 +596,29 @@ h1 {
   width: 100%;
   padding: 0.5rem;
   background: none;
-  color: rgba(100,100,100,1);
 }
 
 .picker-dialog {
   width: 100%;
   border-radius: 0.5rem;
-  border: 1px solid rgba(100,100,100,1);
+  background: var(--calendar-background); 
+  border: 1px solid var(--calendar-border);
 }
 
 .picker-item {
-  color: rgba(100,100,100,1);
+  color: var(--calendar-border);
+  background: var(--calendar-background);
 }
 .picker-cell__control,
 .picker-cell__control::before,
 .picker-cell__header {
-  color: rgba(100,100,100,1);
+  /* background-color: var(--calendar-background); */
+  color: var(--calendar-border);
   text-align: center;
 }
 
 .picker-picked {
-  color: rgba(20,75,250,1);
+  color: var(--calendar-selected);
   font-weight: 900;
 }
 
@@ -620,6 +631,6 @@ h1 {
 }
 
 .picker-cell__header {
-  border-bottom: 1px solid rgba(100,100,100,1);
+  border-bottom: 1px solid;
 }
 </style>
