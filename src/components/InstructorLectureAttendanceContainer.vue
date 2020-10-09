@@ -7,21 +7,25 @@
 			</video>
 		  <button class="btn btn-secondary" id="close_qr_btn" @click="hideQR" aria-label="Hide QR">Hide</button>
 		</div>
-		<div id="container-header">
+		<div id="container-header" style="position:relative">
 			<!-- Pre-set/Random Checkins -->
 			<div v-for="(checkin,i) in lecture.checkins" :key="i" class="inline-block">
 				<button v-if="checkin.activation != 'Manual Activation' && checkinIsOpen(checkin)" type="button" class="header-btn btn btn-secondary" @click="showQR(i)">
-					<img src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
+					<img class="svg-color" src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
 				</button>
 			</div>
-			<button class="header-btn btn btn-primary" v-if="!lectureIsOver()" @click="handleEndEarly">End Now</button>
-			<LectureUploadModal v-if="lectureIsOver() && !lecture.allow_playback_submissions && polls_loaded" :lecture="lecture" :need_timestamp="polls" :update_lecture="true" />
-			<router-link class="header-btn btn btn-secondary" v-else-if="lecture.allow_playback_submissions" title="Watch Recording" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}" aria-label="Watch Recording">
-				<img src="@/assets/icons8-video-64.png" width="60" alt="Video" aria-label="Video">
-			</router-link>
-			<button class="header-btn btn btn-primary" @click="download_submitty_csv" id="submitty_export" title="CSV Export">
-				<img src="@/assets/icons8-database-export-64.png" width="60" alt="QR Code" aria-label="QR Code">
-			</button>
+			<div id="table-header" style="position: relative; height: 60px;">
+      			<div style="position: absolute; height: auto;">
+					<button class="header-btn btn btn-primary" v-if="!lectureIsOver()" @click="handleEndEarly">End Now</button>
+					<LectureUploadModal v-if="lectureIsOver() && !lecture.allow_playback_submissions && polls_loaded" :lecture="lecture" :need_timestamp="polls" :update_lecture="true" />
+					<router-link class="header-btn btn btn-secondary" v-else-if="lecture.allow_playback_submissions" title="Watch Recording" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}" aria-label="Watch Recording">
+					<img class="svg-color" src="@/assets/icons8-video-64.png" width="60" alt="Video" aria-label="Video">
+					</router-link>
+					<button class="header-btn btn btn-primary" @click="download_submitty_csv" id="submitty_export" title="CSV Export">
+						<img class="svg-color" src="@/assets/icons8-database-export-64.png" width="60" alt="QR Code" aria-label="QR Code">
+					</button>
+				</div>
+			</div>
 			<!-- Manual Checkins -->
 			<div class="float-right" v-for="(checkin,i) in lecture.checkins" :key="'Live'+i">
 				<button v-if="checkin.activation == 'Manual Activation'" class="btn btn-secondary manualbtn" @click="showQR(i)">Open Check-in {{i+1}}</button>
@@ -238,15 +242,21 @@ export default {
 		background-color: white;
 	}
 
+	.svg-color {
+		filter: var(--widgets-color);
+	}
+
 	.inline-block {
+		position: absolute;
 		display:inline-block;
 	}
 
 	#container-header {
 	  position: relative;
-	  top: 1.5rem;
+	  top: 0;
 	  bottom: 0;
 	  text-align: left;
+	  padding-top: 2.5rem;
 	}
 
 	.row {
@@ -255,10 +265,12 @@ export default {
 	}
 
 	#container-header h2 {
+		position: relative;
 		display: inline-block;
 	}
 
 	.header-btn {
+		position: absolute;
 		display: inline-block;
 		margin-right: 0.75rem;
 		min-height: calc(60px + .75rem);
@@ -312,15 +324,15 @@ export default {
 	}
 
 	.namecard-edging.live-color {
-		background: #04852f;
+		background: var(--green-pill);
 	}
 
 	.namecard-edging.playback-color {
-		background: #8f3eca;
+		background: var(--lecture-playback);
 	}
 
 	.namecard-edging.absent-color {
-		background: #d13e34;
+		background: var(--red-pill);
 	}
 
 	.namecard {

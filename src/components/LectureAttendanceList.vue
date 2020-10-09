@@ -159,20 +159,20 @@
 	}
 
 	.namecard-edging.live-color {
-	  background: #04852f;
+	  background: var(--green-pill);
 	}
 
 	.namecard-edging.playback-color {
-	  background: #8f3eca;
+	  background: var(--lecture-playback);
 	}
 
 	.namecard-edging.absent-color {
-	  background: #d13e34;
+	  background: var(--red-pill);
 	}
 
 	.namecard {
 	  position: relative;
-	  background: white;
+	  background: var(--main-background-color);
 	  text-align: center;
 	  border-radius: .25rem;
 	  /* top: 0.5rem; */

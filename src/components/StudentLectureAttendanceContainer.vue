@@ -5,13 +5,15 @@
       <button @click="qr_scanning_window_open = false" id="exit_preview_btn" tabindex="0" aria-label="Close QR Scanner">X</button>
       <qrcode-stream id="video_preview" @decode="checkForQRMatch"></qrcode-stream>
     </div>
-    <div id="table-header">
+    <div id="table-header" style="position: relative; height: 60px;">
+      <div style="position: absolute; height: auto;">
       <button v-if="lectureIsOngoing()" @click="qr_scanning_window_open = true" class="header-btn btn btn-primary" title="Scan QR">
-        <img src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
+        <img class="svg-color" src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
       </button>
       <router-link class="header-btn btn btn-secondary" v-else-if="canWatchRecording()" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
-        <img src="@/assets/icons8-video-64.png" width="60" alt="Video" aria-label="Video" title="Watch Recording">
+        <img class="svg-color" src="@/assets/icons8-video-64.png" width="60" alt="Video" aria-label="Video" title="Watch Recording">
       </router-link>
+      </div>
     </div>
     <LectureAttendanceTable :is_instructor="false" :lecture="lecture" :submissions="[submission]" />
     <AnswerPoll v-if="answering_poll" :poll="current_poll" @answer="handleAnswerPoll" @cancel="handleCancelPoll"/>
@@ -127,8 +129,9 @@
 <style scoped>
   #table-header {
     position: relative;
-    top: 1.5rem;
+    top: 0; 
     bottom: 0;
+    padding-top: 1.35rem;
     text-align: left;
     /* padding-left: 5rem;
     padding-right: 5rem; */
@@ -136,6 +139,10 @@
 
   #table-header h2 {
     display: inline-block;
+  }
+
+  .svg-color {
+    filter: var(--widgets-color);
   }
 
   .header-btn {
@@ -180,15 +187,15 @@
   }
 
   .namecard-edging.live-color {
-    background: #04852f;
+    background: var(--green-pill);
   }
 
   .namecard-edging.playback-color {
-    background: #8f3eca;
+    background: var(--lecture-playback);
   }
 
   .namecard-edging.absent-color {
-    background: #d13e34;
+    background: var(--red-pill);
   }
 
   .namecard {

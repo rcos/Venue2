@@ -9,27 +9,50 @@
 </template>
 
 <script>
+import PaletteAPI from '../services/PaletteAPI';
+
 export default {
-  name: "Footer"
+	
+created() {
+	this.setPalette()
+},
+  name: "Footer",
+  methods: {
+	  setPalette() {
+	  	this.current_user = this.$store.state.user.current_user
+	  	let root = document.documentElement;
+		PaletteAPI.setPalette(root, this.current_user.dark_mode)
+	  }
+    }
 };
 </script>
 
 <style>
+
+:root {
+	--main-background-color: #ffffff;
+	--main-text-color: #1d2324;
+
+	--widgets-color: #1d2324;
+} 
+
 .footer {
-	position: relative;
-	bottom: 0;	
+	position: relative;	
 	width: 100%;
-	height: 2rem;
 	/* border-top: #e0e0e0 solid thin; */
 	/* border-bottom: #e0e0e0 solid thin; */
-	background: white;
+	/* background: var(--background-color, white);
+	color: var(--text-color, #1d2324); */
 	font-size: 1rem;
-	padding-top: 0.2rem;
+	/* padding-top: 0.2rem; */
+	margin: auto;
 	text-align: center;
+	padding: 5px;
 }
 
 .github-mark {
 	width: 1rem;
 	cursor: pointer;
+	filter: var(--widgets-color);
 }
 </style>
