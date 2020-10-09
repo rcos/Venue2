@@ -8,8 +8,10 @@
           <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: (is_instructor?course._id:$route.params.id) }}" tabindex="-1">
             <div class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
           </router-link>
-        </div>         
-        <button v-if="is_instructor || is_ta" class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Link to Join {{ course.prefix }} {{ course.suffix }}</button>
+        </div>
+
+        <router-link v-if="is_instructor || is_ta" :to="{name: 'join_course', params: { course_id: (is_instructor?course._id:$route.params.id) }}" tabindex="-1"></router-link>
+        <button v-if="is_instructor || is_ta" class="inline-block big-button" :style="{float: 'right'}" tabindex="0" @click="copyURL">Link to Join {{ course.prefix }} {{ course.suffix }}</button>
         <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" :section_name="section.name" :is_instructor="is_instructor" :is_ta="is_ta"/>
 
 
@@ -154,6 +156,9 @@ export default {
     }
   },
   methods: {
+    copyURL() {
+    
+    },
     async getAllSections () {
       SectionAPI.getSectionsForCourse(this.course_id)
       .catch(err => { console.log(`Problem getting sections for course ${this.course_id}`); console.log(err);})
