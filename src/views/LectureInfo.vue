@@ -71,12 +71,13 @@
           this.polls = res.data
           this.polls_loaded = true
         })
-      }
+      },
     }
   }
 </script>
 
 <style scoped>
+
   #lecture-info-container-root {
     padding: 0 2rem;
   }
