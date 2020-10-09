@@ -108,7 +108,7 @@
 										</div>
 										{{polls[i].question}}
 										<button type="button" v-if="!checkin.start_time || (checkin.start_time && Date.parse(checkin.start_time) > Date.now())" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
-											<img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
+											<img class="svg-color" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
 										</button>
 									</td>
 									<td v-else>X</td>
@@ -317,6 +317,24 @@ export default {
 </script>
 
 <style scoped>
+
+	:root {
+
+		--lecture-attendance-button-text: #636363;
+
+		--lecture-attendance-grey-pill: rgb(110, 110, 110);
+		--lecture-attendance-grey-shadow: rgba(109, 109, 109, 0.644);
+		--lecture-attendance-text: white;
+
+		--lecture-attendance-live-glow: rgba(65, 162, 91, 0.33);
+		--lecture-attendance-async-glow:  rgba(214, 71, 233, 0.36);
+		--lecture-attendace-absent-glow: rgba(255, 99, 88, 0.36);
+	}
+
+	.svg-color {
+		filter: var(--widgets-color);
+	}
+
 	#lecture-attendance-table {
 		margin-top: 3rem;
 		text-align: start;
@@ -350,14 +368,14 @@ export default {
 	  background: none;
 	  outline: none;
 	  border: none;
-	  color: #636363;
+	  color: var(--lecture-attendance-button-text);
 	  /* margin-right: 3rem; */
 	  width: 100%;
 	  padding: 0;
-	  background: rgb(110, 110, 110);
+	  background: var(--lecture-attendance-grey-pill); 
 	  margin: 0.5rem 0rem;
 	  border-radius: 0.25rem;
-	  box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+	  box-shadow: 0px 3px 3px 0px var(--lecture-attendance-grey-shadow);
 	}
 
 	.progress-bar {
@@ -369,17 +387,17 @@ export default {
 	}
 
 	#live-progress-bar {
-		background: #04852f;
+		background: var(--green-pill);
 		transition: width 0s linear;
 	}
 
 	#playback-progress-bar {
-		background: rgba(143,62,202,1);
+		background: var(--lecture-playback);
 		transition: width 0s linear;
 	}
 
 	#absent-progress-bar {
-		background: #d13e34;
+		background: var(--red-pill);
 		transition: width 0s linear;
 	}
 
@@ -387,25 +405,25 @@ export default {
 	  margin: 0;
 	  font-size: 1.5rem;
 	  margin: 0.5rem 1rem;
-	  color: white;
+	  color: var(--lecture-attendance-text);
 	}
 
 	#live_btn:hover,
 	#live_btn:focus,
 	#live_btn.selected_tab {
-		box-shadow: 0px 0px 10px 7px rgba(65, 162, 91, 0.33);
+		box-shadow: 0px 0px 10px 7px var(--lecture-attendance-live-glow);
 	}
 
 	#playback_btn:hover,
 	#playback_btn:focus,
 	#playback_btn.selected_tab {
-		box-shadow: 0px 0px 10px 7px rgba(214, 71, 233, 0.36);
+		box-shadow: 0px 0px 10px 7px var(--lecture-attendance-async-glow);
 	}
 
 	#absent_btn:hover,
 	#absent_btn:focus
 	#absent_btn.selected_tab {
-		box-shadow: 0px 0px 10px 7px rgba(255, 99, 88, 0.36);
+		box-shadow: 0px 0px 10px 7px var(--lecture-attendance-absent-glow);
 	}
 	
 

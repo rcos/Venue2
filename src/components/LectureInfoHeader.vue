@@ -134,23 +134,25 @@
   }
 
   #main-info {
+    background-color: var(--course-card-background);
     display: inline-block;
     border-radius: .25rem;
     padding: 2rem;
     margin: 0;
     text-align: left;
-    box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+    box-shadow: 0px 3px 3px 0px var(--course-card-shadow);
     width: 100%;
   }
 
   #main-info-mobile {
+    background-color: var(--course-card-background);
     display: inline-block;
     border-radius: .25rem;
     padding: 2rem 3rem;
     width: 100%;
     margin: 0;
     text-align: center;
-    box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+    box-shadow: 0px 3px 3px 0px var(--course-card-shadow);
   }
 
   .row-half h5,
@@ -160,8 +162,8 @@
 
   .dept-and-number {
     display: inline-block;
-    background: black;
-    color: white;
+    background: var(--course-number-background);
+    color: var(--course-number-text);
     font-size: 0.8rem;
     padding: 0.1rem 0.5rem;
     margin-left: 0.5rem;
