@@ -274,7 +274,7 @@ const router = new VueRouter({
     {
       name: 'join_course',
       path: '/course_info/:id/join',
-      component: CourseInfo,
+      // component: CourseInfo,
       meta: {
         title: "Join Course",
         requiresAuth: true
@@ -419,17 +419,25 @@ router.beforeEach((to, from, next) => {
         || (to.name == 'edit_course' && user_data.current_user.instructor_courses.includes(to.params.id))
         || (to.name == 'edit_section' && user_data.current_user.ta_sections.includes(to.params.id))
         || (to.name == 'edit_section' && from.name == 'edit_course')
-        || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))) {
+        || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))){
           next()
         } else {
           next('/dashboard')
         }
-
-      } else {
+      }else if (to.name == 'join_course') { //student implement new join route
+        if (user_data.current_user.instructor_courses.includes(to.params.id) 
+        || user_data.current_user.student_sections.includes(to.params.id)) {
+          next('/course_info/' + to.params.id)
+        }
+        else if (to.name == "join_course" && !(user_data.current_user.student_sections.includes(to.params.id)) ) {
+          next('/dashboard')
+        }
+      }
+      else {
         next()
       }
-
-    } else {
+    } 
+    else { // not logged in
       next('/')
     }
 

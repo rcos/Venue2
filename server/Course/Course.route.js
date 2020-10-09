@@ -30,6 +30,8 @@ courseRoutes.route('/').get(function (req, res) {
   });
 });
 
+courseRoutes.route('')
+
 courseRoutes.route('/edit/:id').get(function (req, res) {
   let id = req.params.id;
   Course.findById(id, function (err, course) {
