@@ -11,7 +11,11 @@ let Course = new Schema({
 	instructors: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
-	}]
+	}],
+	is_public: {
+		type: Boolean,
+		default: false
+	}
 });
 
 module.exports = mongoose.model('Course', Course);
