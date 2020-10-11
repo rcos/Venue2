@@ -1,117 +1,73 @@
 <template>
   <div>
-    <h1>Course Settings</h1>
-    <div class="settings-container">
-          <div class="name-area">
-            <div class="name-div" v-if="editing_name">
-              <input v-model="edited_first_name" :placeholder="current_user.first_name"/>
-              <input v-model="edited_last_name" :placeholder="current_user.last_name"/>
-              <button v-if="waiting" class="btn btn-primary" disabled><SquareLoader/></button>
-              <div v-else>
-                <button class="btn btn-secondary" @click="editing_name = false">Cancel</button>
-                <button class="btn btn-primary" @click="saveName()">Save</button>
-              </div>
-            </div>
-            <div class="name-div" v-else>{{ current_user.first_name }} {{ current_user.last_name }} </div>
-            <div class="logout-div"><div class="logout-button" v-on:click="logoutUser" tabindex="0" role="button">Logout</div></div>
-          </div>
-
-          <div v-if="mode == 'setting_options'">
-
-            <div class="setting-option-section">
-                <div class="left">
-                    <div>Current Email: <span class="value-area">{{ current_user.email }}</span></div>
-                    <div class="small-div">The email is used to login to Venue.</div>
-                </div>
-                <div class="right">
-                    <!-- <div class="change-button">Change</div> -->
-                </div>
-            </div>
-
-            <div class="setting-option-section">
-                <div class="left">
-                    <router-link :to="{name: 'teach_new_course'}"><button class="btn btn-primary">Teach New Course</button></router-link>
-                </div>
-                <div class="right">
-                    <!-- <div class="change-button">Change</div> -->
-                </div>
-            </div>
-          </div>
-
-          <!-- Setting Actions -->
-          <div v-else>
-            <ChangePassword v-if="mode == 'change_password'" :current_user="current_user" :complete="actionComplete" />
-          </div>
+  <h1>Course Settings</h1>
+  <div class="settings-container">
+    <div class="name-area">
+      <div>{{course.name}}</div>
     </div>
+    <div class="setting-option-section">
+    <h4>Instructors</h4>
+    
 
+    </div>
+  </div>
   </div>
 </template>
 
-<script>
-  import UserAPI from '@/services/UserAPI.js';
-  import { authComputed } from '../vuex/helpers.js'
-  import {showAt, hideAt} from 'vue-breakpoints'
-  import ChangePassword from '@/components/ChangePassword.vue'
-  import AuthAPI from '../services/AuthAPI';
-  import CourseAPI from '@/services/CourseAPI.js' //ADDED THIS
-  import SquareLoader from '@/components/Loaders/SquareLoader.vue';
 
-  import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
+<script>
+  import CourseAPI from '@/services/CourseAPI.js';
+  import SectionAPI from '@/services/SectionAPI.js';
+  import UserAPI from '@/services/UserAPI.js';
+  import Instructors from '@/components/admin/User/Instructors'
 
   export default {
-    name: 'Dashboard',
-    computed: {
-      ...authComputed
-    },
+    name: 'CourseSettings',
     components: {
-      hideAt,
-      showAt,
-      ChangePassword,
-      SquareLoader
+      Instructors
     },
-    data(){
+    data() {
       return {
-        current_user: {},
-        mode: String,
-        editing_name: false,
-        edited_first_name: '',
-        edited_last_name: '',
-        waiting: false
+        course: {},
+        instructors: [],
+        sections: [],
+        instructors_to_add: ""
       }
     },
     created() {
-      this.mode = "setting_options"
-      this.getCurrentUser()
+      this.getCurrentCourse()
     },
     methods: {
-      getCurrentUser() {
-        this.current_user = this.$store.state.user.current_user
+      async getCurrentCourse() {
+        let course_id = this.$route.params.id
+        const response = await CourseAPI.getCourse(course_id)
+        this.course = response.data
+        this.getCurrentCourseInstructor()
+        this.getCurrentCourseSections()
       },
-      actionComplete () {
-        this.mode = "setting_options";
+      async getCurrentCourseInstructor(){
+        const response = await UserAPI.getInstructorsForCourse(this.course._id)
+        if(response.data)
+          this.instructors = response.data
       },
-      logoutUser() {
-        AuthAPI.logoutCAS().then(res => {
-          this.$store.dispatch('logout')
-        })
+      async getCurrentCourseSections(){
+        const response = await SectionAPI.getSectionsForCourse(this.course._id)
+        if(response.data)
+          this.sections = response.data
       },
-      handleUpdateSubmissions() {
-        LectureSubmissionAPI.updateAllToNewModel()
-        .then(res => {
-          location.reload()
-        })
+      async updateCourse() {
+        let course_id = this.$route.params.id
+        this.course.instructors = this.instructors.map(a=>a._id)
+        const response = await CourseAPI.updateCourse(course_id, this.course)
+        location.reload()
       },
-      saveName() {
-        this.waiting = true
-        this.current_user.first_name = this.edited_first_name
-        this.current_user.last_name = this.edited_last_name
-        UserAPI.updateUser(this.current_user._id,this.current_user).then(res => {
-          this.$store.dispatch('updateCurrentUser',{token: this.$store.state.user.token, current_user: this.current_user})
-          this.edited_first_name = ''
-          this.edited_last_name = ''
-          this.waiting = false
-          this.editing_name = false
-        })
+      addInstructorsToCourse() {
+        let insts = this.instructors_to_add.split(',')
+        if(insts.length) {
+          CourseAPI.addInstructors(this.course._id,insts).then(res => {
+            location.reload()
+          })
+        }
       }
     }
   }
