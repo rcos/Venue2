@@ -11,6 +11,12 @@
         </div>
         <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" :section_name="section.name" :is_instructor="is_instructor" :is_ta="is_ta"/>
 
+        <br>
+        <br>
+        <div>
+          <input data-v-b0bd8b16="" type="text" class="form-control" placeholder="Default Meeting URL">
+        </div>
+        <br>
 
         <!-- Attendance History -->
         <div>
@@ -194,7 +200,7 @@ export default {
       LectureAPI.getLecturesForCourse(this.course_id)
       .then(response => {
         this.all_lectures = response.data
-        this.all_lectures.sort((a, b) => 
+        this.all_lectures.sort((a, b) =>
           (a.start_time > b.start_time || a.playback_submission_start_time > b.playback_submission_start_time ||
           a.start_time > b.playback_submission_start_time || a.playback_submission_start_time > b.start_time) ? 1 : -1
         )
