@@ -96,10 +96,8 @@
 </template>
 
 <script>
-import EventAPI from "@/services/EventAPI.js";
 import SectionAPI from "@/services/SectionAPI.js";
 import CourseAPI from "@/services/CourseAPI.js";
-import SubmissionAPI from "@/services/SubmissionAPI.js";
 import UserAPI from "@/services/UserAPI.js";
 import GoogleMap from "@/components/GoogleMap.vue";
 var QRCode = require("qrcode");

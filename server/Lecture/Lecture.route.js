@@ -2,10 +2,10 @@ const express = require('express');
 const lectureRoutes = express.Router();
 const formidable = require('formidable');
 const {Storage} = require("@google-cloud/storage")
+const multer = require('multer')
 var fs = require('fs');
 var path = require('path');
 var nodemailer = require('nodemailer');
-var multer = require("multer")
 var transporter = nodemailer.createTransport({
 	service: 'gmail',
 	auth: {
@@ -13,15 +13,6 @@ var transporter = nodemailer.createTransport({
 		pass: process.env.EMAIL_PASS
 	}
 });
-// var multer_storage = multer.diskStorage({
-//     destination: function(req, file, cb) {
-//         cb(null, './uploads');
-//      },
-//     filename: function (req, file, cb) {
-//         cb(null , file.originalname);
-//     }
-// });
-var upload = multer({ storage: multer.memoryStorage() })
 
 const legal_preferences = ["with_sections", "with_sections_and_course", "none"]
 
@@ -32,31 +23,35 @@ let Section = require('../Section/Section.model')
 
 // GCS Specific
 
+const BUCKET_NAME = 'venue-meetings-recordings'
+const MINUTES = 60*1000; // milliseconds in minute
+const URL_VALID_DURATION = 30 * MINUTES;
+
 const GCSJSON_filename = path.join(__dirname, 'gcsconfig.json')
 const GCS_project_id = "bright-calculus-286816"
-
 const storage = new Storage({
 	keyFilename: GCSJSON_filename,
 	projectId: GCS_project_id
 })
+const bucket = storage.bucket(BUCKET_NAME)
 
-const bucket = storage.bucket('venue-meetings-recordings')
+var upload = multer({ storage: multer.memoryStorage() })
 
 const uploadVideo = (file) => new Promise((resolve, reject) => {
+  const { originalname, buffer } = file
 
-	const { originalname, buffer } = file
-	const blob = bucket.file(originalname.replace(/ /g, "_"))
-	const blobStream = blob.createWriteStream({
-		resumable: false
-	})
-	blobStream.on('finish', () => {
-		const publicUrl = 'https://storage.googleapis.com/' + bucket.name + '/' + blob.name
-		resolve(publicUrl)
-	})
-	.on('error', () => {
-		reject(`Unable to upload video, something went wrong`)
-	})
-	.end(buffer)
+  const blob = bucket.file(originalname.replace(/ /g, "_"))
+  const blobStream = blob.createWriteStream({
+    resumable: false
+  })
+  blobStream.on('finish', () => {
+    const publicUrl = 'https://storage.googleapis.com/' + bucket.name + '/' + blob.name
+    resolve(publicUrl)
+  })
+  .on('error', () => {
+    reject(`Unable to upload video, something went wrong`)
+  })
+  .end(buffer)
 })
 
 // Lecture Routes
@@ -74,32 +69,61 @@ lectureRoutes.route('/add').post(function (req, res) {
     });
 });
 
-lectureRoutes.post('/add_playback_video/:lecture_id', upload.single('video'),function (req, res) {
+lectureRoutes.post('/add_playback/:lecture_id', upload.single('video'),function (req, res) {
 	let lecture_id = req.params.lecture_id
-	try {
-		req.file.originalname = lecture_id + '-' + req.file.originalname
-		const lecture_video = req.file
-		
-		uploadVideo(lecture_video).then(public_video_url => {
-			// update the lecture with video
-			Lecture.findByIdAndUpdate(lecture_id,
-				{
-					video_ref: public_video_url,
-				},
-				function (err, updated_lecture) {
-					if (err || updated_lecture == null) {
-						console.log("<ERROR> Updating lecture by ID:",lecture_id,"with:",updated_lecture)
-						res.status(404).send("lecture not found");
-					} else {
-						console.log("<SUCCESS> Adding playback video at URL:",public_video_url)
-						res.status(200).json(public_video_url)
-				}
-			})
+	let filename = req.params.filename
+	Lecture.findById(lecture_id,function(err,lecture) {
+		if(err || !lecture) {
+			console.log("<ERROR> Unable to find lecture by ID:", lecture_id)
+			res.json(error)
+		} else {
+			try {
+				req.file.originalname = lecture_id+"-"+req.file.originalname
+				const lecture_video = req.file
+				uploadVideo(lecture_video).then(public_video_url => {
+					console.log("public_video_url", public_video_url)
+					res
+					.status(200)
+					.json(public_video_url)
+				})
+			} catch (error) {
+				next(error)
+			}
+		}
+	})
+})
+
+lectureRoutes.post('/update/:id', function(req,res) {
+	let lecture_id = req.params.id
+	let updated_lecture = req.body.updated
+	if(lecture_id && updated_lecture) {
+		Lecture.findByIdAndUpdate(lecture_id,updated_lecture,function(err,lecture){
+			if(err || !lecture) {
+				console.log("<ERROR> Updating lecture with ID:", lecture_id)
+				res.json(err)
+			} else {
+				console.log("<SUCCESS> Updating lecture with ID:", lecture_id)
+				res.json(lecture)
+			}
 		})
-	} catch (error) {
-		res.json(error)
+	} else {
+		res.json({})
 	}
 })
+
+// Lecture.findByIdAndUpdate(lecture_id,
+// 	{
+// 		video_ref: public_video_url,
+// 	},
+// 	function (err, updated_lecture) {
+// 		if (err || updated_lecture == null) {
+// 			console.log("<ERROR> Updating lecture by ID:",lecture_id,"with:",updated_lecture)
+// 			res.status(404).send("lecture not found");
+// 		} else {
+// 				console.log("<SUCCESS> Adding playback video at URL:",public_video_url)
+// 			res.status(200).json(updated_lecture)
+// 	}
+// })
 
 lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) {
 	let lecture_id = req.params.lecture_id
