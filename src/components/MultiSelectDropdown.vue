@@ -30,6 +30,7 @@ export default {
 	props: {
 		options: Array,
 		sortBy: String,
+		default: Array,
 		displayAs: Array,
 		max: { type: Number, default: 999 },
 		n: { type: Number, default: 0 },
@@ -44,14 +45,19 @@ export default {
 	},
 	created() {
 		this.options.forEach(option => {
-			this.unselected.push(option)
+			let found = this.default.find(a => a._id == option._id)
+			if(found) {
+				this.selected.push(option)
+			} else {
+				this.unselected.push(option)
+			}
 		})
 		if(this.sortBy) {
 			this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
 		}
 	},
 	methods: {
-		addSelection(option) {
+		async addSelection(option) {
 			if(this.selected.length < this.max) {
 				this.selected.push(option)
 				this.selected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
@@ -60,6 +66,7 @@ export default {
 				this.selected[0] = option;
 			}
 			let index = this.unselected.indexOf(option);
+			// console.log(index)
 			if (index > -1) {
 				this.unselected.splice(index, 1);
 			}
@@ -99,7 +106,7 @@ export default {
 		setSelected(selections) {
 			this.unselected = []
 			this.options.forEach(option => {
-				if(!selections.includes(option)) {
+				if(!selections.some(a => a._id == option._id)) {
 					this.unselected.push(option)
 				}
 			})

@@ -6,6 +6,9 @@
       <qrcode-stream id="video_preview" @decode="checkForQRMatch"></qrcode-stream>
     </div>
     <div id="table-header">
+      <button v-if="lecture && lecture.meeting_link" @click="joinMeeting()" class="header-btn btn btn-primary" title="Join Meeting">
+        Join Meeting
+      </button>
       <button v-if="lectureIsOngoing()" @click="qr_scanning_window_open = true" class="header-btn btn btn-primary" title="Scan QR">
         <img src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
       </button>
@@ -66,17 +69,28 @@
       getPollForCheckin(code) {
         return this.polls.find(a => a.code === code)
       },
+      getValidUrl(url="") {
+        let newUrl = window.decodeURIComponent(url);
+        newUrl = newUrl.trim().replace(/\s/g, "");
+        if(/^(:\/\/)/.test(newUrl)){
+            return `http${newUrl}`;
+        }
+        if(!/^(f|ht)tps?:\/\//i.test(newUrl)){
+            return `http://${newUrl}`;
+        }
+        return newUrl;
+      },
+      joinMeeting() {
+        window.open(this.getValidUrl(this.lecture.meeting_link),'_blank');
+      },
       checkForQRMatch(scanned_str) {
         this.qr_scanning_window_open = false
         this.lecture.checkins.forEach(checkin => {
           if(checkin.code === scanned_str) {
-            console.log('here1', scanned_str, checkin)
             if(!this.studentSubmittedToCheckin(checkin)) {
-              console.log('here2')
               this.current_code = scanned_str
               this.current_poll = this.getPollForCheckin(scanned_str)
               if(this.current_poll) {
-                console.log('here3')
                 this.answering_poll = true
               } else {
                 this.createLiveSubmission()
