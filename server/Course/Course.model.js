@@ -8,6 +8,12 @@ let Course = new Schema({
 	name: String,
 	prefix: String,
 	suffix: Number,
+	default_link: String,	//Added this
+	course_times: [{		//Added this
+		day: String,
+		start_time: String,
+		end_time: String
+	}],
 	instructors: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
