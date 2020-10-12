@@ -1,3 +1,14 @@
+
+/* 
+
+Helpful tools/websites to choose color combinations that are 508 compliant:
+
+- Guidelines: http://web-accessibility.carnegiemuseums.org/design/color/ (provides a few examples as well)
+- Check colors: https://contrast-finder.tanaguru.com/ (enter foreground and background colors and it will tell you if they are compliant, or give a list of similar compliant colors)
+- Chrome extension: WAVE Evaluation Tool (points out contrast errors as well as other errors in the website)
+
+*/
+
 export default {
     /* 
         --background-color: #ffffff;
