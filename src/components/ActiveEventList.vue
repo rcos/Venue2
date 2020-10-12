@@ -11,7 +11,6 @@
 
 <script>
   import ActiveEventCard from '@/components/ActiveEventCard.vue'
-  import EventAPI from '@/services/EventAPI.js'
 
   export default {
     name: 'ActiveEventList',
@@ -29,7 +28,7 @@
     },
     methods: {
       async getActiveEvents() {
-        let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
+        
         let events = response.data
         this.updateSubmissionWindowStatuses(events)
         this.active_events = this.sortEventsbySubmissionWindowStatus(events)

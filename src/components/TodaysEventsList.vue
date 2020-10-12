@@ -37,7 +37,6 @@
 </template>
 
 <script>
-  import EventAPI from '@/services/EventAPI.js'
   import TodaysEventCard from '@/components/TodaysEventCard.vue'
   import {showAt, hideAt} from 'vue-breakpoints'
 
