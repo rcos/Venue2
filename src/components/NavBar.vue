@@ -2,7 +2,7 @@
   <div>
     <nav id="venue-nav">
       <!-- Logo -->
-      
+
       <!-- Nav Links -->
       <div id="venue-nav-links">
         <router-link id="nav-logo" :to="{name: 'dashboard'}" role="link" aria-label="Dashboard">
@@ -195,7 +195,7 @@
 
         const response4 = await LectureAPI.getLecturesForUser(this.current_user._id,'with_sections_and_course')
         this.user_lectures = response4.data
-        
+
         this.loadBreadcrumb()
       },
       loadBreadcrumb() {
@@ -215,7 +215,7 @@
             this.current_course = this.instructor_courses.find(course => course._id == this.$route.params.id)
           }
         }
-        
+
       },
       is_dashboard() {
         return this.$route.name === 'dashboard'
@@ -303,7 +303,7 @@
     margin-top: 0.2rem;
     position: absolute;
     /* background-color: #f7f7f7; */
-    
+
     z-index: 9999;
     border-radius: 0.5rem;
 
@@ -315,7 +315,7 @@
     color: #2C3E50;
     background-color: #f7f7f7;
     font-weight: bold;
-    text-decoration: none;  
+    text-decoration: none;
     display: block;
     max-height: 0px;
     width: 15rem;
