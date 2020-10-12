@@ -37,6 +37,10 @@
           </div>
         </div>
       </div>
+      <div>
+        <input type="url" name="meetingURL" placeholder="Enter Meeting URL" size=75>
+        <br>
+      </div>
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
