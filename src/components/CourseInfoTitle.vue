@@ -1,11 +1,9 @@
 <template>
   <div :class="'course-info-title ' + (this.mobileMode ? 'mobile' : '')">
     <div class="course-edit-settings float-right">
-      <a href="#/course_settings" class="">
-        <button class="btn">
-          <img src="/img/settings.7e19eab3.svg" width="20" height="20" alt="Settings Icon" aria-label="Settings Icon" class="d-inline-block align-top">
+        <button class="btn" @click="handleCourseSettings()">
+          <img src="/img/settings.7e19eab3.svg" width="30" height="30" alt="Settings Icon" aria-label="Settings Icon" class="d-inline-block align-top">
         </button>
-      </a>
     </div>
     <!-- Course Name -->
     <div class="course-name" v-if="course.hasOwnProperty('name')"><div v-if="mobileMode && (is_instructor || is_ta)" class="icon-spacer"/> {{course.name}} <button class="btn" title="Edit Course" id="edit-course" @click="handleEditCourse()" v-if="is_instructor || is_ta"><img id="edit-course" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit"></button></div>
@@ -66,6 +64,12 @@
             location.reload()
           })
         }
+      },
+      handleCourseSettings() {
+        this.$router.push({
+          name: "course_settings",
+          params: {id: this.course._id}
+        })
       }
     }
   }

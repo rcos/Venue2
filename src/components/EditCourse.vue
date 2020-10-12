@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>name</label>
+            <label>Name</label>
             <input type="text" class="form-control" v-model="course.name">
           </div>
         </div>
@@ -13,15 +13,22 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>dept</label>
+            <label>Dept</label>
             <input class="form-control" v-model="course.prefix" rows="5">
           </div>
+        </div>
+        <div class="col-md-6">
+          <label>Lecture Times</label>
+          <!-- <input class="form-control" v-model="course.prefix" rows="5" readonly> -->
+          <input v-for="time in course.course_times" :key="time.day" class="form-control" :value="time.day" rows="5" readonly>
+          <br>
+          <button>Add Time</button>
         </div>
       </div><br />
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>number</label>
+            <label>Number</label>
             <input class="form-control" v-model="course.suffix" rows="5">
           </div>
         </div>
@@ -29,7 +36,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>instructors</label>
+            <label>Instructors</label>
             <input v-for="(instructor,i) in instructors" :key="i" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name" rows="5" readonly>
             <label>Add instructors by email</label>
             <input type="text" v-model="instructors_to_add"/>

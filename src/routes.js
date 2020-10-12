@@ -24,7 +24,7 @@ import SetPermanentPassword from './views/SetPermanentPassword.vue';
 import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
 import CourseList from './components/CourseList.vue';
-import CourseSettings from './views/CourseSettings.vue' //ADDED THIS
+import CourseSettings from './views/CourseSettings.vue'
 import CourseInfo from './views/CourseInfo.vue';
 import NewEvent from './views/NewEvent.vue';
 import EventInfo from './views/EventInfo.vue';
@@ -37,6 +37,7 @@ import RedirectCASLogin from './views/RedirectCASLogin.vue';
 import Statistics from './views/Statistics.vue';
 import TeachNewCourse from '@/components/TeachNewCourse.vue';
 import NewSection from '@/components/NewSection.vue';
+import EditLecture from '@/components/EditLecture.vue';
 
 import AuthAPI from '@/services/AuthAPI.js';
 import UserAPI from '@/services/UserAPI.js';
@@ -69,7 +70,7 @@ const router = new VueRouter({
       path: '/course_settings',
       component: CourseSettings,
       meta: {
-        title: "Course Settings",
+        title: "CourseSettings",
         requiresAdmin: true
       }
     },
@@ -368,6 +369,15 @@ const router = new VueRouter({
       component: TeachNewCourse,
       meta: {
         title: "Teach New Course",
+        requiresAuth: true
+      }
+    },
+    {
+      name: 'edit_lecture',
+      path: '/edit_lecture/:id',
+      component: EditLecture,
+      meta: {
+        title: "Edit Lecture",
         requiresAuth: true
       }
     }

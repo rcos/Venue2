@@ -919,8 +919,8 @@ export default {
 <style scoped>
 #stats-container {
 	position: absolute;
-	top: 4rem;
-	bottom: 2rem;
+	top: 0rem;
+	bottom: 0rem;
 	left: 0;
 	right: 0;
 }
@@ -985,6 +985,7 @@ canvas:last-of-type {
 	right: 1rem;
 	background: #c4c4c4;
 	border-radius: 1rem;
+	box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
 }
 #side-panel {
 	right: 0;

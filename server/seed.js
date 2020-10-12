@@ -399,6 +399,12 @@ c1 = {
 	name: "Data Structures",
 	prefix: "CSCI",
 	suffix: 1200,
+	course_times:[{
+		day: "Monday",
+		start_time: "12:00pm",
+		end_time: "1:50pm"
+	}
+	],
 	instructors: [
 		u1._id
 	]
