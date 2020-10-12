@@ -3,7 +3,10 @@
     	Venue | 
     	<a href="https://github.com/rcos/Venue2" target="_blank" aria-label="Github Repository">
     		<img class="github-mark" src="../assets/github_mark.png" aria-label="Github Icon" alt="Github Icon"/>
-    	</a>
+    	</a> |
+			<a href="https://blacklivesmatter.com/" target="_blank" aria-label="Black Lives Matter">
+    		<img class="icon" src="../assets/black_lives_matter.svg" aria-label="BLM Icon" alt="BLM Icon"/>
+		</a>
     	| An RCOS project | Icons by <a target="_blank" href="https://icons8.com">Icons8</a>
     </footer>
 </template>
@@ -48,6 +51,12 @@ created() {
 	margin: auto;
 	text-align: center;
 	padding: 5px;
+}
+
+.icon {
+	filter: var(--widgets-color); 
+	width: 1.5rem;
+	cursor: pointer;
 }
 
 .github-mark {
