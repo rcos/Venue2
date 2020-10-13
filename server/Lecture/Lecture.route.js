@@ -125,6 +125,34 @@ lectureRoutes.post('/update/:id', function(req,res) {
 // 	}
 // })
 
+const AWS = require("aws-sdk");
+const s3 = new AWS.S3({
+	accessKeyId: process.env.AWSAccessKeyId,
+	secretAccessKey: process.env.AWSSecretKey
+});
+
+
+lectureRoutes.route('/get_signed_url/:filename').get(function(req, res) {
+	const fileurls = [];
+	const params = {
+		Bucket: "venue-recordings",
+		Key: req.params.filename,
+		Expires: 60*60, // expiry time
+		ACL: "bucket-owner-full-control",
+		ContentType: "video/mp4" // this can be changed as per the file type
+	};
+	s3.getSignedUrl("putObject", params, function(err, url) {
+		if (err) {
+			console.log("<ERROR> Getting signed URL");
+			res.json();
+		} else {
+			fileurls[0] = url;
+			console.log("<SUCCESS> Getting signed URL: ", fileurls[0]);
+			res.json(fileurls[0]);
+		}
+	});
+});
+
 lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) {
 	let lecture_id = req.params.lecture_id
 	let lecture = req.body.lecture
