@@ -208,8 +208,8 @@ export default {
         }
         this.lecture.video_type = this.video_type
         if(!this.lecture.video_type) {
-          let response = await LectureAPI.addPlaybackVideo(this.lecture._id, lecture_video)
-          this.lecture.video_ref = response.data
+          let response = await this.uploadMediaToS3(this.lecture)
+          this.lecture.video_ref = response.split("?")[0]
         }
         await LectureAPI.updateToPlayback(this.lecture)
         let n_saved = 0
