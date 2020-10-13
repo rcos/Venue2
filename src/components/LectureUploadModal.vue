@@ -338,11 +338,9 @@ export default {
     uploadMediaToS3(lect) {
       return new Promise((resolve,reject) => {
         this.getSignedURL(lect._id + '-' + document.getElementById("video_selector").files[0].name).then(data => {
-          const formData = new FormData()
-          formData.append('file', document.getElementById("video_selector").files[0])
           fetch(data.data, {
             method: 'PUT',
-            body: formData
+            body: document.getElementById("video_selector").files[0]
           }).then(res => {
             resolve(data.data)
           })
