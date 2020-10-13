@@ -394,7 +394,9 @@ router.beforeEach((to, from, next) => {
 
       const user_data = JSON.parse(loggedIn)
 
-      if(to.matched.some(record => record.meta.requiresAdmin)) {
+      if(user_data.current_user.is_admin) {
+        next()
+      } else if(to.matched.some(record => record.meta.requiresAdmin)) {
 
         if (user_data.current_user.is_admin) {
           next()
