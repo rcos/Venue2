@@ -132,6 +132,24 @@ export default {
             root.style.setProperty('--add-poll-tint', 'rgba(255, 255, 255, 0.60)');
             root.style.setProperty('--add-poll-background', 'white');
 
+            // Statistics 
+            // Divider bars, gridlines and labels use (--main-text-color)
+            root.style.setProperty('--stats-panel-background', '#c4c4c4');
+            root.style.setProperty('--stats-live-border', '#04dd74');
+            root.style.setProperty('--stats-live-fill', '#bfffc6');
+            root.style.setProperty('--stats-playback-border', '#3282bf');
+            root.style.setProperty('--stats-playback-fill', '#92bed2');
+            root.style.setProperty('--stats-absent-border', '#e95454');
+            root.style.setProperty('--stats-absent-fill', '#ff8787');
+
+            // ToggleSwitch.vue
+            root.style.setProperty('--toggle-switch-on-background', '#bfffc6');
+            root.style.setProperty('--toggle-switch-on-ball', '#04dd74');
+            root.style.setProperty('--toggle-switch-off-background', '#ff8787');
+            root.style.setProperty('--toggle-switch-off-ball', '#e95454');
+            root.style.setProperty('--toggle-switch-disabled-background', '#7E7E7E');
+            root.style.setProperty('--toggle-switch-disabled-ball', '#4F4F4F');
+
           } else {
 
             // Dark mode palette - main (general)
@@ -247,6 +265,23 @@ export default {
             root.style.setProperty('--calendar-selected', 'rgba(20,75,250,1)');
             root.style.setProperty('--add-poll-tint', 'rgba(255, 255, 255, 0.60)');
             root.style.setProperty('--add-poll-background', 'white');
+            
+            // Statistics but dark
+            root.style.setProperty('--stats-panel-background', '#4c4c4c');
+            root.style.setProperty('--stats-live-border', '#04dd74');
+            root.style.setProperty('--stats-live-fill', '#bfffc6');
+            root.style.setProperty('--stats-playback-border', '#3282bf');
+            root.style.setProperty('--stats-playback-fill', '#92bed2');
+            root.style.setProperty('--stats-absent-border', '#e95454');
+            root.style.setProperty('--stats-absent-fill', '#ff8787');
+
+            // ToggleSwitch.vue
+            root.style.setProperty('--toggle-switch-on-background', '#bfffc6');
+            root.style.setProperty('--toggle-switch-on-ball', '#04dd74');
+            root.style.setProperty('--toggle-switch-off-background', '#ff8787');
+            root.style.setProperty('--toggle-switch-off-ball', '#e95454');
+            root.style.setProperty('--toggle-switch-disabled-background', '#7E7E7E');
+            root.style.setProperty('--toggle-switch-disabled-ball', '#4F4F4F');
           }
     }
 }
