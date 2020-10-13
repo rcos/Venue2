@@ -182,7 +182,7 @@ sectionRoutes.route('/getStudents/:id').get(function (req, res) {
         student_emails.forEach(student_email => {
           User.find({ email: student_email }, function (err, student) {
             if (err || student == null) {
-              console.log("<ERROR> Getting user with Email:", student_email);
+              console.log("<ERROR> Getting user with Email Section getstudents:", student_email);
               res.json(err);
             } else {
               students.push(student);
@@ -213,7 +213,7 @@ sectionRoutes.route('/getTeachingAssistants/:id').get(function (req, res) {
       let num_iterations = 0;
       if (ta_emails.length) {
         ta_emails.forEach(ta_email => {
-          User.findById(ta_email, function (err, ta) {
+          User.find({ email: ta_email }, function (err, ta) {
             if (err || ta == null) {
               console.log("<ERROR> Getting user with Email:", ta_email);
               res.json(err);
