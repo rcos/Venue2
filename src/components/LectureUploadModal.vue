@@ -274,8 +274,8 @@ export default {
       }
       lect.video_type = this.video_type
       if(!lect.video_type) {
-        let response = await LectureAPI.addPlaybackVideo(lect._id, lecture_video)
-        lect.video_ref = response.data
+        let response = await this.uploadMediaToS3(lect)
+        lect.video_ref = response.split("?")[0]
       }
       await LectureAPI.updateToPlayback(lect)
       let n_saved = 0
@@ -323,6 +323,33 @@ export default {
           })
         }
       }
+    },
+    getSignedURL(filename) {
+      return new Promise((resolve, reject) => {
+        LectureAPI.getSignedUrl(filename)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    },
+    uploadMediaToS3(lect) {
+      return new Promise((resolve,reject) => {
+        this.getSignedURL(lect._id + '-' + document.getElementById("video_selector").files[0].name).then(data => {
+          const formData = new FormData()
+          formData.append('file', document.getElementById("video_selector").files[0])
+          fetch(data.data, {
+            method: 'PUT',
+            body: formData
+          }).then(res => {
+            resolve(data.data)
+          })
+        }).catch(err => {
+          reject(err)
+        });
+      })
     },
     setLectureSubmissionVariables() {
       this.lecture.allow_live_submissions = false
