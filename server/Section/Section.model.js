@@ -17,7 +17,11 @@ let Section = new Schema({
 	students: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
-	}]
+	}],
+	is_public: {
+		type: Boolean,
+		default: 'False'
+	}
 });
 
 module.exports = mongoose.model('Section', Section);
