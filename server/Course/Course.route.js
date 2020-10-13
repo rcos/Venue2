@@ -129,7 +129,7 @@ courseRoutes.route('/getInstructor/:id').get(function (req, res) {
       let instructor_email = course.instructor;
       User.find({ email: { instructor_email } }, function (error, instructor) {
         if (error || instructor == null) {
-          console.log("<ERROR> Getting user with Email:", instructor_email);
+          console.log("<ERROR> Getting user with Email Course.route.js:", instructor_email);
           res.json(error);
         } else {
           console.log("<SUCCESS> Getting instructor for course with ID:", id);
