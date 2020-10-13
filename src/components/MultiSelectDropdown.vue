@@ -45,7 +45,11 @@ export default {
 	},
 	created() {
 		this.options.forEach(option => {
-			let found = this.default.find(a => a._id == option._id)
+			
+			let found
+			if(this.default) {
+				found = this.default.find(a => a._id == option._id)
+			}
 			if(found) {
 				this.selected.push(option)
 			} else {
