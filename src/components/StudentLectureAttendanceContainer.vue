@@ -6,14 +6,15 @@
       <qrcode-stream id="video_preview" @decode="checkForQRMatch"></qrcode-stream>
     </div>
     <div id="table-header" style="position: relative; height: 60px;">
-      <div style="position: absolute; height: auto;">
+      <button v-if="lecture && lecture.meeting_link" @click="joinMeeting()" class="header-btn btn btn-primary" title="Join Meeting">
+        Join Meeting
+      </button>
       <button v-if="lectureIsOngoing()" @click="qr_scanning_window_open = true" class="header-btn btn btn-primary" title="Scan QR">
         <img class="svg-color" src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
       </button>
       <router-link class="header-btn btn btn-secondary" v-else-if="canWatchRecording()" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
         <img class="svg-color" src="@/assets/icons8-video-64.png" width="60" alt="Video" aria-label="Video" title="Watch Recording">
       </router-link>
-      </div>
     </div>
     <LectureAttendanceTable :is_instructor="false" :lecture="lecture" :submissions="[submission]" />
     <AnswerPoll v-if="answering_poll" :poll="current_poll" @answer="handleAnswerPoll" @cancel="handleCancelPoll"/>
@@ -68,17 +69,28 @@
       getPollForCheckin(code) {
         return this.polls.find(a => a.code === code)
       },
+      getValidUrl(url="") {
+        let newUrl = window.decodeURIComponent(url);
+        newUrl = newUrl.trim().replace(/\s/g, "");
+        if(/^(:\/\/)/.test(newUrl)){
+            return `http${newUrl}`;
+        }
+        if(!/^(f|ht)tps?:\/\//i.test(newUrl)){
+            return `http://${newUrl}`;
+        }
+        return newUrl;
+      },
+      joinMeeting() {
+        window.open(this.getValidUrl(this.lecture.meeting_link),'_blank');
+      },
       checkForQRMatch(scanned_str) {
         this.qr_scanning_window_open = false
         this.lecture.checkins.forEach(checkin => {
           if(checkin.code === scanned_str) {
-            console.log('here1', scanned_str, checkin)
             if(!this.studentSubmittedToCheckin(checkin)) {
-              console.log('here2')
               this.current_code = scanned_str
               this.current_poll = this.getPollForCheckin(scanned_str)
               if(this.current_poll) {
-                console.log('here3')
                 this.answering_poll = true
               } else {
                 this.createLiveSubmission()
