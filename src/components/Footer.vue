@@ -54,9 +54,6 @@ created() {
 }
 
 .icon {
-<<<<<<< HEAD
-	width: 1.5rem;
-=======
 	filter: var(--widgets-color); 
 	width: 1.5rem;
 	cursor: pointer;
@@ -64,7 +61,6 @@ created() {
 
 .github-mark {
 	width: 1rem;
->>>>>>> 7916e3aa7a3b86929db0d3f3ee70f4ff503e2a44
 	cursor: pointer;
 	filter: var(--widgets-color);
 }
