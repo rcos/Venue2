@@ -9,6 +9,9 @@
 		</div>
 		<div id="container-header" style="position:relative">
 			<!-- Pre-set/Random Checkins -->
+			<button v-if="lecture && lecture.meeting_link" @click="joinMeeting()" class="header-btn btn btn-primary" title="Join Meeting">
+				Join Meeting
+			</button>
 			<div v-for="(checkin,i) in lecture.checkins" :key="i" class="inline-block">
 				<button v-if="checkin.activation != 'Manual Activation' && checkinIsOpen(checkin)" type="button" class="header-btn btn btn-secondary" @click="showQR(i)">
 					<img class="svg-color" src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
@@ -226,6 +229,20 @@ export default {
 			.then(res => {
 				location.reload()
 			})
+		},
+		getValidUrl(url="") {
+			let newUrl = window.decodeURIComponent(url);
+			newUrl = newUrl.trim().replace(/\s/g, "");
+			if(/^(:\/\/)/.test(newUrl)){
+				return `http${newUrl}`;
+			}
+			if(!/^(f|ht)tps?:\/\//i.test(newUrl)){
+				return `http://${newUrl}`;
+			}
+			return newUrl;
+		},
+		joinMeeting() {
+			window.open(this.getValidUrl(this.lecture.meeting_link),'_blank');
 		}
 	}
 }

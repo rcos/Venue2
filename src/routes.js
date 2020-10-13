@@ -36,6 +36,7 @@ import RedirectCASLogin from './views/RedirectCASLogin.vue';
 import Statistics from './views/Statistics.vue';
 import TeachNewCourse from '@/components/TeachNewCourse.vue';
 import NewSection from '@/components/NewSection.vue';
+import EditLecture from '@/components/EditLecture.vue';
 
 import AuthAPI from '@/services/AuthAPI.js';
 import UserAPI from '@/services/UserAPI.js';
@@ -360,6 +361,15 @@ const router = new VueRouter({
         title: "Teach New Course",
         requiresAuth: true
       }
+    },
+    {
+      name: 'edit_lecture',
+      path: '/edit_lecture/:id',
+      component: EditLecture,
+      meta: {
+        title: "Edit Lecture",
+        requiresAuth: true
+      }
     }
   ]
 })
@@ -384,7 +394,9 @@ router.beforeEach((to, from, next) => {
 
       const user_data = JSON.parse(loggedIn)
 
-      if(to.matched.some(record => record.meta.requiresAdmin)) {
+      if(user_data.current_user.is_admin) {
+        next()
+      } else if(to.matched.some(record => record.meta.requiresAdmin)) {
 
         if (user_data.current_user.is_admin) {
           next()

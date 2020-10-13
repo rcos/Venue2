@@ -2,9 +2,12 @@
     <footer class="footer">
     	Venue | 
     	<a href="https://github.com/rcos/Venue2" target="_blank" aria-label="Github Repository">
-    		<img class="github-mark" src="../assets/github_mark.png" aria-label="Github Icon" alt="Github Icon"/>
-    	</a>
-    	| An RCOS project | Icons by <a target="_blank" href="https://icons8.com">Icons8</a>
+    		<img class="icon github-icon" src="../assets/github_mark.png" aria-label="Github Icon" alt="Github Icon"/>
+    	</a> |
+		<a href="https://blacklivesmatter.com/" target="_blank" aria-label="Black Lives Matter">
+    		<img class="icon" src="../assets/black_lives_matter.svg" aria-label="BLM Icon" alt="BLM Icon"/>
+    	</a> |
+    	An RCOS project | Icons by <a target="_blank" href="https://icons8.com">Icons8</a>
     </footer>
 </template>
 
@@ -50,9 +53,13 @@ created() {
 	padding: 5px;
 }
 
-.github-mark {
-	width: 1rem;
+.icon {
+	width: 1.5rem;
 	cursor: pointer;
 	filter: var(--widgets-color);
+}
+
+.github-icon {
+	width: 1.25rem;
 }
 </style>

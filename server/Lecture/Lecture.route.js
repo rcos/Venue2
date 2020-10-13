@@ -93,6 +93,24 @@ lectureRoutes.post('/add_playback/:lecture_id', upload.single('video'),function 
 	})
 })
 
+lectureRoutes.post('/update/:id', function(req,res) {
+	let lecture_id = req.params.id
+	let updated_lecture = req.body.updated
+	if(lecture_id && updated_lecture) {
+		Lecture.findByIdAndUpdate(lecture_id,updated_lecture,function(err,lecture){
+			if(err || !lecture) {
+				console.log("<ERROR> Updating lecture with ID:", lecture_id)
+				res.json(err)
+			} else {
+				console.log("<SUCCESS> Updating lecture with ID:", lecture_id)
+				res.json(lecture)
+			}
+		})
+	} else {
+		res.json({})
+	}
+})
+
 // Lecture.findByIdAndUpdate(lecture_id,
 // 	{
 // 		video_ref: public_video_url,
@@ -106,6 +124,33 @@ lectureRoutes.post('/add_playback/:lecture_id', upload.single('video'),function 
 // 			res.status(200).json(updated_lecture)
 // 	}
 // })
+
+const AWS = require("aws-sdk");
+const s3 = new AWS.S3({
+	accessKeyId: process.env.AWSAccessKeyId,
+	secretAccessKey: process.env.AWSSecretKey,
+	region: 'us-east-2'
+});
+
+lectureRoutes.route('/get_signed_url/:filename').get(function(req, res) {
+	const fileurls = [];
+	const params = {
+		Bucket: "venue-recordings",
+		Key: req.params.filename,
+		Expires: 60*60, // expiry time
+		ACL: "bucket-owner-full-control"
+	};
+	s3.getSignedUrl("putObject", params, function(err, url) {
+		if (err) {
+			console.log("<ERROR> Getting signed URL");
+			res.json();
+		} else {
+			fileurls[0] = url;
+			console.log("<SUCCESS> Getting signed URL: ", fileurls[0]);
+			res.json(fileurls[0]);
+		}
+	});
+});
 
 lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) {
 	let lecture_id = req.params.lecture_id

@@ -29,6 +29,12 @@
           </hide-at>
           <div :class="'active-link-underline ' + (is_instructor_course_info()?'active':'')"></div>
         </div>
+        <div class="venue-nav-link-container" v-if="instructor_courses.length">
+          <router-link class="venue-nav-link" :class="{'active-link':is_statistics()}" :to="{name: 'statistics'}">
+            Statistics
+          </router-link>
+          <div :class="'active-link-underline ' + (is_statistics()?'active':'')"></div>
+        </div>
         <div class="venue-nav-link-container" id="ta-section-dropdown" v-if="ta_sections.length">
           <a data-toggle="collapse" href="#ta-collapse" class="venue-nav-link" :class="{'active-link':is_ta_section_info()}" style="cursor:pointer;">
             TA Sections <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">

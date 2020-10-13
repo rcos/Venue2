@@ -207,8 +207,8 @@ export default {
         }
         this.lecture.video_type = this.video_type
         if(!this.lecture.video_type) {
-          let response = await LectureAPI.addPlaybackVideo(this.lecture._id, lecture_video)
-          this.lecture.video_ref = response.data
+          let response = await this.uploadMediaToS3(this.lecture)
+          this.lecture.video_ref = response.split("?")[0]
         }
         await LectureAPI.updateToPlayback(this.lecture)
         let n_saved = 0
@@ -255,8 +255,8 @@ export default {
       }
       lect.video_type = this.video_type
       if(!lect.video_type) {
-        let response = await LectureAPI.addPlaybackVideo(lect._id, lecture_video)
-        lect.video_ref = response.data
+        let response = await this.uploadMediaToS3(lect)
+        lect.video_ref = response.split("?")[0]
       }
       await LectureAPI.updateToPlayback(lect)
       let n_saved = 0
@@ -285,6 +285,31 @@ export default {
           })
         }
       }
+    },
+    getSignedURL(filename) {
+      return new Promise((resolve, reject) => {
+        LectureAPI.getSignedUrl(filename)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    },
+    uploadMediaToS3(lect) {
+      return new Promise((resolve,reject) => {
+        this.getSignedURL(lect._id + '-' + document.getElementById("video_selector").files[0].name).then(data => {
+          fetch(data.data, {
+            method: 'PUT',
+            body: document.getElementById("video_selector").files[0]
+          }).then(res => {
+            resolve(data.data)
+          })
+        }).catch(err => {
+          reject(err)
+        });
+      })
     },
     setLectureSubmissionVariables() {
       this.lecture.allow_live_submissions = false
