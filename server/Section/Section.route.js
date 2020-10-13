@@ -357,4 +357,32 @@ sectionRoutes.post('/add_tas/:id', (req, res) => {
   })
 })
 
+sectionRoutes.post('/toggleOpenEnrollment/:id', (req, res) => {
+  let id = req.params.id;
+  Section.findByIdAndUpdate(id,
+    {is_public: true}, {$set: {is_public: false}},
+      function (err, course) {
+        if (err || course == null) {
+          console.log("<ERROR> Changing section (ID:",id, ") status to private")
+          res.status(404).send("section not found");
+        } else {
+          console.log("<SUCCESS> Changing section (ID:",id, ") status to private")
+          res.json(course);
+        }
+      }
+    );
+    Section.findByIdAndUpdate(id,
+      {is_public: false}, {$set: {is_public: true}},
+        function (err, course) {
+          if (err || course == null) {
+            console.log("<ERROR> Changing section (ID:",id, ") status to open enrollment")
+            res.status(404).send("section not found");
+          } else {
+            console.log("<SUCCESS> Changing section (ID:",id, ") status to open enrollment")
+            res.json(section);
+          }
+        }
+      );
+})
+
 module.exports = sectionRoutes;
