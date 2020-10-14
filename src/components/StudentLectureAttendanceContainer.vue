@@ -115,10 +115,8 @@
       handleStartScreenScan() {
 				let self = this
 				if(navigator && navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
-					alert('1')
 					navigator.mediaDevices.getDisplayMedia({video: true}).then(res => {
 						if(res) {
-							alert('2')
 							this.screen_scanning = true
 							this.screen_stream = res
 							this.canvas = document.createElement('canvas')
@@ -146,13 +144,11 @@
 								},1000) //... every second
 							})
 						} else {
-							alert('3')
 							this.camera_scanning_window_open = true
 						}
-					}).catch(err => { this.camera_scanning_window_open = true; alert('4') })
+					}).catch(err => { this.camera_scanning_window_open = true })
 				} else {
 					this.camera_scanning_window_open = true
-					alert('5')
 				}
       },
 			handleStopScreenScan() {
