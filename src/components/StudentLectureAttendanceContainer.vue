@@ -1,15 +1,18 @@
 <template>
   <div>
     <!-- TODO: Check if student submitted already -->
-    <div id="qr-scanning-container" v-if="qr_scanning_window_open">
-      <button @click="qr_scanning_window_open = false" id="exit_preview_btn" tabindex="0" aria-label="Close QR Scanner">X</button>
+    <div id="qr-scanning-container" v-if="camera_scanning_window_open">
+      <button @click="camera_scanning_window_open = false" id="exit_preview_btn" tabindex="0" aria-label="Close QR Scanner">X</button>
       <qrcode-stream id="video_preview" @decode="checkForQRMatch"></qrcode-stream>
     </div>
     <div id="table-header">
       <button v-if="lecture && lecture.meeting_link" @click="joinMeeting()" class="header-btn btn btn-primary" title="Join Meeting">
         Join Meeting
       </button>
-      <button v-if="lectureIsOngoing()" @click="qr_scanning_window_open = true" class="header-btn btn btn-primary" title="Scan QR">
+			<button v-if="screen_scanning" @click="handleStopScreenScan()" class="header-btn btn btn-primary" title="Stop Scanning" :style="{fontSize: '2rem', height: '72.75px', width: '72.75px'}">
+        🛑
+      </button>
+      <button v-else-if="lectureIsOngoing()" @click="handleStartScreenScan()" class="header-btn btn btn-primary" title="Scan QR">
         <img src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
       </button>
       <router-link class="header-btn btn btn-secondary" v-else-if="canWatchRecording()" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
@@ -18,6 +21,7 @@
     </div>
     <LectureAttendanceTable :is_instructor="false" :lecture="lecture" :submissions="[submission]" />
     <AnswerPoll v-if="answering_poll" :poll="current_poll" @answer="handleAnswerPoll" @cancel="handleCancelPoll"/>
+		<video v-if="screen_stream" id="captured-screen" autoplay :style="{display: 'none'}"></video>
   </div>
 </template>
 
@@ -28,6 +32,8 @@
   import { QrcodeStream } from 'vue-qrcode-reader';
   import LectureAttendanceTable from "@/components/LectureAttendanceTable.vue";
   import AnswerPoll from '@/components/AnswerPoll.vue';
+
+	import QrCode from 'qrcode-reader'
 
   export default {
     name: 'StudentLectureAttendanceContainer',
@@ -43,12 +49,16 @@
     },
     data(){
       return {
-        qr_scanning_window_open: false,
+        camera_scanning_window_open: false,
         student_can_submit_live: false,
         student_can_watch_playback: false,
         answering_poll: false,
         current_poll: null,
-        current_code: ""
+        current_code: "",
+				screen_stream: null,
+				screen_scanner: null,
+				screen_scanning: false,
+				canvas: null
       }
     },
     created() {
@@ -84,7 +94,7 @@
         window.open(this.getValidUrl(this.lecture.meeting_link),'_blank');
       },
       checkForQRMatch(scanned_str) {
-        this.qr_scanning_window_open = false
+        this.camera_scanning_window_open = false
         this.lecture.checkins.forEach(checkin => {
           if(checkin.code === scanned_str) {
             if(!this.studentSubmittedToCheckin(checkin)) {
@@ -97,11 +107,64 @@
               }
             } else {
               alert("Already submitted for this check-in")
+							this.handleStopScreenScan()
             }
           }
         })
       },
-      async createLiveSubmission() {
+			startScreenScan() {
+				var displayMediaStreamConstraints = {
+					video: true // or pass HINTS
+				};
+
+				return navigator.mediaDevices.getDisplayMedia(displayMediaStreamConstraints).catch(err => { return null; });
+			},
+      handleStartScreenScan() {
+				let self = this
+				this.startScreenScan().then(res => {
+					if(res) {
+						this.screen_scanning = true
+						this.screen_stream = res
+						this.canvas = document.createElement('canvas')
+						this.$nextTick(function() {
+							let video = document.getElementById('captured-screen')
+							video.srcObject = self.screen_stream
+							self.screen_scanner = setInterval(function(){ //check for qrcode ...
+							console.log('ah')
+								if(self.screen_stream) {
+									const videoTrack = video.srcObject.getVideoTracks()[0];
+									const { height, width } = videoTrack.getSettings();
+									self.canvas.width = width
+									self.canvas.height = height
+									self.canvas.getContext('2d').drawImage(video, 0, 0, width, height);
+
+									var qr = new QrCode();
+									qr.callback = function(err, value) {
+										if (!err) {
+											self.checkForQRMatch(value.result)
+										}
+									};
+									qr.decode(self.canvas.getContext('2d').getImageData(0, 0, width, height));
+								} else {
+									self.handleStopScreenScan()
+								}
+							},1000) //... every second
+						})
+					} else {
+						this.camera_scanning_window_open = true
+					}
+				})
+      },
+			handleStopScreenScan() {
+				this.screen_scanning = false
+				clearInterval(this.screen_scanner)
+				this.screen_stream.getTracks()
+  				.forEach(track => track.stop())
+				this.screen_stream = null
+				this.screen_scanner = null
+				this.canvas = null
+			},
+			async createLiveSubmission() {
         if(!this.submission.live_progress) {
           this.submission.live_progress = 0
         }
