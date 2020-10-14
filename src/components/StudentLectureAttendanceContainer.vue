@@ -114,38 +114,46 @@
       },
       handleStartScreenScan() {
 				let self = this
-				navigator.mediaDevices.getDisplayMedia({video: true}).then(res => {
-					if(res) {
-						this.screen_scanning = true
-						this.screen_stream = res
-						this.canvas = document.createElement('canvas')
-						this.$nextTick(function() {
-							let video = document.getElementById('captured-screen')
-							video.srcObject = self.screen_stream
-							self.screen_scanner = setInterval(function(){ //check for qrcode ...
-								if(self.screen_stream) {
-									const videoTrack = video.srcObject.getVideoTracks()[0];
-									const { height, width } = videoTrack.getSettings();
-									self.canvas.width = width
-									self.canvas.height = height
-									self.canvas.getContext('2d').drawImage(video, 0, 0, width, height);
+				if(navigator && navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
+					alert('1')
+					navigator.mediaDevices.getDisplayMedia({video: true}).then(res => {
+						if(res) {
+							alert('2')
+							this.screen_scanning = true
+							this.screen_stream = res
+							this.canvas = document.createElement('canvas')
+							this.$nextTick(function() {
+								let video = document.getElementById('captured-screen')
+								video.srcObject = self.screen_stream
+								self.screen_scanner = setInterval(function(){ //check for qrcode ...
+									if(self.screen_stream) {
+										const videoTrack = video.srcObject.getVideoTracks()[0];
+										const { height, width } = videoTrack.getSettings();
+										self.canvas.width = width
+										self.canvas.height = height
+										self.canvas.getContext('2d').drawImage(video, 0, 0, width, height);
 
-									var qr = new QrCode();
-									qr.callback = function(err, value) {
-										if (!err) {
-											self.checkForQRMatch(value.result)
-										}
-									};
-									qr.decode(self.canvas.getContext('2d').getImageData(0, 0, width, height));
-								} else {
-									self.handleStopScreenScan()
-								}
-							},1000) //... every second
-						})
-					} else {
-						this.camera_scanning_window_open = true
-					}
-				}).catch(err => { this.camera_scanning_window_open = true })
+										var qr = new QrCode();
+										qr.callback = function(err, value) {
+											if (!err) {
+												self.checkForQRMatch(value.result)
+											}
+										};
+										qr.decode(self.canvas.getContext('2d').getImageData(0, 0, width, height));
+									} else {
+										self.handleStopScreenScan()
+									}
+								},1000) //... every second
+							})
+						} else {
+							alert('3')
+							this.camera_scanning_window_open = true
+						}
+					}).catch(err => { this.camera_scanning_window_open = true; alert('4') })
+				} else {
+					this.camera_scanning_window_open = true
+					alert('5')
+				}
       },
 			handleStopScreenScan() {
 				this.screen_scanning = false
