@@ -112,16 +112,9 @@
           }
         })
       },
-			startScreenScan() {
-				var displayMediaStreamConstraints = {
-					video: true // or pass HINTS
-				};
-
-				return navigator.mediaDevices.getDisplayMedia(displayMediaStreamConstraints).catch(err => { return null; });
-			},
       handleStartScreenScan() {
 				let self = this
-				this.startScreenScan().then(res => {
+				navigator.mediaDevices.getDisplayMedia({video: true}).then(res => {
 					if(res) {
 						this.screen_scanning = true
 						this.screen_stream = res
@@ -130,7 +123,6 @@
 							let video = document.getElementById('captured-screen')
 							video.srcObject = self.screen_stream
 							self.screen_scanner = setInterval(function(){ //check for qrcode ...
-							console.log('ah')
 								if(self.screen_stream) {
 									const videoTrack = video.srcObject.getVideoTracks()[0];
 									const { height, width } = videoTrack.getSettings();
@@ -153,7 +145,7 @@
 					} else {
 						this.camera_scanning_window_open = true
 					}
-				})
+				}).catch(err => { this.camera_scanning_window_open = true })
       },
 			handleStopScreenScan() {
 				this.screen_scanning = false
