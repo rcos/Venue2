@@ -212,23 +212,15 @@ sectionRoutes.route('/getTeachingAssistants/:id').get(function (req, res) {
       let tas = [];
       let num_iterations = 0;
       if (ta_emails.length) {
-        ta_emails.forEach(ta_email => {
-          User.find({ email: ta_email }, function (err, ta) {
-            if (err || ta == null) {
-              console.log("<ERROR> Getting user with Email:", ta_email);
-              res.json(err);
-            } else {
-              tas.push(ta);
-              num_iterations++;
-              if (num_iterations === ta_emails.length) {
-                console.log("<SUCCESS> Getting teaching assistants for section with ID:", id);
-                res.json(tas);
-              }
-            }
-          });
+        User.find({ email: { $in: ta_emails } }, function (err, tas) {
+          if (err || ta == null) {
+            console.log("<ERROR> Getting TAs for Section with ID:", id);
+            res.json(err);
+          } else {
+            console.log("<SUCCESS> Getting teaching assistants for section with ID:", id);
+            res.json(tas);
+          }
         });
-      } else {
-        res.json([]);
       }
     }
   });

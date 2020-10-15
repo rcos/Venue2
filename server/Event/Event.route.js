@@ -93,8 +93,10 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
               console.log(course_err)
               res.json(course_err)
             } else {
-              if (course.instructor == user_id)
-                instructor_sections.push(section)
+              User.findById(user_id, function (error, user) {
+                if (course.instructor == user.email)//not sure course.instructors is accurate anymore
+                  instructor_sections.push(section);
+              });
             }
             //Last iteration
             if (counter === sections.length) {
@@ -109,11 +111,11 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
                     instructor_sections.forEach(instructor_section => {
                       if (instructor_section._id.equals(event.section)) {
                         //Get Active Events or Get today's events
-                        if(get_active) {
-                          if(isActive(event))
+                        if (get_active) {
+                          if (isActive(event))
                             requested_events.push(event)
                         } else {
-                          if(isToday(event.start_time) || isToday(event.end_time) || isActive(event))
+                          if (isToday(event.start_time) || isToday(event.end_time) || isActive(event))
                             requested_events.push(event)
                         }
                       }
@@ -131,38 +133,39 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
 
       let user_sections = []
       let current_time = new Date()
-      Section.find((error, sections) => {
-        sections.forEach((section) => {
-          section.students.forEach((student) => {
-            if (student._id == user_id)
-              user_sections.push(section)
+      User.findById(user_id, function (error, user) {
+        Section.find((error, sections) => {
+          sections.forEach((section) => {
+            section.students.forEach((student_email) => {
+              if (student_email == user.email)
+                user_sections.push(section)
+            })
+          })
+          Event.find(function (err, events) {
+            if (err) {
+              console.log(err)
+              res.json(err)
+            } else {
+              events.forEach(event => {
+                user_sections.forEach(user_section => {
+                  if (user_section._id.equals(event.section)) {
+                    //Get Active Events or Get today's events
+                    if (get_active) {
+                      if (isActive(event))
+                        requested_events.push(event)
+                    } else {
+                      if (isToday(event.start_time) || isToday(event.end_time) || isActive(event))
+                        requested_events.push(event)
+                    }
+                  }
+                })
+              })
+              res.json(requested_events)
+            }
           })
         })
-        Event.find(function (err, events) {
-          if (err) {
-            console.log(err)
-            res.json(err)
-          } else {
-            events.forEach(event => {
-              user_sections.forEach(user_section => {
-                if (user_section._id.equals(event.section)) {
-                  //Get Active Events or Get today's events
-                  if(get_active) {
-                    if(isActive(event))
-                      requested_events.push(event)
-                  } else {
-                    if(isToday(event.start_time) || isToday(event.end_time) || isActive(event))
-                      requested_events.push(event)
-                  }
-                }
-              })
-            })
-            res.json(requested_events)
-          }
-        })
-      })
+      });
     }
-
   })
 });
 
@@ -170,23 +173,23 @@ eventRoutes.get('/active_for_course/:course_id', (req, res) => {
   let course_id = req.params.course_id
   // Get the sections for this course
   Section.find((err, sections) => {
-    if(err) {
+    if (err) {
       res.json(err)
     } else {
       let course_sections = []
       sections.forEach(section => {
-        if(section.course == course_id)
+        if (section.course == course_id)
           course_sections.push(section._id.toString())
       })
 
       // Get the events for this section and check if they are active
       Event.find((error, events) => {
-        if(error) {
+        if (error) {
           res.json(error)
         } else {
           let active_course_events = []
           events.forEach(event => {
-            if(isActive(event) && course_sections.includes(event.section.toString()))
+            if (isActive(event) && course_sections.includes(event.section.toString()))
               active_course_events.push(event)
           })
           res.json(active_course_events)
@@ -200,12 +203,12 @@ eventRoutes.get('/active_for_section/:section_id', (req, res) => {
   let section_id = req.params.section_id
   // Get the sections for this course
   Event.find((err, events) => {
-    if(err) {
+    if (err) {
       res.json(err)
     } else {
       let active_events = []
       events.forEach(event => {
-        if(isActive(event) && event.section == section_id)
+        if (isActive(event) && event.section == section_id)
           active_events.push(event)
       })
       res.json(active_events)
@@ -216,23 +219,23 @@ eventRoutes.get('/active_for_section/:section_id', (req, res) => {
 eventRoutes.get('/history_for_course/:course_id', (req, res) => {
   let course_id = req.params.course_id
   Section.find((err, sections) => {
-    if(err) {
+    if (err) {
       res.json(err)
     } else {
       let course_sections = []
       sections.forEach(section => {
-        if(section.course == course_id)
+        if (section.course == course_id)
           course_sections.push(section._id.toString())
       })
 
       // Get all events for the courses sections
       Event.find((error, events) => {
-        if(error) {
+        if (error) {
           res.json(error)
         } else {
           let course_events = []
           events.forEach(event => {
-            if(course_sections.includes(event.section.toString()))
+            if (course_sections.includes(event.section.toString()))
               course_events.push(event)
           })
           res.json(course_events)
@@ -244,8 +247,8 @@ eventRoutes.get('/history_for_course/:course_id', (req, res) => {
 
 eventRoutes.get('/history_for_section/:section_id', (req, res) => {
   let section_id = req.params.section_id
-  Event.find({section: section_id}, (err, section_events) => {
-    if(err)
+  Event.find({ section: section_id }, (err, section_events) => {
+    if (err)
       res.json(err)
     else
       res.json(section_events)
@@ -254,27 +257,27 @@ eventRoutes.get('/history_for_section/:section_id', (req, res) => {
 
 eventRoutes.route('/section_and_course/:event_id').get(function (req, res) {
   let event_id = req.params.event_id;
-  Event.findById(event_id, function (err, event){
-      if(err){
-        console.log(err);
-        res.json(err);
-      }else{
-        Section.findById(event.section, (error, section) => {
-          if(error) {
-            res.json(error)
-          } else {
-            event.section = section
-            Course.findById(section.course, (error, course) => {
-              if(error) {
-                res.json(error)
-              } else {
-                event.section.course = course
-                res.json(event)
-              }
-            })
-          }
-        })
-      }
+  Event.findById(event_id, function (err, event) {
+    if (err) {
+      console.log(err);
+      res.json(err);
+    } else {
+      Section.findById(event.section, (error, section) => {
+        if (error) {
+          res.json(error)
+        } else {
+          event.section = section
+          Course.findById(section.course, (error, course) => {
+            if (error) {
+              res.json(error)
+            } else {
+              event.section.course = course
+              res.json(event)
+            }
+          })
+        }
+      })
+    }
   });
 });
 
