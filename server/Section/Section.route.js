@@ -217,7 +217,7 @@ sectionRoutes.route('/getTeachingAssistants/:id').get(function (req, res) {
             console.log("<ERROR> Getting TAs for Section with ID:", id);
             res.json(err);
           } else {
-            console.log("<SUCCESS> Getting teaching assistants for section with ID:", id);
+            console.log("<SUCCESS> Getting TAs for section with ID:", id);
             res.json(tas);
           }
         });
