@@ -299,7 +299,7 @@ userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
                   if (!found) {
                     students.push(student);
                   }
-                  num_iterations++;
+                  num_iterations++;//todo fix?
                   if (num_iterations === student_emails.length) {
                     sect_itr++
                     if (sect_itr == sections.length) {

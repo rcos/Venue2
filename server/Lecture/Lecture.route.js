@@ -157,7 +157,7 @@ lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) 
 												console.log('Email sent to ' + student.email + ': ' + info.response);
 											}
 										});
-										num_iterations++;
+										num_iterations++;//todo fix?
 										if (num_iterations === student_ids.length) {
 											section_itr++;
 											if (section_itr == updated_lecture.sections.length) {
