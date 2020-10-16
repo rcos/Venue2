@@ -40,6 +40,7 @@ import EditLecture from '@/components/EditLecture.vue';
 
 import AuthAPI from '@/services/AuthAPI.js';
 import UserAPI from '@/services/UserAPI.js';
+import SectionAPI from './services/SectionAPI';
 
 const url = require('url')
 const query = require('querystring')
@@ -424,21 +425,23 @@ router.beforeEach((to, from, next) => {
         } else {
           next('/dashboard')
         }
-      }else if (to.name == 'join_course') { //student implement new join route
+      } else if (to.name == 'join_course') { //student implement new join route
         if (user_data.current_user.instructor_courses.includes(to.params.id) 
         || user_data.current_user.student_sections.includes(to.params.id)) {
           next('/course_info/' + to.params.id)
-        }
-        
-        else if (to.name == "join_course" && !(user_data.current_user.student_sections.includes(to.params.id)) ) {
-          next('/dashboard')
+        }     
+        else if (!(user_data.current_user.student_sections.includes(to.params.id)) ) {
+          user_data.current_user.student_sections.push(to.params.id)
+          SectionAPI.getSectionsForCourse(to.params.id)
+          next('/course_info/' + to.params.id)
         }
       }
       else {
         next()
       }
-    } 
-    else { // not logged in
+    }
+    // not logged in
+    else {
       next('/')
     }
 
