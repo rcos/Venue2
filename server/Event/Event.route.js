@@ -88,13 +88,13 @@ eventRoutes.get('/active_or_todays_events/:user_id/:get_active', (req, res) => {
         let counter = 0
         sections.forEach(section => {
           Course.findById(section.course, function (course_err, course) {
-            counter++
+            counter++;//todo fix?
             if (course_err) {
               console.log(course_err)
               res.json(course_err)
             } else {
               User.findById(user_id, function (error, user) {
-                if (course.instructor == user.email)//not sure course.instructors is accurate anymore
+                if (course.instructor == user.email)//todo fix? ; not sure course.instructor (should be plural) is accurate anymore
                   instructor_sections.push(section);
               });
             }

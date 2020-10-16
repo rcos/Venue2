@@ -214,7 +214,7 @@ sectionRoutes.route('/getTeachingAssistants/:id').get(function (req, res) {
   });
 });
 
-sectionRoutes.get('/get_with_courses_for_student/:user_id', (req, res) => {//todo here
+sectionRoutes.get('/get_with_courses_for_student/:user_id', (req, res) => {
   let user_id = req.params.user_id;
   user_sections = [];
   User.findById(user_id, function (user_error, user) {
@@ -243,9 +243,9 @@ sectionRoutes.get('/get_with_courses_for_student/:user_id', (req, res) => {//tod
               } else {
                 user_section.course = course;
               }
-              counter++;
+              counter++;//todo fix?
               if (counter === user_sections.length) {
-                console.log("<SUCCESS> Getting sections with courses for user with ID:", user_id);//this was the route with the bug but this darn console.log never shows up :\
+                console.log("<SUCCESS> Getting sections with courses for user with ID:", user_id);
                 res.json(user_sections);
               }
             });
