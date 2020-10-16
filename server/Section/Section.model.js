@@ -20,7 +20,7 @@ let Section = new Schema({
 	}],
 	is_public: {
 		type: Boolean,
-		default: 'False'
+		default: false
 	}
 });
 
