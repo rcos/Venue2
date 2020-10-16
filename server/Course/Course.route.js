@@ -136,7 +136,7 @@ courseRoutes.post('/add_instructors/:id', (req, res) => {
       })
     })
   })
-})
+});
 
 courseRoutes.route('/toggleOpenEnrollment/:id').post(function (req, res) {
   let id = req.params.id;
@@ -164,6 +164,14 @@ courseRoutes.route('/toggleOpenEnrollment/:id').post(function (req, res) {
           }
         }
       );
+});
+
+courseRoutes.route('/AddToCourse/:id').post(function(req, res) {
+  let id = req.params.id;
+  Course.findByIdAndUpdate(id, {
+
+  });
+
 });
 
 module.exports = courseRoutes;

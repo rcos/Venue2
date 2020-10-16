@@ -157,7 +157,7 @@ export default {
   },
   methods: {
     copyURL() {
-    
+
     },
     async getAllSections () {
       SectionAPI.getSectionsForCourse(this.course_id)
