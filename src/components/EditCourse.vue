@@ -40,7 +40,7 @@
             <input v-for="(instructor,i) in instructors" :key="i" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name" rows="5" readonly>
             <label>Add instructors by email</label>
             <input type="text" v-model="instructors_to_add"/>
-            <button @click="addInstructorsToCourse()">Update</button>
+            <button type="button" @click="addInstructorsToCourse()">Update</button>
           </div>
         </div>
       </div>
@@ -55,7 +55,7 @@
                 <button class="btn btn-secondary">Edit Section {{section.name}}</button>
             </router-link>
             <router-link :to="{name: 'new_section', params: { id: course._id }}">
-                <button class="btn btn-primary">Add Section</button>
+                <button class="btn btn-primary">New Section</button>
             </router-link>
           </div>
         </div>
