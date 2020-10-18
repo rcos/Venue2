@@ -42,19 +42,12 @@
           </hide-at>
           <div :class="'active-link-underline ' + (is_ta_section_info()?'active':'')"></div>
         </div>
+
         <div class="venue-nav-link-container" id="student-section-dropdown" v-if="student_sections.length">
-          <a data-toggle="collapse" href="#student-collapse" class="venue-nav-link" :class="{'active-link':is_student_section_info()}" style="cursor:pointer;">
-            Student Sections <img src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
-          </a>
-          <hide-at breakpoint="mediumAndBelow">
-            <div class="dropdown-content">
-              <router-link v-for="section in student_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
-                <p>{{ section.course.name }} {{ section.name }}</p>
-              </router-link>
-            </div>
-          </hide-at>
+          <DropDown :is_section_info="is_student_section_info()" :whose_course_label="'Student Sections'" :whose_courses="student_sections"/>
           <div :class="'active-link-underline ' + (is_student_section_info()?'active':'')"></div>
         </div>
+
         <!-- Statistics Link -->
         <!-- <show-at breakpoint="large">
           <div v-if="instructor_courses.length" class="venue-nav-link-container">
@@ -146,6 +139,7 @@
   import CourseAPI from '@/services/CourseAPI.js'
   import SectionAPI from '@/services/SectionAPI.js'
   import LectureAPI from '@/services/LectureAPI.js'
+  import DropDown from './DropDown'
 
   export default {
     name: 'NavBar',
@@ -161,7 +155,8 @@
     },
     components: {
       hideAt,
-      showAt
+      showAt,
+      'DropDown': DropDown,
     },
     data(){
       return {
