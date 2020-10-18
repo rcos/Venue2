@@ -20,7 +20,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Dept</label>
-            <input class="form-control" v-model="edited_dept_name" :placeholder="course.prefix" rows="5">
+            <input class="form-control" v-model="edited_dept_name" :placeholder="course.prefix"/>
           </div>
         </div>
         <div class="col-md-6">
