@@ -9,6 +9,12 @@
             <input type="text" class="form-control" v-model="course.name">
           </div>
         </div>
+        <div class="col-md-6">
+            <div>
+              <label>Meeting URL</label>
+              <input class="form-control" type="url" name="meetingURL" placeholder="Enter Meeting URL" size=75>
+            </div>
+          </div>
       </div><br />
       <div class="row">
         <div class="col-md-6">
@@ -43,10 +49,6 @@
             <button type="button" @click="addInstructorsToCourse()">Update</button>
           </div>
         </div>
-      </div>
-      <div>
-        <input type="url" name="meetingURL" placeholder="Enter Meeting URL" size=75>
-        <br>
       </div>
       <div class="row">
         <div class="col-md-6">
