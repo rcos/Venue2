@@ -1,3 +1,12 @@
+/* Useful resources for testing / changing palette
+
+http://web-accessibility.carnegiemuseums.org/design/color/ (508 compliance guidelines)
+https://wave.webaim.org/ (tests accessibility of website; also a helpful Google Chrome extension)
+https://imagecolorpicker.com/en/ (Select colors from pictures - provides HEX and RGB code of selected color)
+https://coolors.co/ (Color palette generator)
+
+*/
+
 export default {
     /* 
         --background-color: #ffffff;
@@ -42,13 +51,13 @@ export default {
             root.style.setProperty('--settings-logout-button', 'rgb(207,39,41);');
             root.style.setProperty('--settings-logout-button-shadow', 'rgba(144, 62, 80, 0.8)');
             root.style.setProperty('--settings-small-div', 'rgba(0, 0, 0, 0.64)');
-            root.style.setProperty('--settings-text', '#517B94');
+            root.style.setProperty('--settings-text', '#2a74a3');                            // test: #2a74a3   original: #517B94     -- slightly darker blue comparison from original
             root.style.setProperty('--settings-switch-on', '#42f593');
             root.style.setProperty('--settings-switch-off', '#f55442');
             root.style.setProperty('--settings-switch-ball', 'white');
 
             // Buttons Palette
-            root.style.setProperty('--button-primary-blue', '#0078c2');
+            root.style.setProperty('--button-primary-blue', '#1072b0');                      // test: #1072b0   original: #0078c2       -- slightly darker blue comparison from original
             root.style.setProperty('--button-hover-blue', '#005183');
             root.style.setProperty('--button-secondary-grey', '#727272');
             root.style.setProperty('--button-hover-grey', '#444444');
@@ -63,10 +72,10 @@ export default {
             // These are also used in MultiSelectDropdown.vue
             root.style.setProperty('--nav-bar-text', '#2C3E50');
             root.style.setProperty('--nav-bar-background', '#f7f7f7');
-            root.style.setProperty('--nav-bar-selected-text', '#466D85');
+            root.style.setProperty('--nav-bar-selected-text', '#2f7cae');                     // test: #2f7cae   original: #466D85
             root.style.setProperty('--nav-bar-box-shadow', 'rgba(109, 109, 109, 0.744)');
             root.style.setProperty('--nav-bar-link-text', '#575757');
-            root.style.setProperty('--nav-bar-hover-background', '#466D85');
+            root.style.setProperty('--nav-bar-hover-background', '#2f7cae');                  // test: #2f7cae   original: #466D85
             root.style.setProperty('--nav-bar-hover-text', 'white');
             root.style.setProperty('--nav-bar-hover-top-shadow', 'rgba(85, 85, 85, 0.644)');
             root.style.setProperty('--nav-bar-hover-bottom-shadow', 'rgba(179, 179, 179, 0.644)');  
@@ -92,7 +101,7 @@ export default {
             root.style.setProperty('--lecture-pill-shadow', 'rgba(109, 109, 109, 0.644)');
             root.style.setProperty('--lecture-info-background', 'white');
             root.style.setProperty('--lecture-course-number-text', '#097bac');
-            root.style.setProperty('--lecture-course-name-text', '#466D85');
+            root.style.setProperty('--lecture-course-name-text', '#2f7cae');                // test: #2f7cae   original: #466D85
             root.style.setProperty('--lecture-name-text', '#2C3E50');
             root.style.setProperty('--lecture-closed-text', '#a7640d');
 
@@ -116,8 +125,8 @@ export default {
 
             
             // Legend green and purple
-            root.style.setProperty('--sync-border', '#04852f');
-            root.style.setProperty('--async-border', '#683eca');
+            root.style.setProperty('--sync-border', '#1db34f');                          // test: #1db34f   original: #04852f
+            root.style.setProperty('--async-border', '#f0c23a');                         // test: #683eca   original: #683eca
 
             root.style.setProperty('--button-color', '#0078c2');
             root.style.setProperty('--text-color', '#1d2324');
