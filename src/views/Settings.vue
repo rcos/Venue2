@@ -1,6 +1,6 @@
 <template>
-  <div class="palette">
-    <h1 class="palette">Settings</h1>
+  <div>
+    <h1>Settings</h1>
     <div class="settings-container">
           <div class="name-area">
             <div class="name-div" v-if="editing_name">
@@ -45,9 +45,6 @@
                   <span class="dark-mode-slider"></span>
                 </div>
               </label>
-            <!-- PRINTING VARIABLES OUT FOR TESTING
-            <div>this.current_user.first_name: {{ this.current_user.first_name }}</div>
-            <div>edited_first_name: {{ this.edited_first_name }}</div> -->
           </div>
 
           <div style="position:relative" class="setting-option-section">
@@ -56,17 +53,6 @@
                 <button class="btn btn-primary" @click="saveName()">Save Changes</button>
               </div>
           </div>
-          <!-- @/assets/icons8-edit.svg 
-            <img class="svg-color" width="100px" height="100px" src="@/assets/icons8-edit.svg" alt=""/>
-            <img class="test-filter2" src="@/assets/icons8-edit.svg" alt=""/>
-            <img class="test-filter3" src="@/assets/icons8-edit.svg" alt=""/>
-            <img class="test-filter4" src="@/assets/icons8-edit.svg" alt=""/>
-            <img class="test-filter5" src="@/assets/icons8-edit.svg" alt=""/>
-            <img class="test-filter6" src="@/assets/icons8-edit.svg" alt=""/>
-            <img class="test-filter7" src="@/assets/icons8-edit.svg" alt=""/>
-            <img class="test-filter8" src="@/assets/icons8-edit.svg" alt=""/>
-            <img class="test-filter9" src="@/assets/icons8-edit.svg" alt=""/>
-            <img class="test-filter10" src="@/assets/icons8-edit.svg" alt=""/> -->
         </div>
           
         <!--<div class="test-div">
@@ -109,7 +95,6 @@
   import {showAt, hideAt} from 'vue-breakpoints'
   import ChangePassword from '@/components/ChangePassword.vue'
   import AuthAPI from '../services/AuthAPI';
-  //import PaletteAPI from '../services/PaletteAPI';
 
   import SquareLoader from '@/components/Loaders/SquareLoader.vue';
 
@@ -140,7 +125,6 @@
     created() {
       this.mode = "setting_options"
       this.getCurrentUser()
-      //this.setPalette()
     },
     methods: {
       getCurrentUser() {
@@ -166,11 +150,7 @@
       toggleDarkMode() {
         this.edited_dark_mode = !this.edited_dark_mode;
       },
-      /*setPalette() {
-      let root = document.documentElement;
-      PaletteAPI.setPalette(root, this.current_user.dark_mode)
-    }, */
-    async saveName() {
+      async saveName() {
         this.waiting = true
         this.current_user.first_name = this.edited_first_name
         this.current_user.last_name = this.edited_last_name
@@ -184,19 +164,6 @@
           this.editing_name = false
         })
         location.reload()
-      },
-      test() {
-        // This function will never get called, but I will leave it in in case it needs future debugging
-        let root = document.documentElement;
-        const style = getComputedStyle(root);
-        var testColor = new Color();
-        testColor = getComputedStyle(root).getPropertyValue('--course-attendance-percent-bad');
-        var bad_attendance = getComputedStyle(root).getPropertyValue('--course-attendance-percent-bad');
-        //alert(testColor[0]);
-
-        //var rgb = 'rgb(200, 12, 53)';
-        //var rgb = testColor.replace(/[^\d,]/g, '').split(',');
-        alert(testColor);
       }
     }
   }
@@ -212,11 +179,7 @@
 
       --settings-switch-on: #42f593;
       --settings-switch-off: #f55442;
-      --swttings-switch-ball: white;
-
-      --test-var: #d1ec32;
-      --course-attendance-percent-bad: #d13e34; 
-      --course-attendance-percent-medium: #b753e4;
+      --settings-switch-ball: white;
     }
 
     .pencil {
@@ -229,67 +192,6 @@
     .svg-color {
       filter: var(--widgets-color);
     }
-    .test-filter2 {
-      filter: invert(32%) sepia(25%) saturate(3284%) hue-rotate(332deg) brightness(98%) contrast(97%);
-      width: 50px;
-      height: 50px;
-    }
-    .test-filter3 {
-      filter: invert(61%) sepia(37%) saturate(4670%) hue-rotate(1deg) brightness(103%) contrast(107%);
-      width: 50px;
-      height: 50px;
-    }
-    .test-filter4 {
-      filter: invert(69%) sepia(76%) saturate(554%) hue-rotate(2deg) brightness(107%) contrast(103%);
-      width: 50px;
-      height: 50px;
-    }
-    .test-filter5 {
-      filter: invert(82%) sepia(21%) saturate(6600%) hue-rotate(91deg) brightness(108%) contrast(102%);
-      width: 50px;
-      height: 50px;
-    }
-    .test-filter6 {
-      filter: invert(58%) sepia(11%) saturate(2694%) hue-rotate(128deg) brightness(98%) contrast(90%);
-      width: 50px;
-      height: 50px;
-    }
-    .test-filter7 {
-      filter: invert(44%) sepia(25%) saturate(2782%) hue-rotate(184deg) brightness(103%) contrast(106%);
-      width: 50px;
-      height: 50px;
-    }
-    .test-filter8 {
-      filter: invert(10%) sepia(93%) saturate(7351%) hue-rotate(248deg) brightness(73%) contrast(134%);
-      width: 50px;
-      height: 50px;
-    }
-    .test-filter9 {
-      filter: invert(10%) sepia(58%) saturate(4182%) hue-rotate(235deg) brightness(306%) contrast(100%);
-      width: 50px;
-      height: 50px;
-    }
-    .test-filter10 {
-      filter: invert(8%) sepia(48%) saturate(7011%) hue-rotate(280deg) brightness(502%) contrast(110%);
-      width: 50px;
-      height: 50px;
-    }
-
-    #masked {
-      width: 100px;
-      height: 100px;
-      background-color: #8cffa0;
-      -webkit-mask-image: url(https://mdn.mozillademos.org/files/12676/star.svg);
-      mask-image: url(https://mdn.mozillademos.org/files/12676/star.svg);
-    }
-
-    #test {
-      background: linear-gradient(90deg, rgba(62,73,202,1) 0%, rgba(143,62,202,1) 20%, rgba(209,62,52,1) 40%, rgba(176,95,22,1) 70%, rgba(4,133,47,1) 100%);
-      color: var(--course-attendance-percent-bad);
-    }
-    #attendance_bad {
-      color: var(--course-attendance-percent-bad);
-  }
 
     .palette {
       background-color: var(--main-background-color);

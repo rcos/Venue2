@@ -45,7 +45,7 @@
 						<canvas id="lectureChart"></canvas>
 					</div>
 					<div v-else-if="sections.active.length > 0">
-						<canvas  v-for="section in sections.active" :id="'sectionChart_'+section.name" :key="section.name"></canvas>
+						<canvas v-for="section in sections.active" :id="'sectionChart_'+section.name" :key="section.name"></canvas>
 					</div>
 					<canvas v-else-if="courses.active" id="courseChart"></canvas>
 				</div>
@@ -390,7 +390,7 @@ export default {
 						live: sections[section.name].live,
 						playback: sections[section.name].playback,
 						absent: sections[section.name].absent,
-						dates: sections[section.name].dates,
+						dates: sections[section.name].dates
 					})
 				})
 			} else if(this.courses.active) {
@@ -562,14 +562,12 @@ export default {
 							},
 							ticks: {
 								maxRotation: 90,
-								minRotation: 80,
-								fontColor: this.text
+								minRotation: 80
 							}
 						}],
 						yAxes: [{
 							ticks: {
-								beginAtZero: true,
-								fontColor: this.text
+								beginAtZero: true
 								// callback: function(value, index, values) {
 								// 	return value+"%";
 								// }
@@ -656,7 +654,7 @@ export default {
 								fontColor: this.text
 							}
 						},
-					responsive: true
+					responsive: true	
 				}
 			}
 			))
@@ -993,6 +991,7 @@ export default {
 <style scoped>
 :root {
 	--stats-panel-background: #c4c4c4;
+	--stats-panel-shadow: rgba(109, 109, 109, 0.644);
 
 	--stats-live-border: #04dd74;
 	--stats-live-fill: #bfffc6;
@@ -1078,7 +1077,7 @@ canvas:last-of-type {
 	overflow-y: auto;
 	background: var(--stats-panel-background);
 	border-radius: 1rem;
-	box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+	box-shadow: 0px 3px 3px 0px var(--stats-panel-shadow);
 }
 #side-panel {
 	right: 0;
