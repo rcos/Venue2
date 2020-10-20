@@ -7,28 +7,24 @@
 			</video>
 		  <button class="btn btn-secondary" id="close_qr_btn" @click="hideQR" aria-label="Hide QR">Hide</button>
 		</div>
-		<div id="container-header" style="position:relative">
+		<div id="container-header">
 			<!-- Pre-set/Random Checkins -->
 			<button v-if="lecture && lecture.meeting_link" @click="joinMeeting()" class="header-btn btn btn-primary" title="Join Meeting">
 				Join Meeting
 			</button>
 			<div v-for="(checkin,i) in lecture.checkins" :key="i" class="inline-block">
 				<button v-if="checkin.activation != 'Manual Activation' && checkinIsOpen(checkin)" type="button" class="header-btn btn btn-secondary" @click="showQR(i)">
-					<img class="svg-color" src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
+					<img class="Svg-color" src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
 				</button>
 			</div>
-			<div id="table-header" style="position: relative; height: 60px;">
-      			<div style="position: absolute; height: auto;">
-					<button class="header-btn btn btn-primary" v-if="!lectureIsOver()" @click="handleEndEarly">End Now</button>
-					<LectureUploadModal v-if="lectureIsOver() && !lecture.allow_playback_submissions && polls_loaded" :lecture="lecture" :need_timestamp="polls" :update_lecture="true" />
-					<router-link class="header-btn btn btn-secondary" v-else-if="lecture.allow_playback_submissions" title="Watch Recording" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}" aria-label="Watch Recording">
-					<img class="svg-color" src="@/assets/icons8-video-64.png" width="60" alt="Video" aria-label="Video">
-					</router-link>
-					<button class="header-btn btn btn-primary" @click="download_submitty_csv" id="submitty_export" title="CSV Export">
-						<img class="svg-color" src="@/assets/icons8-database-export-64.png" width="60" alt="QR Code" aria-label="QR Code">
-					</button>
-				</div>
-			</div>
+			<button class="header-btn btn btn-primary" v-if="!lectureIsOver()" @click="handleEndEarly">End Now</button>
+			<LectureUploadModal v-if="lectureIsOver() && !lecture.allow_playback_submissions && polls_loaded" :lecture="lecture" :need_timestamp="polls" :update_lecture="true" />
+			<router-link class="header-btn btn btn-secondary" v-else-if="lecture.allow_playback_submissions" title="Watch Recording" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}" aria-label="Watch Recording">
+				<img class="svg-color" src="@/assets/icons8-video-64.png" width="60" alt="Video" aria-label="Video">
+			</router-link>
+			<button class="header-btn btn btn-primary" @click="download_submitty_csv" id="submitty_export" title="CSV Export">
+				<img class="svg-color" src="@/assets/icons8-database-export-64.png" width="60" alt="QR Code" aria-label="QR Code">
+			</button>
 			<!-- Manual Checkins -->
 			<div class="float-right" v-for="(checkin,i) in lecture.checkins" :key="'Live'+i">
 				<button v-if="checkin.activation == 'Manual Activation'" class="btn btn-secondary manualbtn" @click="showQR(i)">Open Check-in {{i+1}}</button>
@@ -259,21 +255,15 @@ export default {
 		background-color: white;
 	}
 
-	.svg-color {
-		filter: var(--widgets-color);
-	}
-
 	.inline-block {
-		position: absolute;
 		display:inline-block;
 	}
 
 	#container-header {
 	  position: relative;
-	  top: 0;
+	  top: 1.5rem;
 	  bottom: 0;
 	  text-align: left;
-	  padding-top: 2.5rem;
 	}
 
 	.row {
@@ -282,12 +272,10 @@ export default {
 	}
 
 	#container-header h2 {
-		position: relative;
 		display: inline-block;
 	}
 
 	.header-btn {
-		position: absolute;
 		display: inline-block;
 		margin-right: 0.75rem;
 		min-height: calc(60px + .75rem);
@@ -307,21 +295,21 @@ export default {
 	  background: none;
 	  outline: none;
 	  border: none;
-	  color: gray;
+	  color: var(--button-tab-text);
 	  margin-right: 3rem;
 	}
 
 	.tab_btn h5 {
-	  color: gray;
+	  color: var(--button-tab-text);
 	}
 
 	.tab_btn.selected_tab {
-	  color: #0078c2;
-	  border-bottom: .2rem solid #0078c2;
+	  color: var(--button-tab);
+	  border-bottom: .2rem solid var(--button-tab);
 	}
 
 	.tab_btn.selected_tab h5 {
-	  color: #0078c2;
+	  color: var(--button-tab);
 	}
 
 	.tab_section {
@@ -345,7 +333,7 @@ export default {
 	}
 
 	.namecard-edging.playback-color {
-		background: var(--lecture-playback);
+		background: var(--recording-namecard);
 	}
 
 	.namecard-edging.absent-color {
@@ -354,14 +342,14 @@ export default {
 
 	.namecard {
 	  position: relative;
-	  background: white;
+	  background: var(--course-card-background);
 	  text-align: center;
 	  border-radius: .25rem;
 	  top: 0.5rem;
 	  margin-left: 0.5rem;
 	  width: 11rem;
 	  height: 4rem;
-	  box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+	  box-shadow: 0px 3px 3px 0px var(--course-card-shadow);
 	  padding-top: 0.5rem;
 	  z-index: 100;
 	}

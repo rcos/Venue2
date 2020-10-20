@@ -119,7 +119,7 @@ export default {
 }
 textarea {
 	border-radius: 0.25rem;
-	border: 1px solid gray;
+	border: 1px solid var(--modal-border);
 }
 .row {
 	margin: 0;

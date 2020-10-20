@@ -69,7 +69,7 @@ export default {
   left: 0;
   right: 0;
 	padding: 1rem;
-  background: rgba(255, 255, 255, 0.60);
+  background: var(--modal-container-background);
 	text-align: center;
 }
 #answer-poll-contents {
@@ -78,8 +78,8 @@ export default {
   bottom: 25%;
 	max-width: 50rem;
 	margin: 0rem auto;
-  background: white;
-  border: 1px solid gray;
+  background: var(--modal-background);
+  border: 1px solid var(--modal-border);
   border-radius: 0.5rem;
   padding: 1rem;
   overflow: auto;
@@ -100,7 +100,7 @@ h2 {
 }
 .labelrow {
 	margin-bottom: 1rem;
-	border-bottom: 1px solid black;
+	border-bottom: 1px solid var(--modal-border);
 }
 #number_label {
 	width: 10%;

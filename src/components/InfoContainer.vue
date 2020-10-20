@@ -47,11 +47,17 @@
 </script>
 
 <style scoped>
+:root {
+  --info-container-percentage-text: #828282;
+  --info-container-border: rgba(0, 0, 0, 0.3);
+  --info-container-border-hover: rgba(0, 0, 0, 0.6);
+  --info-container-text: #b54545;
+}
 
 .info-container {
   width: 11rem; 
   height: 6rem;
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border: 1px solid ;
   /*box-sizing: border-box;*/
   border-radius: 5px;
   padding: 0.75rem 1.5rem;
@@ -63,12 +69,12 @@
 }
 
 .info-container:hover {
-  border: 1px solid rgba(0, 0, 0, 0.6);
+  border: 1px solid ;
 }
 
 .info-container .time-left {
   font-size: 12px;
-  color: #b54545;
+  color: var(--info-container-text);
   font-weight: bold;
 }
 
@@ -79,12 +85,12 @@
 .info-container .course-code {
   font-size: 14px;
   font-weight: bold;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--info-container-border-hover);
 }
 
 .percentage-text {
   font-size: 0.9rem;
-  color: #828282;
+  color: var(--info-container-percentage-text);
 }
 
 .pg-bar {

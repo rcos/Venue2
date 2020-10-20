@@ -291,6 +291,7 @@
   :root {
     --nav-bar-text: #2C3E50;
     --nav-bar-background: #f7f7f7;
+    --nav-bar-separator: rgba(0, 0, 0, 0.15);
     --nav-bar-selected-text: #466D85;
     --nav-bar-box-shadow:  rgba(109, 109, 109, 0.644);
     --nav-bar-link-text: #575757;
@@ -401,7 +402,7 @@
   }
 
   .dropdown-content a:not(:first-of-type) {
-    border-top: 0.1rem solid rgba(0, 0, 0, 0.15);
+    border-top: 0.1rem solid var(--nav-bar-separator);
   }
 
   .dropdown-content a:last-of-type {
