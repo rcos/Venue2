@@ -70,11 +70,11 @@
 
     <label>Add students by email</label>
     <input type="text" v-model="students_to_add"/>
-    <button @click="addStudentsToSection()">Update</button>
+    <button type="button" @click="addStudentsToSection()">Update</button>
     <br/>
     <label>Add ta's by email</label>
     <input type="text" v-model="tas_to_add"/>
-    <button @click="addTasToSection()">Update</button>
+    <button type="button" @click="addTasToSection()">Update</button>
 
     <div class="form-group">
       <button class="btn btn-primary">Update</button>

@@ -1,7 +1,7 @@
 <template>
   <div :class="'course-info-title ' + (this.mobileMode ? 'mobile' : '')">
     <div class="course-edit-settings float-right">
-        <button class="btn" @click="handleCourseSettings()">
+        <button class="btn" @click="handleCourseSettings()" v-if=" ! (is_instructor || is_ta)">
           <img src="/img/settings.7e19eab3.svg" width="30" height="30" alt="Settings Icon" aria-label="Settings Icon" class="d-inline-block align-top">
         </button>
     </div>
@@ -66,10 +66,12 @@
         }
       },
       handleCourseSettings() {
-        this.$router.push({
-          name: "course_settings",
-          params: {id: this.course._id}
-        })
+        if(this.is_student) {
+            this.$router.push({
+            name: "course_settings",
+            params: {id: this.course._id}
+          })
+        }
       }
     }
   }

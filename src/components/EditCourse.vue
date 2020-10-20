@@ -6,23 +6,27 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Name</label>
-            <input type="text" class="form-control" v-model="course.name">
+            <input type="text" class="form-control" v-model="edited_course_name" :placeholder="course.name"/>
           </div>
         </div>
+        <div class="col-md-6">
+            <div>
+              <label>Meeting URL</label>
+              <input class="form-control" type="url" name="meetingURL" placeholder="Enter Meeting URL" size=75>
+            </div>
+          </div>
       </div><br />
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
             <label>Dept</label>
-            <input class="form-control" v-model="course.prefix" rows="5">
+            <input class="form-control" v-model="edited_dept_name" :placeholder="course.prefix"/>
           </div>
         </div>
         <div class="col-md-6">
-          <label>Lecture Times</label>
-          <!-- <input class="form-control" v-model="course.prefix" rows="5" readonly> -->
-          <input v-for="time in course.course_times" :key="time.day" class="form-control" :value="time.day" rows="5" readonly>
+          <label>Snooze</label>
+          <input class="form-control" v-model="edited_snooze" :placeholder="course.snooze" rows="5">
           <br>
-          <button>Add Time</button>
         </div>
       </div><br />
       <div class="row">
@@ -32,6 +36,13 @@
             <input class="form-control" v-model="course.suffix" rows="5">
           </div>
         </div>
+          <div class="col-md-6">
+            <label>Lecture Times</label>
+            <!-- <input class="form-control" v-model="course.prefix" rows="5" readonly> -->
+            <input v-for="time in course.course_times" :key="time.day" class="form-control" :value="time.day" rows="5" readonly>
+            <br>
+            <button>Add Time</button>
+        </div>
       </div><br />
       <div class="row">
         <div class="col-md-6">
@@ -39,9 +50,14 @@
             <label>Instructors</label>
             <input v-for="(instructor,i) in instructors" :key="i" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name" rows="5" readonly>
             <br>
+<<<<<<< HEAD
             <label>Add instructors by email&nbsp;</label>
+=======
+            <label>Add instructors by email</label>
+>>>>>>> 5607a312c0dbf73a02c6ff46594b571c28ae16f6
             <input type="text" v-model="instructors_to_add"/>
-            <button @click="addInstructorsToCourse()">Update</button>
+            <button type="button" @click="addInstructorsToCourse()">Update</button>
+            <br>
           </div>
         </div>
       </div>
@@ -60,13 +76,13 @@
                 <button class="btn btn-secondary">Edit Section {{section.name}}</button>
             </router-link>
             <router-link :to="{name: 'new_section', params: { id: course._id }}">
-                <button class="btn btn-primary">Add Section</button>
+                <button class="btn btn-primary">New Section</button>
             </router-link>
           </div>
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" id="update-course-btn">Update</button>
+        <button class="btn btn-primary" id="update-course-btn" @click="updateCourse()">Update</button>
       </div>
     </form>
   </div>
@@ -125,6 +141,24 @@
             location.reload()
           })
         }
+      },
+      updateCourse() {
+        this.waiting= true
+        if (this.edited_course_name != '')
+          this.course.name = this.edited_course_name
+        else 
+          this.course.name = this.course.name
+        if (this.edited_dept_name != '')
+          this.course.prefix = this.edited_dept_name
+        else 
+          this.course.prefix = this.course.prefix
+
+        CourseAPI.updateCourse(this.course._id, this.course).then(res => {
+          this.$store.dispatch('updateCurrentCourse', {token: this.$store.state.course.token, course: this.course})
+          this.edited_course_name = ''
+          this.edited_dept_name = ''
+          this.waiting = false
+        })
       }
     }
   }
