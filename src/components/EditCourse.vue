@@ -38,14 +38,19 @@
           <div class="form-group">
             <label>Instructors</label>
             <input v-for="(instructor,i) in instructors" :key="i" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name" rows="5" readonly>
-            <label>Add instructors by email</label>
+            <br>
+            <label>Add instructors by email&nbsp;</label>
             <input type="text" v-model="instructors_to_add"/>
             <button @click="addInstructorsToCourse()">Update</button>
           </div>
         </div>
       </div>
       <div>
-        <input type="url" name="meetingURL" placeholder="Enter Meeting URL" size=75>
+        <br>
+        <label>Default meeting URL&nbsp;</label>
+        <input type="url" name="meetingURL" size=65>
+        <button>Update</button>
+        <br>
         <br>
       </div>
       <div class="row">
