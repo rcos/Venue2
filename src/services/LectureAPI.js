@@ -16,6 +16,9 @@ export default {
   getLectureWithSectionsAndCourse(lecture_id) {
     return API().get('lectures/with_sections_and_course/' + lecture_id)
   },
+  getSignedUrl(filename) {
+    return API().get('lectures/get_signed_url/'+filename)
+  },
   addLecture(lecture) {
     return API().post('lectures/add', {
       lecture: lecture

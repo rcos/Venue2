@@ -9,6 +9,7 @@ let Course = new Schema({
 	prefix: String,
 	suffix: Number,
 	default_link: String,	//Added this
+	snooze: Number,
 	course_times: [{		//Added this
 		day: String,
 		start_time: String,
