@@ -128,6 +128,8 @@ userRoutes.route('/update/:id').post(function (req, res) {
       first_name: updated_user.first_name,
       last_name: updated_user.last_name,
       email: updated_user.email,
+      dark_mode: updated_user.dark_mode,
+      is_admin: true,
       password: updated_user.password,
       is_instructor: updated_user.is_instructor,
       ta_sections: updated_user.ta_sections,
