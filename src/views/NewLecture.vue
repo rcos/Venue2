@@ -468,14 +468,6 @@ export default {
 </script>
 
 <style>
-:root {
-  --calendar-background: lime;
-  --calendar-border: rgba(100,100,100,1);
-  --checkins-border: gray;
-  --calendar-selected: rgba(20,75,250,1); 
-  --add-poll-tint: rgba(255, 255, 255, 0.60);
-  --add-poll-background: white;
-}
 h1 {
   text-align: center;
 }
@@ -537,7 +529,7 @@ h1 {
 }
 
 .error_msg {
-  color: red;
+  color: var(--error-brighter);
 }
 
 .checkin-container {
@@ -568,7 +560,7 @@ h1 {
   bottom: 0;
   left: 0;
   right: 0;
-  background: var(--add-poll-tint);
+  background: var(--modal-container-background);
 }
 
 .modal-contents {
@@ -577,8 +569,8 @@ h1 {
   left: 25%;
   right: 25%;
   bottom: 25%;
-  background: var(--add-poll-background);
-  border: 1px solid var(--checkins-border);
+  background: var(--modal-background);
+  border: 1px solid var(--modal-border);
   border-radius: 0.5rem;
   padding: 1rem;
   text-align: left;
