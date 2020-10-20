@@ -62,9 +62,9 @@
 					</div>
 					<div class="input-group">
 						<label for="sync-rcs-ids" id="sync-override-label">Synchronous override:</label>
-						<input id="sync-rcs-ids" type="text" v-model.lazy="sync_overrides" class="form-control" style="left:12px;" placeholder="eg: 'whitte3,mbizin'" aria-label="RCS IDs to override"/>
-						<div class="override-button" style="left:22px;">
-							<button class="btn btn-primary" aria-label="Synchronous Submit Override" @click="handleSyncOverride">Override</button>
+						<input id="sync-rcs-ids" type="text" v-model.lazy="sync_overrides" class="form-control" placeholder="eg: 'whitte3,mbizin'" aria-label="RCS IDs to override"/>
+						<div class="input-group-append">
+							<button style="border-radius: 0.5rem;" class="btn btn-primary" aria-label="Synchronous Submit Override" @click="handleSyncOverride">Override</button>
 						</div>
 					</div>
 				</div>
@@ -75,8 +75,8 @@
 					<div class="input-group">
 						<label for="async-rcs-ids" id="async-override-label">Asynchronous override:</label>
 						<input id="async-rcs-ids" type="text" v-model.lazy="async_overrides" class="form-control" placeholder="eg: 'whitte3,mbizin'" aria-label="RCS IDs to override"/>
-						<div class="override-button">
-							<button class="btn btn-primary" aria-label="Asynchronous Submit Override" @click="handleAsyncOverride">Override</button>
+						<div class="input-group-append">
+							<button style="border-radius: 0.5rem;" class="btn btn-primary" aria-label="Asynchronous Submit Override" @click="handleAsyncOverride">Override</button>
 						</div>
 					</div>
 				</div>
@@ -86,21 +86,21 @@
 						<table id="checkins-container" aria-labelledby="checkin-table-label">
 							<thead>
 								<tr>
-									<th class="th">Start Time</th>
-									<th class="th">End Time</th>
-									<th class="th">Timestamp</th>
-									<th class="th">Poll</th>
+									<th>Start Time</th>
+									<th>End Time</th>
+									<th>Timestamp</th>
+									<th>Poll</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr v-for="(checkin,i) in lecture.checkins" :key="i">
-									<td class="th" v-if="checkin.start_time">{{ getPrettyDateTime(new Date(checkin.start_time)) }}</td>
-									<td class="th" v-else>Manual</td>
-									<td class="th" v-if="checkin.end_time">{{ getPrettyDateTime(new Date(checkin.end_time)) }}</td>
-									<td class="th" v-else>Manual</td>
-									<td class="th" v-if="polls[i] && polls[i].timestamp">{{ polls[i].timestamp }}</td>
-									<td class="th" v-else>X</td>
-									<td class="th" v-if="polls[i]">
+									<td v-if="checkin.start_time">{{ getPrettyDateTime(new Date(checkin.start_time)) }}</td>
+									<td v-else>Manual</td>
+									<td v-if="checkin.end_time">{{ getPrettyDateTime(new Date(checkin.end_time)) }}</td>
+									<td v-else>Manual</td>
+									<td v-if="polls[i] && polls[i].timestamp">{{ polls[i].timestamp }}</td>
+									<td v-else>X</td>
+									<td v-if="polls[i]">
 										<div id="edit-poll-modal-container" v-if="edit_poll_index != -1 && edit_poll_index == i">
 											<div id="edit-poll-modal-contents">
 												<CreatePoll :playback_only="false" :checkin="i" :poll="polls[i]" @cancel="handleCancelEditPoll" @addPoll="handleEditPoll"/>
@@ -111,7 +111,7 @@
 											<img class="svg-color" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
 										</button>
 									</td>
-									<td class="th" v-else>X</td>
+									<td v-else>X</td>
 								</tr>
 							</tbody>
 						</table>
@@ -121,14 +121,14 @@
 						<table id="checkins-container" aria-labelledby="checkin-table-label">
 							<thead>
 								<tr>
-									<th class="th">Seconds In</th>
-									<th class="th">Poll</th>
+									<th>Seconds In</th>
+									<th>Poll</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr class="th" v-for="(poll,i) in polls" :key="i">
-									<td class="th">{{poll.timestamp}}</td>
-									<td class="th">
+								<tr v-for="(poll,i) in polls" :key="i">
+									<td>{{poll.timestamp}}</td>
+									<td>
 										<div id="edit-poll-modal-container" v-if="edit_poll_index != -1 && edit_poll_index == i">
 											<div id="edit-poll-modal-contents">
 												<CreatePoll :playback_only="false" :checkin="i" :poll="polls[i]" @cancel="handleCancelEditPoll" @addPoll="handleEditPoll"/>
@@ -136,7 +136,7 @@
 										</div>
 										{{polls[i].question}}
 										<button type="button" v-if="Date.parse(lecture.playback_submission_start_time) > Date.now()" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
-											<img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
+											<img class="svg-color" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
 										</button>
 									</td>
 								</tr>
@@ -331,10 +331,6 @@ export default {
 		--lecture-attendace-absent-glow: rgba(255, 99, 88, 0.36);
 	}
 
-	.th {
-		border: 1px solid var(--main-text-color);
-	}
-
 	.svg-color {
 		filter: var(--widgets-color);
 	}
@@ -342,16 +338,8 @@ export default {
 	.input-group {
 		width: auto;
 		top: 0px;
+		padding-right: 10px;
 	} 
-
-	.override-button {
-		overflow: visible; 
-		position: relative;
-		right: 0px; 
-		left: 10px;
-		border-top-left-radius: 0.5rem;
-		border-bottom-right-radius: 0.5rem;
-	}
 
 	#lecture-attendance-table {
 		margin-top: 3rem;
@@ -364,7 +352,7 @@ export default {
 		bottom: 0;
 		left: 0;
 		right: 0;
-		background: rgba(255, 255, 255, 0.65);
+		background: var(--modal-container-background);
 	}
 
 	#edit-poll-modal-contents {
@@ -373,8 +361,8 @@ export default {
 		bottom: 25%;
 		left: 25%;
 		right: 25%;
-		background: white;
-		border: 1px solid gray;
+		background: var(--modal-background);
+		border: 1px solid var(--modal-border);
 		padding: 1rem;
 		border-radius: 1rem;
 	}
@@ -489,16 +477,19 @@ export default {
 	}
 
 	.override-container {
+		position: relative;
+		padding-top: 10px;
+		bottom: 10px;
 		display: flex;
-		height: 3rem;
+		height: auto;
 	}
 
 	#sync-override-err-msg {
-		color:#c40000;
+		color: var(--error);
 		padding: 0.5rem;
 	}
 	#async-override-err-msg {
-		color:#c40000;
+		color: var(--error);
 		padding: 0.5rem;
 	}
 
@@ -507,7 +498,7 @@ export default {
 	}
 
 	table, th, td {
-		border: 1px solid black;
+		border: 1px solid var(--main-text-color);
 		padding: 0.5rem;
 	}
 
