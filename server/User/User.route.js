@@ -221,36 +221,6 @@ userRoutes.route('/student_sections/:id').get(function (req, res) {
   });
 });
 
-
-userRoutes.route('/add_to_sections/:id/:course_id').get(function (req, res) {
-  let student_id = req.params.id;
-  Section.find(function(err, sections){
-    if(err || sections == null) {
-      console.log("<ERROR> Getting all sections")
-      res.json(err);
-    } else {
-      let student_sections = []
-      let n = 0
-      sections.forEach((section) => {
-        n++
-        let m = 0
-        section.students.forEach((section_student) => {
-          m++
-          if(section_student._id == student_id){
-            student_sections.push(section);
-          }
-          if(n == sections.length && m == section.students.length) {
-            console.log("<SUCCESS> Getting sections for student with ID:",student_id)
-            res.json(student_sections);
-          }
-        });
-      });
-    }
-  });
-});
-
-
-
 userRoutes.route('/instructors_for_course/:course_id').get(function (req, res) {
   let course_id = req.params.course_id;
   Course.findById(course_id,function(err,course) {

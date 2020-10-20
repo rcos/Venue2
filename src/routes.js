@@ -41,6 +41,7 @@ import EditLecture from '@/components/EditLecture.vue';
 import AuthAPI from '@/services/AuthAPI.js';
 import UserAPI from '@/services/UserAPI.js';
 import SectionAPI from './services/SectionAPI';
+import CourseAPI from './services/CourseAPI';
 
 const url = require('url')
 const query = require('querystring')
@@ -426,16 +427,32 @@ router.beforeEach((to, from, next) => {
           next('/dashboard')
         }
       } else if (to.name == 'join_course') { //student implement new join route
-        if (user_data.current_user.instructor_courses.includes(to.params.id) 
-        || user_data.current_user.student_sections.includes(to.params.id)) {
+
+        CourseAPI.getCourse(to.params.id).then(response=>{
+          const course = response.data.name
+          alert(course)
+        })
+        SectionAPI.getSectionsForCourse(to.params.id).then(res=>{
+          let sections = res.data
+          var i
+          for (i = 0; i < sections.length; i++) {
+            if (user_data.current_user.student_sections.includes(sections[i]._id)) {
+              break
+            }
+          }
+        })
+        
+        if (user_data.current_user.instructor_courses.includes(to.params.id)) {
           next('/course_info/' + to.params.id)
         }     
         else if (!(user_data.current_user.student_sections.includes(to.params.id)) ) {
           user_data.current_user.student_sections.push(to.params.id)
-          SectionAPI.getSectionsForCourse(to.params.id)
+          SectionAPI.addStudents(to.params.id, user_data.current_user.user_id)
           next('/course_info/' + to.params.id)
         }
       }
+
+      
       else {
         next()
       }
