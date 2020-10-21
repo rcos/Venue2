@@ -50,24 +50,12 @@
             <label>Instructors</label>
             <input v-for="(instructor,i) in instructors" :key="i" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name" rows="5" readonly>
             <br>
-<<<<<<< HEAD
-            <label>Add instructors by email&nbsp;</label>
-=======
             <label>Add instructors by email</label>
->>>>>>> 5607a312c0dbf73a02c6ff46594b571c28ae16f6
             <input type="text" v-model="instructors_to_add"/>
             <button type="button" @click="addInstructorsToCourse()">Update</button>
             <br>
           </div>
         </div>
-      </div>
-      <div>
-        <br>
-        <label>Default meeting URL&nbsp;</label>
-        <input type="url" name="meetingURL" size=65>
-        <button>Update</button>
-        <br>
-        <br>
       </div>
       <div class="row">
         <div class="col-md-6">
