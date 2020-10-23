@@ -426,7 +426,8 @@ router.beforeEach((to, from, next) => {
         } else {
           next('/dashboard')
         }
-      } else if (to.name == 'join_course') { //student implement new join route
+      } 
+      else if (to.name == 'join_course') { //student implement new join route
 
         if (user_data.current_user.instructor_courses.includes(to.params.id)) {
           next('/course_info/' + to.params.id)
