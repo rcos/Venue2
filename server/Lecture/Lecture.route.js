@@ -209,7 +209,7 @@ lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) 
 											}
 										});
 										num_iterations++;//todo fix?
-										if (num_iterations === student_ids.length) {
+										if (num_iterations === student_emails.length) {
 											section_itr++;
 											if (section_itr == updated_lecture.sections.length) {
 												console.log("<SUCCESS> Adding playback to lecture with ID:", lecture_id)

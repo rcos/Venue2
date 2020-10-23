@@ -124,8 +124,6 @@ sectionRoutes.route('/getInstructors/:id').get(function (req, res) {
           res.json(error);
         } else {
           let instructor_emails = course.instructors;
-          let instructors = [];
-          let num_iterations = 0;
           User.find({ email: { $in: instructor_emails } }, function (err, instructors) {
             if (err || instructors == null) {
               console.log("<ERROR> Getting instructors with Email:", instructor_email);

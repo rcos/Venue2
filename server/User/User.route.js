@@ -193,7 +193,7 @@ userRoutes.route('/instructor_courses/:id').get(function (req, res) {
     }
   });
 });
-
+//should there be ta_sections route like above and below?
 userRoutes.route('/student_sections/:id').get(function (req, res) {
   let student_id = req.params.id;
   User.findById(student_id, function (err, student) {
@@ -284,7 +284,7 @@ userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
             let num_iterations = 0;
             student_emails.forEach(student_email => {
               User.findOne({ email: student_email }, function (err, student) {
-                if (err || student == null) {
+                if (err || student == null) {//if want functionality as stated in future need change here maybe
                   console.log("<ERROR> Getting user with Email:", student_email)
                   res.json(err);
                 } else {
