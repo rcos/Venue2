@@ -358,10 +358,10 @@ sectionRoutes.post('/add_tas/:id', (req, res) => {
 })
 
 sectionRoutes.post('/add_student_section/', (req, res) => {
-  let student = req.body.user
-  let section = req.body.section
+  let student = req.body.user_id
+  let section = req.body.section_id
 
-  User.findByIdAndUpdate(student._id,
+  User.findByIdAndUpdate(student,
     {$push: {student_sections: section }}, function(err, post) {
       if (err) {
         console.log(err)
@@ -371,7 +371,7 @@ sectionRoutes.post('/add_student_section/', (req, res) => {
       }
     })
 
-  Section.findByIdAndUpdate(section._id,
+  Section.findByIdAndUpdate(section,
     {$push : {students: student}}, function(err, post) {
       if (err) {
         console.log(err)

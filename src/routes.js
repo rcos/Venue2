@@ -427,8 +427,7 @@ router.beforeEach((to, from, next) => {
           next('/dashboard')
         }
       } else if (to.name == 'join_course') { //student implement new join route
-        console.log(user_data.current_user.student_sections.length)
-      
+
         if (user_data.current_user.instructor_courses.includes(to.params.id)) {
           next('/course_info/' + to.params.id)
         }
@@ -442,21 +441,13 @@ router.beforeEach((to, from, next) => {
               in_course = !in_course
               break }
           }
-          console.log("hi")
           if (!in_course) {
             var section_choice = prompt("Join Section")
             for (let i = 0; i < sections.length; i++) {
               if (sections[i].name == section_choice) {
-                // edit database
-                  console.log(user_data.current_user.student_sections.length)
-                  console.log(user_data.current_user._id)
-                  SectionAPI.addSection(sections[i], user_data.current_user).then(res=>{
-                    console.log(user_data.current_user.student_sections.length)
-                    next('/course_info/' + sections[i]._id)
-                  })
-                /*
-                SectionAPI.addStudents(sections[i]._id, studs)
-                */
+                  SectionAPI.addToSection(sections[i]._id, user_data.current_user._id)
+                  location.reload()
+                  next('/course_info/' + sections[i]._id)
                 break }
             }
           }
