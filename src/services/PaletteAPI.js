@@ -1,5 +1,4 @@
 /* Useful resources for testing / changing palette
-
 http://web-accessibility.carnegiemuseums.org/design/color/ (508 compliance guidelines)
 https://wave.webaim.org/ (tests accessibility of website; also a helpful Google Chrome extension)
 https://imagecolorpicker.com/en/ (Select colors from pictures - provides HEX and RGB code of selected color)
@@ -20,14 +19,21 @@ export default {
     setPalette(root, dark_mode) {
         if (!dark_mode) {
 
-            // TODO - MultiSelectDropdown.vue
-
             // Default palette - main (general)
             root.style.setProperty('--main-text-color', '#1d2324');
             root.style.setProperty('--main-background-color', '#ffffff');
             root.style.setProperty('--input-background', '#f7f7f7');
+            root.style.setProperty('--input-border', 'grey');
             root.style.setProperty('--input-text', 'black');
             root.style.setProperty('--input-shadow', '#9ecaed');
+
+            // Errors 
+            root.style.setProperty('--error', '#c40000');
+            root.style.setProperty('--error-brighter', 'red');
+
+            // Links - venue.css
+            root.style.setProperty('--link', '#5597EE');
+            root.style.setProperty('--link-hover', '#2c70c9');
 
             // In this example, the widget is set to #000 and #fff, but this can be any color,
             // Check out some examples in Settings.vue and become friends with this website:
@@ -35,6 +41,7 @@ export default {
             root.style.setProperty('--widgets-color', 'brightness(0) invert(0)');
             root.style.setProperty('--clock-color', 'invert(20%) sepia(43%) saturate(454%) hue-rotate(168deg) brightness(93%) contrast(89%)');
             root.style.setProperty('--logo-color', '');
+            root.style.setProperty('--red-x', '');
 
             root.style.setProperty('--loader-square-even', '#4CC9FF');
             root.style.setProperty('--loader-square-odd', '#FC6E71');
@@ -56,11 +63,23 @@ export default {
             root.style.setProperty('--settings-switch-off', '#f55442');
             root.style.setProperty('--settings-switch-ball', 'white');
 
-            // Buttons Palette
+            // ChangePassword.vue
+            root.style.setProperty('--change-password-error', '#FC6F71');
+            root.style.setProperty('--change-password-success', '#34c759');
+            root.style.setProperty('--change-password-success-border', '#158f34');
+
+            // Buttons Palette - lives in venue.core.css
+            // .btn-btn-danger has a separate instance of hover & friends in MultiSelectDropdown.vue 
+            //  to prevent unfit shadows on the X buttons 
             root.style.setProperty('--button-primary-blue', '#1072b0');                      // test: #1072b0   original: #0078c2       -- slightly darker blue comparison from original
             root.style.setProperty('--button-hover-blue', '#005183');
             root.style.setProperty('--button-secondary-grey', '#727272');
             root.style.setProperty('--button-hover-grey', '#444444');
+            root.style.setProperty('--button-danger', '#dc3545');
+            root.style.setProperty('--button-danger-shadow', 'rgba(110, 26, 34, 0.74)');
+            root.style.setProperty('--button-danger-hover', 'rgba(110, 26, 34, 0.74)');
+            root.style.setProperty('--button-tab', '#0078c2');
+            root.style.setProperty('--button-tab-text', 'grey');
             root.style.setProperty('--big-button', 'white');
             root.style.setProperty('--big-button-text', 'rgba(44, 62, 80, 1)');
             root.style.setProperty('--big-button-border', 'rgba(44, 62, 80, 0.7)');
@@ -72,6 +91,7 @@ export default {
             // These are also used in MultiSelectDropdown.vue
             root.style.setProperty('--nav-bar-text', '#2C3E50');
             root.style.setProperty('--nav-bar-background', '#f7f7f7');
+            root.style.setProperty('--nav-bar-separator', 'rgba(0, 0, 0, 0.15)');
             root.style.setProperty('--nav-bar-selected-text', '#2f7cae');                     // test: #2f7cae   original: #466D85
             root.style.setProperty('--nav-bar-box-shadow', 'rgba(109, 109, 109, 0.744)');
             root.style.setProperty('--nav-bar-link-text', '#575757');
@@ -81,6 +101,7 @@ export default {
             root.style.setProperty('--nav-bar-hover-bottom-shadow', 'rgba(179, 179, 179, 0.644)');  
 
             // Course and Lecture 'pills'
+            // Foreground pill also uses --lecture-name-text
             root.style.setProperty('--red-pill', '#d13e34');
             root.style.setProperty('--red-pill-shadow', 'rgba(249, 82, 71, 0.3)');
             root.style.setProperty('--yellow-pill', '#b95726');
@@ -91,6 +112,9 @@ export default {
             root.style.setProperty('--green-pill-shadow', 'rgba(78, 205, 76, 0.3)');
             root.style.setProperty('--upcoming-pill', '#0078c2');
             root.style.setProperty('--upcoming-pill-shadow', 'rgba(109, 109, 109, 0.644)');
+            root.style.setProperty('--foreground-pill', '#f5f5f5');
+            root.style.setProperty('--foreground-pill-shadow', 'rgba(109, 109, 109, 0.644)');
+            root.style.setProperty('--date-and-percent', 'white');
 
             // Lecture pills con't - these live in LectureCard.vue
             root.style.setProperty('--lecture-live', '#04852F');
@@ -127,19 +151,66 @@ export default {
             // Legend green and purple
             root.style.setProperty('--sync-border', '#1db34f');                          // test: #1db34f   original: #04852f
             root.style.setProperty('--async-border', '#f0c23a');                         // test: #683eca   original: #683eca
+            root.style.setProperty('--recording-namecard', '#8f3eca');
 
             root.style.setProperty('--button-color', '#0078c2');
             root.style.setProperty('--text-color', '#1d2324');
             root.style.setProperty('--dashboard-text-color', '#2C3E50');
             root.style.setProperty('--dashboard-background-color', '#F5F5F5');
 
+            // Modal
+            root.style.setProperty('--modal-background', '#ffffff');
+            root.style.setProperty('--modal-course-name', '#53788E');
+            root.style.setProperty('--modal-course-number', '#2398C8');
+            root.style.setProperty('--modal-border', 'grey');
+            root.style.setProperty('--modal-container-background', 'rgba(255, 255, 255, 0.65)');
+            root.style.setProperty('--modal-lecture-border', 'rgba(120,120,120,1)');
+
+            root.style.setProperty('--poll-background', 'lightskyblue');
+
+            // Cards 
+            root.style.setProperty('--card-background', 'DarkGray');
+            root.style.setProperty('--card-shadow1', 'rgba(0,0,0,0.25)');
+            root.style.setProperty('--card-shadow2', 'rgba(0,0,0,0.22)');
+            root.style.setProperty('--card-title-light', 'white');
+            root.style.setProperty('--card-title-dark', 'black');
+
+            // Info container
+            root.style.setProperty('--info-container-percentage-text', '#828282');
+            root.style.setProperty('--info-container-border', 'rgba(0, 0, 0, 0.3)');
+            root.style.setProperty('--info-container-border-hover', 'rgba(0, 0, 0, 0.6)');
+            root.style.setProperty('--info-container-text', '#b54545');
+
+            // Event pills
+            root.style.setProperty('--event-pill-green', '#04852f');
+            root.style.setProperty('--event-pill-shadow', 'rgba(0, 0, 0, 0.065)');
+            root.style.setProperty('--event-pill-date', 'rgba(0, 0, 0, 0.6)');
+            root.style.setProperty('--event-pill-name', 'rgba(0, 0, 0, 1)');
+            root.style.setProperty('--event-pill-location', 'rgba(0, 0, 0, 0.5)');
+
+            root.style.setProperty('--event-pill-border', 'rgba(35, 217, 96, 0.5)');
+            root.style.setProperty('--event-pill-text', 'black');
+
+            root.style.setProperty('--event-active-link', '#2c3e50');
+            root.style.setProperty('--event-list-background', '#F5F5F5');
+            root.style.setProperty('--event-pending', '#E0932F');
+            root.style.setProperty('--event-ongoing', '#4bcc69');
+            root.style.setProperty('--event-static', '#2a8dc7');
+            root.style.setProperty('--event-ending', '#919191');
+
+            root.style.setProperty('--event-course-name', '#466D85');
+            root.style.setProperty('--event-course-title', '#146c91');
+
+            root.style.setProperty('--event-active-background', 'white');
+            root.style.setProperty('--event-active-shadow', 'rgba(0, 0, 0, 0.1)');
+
+            root.style.setProperty('--event-location', '#524e0a');
+
             // Calendar colors for creating lectures
             root.style.setProperty('--calendar-background', 'white');
             root.style.setProperty('--calendar-border', 'rgba(100,100,100,1)');
             root.style.setProperty('--checkins-border', 'gray');
             root.style.setProperty('--calendar-selected', 'rgba(20,75,250,1)');
-            root.style.setProperty('--add-poll-tint', 'rgba(255, 255, 255, 0.60)');
-            root.style.setProperty('--add-poll-background', 'white');
 
             // Statistics 
             // Divider bars, gridlines and labels use (--main-text-color)
@@ -150,6 +221,7 @@ export default {
             root.style.setProperty('--stats-playback-fill', '#92bed2');
             root.style.setProperty('--stats-absent-border', '#e95454');
             root.style.setProperty('--stats-absent-fill', '#ff8787');
+            root.style.setProperty('--stats-panel-shadow', 'rgba(109, 109, 109, 0.644)');
 
             // ToggleSwitch.vue
             root.style.setProperty('--toggle-switch-on-background', '#bfffc6');
@@ -164,13 +236,23 @@ export default {
             // Dark mode palette - main (general)
             root.style.setProperty('--main-text-color', '#ffffff');
             root.style.setProperty('--main-background-color', '#1d2324');
-            root.style.setProperty('--input-background', '#f7f7f7');
-            root.style.setProperty('--input-text', 'black');
-            root.style.setProperty('--input-shadow', '#9ecaed');
+            root.style.setProperty('--input-background', '#000000');
+            root.style.setProperty('--input-border', 'lime');
+            root.style.setProperty('--input-text', 'green');
+            root.style.setProperty('--input-shadow', '#ff00ff');
+
+            // Errors 
+            root.style.setProperty('--error', '#00ff00');
+            root.style.setProperty('--error-brighter', 'lime');
+
+            // Links - venue.css
+            root.style.setProperty('--link', '#00ff00');
+            root.style.setProperty('--link-hover', '#00ff00');
 
             root.style.setProperty('--widgets-color', 'brightness(0) invert(1)');
             root.style.setProperty('--clock-color', 'invert(20%) sepia(43%) saturate(454%) hue-rotate(168deg) brightness(93%) contrast(89%)');
             root.style.setProperty('--logo-color', 'brightness(0.75) saturate(0.75)');
+            root.style.setProperty('--red-x', 'brightness(0.75) saturate(0.75)');
 
             root.style.setProperty('--loader-square-even', '#4CC9FF');
             root.style.setProperty('--loader-square-odd', '#FC6E71');
@@ -193,11 +275,23 @@ export default {
             root.style.setProperty('--settings-switch-off', '#f55442');
             root.style.setProperty('--settings-switch-ball', 'white');
 
+            // ChangePassword.vue
+            root.style.setProperty('--change-password-error', '#FC6F71');
+            root.style.setProperty('--change-password-success', '#34c759');
+            root.style.setProperty('--change-password-success-border', '#158f34');
+
             // Buttons Palette - lives in venue.core.css
+            // .btn-btn-danger has a separate instance of hover & friends in MultiSelectDropdown.vue 
+            //  to prevent unfit shadows on the X buttons 
             root.style.setProperty('--button-primary-blue', '#082d45');
             root.style.setProperty('--button-hover-blue', '#005183');
             root.style.setProperty('--button-secondary-grey', '#727272');
             root.style.setProperty('--button-hover-grey', '#444444');
+            root.style.setProperty('--button-danger', 'lime');
+            root.style.setProperty('--button-danger-shadow', 'rgba(110, 26, 34, 0.74)');
+            root.style.setProperty('--button-danger-hover', 'rgba(110, 26, 34, 0.74)');
+            root.style.setProperty('--button-tab', '#0078c2');
+            root.style.setProperty('--button-tab-text', 'grey');
             root.style.setProperty('--big-button', 'white');
             root.style.setProperty('--big-button-text', 'rgba(44, 62, 80, 1)');
             root.style.setProperty('--big-button-border', 'rgba(44, 62, 80, 0.7)');
@@ -208,6 +302,7 @@ export default {
             // Dark mode Palette - Nav bar 
             root.style.setProperty('--nav-bar-text', '#5e2f2f');
             root.style.setProperty('--nav-bar-background', '#a16262');
+            root.style.setProperty('--nav-bar-separator', 'rgba(255, 255, 255, 0.15)');
             root.style.setProperty('--nav-bar-selected-text', '#a12725');
             root.style.setProperty('--nav-bar-box-shadow', 'rgba(89, 45, 45, 0.744)');
             root.style.setProperty('--nav-bar-link-text', '#c9abab');
@@ -216,9 +311,10 @@ export default {
             root.style.setProperty('--nav-bar-hover-top-shadow', 'rgba(138, 54, 54, 0.644)');
             root.style.setProperty('--nav-bar-hover-bottom-shadow', 'rgba(219, 173, 173, 0.644)'); 
 
-            // Legend green and purple
+            // Legend green and purple + sections dropdown border
             root.style.setProperty('--sync-border', '#0ac448');
             root.style.setProperty('--async-border', '#9576db');
+            root.style.setProperty('--recording-namecard', '#8f3eca');
 
             // Course and Lecture 'pills'
             root.style.setProperty('--red-pill', '#d13e34');
@@ -231,6 +327,9 @@ export default {
             root.style.setProperty('--green-pill-shadow', 'rgba(78, 205, 76, 0.3)');
             root.style.setProperty('--upcoming-pill', '#0078c2');
             root.style.setProperty('--upcoming-pill-shadow', 'rgba(109, 109, 109, 0.644)');
+            root.style.setProperty('--foreground-pill', '#f5f5f5');
+            root.style.setProperty('--foreground-pill-shadow', 'rgba(109, 109, 109, 0.644)');
+            root.style.setProperty('--date-and-percent', 'white');
 
             // Lecture pills con't - these live in LectureCard.vue
             root.style.setProperty('--lecture-live', '#04852F');
@@ -267,13 +366,59 @@ export default {
             root.style.setProperty('--dashboard-text-color', '#87a7c7');
             root.style.setProperty('--dashboard-background-color', '#636363');
 
+            // Modal
+            root.style.setProperty('--modal-background', '#272727');
+            root.style.setProperty('--modal-course-name', '#53788E');
+            root.style.setProperty('--modal-course-number', '#2398C8');
+            root.style.setProperty('--modal-border', 'grey');
+            root.style.setProperty('--modal-container-background', 'rgba(63, 63, 63, 0.65)');
+            root.style.setProperty('--modal-lecture-border', 'rgba(120,120,120,1)');
+
+            root.style.setProperty('--poll-background', 'lightskyblue');
+
+            // Cards 
+            root.style.setProperty('--card-background', 'DarkGray');
+            root.style.setProperty('--card-shadow1', 'rgba(0,0,0,0.25)');
+            root.style.setProperty('--card-shadow2', 'rgba(0,0,0,0.22)');
+            root.style.setProperty('--card-title-light', 'white');
+            root.style.setProperty('--card-title-dark', 'black');
+
+            // Info container
+            root.style.setProperty('--info-container-percentage-text', '#828282');
+            root.style.setProperty('--info-container-border', 'rgba(0, 0, 0, 0.3)');
+            root.style.setProperty('--info-container-border-hover', 'rgba(0, 0, 0, 0.6)');
+            root.style.setProperty('--info-container-text', '#b54545');
+
+            // Event pills
+            root.style.setProperty('--event-pill-green', '#04852f');
+            root.style.setProperty('--event-pill-shadow', 'rgba(0, 0, 0, 0.065)');
+            root.style.setProperty('--event-pill-date', 'rgba(0, 0, 0, 0.6)');
+            root.style.setProperty('--event-pill-name', 'rgba(0, 0, 0, 1)');
+            root.style.setProperty('--event-pill-location', 'rgba(0, 0, 0, 0.5)');
+
+            root.style.setProperty('--event-pill-border', 'rgba(35, 217, 96, 0.5)');
+            root.style.setProperty('--event-pill-text', 'black');
+
+            root.style.setProperty('--event-active-link', '#2c3e50');
+            root.style.setProperty('--event-list-background', '#F5F5F5');
+            root.style.setProperty('--event-pending', '#E0932F');
+            root.style.setProperty('--event-ongoing', '#4bcc69');
+            root.style.setProperty('--event-static', '#2a8dc7');
+            root.style.setProperty('--event-ending', '#919191');
+
+            root.style.setProperty('--event-course-name', '#466D85');
+            root.style.setProperty('--event-course-title', '#146c91');
+
+            root.style.setProperty('--event-active-background', 'white');
+            root.style.setProperty('--event-active-shadow', 'rgba(0, 0, 0, 0.1)');
+
+            root.style.setProperty('--event-location', '#524e0a');
+
             // Calendar colors for creating lectures
-            root.style.setProperty('--calendar-background', 'white');
-            root.style.setProperty('--calendar-border', 'rgba(100,100,100,1)');
+            root.style.setProperty('--calendar-background', 'pink');
+            root.style.setProperty('--calendar-border', 'rgba(0,0,0,1)');
             root.style.setProperty('--checkins-border', 'gray');
-            root.style.setProperty('--calendar-selected', 'rgba(20,75,250,1)');
-            root.style.setProperty('--add-poll-tint', 'rgba(255, 255, 255, 0.60)');
-            root.style.setProperty('--add-poll-background', 'white');
+            root.style.setProperty('--calendar-selected', 'rgba(200,40,120,1)');
             
             // Statistics but dark
             root.style.setProperty('--stats-panel-background', '#4c4c4c');
@@ -283,6 +428,7 @@ export default {
             root.style.setProperty('--stats-playback-fill', '#92bed2');
             root.style.setProperty('--stats-absent-border', '#e95454');
             root.style.setProperty('--stats-absent-fill', '#ff8787');
+            root.style.setProperty('--stats-panel-shadow', 'rgba(109, 109, 109, 0.644)');
 
             // ToggleSwitch.vue
             root.style.setProperty('--toggle-switch-on-background', '#bfffc6');
