@@ -427,32 +427,42 @@ router.beforeEach((to, from, next) => {
           next('/dashboard')
         }
       } else if (to.name == 'join_course') { //student implement new join route
-
-        CourseAPI.getCourse(to.params.id).then(response=>{
-          const course = response.data.name
-          alert(course)
-        })
+        console.log(user_data.current_user.student_sections.length)
+      
+        if (user_data.current_user.instructor_courses.includes(to.params.id)) {
+          next('/course_info/' + to.params.id)
+        }
         SectionAPI.getSectionsForCourse(to.params.id).then(res=>{
+          let in_course = false
           let sections = res.data
-          var i
-          for (i = 0; i < sections.length; i++) {
+          for (let i = 0; i < sections.length; i++) {
             if (user_data.current_user.student_sections.includes(sections[i]._id)) {
-              break
+              console.log(sections[i].name)
+              next('/course_info/' + sections[i]._id)
+              in_course = !in_course
+              break }
+          }
+          console.log("hi")
+          if (!in_course) {
+            var section_choice = prompt("Join Section")
+            for (let i = 0; i < sections.length; i++) {
+              if (sections[i].name == section_choice) {
+                // edit database
+                  console.log(user_data.current_user.student_sections.length)
+                  console.log(user_data.current_user._id)
+                  SectionAPI.addSection(sections[i], user_data.current_user).then(res=>{
+                    console.log(user_data.current_user.student_sections.length)
+                    next('/course_info/' + sections[i]._id)
+                  })
+                /*
+                SectionAPI.addStudents(sections[i]._id, studs)
+                */
+                break }
             }
           }
         })
-        
-        if (user_data.current_user.instructor_courses.includes(to.params.id)) {
-          next('/course_info/' + to.params.id)
-        }     
-        else if (!(user_data.current_user.student_sections.includes(to.params.id)) ) {
-          user_data.current_user.student_sections.push(to.params.id)
-          SectionAPI.addStudents(to.params.id, user_data.current_user.user_id)
-          next('/course_info/' + to.params.id)
-        }
-      }
 
-      
+      }  
       else {
         next()
       }
