@@ -337,7 +337,7 @@ sectionRoutes.post('/add_tas/:id', (req, res) => {
       let ta_ids = tas.map(a => a._id)
       Promise.all([
         User.updateMany( {_id: {$in: ta_ids}}, {$push: {ta_sections: [section_id]}}),
-        Section.findByIdAndUpdate( section_id, {$push: {teaching_assistants: {$each: ta_ids}}})
+        Section.findByIdAndUpdate( section_id, {$push: {tas: {$each: ta_ids}}})
       ]).then(resolved => {
         res.json()
       })
