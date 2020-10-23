@@ -13,13 +13,10 @@ let Course = new Schema({
 		type: String,
 		ref: 'User'
 	}],
-<<<<<<< HEAD
-=======
 	is_public: {
 		type: Boolean,
 		default: false
 	},
->>>>>>> master
 	sections: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Section'
