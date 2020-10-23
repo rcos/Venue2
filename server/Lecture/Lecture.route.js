@@ -1,14 +1,6 @@
 const express = require('express');
 const lectureRoutes = express.Router();
 const formidable = require('formidable');
-<<<<<<< HEAD
-const { Storage } = require("@google-cloud/storage")
-=======
-const {Storage} = require("@google-cloud/storage")
-const multer = require('multer')
->>>>>>> c3f567ac8a8c41d369050f6981b3f01611461d4f
-var fs = require('fs');
-var path = require('path');
 var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
 	service: 'gmail',
