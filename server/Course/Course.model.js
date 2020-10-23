@@ -10,7 +10,7 @@ let Course = new Schema({
 	prefix: String,
 	suffix: Number,
 	instructors: [{
-		type: mongoose.Schema.Types.ObjectId,
+		type: String,
 		ref: 'User'
 	}],
 	is_public: {
