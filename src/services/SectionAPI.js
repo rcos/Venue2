@@ -56,5 +56,12 @@ export default {
     return API().post('sections/add_tas/'+section_id, {
       tas: tas
     })
+  },
+
+  addSection(section, user) {
+    return API().post('sections/add_student_section/', {
+      section: section,
+      user: user
+    })
   }
 }
