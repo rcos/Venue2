@@ -181,27 +181,15 @@ sectionRoutes.route('/getTeachingAssistants/:id').get(function (req, res) {
       res.json(err);
     } else {
       let ta_ids = section.teaching_assistants;
-      let tas = [];
-      let num_iterations = 0;
-      if(ta_ids.length) {
-        ta_ids.forEach(ta_id => {
-          User.findById(ta_id, function(err, ta) {
-            if(err || ta == null){
-              console.log("<ERROR> Getting user with ID:",ta_id)
-              res.json(err);
-            } else {
-              tas.push(ta);
-              num_iterations++;
-              if(num_iterations === ta_ids.length) {
-                console.log("<SUCCESS> Getting teaching assistants for section with ID:",id)
-                res.json(tas);
-              }
-            }
-          })
-        })
-      } else {
-        res.json([])
-      }
+      User.find({_id: {$in: ta_ids}},function(err,tas) {
+        if(err || tas == null){
+          console.log("<ERROR> Getting TAs for section with ID:",id)
+          res.json([]);
+        } else {
+          console.log("<SUCCESS> Getting TAs for section with ID:",id)
+          res.json(tas)
+        }
+      })
     }
   })
 })
@@ -349,7 +337,7 @@ sectionRoutes.post('/add_tas/:id', (req, res) => {
       let ta_ids = tas.map(a => a._id)
       Promise.all([
         User.updateMany( {_id: {$in: ta_ids}}, {$push: {ta_sections: [section_id]}}),
-        Section.findByIdAndUpdate( section_id, {$push: {tas: {$each: ta_ids}}})
+        Section.findByIdAndUpdate( section_id, {$push: {teaching_assistants: {$each: ta_ids}}})
       ]).then(resolved => {
         res.json()
       })
