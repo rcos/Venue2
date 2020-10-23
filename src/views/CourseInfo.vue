@@ -5,12 +5,13 @@
 
         <!-- Title -->
         <div class="title">
-          <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: (is_instructor?course._id:$route.params.id) }}" tabindex="-1">
+          <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: $route.params.id }}" tabindex="-1">
             <div class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
           </router-link>
         </div>
-        <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" :section_name="section.name" :is_instructor="is_instructor" :is_ta="is_ta"/>
 
+        <CourseInfoTitle v-if="is_instructor" :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta"/>
+        <CourseInfoTitle v-else-if="sections[$route.params.id]" :course="sections[$route.params.id].course" :section_name="sections[$route.params.id].name" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta"/>
 
         <!-- Attendance History -->
         <div>
@@ -41,8 +42,10 @@
     <hide-at breakpoint="large">
       <div>
         <!-- Mobile View -->
-        <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta" mobileMode />
-        <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: (is_instructor?course._id:$route.params.id) }}" tabindex="-1">
+        <CourseInfoTitle v-if="is_instructor" :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta" mobileMode/>
+        <CourseInfoTitle v-else-if="sections[$route.params.id]" :course="sections[$route.params.id].course" :section_name="sections[$route.params.id].name" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta" mobileMode/>
+
+        <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: $route.params.id }}" tabindex="-1">
           <div class="inline-block big-button mobile" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
         </router-link>
         <div class="courseinfo-attendance-listing">
