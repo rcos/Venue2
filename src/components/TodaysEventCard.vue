@@ -1,4 +1,4 @@
-<<template>
+<template>
   <div>
     <!-- Dekstops & Tablets -->
     <hide-at breakpoint="small">
