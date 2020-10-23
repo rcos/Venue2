@@ -1,8 +1,6 @@
 const seeder = require("mongoose-seed");
 const Course = require("./Course/Course.model")
-const Event = require("./Event/Event.model")
 const Section = require("./Section/Section.model")
-const Submission = require("./Submission/Submission.model")
 const User = require("./User/User.model")
 const Lecture = require("./Lecture/Lecture.model")
 const LectureSubmission = require("./LectureSubmission/LectureSubmission.model")
@@ -695,13 +693,11 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 		"./Course/Course.model",
 		"./User/User.model",
 		"./Section/Section.model",
-		"./Event/Event.model",
-		"./Submission/Submission.model",
 		"./Lecture/Lecture.model",
 		"./LectureSubmission/LectureSubmission.model",
 		"./PlaybackPoll/PlaybackPoll.model"
 	]);
-	seeder.clearModels(['Course', 'User', 'Section', 'Event', 'Submission', 'Lecture', 'LectureSubmission', 'PlaybackPoll'], function () {
+	seeder.clearModels(['Course', 'User', 'Section', 'Lecture', 'LectureSubmission', 'PlaybackPoll'], function () {
 
 		let u = []
 		let c = []
