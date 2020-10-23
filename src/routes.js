@@ -37,6 +37,7 @@ import Statistics from './views/Statistics.vue';
 import TeachNewCourse from '@/components/TeachNewCourse.vue';
 import NewSection from '@/components/NewSection.vue';
 import EditLecture from '@/components/EditLecture.vue';
+import JoinCourse from '@/components/JoinCourse.vue';
 
 import AuthAPI from '@/services/AuthAPI.js';
 import UserAPI from '@/services/UserAPI.js';
@@ -272,6 +273,15 @@ const router = new VueRouter({
       }
     },
     {
+      name: 'join_course',
+      path: '/join_course/:id',
+      component: JoinCourse,
+      meta: {
+        title: "Join Course",
+        requiresAuth: true
+      }
+    },
+    {
       name: 'new_event',
       path: '/new_event/:course_id',
       component: NewEvent,
@@ -412,17 +422,26 @@ router.beforeEach((to, from, next) => {
         || (to.name == 'edit_course' && user_data.current_user.instructor_courses.includes(to.params.id))
         || (to.name == 'edit_section' && user_data.current_user.ta_sections.includes(to.params.id))
         || (to.name == 'edit_section' && from.name == 'edit_course')
-        || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))) {
+        || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))){
           next()
         } else {
           next('/dashboard')
         }
-
-      } else {
+      }else if (to.name == 'join_course') { //student implement new join route
+        if (user_data.current_user.instructor_courses.includes(to.params.id) 
+        || user_data.current_user.student_sections.includes(to.params.id)) {
+          next('/course_info/' + to.params.id)
+        }
+        
+        else if (to.name == "join_course" && !(user_data.current_user.student_sections.includes(to.params.id)) ) {
+          next('/dashboard')
+        }
+      }
+      else {
         next()
       }
-
-    } else {
+    } 
+    else { // not logged in
       next('/')
     }
 
