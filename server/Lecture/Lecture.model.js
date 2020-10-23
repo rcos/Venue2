@@ -33,7 +33,8 @@ let Lecture = new Schema({
 	video_length: Number,
 	video_type: { type: String, default: "" },
 	num_playback_polls: Number,
-	email_sent: {type: Boolean, default: false}
+	email_sent: {type: Boolean, default: false},
+	meeting_link: String
 });
 
 module.exports = mongoose.model('Lecture', Lecture);

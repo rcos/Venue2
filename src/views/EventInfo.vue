@@ -62,7 +62,6 @@
 </template>
 
 <script>
-  import EventAPI from '@/services/EventAPI.js';
   import QRCode from "qrcode";
   import QRScanner from "qr-code-scanner";
   import LectureUploadModal from "../components/LectureUploadModal";

@@ -118,10 +118,9 @@ export default {
 
 main {
   position: relative;
-  width: 100%;
   top: 0;
-  bottom: 0rem;
+  width: 100%;
   overflow-y: auto;
-  padding-bottom: 2rem;
+  min-height: calc(100vh - 10rem);
 }
 </style>

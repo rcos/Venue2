@@ -17,7 +17,11 @@ let Section = new Schema({
 	students: [{
 		type: String,
 		ref: 'User'
-	}]
+	}],
+	is_public: {
+		type: Boolean,
+		default: false
+	}
 });
 
 module.exports = mongoose.model('Section', Section);
