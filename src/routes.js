@@ -37,6 +37,7 @@ import Statistics from './views/Statistics.vue';
 import TeachNewCourse from '@/components/TeachNewCourse.vue';
 import NewSection from '@/components/NewSection.vue';
 import EditLecture from '@/components/EditLecture.vue';
+import JoinCourse from '@/components/JoinCourse.vue';
 
 import AuthAPI from '@/services/AuthAPI.js';
 import UserAPI from '@/services/UserAPI.js';
@@ -275,8 +276,8 @@ const router = new VueRouter({
     },
     {
       name: 'join_course',
-      path: '/course_info/:id/join',
-      // component: CourseInfo,
+      path: '/join_course/:id',
+      component: JoinCourse,
       meta: {
         title: "Join Course",
         requiresAuth: true
@@ -405,7 +406,9 @@ router.beforeEach((to, from, next) => {
 
       const user_data = JSON.parse(loggedIn)
 
-      if(to.matched.some(record => record.meta.requiresAdmin)) {
+      if(user_data.current_user.is_admin) {
+        next()
+      } else if(to.matched.some(record => record.meta.requiresAdmin)) {
 
         if (user_data.current_user.is_admin) {
           next()
