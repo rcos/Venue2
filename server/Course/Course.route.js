@@ -139,7 +139,8 @@ courseRoutes.post('/add_instructors/:id', (req, res) => {
 })
 
 courseRoutes.route('/toggleOpenEnrollment/:id').post(function (req, res) {
-  let id = req.params.id;
+  let id = req.params.id
+  let sections = req.body.sections
   Course.findByIdAndUpdate(id,
     {is_public: true}, {$set: {is_public: false}},
       function (err, course) {
@@ -147,6 +148,7 @@ courseRoutes.route('/toggleOpenEnrollment/:id').post(function (req, res) {
           console.log("<ERROR> Changing course (ID:",id, ") status to private")
           res.status(404).send("course not found");
         } else {
+          
           console.log("<SUCCESS> Changing course (ID:",id, ") status to private")
           res.json(course);
         }
