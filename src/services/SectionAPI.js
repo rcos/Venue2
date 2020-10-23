@@ -58,10 +58,10 @@ export default {
     })
   },
 
-  addSection(section, user) {
+  addToSection(section_id, user_id) {
     return API().post('sections/add_student_section/', {
-      section: section,
-      user: user
+      section_id: section_id,
+      user_id: user_id
     })
   }
 }
