@@ -92,7 +92,6 @@
 </template>
 
 <script>
-import EventAPI from "@/services/EventAPI.js";
 import CourseAPI from "@/services/CourseAPI.js";
 import SectionAPI from "@/services/SectionAPI.js";
 import Sections from "@/components/Sections";
