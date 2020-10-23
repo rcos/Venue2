@@ -283,7 +283,7 @@ userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
             let student_emails = section.students;
             let num_iterations = 0;
             student_emails.forEach(student_email => {
-              User.find({ email: student_email }, function (err, student) {
+              User.findOne({ email: student_email }, function (err, student) {
                 if (err || student == null) {
                   console.log("<ERROR> Getting user with Email:", student_email)
                   res.json(err);
