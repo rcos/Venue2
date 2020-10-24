@@ -102,7 +102,7 @@ export default {
             root.style.setProperty('--nav-bar-hover-bottom-shadow', 'rgba(179, 179, 179, 0.644)');  
 
             // Course and Lecture 'pills'
-            root.style.setProperty('--red-pill', '#d13e34');                                  // testing: #D14454      original: #d13e34
+            root.style.setProperty('--red-pill', '#D14454');                                  // testing: #D14454      original: #d13e34
             root.style.setProperty('--red-pill-shadow', 'rgba(249, 82, 71, 0.3)');
             root.style.setProperty('--yellow-pill', '#b95726');
             root.style.setProperty('--yellow-pill-shadow', 'rgba(244, 159, 50, 0.4)');
@@ -328,7 +328,7 @@ export default {
             root.style.setProperty('--recording-namecard', '#8f3eca');
 
             // Course and Lecture 'pills'
-            root.style.setProperty('--red-pill', '#d13e34');
+            root.style.setProperty('--red-pill', '#D14454');                                  // testing: #D14454      original: #d13e34
             root.style.setProperty('--red-pill-shadow', 'rgba(249, 82, 71, 0.3)');
             root.style.setProperty('--yellow-pill', '#b95726');
             root.style.setProperty('--yellow-pill-shadow', 'rgba(244, 159, 50, 0.4)');
