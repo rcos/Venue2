@@ -6,44 +6,43 @@ export default {
   },
   data() {
     return {
-      sections: [],
-      in_course: false
+      names: [],
+      sections: []
     }
   },
   created() {
     this.course_id = this.$route.params.id
     this.current_user = this.$store.state.user.current_user
     this.inCourse()
-    /*
-    if (!this.in_course) {
-      this.addStudentToSection()
-    } */
-
+   
   }, 
   methods : {
-    inCourse()  {
+    async inCourse()  {
+      let in_course = false
       SectionAPI.getSectionsForCourse(this.course_id).then(res=> {
         res.data.forEach(sec => {
           this.sections.push(sec._id)
+          this.names.push(sec.name)
         })
         for (let i = 0; i < this.sections.length; i++) {
           if (this.current_user.student_sections.includes(this.sections[i])) {
-            this.in_course = !this.in_course
+           in_course = !in_course
             this.$router.push('/course_info/' + this.sections[i])
             break
           }
         }
+        if (!in_course) {
+          var section_choice = prompt("Join Section")
+          for (let i = 0; i < this.names.length; i++) {
+              if (this.names[i] == section_choice) {
+                const response = SectionAPI.addToSection(this.sections[i], this.current_user._id)
+                this.$router.push('/course_info/' + this.sections[i])
+                location.reload()
+              }
+          }
+        }
       })
     }
-    /*
-    addStudentToSection() {
-      var section_choice = prompt("Join Section")
-      if (this.names.includes(section_choice)) {
-        const response = SectionAPI.addToSection(this.sections[i]._id, this.current_user._id)
-        this.$router.push('/course_info/' + this.sections[i]._id)
-        location.reload()
-      }
-    } */
 
 
   }
