@@ -226,9 +226,22 @@ export default {
 	padding: 0.1rem 0.5rem;
 	padding-left: 0;
 	background: none;
-	color: red;
+	color: var(--error-brighter);
 	border: none;
 	font-weight: 900;
 	outline: none;
 }
+.btn.btn-danger:hover,
+.btn.btn-danger:focus,
+.btn.btn-danger:focus:active,
+.btn.btn-danger:active,
+.btn.btn-danger:target {
+  outline: none;
+  border: none;
+  box-shadow: none;
+  background-color: none;
+  font-weight: 1200;
+  background: none;
+  color: var(--button-danger-hover);
+} 
 </style>

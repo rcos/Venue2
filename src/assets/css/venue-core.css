@@ -65,8 +65,12 @@
 
   --widgets-color: 'brightness(0) filter(1)';
   --input-background: #f7f7f7;
+  --input-border: grey;
   --input-text: #171717;
   --input-shadow: #9ecaed;
+
+  --error: #c40000;
+  --error-brighter: red;
   
   --course-card-background: #ffffff;
   --course-card-shadow: rgba(179, 179, 179, 0.644);
@@ -82,7 +86,7 @@
   --big-button-border: rgba(44, 62, 80, 0.7);
   --big-button-text: rgba(44, 62, 80, 1);
   --big-button-shadow: rgba(44, 62, 80, 0.2);
-  --button-blue-shadow: rgba(109, 109, 109, 0.644);
+  --button-blue-shadow: rgba(67, 65, 120, 0.844);
   --button-grey-shadow: rgba(109, 109, 109, 0.644);
 
   --sync-border: #04852f;
@@ -96,15 +100,34 @@
   --blue-pill-shadow: rgba(79, 109, 234, 0.3);
   --green-pill: #04852f;
   --green-pill-shadow: rgba(78, 205, 76, 0.3);
+  --foreground-pill: #f5f5f5;
+  --foreground-pill-shadow: rgba(109, 109, 109, 0.644);
+  --date-and-percent: white;
 
   --upcoming-pill: #0078c2;
   --upcoming-pill-shadow: rgba(109, 109, 109, 0.644);
+
+  --calendar-background: white;
+  --calendar-border: rgba(100,100,100,1);
+  --checkins-border: gray;
+  --calendar-selected: rgba(20,75,250,1); 
+
+  --modal-background: #ffffff;
+  --modal-course-name: #53788E;
+  --modal-course-number: #2398C8;
+  --modal-border: grey;
+  --modal-container-background: rgba(255, 255, 255, 0.65);
+  --modal-lecture-border: rgba(120,120,120,1);
 }
 
 body {
   height: auto; 
   background-color: var(--main-background-color); 
   color: var(--main-text-color);
+}
+
+h1 {
+  color: var(--dashboard-text-color);
 }
 
 .venue-body-container {
@@ -142,7 +165,6 @@ body {
   margin-right: 2rem;
   background-color: var(--course-card-background); 
   color: var(--course-card-text);
-  /* This is where course info cards go */
 }
 
 .venue-body-container .course-info-title .course-name {
@@ -320,7 +342,6 @@ body {
   color: #2c3e50;
   box-shadow: 0px 3px 3px 1px rgba(109, 109, 109, 0.644);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
-  background: var(--red-pill);
   /* margin-bottom: 1rem; */
 }
 
@@ -352,7 +373,7 @@ body {
   /* background-color: #d13e34; */
   height: 100%;
   text-align: center;
-  color: white;
+  color: var(--date-and-percent);;
   font-size: 1rem;
   margin-right: 15px;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
@@ -370,7 +391,7 @@ body {
   /* background-color: #d13e34; */
   height: 100%;
   text-align: center;
-  color: white;
+  color: var(--date-and-percent);
   margin-right: 15px;
 }
 
@@ -382,10 +403,11 @@ body {
   left: 20%;
   bottom: 0;
   padding-left: 1rem;
-  background: white;
+  background: var(--foreground-pill);
   margin: 0.5rem 0rem;
   border-radius: 0.75rem;
-  box-shadow: 0px 3px 3px 1px rgba(109, 109, 109, 0.644) inset;
+  color: var(--lecture-name-text);
+  box-shadow: 0px 3px 3px 1px var(--foreground-pill-shadow) inset;
   text-align: left;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
@@ -433,7 +455,7 @@ body {
   bottom: 0;
   text-align: center;
   line-height: 4rem;
-  color: white;
+  color: var(--date-and-percent);
   font-size: 1.2rem;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
@@ -577,7 +599,7 @@ body {
 .dashboard-section-modal .sub-section::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: #F5F5F5; 
+  background-color: var(--modal-background); 
 }
 
 .dashboard-section-modal .sub-section.is-mobile {
@@ -598,10 +620,10 @@ body {
 
 .dashboard-section-modal .course-pill .foreground-pillar {
   border-radius: 5px;
-  box-shadow: 0px 3px 3px 1px rgba(109, 109, 109, 0.644);
+  box-shadow: 0px 3px 3px 1px var(--foreground-pill-shadow);
   position: relative;
   z-index: 3;
-  background-color: white;
+  background-color: var(--foreground-pill);
   height: 100%;
 }
 
@@ -636,12 +658,12 @@ body {
 .dashboard-section-modal .course-pill .pill-left .course-name {
   font-size: 0.8rem;
   font-weight: bold;
-  color: #53788E;
+  color: var(--modal-course-name);
 }
 
 .dashboard-section-modal .course-pill .pill-left .course-dept {
   font-size: 0.85rem;
-  color: #2398C8;
+  color: var(--modal-course-dept);
   font-weight: bold;
 }
 
@@ -830,8 +852,8 @@ a:hover {
 .course-info-upcoming-lecture-pill .foreground-pill {
   width: 100%;
   height: 100%;
-  background-color: white;
-  box-shadow: 0px 3px 3px 1px var(--upcoming-pill-shadow);
+  background-color: var(--foreground-pill);
+  box-shadow: 0px 3px 3px 1px var(--foreground-pill-shadow);
   position: relative;
   z-index: 2;
   padding: 0px 20px;
@@ -913,6 +935,12 @@ a:hover {
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
+.btn.btn-danger {
+  background: var(--button-danger);
+  border: 0.1rem solid rgba(255,255,255, 0);
+  box-shadow: none;
+} 
+
 .btn.btn-primary:hover,
 .btn.btn-primary:focus,
 .btn.btn-primary:active,
@@ -951,7 +979,16 @@ a:hover {
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-
+.btn.btn-danger:hover,
+.btn.btn-danger:focus,
+.btn.btn-danger:active,
+.btn.btn-danger:target {
+  outline: none;
+  border: 0.1rem solid var(--button-danger-shadow);
+  background-color: var(--button-danger-hover);
+  box-shadow: 0px 3px 3px 0px var(--button-danger-shadow) inset;
+  transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+} 
 
 input,select {
   color: var(--input-text) !important;
@@ -960,14 +997,43 @@ input,select {
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
+.input-group-append {
+  padding-left: 20px;
+}
+
+.form-control {
+  border-color: var(--input-border);
+}
+
 .form-control:focus {
   outline: none;
   border-color: var(--input-shadow);
   box-shadow: 0 0 10px var(--input-shadow);
 }
 
+th,td {
+  color: var(--main-text-color);
+}
 
+.picker-dialog {
+  background: var(--calendar-background); 
+  border: 1px solid var(--calendar-border);
+}
 
+.picker-item {
+  color: var(--calendar-border);
+  background: var(--calendar-background);
+}
+.picker-cell__control,
+.picker-cell__control::before,
+.picker-cell__header {
+  /* background-color: var(--calendar-background); */
+  color: var(--calendar-border);
+}
+
+.picker-picked {
+  color: var(--calendar-selected);
+}
 
 /* ------------------ */
 
@@ -977,7 +1043,7 @@ input,select {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.65);
+  background: var(--modal-container-background);
   z-index: 99;
 }
 
@@ -986,8 +1052,8 @@ input,select {
   width: 50%;
   height: 50%;
   margin: 12.5% 25%;
-  background: white;
-  border: 1px solid gray;
+  background: var(--modal-background);
+  border: 1px solid var(--modal-border);
   padding: 1rem;
   border-radius: 1rem;
   overflow-y: auto;
