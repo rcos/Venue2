@@ -7,7 +7,7 @@
           <h3 class="lecture-title">
             {{lecture.title}}
             <router-link v-if="is_instructor" :to="{name: 'edit_lecture',params:{id: lecture._id}}" role="link" aria-label="Edit Lecture">
-              <img src="@/assets/settings.svg" width="30" height="30" class="d-inline-block align-top" alt="Settings" aria-label="Settings">
+              <img src="@/assets/settings.svg" width="30" height="30" class="d-inline-block align-top svg-color" alt="Settings" aria-label="Settings">
             </router-link>
           </h3>
           <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.prefix}} {{lecture.sections[0].course.suffix}}</p></div>
@@ -37,7 +37,7 @@
             <h3 class="lecture-title">
               {{lecture.title}}
               <router-link v-if="is_instructor" :to="{name: 'edit_lecture',params:{id: lecture._id}}" role="link" aria-label="Edit Lecture">
-                <img src="@/assets/settings.svg" width="30" height="30" class="d-inline-block align-top" alt="Settings" aria-label="Settings">
+                <img src="@/assets/settings.svg" width="30" height="30" class="d-inline-block align-top svg-color" alt="Settings" aria-label="Settings">
               </router-link>
             </h3>
             <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.prefix}} {{lecture.sections[0].course.suffix}}</p></div>
@@ -144,25 +144,24 @@
   }
 
   #main-info {
-    background-color: var(--course-card-background);
     display: inline-block;
     border-radius: .25rem;
     padding: 2rem;
     margin: 0;
     text-align: left;
-    box-shadow: 0px 3px 3px 0px var(--course-card-shadow);
+    background-color: var(--course-card-background);
+    box-shadow: 0px 3px 3px 0px var(--lecture-attendance-grey-shadow);
     width: 100%;
   }
 
   #main-info-mobile {
-    background-color: var(--course-card-background);
     display: inline-block;
     border-radius: .25rem;
     padding: 2rem 3rem;
     width: 100%;
     margin: 0;
     text-align: center;
-    box-shadow: 0px 3px 3px 0px var(--course-card-shadow);
+    box-shadow: 0px 3px 3px 0px var(--lecture-attendance-grey-shadow);
   }
 
   .row-half h5,
@@ -190,14 +189,14 @@
 
   #checkins-container {
     width: 100%;
-    border: grey solid;
+    border: var(--modal-border) solid;
   }
 
   .time-container {
     display: inline-block;
     text-align: center;
     width:50%;
-    border: grey solid thin;
+    border: var(--modal-border) solid thin;
   }
 
   .time-window {

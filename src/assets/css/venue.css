@@ -1,12 +1,12 @@
 /* Global Style */
 
-input:focus, 
+input:focus,
 button:focus {
   outline: none;
 }
 
 html,body {
-  background: white;
+  background: #FCFEFF;
   font-weight: normal;
   height: 100%;
   /*font-size: 16px;*/
@@ -189,11 +189,11 @@ h1 {
 
 /* Link Styles */
 a {
-  color: #5597EE; 
+  color: var(--link);
 }
 
 a:hover {
-  color: #2c70c9;
+  color: var(--link-hover);
   text-decoration: none;
 }
 

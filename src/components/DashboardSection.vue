@@ -1,15 +1,8 @@
 <template>
   <div class="dashboard-section">
     <div class="dashboard-section-title-container">
-      <h4 v-if="lecture_type === 'Live'" class="dashboard-section-title">
-        Synchronous
-      </h4>
-      <h4
-        v-else-if="lecture_type === 'Playback'"
-        class="dashboard-section-title"
-      >
-        Asynchronous
-      </h4>
+      <h4 v-if="lecture_type === 'Live'" class="dashboard-section-title"> Synchronous</h4>
+      <h4 v-else-if="lecture_type === 'Playback'" class="dashboard-section-title">Asynchronous</h4>
       <h4 v-else class="dashboard-section-title">{{ lecture_type }}</h4>
     </div>
     <div class="dashboard-section-body-container">
@@ -19,33 +12,27 @@
 </template>
 
 <script>
-import LectureList from "@/components/LectureList";
-import PaletteAPI from '../services/PaletteAPI';
+  import LectureList from '@/components/LectureList'
 
-export default {
-  name: "DashboardSection",
-  props: {
-    lecture_type: String,
-    lecture_list: Array
-  },
-  computed: {},
-  components: {
-    LectureList
-  },
-  data() {
-    return {};
-  },
-  created() {
-    this.setPalette();
-  },
-  methods: {
-    setPalette() {
-      this.current_user = this.$store.state.user.current_user
-      let root = document.documentElement;
-      PaletteAPI.setPalette(root, this.current_user.dark_mode)
+  export default {
+    name: 'DashboardSection',
+    props: {
+      lecture_type: String,
+      lecture_list: Array
+    },
+    computed: {
+    },
+    components: {
+      LectureList
+    },
+    data(){
+      return {
+      }
+    },
+    methods: {
+
     }
   }
-};
 </script>
 
 <style scoped>

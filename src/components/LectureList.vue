@@ -40,7 +40,7 @@
   }
 
   .no-lecture-text {
-    color: #2C3E50;
+    color: var(--dashboard-text-color);
   }
 
   /*Ipad & below*/
