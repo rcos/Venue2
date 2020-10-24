@@ -1,8 +1,6 @@
 const seeder = require("mongoose-seed");
 const Course = require("./Course/Course.model")
-const Event = require("./Event/Event.model")
 const Section = require("./Section/Section.model")
-const Submission = require("./Submission/Submission.model")
 const User = require("./User/User.model")
 const Lecture = require("./Lecture/Lecture.model")
 const LectureSubmission = require("./LectureSubmission/LectureSubmission.model")
@@ -391,7 +389,7 @@ c0 = {
 	prefix: "CSCI",
 	suffix: 2961,
 	instructors: [
-		u0._id
+		u0.email
 	]
 }
 c1 = {
@@ -400,7 +398,7 @@ c1 = {
 	prefix: "CSCI",
 	suffix: 1200,
 	instructors: [
-		u1._id
+		u1.email
 	]
 }
 c2 = {
@@ -409,7 +407,7 @@ c2 = {
 	prefix: "MATH",
 	suffix: 2010,
 	instructors: [
-		u0._id
+		u0.email
 	]
 }
 c3 = {
@@ -427,8 +425,8 @@ c4 = {
 	prefix: "TEST",
 	suffix: 1000,
 	instructors: [
-		u0._id,
-		u1._id
+		u0.email,
+		u1.email
 	]
 }
 
@@ -438,34 +436,34 @@ s0 = {
 	course: c0._id,
 	name: "1",
 	students: [
-		u2._id,
-		u3._id,
-		u4._id,
-		u5._id,
-		u6._id,
-		u7._id,
-		u8._id,
-		u9._id,
-		u10._id,
-		u11._id,
-		u12._id,
-		u13._id,
-		u14._id,
-		u15._id,
-		u16._id,
-		u17._id,
-		u18._id,
-		u19._id,
-		u20._id,
-		u21._id,
-		u22._id,
-		u23._id,
-		u24._id,
-		u25._id
+		u2.email,
+		u3.email,
+		u4.email,
+		u5.email,
+		u6.email,
+		u7.email,
+		u8.email,
+		u9.email,
+		u10.email,
+		u11.email,
+		u12.email,
+		u13.email,
+		u14.email,
+		u15.email,
+		u16.email,
+		u17.email,
+		u18.email,
+		u19.email,
+		u20.email,
+		u21.email,
+		u22.email,
+		u23.email,
+		u24.email,
+		u25.email
 	],
 	teaching_assistants: [
-		u26._id,
-		u27._id
+		u26.email,
+		u27.email
 	]
 }
 s1 = {
@@ -473,11 +471,11 @@ s1 = {
 	course: c1._id,
 	name: "1",
 	students: [
-		u2._id,
-		u3._id
+		u2.email,
+		u3.email
 	],
 	teaching_assistants: [
-		u0._id
+		u0.email
 	]
 }
 s2 = {
@@ -485,11 +483,11 @@ s2 = {
 	course: c1._id,
 	name: "2",
 	students: [
-		u2._id,
-		u4._id
+		u2.email,
+		u4.email
 	],
 	teaching_assistants: [
-		u0._id
+		u0.email
 	]
 }
 s3 = {
@@ -497,21 +495,21 @@ s3 = {
 	course: c4._id,
 	name: "1",
 	students: [
-		u2._id, //a
-		u3._id, //b
-		u4._id,
-		u5._id,
-		u6._id,
-		u7._id,
-		u8._id,
-		u9._id,
-		u10._id,
-		u11._id,
-		u12._id,
-		u13._id //l
+		u2.email, //a
+		u3.email, //b
+		u4.email,
+		u5.email,
+		u6.email,
+		u7.email,
+		u8.email,
+		u9.email,
+		u10.email,
+		u11.email,
+		u12.email,
+		u13.email //l
 	],
 	teaching_assistants: [
-		u26._id //y
+		u26.email //y
 	]
 }
 s4 = {
@@ -519,22 +517,22 @@ s4 = {
 	course: c4._id,
 	name: "2",
 	students: [
-		u2._id,	//a
-		u14._id,//m
-		u15._id,
-		u16._id,
-		u17._id,
-		u18._id,
-		u19._id,
-		u20._id,
-		u21._id,
-		u22._id,
-		u23._id,
-		u24._id,
-		u25._id //x
+		u2.email,	//a
+		u14.email,//m
+		u15.email,
+		u16.email,
+		u17.email,
+		u18.email,
+		u19.email,
+		u20.email,
+		u21.email,
+		u22.email,
+		u23.email,
+		u24.email,
+		u25.email //x
 	],
 	teaching_assistants: [
-		u27._id //z
+		u27.email //z
 	]
 }
 
@@ -695,13 +693,11 @@ seeder.connect(process.env.MONGODB_URI || db, function () {
 		"./Course/Course.model",
 		"./User/User.model",
 		"./Section/Section.model",
-		"./Event/Event.model",
-		"./Submission/Submission.model",
 		"./Lecture/Lecture.model",
 		"./LectureSubmission/LectureSubmission.model",
 		"./PlaybackPoll/PlaybackPoll.model"
 	]);
-	seeder.clearModels(['Course', 'User', 'Section', 'Event', 'Submission', 'Lecture', 'LectureSubmission', 'PlaybackPoll'], function () {
+	seeder.clearModels(['Course', 'User', 'Section', 'Lecture', 'LectureSubmission', 'PlaybackPoll'], function () {
 
 		let u = []
 		let c = []
