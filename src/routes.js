@@ -435,6 +435,7 @@ router.beforeEach((to, from, next) => {
         if (user_data.current_user.instructor_courses.includes(to.params.id)) {
           next('/course_info/' + to.params.id)
         }
+        /*
         SectionAPI.getSectionsForCourse(to.params.id).then(res=>{
           let in_course = false
           let sections = res.data
@@ -455,7 +456,8 @@ router.beforeEach((to, from, next) => {
                 break }
             }
           }
-        })
+        }) */
+        next()
 
       }  
       else {
