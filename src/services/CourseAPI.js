@@ -17,6 +17,11 @@ export default {
       updated_course: course
     })
   },
+  addTime(id, course){
+    return API().post('courses/add_lecture_time/' + id, {
+      course_times: course_times
+    })
+  },
   deleteCourse (id) {
     return API().delete('courses/delete/' + id)
   },

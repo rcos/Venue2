@@ -11,10 +11,10 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6" >
           <div class="form-group">
             <label>Day:</label>
-            <input type="text" class="form-control" v-model="section.name">
+            <input type="text" class="form-control" v-model="new_day">
           </div>
         </div>
       </div>
@@ -22,7 +22,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Start Time:</label>
-            <input type="text" class="form-control" v-model="section.name">
+            <input type="text" class="form-control" v-model="new_start">
           </div>
         </div>
       </div>
@@ -30,7 +30,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>End Time:</label>
-            <input type="text" class="form-control" v-model="section.name">
+            <input type="text" class="form-control" v-model="new_end">
           </div>
           <div class="form-group">
             <button class="btn btn-primary">Create</button>
@@ -43,7 +43,6 @@
 </template>
 
 <script>
-  import SectionAPI from '@/services/SectionAPI.js';
   import UserAPI from '@/services/UserAPI.js';
   import CourseAPI from '@/services/CourseAPI.js';
 
@@ -54,7 +53,7 @@
     data(){
       return {
         course: null,
-				section: {}
+				course_times: {}
       }
     },
     created() {
@@ -63,10 +62,10 @@
 			})
     },
     methods: {
-      async addSection(evt){
+      async addTime(evt){
         evt.preventDefault() // prevents the form's default action from redirecting the page
-        this.section.course = this.course._id
-        const response = await SectionAPI.addSection(this.section)
+        this.course_times.course = this.course._id
+        const response = await CourseAPI.addTime(this.course_times)
         this.$router.push({name: 'edit_course',params: {id: this.course._id}})
 				location.reload()
       }
