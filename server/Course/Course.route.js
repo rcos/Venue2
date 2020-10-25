@@ -170,6 +170,18 @@ courseRoutes.post('/add_instructors/:id', (req, res) => {
   });
 });
 
+courseRoutes.post('/add_lecture_time/:id', (req, res) => {
+  let course_times = req.body.course_times;
+  let course_id = req.params.id;
+  Course.findById(course_id, function (err, course) {
+    Promise.all([
+      Course.findByIdAndUpdate(course_id, { $push: { course_times: { $each: instructor_emails } } })
+    ]).then(resolved => {
+      res.json();
+    });
+  });
+});
+
 courseRoutes.route('/toggleOpenEnrollment/:id').post(function (req, res) {
   let id = req.params.id;
   Course.findByIdAndUpdate(id,
