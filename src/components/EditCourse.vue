@@ -39,9 +39,11 @@
           <div class="col-md-6">
             <label>Lecture Times</label>
             <!-- <input class="form-control" v-model="course.prefix" rows="5" readonly> -->
-            <input v-for="time in course.course_times" :key="time.day" class="form-control" :value="time.day" rows="5" readonly>
+            <input v-for="time in course.course_times" :key="time.day" class="form-control" :value="time.day + ': ' + time.start_time + ' - ' +  time.end_time" rows="5" readonly>
             <br>
-            <button>Add Time</button>
+            <router-link :to="{name: 'new_lecture_time', params: { id:course._id}}">
+              <button class="btn btn-primary">Add Time</button>
+            </router-link>
         </div>
       </div><br />
       <div class="row">
@@ -130,24 +132,24 @@
           })
         }
       },
-      updateCourse() {
-        this.waiting= true
-        if (this.edited_course_name != '')
-          this.course.name = this.edited_course_name
-        else 
-          this.course.name = this.course.name
-        if (this.edited_dept_name != '')
-          this.course.prefix = this.edited_dept_name
-        else 
-          this.course.prefix = this.course.prefix
+      // async updateCourse() {
+      //   this.waiting= true
+      //   if (this.edited_course_name != '')
+      //     this.course.name = this.edited_course_name
+      //   else 
+      //     this.course.name = this.course.name
+      //   if (this.edited_dept_name != '')
+      //     this.course.prefix = this.edited_dept_name
+      //   else 
+      //     this.course.prefix = this.course.prefix
 
-        CourseAPI.updateCourse(this.course._id, this.course).then(res => {
-          this.$store.dispatch('updateCurrentCourse', {token: this.$store.state.course.token, course: this.course})
-          this.edited_course_name = ''
-          this.edited_dept_name = ''
-          this.waiting = false
-        })
-      }
+      //   CourseAPI.updateCourse(this.course._id, this.course).then(res => {
+      //     this.$store.dispatch('updateCurrentCourse', {token: this.$store.state.course.token, course: this.course})
+      //     this.edited_course_name = ''
+      //     this.edited_dept_name = ''
+      //     this.waiting = false
+      //   })
+      // }
     }
   }
 </script>
