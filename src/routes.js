@@ -39,6 +39,7 @@ import TeachNewCourse from '@/components/TeachNewCourse.vue';
 import NewSection from '@/components/NewSection.vue';
 import EditLecture from '@/components/EditLecture.vue';
 import JoinCourse from '@/components/JoinCourse.vue';
+import NewLectureTime from '@/components/NewLectureTime.vue';
 
 import AuthAPI from '@/services/AuthAPI.js';
 import UserAPI from '@/services/UserAPI.js';
@@ -151,6 +152,15 @@ const router = new VueRouter({
       name: 'edit_course',
       path: '/edit_course/:id',
       component: EditCourse,
+      meta: {
+        requiresAuth: true,
+        requiresInstructor: true
+      }
+    },
+    {
+      name: 'new_lecture_time',
+      path: '/new_lecture_time/:id',
+      component: NewLectureTime,
       meta: {
         requiresAuth: true,
         requiresInstructor: true
@@ -432,6 +442,7 @@ router.beforeEach((to, from, next) => {
         || (to.name == 'edit_course' && user_data.current_user.instructor_courses.includes(to.params.id))
         || (to.name == 'edit_section' && user_data.current_user.ta_sections.includes(to.params.id))
         || (to.name == 'edit_section' && from.name == 'edit_course')
+        || (to.name == 'new_lecture_time' && user_data.current_user.instructor_courses.includes(to.params.id))
         || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))){
           next()
         } else {
