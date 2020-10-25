@@ -158,6 +158,7 @@ export default {
   },
   methods: {
     copyURL() {
+      navigator.clipboard.writeText((process.env.NODE_ENV === 'production'?'https://venue-meetings.com':'http://localhost:8080')+"/#/join_course/"+this.$route.params.id)
     },
     async getAllSections () {
       SectionAPI.getSectionsForCourse(this.course_id)
