@@ -345,6 +345,36 @@ sectionRoutes.post('/add_tas/:id', (req, res) => {
   })
 })
 
+sectionRoutes.post('/add_student_section/', (req, res) => {
+  let student = req.body.user_id
+  let section = req.body.section_id
+  Promise.all([
+    User.findByIdAndUpdate(student, {$push: {student_sections: section }}),
+    Section.findByIdAndUpdate(section, {$push: {students: student}})]).then(resolved => {
+      res.json()
+  })
+  /*
+  User.findByIdAndUpdate(student,
+    {$push: {student_sections: section }}, function(err, post) {
+      if (err) {
+        console.log(err)
+      }
+      else {
+        console.log(post)
+      }
+    })
+
+  Section.findByIdAndUpdate(section,
+    {$push : {students: student}}, function(err, post) {
+      if (err) {
+        console.log(err)
+      }
+      else {
+        console.log(post)
+      }
+    }) */
+ 
+});
 sectionRoutes.post('/toggleOpenEnrollment/:id', (req, res) => {
   let id = req.params.id;
   Promise.all([Section.findByIdAndUpdate(id,
