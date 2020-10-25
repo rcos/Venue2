@@ -152,7 +152,6 @@ export default {
       this.getCourse()
     }
     else {
-      console.log()
       this.section_id = this.$route.params.id
       this.getSectionWithCourse()
     }
