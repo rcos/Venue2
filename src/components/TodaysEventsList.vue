@@ -1,4 +1,4 @@
-<<template>
+<template>
   <div class="todays-events-list">
     <div v-if="todays_events.length > 0">
       <!-- Desktop and tablet -->
