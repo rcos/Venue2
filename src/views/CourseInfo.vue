@@ -150,7 +150,8 @@ export default {
       this.getAllSections()
       this.getStudentsForCourse()
       this.getCourse()
-    } else {
+    }
+    else {
       this.section_id = this.$route.params.id
       this.getSectionWithCourse()
     }
