@@ -102,13 +102,15 @@ html,body {
   /*font-size: 25px;*/
   position: relative;
   margin-top: -20px;
-  color: #2C3E50;
+  /* color: #2C3E50; */
+  color: var(--dashboard-text-color);
 }
 
 h1 {
   /* font-family: "Exo"; */
   font-weight: bold;
-  color: #2C3E50;
+  /* color: #2C3E50; */
+  color: var(--dashboard-text-color);
 }
 
 .sub-logo {

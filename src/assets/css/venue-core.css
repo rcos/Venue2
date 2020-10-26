@@ -77,6 +77,8 @@
   --course-card-text: #000000;
   --course-number-background: rgba(0, 0, 0, 0.86);
   --course-number-text: #C1EDFF;
+  --course-pill-shadow: rgba(109, 109, 109, 0.644);
+  --course-pill-hover: rgba(160, 160, 160, 0.644);
 
   --button-primary-blue: #0078c2;
   --button-hover-blue: #005183;
@@ -88,6 +90,8 @@
   --big-button-shadow: rgba(44, 62, 80, 0.2);
   --button-blue-shadow: rgba(67, 65, 120, 0.844);
   --button-grey-shadow: rgba(109, 109, 109, 0.644);
+  --button-text-color: white;
+  --button-text-hover: white;
 
   --sync-border: #04852f;
   --async-border: #683eca;
@@ -101,7 +105,9 @@
   --green-pill: #04852f;
   --green-pill-shadow: rgba(78, 205, 76, 0.3);
   --foreground-pill: #f5f5f5;
+  --foreground-pill-text: #000000;
   --foreground-pill-shadow: rgba(109, 109, 109, 0.644);
+  --foreground-pill-hover: rgba(54, 54, 54, 0.644);
   --date-and-percent: white;
 
   --upcoming-pill: #0078c2;
@@ -229,7 +235,7 @@ h1 {
 
 .weekly-attendance-bar .graph-container .label {
   font-size: 0.8rem;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(0, 0, 0, 0.86);
   width: 100px;
   text-align: right;
   height: 25px;
@@ -340,7 +346,7 @@ h1 {
   height: 100%;
   cursor: pointer;
   color: #2c3e50;
-  box-shadow: 0px 3px 3px 1px rgba(109, 109, 109, 0.644);
+  box-shadow: 0px 3px 3px 1px var(--course-pill-shadow);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   /* margin-bottom: 1rem; */
 }
@@ -358,7 +364,7 @@ h1 {
   max-height: 5rem;
   height: 5rem;
   border-radius: 1.5rem;
-  box-shadow: 0px 3px 5px 1px var(--button-grey-shadow);
+  box-shadow: 0px 3px 5px 1px var(--course-pill-hover);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   outline: none;
 }
@@ -406,7 +412,7 @@ h1 {
   background: var(--foreground-pill);
   margin: 0.5rem 0rem;
   border-radius: 0.75rem;
-  color: var(--lecture-name-text);
+  color: var(--forgeround-pill-text);
   box-shadow: 0px 3px 3px 1px var(--foreground-pill-shadow) inset;
   text-align: left;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
@@ -416,7 +422,7 @@ h1 {
 .instructor-attendance-history-pill:focus .name-area {
   padding-top: 0.8rem;
   border-radius: 1rem;
-  box-shadow: 0px 3px 5px 1px var(--button-grey-shadow) inset;
+  box-shadow: 0px 3px 5px 1px var(--foreground-pill-hover) inset;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
@@ -926,6 +932,7 @@ a:hover {
   border: 0.1rem solid var(--button-primary-blue); 
   box-shadow: 0px 3px 3px 0px var(--button-blue-shadow);
   outline: none;
+  color: var(--button-text-color);
 }
 
 .btn.btn-secondary {
@@ -933,49 +940,69 @@ a:hover {
   /* border: 0.1rem solid #444444; */
   box-shadow: 0px 3px 3px 0px var(--button-grey-shadow);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+  color: var(--button-text-color);
 }
 
 .btn.btn-danger {
   background: var(--button-danger);
   border: 0.1rem solid rgba(255,255,255, 0);
   box-shadow: none;
+  color: var(--button-text-color);
 } 
 
 .btn.btn-primary:hover,
 .btn.btn-primary:focus,
 .btn.btn-primary:active,
+.btn.btn-primary:active:focus,
 .btn.btn-primary:target {
   outline: none;
   border: 0.1rem solid var(--button-blue-shadow);
   background: var(--button-hover-blue);
   box-shadow: 0px 3px 3px 0px var(--button-blue-shadow) inset;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+  color: var(--button-text-hover);
+}
+
+/* This is because white is not 508 with halloween *
+ * Take this block out when halloween is over 
+ * Also change invert(0) back to (1) */
+.btn.btn-primary img,
+.btn.btn-secondary img {
+  filter: brightness(0) !important;
+}
+
+.btn.btn-primary:active:focus,
+.btn.btn-secondary:active:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .btn.btn-primary:hover img,
 .btn.btn-primary:focus img,
 .btn.btn-primary:active img,
 .btn.btn-primary:target img {
-  filter: var(--widgets-color) invert(1);
+  filter: var(--widgets-color) invert(0);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .btn.btn-secondary:hover,
 .btn.btn-secondary:focus,
-.btn.btn-secondary:active
+.btn.btn-secondary:active,
+.btn.btn-secondary:active:focus,
 .btn.btn-secondary:target {
   outline: none;
   border: 0.1rem solid var(--button-hover-grey);
   background: var(--button-hover-grey);
   box-shadow: 0px 3px 3px 0px var(--button-grey-shadow) inset;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+  color: var(--button-text-hover);
 }
 
 .btn.btn-secondary:hover img,
 .btn.btn-secondary:focus img,
 .btn.btn-secondary:active img,
 .btn.btn-secondary:target img {
-  filter: var(--widgets-color) invert(1);
+  filter: var(--widgets-color) invert(0);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
@@ -988,6 +1015,7 @@ a:hover {
   background-color: var(--button-danger-hover);
   box-shadow: 0px 3px 3px 0px var(--button-danger-shadow) inset;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+  color: white;
 } 
 
 input,select {
@@ -995,6 +1023,14 @@ input,select {
   background: var(--input-background) !important;
   border-radius: 0.25rem !important;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* take out after halloween? */
+input:-webkit-autofill {
+  -webkit-text-fill-color: var(--input-text) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--input-background) inset;
+  border-radius: 0.25rem !important;
+  transition: background-color 500s ease-in-out 0s;
 }
 
 .input-group-append {
