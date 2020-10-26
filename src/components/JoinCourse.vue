@@ -1,22 +1,27 @@
 <template>
   <div class="form-group">
-    <h2>Join Section:</h2>
-    <router-link v-for="section in sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
-        <button class="btn btn-secondary" @click="addToSection(section._id)">Section {{section.name}} </button>
-    </router-link>
+    <h2>Joinable Sections:</h2>
+    <MultiSelectDropdown v-if="sections.length" :options="sections" sortBy="name" @update="handleSectionChange" :n="0"/>
+    <SquareLoader v-else/>
+    <button class="btn btn-primary" @click="joinSections">Join Selected Sections</button>
   </div>
 </template>
 
 <script>
 import SectionAPI from '@/services/SectionAPI.js';
 import MultiSelectDropdown from "@/components/MultiSelectDropdown";
+import SquareLoader from "@/components/Loaders/SquareLoader";
+
 export default {
   name: 'JoinCourse',
-  props: {
+  components: {
+    MultiSelectDropdown,
+    SquareLoader
   },
   data() {
     return {
       sections: [],
+      selected: [],
       in_course: false
     }
   },
@@ -29,19 +34,22 @@ export default {
   methods : {
     inCourse()  {
       SectionAPI.getSectionsForCourse(this.course_id).then(res=> {
-        this.sections = res.data
-        for (let i = 0; i < this.sections.length; i++) {
-          if (this.current_user.student_sections.includes(this.sections[i]._id)) {
-            this.$router.push({name: 'course_info', params: {id: this.sections[i]._id}})
-            this.in_course = !this.in_course
-            break
-          }
-        }
+        this.sections = res.data.filter(a => a.is_public)
       })
     }, 
-    async addToSection(section) {
-      const response = await SectionAPI.addToSection(section, this.current_user._id)
+    async joinSections() {
+      const response = await SectionAPI.joinPublicSections(this.sections, this.current_user.email)
+      location.reload()
+    },
+    handleSectionChange(selected) {
+      this.selected = selected
     }
   }
 }
 </script>
+
+<style scoped>
+.btn {
+  margin: 1rem;
+}
+</style>

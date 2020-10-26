@@ -173,7 +173,6 @@ export default {
     };
   },
   created() {
-    this.getPollsIfNeeded()
   },
   beforeDestroy() {
     if(this.vjs) {
@@ -181,11 +180,6 @@ export default {
     }
   },
   methods: {
-    getPollsIfNeeded() {
-      if(this.update_lecture) {
-        PlaybackPollAPI.getByLecture()
-      }
-    },
     async updateLecture() {
       if(this.isComplete()) {
         this.waiting = true;
