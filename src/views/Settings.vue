@@ -53,6 +53,8 @@
           <div v-else>
             <ChangePassword v-if="mode == 'change_password'" :current_user="current_user" :complete="actionComplete" />
           </div>
+
+          <button v-if="current_user && current_user.email == 'whitte3@rpi.edu'" class="btn btn-primary" @click="DOIT()">DOIT</button>
     </div>
 
   </div>
@@ -122,6 +124,11 @@
           this.edited_last_name = ''
           this.waiting = false
           this.editing_name = false
+        })
+      },
+      DOIT() {
+        UserAPI.migrate().then(res => {
+          location.reload()
         })
       }
     }

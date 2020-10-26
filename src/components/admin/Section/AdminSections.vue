@@ -23,7 +23,7 @@
             </td>
             <td>{{ section.name }}</td>
             <div v-if="is_section_view">
-              <td><router-link :to="{name: 'admin_edit_section', params: { id: section._id }}" class="btn btn-primary">Edit</router-link></td>
+              <td><router-link :to="{name: 'edit_section', params: { id: section._id }}" class="btn btn-primary">Edit</router-link></td>
               <td><button class="btn btn-danger" @click.prevent="deleteSection(section._id)">Delete</button></td>
             </div>
             <td v-else><button class="btn btn-secondary" @click.prevent="$emit('select-section', section)">Select</button></td>
