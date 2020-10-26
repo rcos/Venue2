@@ -69,6 +69,9 @@ sectionRoutes.route('/update/:id').post(function (req, res) {
     if (req.body.updated_section.teaching_assistants) {
       updated_section.teaching_assistants = req.body.updated_section.teaching_assistants;
     }
+    if (undefined != req.body.updated_section.is_public) {
+      updated_section.is_public = req.body.updated_section.is_public;
+    }
   }
 
   Section.findByIdAndUpdate(id,
