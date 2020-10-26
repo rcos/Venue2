@@ -108,7 +108,7 @@
 										</div>
 										{{polls[i].question}}
 										<button type="button" v-if="!checkin.start_time || (checkin.start_time && Date.parse(checkin.start_time) > Date.now())" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
-											<img class="svg-color" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
+											<img src="@/assets/hw/icons8-jack-o-lantern-64.png" alt="Edit" width="40" aria-label="Edit">
 										</button>
 									</td>
 									<td v-else>X</td>
@@ -136,7 +136,7 @@
 										</div>
 										{{polls[i].question}}
 										<button type="button" v-if="Date.parse(lecture.playback_submission_start_time) > Date.now()" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
-											<img class="svg-color" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
+											<img src="@/assets/hw/icons8-jack-o-lantern-64.png" alt="Edit" width="40" aria-label="Edit">
 										</button>
 									</td>
 								</tr>
@@ -381,7 +381,7 @@ export default {
 	  background: var(--lecture-attendance-grey-pill); 
 	  margin: 0.5rem 0rem;
 	  border-radius: 0.25rem;
-	  box-shadow: 0px 3px 3px 0px var(--lecture-attendance-grey-shadow);
+	  box-shadow: 0px 3px 3px 0px var(--lecture-attendance-grey-shadow); 
 	}
 
 	.progress-bar {

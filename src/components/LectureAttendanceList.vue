@@ -172,9 +172,10 @@
 
 	.namecard {
 	  position: relative;
-	  background: var(--course-card-background);
+    background: var(--course-card-background);
+    color: var(--course-card-text);
 	  text-align: center;
-	  border-radius: .25rem;
+    border-radius: .25rem;
 	  /* top: 0.5rem; */
 	  /* margin-left: 0.5rem; */
     margin-bottom: -0.5rem;
