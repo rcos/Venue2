@@ -42,8 +42,8 @@ export default {
             root.style.setProperty('--logo-color', '');
             root.style.setProperty('--red-x', 'brightness(0.75) saturate(0.75)');
 
-            root.style.setProperty('--loader-square-even', '#4CC9FF');
-            root.style.setProperty('--loader-square-odd', '#FC6E71');
+            root.style.setProperty('--loader-square-even', '#e39144');
+            root.style.setProperty('--loader-square-odd', '#bcf593');
             root.style.setProperty('--loader-square-shadow', 'rgba(128, 128, 128, 0.5)');
             
             
