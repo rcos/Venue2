@@ -41,6 +41,12 @@ export default {
   getSectionsForCourse(course_id) {
     return API().get('sections/get_for_course/' + course_id)
   },
+  joinPublicSections(sections,email) {
+    return API().post('sections/join_public_sections',{
+      sections: sections,
+      email: email
+    })
+  },
   getTASections() {
     return API().get('sections/get_ta_sections')
   },
@@ -55,6 +61,13 @@ export default {
   addTAs(section_id,tas) {
     return API().post('sections/add_tas/'+section_id, {
       tas: tas
+    })
+  },
+
+  addToSection(section_id, user_id) {
+    return API().post('sections/add_student_section/', {
+      section_id: section_id,
+      user_id: user_id
     })
   }
 }
