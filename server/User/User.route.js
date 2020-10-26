@@ -301,7 +301,7 @@ userRoutes.route('/migrate').get(function (req, res) {
       //update student sections for the user's id (update by pulling the id and pushing the email)
       //update TA sections for the user's id (update by pulling the id and pushing the email)
       //update courses for the user's id (update by pulling the id and pushing the email)
-  Users.find({},function(err,users) {
+  User.find({},function(err,users) {
     let promises = []
     users.forEach(user => {
       promises.push(new Promise((resolve,reject) => {
