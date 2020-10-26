@@ -69,6 +69,9 @@ sectionRoutes.route('/update/:id').post(function (req, res) {
     if (req.body.updated_section.teaching_assistants) {
       updated_section.teaching_assistants = req.body.updated_section.teaching_assistants;
     }
+    if (undefined != req.body.updated_section.is_public) {
+      updated_section.is_public = req.body.updated_section.is_public;
+    }
   }
 
   Section.findByIdAndUpdate(id,
@@ -369,32 +372,54 @@ sectionRoutes.post('/add_tas/:id', (req, res) => {
   });
 });
 
+sectionRoutes.post('/add_student_section/', (req, res) => {
+  let student = req.body.user_id
+  let section = req.body.section_id
+  Promise.all([
+    User.findByIdAndUpdate(student, {$push: {student_sections: section }}),
+    Section.findByIdAndUpdate(section, {$push: {students: student}})]).then(resolved => {
+      res.json()
+  })
+  /*
+  User.findByIdAndUpdate(student,
+    {$push: {student_sections: section }}, function(err, post) {
+      if (err) {
+        console.log(err)
+      }
+      else {
+        console.log(post)
+      }
+    })
+
+  Section.findByIdAndUpdate(section,
+    {$push : {students: student}}, function(err, post) {
+      if (err) {
+        console.log(err)
+      }
+      else {
+        console.log(post)
+      }
+    }) */
+ 
+});
 sectionRoutes.post('/toggleOpenEnrollment/:id', (req, res) => {
   let id = req.params.id;
-  Section.findByIdAndUpdate(id,
-    {is_public: true}, {$set: {is_public: false}},
-      function (err, course) {
-        if (err || course == null) {
-          console.log("<ERROR> Changing section (ID:",id, ") status to private")
-          res.status(404).send("section not found");
-        } else {
-          console.log("<SUCCESS> Changing section (ID:",id, ") status to private")
-          res.json(course);
-        }
-      }
-    );
-    Section.findByIdAndUpdate(id,
-      {is_public: false}, {$set: {is_public: true}},
-        function (err, course) {
-          if (err || course == null) {
-            console.log("<ERROR> Changing section (ID:",id, ") status to open enrollment")
-            res.status(404).send("section not found");
-          } else {
-            console.log("<SUCCESS> Changing section (ID:",id, ") status to open enrollment")
-            res.json(section);
-          }
-        }
-      );
+  Promise.all([Section.findByIdAndUpdate(id,
+    {is_public: true}, {$set: {is_public: false}}), Section.findByIdAndUpdate(id,
+      {is_public: false}, {$set: {is_public: true}}
+      )]).then(resolved => {
+        res.json(course)
+      })
 })
+
+sectionRoutes.route('/join_public_sections').post(function (req, res) {
+  let section_ids = req.body.sections.map(a=>a._id)
+  Promise.all([
+    Section.updateMany({_id: {$in: section_ids}},{$push: {students: req.body.email}}),
+    User.updateOne({email: req.body.email},{$push: {student_sections: {$each: section_ids}}})
+  ]).then(resolved => { 
+    res.json(true)
+  })
+});
 
 module.exports = sectionRoutes;
