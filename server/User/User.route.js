@@ -219,6 +219,7 @@ userRoutes.route('/instructors_for_course/:course_id').get(function (req, res) {
           console.log("<ERROR> Getting instructors for course with ID:", course_id);
           res.json(err);
         } else {
+          console.log("<SUCCESS> Getting instructors for course with ID:", course_id);
           res.json(instructors);
         }
       });
