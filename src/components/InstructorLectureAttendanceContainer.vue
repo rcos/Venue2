@@ -135,7 +135,7 @@ export default {
 				let self = this
 				this.all_students.forEach(function(student) {
 					course_sections.forEach(function(section) {
-						if(section.students.includes(student._id)) {
+						if(section.students.includes(student.email)) {
 							let stud_data = []
 
 							let submission = self.submissions.find(a => a.submitter._id == student._id)
