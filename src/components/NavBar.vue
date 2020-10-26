@@ -44,8 +44,7 @@
         </div>
 
         <div class="venue-nav-link-container" id="student-section-dropdown" v-if="student_sections.length">
-          <DropDown :is_section_info="is_student_section_info()" :whose_course_label="'Student Sections'" :whose_courses="student_sections"/>
-          <div :class="'active-link-underline ' + (is_student_section_info()?'active':'')"></div>
+          <DropDown :is_section_info="is_student_section_info()" :whose_course_label="'Student Sections'" :whose_courses="student_sections"></DropDown>
         </div>
 
         <!-- Statistics Link -->
@@ -139,7 +138,7 @@
   import CourseAPI from '@/services/CourseAPI.js'
   import SectionAPI from '@/services/SectionAPI.js'
   import LectureAPI from '@/services/LectureAPI.js'
-  import DropDown from './DropDown'
+  import DropDown from './DropDown.vue'
 
   export default {
     name: 'NavBar',
