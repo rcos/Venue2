@@ -294,4 +294,36 @@ userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
   })
 });
 
+userRoutes.route('/migrate').get(function (req, res) {
+  //collect all users
+    //then
+    //for each user
+      //update student sections for the user's id (update by pulling the id and pushing the email)
+      //update TA sections for the user's id (update by pulling the id and pushing the email)
+      //update courses for the user's id (update by pulling the id and pushing the email)
+  Users.find({},function(err,users) {
+    let promises = []
+    users.forEach(user => {
+      promises.push(new Promise((resolve,reject) => {
+        Section.updateMany({_id: {$in: user.student_sections}},{$pull: {students: user._id}},function(err,sections) {
+          Section.updateMany({_id: {$in: user.student_sections}},{$push: {students: user.email}},function(err,sections) {
+            Section.updateMany({_id: {$in: user.ta_sections}},{$pull: {teaching_assistants: user._id}},function(err,sections) {
+              Section.updateMany({_id: {$in: user.ta_sections}},{$push: {teaching_assistants: user.email}},function(err,sections) {
+                Course.updateMany({_id: {$in: user.instructor_courses}},{$pull: {instructors: user._id}},function(err,courses) {
+                  Course.updateMany({_id: {$in: user.instructor_courses}},{$push: {instructors: user.email}},function(err,courses) {
+                    resolve(true)
+                  })
+                })
+              })
+            })
+          })
+        })
+      }))
+    })
+    Promise.all(promises).then(resolved => {
+      res.json(resolved)
+    })
+  })
+});
+
 module.exports = userRoutes;
