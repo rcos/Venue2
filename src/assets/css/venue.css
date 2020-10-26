@@ -64,15 +64,10 @@ html,body {
   font-weight: lighter;
 }
 
-@font-face {
-  font-family: "Ubuntu Mono";
-  src: url("../fonts/Ubuntu/UbuntuMono-Regular.ttf");
-}
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
 
-@font-face {
-  font-family: "Ubuntu Mono";
-  src: url("../fonts/Ubuntu/UbuntuMono-Bold.ttf");
-  font-weight: bold;
+* {
+  font-family: "Comfortaa", "Exo", sans-serif;
 }
 
 /* Logo Styles */
@@ -97,17 +92,17 @@ html,body {
 }
 
 .logo-text {
-  font-family: "Exo";
-  font-weight: bold;
+  /* font-family: "Exo";
+  font-weight: bold; */
   /*font-size: 25px;*/
   position: relative;
   margin-top: -20px;
   color: #2C3E50;
 }
 
-h1 {
-  /* font-family: "Exo"; */
-  font-weight: bold;
+h1,h2,h3,h4,.course-name,.name-div {
+  font-family: "Exo";
+  font-weight: bold !important;
   color: #2C3E50;
 }
 
