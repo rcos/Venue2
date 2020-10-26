@@ -30,12 +30,11 @@ export default {
 	props: {
 		options: Array,
 		sortBy: String,
-		default: Array,
+		preselected: Array,
 		displayAs: Array,
 		max: { type: Number, default: 999 },
 		n: { type: Number, default: 0 },
 	},
-	components: {},
 	data(){
 		return {
 			selected: [],
@@ -46,12 +45,13 @@ export default {
 	created() {
 		this.options.forEach(option => {
 			
-			let found
-			if(this.default) {
-				found = this.default.find(a => a._id == option._id)
-			}
-			if(found) {
-				this.selected.push(option)
+			if(this.preselected) {
+				let found = this.preselected.find(a => a._id == option._id || a === option)
+				if(found) {
+					this.selected.push(option)
+				} else {
+					this.unselected.push(option)
+				}
 			} else {
 				this.unselected.push(option)
 			}
