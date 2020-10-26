@@ -62,5 +62,8 @@ export default {
   },
   getStudentsForLecture(lecture_id) {
     return API().get('users/students_for_lecture/' + lecture_id)
+  },
+  migrate() {
+    return API().get('users/mgirate')
   }
 }
