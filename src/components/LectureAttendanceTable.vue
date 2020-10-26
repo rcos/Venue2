@@ -195,12 +195,12 @@ export default {
 			let playsum = 0
 			this.submissions.forEach(submission => {
 				let hasAttendance = false
-				if(submission.live_progress) {
+				if(submission.live_percent) {
 					this.submissions_with_live.push(submission)
 					hasAttendance = true
 					livesum += submission.live_percent
 				}
-				if(submission.video_progress) {
+				if(submission.video_percent) {
 					this.submissions_with_playback.push(submission)
 					hasAttendance = true
 					playsum += submission.video_percent

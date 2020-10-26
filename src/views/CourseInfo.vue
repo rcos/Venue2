@@ -334,7 +334,7 @@ export default {
             let running_total = 0
             students.forEach(stud => {
               submissions.forEach(submission => {
-                if(submission.submitter._id == stud) {
+                if(submission.submitter.email == stud) {
                   if(submission.live_percent) {
                     if(submission.video_percent) {
                       running_total += Math.max(
