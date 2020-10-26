@@ -111,60 +111,59 @@ lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) 
 				console.log("<ERROR> Updating lecture by ID:", lecture_id, "with:", updated_lecture)
 				res.status(404).send("lecture not found");
 			} else {
-				let section_itr = 0
-				updated_lecture.sections.forEach(section => {
-					Section.findById(section, function (err, section) {
-						if (err || section == null) {
-							console.log("<ERROR> Getting section with ID:", section)
-							res.json(err);
-						} else {
-							let student_emails = section.students;
-							let num_iterations = 0;
-							student_emails.forEach(student_email => {
-								User.find({ email: { student_email } }, function (err, student) {
-									if (err || student == null) {
-										console.log("<ERROR> Getting user with ID:", student_email)
-										res.json(err);
-									} else {
-										//send email
-										let myhtml = ""
-										if (process.env.NODE_ENV === "production") {
-											myhtml = '<p>New Lecture available for playback <a href="https://www.venue-meetings.com/#/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
-										} else {
-											myhtml = '<p>New Lecture available for playback <a href="http://localhost:8080/#/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
-										}
-										var mailOptions = {
-											from: 'venue.do.not.reply@gmail.com',
-											to: student.email,
-											subject: 'Venue - New Lecture Recording Notification',
-											html: myhtml
-										};
-										console.log("About to send email with:", mailOptions)
-										transporter.sendMail(mailOptions, function (error, info) {
-											if (error || info == null) {
-												console.log(error);
-											} else {
-												console.log('Email sent to ' + student.email + ': ' + info.response);
-											}
-										});
-										num_iterations++;//todo fix?
-										if (num_iterations === student_emails.length) {
-											section_itr++;
-											if (section_itr == updated_lecture.sections.length) {
-												console.log("<SUCCESS> Adding playback to lecture with ID:", lecture_id)
-												res.json(updated_lecture);
-											}
-										}
-									}
-								})
-							})
-						}
-					})
-				})
+				// Section.find({_id: {$in: updated_lecture.sections}}, function (err, sections) {
+				// 	if (err || sections == null) {
+				// 		console.log("<ERROR> Getting sections for lecture with ID:", updated_lecture._id)
+				// 		res.json(err);
+				// 	} else {
+						// let student_emails = section.students;
+						// let num_iterations = 0;
+						// student_emails.forEach(student_email => {
+						// 	User.find({ email:  student_email }, function (err, student) {
+						// 		if (err || student == null) {
+						// 			console.log("<ERROR> Getting user with ID:", student_email)
+						// 			res.json(err);
+						// 		} else {
+									
+						// 			num_iterations++;//todo fix?
+						// 			if (num_iterations === student_emails.length) {
+						// 				section_itr++;
+						// 				if (section_itr == updated_lecture.sections.length) {
+						// 					console.log("<SUCCESS> Adding playback to lecture with ID:", lecture_id)
+				res.json(updated_lecture);
+				// 						}
+				// 					}
+				// 				}
+				// 			})
+				// 		})
+				// 	}
+				// })
 			}
 		}
 	);
 });
+
+// //send email
+// let myhtml = ""
+// if (process.env.NODE_ENV === "production") {
+// 	myhtml = '<p>New Lecture available for playback <a href="https://www.venue-meetings.com/#/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
+// } else {
+// 	myhtml = '<p>New Lecture available for playback <a href="http://localhost:8080/#/lecture_playback/' + updated_lecture._id + '">here</a>!</p>'
+// }
+// var mailOptions = {
+// 	from: 'venue.do.not.reply@gmail.com',
+// 	to: student.email,
+// 	subject: 'Venue - New Lecture Recording Notification',
+// 	html: myhtml
+// };
+// console.log("About to send email with:", mailOptions)
+// transporter.sendMail(mailOptions, function (error, info) {
+// 	if (error || info == null) {
+// 		console.log(error);
+// 	} else {
+// 		console.log('Email sent to ' + student.email + ': ' + info.response);
+// 	}
+// });
 
 lectureRoutes.route('/').get(function (req, res) {
 	Lecture.find(function (err, lectures) {

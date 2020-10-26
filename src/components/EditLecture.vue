@@ -21,7 +21,7 @@
       <form id="lect-current-settings" @submit.prevent="updateLecture">
         <h2>Current</h2>
         <input class="gap1" v-model="lecture.title"/>
-        <MultiSelectDropdown v-if="all_sections" ref="sectionsSelector" :options="all_sections" :default="lecture.sections" sortBy="name" @update="handleSectionsUpdate"/>
+        <MultiSelectDropdown v-if="all_sections" ref="sectionsSelector" :options="all_sections" :preselected="lecture.sections" sortBy="name" @update="handleSectionsUpdate"/>
         <input class="gap2" v-model="lecture.start_time"/>
         <input v-model="lecture.end_time"/>
         <input v-model="lecture.meeting_link"/>

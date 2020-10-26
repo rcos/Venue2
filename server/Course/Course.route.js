@@ -4,6 +4,7 @@ const courseRoutes = express.Router();
 let Course = require('./Course.model');
 let Section = require('../Section/Section.model');
 let User = require('../User/User.model');
+const { update } = require('../Section/Section.model');
 
 courseRoutes.route('/add').post(function (req, res) {
   let course = new Course(req.body.course);
@@ -45,14 +46,18 @@ courseRoutes.route('/edit/:id').get(function (req, res) {
 
 courseRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
-  let updated_course = req.body.updated_course;
+  let updated_course = {}
+  if(req.body.updated_course.name) {
+    updated_course.name = req.body.updated_course.name
+  }
+  if(req.body.updated_course.prefix) {
+    updated_course.prefix = req.body.updated_course.prefix
+  }
+  if(req.body.updated_course.suffix) {
+    updated_course.suffix = req.body.updated_course.suffix
+  }
   Course.findByIdAndUpdate(id,
-    {
-      name: updated_course.name,
-      dept: updated_course.dept,
-      course_number: updated_course.course_number,
-      instructor: updated_course.instructor
-    },
+    updated_course,
     function (err, course) {
       if (err || course == null) {
         console.log("<ERROR> Updating course by ID:", id, "with:", updated_course);

@@ -412,4 +412,14 @@ sectionRoutes.post('/toggleOpenEnrollment/:id', (req, res) => {
       })
 })
 
+sectionRoutes.route('/join_public_sections').post(function (req, res) {
+  let section_ids = req.body.sections.map(a=>a._id)
+  Promise.all([
+    Section.updateMany({_id: {$in: section_ids}},{$push: {students: req.body.email}}),
+    User.updateOne({email: req.body.email},{$push: {student_sections: {$each: section_ids}}})
+  ]).then(resolved => { 
+    res.json(true)
+  })
+});
+
 module.exports = sectionRoutes;

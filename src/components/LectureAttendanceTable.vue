@@ -209,7 +209,7 @@ export default {
 					this.submissions_with_nothing.push(submission)
 				}
 			})
-			if(this.all_students) {
+			if(this.all_students && this.all_students.length) {
 				this.live_percent = livesum / this.all_students.length
 				this.playback_percent = playsum / this.all_students.length
 				let submitted_student_ids = this.submissions.map(a=>a.submitter._id)
