@@ -150,6 +150,9 @@ export default {
     }
   },
   methods: {
+    copyURL() {
+      navigator.clipboard.writeText((process.env.NODE_ENV === 'production'?'https://www.venue-meetings.com':'http://localhost:8080')+"/#/join_course/"+this.course._id)
+    },
     async getAllSections () {
       SectionAPI.getSectionsForCourse(this.course_id)
       .catch(err => { console.log(`Problem getting sections for course ${this.course_id}`); console.log(err);})
@@ -348,7 +351,7 @@ export default {
             let running_total = 0
             students.forEach(stud => {
               submissions.forEach(submission => {
-                if(submission.submitter._id == stud) {
+                if(submission.submitter.email == stud) {
                   if(submission.live_percent) {
                     if(submission.video_percent) {
                       running_total += Math.max(

@@ -239,24 +239,24 @@ export default {
 					lecture.students = {}
 					lecture.sections.forEach(sectID => {
 						let section = this.sections.all.find(section => section._id == sectID)
-						section.students.forEach(studID => {
+						section.students.forEach(studEmail => {
 							if(this.students.active.length > 0) {
 								this.students.active.forEach(stud => {
-									if(stud._id == studID) {
-										lecture.students[studID] = {}
+									if(stud.email == studEmail) {
+										lecture.students[studEmail] = {}
 									}
 								})
 							} else {
-								lecture.students[studID] = {}
+								lecture.students[studEmail] = {}
 							}
 						})
 					})
 					let subsForLecture = this.lectureSubmissions.filtered.filter(a => a.lecture == lecture._id)
 					subsForLecture.forEach(sub => {
-						Object.keys(lecture.students).forEach(studID => {
-							if(sub.submitter._id == studID) {
-								lecture.students[studID] = sub
-								if(undefined == currentSubmissions[studID]) {
+						Object.keys(lecture.students).forEach(studEmail => {
+							if(sub.submitter.email == studEmail) {
+								lecture.students[studEmail] = sub
+								if(undefined == currentSubmissions[studEmail]) {
 									currentSubmissions[lecture._id] = []
 								}
 								currentSubmissions[lecture._id].push(sub)
@@ -349,23 +349,23 @@ export default {
 							lecture.students = {}
 							lecture.sections.forEach(sectID => {
 								let section = this.sections.all.find(section => section._id == sectID)
-								section.students.forEach(studID => {
+								section.students.forEach(studEmail => {
 									if(this.students.active.length > 0) {
 										this.students.active.forEach(stud => {
-											if(stud._id == studID) {
-												lecture.students[studID] = {}
+											if(stud.email == studEmail) {
+												lecture.students[studEmail] = {}
 											}
 										})
 									} else {
-										lecture.students[studID] = {}
+										lecture.students[studEmail] = {}
 									}
 								})
 							})
 							let subsForLecture = this.lectureSubmissions.filtered.filter(a => a.lecture == lecture._id)
 							subsForLecture.forEach(sub => {
-								Object.keys(lecture.students).forEach(studID => {
-									if(sub.submitter._id == studID) {
-										lecture.students[studID] = sub
+								Object.keys(lecture.students).forEach(studEmail => {
+									if(sub.submitter.email == studEmail) {
+										lecture.students[studEmail] = sub
 									}
 								})
 							})
@@ -406,23 +406,23 @@ export default {
 					lecture.students = {}
 					lecture.sections.forEach(sectID => {
 						let section = this.sections.all.find(section => section._id == sectID)
-						section.students.forEach(studID => {
+						section.students.forEach(studEmail => {
 							if(this.students.active.length > 0) {
 								this.students.active.forEach(stud => {
-									if(stud._id == studID) {
-										lecture.students[studID] = {}
+									if(stud.email == studEmail) {
+										lecture.students[studEmail] = {}
 									}
 								})
 							} else {
-								lecture.students[studID] = {}
+								lecture.students[studEmail] = {}
 							}
 						})
 					})
 					let subsForLecture = this.lectureSubmissions.filtered.filter(a => a.lecture == lecture._id)
 					subsForLecture.forEach(sub => {
-						Object.keys(lecture.students).forEach(studID => {
-							if(sub.submitter._id == studID) {
-								lecture.students[studID] = sub
+						Object.keys(lecture.students).forEach(studEmail => {
+							if(sub.submitter.email == studEmail) {
+								lecture.students[studEmail] = sub
 							}
 						})
 					})
@@ -455,8 +455,8 @@ export default {
 			let lectureLive = 0
 			let lecturePlayback = 0
 			let lectureAbsent = 0
-			lectureStudents.forEach(studID => {
-				let studSubmission = lecture.students[studID]
+			lectureStudents.forEach(studEmail => {
+				let studSubmission = lecture.students[studEmail]
 				if(studSubmission.live_percent && studSubmission.video_percent) {
 					let percentage = Math.max(studSubmission.live_percent, studSubmission.video_percent)
 					if(studSubmission.live_percent  == percentage) {
