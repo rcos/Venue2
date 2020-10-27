@@ -3,10 +3,17 @@
     top: 0;
     right: 0;
     width: 256px;
-    height: 256px;    
+    height: 256px; 
 }
 
 @media (max-width: 575px) {
+    .cobweb {
+        top: 0;
+        right: 0px;
+        width: 64px;
+        height: 64px;
+    }
+
     .web-size {
         position: absolute;
         width: 64px;
