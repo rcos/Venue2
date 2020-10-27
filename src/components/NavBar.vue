@@ -93,7 +93,7 @@
               <p aria-label="User Name">{{ current_user.first_name }} <img src="@/assets/hw/icons8-spider-web.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon"></p>
             </show-at>
             <show-at breakpoint="small">
-              <img src="@/assets/hw/icons8-spider-web.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
+              <img src="@/assets/hw/icons8-spider-web.svg" width="20" height="20" :style="{marginRight: '6rem'}" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
             </show-at>
           </router-link>
           <div :class="'active-link-underline ' + (is_settings()?'active':'')"></div>

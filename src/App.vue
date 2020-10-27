@@ -7,14 +7,12 @@
       </main>
     </div>
     <div>
-    <hide-at breakpoint="small">
-    <div class="cobweb">
-      <img class="web-size" src="@/assets/hw/web-corner.png" alt="cobweb"> 
-      <spider>
-        <img class="spider-size" src="@/assets/hw/icons8-spider-64.png" alt="spider">
-      </spider>
-    </div>
-    </hide-at>
+      <div class="cobweb">
+        <img class="web-size" src="@/assets/hw/web-corner.png" alt="cobweb"> 
+        <spider>
+          <img class="spider-size" src="@/assets/hw/icons8-spider-64.png" alt="spider">
+        </spider>
+      </div>
     </div>
     <Footer/>
   </div>
@@ -46,7 +44,8 @@ export default {
   },
   components: {
     NavBar,
-    Footer
+    Footer,
+    hideAt
   },
   data() {
     return {
