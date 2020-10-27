@@ -347,13 +347,13 @@ export default {
         return "rgb(" + [color.r, color.g, color.b].join(",") + ")";
     },
     calculateInstructorAttendances() {
-      let promise_tracker = []
-      this.all_lectures.forEach(lecture_ => {
-        promise_tracker.push(
-          LectureSubmissionAPI.getLectureSubmissionsForLecture(lecture_._id)
-          .catch(err => { console.log('error retrieving lecture submissions for lecture ' + lecture_._id); console.log(err); })
-          .then(response => {
-            let submissions = response.data == undefined ? [] : response.data
+      LectureSubmissionAPI.getLectureSubmissionsForLectures(this.all_lectures.map(a=>a._id))
+      .catch(err => { console.log('error retrieving lecture submissions for lecture ' + lecture_._id); console.log(err); })
+      .then(response => {
+        let promise_tracker = []
+        this.all_lectures.forEach(lecture_ => {
+          promise_tracker.push( new Promise((resolve,reject) => {
+            let submissions = response.data == undefined ? [] : response.data.filter(a=>a.lecture == lecture_._id)
             let students = lecture_.students
             let running_total = 0
             students.forEach(stud => {
@@ -377,12 +377,13 @@ export default {
             lecture_.percentage = running_total / students.length
             // lecture_.color = this.getHTMLClassByAttendance(lecture_.percentage)
             lecture_.color = this.perc2color(lecture_.percentage / 100)
-          })
-        )
-      })
-      Promise.all(promise_tracker)
-      .then(res => {
-        this.scores_loaded = true
+            resolve(true)
+          }))
+        })
+        Promise.all(promise_tracker)
+        .then(res => {
+          this.scores_loaded = true
+        })
       })
     },
     calculateStudentAttendances() {
