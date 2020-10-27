@@ -694,7 +694,7 @@ p4 = {
 	timestamp: 5
 }
 
-seeder.connect(process.env.MONGODB_URI || db, function () {
+seeder.connect(process.env.DB_URI || db, function () {
 	seeder.loadModels([
 		"./Course/Course.model",
 		"./User/User.model",

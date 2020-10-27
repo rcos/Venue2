@@ -453,7 +453,7 @@
 
   .dept-and-number {
     background: black;
-    color: white;
+    color: var(--course-number-text);
     border-radius: 1rem;
   }
 

@@ -1,71 +1,85 @@
-/* Custom Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
 
-@font-face {
-  font-family: Oxygen;
-  src: url(../fonts/Oxygen/Oxygen-Regular.ttf);
-}
+:root {
+  --main-background-color: #ffffff;
+  --main-text-color: #1d2324;
 
-@font-face {
-  font-family: Oxygen;
-  src: url(../fonts/Oxygen/Oxygen-Bold.ttf);
-  font-weight: bold;
-}
+  --widgets-color: 'brightness(0) filter(1)';
+  --input-background: #f7f7f7;
+  --input-border: grey;
+  --input-text: #171717;
+  --input-shadow: #9ecaed;
 
-@font-face {
-  font-family: Oxygen;
-  src: url(../fonts/Oxygen/Oxygen-Light.ttf);
-  font-weight: lighter;
-}
+  --error: #c40000;
+  --error-brighter: red;
+  
+  --course-card-background: #ffffff;
+  --course-card-shadow: rgba(179, 179, 179, 0.644);
+  --course-card-text: #000000;
+  --course-number-background: rgba(0, 0, 0, 0.86);
+  --course-number-text: #C1EDFF;
+  --course-pill-shadow: rgba(109, 109, 109, 0.644);
+  --course-pill-hover: rgba(160, 160, 160, 0.644);
 
-@font-face {
-  font-family: NotoSans;
-  src: url(../fonts/NotoSans/NotoSansJP-Medium.otf);
-}
+  --button-primary-blue: #0078c2;
+  --button-hover-blue: #005183;
+  --button-secondary-grey: #727272;
+  --button-hover-grey: #444444;
+  --big-button: white;
+  --big-button-border: rgba(44, 62, 80, 0.7);
+  --big-button-text: rgba(44, 62, 80, 1);
+  --big-button-shadow: rgba(44, 62, 80, 0.2);
+  --button-blue-shadow: rgba(67, 65, 120, 0.844);
+  --button-grey-shadow: rgba(109, 109, 109, 0.644);
+  --button-text-color: white;
+  --button-text-hover: white;
 
-@font-face {
-  font-family: NotoSans;
-  src: url(../fonts/NotoSans/NotoSansJP-Bold.otf);
-  font-weight: bold;
-}
+  --sync-border: #04852f;
+  --async-border: #683eca;
 
-@font-face {
-  font-family: NotoSans;
-  src: url(../fonts/NotoSans/NotoSansJP-Thin.otf);
-  font-weight: lighter;
-}
+  --red-pill: #d13e34;
+  --red-pill-shadow: rgba(249, 82, 71, 0.3);
+  --yellow-pill: #b95726;
+  --yellow-pill-shadow:  rgba(244, 159, 50, 0.4);
+  --blue-pill: #0078c2;
+  --blue-pill-shadow: rgba(79, 109, 234, 0.3);
+  --green-pill: #04852f;
+  --green-pill-shadow: rgba(78, 205, 76, 0.3);
+  --foreground-pill: #f5f5f5;
+  --foreground-pill-text: #000000;
+  --foreground-pill-shadow: rgba(109, 109, 109, 0.644);
+  --foreground-pill-hover: rgba(54, 54, 54, 0.644);
+  --date-and-percent: white;
 
-@font-face {
-  font-family: Lato;
-  src: url(../fonts/Lato/Lato-Black.ttf);
-  font-weight: normal;
-}
+  --upcoming-pill: #0078c2;
+  --upcoming-pill-shadow: rgba(109, 109, 109, 0.644);
 
-@font-face {
-  font-family: Lato;
-  src: url(../fonts/Lato/Lato-Bold.ttf);
-  font-weight: bold;
-}
+  --calendar-background: white;
+  --calendar-border: rgba(100,100,100,1);
+  --checkins-border: gray;
+  --calendar-selected: rgba(20,75,250,1); 
 
-@font-face {
-  font-family: Lato;
-  src: url(../fonts/Lato/Lato-Light.ttf);
-  font-weight: lighter;
-}
-
-/* CSS Style */
-* {
-  font-family: Comfortaa, Arial, NotoSans;
-  font-weight: normal;
+  --modal-background: #ffffff;
+  --modal-course-name: #53788E;
+  --modal-course-number: #2398C8;
+  --modal-border: grey;
+  --modal-container-background: rgba(255, 255, 255, 0.65);
+  --modal-lecture-border: rgba(120,120,120,1);
 }
 
 body {
-  background: white;
+  height: auto; 
+  background-color: var(--main-background-color); 
+  color: var(--main-text-color);
+}
+
+h1 {
+  color: var(--dashboard-text-color);
 }
 
 .venue-body-container {
   margin: 2rem 8rem;
   text-align: left;
+  background: var(--main-background-color);
 }
 
 .venue-body-container.is-mobile {
@@ -92,9 +106,11 @@ body {
 .venue-body-container .course-info-title {
   width: 380px;
   padding: 40px 30px;
-  box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+  box-shadow: 0px 3px 3px 0px var(--course-card-shadow);
   border-radius: 5px;
   margin-right: 2rem;
+  background-color: var(--course-card-background); 
+  color: var(--course-card-text);
 }
 
 .venue-body-container .course-info-title .course-name {
@@ -103,12 +119,12 @@ body {
 }
 
 .venue-body-container .course-info-title .course-dept-number {
-  background-color: rgba(0, 0, 0, 0.86);
+  background-color: var(--course-number-background);
   width: 87px;
   height: 23px;
   font-size: 0.8rem;
   text-align: center;
-  color: #C1EDFF;
+  color: var(--course-number-text);
   border-radius: 2px;
 }
 
@@ -122,7 +138,7 @@ body {
   margin-top: 1rem;
   padding: 2rem;
   border-radius: 5px;
-  box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+  box-shadow: 0px 3px 3px 0px var(--course-card-shadow);
 }
 
 .course-info-title.mobile .course-name {
@@ -131,7 +147,7 @@ body {
 }
 
 .course-info-title.mobile .course-dept-number {
-  background-color: rgba(0, 0, 0, 0.86);
+  background-color: var(--course-number-background);
   width: 130px;
   height: 23px;
   line-height: 23px;
@@ -139,7 +155,7 @@ body {
   text-align: center;
   margin: 0 auto;
   margin-bottom: 5px;
-  color: #C1EDFF;
+  color: var(--course-number-text);
   border-radius: 2px;
 }
 
@@ -159,7 +175,7 @@ body {
 
 .weekly-attendance-bar .graph-container .label {
   font-size: 0.8rem;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(0, 0, 0, 0.86);
   width: 100px;
   text-align: right;
   height: 25px;
@@ -246,12 +262,12 @@ body {
 }
 
 .live-border {
-  border: 0.25rem dashed #04852f;
+  border: 0.25rem dashed var(--sync-border);
   border-radius: 1.5rem;
 }
 
 .playback-border {
-  border: 0.25rem dotted #683eca;
+  border: 0.25rem dotted var(--async-border);
   border-radius: 1.5rem;
 }
 
@@ -270,7 +286,7 @@ body {
   height: 100%;
   cursor: pointer;
   color: #2c3e50;
-  box-shadow: 0px 3px 3px 1px rgba(109, 109, 109, 0.644);
+  box-shadow: 0px 3px 3px 1px var(--course-pill-shadow);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   /* margin-bottom: 1rem; */
 }
@@ -288,7 +304,7 @@ body {
   max-height: 5rem;
   height: 5rem;
   border-radius: 1.5rem;
-  box-shadow: 0px 3px 5px 1px rgba(109, 109, 109, 0.644);
+  box-shadow: 0px 3px 5px 1px var(--course-pill-hover);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   outline: none;
 }
@@ -303,7 +319,7 @@ body {
   /* background-color: #d13e34; */
   height: 100%;
   text-align: center;
-  color: white;
+  color: var(--date-and-percent);;
   font-size: 1rem;
   margin-right: 15px;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
@@ -321,7 +337,7 @@ body {
   /* background-color: #d13e34; */
   height: 100%;
   text-align: center;
-  color: white;
+  color: var(--date-and-percent);
   margin-right: 15px;
 }
 
@@ -333,11 +349,11 @@ body {
   left: 20%;
   bottom: 0;
   padding-left: 1rem;
-  background: white;
+  background: var(--foreground-pill);
   margin: 0.5rem 0rem;
   border-radius: 0.75rem;
-  /* color: white; */
-  box-shadow: 0px 3px 3px 1px rgba(109, 109, 109, 0.644) inset;
+  color: var(--forgeround-pill-text);
+  box-shadow: 0px 3px 3px 1px var(--foreground-pill-shadow) inset;
   text-align: left;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
@@ -346,7 +362,7 @@ body {
 .instructor-attendance-history-pill:focus .name-area {
   padding-top: 0.8rem;
   border-radius: 1rem;
-  box-shadow: 0px 3px 5px 1px rgba(109, 109, 109, 0.644) inset;
+  box-shadow: 0px 3px 5px 1px var(--foreground-pill-hover) inset;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
@@ -385,7 +401,7 @@ body {
   bottom: 0;
   text-align: center;
   line-height: 4rem;
-  color: white;
+  color: var(--date-and-percent);
   font-size: 1.2rem;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
@@ -408,69 +424,69 @@ body {
 
 
 .instructor-attendance-history-pill.good {
-  border: 2px solid #04852f;
+  border: 2px solid var(--green-pill);
   /* box-shadow: 0px 3px 10px rgba(65, 162, 91, 0.33); */
 }
 .instructor-attendance-history-pill.good .date-area {
-  background-color: #04852f;
+  background-color: var(--green-pill);
 }
 .instructor-attendance-history-pill.good .percentage-area {
-  background-color: #04852f;
+  background-color: var(--green-pill);
 }
 
 .instructor-attendance-history-pill.good .percentage-area::before {
-  border-right: 0rem solid #04852f;
-  border-bottom: 3.9rem solid #04852f;
+  border-right: 0rem solid var(--green-pill);
+  border-bottom: 3.9rem solid var(--green-pill);
 }
 
 .instructor-attendance-history-pill.good:hover,
 .instructor-attendance-history-pill.good:focus {
   outline: none;
-  box-shadow: 0px 0px 10px 7px rgba(65, 162, 91, 0.33);
+  box-shadow: 0px 0px 10px 7px var(--green-pill-shadow);
 }
 
 .instructor-attendance-history-pill.medium {
-  border: 2px solid #b95726;
+  border: 2px solid var(--yellow-pill);
   /* box-shadow: 0px 3px 10px rgba(233, 126, 71, 0.36); */
 }
 .instructor-attendance-history-pill.medium .date-area {
-  background-color: #b95726;
+  background-color: var(--yellow-pill);
 }
 .instructor-attendance-history-pill.medium .percentage-area {
-  background-color: #b95726;
+  background-color: var(--yellow-pill);
 }
 
 .instructor-attendance-history-pill.medium .percentage-area::before {
-  border-right: 0rem solid #b95726;
-  border-bottom: 3.9rem solid #b95726;
+  border-right: 0rem solid var(--yellow-pill);
+  border-bottom: 3.9rem solid var(--yellow-pill);
 }
 
 .instructor-attendance-history-pill.medium:hover,
 .instructor-attendance-history-pill.medium:focus {
   outline: none;
-  box-shadow: 0px 0px 10px 7px rgba(233, 126, 71, 0.36);
+  box-shadow: 0px 0px 10px 7px var(--yellow-pill-shadow);
 }
 
 .instructor-attendance-history-pill.bad {
-  border: 2px solid #d13e34;
+  border: 2px solid var(--red-pill);
   /* box-shadow: 0px 3px 10px rgba(255, 99, 88, 0.36); */
 }
 .instructor-attendance-history-pill.bad .date-area {
-  background-color: #d13e34;
+  background-color: var(--red-pill);
 }
 .instructor-attendance-history-pill.bad .percentage-area {
-  background-color: #d13e34;
+  background-color: var(--red-pill);
 }
 
 .instructor-attendance-history-pill.bad .percentage-area::before {
-  border-right: 0rem solid #d13e34;
-  border-bottom: 3.9rem solid #d13e34;
+  border-right: 0rem solid var(--red-pill);
+  border-bottom: 3.9rem solid var(--red-pill);
 }
 
 .instructor-attendance-history-pill.bad:hover,
 .instructor-attendance-history-pill.bad:focus {
   outline: none;
-  box-shadow: 0px 0px 10px 7px rgba(255, 99, 88, 0.36);
+  box-shadow: 0px 0px 10px 7px var(--red-pill-shadow);
 }
 
 .instructor-attendance .month-area,
@@ -529,7 +545,7 @@ body {
 .dashboard-section-modal .sub-section::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: #F5F5F5; 
+  background-color: var(--modal-background); 
 }
 
 .dashboard-section-modal .sub-section.is-mobile {
@@ -550,16 +566,16 @@ body {
 
 .dashboard-section-modal .course-pill .foreground-pillar {
   border-radius: 5px;
-  box-shadow: 0px 3px 3px 1px rgba(109, 109, 109, 0.644);
+  box-shadow: 0px 3px 3px 1px var(--foreground-pill-shadow);
   position: relative;
   z-index: 3;
-  background-color: white;
+  background-color: var(--foreground-pill);
   height: 100%;
 }
 
 .course-pill .background-pillar {
   position: absolute;
-  background-color: #d13e34;
+  background-color: var(--red-pill);
   left: -1%;
   top: -6%;
   border-radius: 5px;
@@ -588,12 +604,12 @@ body {
 .dashboard-section-modal .course-pill .pill-left .course-name {
   font-size: 0.8rem;
   font-weight: bold;
-  color: #53788E;
+  color: var(--modal-course-name);
 }
 
 .dashboard-section-modal .course-pill .pill-left .course-dept {
   font-size: 0.85rem;
-  color: #2398C8;
+  color: var(--modal-course-dept);
   font-weight: bold;
 }
 
@@ -647,14 +663,14 @@ custom-scrollbar::-webkit-scrollbar-thumb {
 .big-button {
   font-size: 1rem;
   font-weight: normal;
-  border: 2px solid rgba(44, 62, 80, 0.7);
-  color: rgba(44, 62, 80, 1);
+  border: 2px solid var(--big-button-border);
+  color: var(--big-button-text);
   padding: 0px 30px;
   height: 40px;
   line-height: 35px;
   border-radius: 5px;
-  background-color: white;
-  box-shadow: 0px 3px 5px rgba(44, 62, 80, 0.1);
+  background-color: var(--big-button);
+  box-shadow: 0px 3px 5px var(--big-button-shadow);
   cursor: pointer;
   transition: border 0.25s, box-shadow 0.25s;
   margin: 0.5rem;
@@ -663,8 +679,8 @@ custom-scrollbar::-webkit-scrollbar-thumb {
 .big-button:hover,
 .big-button:focus {
   outline: none;
-  border: 2px solid rgba(44, 62, 80, 1);
-  box-shadow: 0px 0px 10px 7px rgba(44, 62, 80, 0.2);
+  border: 2px solid var(--big-button-border);
+  box-shadow: 0px 0px 10px 7px var(--big-button-shadow);
 }
 
 .center-fill-section {
@@ -706,20 +722,20 @@ a:hover {
 }
 
 .lecture-pill-min.green {
-  background-color: #04852f;
-  box-shadow: 0px 3px 5px rgba(78, 205, 76, 0.3);
+  background-color: var(--green-pill);
+  box-shadow: 0px 3px 5px var(--green-pill-shadow);
 }
 .lecture-pill-min.blue {
-  background-color: #0078c2;
-  box-shadow: 0px 3px 5px rgba(79, 109, 234, 0.3);
+  background-color: var(--blue-pill);
+  box-shadow: 0px 3px 5px var(--blue-pill-shadow);
 }
 .lecture-pill-min.yellow {
-  background-color: #b95726;
-  box-shadow: 0px 3px 5px rgba(244, 159, 50, 0.4);
+  background-color: var(--yellow-pill);
+  box-shadow: 0px 3px 5px var(--yellow-pill-shadow);
 }
 .lecture-pill-min.red {
-  background-color: #d13e34;
-  box-shadow: 0px 3px 5px rgba(249, 82, 71, 0.3);
+  background-color: var(--red-pill);
+  box-shadow: 0px 3px 5px var(--red-pill-shadow);
 }
 
 .lecture-pills-min-container .lecture-pill-holder {
@@ -744,19 +760,19 @@ a:hover {
 }
 
 .mobile-event-pill-area .mobile-pill.good {
-  border: 3px solid #04852f;
-  box-shadow: 0px 3px 10px rgba(65, 162, 91, 0.33);
+  border: 3px solid var(--green-pill);
+  box-shadow: 0px 3px 10px var(--green-pill-shadow);
 }
 
 .mobile-event-pill-area .mobile-pill.bad {
-  border: 3px solid #d13e34;
-  box-shadow: 0px 3px 10px rgba(255, 99, 88, 0.36);
+  border: 3px solid var(--red-pill);
+  box-shadow: 0px 3px 10px var(--red-pill-shadow);
 
 }
 
 .mobile-event-pill-area .mobile-pill.medium {
-  border: 3px solid #b95726;
-  box-shadow: 0px 3px 10px rgba(233, 126, 71, 0.36);
+  border: 3px solid var(--yellow-pill);
+  box-shadow: 0px 3px 10px var(--yellow-pill-shadow);
 }
 
 .mobile-event-pill-area .mobile-pill .day-of-week {
@@ -782,8 +798,8 @@ a:hover {
 .course-info-upcoming-lecture-pill .foreground-pill {
   width: 100%;
   height: 100%;
-  background-color: white;
-  box-shadow: 0px 3px 3px 1px rgba(109, 109, 109, 0.644);
+  background-color: var(--foreground-pill);
+  box-shadow: 0px 3px 3px 1px var(--foreground-pill-shadow);
   position: relative;
   z-index: 2;
   padding: 0px 20px;
@@ -797,7 +813,7 @@ a:hover {
   left: -2%;
   width: 104%;
   height: 100%;
-  background-color: #0078c2;
+  background-color: var(--upcoming-pill);
   border-radius: 5px;
 }
 
@@ -852,66 +868,147 @@ a:hover {
 .btn {}
 
 .btn.btn-primary {
-  background: #0078c2;
-  /* border: 0.1rem solid #005183; */
-  box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+  background: var(--button-primary-blue);
+  border: 0.1rem solid var(--button-primary-blue); 
+  box-shadow: 0px 3px 3px 0px var(--button-blue-shadow);
+  outline: none;
+  color: var(--button-text-color);
 }
 
 .btn.btn-secondary {
-  background: #727272;
+  background: var(--button-secondary-grey);
   /* border: 0.1rem solid #444444; */
-  box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+  box-shadow: 0px 3px 3px 0px var(--button-grey-shadow);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+  color: var(--button-text-color);
 }
+
+.btn.btn-danger {
+  background: var(--button-danger);
+  border: 0.1rem solid rgba(255,255,255, 0);
+  box-shadow: none;
+  color: var(--button-text-color);
+} 
 
 .btn.btn-primary:hover,
 .btn.btn-primary:focus,
 .btn.btn-primary:active,
+.btn.btn-primary:active:focus,
 .btn.btn-primary:target {
   outline: none;
-  border: 0.1rem solid #005183;
-  background: #005183;
-  box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644) inset;
+  border: 0.1rem solid var(--button-blue-shadow);
+  background: var(--button-hover-blue);
+  box-shadow: 0px 3px 3px 0px var(--button-blue-shadow) inset;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+  color: var(--button-text-hover);
+}
+
+/* This is because white is not 508 with halloween *
+ * Take this block out when halloween is over 
+ * Also change invert(0) back to (1) */
+.btn.btn-primary img,
+.btn.btn-secondary img {
+  filter: brightness(0) !important;
+}
+
+.btn.btn-primary:active:focus,
+.btn.btn-secondary:active:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .btn.btn-primary:hover img,
 .btn.btn-primary:focus img,
 .btn.btn-primary:active img,
 .btn.btn-primary:target img {
-  filter: invert(1);
+  filter: var(--widgets-color) invert(0);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .btn.btn-secondary:hover,
 .btn.btn-secondary:focus,
-.btn.btn-secondary:active
+.btn.btn-secondary:active,
+.btn.btn-secondary:active:focus,
 .btn.btn-secondary:target {
   outline: none;
-  border: 0.1rem solid #444444;
-  background: #444444;
-  box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644) inset;
+  border: 0.1rem solid var(--button-hover-grey);
+  background: var(--button-hover-grey);
+  box-shadow: 0px 3px 3px 0px var(--button-grey-shadow) inset;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+  color: var(--button-text-hover);
 }
 
 .btn.btn-secondary:hover img,
 .btn.btn-secondary:focus img,
 .btn.btn-secondary:active img,
 .btn.btn-secondary:target img {
-  filter: invert(1);
+  filter: var(--widgets-color) invert(0);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-
+.btn.btn-danger:hover,
+.btn.btn-danger:focus,
+.btn.btn-danger:active,
+.btn.btn-danger:target {
+  outline: none;
+  border: 0.1rem solid var(--button-danger-shadow);
+  background-color: var(--button-danger-hover);
+  box-shadow: 0px 3px 3px 0px var(--button-danger-shadow) inset;
+  transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+  color: white;
+} 
 
 input,select {
-  background: #f7f7f7 !important;
+  color: var(--input-text) !important;
+  background: var(--input-background) !important;
   border-radius: 0.25rem !important;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.input-group input {
-  min-height:3rem;
+/* take out after halloween? */
+input:-webkit-autofill {
+  -webkit-text-fill-color: var(--input-text) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--input-background) inset;
+  border-radius: 0.25rem !important;
+  transition: background-color 500s ease-in-out 0s;
+}
+
+.input-group-append {
+  padding-left: 20px;
+}
+
+.form-control {
+  border-color: var(--input-border);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--input-shadow);
+  box-shadow: 0 0 10px var(--input-shadow);
+}
+
+th,td {
+  color: var(--main-text-color);
+}
+
+.picker-dialog {
+  background: var(--calendar-background); 
+  border: 1px solid var(--calendar-border);
+}
+
+.picker-item {
+  color: var(--calendar-border);
+  background: var(--calendar-background);
+}
+.picker-cell__control,
+.picker-cell__control::before,
+.picker-cell__header {
+  /* background-color: var(--calendar-background); */
+  color: var(--calendar-border);
+}
+
+.picker-picked {
+  color: var(--calendar-selected);
 }
 
 /* ------------------ */
@@ -922,7 +1019,7 @@ input,select {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.65);
+  background: var(--modal-container-background);
   z-index: 99;
 }
 
@@ -931,8 +1028,8 @@ input,select {
   width: 50%;
   height: 50%;
   margin: 12.5% 25%;
-  background: white;
-  border: 1px solid gray;
+  background: var(--modal-background);
+  border: 1px solid var(--modal-border);
   padding: 1rem;
   border-radius: 1rem;
   overflow-y: auto;

@@ -6,7 +6,12 @@
         </button>
     </div>
     <!-- Course Name -->
+<<<<<<< HEAD
     <div class="course-name" v-if="course.hasOwnProperty('name')"><div v-if="mobileMode && (is_instructor || is_ta)" class="icon-spacer"/> {{course.name}} <button class="btn" title="Edit Course" id="edit-course" @click="handleEditCourse()" v-if="is_instructor || is_ta"><img id="edit-course" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit"></button></div>
+=======
+    <div class="course-name" v-if="course.hasOwnProperty('name')"><div v-if="mobileMode && (is_instructor || is_ta)" class="icon-spacer"/> {{course.name}} <button class="btn" title="Edit Course" id="edit-course" @click="handleEditCourse()" v-if="is_instructor || is_ta"><img id="edit-course" src="@/assets/hw/icons8-jack-o-lantern-64.png" alt="Edit" width="40" aria-label="Edit"></button></div>
+
+>>>>>>> master
     <div>
 
       <!-- Course Dept # -->
@@ -80,6 +85,9 @@
 </script>
 
 <style scoped>
+:root {
+  --red-x: ''
+}
 #edit-course,
 #delete-course {
   float: right;
@@ -94,5 +102,8 @@
   left: 0;
   bottom: 0;
   margin: 1rem;
+}
+.red-x {
+  filter: var(--red-x);
 }
 </style>

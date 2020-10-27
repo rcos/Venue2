@@ -213,13 +213,13 @@ export default {
 	min-width: 25rem;
 	width: 50%;
 	left: -2rem;
-	background: lightskyblue;
+	background: var(--poll-background);
 	border-radius: 1.25rem;
 	z-index: 999;
 }
 #poll_contents {
 	position: relative;
-	background: white;
+	background: var(--main-background-color);
 	border-radius: 1rem;
 	height: 100%;
 	padding: 1rem;
@@ -247,7 +247,7 @@ h2 {
 }
 .labelrow {
 	margin-bottom: 1rem;
-	border-bottom: 1px solid black;
+	border-bottom: 1px solid var(--main-text-color);
 }
 #number_label {
 	width: 10%;

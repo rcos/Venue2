@@ -91,10 +91,20 @@
 </script>
 
 <style scoped>
+:root {
+  --event-pill-green: #04852f;
+  --event-pill-shadow: rgba(0, 0, 0, 0.065);
+  --event-pill-date: rgba(0, 0, 0, 0.6);
+  --event-pill-name: rgba(0, 0, 0, 1);
+  --event-pill-location: rgba(0, 0, 0, 0.5);
+
+  --event-pill-border: rgba(35, 217, 96, 0.5);
+  --event-pill-text: black;
+}
 
   .event-pill-list-mode {
     width: 45%;
-    border: 1px solid #04852f;
+    border: 1px solid var(--event-pill-green);
     display: inline-block;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
@@ -103,7 +113,7 @@
     font-size: 0.9rem;
     padding: 0px 10px;
     border-radius: 5px;
-    box-shadow: 0px 3px 5px 5px rgba(0, 0, 0, 0.065);
+    box-shadow: 0px 3px 5px 5px var(--event-pill-shadow);
     height: 40px;
     line-height: 40px;
   }
@@ -116,17 +126,17 @@
 
   .event-pill-list-item .event-date-section {
     width: 20%;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--event-pill-date);
   }
 
   .event-pill-list-item .event-name-section {
     width: 50%;
-    color: rgba(0, 0, 0, 1);
+    color: var(--event-pill-name);
   }
 
   .event-pill-list-item .event-location-section {
     width: 30%;
-    color: rgba(0, 0, 0, 0.5);
+    color: var(--event-pill-location);
   }
 
   .attendance-month-container {
@@ -145,14 +155,14 @@
   }
 
   .event-pill {
-    border: 1px solid rgba(35, 217, 96, 0.5);
+    border: 1px solid var(--event-pill-border);
     width: 250px;
     height: 60px;
     min-width: 150px;
     border-radius: 5px;
     margin-top: 1rem;
     cursor: pointer;
-    color: black;
+    color: var(--event-pill-text);
   }
 
   .event-card-section {

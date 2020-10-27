@@ -11,7 +11,6 @@
 
 <script>
   import ActiveEventCard from '@/components/ActiveEventCard.vue'
-
   export default {
     name: 'ActiveEventList',
     components: {
@@ -68,22 +67,23 @@
 </script>
 
 <style scoped>
+:root { 
+  --event-active-link: #2c3e50; 
+  --event-list-background: #F5F5F5; 
+}
 .active-event-list {
   height: 12.5rem;
   overflow-y: auto;
 }
-
 .active-event-list::-webkit-scrollbar {
   width: 12px;
 }
-
 .active-event-list::-webkit-scrollbar-thumb {
 border-radius: 10px;
--webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-background-color: #F5F5F5; 
+-webkit-box-shadow: inset 0 0 6px var(--event-active-shadow);
+background-color: var(--event-list-background); 
 }
-
 .active-event-link {
-  color: #2c3e50;
+  color: var(--event-active-link);
 }
 </style>

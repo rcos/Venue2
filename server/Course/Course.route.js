@@ -4,6 +4,7 @@ const courseRoutes = express.Router();
 let Course = require('./Course.model');
 let Section = require('../Section/Section.model');
 let User = require('../User/User.model');
+const { update } = require('../Section/Section.model');
 
 courseRoutes.route('/add').post(function (req, res) {
   let course = new Course(req.body.course);
@@ -30,8 +31,6 @@ courseRoutes.route('/').get(function (req, res) {
   });
 });
 
-courseRoutes.route('')
-
 courseRoutes.route('/edit/:id').get(function (req, res) {
   let id = req.params.id;
   Course.findById(id, function (err, course) {
@@ -47,14 +46,18 @@ courseRoutes.route('/edit/:id').get(function (req, res) {
 
 courseRoutes.route('/update/:id').post(function (req, res) {
   let id = req.params.id;
-  let updated_course = req.body.updated_course;
+  let updated_course = {}
+  if(req.body.updated_course.name) {
+    updated_course.name = req.body.updated_course.name
+  }
+  if(req.body.updated_course.prefix) {
+    updated_course.prefix = req.body.updated_course.prefix
+  }
+  if(req.body.updated_course.suffix) {
+    updated_course.suffix = req.body.updated_course.suffix
+  }
   Course.findByIdAndUpdate(id,
-    {
-      name: updated_course.name,
-      dept: updated_course.dept,
-      course_number: updated_course.course_number,
-      instructor: updated_course.instructor
-    },
+    updated_course,
     function (err, course) {
       if (err || course == null) {
         console.log("<ERROR> Updating course by ID:", id, "with:", updated_course);
@@ -89,7 +92,22 @@ courseRoutes.route('/delete/:id').delete(function (req, res) {//copied how old c
                     console.log("<ERROR> Removing section from student users with ID:", section_id);
                     res.json(err);
                   } else {
-                    console.log("<SUCCESS> Deleting section with ID:", section_id);
+                    Course.findByIdAndRemove({ _id: req.params.id }, function (err) {
+                      if (err) {
+                        console.log("<ERROR> Deleting course with ID:", req.params.id);
+                        res.json(err);
+                      } else {
+                        User.updateMany({}, { $pull: { instructor_courses: req.params.id } }, function (err) {
+                          if (err) {
+                            console.log("<ERROR> Removing course from users with ID:", req.params.id);
+                            res.json(err);
+                          } else {
+                            console.log("<SUCCESS> Deleting course with ID:", req.params.id);
+                            res.json('Successfully removed');
+                          }
+                        });
+                      }
+                    });
                   }
                 });
               }
@@ -98,22 +116,6 @@ courseRoutes.route('/delete/:id').delete(function (req, res) {//copied how old c
         });
       });
     }
-    Course.findByIdAndRemove({ _id: req.params.id }, function (err) {
-      if (err) {
-        console.log("<ERROR> Deleting course with ID:", req.params.id);
-        res.json(err);
-      } else {
-        User.updateMany({}, { $pull: { instructor_courses: req.params.id } }, function (err) {
-          if (err) {
-            console.log("<ERROR> Removing course from users with ID:", req.params.id);
-            res.json(err);
-          } else {
-            console.log("<SUCCESS> Deleting course with ID:", req.params.id);
-            res.json('Successfully removed');
-          }
-        });
-      }
-    });
   });
 });
 
@@ -183,31 +185,16 @@ courseRoutes.post('/add_lecture_time/:id', (req, res) => {
 });
 
 courseRoutes.route('/toggleOpenEnrollment/:id').post(function (req, res) {
-  let id = req.params.id;
-  Course.findByIdAndUpdate(id,
-    {is_public: true}, {$set: {is_public: false}},
-      function (err, course) {
-        if (err || course == null) {
-          console.log("<ERROR> Changing course (ID:",id, ") status to private")
-          res.status(404).send("course not found");
-        } else {
-          console.log("<SUCCESS> Changing course (ID:",id, ") status to private")
-          res.json(course);
-        }
-      }
-    );
-    Course.findByIdAndUpdate(id,
-      {is_public: false}, {$set: {is_public: true}},
-        function (err, course) {
-          if (err || course == null) {
-            console.log("<ERROR> Changing course (ID:",id, ") status to open enrollment")
-            res.status(404).send("course not found");
-          } else {
-            console.log("<SUCCESS> Changing course (ID:",id, ") status to open enrollment")
-            res.json(course);
-          }
-        }
-      );
+  let id = req.params.id
+  let sections = req.body.sections
+  let section_ids = sections.map(a => a._id)
+  Promise.all([Course.findByIdAndUpdate(id,
+    {is_public: true}, {$set: {is_public: false}}, Section.updateMany( {_id: {$in: section_ids}}, {$set: {is_public: false}})), Course.findByIdAndUpdate(id,
+      {is_public: false}, {$set: {is_public: true}}, Section.updateMany( {_id: {$in: section_ids}}, {$set: {is_public: true}}))
+    ]).then(resolved => {
+      res.json(course)
+    });
 });
+
 
 module.exports = courseRoutes;
