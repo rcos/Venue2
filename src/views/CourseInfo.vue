@@ -63,9 +63,9 @@
           <div class="courseinfo-legend live-border">Synchronous</div>
           <div class="courseinfo-legend playback-border">Asynchronous</div>
           <InstructorAttendanceHistory :style='{textAlign: "center"}'
-            v-if="(is_instructor || is_ta) && lectures_loaded && sorted_lectures[selected_section] && scores_loaded"
+            v-if="(is_instructor || is_ta) && lectures_loaded && sorted_lectures[selected_section]"
             :lectures="sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded" mobileMode/>
-          <StudentAttendanceHistory :style='{textAlign: "center"}' v-else-if="is_student && lectures_loaded && sorted_lectures[section_id] && scores_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
+          <StudentAttendanceHistory :style='{textAlign: "center"}' v-else-if="is_student && lectures_loaded && sorted_lectures[section_id]" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
           <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
             <SquareLoader />
           </div>
