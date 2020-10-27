@@ -36,9 +36,13 @@ import RedirectCASLogin from './views/RedirectCASLogin.vue';
 import Statistics from './views/Statistics.vue';
 import TeachNewCourse from '@/components/TeachNewCourse.vue';
 import NewSection from '@/components/NewSection.vue';
+import EditLecture from '@/components/EditLecture.vue';
+import JoinCourse from '@/components/JoinCourse.vue';
 
 import AuthAPI from '@/services/AuthAPI.js';
 import UserAPI from '@/services/UserAPI.js';
+import SectionAPI from './services/SectionAPI';
+import CourseAPI from './services/CourseAPI';
 
 const url = require('url')
 const query = require('querystring')
@@ -271,6 +275,15 @@ const router = new VueRouter({
       }
     },
     {
+      name: 'join_course',
+      path: '/join_course/:id',
+      component: JoinCourse,
+      meta: {
+        title: "Join Course",
+        requiresAuth: true
+      }
+    },
+    {
       name: 'new_event',
       path: '/new_event/:course_id',
       component: NewEvent,
@@ -360,6 +373,15 @@ const router = new VueRouter({
         title: "Teach New Course",
         requiresAuth: true
       }
+    },
+    {
+      name: 'edit_lecture',
+      path: '/edit_lecture/:id',
+      component: EditLecture,
+      meta: {
+        title: "Edit Lecture",
+        requiresAuth: true
+      }
     }
   ]
 })
@@ -384,7 +406,9 @@ router.beforeEach((to, from, next) => {
 
       const user_data = JSON.parse(loggedIn)
 
-      if(to.matched.some(record => record.meta.requiresAdmin)) {
+      if(user_data.current_user.is_admin) {
+        next()
+      } else if(to.matched.some(record => record.meta.requiresAdmin)) {
 
         if (user_data.current_user.is_admin) {
           next()
@@ -400,17 +424,48 @@ router.beforeEach((to, from, next) => {
         || (to.name == 'edit_course' && user_data.current_user.instructor_courses.includes(to.params.id))
         || (to.name == 'edit_section' && user_data.current_user.ta_sections.includes(to.params.id))
         || (to.name == 'edit_section' && from.name == 'edit_course')
-        || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))) {
+        || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))){
           next()
         } else {
           next('/dashboard')
         }
+      } 
+      else if (to.name == 'join_course') { //student implement new join route
 
-      } else {
+        if (user_data.current_user.instructor_courses.includes(to.params.id)) {
+          next('/course_info/' + to.params.id)
+        }
+        /*
+        SectionAPI.getSectionsForCourse(to.params.id).then(res=>{
+          let in_course = false
+          let sections = res.data
+          for (let i = 0; i < sections.length; i++) {
+            if (user_data.current_user.student_sections.includes(sections[i]._id)) {
+              console.log(sections[i].name)
+              next('/course_info/' + sections[i]._id)
+              in_course = !in_course
+              break }
+          }
+          if (!in_course) {
+            var section_choice = prompt("Join Section")
+            for (let i = 0; i < sections.length; i++) {
+              if (sections[i].name == section_choice) {
+                  SectionAPI.addToSection(sections[i]._id, user_data.current_user._id)
+                  location.reload()
+                  next('/course_info/' + sections[i]._id)
+                break }
+            }
+          }
+        }) */
+        next()
+
+      }  
+      else {
         next()
       }
-
-    } else {
+    }
+    // not logged in
+    else {
       next('/')
     }
 

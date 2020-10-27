@@ -1,4 +1,4 @@
-<<template>
+<template>
   <div class="todays-events-list">
     <div v-if="todays_events.length > 0">
       <!-- Desktop and tablet -->
@@ -37,7 +37,6 @@
 </template>
 
 <script>
-  import EventAPI from '@/services/EventAPI.js'
   import TodaysEventCard from '@/components/TodaysEventCard.vue'
   import {showAt, hideAt} from 'vue-breakpoints'
 

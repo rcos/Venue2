@@ -5,18 +5,15 @@
 
         <!-- Title -->
         <div class="title">
-          <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: (is_instructor?course._id:$route.params.id) }}" tabindex="-1">
+          <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: $route.params.id }}" tabindex="-1">
             <div class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
           </router-link>
         </div>
-        <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" :section_name="section.name" :is_instructor="is_instructor" :is_ta="is_ta"/>
 
-        <br>
-        <br>
-        <div>
-          <input data-v-b0bd8b16="" type="text" class="form-control" placeholder="Default Meeting URL">
-        </div>
-        <br>
+        <button v-if="is_instructor || is_ta" class="inline-block big-button" :style="{float: 'right'}" tabindex="0" @click="copyURL">Copy Link to Join {{ course.prefix }} {{ course.suffix }}</button>        
+
+        <CourseInfoTitle v-if="is_instructor" :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta"/>
+        <CourseInfoTitle v-else-if="sections[$route.params.id]" :course="sections[$route.params.id].course" :section_name="sections[$route.params.id].name" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta"/>
 
         <!-- Attendance History -->
         <div>
@@ -47,10 +44,13 @@
     <hide-at breakpoint="large">
       <div>
         <!-- Mobile View -->
-        <CourseInfoTitle :course="typeof course == typeof {} ? course : {}" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta" mobileMode />
-        <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: (is_instructor?course._id:$route.params.id) }}" tabindex="-1">
+        <CourseInfoTitle v-if="is_instructor" :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta" mobileMode/>
+        <CourseInfoTitle v-else-if="sections[$route.params.id]" :course="sections[$route.params.id].course" :section_name="sections[$route.params.id].name" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta" mobileMode/>
+
+        <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: $route.params.id }}" tabindex="-1">
           <div class="inline-block big-button mobile" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
         </router-link>
+        <button v-if="is_instructor || is_ta" class="inline-block big-button mobile" :style="{float: 'right'}" tabindex="0" @click="copyURL">Copy Link to Join {{ course.prefix }} {{ course.suffix }}</button>
         <div class="courseinfo-attendance-listing">
           <div v-if="is_instructor" class="section-select-container mobile float-right">
             <label id="section_select_label">Section(s):</label>
@@ -150,12 +150,16 @@ export default {
       this.getAllSections()
       this.getStudentsForCourse()
       this.getCourse()
-    } else {
+    }
+    else {
       this.section_id = this.$route.params.id
       this.getSectionWithCourse()
     }
   },
   methods: {
+    copyURL() {
+      navigator.clipboard.writeText((process.env.NODE_ENV === 'production'?'https://www.venue-meetings.com':'http://localhost:8080')+"/#/join_course/"+this.$route.params.id)
+    },
     async getAllSections () {
       SectionAPI.getSectionsForCourse(this.course_id)
       .catch(err => { console.log(`Problem getting sections for course ${this.course_id}`); console.log(err);})
@@ -200,7 +204,7 @@ export default {
       LectureAPI.getLecturesForCourse(this.course_id)
       .then(response => {
         this.all_lectures = response.data
-        this.all_lectures.sort((a, b) =>
+        this.all_lectures.sort((a, b) => 
           (a.start_time > b.start_time || a.playback_submission_start_time > b.playback_submission_start_time ||
           a.start_time > b.playback_submission_start_time || a.playback_submission_start_time > b.start_time) ? 1 : -1
         )
@@ -330,7 +334,7 @@ export default {
             let running_total = 0
             students.forEach(stud => {
               submissions.forEach(submission => {
-                if(submission.submitter._id == stud) {
+                if(submission.submitter.email == stud) {
                   if(submission.live_percent) {
                     if(submission.video_percent) {
                       running_total += Math.max(

@@ -6,6 +6,10 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>course:</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
             <input type="text" class="form-control" v-model="course.name" readonly>
           </div>
         </div>
@@ -13,8 +17,12 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>instructors:</label>
-            <input v-for="(instructor,i) in instructors" :key="i" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name"/>
+            <label>instructors:</label> 
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input v-for="(instructor,i) in instructors" :key="i" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name" readonly/>
           </div>
         </div>
       </div>
@@ -22,7 +30,30 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>section's name:</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
             <input type="text" class="form-control" v-model="section.name">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+           <label>Is Publicly Joinable</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+           <input type="checkbox" class="form-control" v-model="section.is_public"/>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+           <button id="update-btn" class="btn btn-primary">Update</button>
           </div>
         </div>
       </div>
@@ -68,18 +99,32 @@
         </tbody>
     </table>
 
-    <label>Add students by email</label>
-    <input type="text" v-model="students_to_add"/>
-    <button @click="addStudentsToSection()">Update</button>
-    <br/>
-    <label>Add ta's by email</label>
-    <input type="text" v-model="tas_to_add"/>
-    <button @click="addTasToSection()">Update</button>
-
-    <div class="form-group">
-      <button class="btn btn-primary">Update</button>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Add students by email</label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input type="text" v-model="students_to_add"/>
+          <button type="button" @click="addStudentsToSection()">Update</button>
+        </div>
+      </div>
     </div>
-
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Add ta's by email</label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input type="text" v-model="tas_to_add"/>
+          <button type="button" @click="addTasToSection()">Update</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -90,7 +135,7 @@
   import Students from '@/components/admin/User/Students';
 
   export default {
-    name: 'AdminEditSection',
+    name: 'EditSection',
     components: {
       Courses,
       Instructors,
@@ -148,15 +193,12 @@
       },
       removeTA(ta){
         this.tas.splice(this.tas.indexOf(ta),1)
-        this.section.teaching_assistants = this.tas
+        this.section.teaching_assistants = this.tas.map(a=>a.email)
         SectionAPI.updateSection(this.$route.params.id, this.section)
       },
       async updateSection() {
-        let section_id = this.$route.params.id
-        this.section.course = this.course
-        this.section.students = this.students
-        const response = await SectionAPI.updateSection(section_id, this.section)
-        this.$router.push({name: 'admin_sections'})
+        const response = await SectionAPI.updateSection(this.$route.params.id, this.section)
+        location.reload()
       },
       addStudentsToSection() {
         let studs = this.students_to_add.split(',')
@@ -177,5 +219,15 @@
 <style scoped>
 #edit-section {
   padding: 2rem;
+}
+label {
+  float: right;
+}
+#update-btn {
+  margin: 2rem;
+}
+
+.row {
+  margin: 1rem;
 }
 </style>

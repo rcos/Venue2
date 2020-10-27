@@ -9,63 +9,13 @@
 
       <show-at breakpoint="small">
 
-        <div>
-          <div class="attendance-month-container" v-for="(month,index) in event_months">
-            <div class="month-bar-mobile">
-              <span class="month">{{ month_names[month] }}</span>
-            </div>
-
-            <router-link
-              v-for="event in event_history_by_month[index]"
-              :to="{name: 'event_info', params: { event_id: event._id }}">
-              <div class="event-pill-container-mobile">
-                <div class="day-of-week-mobile">Mon</div>
-                <div class="day-of-month-mobile">10</div>
-              </div>
-            </router-link>
-
-          </div>
-        </div>
-
+        
       </show-at>
       <hide-at breakpoint="small">
 
         <div>
 
-          <div class="attendance-month-container" v-for="(month,index) in event_months">
-            <div class="month-bar" v-on:click="toggleMonthVisibility(month)" ><span class="month">{{ month_names[month] }}</span></div>
-
-            <div class="event-pill-container">
-              <!-- Grid Mode -->
-              <div class="event-pill-list" v-if="monthVisible(month) && grid_mode" v-for="event in event_history_by_month[index]">
-                <router-link :to="{name: 'event_info', params: { event_id: event._id }}">
-                  <div class="event-pill">
-                    <div class="left-side">
-                      <div class="day-of-week">Mon</div>
-                      <div class="day-of-month">10</div>
-                    </div>
-                    <div class="right-side">
-                      <div class="name-of-event">Online Class #1</div>
-                      <div class="location-of-event">WebEx Meeting</div>
-                    </div>
-                  </div>
-                </router-link>
-              </div>
-
-              <!-- List Mode -->
-              <div class="event-pill-list-mode" v-if="monthVisible(month) && !grid_mode" v-for="event in event_history_by_month[index]">
-                <router-link :to="{name: 'event_info', params: {event_id: event._id}}">
-                  <div class="event-pill-list-item">
-                    <div class="event-date-section">Mon 10</div>
-                    <div class="event-name-section">Online Class #1</div>
-                    <div class="event-location-section">WebEx Meeting</div>
-                  </div>
-                </router-link>
-              </div>
-            </div>
-
-          </div>
-
+          
         </div>
 
       </hide-at>
@@ -75,8 +25,7 @@
 </template>
 
 <script>
-  import EventAPI from '@/services/EventAPI.js';
-
+  
   export default {
     name: 'EventHistoryList',
     props: {
@@ -111,13 +60,12 @@
     },
     methods: {
       async getEventHistoryForCourse() {
-        const response = await EventAPI.getEventHistoryForCourse(this.course._id)
+
         this.event_history = response.data
         this.sortEventsByStartTime()
         this.separateEventsByMonth()
       },
       async getEventHistoryForSection() {
-        const response = await EventAPI.getEventHistoryForSection(this.section._id)
         this.event_history = response.data
         this.sortEventsByStartTime()
         this.separateEventsByMonth()
