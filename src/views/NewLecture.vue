@@ -28,7 +28,7 @@
         </div>
         <div class="input-wrapper">
           <label>Is your meeting live, or pre-recorded?</label><br>
-          <input @click="setAllowLiveSubmissions" type="checkbox" name="live_submission" v-model="allow_live_submissions" aria-labelledby="live_submission_label" :tabindex="(modal_open ? '-1' : '0')">
+          <input @click="setAllowLiveSubmissions" type="checkbox" name="live_submission" v-model="allow_live_submissions" aria-labelledby="live_submission_label" :tabindex="(modal_open ? '-1' : '0')"> 
           <label id="live_submission_label">Live</label><br>
           <input @click="setAllowPlaybackSubmissions" type="checkbox" name="playback_submission" v-model="allow_playback_submissions" aria-labelledby="playback_submission_label" :tabindex="(modal_open ? '-1' : '0')">
           <label id="playback_submission_label">Pre-recorded</label><br>
