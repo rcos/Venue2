@@ -5,8 +5,17 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
+<<<<<<< HEAD
             <label>Name</label>
             <input type="text" class="form-control" v-model="edited_course_name" :placeholder="course.name"/>
+=======
+            <label>name</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="text" class="form-control" v-model="course.name">
+>>>>>>> master
           </div>
         </div>
         <div class="col-md-6">
@@ -19,8 +28,17 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
+<<<<<<< HEAD
             <label>Dept</label>
             <input class="form-control" v-model="edited_dept_name" :placeholder="course.prefix"/>
+=======
+            <label>dept</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input class="form-control" v-model="course.prefix" rows="5">
+>>>>>>> master
           </div>
         </div>
         <div class="col-md-6">
@@ -32,7 +50,15 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
+<<<<<<< HEAD
             <label>Number</label>
+=======
+            <label>number</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+>>>>>>> master
             <input class="form-control" v-model="course.suffix" rows="5">
           </div>
         </div>
@@ -49,6 +75,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
+<<<<<<< HEAD
             <label>Instructors</label>
             <input v-for="(instructor,i) in instructors" :key="i" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name" rows="5" readonly>
             <br>
@@ -56,18 +83,14 @@
             <input type="text" v-model="instructors_to_add"/>
             <button type="button" @click="addInstructorsToCourse()">Update</button>
             <br>
+=======
+            <label>instructors</label>
+>>>>>>> master
           </div>
         </div>
-      </div>
-      <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <router-link v-for="section in sections" :key="section._id" :to="{name: 'edit_section', params: { id: section._id }}">
-                <button class="btn btn-secondary">Edit Section {{section.name}}</button>
-            </router-link>
-            <router-link :to="{name: 'new_section', params: { id: course._id }}">
-                <button class="btn btn-primary">New Section</button>
-            </router-link>
+            <input v-for="(instructor,i) in instructors" :key="i" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name" rows="5" readonly>
           </div>
         </div>
       </div>
@@ -75,6 +98,31 @@
         <button class="btn btn-primary" id="update-course-btn" @click="updateCourse()">Update</button>
       </div>
     </form>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Add instructors by email</label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input type="text" v-model="instructors_to_add"/>
+          <button type="button" @click="addInstructorsToCourse()">Update</button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <router-link v-for="section in sections" :key="section._id" :to="{name: 'edit_section', params: { id: section._id }}">
+              <button class="btn btn-secondary">Edit Section {{section.name}}</button>
+          </router-link>
+          <router-link :to="{name: 'new_section', params: { id: course._id }}">
+              <button class="btn btn-primary">New Section</button>
+          </router-link>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -120,7 +168,7 @@
       },
       async updateCourse() {
         let course_id = this.$route.params.id
-        this.course.instructors = this.instructors.map(a=>a._id)
+        this.course.instructors = this.instructors.map(a=>a.email)
         const response = await CourseAPI.updateCourse(course_id, this.course)
         location.reload()
       },
@@ -157,6 +205,11 @@
 <style scoped>
 #edit-course {
   padding: 2rem;
+  max-width: 80rem;
+  margin: auto;
+}
+.btn {
+  margin: 0.5rem 0.25rem 0rem 0rem;
 }
 #update-course-btn {
   margin: 2rem;

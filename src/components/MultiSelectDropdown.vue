@@ -3,7 +3,7 @@
       @mouseleave="open = false">
 		<div :class="'multiselect-box z'+(999-(2*n)+1)" @click="open = !open">
 			<div class="multiselect-toggle float-right">
-				<img src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+				<img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
 			</div>
 			<div v-for="(selection,i) in selected" :class="'multiselect-selected ' + (i==0?'first ':'') + (i==selected.length-1?'last ':'')" :key="i" v-on:click.stop>
 				<div class="multiselect-selected-text" :title="getDisplayText(selection)">
@@ -30,12 +30,11 @@ export default {
 	props: {
 		options: Array,
 		sortBy: String,
-		default: Array,
+		preselected: Array,
 		displayAs: Array,
 		max: { type: Number, default: 999 },
 		n: { type: Number, default: 0 },
 	},
-	components: {},
 	data(){
 		return {
 			selected: [],
@@ -45,16 +44,17 @@ export default {
 	},
 	created() {
 		this.options.forEach(option => {
-			
-			let found
-			if(this.default) {
-				found = this.default.find(a => a._id == option._id)
-			}
-			if(found) {
-				this.selected.push(option)
+			if(this.preselected) {
+				let found = this.preselected.find(a => a._id == option._id || a === option)
+				if(found) {
+					this.selected.push(option)
+				} else {
+					this.unselected.push(option)
+				}
 			} else {
 				this.unselected.push(option)
 			}
+			
 		})
 		if(this.sortBy) {
 			this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
@@ -124,6 +124,10 @@ export default {
 </script>
 
 <style scoped>
+.svg-color {
+	filter: var(--widgets-color);
+}
+
 .multiselect {
 	text-align: left;
 	display: inline-block;
@@ -134,9 +138,9 @@ export default {
 	min-height: 2.75rem;
 	width: 10rem;
 	padding: 0.25rem;
-	background: #f7f7f7;
+	background: var(--nav-bar-background);
 	cursor: pointer;
-	box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644) inset;
+	box-shadow: 0px 3px 3px 0px var(--nav-bar-hover-top-shadow) inset;
 }
 .multiselect-toggle {
 	position: relative;
@@ -172,10 +176,11 @@ export default {
 	width: 10rem;
 	overflow: auto;
 	position: absolute;
-	background: #f7f7f7;
+	background: var(--nav-bar-background);
+	color: var(--nav-bar-text);
 	/* border-top: 1px solid black; */
 	border-radius: 0.5rem;
-	box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+	box-shadow: 0px 3px 3px 0px var(--nav-bar-hover-top-shadow);
 	min-height: 1rem;
 }
 .z1000 {
@@ -206,23 +211,37 @@ export default {
 	margin: 0rem;
 	width: 100%;
 	padding: 0.5rem 1rem;
-	background:#f7f7f7;
+	background: var(--nav-bar-background);
 }
 
 .multiselect-option:hover,
 .multiselect-option:focus {
-	background:#466D85;
+	background: var(--nav-bar-hover-background);
+	color: var(--nav-bar-hover-text);
 	cursor: pointer;
-	box-shadow: 0px 3px 3px 0px rgba(85, 85, 85, 0.644) inset, 0px -3px 3px 0px rgba(179, 179, 179, 0.644) inset;
+	box-shadow: 0px 3px 3px 0px var(--nav-bar-hover-top-shadow) inset, 0px -3px 3px 0px var(--nav-bar-hover-top-shadow) inset;
 }
 .btn-danger {
 	border-radius: 0.25rem;
 	padding: 0.1rem 0.5rem;
 	padding-left: 0;
 	background: none;
-	color: red;
+	color: var(--error-brighter);
 	border: none;
 	font-weight: 900;
 	outline: none;
 }
+.btn.btn-danger:hover,
+.btn.btn-danger:focus,
+.btn.btn-danger:focus:active,
+.btn.btn-danger:active,
+.btn.btn-danger:target {
+  outline: none;
+  border: none;
+  box-shadow: none;
+  background-color: none;
+  font-weight: 1200;
+  background: none;
+  color: var(--button-danger-hover);
+} 
 </style>
