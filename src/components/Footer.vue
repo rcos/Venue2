@@ -7,12 +7,16 @@
 		<a href="https://blacklivesmatter.com/" target="_blank" aria-label="Black Lives Matter">
     		<img class="icon" src="../assets/black_lives_matter.svg" aria-label="BLM Icon" alt="BLM Icon"/>
     	</a> |
-    	An RCOS project | Icons by <a target="_blank" href="https://icons8.com">Icons8</a>
+		An RCOS project | Icons by <a target="_blank" href="https://icons8.com">Icons8</a> and <a target="_blank" href="https://www.flaticon.com/authors/freepik">Freepik</a>
+		<ghost @click="boo()">
+			<img class="icon" src="../assets/hw/icons8-ghost-48.png" alt="ooooooo"/>
+		</ghost>
     </footer>
 </template>
 
 <script>
 import PaletteAPI from '../services/PaletteAPI';
+import ghost from '@/assets/hw/hw.css'
 
 export default {
 	
@@ -25,6 +29,9 @@ created() {
 	  	this.current_user = this.$store.state.user.current_user
 	  	let root = document.documentElement;
 		PaletteAPI.setPalette(root, this.current_user.dark_mode)
+	  },
+	  boo() {
+		  alert('boo')
 	  }
     }
 };

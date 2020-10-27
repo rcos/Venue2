@@ -44,7 +44,6 @@ export default {
 	},
 	created() {
 		this.options.forEach(option => {
-
 			if(this.preselected) {
 				let found = this.preselected.find(a => a._id == option._id || a === option)
 				if(found) {
