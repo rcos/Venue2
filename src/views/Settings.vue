@@ -56,10 +56,6 @@
                 <button class="btn btn-primary" @click="saveName()">Save Changes</button>
               </div>
         </div>
-          
-        <!--<div class="test-div">
-          test
-        </div> -->
 
             <div style="position:relative" class="setting-option-section">
                 <div class="left" style="position:absolute">

@@ -120,29 +120,26 @@ userRoutes.route('/change_password/').post((req, res) => {
 
 })
 
-userRoutes.route('/update/:id').post(function (req, res) {
-  let id = req.params.id;
-  let updated_user = req.body.updated_user;
-  User.findByIdAndUpdate(id,
-    {
-      first_name: updated_user.first_name,
-      last_name: updated_user.last_name,
-      email: updated_user.email,
-      password: updated_user.password,
-      is_instructor: updated_user.is_instructor,
-      ta_sections: updated_user.ta_sections,
-      submissions: updated_user.submissions
-    },
-    function (err, user) {
-      if (err || user == null) {
-        console.log("<ERROR> Updating user by ID:", id, "with:", updated_user)
-        res.status(404).send("user not found");
-      } else {
-        console.log("<SUCCESS> Updating user by ID:", id, "with:", updated_user)
-        res.json(user);
-      }
-    }
-  );
+userRoutes.route('/update/:id').post(function (req, res) { 
+  let id = req.params.id; 
+  let updated_user = req.body.updated_user; 
+  User.findByIdAndUpdate(id, { 
+    first_name: updated_user.first_name, 
+    last_name: updated_user.last_name, 
+    email: updated_user.email, 
+    dark_mode: updated_user.dark_mode, 
+    password: updated_user.password, 
+    is_instructor: updated_user.is_instructor, 
+    ta_sections: updated_user.ta_sections, 
+    submissions: updated_user.submissions }, 
+    function(err, user) { if (err || user == null) { 
+      console.log("<ERROR> Updating user by ID:",id,"with:",updated_user) 
+      res.status(404).send("user not found"); 
+    } else { 
+      console.log("<SUCCESS> Updating user by ID:",id,"with:",updated_user) 
+      res.json(user); 
+    } 
+  }); 
 });
 
 userRoutes.route('/delete/:id').delete(function (req, res) {
