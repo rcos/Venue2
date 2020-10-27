@@ -65,28 +65,32 @@ export default {
   },
   methods: {
     afterUser() {
-      if((this.current_user.instructor_courses && this.current_user.instructor_courses.length) || (this.current_user.ta_sections && this.current_user.ta_sections.length)) {
-        LectureAPI.getLecturesForUser(this.current_user._id, "with_sections_and_course")
-          .then(res => {
-            let inst_lects = res.data.filter(lect => this.current_user.instructor_courses.includes(lect.sections[0].course._id)
-              || lect.sections.some(sect => this.current_user.ta_sections.includes(sect._id)))
-            let liveAndUpcoming = getLiveLectures(inst_lects).concat(getUpcomingLectures(inst_lects))
-            if (!("Notification" in window)) {
-              alert("This browser does not support desktop notification");
-            } else if (Notification.permission === "granted") {
-              this.processNotifications(liveAndUpcoming)
-            } else if (Notification.permission !== "denied") {
-              Notification.requestPermission().then(function (permission) {
-                if (permission === "granted") {
-                  this.processNotifications(liveAndUpcoming)
-                }
-              });
-            }
-            this.processInstructorEmails(getPastLectures(inst_lects))
-          })
-      } else {
-        
-      }
+      UserAPI.getUser(this.$store.state.user.current_user._id).then(res => {
+        this.current_user = res.data
+        this.$store.dispatch('updateCurrentUser',{token: this.$store.state.user.token, current_user: res.data})
+        if((this.current_user.instructor_courses && this.current_user.instructor_courses.length) || (this.current_user.ta_sections && this.current_user.ta_sections.length)) {
+          LectureAPI.getLecturesForUser(this.current_user._id, "with_sections_and_course")
+            .then(res => {
+              let inst_lects = res.data.filter(lect => this.current_user.instructor_courses.includes(lect.sections[0].course._id)
+                || lect.sections.some(sect => this.current_user.ta_sections.includes(sect._id)))
+              let liveAndUpcoming = getLiveLectures(inst_lects).concat(getUpcomingLectures(inst_lects))
+              if (!("Notification" in window)) {
+                alert("This browser does not support desktop notification");
+              } else if (Notification.permission === "granted") {
+                this.processNotifications(liveAndUpcoming)
+              } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(function (permission) {
+                  if (permission === "granted") {
+                    this.processNotifications(liveAndUpcoming)
+                  }
+                });
+              }
+              this.processInstructorEmails(getPastLectures(inst_lects))
+            })
+        } else {
+          
+        }
+      })
     },
     processNotifications(lectures) {
       for(let i=0;i<lectures.length;i++) {
@@ -122,7 +126,7 @@ export default {
 
 <style lang="scss">
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: "Comfortaa", "Exo", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

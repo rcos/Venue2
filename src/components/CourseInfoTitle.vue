@@ -10,7 +10,8 @@
       <div class="course-dept-number inline-block" v-if="course.hasOwnProperty('prefix') && course.hasOwnProperty('suffix')">{{course.prefix}} {{course.suffix}}</div>
 
       <!-- Time Block -->
-      <div v-if="course.hasOwnProperty('name') && section_name != -1"><div v-if="mobileMode && is_instructor" class="icon-spacer"/> Section {{ section_name }} <button class="btn" title="Delete Course" id="delete-course" @click="handleDeleteCourse()" v-if="is_instructor"><img class="red-x" id="delete-course" src="@/assets/hw/icons8-thriller-64.png" alt="Delete" width="40" aria-label="Delete"></button></div>
+      <div v-if="is_instructor"><div v-if="mobileMode && is_instructor" class="icon-spacer"/> Section(s): {{ (section_name?section_name:'None') }} <button class="btn" title="Delete Course" id="delete-course" @click="handleDeleteCourse()" v-if="is_instructor"><img id="delete-course" src="@/assets/icons8-delete.svg" alt="Delete" width="40" aria-label="Delete"></button></div>
+      <div v-else>Section: {{ section_name }}</div>
 
     </div>
 
