@@ -41,6 +41,16 @@ export default {
 </script>
 
 <style scoped>
+:root {
+	--toggle-switch-on-background:  #bfffc6;
+	--toggle-switch-on-ball: #04dd74;
+
+	--toggle-switch-off-background: #ff8787;
+	--toggle-switch-off-ball: #e95454;
+	
+	--toggle-switch-disabled-background: #7E7E7E;
+	--toggle-switch-disabled-ball: #4F4F4F;
+}
 .toggle-container {
 	display: inline-flex;
 	margin-left: 2rem;
@@ -60,10 +70,10 @@ export default {
 	cursor: pointer;
 }
 .toggle-background.left {
-	background: #ff8787;
+	background: var(--toggle-switch-off-background);
 }
 .toggle-background.right {
-	background: #bfffc6;
+	background: var(--toggle-switch-on-background);
 }
 .toggle-switch {
 	border-radius: 0.75rem;
@@ -72,17 +82,17 @@ export default {
 	margin-top: 0.25rem;
 }
 .toggle-switch.left {
-	background:#e95454;
+	background:var(--toggle-switch-off-ball);
 	margin-left: 0.3rem;
 }
 .toggle-switch.right {
-	background: #04dd74;
+	background: var(--toggle-switch-on-ball);
 	margin-left: 3.25rem;
 }
 .toggle-background.disabled {
-	background: #7E7E7E;
+	background: var(--toggle-switch-disabled-background);
 }
 .toggle-switch.disabled {
-	background: #4F4F4F;
+	background: var(--toggle-switch-disabled-ball);
 }
 </style>

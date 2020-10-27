@@ -97,7 +97,8 @@ html,body {
   /*font-size: 25px;*/
   position: relative;
   margin-top: -20px;
-  color: #2C3E50;
+  /* color: #2C3E50; */
+  color: var(--dashboard-text-color);
 }
 
 h1,h2,h3,h4,.course-name,.name-div {
@@ -184,11 +185,11 @@ h1,h2,h3,h4,.course-name,.name-div {
 
 /* Link Styles */
 a {
-  color: #5597EE;
+  color: var(--link);
 }
 
 a:hover {
-  color: #2c70c9;
+  color: var(--link-hover);
   text-decoration: none;
 }
 

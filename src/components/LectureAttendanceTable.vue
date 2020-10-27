@@ -64,7 +64,7 @@
 						<label for="sync-rcs-ids" id="sync-override-label">Synchronous override:</label>
 						<input id="sync-rcs-ids" type="text" v-model.lazy="sync_overrides" class="form-control" placeholder="eg: 'whitte3,mbizin'" aria-label="RCS IDs to override"/>
 						<div class="input-group-append">
-							<button class="btn btn-primary" aria-label="Synchronous Submit Override" @click="handleSyncOverride">Override</button>
+							<button style="border-radius: 0.5rem;" class="btn btn-primary" aria-label="Synchronous Submit Override" @click="handleSyncOverride">Override</button>
 						</div>
 					</div>
 				</div>
@@ -76,7 +76,7 @@
 						<label for="async-rcs-ids" id="async-override-label">Asynchronous override:</label>
 						<input id="async-rcs-ids" type="text" v-model.lazy="async_overrides" class="form-control" placeholder="eg: 'whitte3,mbizin'" aria-label="RCS IDs to override"/>
 						<div class="input-group-append">
-							<button class="btn btn-primary" aria-label="Asynchronous Submit Override" @click="handleAsyncOverride">Override</button>
+							<button style="border-radius: 0.5rem;" class="btn btn-primary" aria-label="Asynchronous Submit Override" @click="handleAsyncOverride">Override</button>
 						</div>
 					</div>
 				</div>
@@ -108,7 +108,7 @@
 										</div>
 										{{polls[i].question}}
 										<button type="button" v-if="!checkin.start_time || (checkin.start_time && Date.parse(checkin.start_time) > Date.now())" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
-											<img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
+											<img src="@/assets/hw/icons8-jack-o-lantern-64.png" alt="Edit" width="40" aria-label="Edit">
 										</button>
 									</td>
 									<td v-else>X</td>
@@ -136,7 +136,7 @@
 										</div>
 										{{polls[i].question}}
 										<button type="button" v-if="Date.parse(lecture.playback_submission_start_time) > Date.now()" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
-											<img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
+											<img src="@/assets/hw/icons8-jack-o-lantern-64.png" alt="Edit" width="40" aria-label="Edit">
 										</button>
 									</td>
 								</tr>
@@ -317,6 +317,30 @@ export default {
 </script>
 
 <style scoped>
+
+	:root {
+
+		--lecture-attendance-button-text: #636363;
+
+		--lecture-attendance-grey-pill: rgb(110, 110, 110);
+		--lecture-attendance-grey-shadow: rgba(109, 109, 109, 0.644);
+		--lecture-attendance-text: white;
+
+		--lecture-attendance-live-glow: rgba(65, 162, 91, 0.33);
+		--lecture-attendance-async-glow:  rgba(214, 71, 233, 0.36);
+		--lecture-attendace-absent-glow: rgba(255, 99, 88, 0.36);
+	}
+
+	.svg-color {
+		filter: var(--widgets-color);
+	}
+
+	.input-group {
+		width: auto;
+		top: 0px;
+		padding-right: 10px;
+	} 
+
 	#lecture-attendance-table {
 		margin-top: 3rem;
 		text-align: start;
@@ -328,7 +352,7 @@ export default {
 		bottom: 0;
 		left: 0;
 		right: 0;
-		background: rgba(255, 255, 255, 0.65);
+		background: var(--modal-container-background);
 	}
 
 	#edit-poll-modal-contents {
@@ -337,8 +361,8 @@ export default {
 		bottom: 25%;
 		left: 25%;
 		right: 25%;
-		background: white;
-		border: 1px solid gray;
+		background: var(--modal-background);
+		border: 1px solid var(--modal-border);
 		padding: 1rem;
 		border-radius: 1rem;
 	}
@@ -350,14 +374,14 @@ export default {
 	  background: none;
 	  outline: none;
 	  border: none;
-	  color: #636363;
+	  color: var(--lecture-attendance-button-text);
 	  /* margin-right: 3rem; */
 	  width: 100%;
 	  padding: 0;
-	  background: rgb(110, 110, 110);
+	  background: var(--lecture-attendance-grey-pill); 
 	  margin: 0.5rem 0rem;
 	  border-radius: 0.25rem;
-	  box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+	  box-shadow: 0px 3px 3px 0px var(--lecture-attendance-grey-shadow); 
 	}
 
 	.progress-bar {
@@ -369,17 +393,17 @@ export default {
 	}
 
 	#live-progress-bar {
-		background: #04852f;
+		background: var(--green-pill);
 		transition: width 0s linear;
 	}
 
 	#playback-progress-bar {
-		background: rgba(143,62,202,1);
+		background: var(--lecture-playback);
 		transition: width 0s linear;
 	}
 
 	#absent-progress-bar {
-		background: #d13e34;
+		background: var(--red-pill);
 		transition: width 0s linear;
 	}
 
@@ -387,25 +411,25 @@ export default {
 	  margin: 0;
 	  font-size: 1.5rem;
 	  margin: 0.5rem 1rem;
-	  color: white;
+	  color: var(--lecture-attendance-text);
 	}
 
 	#live_btn:hover,
 	#live_btn:focus,
 	#live_btn.selected_tab {
-		box-shadow: 0px 0px 10px 7px rgba(65, 162, 91, 0.33);
+		box-shadow: 0px 0px 10px 7px var(--lecture-attendance-live-glow);
 	}
 
 	#playback_btn:hover,
 	#playback_btn:focus,
 	#playback_btn.selected_tab {
-		box-shadow: 0px 0px 10px 7px rgba(214, 71, 233, 0.36);
+		box-shadow: 0px 0px 10px 7px var(--lecture-attendance-async-glow);
 	}
 
 	#absent_btn:hover,
 	#absent_btn:focus
 	#absent_btn.selected_tab {
-		box-shadow: 0px 0px 10px 7px rgba(255, 99, 88, 0.36);
+		box-shadow: 0px 0px 10px 7px var(--lecture-attendance-absent-glow);
 	}
 	
 
@@ -453,16 +477,19 @@ export default {
 	}
 
 	.override-container {
+		position: relative;
+		padding-top: 10px;
+		bottom: 10px;
 		display: flex;
-		height: 3rem;
+		height: auto;
 	}
 
 	#sync-override-err-msg {
-		color:#c40000;
+		color: var(--error);
 		padding: 0.5rem;
 	}
 	#async-override-err-msg {
-		color:#c40000;
+		color: var(--error);
 		padding: 0.5rem;
 	}
 
@@ -471,7 +498,7 @@ export default {
 	}
 
 	table, th, td {
-		border: 1px solid black;
+		border: 1px solid var(--main-text-color);
 		padding: 0.5rem;
 	}
 

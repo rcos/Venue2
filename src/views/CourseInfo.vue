@@ -294,17 +294,41 @@ export default {
       }
     },
     perc2color(pct) {
+      let root = document.documentElement;
+      //const style = getComputedStyle(root);
+      var bad_attendance = new Color();
+      var medium_attendance = new Color();
+      var good_attendance = new Color();
+
+      var rainbow_blue = new Color();
+      var rainbow_purple = new Color();
+      var rainbow_red = new Color();
+      var rainbow_yellow = new Color();
+      var rainbow_green = new Color(); 
+
+      bad_attendance = getComputedStyle(root).getPropertyValue('--red-pill');
+      medium_attendance = getComputedStyle(root).getPropertyValue('--yellow-pill');
+      good_attendance = getComputedStyle(root).getPropertyValue('--green-pill');
+
+      // The rainbow is made up of these 5 pieces
+      rainbow_blue = getComputedStyle(root).getPropertyValue('--course-attendance-rainbow-blue');
+      rainbow_purple = getComputedStyle(root).getPropertyValue('--course-attendance-rainbow-purple');
+      rainbow_red = getComputedStyle(root).getPropertyValue('--course-attendance-rainbow-red');
+      rainbow_yellow = getComputedStyle(root).getPropertyValue('--course-attendance-rainbow-yellow');
+      rainbow_green = getComputedStyle(root).getPropertyValue('--course-attendance-rainbow-green');
+
       var percentColors = [
-        { pct: 0.0, color: { r: 0xd1, g: 0x3e, b: 0x34 } },
-        { pct: 0.6, color: { r: 0xd1, g: 0x3e, b: 0x34 } },
-        { pct: 0.8, color: { r: 0xb9, g: 0x57, b: 0x26 } },
+        //{ pct: 0.0, color: { r: 0xd1, g: 0x3e, b: 0x34 } },
+        { pct: 0.0, color: { r: "0x" + bad_attendance[1] + bad_attendance[2], g: "0x" + bad_attendance[3] + bad_attendance[4], b: "0x" + bad_attendance[5] + bad_attendance[6] } },
+        { pct: 0.6, color: { r: "0x" + bad_attendance[1] + bad_attendance[2], g: "0x" + bad_attendance[3] + bad_attendance[4], b: "0x" + bad_attendance[5] + bad_attendance[6] } },
+        { pct: 0.8, color: { r: "0x" + medium_attendance[1] + medium_attendance[2], g: "0x" + medium_attendance[3] + medium_attendance[4], b: "0x" + medium_attendance[5] + medium_attendance[6] } },
         // { pct: 0.85, color: { r: 0x82, g: 0x90, b: 0x25 } },
-        { pct: 1.0, color: { r: 0x04, g: 0x85, b: 0x2f } }
+        { pct: 1.0, color: { r: "0x" + good_attendance[1] + good_attendance[2], g: "0x" + good_attendance[3] + good_attendance[4], b: "0x" + good_attendance[5] + good_attendance[6] } } 
       ];
       for (var i = 1; i < percentColors.length - 1; i++) {
-          if (pct < percentColors[i].pct) {
-              break;
-          }
+        if (pct < percentColors[i].pct) {
+          break;
+        }
       }
       var lower = percentColors[i - 1];
       var upper = percentColors[i];
@@ -313,14 +337,14 @@ export default {
       var pctLower = 1 - rangePct;
       var pctUpper = rangePct;
       var color = {
-          r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
-          g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
-          b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
+        r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
+        g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
+        b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper) 
       };
-      if(pct == 1.0) {
-        return 'linear-gradient(90deg, rgba(62,73,202,1) 0%, rgba(143,62,202,1) 20%, rgba(209,62,52,1) 40%, rgba(176,95,22,1) 70%, rgba(4,133,47,1) 100%)'
+      if (pct == 1.0) {
+          return "linear-gradient(90deg, " + rainbow_blue + " 0%, " + rainbow_purple + " 20%, " + rainbow_red + " 40%, " + rainbow_yellow + " 70%, " + rainbow_green + " 100%)";
       }
-      return 'rgb(' + [color.r, color.g, color.b].join(',') + ')';
+        return "rgb(" + [color.r, color.g, color.b].join(",") + ")";
     },
     calculateInstructorAttendances() {
       let promise_tracker = []
