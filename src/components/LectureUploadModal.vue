@@ -2,7 +2,7 @@
   <div id="lecture-upload-modal">
     <LoadingOverlay v-if="waiting"/>
     <button type="button" id="video-upload-btn" class="btn btn-primary" @click="handleShowModal" :tabindex="(modal_open ? '-1' : '0')" title="Upload Recording">
-      <img src="@/assets/icons8-upload-96.png" width="60" alt="QR Code" aria-label="QR Code">
+      <img class="svg-color" src="@/assets/icons8-upload-96.png" width="60" alt="QR Code" aria-label="QR Code">
     </button>
     <div id="lecture_modal_viewable" class="hiddenModal">
       <div class="row titlerow">
@@ -548,12 +548,12 @@ h2 {
 }
 #lecture_modal_viewable {
   position: fixed;
-  background: white;
+  background: var(--modal-background);
   top: 7rem;
   left: 2rem;
   right: 2rem;
   bottom: 2rem;
-  border: 1px solid rgba(120,120,120,1);
+  border: 1px solid var(--modal-lecture-border);
   overflow-y: auto;
   z-index: 1001;
   padding: 1rem;

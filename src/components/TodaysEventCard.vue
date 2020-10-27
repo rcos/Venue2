@@ -35,7 +35,6 @@
 <script>
   import SectionAPI from '@/services/SectionAPI.js'
   import {showAt, hideAt} from 'vue-breakpoints'
-
   export default {
     name: 'TodaysEventCard',
     components: {
@@ -78,17 +77,24 @@
 </script>
 
 <style scoped>
+:root {
+  --event-ending-container: #516ded;
+  --event-today-container: #f29f33;
+  --event-hover-background: #e8e8e8;
+  --event-hover-shadow: rgba(0, 0, 0, 0.3);
+
+  --event-today-title: #1591C5;
+}
   .todays-event-card-container {
-    background-color: #f29f33;
+    background-color: var(--event-today-container);
     margin-top: 1rem;
     height: 3.5rem;
     border-radius: 5px;
     position: relative;
     cursor: pointer;
   }
-
   .mobile-event-card {
-    background-color: white;
+    background-color: var(--event-active-background);
     height: 4rem;
     width: 17rem;
     border-radius: 5px;
@@ -96,9 +102,8 @@
     margin-left: 3rem;
     position: absolute;
     z-index: 2;
-    box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 3px 10px 5px var(--event-active-shadow);
   }
-
   .mobile-event-card-extending-background {
     height: 1.5rem;
     width: 19rem;
@@ -107,50 +112,42 @@
     position: relative;
     z-index: 1;
   }
-
   /*Very small phone sizes*/
   @media (max-width: 321px) {
     .mobile-event-card {
       width: 15rem;
     }
-
     .mobile-event-card-extending-background {
       width: 17rem;
     }
   }
-
   .active-container {
-    background-color: #516ded;
+    background-color: var(--event-ending-container);
   }
-
   .over-container {
-    background-color: #919191;
+    background-color: var(--event-ending);
   }
-
   .todays-event-card {
     height: 100%;
     width: 100%;
     border-radius: 5px;
     position: absolute;
-    background-color: white;
+    background-color: var(--event-active-background);
     margin-top: 0.4rem;
     margin-left: 0.4rem;
-    box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 3px 10px 5px var(--event-active-shadow);
     text-align: center;
     transition: background-color, box-shadow 0.25s;
   }
-
   .event-card-spinner {
     height:2rem; 
     width:2rem; 
     margin-top:1rem;
   }
-
   .todays-event-card:hover {
-    background-color: #e8e8e8;
-    box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.3);
+    background-color: var(--event-hover-background);
+    box-shadow: 0px 3px 10px 5px var(--event-hover-shadow);
   }
-
   .event-title {
     margin: auto;
     margin-top: 0.5rem;
@@ -160,23 +157,18 @@
     text-overflow: ellipsis;
     max-width: 85%;
   }
-
   .desktop-event-title {
     font-size: 1rem;
   }
-
   .mobile-event-title {
     font-size: 1.25rem;
   }
-
   .course-title {
-    color: #1591C5;
+    color: var(--event-today-title);
   }
-
   .desktop-course-title {
     font-size: 0.6rem;
   }
-
   .mobile-course-title {
     font-size: 0.8rem;
   }

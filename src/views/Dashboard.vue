@@ -17,6 +17,7 @@
   import SectionAPI from '@/services/SectionAPI.js';
   import { authComputed } from '../vuex/helpers.js'
   import {showAt, hideAt} from 'vue-breakpoints'
+  import PaletteAPI from '../services/PaletteAPI';
   import {getLiveLectures,getRecentLectures,getUpcomingLectures,getActivePlaybackLectures} from '@/services/GlobalFunctions.js'
 
   import LiveLectureList from '@/components/LiveLectureList.vue'
@@ -79,6 +80,7 @@
 
       this.getCurrentUser()
       this.getAllLecturesForUser()
+      this.setPalette()
     },
     methods: {
       getColor (course_info) {
@@ -204,6 +206,10 @@
             }
           }
         }
+      },
+      setPalette() {
+        let root = document.documentElement;
+        PaletteAPI.setPalette(root, this.current_user.dark_mode)
       }
     }
   }

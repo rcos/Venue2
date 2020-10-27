@@ -6,7 +6,7 @@
       <!-- Nav Links -->
       <div id="venue-nav-links">
         <router-link id="nav-logo" :to="{name: 'dashboard'}" role="link" aria-label="Dashboard">
-          <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="Venue Logo" aria-label="Venue Logo">
+          <img src="@/assets/hw/venue-bat.svg" width="30" height="30" class="d-inline-block align-top logo-color" alt="Venue Logo" aria-label="Venue Logo">
         </router-link>
         <!-- Dashboard Link -->
         <div class="venue-nav-link-container">
@@ -18,7 +18,7 @@
         <!-- Courses Link -->
         <div class="venue-nav-link-container" id="instructor-course-dropdown" v-if="instructor_courses.length">
           <a data-toggle="collapse" href="#instructor-collapse" class="venue-nav-link" :class="{'active-link':is_instructor_course_info()}" style="cursor:pointer;">
-            Instructor Courses <img src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+            Instructor Courses <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
@@ -37,7 +37,7 @@
         </div>
         <div class="venue-nav-link-container" id="ta-section-dropdown" v-if="ta_sections.length">
           <a data-toggle="collapse" href="#ta-collapse" class="venue-nav-link" :class="{'active-link':is_ta_section_info()}" style="cursor:pointer;">
-            TA Sections <img src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+            TA Sections <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
@@ -50,7 +50,7 @@
         </div>
         <div class="venue-nav-link-container" id="student-section-dropdown" v-if="student_sections.length">
           <a data-toggle="collapse" href="#student-collapse" class="venue-nav-link" :class="{'active-link':is_student_section_info()}" style="cursor:pointer;">
-            Student Sections <img src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+            Student Sections <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
@@ -64,7 +64,7 @@
         <!-- ADMIN -->
         <div class="venue-nav-link-container" id="admin-dropdown" v-if="current_user.is_admin">
           <a data-toggle="collapse" href="#admin-collapse" class="venue-nav-link" style="cursor:pointer;">
-            🔑 <img src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+            🍫 <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
@@ -87,13 +87,13 @@
         <div class="venue-nav-link-container">
           <router-link class="venue-nav-link" :class="{'active-link':is_settings()}" :to="{name: 'settings'}">
             <show-at breakpoint="large">
-              <p aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon"></p>
+              <p aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }} <img src="@/assets/hw/icons8-spider-web.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon"></p>
             </show-at>
             <show-at breakpoint="medium">
-              <p aria-label="User Name">{{ current_user.first_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon"></p>
+              <p aria-label="User Name">{{ current_user.first_name }} <img src="@/assets/hw/icons8-spider-web.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon"></p>
             </show-at>
             <show-at breakpoint="small">
-              <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
+              <img src="@/assets/hw/icons8-spider-web.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
             </show-at>
           </router-link>
           <div :class="'active-link-underline ' + (is_settings()?'active':'')"></div>
@@ -287,6 +287,29 @@
 </script>
 
 <style scoped>
+
+  :root {
+    --nav-bar-text: #2C3E50;
+    --nav-bar-background: #f7f7f7;
+    --nav-bar-separator: rgba(0, 0, 0, 0.15);
+    --nav-bar-selected-text: #466D85;
+    --nav-bar-box-shadow:  rgba(109, 109, 109, 0.644);
+    --nav-bar-link-text: #575757;
+
+    --nav-bar-hover-background: #466D85;
+    --nav-bar-hover-text: white;
+    --nav-bar-hover-top-shadow: rgba(85, 85, 85, 0.644);
+    --nav-bar-hover-bottom-shadow: rgba(179, 179, 179, 0.644);
+  }
+
+  .svg-color {
+    filter: var(--widgets-color);
+  }
+
+  .logo-color {
+    filter: var(--logo-color);
+  }
+
   #venue-nav {
     height: 4rem;
     padding: 1rem 0rem;
@@ -308,6 +331,10 @@
     text-align: left;
     padding-left: 4rem;
     font-size: 0.9rem;
+  }
+
+  .svg-color {
+    filter: var(--widgets-color);
   }
 
   .crumb {
@@ -333,7 +360,7 @@
   }
 
   .venue-nav-link-container.active {
-    border-bottom: 0.2rem solid #466D85;
+    border-bottom: 0.2rem solid var(--nav-bar-selected-text);
     transition: border-bottom 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
@@ -352,8 +379,8 @@
 
   .dropdown-content a {
     visibility: hidden;
-    color: #2C3E50;
-    background-color: #f7f7f7;
+    color: var(--nav-bar-text);
+    background-color: var(--nav-bar-background);
     font-weight: bold;
     font-size: 0rem;
     text-decoration: none;  
@@ -362,7 +389,7 @@
     width: 15rem;
     margin: 0px;
     padding: 0px;
-    box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+    box-shadow: 0px 3px 3px 0px var(--nav-bar-box-shadow);
     transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
@@ -375,7 +402,7 @@
   }
 
   .dropdown-content a:not(:first-of-type) {
-    border-top: 0.1rem solid rgba(0, 0, 0, 0.15);
+    border-top: 0.1rem solid var(--nav-bar-separator);
   }
 
   .dropdown-content a:last-of-type {
@@ -459,10 +486,10 @@
 
   .dropdown-content a:hover,
   .dropdown-content a:focus {
-    background-color: #466D85;
-    color: white;
+    background-color: var(--nav-bar-hover-background);
+    color: var(--nav-bar-hover-text);
     outline: none;
-    box-shadow: 0px 3px 3px 0px rgba(85, 85, 85, 0.644) inset, 0px -3px 3px 0px rgba(179, 179, 179, 0.644) inset;
+    box-shadow: 0px 3px 3px 0px var(--nav-bar-hover-top-shadow) inset, 0px -3px 3px 0px var(--nav-bar-hover-bottom-shadow) inset;
     /* -webkit-transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
     -ms-transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
     transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1); */
@@ -487,7 +514,7 @@
 
   .venue-nav-link {
     text-decoration: none;
-    color: #575757;
+    color: var(--nav-bar-link-text);
     font-weight: 100;
     margin: 0;
     padding: 0;
@@ -495,18 +522,18 @@
   }
 
   .active-link {
-    color: #466D85;
+    color: var(--nav-bar-selected-text);
   }
 
   .active-link:hover,
   .active-link:focus {
-    color: #575757;
+    color: var(--nav-bar-link-text);
   }
 
   .active-link-underline {
     height: 0rem;
     width: 0rem;
-    background-color: #466D85;
+    background-color: var(--nav-bar-selected-text);
     margin: auto;
     transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   }
@@ -527,6 +554,7 @@
     margin-top: 0.1rem;
     margin-left: 0.25rem;
     margin-right: 1.5rem;
+    filter: var(--widgets-color);
   }
 
   .venue-nav-link:focus,
@@ -540,12 +568,13 @@
   .settings_link:focus .mr-2,
   .venue-nav-link:focus p,
   .venue-nav-link:hover p {
-    color: #466D85;
+    color: var(--nav-bar-selected-text);
   }
 
   .rotate-arrow {
     transform: rotateZ(-90deg);
     margin-bottom: 0.1rem;
+    filter: var(--widgets-color);
   }
 
   img {
