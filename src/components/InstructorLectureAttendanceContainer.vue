@@ -14,7 +14,7 @@
 			</button>
 			<div v-for="(checkin,i) in lecture.checkins" :key="i" class="inline-block">
 				<button v-if="checkin.activation != 'Manual Activation' && checkinIsOpen(checkin)" type="button" class="header-btn btn btn-secondary" @click="showQR(i)">
-					<img class="Svg-color" src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
+					<img class="svg-color" src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
 				</button>
 			</div>
 			<button class="header-btn btn btn-primary" v-if="!lectureIsOver()" @click="handleEndEarly">End Now</button>
@@ -135,7 +135,7 @@ export default {
 				let self = this
 				this.all_students.forEach(function(student) {
 					course_sections.forEach(function(section) {
-						if(section.students.includes(student._id)) {
+						if(section.students.includes(student.email)) {
 							let stud_data = []
 
 							let submission = self.submissions.find(a => a.submitter._id == student._id)
@@ -343,6 +343,7 @@ export default {
 	.namecard {
 	  position: relative;
 	  background: var(--course-card-background);
+	  color: var(--course-card-text);
 	  text-align: center;
 	  border-radius: .25rem;
 	  top: 0.5rem;

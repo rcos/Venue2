@@ -220,6 +220,7 @@ export default {
 }
 
 .clock {
+  filter: var(--clock-color);
   display: inline-block;
   height: 1rem;
 }

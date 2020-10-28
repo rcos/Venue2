@@ -7,7 +7,7 @@
           <h3 class="lecture-title">
             {{lecture.title}}
             <router-link v-if="is_instructor" :to="{name: 'edit_lecture',params:{id: lecture._id}}" role="link" aria-label="Edit Lecture">
-              <img src="@/assets/settings.svg" width="30" height="30" class="d-inline-block align-top svg-color" alt="Settings" aria-label="Settings">
+              <img src="@/assets/settings.svg" width="30" height="30" class="d-inline-block align-top" alt="Settings" aria-label="Settings">
             </router-link>
           </h3>
           <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.prefix}} {{lecture.sections[0].course.suffix}}</p></div>
@@ -37,7 +37,7 @@
             <h3 class="lecture-title">
               {{lecture.title}}
               <router-link v-if="is_instructor" :to="{name: 'edit_lecture',params:{id: lecture._id}}" role="link" aria-label="Edit Lecture">
-                <img src="@/assets/settings.svg" width="30" height="30" class="d-inline-block align-top svg-color" alt="Settings" aria-label="Settings">
+                <img src="@/assets/settings.svg" width="30" height="30" class="d-inline-block align-top scvg-color" alt="Settings" aria-label="Settings">
               </router-link>
             </h3>
             <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.prefix}} {{lecture.sections[0].course.suffix}}</p></div>
@@ -105,6 +105,10 @@
     display: inline-block;
   }
 
+  img {
+    filter: var(--widgets-color);
+  }
+
   p {
     max-width: 100%;
   }
@@ -150,7 +154,8 @@
     margin: 0;
     text-align: left;
     background-color: var(--course-card-background);
-    box-shadow: 0px 3px 3px 0px var(--lecture-attendance-grey-shadow);
+    color: var(--course-card-text);
+    box-shadow: 0px 3px 3px 0px var(--course-card-shadow);
     width: 100%;
   }
 
@@ -161,7 +166,9 @@
     width: 100%;
     margin: 0;
     text-align: center;
-    box-shadow: 0px 3px 3px 0px var(--lecture-attendance-grey-shadow);
+    background-color: var(--course-card-background);
+    color: var(--course-card-text);
+    box-shadow: 0px 3px 3px 0px var(--course-card-shadow);
   }
 
   .row-half h5,
