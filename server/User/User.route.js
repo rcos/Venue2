@@ -128,7 +128,6 @@ userRoutes.route('/update/:id').post(function (req, res) {
     last_name: updated_user.last_name, 
     email: updated_user.email, 
     dark_mode: updated_user.dark_mode, 
-    is_admin: true, 
     password: updated_user.password, 
     is_instructor: updated_user.is_instructor, 
     ta_sections: updated_user.ta_sections, 
@@ -217,6 +216,7 @@ userRoutes.route('/instructors_for_course/:course_id').get(function (req, res) {
           console.log("<ERROR> Getting instructors for course with ID:", course_id);
           res.json(err);
         } else {
+          console.log("<SUCCESS> Getting instructors for course with ID:", course_id);
           res.json(instructors);
         }
       });
@@ -268,48 +268,24 @@ userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
   Lecture.findById(lecture_id, function (err, lecture) {
     if (err || lecture == null) {
       console.log("<ERROR> Getting lecture with ID:", lecture_id)
+      res.json([])
     } else {
-      let sections = lecture.sections;
-      let sect_itr = 0;
-      let students = [];
-      sections.forEach(sect => {
-        Section.findById(sect, function (err, section) {
-          if (err || section == null) {
-            console.log("<ERROR> Getting section with ID:", id)
-            res.json(err);
-          } else {
-            let student_emails = section.students;
-            let num_iterations = 0;
-            student_emails.forEach(student_email => {
-              User.findOne({ email: student_email }, function (err, student) {
-                if (err || student == null) {//if want functionality as stated in future need change here maybe
-                  console.log("<ERROR> Getting user with Email:", student_email)
-                  res.json(err);
-                } else {
-                  let found = false;
-                  for (let i = 0; i < students.length; i++) {
-                    console.log(students[i]._id + "\t" + student._id);
-                    if (students[i]._id.equals(student._id)) {
-                      found = true;
-                      break;
-                    }
-                  }
-                  if (!found) {
-                    students.push(student);
-                  }
-                  num_iterations++;//todo fix?
-                  if (num_iterations === student_emails.length) {
-                    sect_itr++
-                    if (sect_itr == sections.length) {
-                      console.log("<SUCCESS> Getting students for lecture with ID:", lecture_id)
-                      res.json(students);
-                    }
-                  }
-                }
-              })
-            })
-          }
-        })
+      Section.find({_id: {$in: lecture.sections}}, function (err, sections) {
+        if (err || sections == null) {
+          console.log("<ERROR> Getting sections for lecture:", lecture_id)
+          res.json([])
+        } else {
+          let emails = [].concat.apply([], sections.map(a=>a.students))
+          User.find({email: {$in: emails}},function(err,students) {
+            if(err || students == null) {
+              console.log("<ERROR> Getting students for lecture:", lecture_id)
+              res.json([])
+            } else {
+              console.log("<SUCCESS> Getting students for lecture:", lecture_id)
+              res.json(students)
+            }
+          })
+        }
       })
     }
   })
