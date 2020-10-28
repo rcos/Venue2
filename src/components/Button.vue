@@ -48,14 +48,14 @@
     width: 12rem;
     /*margin-top: 1rem;*/
     border: #0078c2 solid;
-    color: #0078c2;
+    color: #0078c2; 
     border-radius: 5px;
   }
 
   .venue-btn:hover,
   .venue-btn:focus {
-    background-color: #0078c2;
-    color: white;
+    background-color: #0078c2; 
+    color: white; 
   }
 
   .hidden {

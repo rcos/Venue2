@@ -7,7 +7,7 @@
 		<a href="https://blacklivesmatter.com/" target="_blank" aria-label="Black Lives Matter">
     		<img class="icon" src="../assets/black_lives_matter.svg" aria-label="BLM Icon" alt="BLM Icon"/>
     	</a> |
-    	An RCOS project | Icons by <a target="_blank" href="https://icons8.com">Icons8</a>
+		An RCOS project | Icons by <a target="_blank" href="https://icons8.com">Icons8</a> 
     </footer>
 </template>
 
