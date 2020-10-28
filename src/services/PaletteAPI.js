@@ -1,7 +1,6 @@
 /* Useful resources for testing / changing palette
 http://web-accessibility.carnegiemuseums.org/design/color/ (508 compliance guidelines)
 https://wave.webaim.org/ (tests accessibility of website; also a helpful Google Chrome extension)
-https://dribbble.com/ (Preview designs based around specific colors)
 https://imagecolorpicker.com/en/ (Select colors from pictures - provides HEX and RGB code of selected color)
 https://coolors.co/ (Color palette generator)
 
@@ -47,7 +46,7 @@ export default {
             root.style.setProperty('--loader-square-even', '#4CC9FF');
             root.style.setProperty('--loader-square-odd', '#FC6E71');
             root.style.setProperty('--loader-square-shadow', 'rgba(128, 128, 128, 0.5)');
-
+            
             // Course cards 
             root.style.setProperty('--course-card-background', '#ffffff');
             root.style.setProperty('--course-card-shadow', 'rgba(179, 179, 179, 0.644)');
@@ -59,6 +58,7 @@ export default {
             root.style.setProperty('--settings-logout-button', 'rgb(207,39,41);');
             root.style.setProperty('--settings-logout-button-shadow', 'rgba(144, 62, 80, 0.8)');
             root.style.setProperty('--settings-small-div', 'rgba(0, 0, 0, 0.64)');
+            root.style.setProperty('--settings-logout-hover-text', 'white');
             root.style.setProperty('--settings-text', '#045c91');                            // original: #517B94     -- slightly darker blue comparison from original
             root.style.setProperty('--settings-switch-on', '#42f593');
             root.style.setProperty('--settings-switch-off', '#f55442');
@@ -87,6 +87,8 @@ export default {
             root.style.setProperty('--big-button-shadow', 'rgba(44, 62, 80, 0.2)');
             root.style.setProperty('--button-blue-shadow', 'rgba(67, 65, 120, 0.844)');
             root.style.setProperty('--button-grey-shadow', 'rgba(109, 109, 109, 0.644)');
+            root.style.setProperty('--button-text-color', 'white');
+            root.style.setProperty('--button-text-hover', 'white');
 
             // Nav bar Palette
             // These are also used in MultiSelectDropdown.vue
@@ -115,6 +117,8 @@ export default {
             root.style.setProperty('--foreground-pill', '#f5f5f5');
             root.style.setProperty('--foreground-pill-shadow', 'rgba(109, 109, 109, 0.644)');
             root.style.setProperty('--date-and-percent', 'white');
+            root.style.setProperty('--course-pill-shadow', 'rgba(109, 109, 109, 0.644)');
+            root.style.setProperty('--course-pill-hover', 'rgba(160, 160, 160, 0.644)');
 
             // Lecture pills con't - these live in LectureCard.vue
             root.style.setProperty('--lecture-live', '#04852F');
@@ -146,7 +150,7 @@ export default {
             root.style.setProperty('--course-attendance-rainbow-red', 'rgba(209,62,52,1)');
             root.style.setProperty('--course-attendance-rainbow-yellow', 'rgba(176,95,22,1)');
             root.style.setProperty('--course-attendance-rainbow-green', 'rgba(4,133,47,1)');
-            
+
             // root.style.setProperty('--course-attendance-rainbow-blue', '#7E4BDE');
             // root.style.setProperty('--course-attendance-rainbow-purple', '#465acf');     
             // root.style.setProperty('--course-attendance-rainbow-red', '#55a2e6');
@@ -160,16 +164,14 @@ export default {
             // dark blue-green: #1D8293
             // green: #178935
 
-            
             // Legend green and purple
             root.style.setProperty('--sync-border', '#04852f');
             root.style.setProperty('--async-border', '#683eca');
             root.style.setProperty('--recording-namecard', '#8f3eca');
 
-            root.style.setProperty('--button-color', '#0078c2');
-            root.style.setProperty('--text-color', '#1d2324');
+            // Lives in dashboardSection.vue -> also main heading color
             root.style.setProperty('--dashboard-text-color', '#2C3E50');
-            root.style.setProperty('--dashboard-background-color', '#F5F5F5');
+            root.style.setProperty('--dashboard-background-color', '#636363');
 
             // Modal
             root.style.setProperty('--modal-background', '#ffffff');
@@ -224,7 +226,7 @@ export default {
             root.style.setProperty('--calendar-border', 'rgba(100,100,100,1)');
             root.style.setProperty('--checkins-border', 'gray');
             root.style.setProperty('--calendar-selected', 'rgba(20,75,250,1)');
-
+            
             // Statistics 
             // Divider bars, gridlines and labels use (--main-text-color)
             root.style.setProperty('--stats-panel-background', '#c4c4c4');
@@ -271,7 +273,6 @@ export default {
             root.style.setProperty('--loader-square-odd', '#FC6E71');
             root.style.setProperty('--loader-square-shadow', 'rgba(128, 128, 128, 0.5)');
             
-            
             // Course cards
             root.style.setProperty('--course-card-background', '#272727');
             root.style.setProperty('--course-card-shadow', 'rgba(179, 179, 179, 0.644)');
@@ -283,6 +284,7 @@ export default {
             root.style.setProperty('--settings-logout-button', 'rgba(110, 148, 186, 1)');   
             root.style.setProperty('--settings-logout-button-shadow', 'rgba(69, 122, 176, 0.8)');
             root.style.setProperty('--settings-small-div', 'rgba(216, 216, 216, 0.64)');
+            root.style.setProperty('--settings-logout-hover-text', '#272727');
             root.style.setProperty('--settings-text', '#2991C3');       //#cccccc
             root.style.setProperty('--settings-switch-on', '#42f593');
             root.style.setProperty('--settings-switch-off', '#f55442');
@@ -309,6 +311,8 @@ export default {
             root.style.setProperty('--big-button-shadow', 'rgba(44, 62, 80, 0.2)');
             root.style.setProperty('--button-blue-shadow', 'rgba(67, 65, 120, 0.844)');
             root.style.setProperty('--button-grey-shadow', 'rgba(109, 109, 109, 0.644)');
+            root.style.setProperty('--button-text-color', 'white');
+            root.style.setProperty('--button-text-hover', 'white');
 
             // Dark mode Palette - Nav bar 
             root.style.setProperty('--nav-bar-text', '#5e2f2f');
@@ -341,6 +345,8 @@ export default {
             root.style.setProperty('--foreground-pill', '#f5f5f5');
             root.style.setProperty('--foreground-pill-shadow', 'rgba(109, 109, 109, 0.644)');
             root.style.setProperty('--date-and-percent', 'white');
+            root.style.setProperty('--course-pill-shadow', 'rgba(109, 109, 109, 0.644)');
+            root.style.setProperty('--course-pill-hover', 'rgba(160, 160, 160, 0.644)');
 
             // Lecture pills con't - these live in LectureCard.vue
             root.style.setProperty('--lecture-live', '#04852F');
@@ -371,9 +377,8 @@ export default {
             root.style.setProperty('--course-attendance-rainbow-red', 'rgba(209,62,52,1)');
             root.style.setProperty('--course-attendance-rainbow-yellow', 'rgba(176,95,22,1)');
             root.style.setProperty('--course-attendance-rainbow-green', 'rgba(4,133,47,1)');
-    
-            root.style.setProperty('--button-color', '#201857');
-            root.style.setProperty('--text-color', '#ffffff'); 
+
+            // Lives in dashboardSection.vue -> also main heading color
             root.style.setProperty('--dashboard-text-color', '#87a7c7');
             root.style.setProperty('--dashboard-background-color', '#636363');
 
@@ -452,6 +457,8 @@ export default {
     }
 }
 
+//brightness(0.75) saturate(0.75)
+
 /**********************************************************************************
  **********************************************************************************
  **********************************************************************************
@@ -508,7 +515,7 @@ export default {
  ***              Red: #d13e34, Transparent: rgba(249, 82, 71, 0.3)             ***
  ***            Orange: #b95726 Transparent: rgba(244, 159, 50, 0.4)            ***
  ***            Green: #04852f Transparent: rgba(78, 205, 76, 0.3)              ***
- ***             Blue: #1072b0 Transparent: rgba(79, 109, 234, 0.3)             ***
+ ***             Blue: #0078c2 Transparent: rgba(79, 109, 234, 0.3)             ***
  ***                                                                            ***
  ***                                                                            ***
  ***                               LECTURES - main.css                          ***
@@ -539,7 +546,7 @@ export default {
  ***             rgba() for all the different colors                            ***
  ***                                                                            ***
  ***              OFF-BLUE: Course number, e.g. "RCOS 2961" #097bac             ***
- ***             GREY-BLUE: Course name: #2f7cae                                ***
+ ***             GREY-BLUE: Course name: #466D85                                ***
  ***               NAVY: Lecture name: #2C3E50                                  ***
  ***             ORANGE: Closed text: #a7640d                                   ***
  ***            orange closed text is the only text color that                  ***
@@ -548,7 +555,7 @@ export default {
  ***                                                                            ***
  ***                               BUTTONS                                      ***
  ***                                                                            ***
- ***              BLUE Primary: #1072b0 rgba(109, 109, 109, 0.644)              ***
+ ***              BLUE Primary: #0078c2 rgba(109, 109, 109, 0.644)              ***
  ***            GREY  Secondary: #727272 rgba(109, 109, 109, 0.644)             ***
  ***            NAVY Button Hover: #005183 rgba(109, 109, 109, 0.644)           ***
  ***          DARK GREY Secondary Hover: #444444 rgba(109, 109, 109, 0.644)     ***
@@ -565,19 +572,19 @@ export default {
  ***                  Logout Button: rgb(207,39,41)  (red)                      ***
  ***                Logout btn Shadow:  rgba(144, 62, 80, 1) (dark red)         ***
  ***            Switch unticked: #f55442 Ticked: #42f593 Circle: #ffffff        ***
- ***            Name and heading color: #045c91 (dark-ish blue)                 ***
+ ***            Name and heading color: #517B94 (light-ish blue)                ***
  ***                                                                            ***
  ***                         DROPDOWN MENU LIVES IN                             ***
  ***                                NavBar.vue                                  ***
  ***                                                                            ***
  ***         (DARK NAVY/GREY) Text color: #2C3E50                               ***
  ***                  (LIGHT PINK) Background: #f7f7f7                          ***
- ***            (ROYAL BLUE) Selected Text: #2f7cae                             ***
+ ***               (NAVY) Selected Text: #466D85                                ***
  ***           (Transparent GREY) List shadow: rgba(109, 109, 109, 0.644)       ***  
  ***                 ^ Shadow on the bottom box                                 ***
  ***            (DARK GREY) Text color on main bar: #575757                     ***
  ***                                                                            ***
- ***            (ROYAL BLUE) Hover background: #2f7cae                          ***
+ ***             (NAVY BLUE) Hover background: #466D85                          ***
  ***                (WHITE) Hover text: #ffffff                                 ***
  ***     (DARK GREY) Hover box top shadow:  rgba(85, 85, 85, 0.644)             ***
  ***  (LIGHT GREY) Hover box bottom shadow: rgba(179, 179, 179, 0.644)          ***
