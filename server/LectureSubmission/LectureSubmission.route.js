@@ -3,6 +3,8 @@ const lectureSubmissionRoutes = express.Router();
 
 let LectureSubmission = require('../LectureSubmission/LectureSubmission.model');
 let Lecture = require('../Lecture/Lecture.model');
+let Section = require('../Section/Section.model');
+let Course = require('../Course/Course.model');
 let User = require('../User/User.model');
 
 lectureSubmissionRoutes.route('/add').post(function (req, res) {
@@ -332,6 +334,43 @@ lectureSubmissionRoutes.get('/for_lecture/:lecture_id', (req, res) => {
         })
       } else {
         console.log("<SUCCESS> Getting lecture submissions for lecture with ID:",lecture_id)
+        res.json([])
+      }
+    }
+  )
+})
+
+lectureSubmissionRoutes.post('/for_lectures', (req, res) => {
+  let lecture_ids = req.body.lecture_ids;
+  LectureSubmission.find(
+    {lecture: {$in: lecture_ids}},
+    function(err,lect_submissions) {
+      if(err || lect_submissions == null) {
+        res.json(err)
+      } else if(lect_submissions.length > 0){
+        let submitter_ids = lect_submissions.map(a=>a.submitter)
+        User.find({_id: {$in: submitter_ids}}, (error, submitters) => {
+          if(error || submitters == null) {
+            console.log("<ERROR> Getting lecture submissions for lectures with IDs:",lecture_ids)
+            res.json(error)
+          } else {
+            console.log(submitters)
+            let n = 0
+            lect_submissions.forEach(lect_sub => {
+              n++
+              let submitter = submitters.find(a => a._id.equals(lect_sub.submitter))
+              if(submitter) {
+                lect_sub.submitter = submitter
+              }
+              if(n == lect_submissions.length) {
+                console.log("<SUCCESS> Getting lecture submissions for lectures with IDs:",lecture_ids)
+                res.json(lect_submissions)
+              }
+            })
+          }
+        })
+      } else {
+        console.log("<SUCCESS> Getting lecture submissions for lectures with IDs:",lecture_ids)
         res.json([])
       }
     }
