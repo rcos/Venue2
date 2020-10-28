@@ -92,19 +92,24 @@ html,body {
 }
 
 .logo-text {
-  /* font-family: "Exo";
-  font-weight: bold; */
-  /*font-size: 25px;*/
+  /*font-family: "Exo";
+  font-weight: bold;
+  font-size: 25px;*/
   position: relative;
   margin-top: -20px;
   /* color: #2C3E50; */
   color: var(--dashboard-text-color);
 }
 
-h1,h2,h3,h4,.course-name,.name-div {
+h1,h2,h4 {
   font-family: "Exo";
   font-weight: bold !important;
-  color: #2C3E50;
+  color: var(--dashboard-text-color);
+}
+
+h3,.course-name, .name-div {
+  font-family: "Exo";
+  font-weight: bold !important;
 }
 
 .sub-logo {
