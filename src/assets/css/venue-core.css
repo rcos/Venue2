@@ -1,4 +1,3 @@
-
 :root {
   --main-background-color: #ffffff;
   --main-text-color: #1d2324;
@@ -72,7 +71,7 @@ body {
   color: var(--main-text-color);
 }
 
-h1 {
+h1,h2,h4 {
   color: var(--dashboard-text-color);
 }
 
