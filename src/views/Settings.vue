@@ -27,25 +27,27 @@
                 </div>
             </div>
 
-          <div class="setting-option-section">
-            <div class="left">
-              <div>
-                Dark mode
+            <div class="setting-option-section">
+              <div class="left">
+                <div>
+                  Dark mode
+                </div>
               </div>
-            </div>
 
-            <div class="right">
-              <label class="dark-mode-switch">
-                <div v-if="this.edited_dark_mode">
-                  <input type="checkbox" v-on:click="toggleDarkMode()" checked>
-                  <span class="dark-mode-slider"></span>
-                </div>
-                <div v-else>
-                  <input type="checkbox" v-on:click="toggleDarkMode()">
-                  <span class="dark-mode-slider"></span>
-                </div>
-              </label>
-          </div>
+              <div class="right">
+                <label class="dark-mode-switch">
+                  <div v-if="this.edited_dark_mode">
+                    <input type="checkbox" v-on:click="toggleDarkMode()" checked>
+                    <span class="dark-mode-slider"></span>
+                  </div>
+                  <div v-else>
+                    <input type="checkbox" v-on:click="toggleDarkMode()">
+                    <span class="dark-mode-slider"></span>
+                  </div>
+                </label>
+              </div>
+            </div> 
+          
 
           <div style="position:relative" class="setting-option-section">
               <div class="left"></div>
@@ -53,11 +55,6 @@
                 <button class="btn btn-primary" @click="saveName()">Save Changes</button>
               </div>
           </div>
-        </div>
-          
-        <!--<div class="test-div">
-          test
-        </div> -->
 
             <div style="position:relative" class="setting-option-section">
                 <div class="left" style="position:absolute">
@@ -68,7 +65,7 @@
                 </div>
             </div>
 
-<!--             <div class="setting-option-section">
+          <!-- <div class="setting-option-section">
                 <div class="left">
                     <div>Current Password: <span class="value-area">*********</span></div>
                     <div class="small-div">The password is the key to your Venue account.</div>
@@ -78,13 +75,14 @@
                 </div>
             </div> -->
 
-          </div>
+          </div> 
 
           <!-- Setting Actions -->
           <div v-else>
             <ChangePassword v-if="mode == 'change_password'" :current_user="current_user" :complete="actionComplete" />
-          </div>
-    </div>
+          </div> 
+
+      </div>
 
   </div>
 </template>
@@ -173,6 +171,7 @@
    :root {
       --settings-logout-button: rgb(207,39,41);
       --settings-logout-button-shadow: rgba(144, 62, 80, 1);
+      --settings-logout-hover-text: white;
 
       --settings-text: #517B94;
       --settings-small-div: rgba(0, 0, 0, 0.64);
@@ -270,7 +269,7 @@
     .name-area .logout-div .logout-button:hover,
     .name-area .logout-div .logout-button:focus {
       background-color: var(--settings-logout-button);
-      color: white;
+      color: var(--settings-logout-hover-text);
       outline: none;
     }
 
