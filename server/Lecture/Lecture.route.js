@@ -50,6 +50,16 @@ lectureRoutes.post('/update/:id', function(req,res) {
 	}
 })
 
+lectureRoutes.get('/delete/:id', function(req,res) {
+	Lecture.deleteOne({ _id: req.params.id },function(err) {
+		if(err) {
+			res.json(err)
+		} else {
+			res.json('Successfully removed');
+		}
+	})
+})
+
 // Lecture.findByIdAndUpdate(lecture_id,
 // 	{
 // 		video_ref: public_video_url,

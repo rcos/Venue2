@@ -4,6 +4,9 @@ export default {
   getLectures() {
     return API().get('lectures')
   },
+  deleteLecture(lecture_id) {
+    return API().get('lectures/delete/'+lecture_id)
+  },
   getLecturesForUser(user_id, preference) {
     return API().get('lectures/for_user/' + user_id + '/' + preference)
   },
