@@ -341,7 +341,7 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 									course_promises.push(new Promise((resolve2, reject2) => {
 										Course.findById(lecture_sections[0].course, (error, lecture_course) => {
 											if (error || lecture_course == null) {
-												console.log("<ERROR> Getting course for section:", lecture_section)
+												console.log("<ERROR> Getting course with ID:", lecture_sections[0]._id)
 												resolve2(null)
 											} else {
 												resolve2(lecture_course)
