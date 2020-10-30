@@ -347,8 +347,8 @@ sectionRoutes.post('/add_students/:id', (req, res) => {
     User.find({ email: { $in: student_emails } }, function (err, students) {
       let student_ids = students.map(a => a._id);
       Promise.all([
-        User.updateMany({ _id: { $in: student_ids } }, { $push: { student_sections: [section_id] } }),
-        Section.findByIdAndUpdate(section_id, { $push: { students: { $each: student_emails } } })
+        User.updateMany({ _id: { $in: student_ids } }, { $push: { student_sections: section_id }, $pull: { ta_sections: section_id } }),
+        Section.findByIdAndUpdate(section_id, { $push: { students: { $each: student_emails } }, $pullAll: { teaching_assistants: student_emails } })
       ]).then(resolved => {
         res.json();
       });
@@ -363,8 +363,8 @@ sectionRoutes.post('/add_tas/:id', (req, res) => {
     User.find({ email: { $in: ta_emails } }, function (err, tas) {
       let ta_ids = tas.map(a => a._id);
       Promise.all([
-        User.updateMany({ _id: { $in: ta_ids } }, { $push: { ta_sections: [section_id] } }),
-        Section.findByIdAndUpdate(section_id, { $push: { teaching_assistants: { $each: ta_emails } } })
+        User.updateMany({ _id: { $in: ta_ids } }, { $push: { ta_sections: section_id, $pull: { student_sections: section_id } } }),
+        Section.findByIdAndUpdate(section_id, { $push: { teaching_assistants: { $each: ta_emails } }, $pullAll: { students: ta_emails } })
       ]).then(resolved => {
         res.json();
       });
@@ -372,36 +372,6 @@ sectionRoutes.post('/add_tas/:id', (req, res) => {
   });
 });
 
-sectionRoutes.post('/add_student_section/', (req, res) => {
-  let student = req.body.user_id
-  let section = req.body.section_id
-  Promise.all([
-    User.findByIdAndUpdate(student, {$push: {student_sections: section }}),
-    Section.findByIdAndUpdate(section, {$push: {students: student}})]).then(resolved => {
-      res.json()
-  })
-  /*
-  User.findByIdAndUpdate(student,
-    {$push: {student_sections: section }}, function(err, post) {
-      if (err) {
-        console.log(err)
-      }
-      else {
-        console.log(post)
-      }
-    })
-
-  Section.findByIdAndUpdate(section,
-    {$push : {students: student}}, function(err, post) {
-      if (err) {
-        console.log(err)
-      }
-      else {
-        console.log(post)
-      }
-    }) */
- 
-});
 sectionRoutes.post('/toggleOpenEnrollment/:id', (req, res) => {
   let id = req.params.id;
   Promise.all([Section.findByIdAndUpdate(id,
