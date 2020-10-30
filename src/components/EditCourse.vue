@@ -5,17 +5,8 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-<<<<<<< HEAD
             <label>Name</label>
             <input type="text" class="form-control" v-model="edited_course_name" :placeholder="course.name"/>
-=======
-            <label>name</label>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <input type="text" class="form-control" v-model="course.name">
->>>>>>> master
           </div>
         </div>
         <div class="col-md-6">
@@ -28,17 +19,12 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-<<<<<<< HEAD
-            <label>Dept</label>
-            <input class="form-control" v-model="edited_dept_name" :placeholder="course.prefix"/>
-=======
             <label>dept</label>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <input class="form-control" v-model="course.prefix" rows="5">
->>>>>>> master
           </div>
         </div>
         <div class="col-md-6">
@@ -50,15 +36,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-<<<<<<< HEAD
             <label>Number</label>
-=======
-            <label>number</label>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
->>>>>>> master
             <input class="form-control" v-model="course.suffix" rows="5">
           </div>
         </div>
@@ -75,17 +53,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-<<<<<<< HEAD
-            <label>Instructors</label>
-            <input v-for="(instructor,i) in instructors" :key="i" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name" rows="5" readonly>
-            <br>
-            <label>Add instructors by email</label>
-            <input type="text" v-model="instructors_to_add"/>
-            <button type="button" @click="addInstructorsToCourse()">Update</button>
-            <br>
-=======
             <label>instructors</label>
->>>>>>> master
           </div>
         </div>
         <div class="col-md-6">
