@@ -39,9 +39,9 @@
 
         
         <!-- Reroute to Statistics.vue with preloaded parameters for course and section -->
+        <!-- section_id: (is_instructor?selected_section:$route.params.id),  -->
         <div >
-            <router-link v-if="is_instructor" :to="{name: 'statistics', params: { course_id: (is_instructor?this.getCourse()._id:$route.params.id), 
-                                                                                  section_id: (is_instructor?selected_section:$route.params.id), }}" tabindex="-1">
+            <router-link v-if="is_instructor" :to="{name: 'statistics', params: { course_id: (is_instructor?this.course_id:$route.params.id)}}" tabindex="-1">
               <div class="inline-block big-button" :style="{float: 'left'}" tabindex="0">Attendance Graph for {{ course.prefix }} {{ course.suffix }}</div>
             </router-link>
         </div>

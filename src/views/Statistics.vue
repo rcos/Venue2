@@ -121,6 +121,7 @@ export default {
 	},
 	created() {
 		this.current_user = this.$store.state.user.current_user;
+		this.course._id = this.$route.params.id;
 		this.fetchData()
 	},
 	methods: {
