@@ -62,5 +62,15 @@ export default {
     return API().post('sections/add_tas/'+section_id, {
       tas: tas
     })
+  },
+  turnSectionsOff(sections) {
+    return API().post('sections/turn_sections_off/', {
+      sections: sections
+    })
+  },
+  turnSectionsOn(sections) {
+    return API().post('sections/turn_sections_on/', {
+      sections: sections
+    })
   }
 }

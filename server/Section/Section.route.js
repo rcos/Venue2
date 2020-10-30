@@ -392,4 +392,22 @@ sectionRoutes.route('/join_public_sections').post(function (req, res) {
   })
 });
 
+sectionRoutes.route('/turn_sections_off').post(function(req, res) {
+  let section_ids = req.body.sections.map(a=>a._id)
+  Promise.all([
+    Section.updateMany({_id: {$in: section_ids}},{$set: {is_public: false}})
+  ]).then(resolved => { 
+    res.json(true)
+  })
+});
+
+sectionRoutes.route('/turn_sections_on').post(function(req, res) {
+  let section_ids = req.body.sections.map(a=>a._id)
+  Promise.all([
+    Section.updateMany({_id: {$in: section_ids}},{$set: {is_public: true}})
+  ]).then(resolved => { 
+    res.json(true)
+  })
+});
+
 module.exports = sectionRoutes;
