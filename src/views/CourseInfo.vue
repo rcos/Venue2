@@ -38,7 +38,10 @@
         <div v-else>
           None
         </div>
-
+         <div>
+            <button v-if="is_instructor" @click="closeSections">Close Sections</button>
+            <button v-if="is_instructor" @click="openSections">Open Sections</button>
+        </div>
       </div>
     </show-at>
     <hide-at breakpoint="large">
@@ -69,8 +72,13 @@
           <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
             <SquareLoader />
           </div>
+  
           <div v-else>
             None
+          </div>
+          <div>
+            <button v-if="is_instructor" @click="closeSections">Close Sections</button>
+            <button v-if="is_instructor" @click="openSections">Open Sections</button>
           </div>
         </div>
       </div>
@@ -159,6 +167,18 @@ export default {
   methods: {
     copyURL() {
       navigator.clipboard.writeText((process.env.NODE_ENV === 'production'?'https://www.venue-meetings.com':'http://localhost:8080')+"/#/join_course/"+this.course._id)
+    },
+    closeSections() {
+      let close = this.sorted_sections.filter(a=>a.is_public)
+      SectionAPI.turnSectionsOff(close).then(res=> {
+        location.reload()
+      })
+    },
+    openSections() {
+      let open = this.sorted_sections.filter(a=>!(a.is_public))
+      SectionAPI.turnSectionsOn(open).then(res=> {
+        location.reload()
+      })
     },
     async getAllSections () {
       SectionAPI.getSectionsForCourse(this.course_id)
