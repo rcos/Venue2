@@ -5,6 +5,7 @@ let Course = require('./Course.model');
 let Section = require('../Section/Section.model');
 let User = require('../User/User.model');
 let Lecture = require('../Lecture/Lecture.model');
+let Organization = require('../Organization/Organization.model');
 const { update } = require('../Section/Section.model');
 
 courseRoutes.route('/add').post(function (req, res) {
@@ -71,7 +72,7 @@ courseRoutes.route('/update/:id').post(function (req, res) {
   );
 });
 
-courseRoutes.route('/delete/:id').delete(function (req, res) {//copied how old code did it which is to search through the all users and remove from there. Not sure if most efficient
+courseRoutes.route('/delete/:id').delete(function (req, res) {
   Course.findById({ _id: req.params.id }, function (err, course) {
     Section.find({course: course}, function (err,sections) {
       let section_ids = sections.map(a=>a._id)
@@ -79,6 +80,7 @@ courseRoutes.route('/delete/:id').delete(function (req, res) {//copied how old c
         User.updateMany({}, {$pullAll: {ta_sections: section_ids}}),
         User.updateMany({}, {$pullAll: {student_sections: section_ids}}),
         User.updateMany({}, {$pull: {instructor_courses: req.params.id}}),
+        Organization.updateOne({}, {$pull: {courses: req.params.id}}),
         Lecture.deleteMany({ "sections.0": { $exists: false }}),
         Section.deleteMany({course: course}),
         Course.deleteOne({ _id: req.params.id }),

@@ -20,7 +20,11 @@ let Course = new Schema({
 	sections: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Section'
-	}]
+	}],
+	organizations:{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Organization'
+	}
 });
 
 module.exports = mongoose.model('Course', Course);
