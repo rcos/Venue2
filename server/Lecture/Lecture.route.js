@@ -50,6 +50,16 @@ lectureRoutes.post('/update/:id', function(req,res) {
 	}
 })
 
+lectureRoutes.get('/delete/:id', function(req,res) {
+	Lecture.deleteOne({ _id: req.params.id },function(err) {
+		if(err) {
+			res.json(err)
+		} else {
+			res.json('Successfully removed');
+		}
+	})
+})
+
 // Lecture.findByIdAndUpdate(lecture_id,
 // 	{
 // 		video_ref: public_video_url,
@@ -341,7 +351,7 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 									course_promises.push(new Promise((resolve2, reject2) => {
 										Course.findById(lecture_sections[0].course, (error, lecture_course) => {
 											if (error || lecture_course == null) {
-												console.log("<ERROR> Getting course for section:", lecture_section)
+												console.log("<ERROR> Getting course with ID:", lecture_sections[0]._id)
 												resolve2(null)
 											} else {
 												resolve2(lecture_course)

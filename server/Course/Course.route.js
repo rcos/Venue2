@@ -4,6 +4,7 @@ const courseRoutes = express.Router();
 let Course = require('./Course.model');
 let Section = require('../Section/Section.model');
 let User = require('../User/User.model');
+let Lecture = require('../Lecture/Lecture.model');
 const { update } = require('../Section/Section.model');
 
 courseRoutes.route('/add').post(function (req, res) {
@@ -72,50 +73,19 @@ courseRoutes.route('/update/:id').post(function (req, res) {
 
 courseRoutes.route('/delete/:id').delete(function (req, res) {//copied how old code did it which is to search through the all users and remove from there. Not sure if most efficient
   Course.findById({ _id: req.params.id }, function (err, course) {
-    if (err) {
-      console.log("<ERROR> Finding course with ID:", req.params.id);
-      res.json(err);
-    } else {
-      course.sections.forEach(section_id => {
-        Section.findByIdAndRemove(section_id, function (err) {
-          if (err) {
-            console.log("<ERROR> Deleting section with ID:", section_id);
-            res.json(err);
-          } else {
-            User.updateMany({}, { $pull: { ta_sections: section_id } }, function (err) {
-              if (err) {
-                console.log("<ERROR> Removing section from ta users with ID:", section_id);
-                res.json(err);
-              } else {
-                User.updateMany({}, { $pull: { student_sections: section_id } }, function (err) {
-                  if (err) {
-                    console.log("<ERROR> Removing section from student users with ID:", section_id);
-                    res.json(err);
-                  } else {
-                    Course.findByIdAndRemove({ _id: req.params.id }, function (err) {
-                      if (err) {
-                        console.log("<ERROR> Deleting course with ID:", req.params.id);
-                        res.json(err);
-                      } else {
-                        User.updateMany({}, { $pull: { instructor_courses: req.params.id } }, function (err) {
-                          if (err) {
-                            console.log("<ERROR> Removing course from users with ID:", req.params.id);
-                            res.json(err);
-                          } else {
-                            console.log("<SUCCESS> Deleting course with ID:", req.params.id);
-                            res.json('Successfully removed');
-                          }
-                        });
-                      }
-                    });
-                  }
-                });
-              }
-            });
-          }
-        });
-      });
-    }
+    Section.find({course: course}, function (err,sections) {
+      let section_ids = sections.map(a=>a._id)
+      Promise.all([
+        User.updateMany({}, {$pullAll: {ta_sections: section_ids}}),
+        User.updateMany({}, {$pullAll: {student_sections: section_ids}}),
+        User.updateMany({}, {$pull: {instructor_courses: req.params.id}}),
+        Lecture.deleteMany({ "sections.0": { $exists: false }}),
+        Section.deleteMany({course: course}),
+        Course.deleteOne({ _id: req.params.id }),
+      ]).then(resolved => {
+        res.json('Successfully removed');
+      }) 
+    });
   });
 });
 
