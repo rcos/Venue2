@@ -89,6 +89,15 @@ sectionRoutes.route('/update/:id').post(function (req, res) {
 });
 
 sectionRoutes.route('/delete/:id').delete(function (req, res) {
+  Section.findById({ _id: req.params.id }, function (err, section) {
+    Promise.all([
+      User.updateMany({}, { $pull: { ta_sections: req.params.id } }),
+      User.updateMany({}, { $pull: { student_sections: req.params.id } }),
+      Section.deleteOne({ _id: req.params.id }),
+    ]).then(resolved => {
+      res.json('Successfully removed');
+    });
+  });
   Section.findByIdAndRemove(section_id, function (err) {//copied logic from course delete route. not sure if most efficient.
     if (err) {
       console.log("<ERROR> Deleting section with ID:", section_id);
@@ -375,19 +384,19 @@ sectionRoutes.post('/add_tas/:id', (req, res) => {
 sectionRoutes.post('/toggleOpenEnrollment/:id', (req, res) => {
   let id = req.params.id;
   Promise.all([Section.findByIdAndUpdate(id,
-    {is_public: true}, {$set: {is_public: false}}), Section.findByIdAndUpdate(id,
-      {is_public: false}, {$set: {is_public: true}}
-      )]).then(resolved => {
-        res.json(course)
-      })
+    { is_public: true }, { $set: { is_public: false } }), Section.findByIdAndUpdate(id,
+      { is_public: false }, { $set: { is_public: true } }
+    )]).then(resolved => {
+      res.json(course)
+    })
 })
 
 sectionRoutes.route('/join_public_sections').post(function (req, res) {
-  let section_ids = req.body.sections.map(a=>a._id)
+  let section_ids = req.body.sections.map(a => a._id)
   Promise.all([
-    Section.updateMany({_id: {$in: section_ids}},{$push: {students: req.body.email}}),
-    User.updateOne({email: req.body.email},{$push: {student_sections: {$each: section_ids}}})
-  ]).then(resolved => { 
+    Section.updateMany({ _id: { $in: section_ids } }, { $push: { students: req.body.email } }),
+    User.updateOne({ email: req.body.email }, { $push: { student_sections: { $each: section_ids } } })
+  ]).then(resolved => {
     res.json(true)
   })
 });
