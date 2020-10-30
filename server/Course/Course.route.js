@@ -142,24 +142,16 @@ courseRoutes.post('/add_instructors/:id', (req, res) => {
   });
 });
 
-courseRoutes.post('/toggleAllSectionsPublic/:id', (req, res) => {
-  let id = req.params.id;
-  Course.findById(id, function(err,course) {
-    let sections = course.sections
-    sections.forEach(section_id => {
-      Section.findByIdAndUpdate(section_id, {$set:{is_public: true}})
-    })
-  })
-});
-
-courseRoutes.post('/toggleAllSectionsPrivate/:id', (req, res) => {
-  let id = req.params.id;
-  Course.findById(id, function(err,course) {
-    let sections = course.sections
-    sections.forEach(section_id => {
-      Section.findByIdAndUpdate(section_id, {$set:{is_public: false}})
-    })
-  })
+courseRoutes.route('/toggleOpenEnrollment/:id').post(function (req, res) {
+  let id = req.params.id
+  let sections = req.body.sections
+  let section_ids = sections.map(a => a._id)
+  Promise.all([Course.findByIdAndUpdate(id,
+    {is_public: true}, {$set: {is_public: false}}, Section.updateMany( {_id: {$in: section_ids}}, {$set: {is_public: false}})), Course.findByIdAndUpdate(id,
+      {is_public: false}, {$set: {is_public: true}}, Section.updateMany( {_id: {$in: section_ids}}, {$set: {is_public: true}}))
+    ]).then(resolved => {
+      res.json(course)
+    });
 });
 
 
