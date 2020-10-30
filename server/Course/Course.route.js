@@ -149,6 +149,7 @@ courseRoutes.post('/toggleAllSectionsPublic/:id', (req, res) => {
     sections.forEach(section_id => {
       Section.findByIdAndUpdate(section_id, {$set:{is_public: true}})
     });
+    console.log("<SUCCESS> Turned all sections public in course with ID:", id);
     res.json(sections);
   });
 });
@@ -160,6 +161,7 @@ courseRoutes.post('/toggleAllSectionsPrivate/:id', (req, res) => {
     sections.forEach(section_id => {
       Section.findByIdAndUpdate(section_id, {$set:{is_public: false}})
     });
+    console.log("<SUCCESS> Turned all sections private in course with ID:", id);
     res.json(sections);
   });
 });
