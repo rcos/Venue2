@@ -10,7 +10,7 @@
         Join Meeting
       </button>
 			<button v-if="screen_scanning" @click="handleStopScreenScan()" class="header-btn btn btn-primary" title="Stop Scanning" :style="{fontSize: '2rem', height: '72.75px', width: '72.75px'}">
-        🛑
+        🍬
       </button>
       <button v-else-if="lectureIsOngoing()" @click="handleStartScreenScan()" class="header-btn btn btn-primary" title="Scan QR">
         <img class="svg-color" src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">

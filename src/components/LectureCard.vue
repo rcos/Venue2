@@ -15,22 +15,22 @@
         </div>
         <div class="lecture-card-section" id="right-section">
           <div v-if="lecture_type === 'Live'" class="right-container">
-            <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
+            <img src="@/assets/hw/icons8-witch.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
             <p v-if="lecture.checkin_window_status === 'open'" class="lecture-time-text open-text">{{ getTimeToWindowCloseString(false) }}</p>
             <p v-else class="lecture-time-text closed-text">waiting...</p>
           </div>
           <div v-else-if="lecture_type === 'Playback'" class="right-container">
-            <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
+            <img src="@/assets/hw/icons8-witch.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
             <p class="lecture-time-text playback-percentage-text">{{ getTimeToWindowCloseString(true) }}</p>
             <!-- <p class="playback-percentage-text">87% submission</p> -->
           </div>
           <div v-else-if="lecture_type === 'Recent'" class="right-container">
-            <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
+            <img src="@/assets/hw/icons8-witch.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
             <p class="lecture-time-text closed-text">closed</p>
             <!-- <p class="recent-percentage-text">91% submission</p> -->
           </div>
           <div v-else-if="lecture_type === 'Upcoming'" class="right-container">
-            <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
+            <img src="@/assets/hw/icons8-witch.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
             <p v-if="lecture.allow_live_submissions" class="lecture-time-text upcoming-text">{{ getUpcomingTimeString(lecture.start_time) }}</p>
             <p v-else class="lecture-time-text upcoming-text">{{ getUpcomingTimeString(lecture.playback_submission_start_time) }}</p>
           </div>
