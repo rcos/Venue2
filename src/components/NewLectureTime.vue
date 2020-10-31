@@ -53,7 +53,7 @@
     
       <div class="row">
           <div class="form-group col-md-5 float-right">
-            <button class="btn btn-primary " style="position:absolute">Add Time</button>
+            <button class="btn btn-primary" @click="addTime()" style="position:absolute">Add Time</button>
           </div>
       </div>
     </form>
@@ -81,9 +81,12 @@
 			})
     },
     methods: {
-      async addTime(evt){
+      async addTime( ){
         evt.preventDefault() // prevents the form's default action from redirecting the page
         this.course_times.course = this.course._id
+        let time = {
+          day: 
+        }
         const response = await CourseAPI.addTime(this.course_times)
         this.$router.push({name: 'edit_course',params: {id: this.course._id}})
 				location.reload()
