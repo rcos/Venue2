@@ -284,7 +284,7 @@ export default {
           root.style.setProperty('--settings-logout-button', 'rgba(110, 148, 186, 1)');   
           root.style.setProperty('--settings-logout-button-shadow', 'rgba(69, 122, 176, 0.8)');
           root.style.setProperty('--settings-small-div', 'rgba(216, 216, 216, 0.64)');
-          root.style.setProperty('--settings-logout-hover-text', '#272727');
+          root.style.setProperty('--settings-logout-hover-text', '#001324');  //#272727
           root.style.setProperty('--settings-text', '#2991C3');       //#cccccc
           root.style.setProperty('--settings-switch-on', '#42f593');
           root.style.setProperty('--settings-switch-off', '#f55442');
