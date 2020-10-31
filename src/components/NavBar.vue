@@ -87,13 +87,13 @@
         <div class="venue-nav-link-container">
           <router-link class="venue-nav-link" :class="{'active-link':is_settings()}" :to="{name: 'settings'}">
             <show-at breakpoint="large">
-              <p aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon"></p>
+              <p aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon"></p>
             </show-at>
             <show-at breakpoint="medium">
-              <p aria-label="User Name">{{ current_user.first_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon"></p>
+              <p aria-label="User Name">{{ current_user.first_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon"></p>
             </show-at>
             <show-at breakpoint="small">
-              <img src="@/assets/settings.svg" width="20" height="20" :style="{marginRight: '6rem'}" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
+              <img src="@/assets/settings.svg" width="20" height="20" :style="{marginRight: '6rem'}" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon">
             </show-at>
           </router-link>
           <div :class="'active-link-underline ' + (is_settings()?'active':'')"></div>
@@ -300,10 +300,6 @@
     --nav-bar-hover-text: white;
     --nav-bar-hover-top-shadow: rgba(85, 85, 85, 0.644);
     --nav-bar-hover-bottom-shadow: rgba(179, 179, 179, 0.644);
-  }
-
-  .svg-color {
-    filter: var(--widgets-color);
   }
 
   .logo-color {
