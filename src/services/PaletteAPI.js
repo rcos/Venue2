@@ -274,7 +274,7 @@ export default {
           root.style.setProperty('--loader-square-shadow', 'rgba(128, 128, 128, 0.5)');
           
           // Course cards
-          root.style.setProperty('--course-card-background', '#272727');
+          root.style.setProperty('--course-card-background', '#2b485e');  //#272727
           root.style.setProperty('--course-card-shadow', 'rgba(179, 179, 179, 0.644)');
           root.style.setProperty('--course-card-text', '#ffffff');
           root.style.setProperty('--course-number-background', 'rgba(0, 0, 0, 0.86)');
@@ -315,16 +315,16 @@ export default {
           root.style.setProperty('--button-text-hover', 'white');
 
           // Dark mode Palette - Nav bar 
-          root.style.setProperty('--nav-bar-text', '#5e2f2f');
-          root.style.setProperty('--nav-bar-background', '#a16262');
-          root.style.setProperty('--nav-bar-separator', 'rgba(255, 255, 255, 0.15)');
-          root.style.setProperty('--nav-bar-selected-text', '#a12725');
-          root.style.setProperty('--nav-bar-box-shadow', 'rgba(89, 45, 45, 0.744)');
-          root.style.setProperty('--nav-bar-link-text', '#c9abab');
-          root.style.setProperty('--nav-bar-hover-background', '#6e3b3a');
-          root.style.setProperty('--nav-bar-hover-text', '#eba8a7');
-          root.style.setProperty('--nav-bar-hover-top-shadow', 'rgba(138, 54, 54, 0.644)');  //rgba(138, 54, 54, 0.644)
-          root.style.setProperty('--nav-bar-hover-bottom-shadow', 'rgba(219, 173, 173, 0.644)');  //rgba(219, 173, 173, 0.644)
+          root.style.setProperty('--nav-bar-text', '#034066');  //#5e2f2f
+          root.style.setProperty('--nav-bar-background', '#92AABA');  //#a16262
+          root.style.setProperty('--nav-bar-separator', 'rgba(7, 58, 89, 0.20)');  //7, 58, 89, 0.35
+          root.style.setProperty('--nav-bar-selected-text', '#308CDE');  //#a12725
+          root.style.setProperty('--nav-bar-box-shadow', 'rgba(78, 120, 148, 0.744)');
+          root.style.setProperty('--nav-bar-link-text', '#9fbed4');  //#c9abab
+          root.style.setProperty('--nav-bar-hover-background', '#314f63'); //#6e3b3a
+          root.style.setProperty('--nav-bar-hover-text', '#a1cbe6'); //#eba8a7
+          root.style.setProperty('--nav-bar-hover-top-shadow', 'rgba(0, 25, 43, 0.644)');  //rgba(138, 54, 54, 0.644)
+          root.style.setProperty('--nav-bar-hover-bottom-shadow', 'rgba(115, 197, 255, 0.644)');  //rgba(219, 173, 173, 0.644)
 
           // Legend green and purple + sections dropdown border
           root.style.setProperty('--sync-border', '#0ac448');
@@ -332,7 +332,7 @@ export default {
           root.style.setProperty('--recording-namecard', '#8f3eca');
 
           // Course and Lecture 'pills'
-          root.style.setProperty('--red-pill', '#D14454');                                  // testing: #D14454      original: #d13e34
+          root.style.setProperty('--red-pill', '#d14454');                                  // testing: #D14454      original: #d13e34
           root.style.setProperty('--red-pill-shadow', 'rgba(249, 82, 71, 0.3)');
           root.style.setProperty('--yellow-pill', '#b95726');
           root.style.setProperty('--yellow-pill-shadow', 'rgba(244, 159, 50, 0.4)');
