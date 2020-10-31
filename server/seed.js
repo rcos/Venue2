@@ -397,6 +397,7 @@ c1 = {
 	name: "Data Structures",
 	prefix: "CSCI",
 	suffix: 1200,
+	meetingURL: "default_link",
 	course_times:[{
 		day: "Monday",
 		start_time: "12:00pm",
