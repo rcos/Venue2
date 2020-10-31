@@ -82,12 +82,15 @@
     },
     methods: {
       async addTime( ){
+        
         evt.preventDefault() // prevents the form's default action from redirecting the page
         this.course_times.course = this.course._id
         let time = {
-          day: 
+          day: this.new_day,
+          start_time: this.new_start,
+          end_time: this.new_end
         }
-        const response = await CourseAPI.addTime(this.course_times)
+        const response = await CourseAPI.addTime(this.course._id, this.course_times)
         this.$router.push({name: 'edit_course',params: {id: this.course._id}})
 				location.reload()
       }
