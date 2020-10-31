@@ -144,26 +144,24 @@ courseRoutes.post('/add_instructors/:id', (req, res) => {
 
 courseRoutes.post('/toggleAllSectionsPublic/:id', (req, res) => {
   let id = req.params.id;
-  Course.findById(id, function(course) {
-    let sections = course.sections
-    sections.forEach(section_id => {
-      Section.findByIdAndUpdate(section_id, {$set:{is_public: true}})
-    });
+  let ids = req.body.sections.map(a=>a._id);
+  Promise.all([
+    Section.updateMany({_id: {$in: ids}},{$set: {is_public: true}})
+  ]).then(resolved=> {
     console.log("<SUCCESS> Turned all sections public in course with ID:", id);
-    res.json(sections);
-  });
+    res.json(true);
+  })
 });
 
 courseRoutes.post('/toggleAllSectionsPrivate/:id', (req, res) => {
   let id = req.params.id;
-  Course.findById(id, function(course) {
-    let sections = course.sections
-    sections.forEach(section_id => {
-      Section.findByIdAndUpdate(section_id, {$set:{is_public: false}})
-    });
+  let ids = req.body.sections.map(a=>a._id);
+  Promise.all([
+    Section.updateMany({_id: {$in: ids}},{$set: {is_public: false}})
+  ]).then(resolved=> {
     console.log("<SUCCESS> Turned all sections private in course with ID:", id);
-    res.json(sections);
-  });
+    res.json(true);
+  })
 });
 
 module.exports = courseRoutes;

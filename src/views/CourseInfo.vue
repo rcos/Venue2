@@ -14,7 +14,11 @@
 
         <CourseInfoTitle v-if="is_instructor" :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta"/>
         <CourseInfoTitle v-else-if="sections[$route.params.id]" :course="sections[$route.params.id].course" :section_name="sections[$route.params.id].name" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta"/>
-
+        
+        <div class="title" :style="{height: '50px', width: '1000px'}">
+          <button v-if="is_instructor" class="btn btn-secondary" :style="{float: 'left', margin: '5px'}" @click="closeSections">Close All Sections</button>
+          <button v-if="is_instructor" class="btn btn-secondary" :style="{float: 'left', margin: '5px'}" @click="openSections" >Open All Sections</button>
+        </div>
         <!-- Attendance History -->
         <div>
           <div v-if="is_instructor" class="section-select-container float-right">
@@ -38,10 +42,6 @@
         <div v-else>
           None
         </div>
-         <div>
-            <button v-if="is_instructor" @click="closeSections">Close Sections</button>
-            <button v-if="is_instructor" @click="openSections">Open Sections</button>
-        </div>
       </div>
     </show-at>
     <hide-at breakpoint="large">
@@ -61,6 +61,8 @@
               <option :value="'all'" selected>All</option>
               <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">{{section.name}}</option>
             </select>
+            <button v-if="is_instructor" @click="closeSections">Close Sections</button>
+            <button v-if="is_instructor" @click="openSections">Open Sections</button>
           </div>
           <div class="courseinfo-legend">Legend:</div>
           <div class="courseinfo-legend live-border">Synchronous</div>
@@ -75,10 +77,6 @@
   
           <div v-else>
             None
-          </div>
-          <div>
-            <button v-if="is_instructor" @click="closeSections">Close Sections</button>
-            <button v-if="is_instructor" @click="openSections">Open Sections</button>
           </div>
         </div>
       </div>
@@ -170,15 +168,19 @@ export default {
     },
     closeSections() {
       let close = this.sorted_sections.filter(a=>a.is_public)
-      SectionAPI.turnSectionsOff(close).then(res=> {
-        location.reload()
-      })
+      if (window.confirm("Are you sure you want to turn all sections to private?")) {
+        CourseAPI.turnSectionsOff(close, this.course_id).then(res=> {
+          location.reload()
+        })
+      }
     },
     openSections() {
       let open = this.sorted_sections.filter(a=>!(a.is_public))
-      SectionAPI.turnSectionsOn(open).then(res=> {
-        location.reload()
-      })
+      if (window.confirm("Are you sure you want to turn all sections to public?")) {
+        CourseAPI.turnSectionsOn(open, this.course_id).then(res=> {
+          location.reload()
+        })
+      }
     },
     async getAllSections () {
       SectionAPI.getSectionsForCourse(this.course_id)
@@ -460,6 +462,11 @@ export default {
 </script>
 
 <style scoped>
+
+.buttons {
+  float: left;
+  padding: 20px;
+}
   .course-info-container {
     /*border: blue solid;*/
   }
