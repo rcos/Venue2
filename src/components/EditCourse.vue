@@ -6,54 +6,84 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Name</label>
-            <input type="text" class="form-control" v-model="edited_course_name" :placeholder="course.name"/>
           </div>
         </div>
         <div class="col-md-6">
-            <div>
-              <label>Meeting URL</label>
-              <input class="form-control" type="url" name="meetingURL" placeholder="Enter Meeting URL" size=75>
-            </div>
+          <div class="form-group">
+            <input type="text" class="form-control" v-model="edited_course_name" :placeholder="course.name"/>
           </div>
+        </div>
       </div><br />
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>dept</label>
+            <label>Dept</label>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <input class="form-control" v-model="course.prefix" rows="5">
+            <input type="text" class="form-control" v-model="edited_course_prefix" :placeholder="course.prefix" rows="5">
+          </div>
+        </div>
+      </div><br />
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Meeting URL</label>
           </div>
         </div>
         <div class="col-md-6">
-          <label>Snooze</label>
-          <input class="form-control" v-model="edited_snooze" :placeholder="course.snooze" rows="5">
-          <br>
+          <div class="form-group">
+            <input class="form-control" type="url" name="edited_url" :placeholder="course.meetingURL" size=75>
+          </div>
         </div>
       </div><br />
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Snooze</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input class="form-control" v-model="edited_snooze" :placeholder="course.snooze" rows="5">
+          </div>
+          <br>
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
             <label>Number</label>
-            <input class="form-control" v-model="course.suffix" rows="5">
           </div>
         </div>
-          <div class="col-md-6">
-            <label>Lecture Times</label>
-            <!-- <input class="form-control" v-model="course.prefix" rows="5" readonly> -->
-            <input v-for="time in course.course_times" :key="time.day" class="form-control" :value="time.day + ': ' + time.start_time + ' - ' +  time.end_time" rows="5" readonly>
-            <br>
-            <router-link :to="{name: 'new_lecture_time', params: { id:course._id}}">
-              <button class="btn btn-primary">Add Time</button>
-            </router-link>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input class="form-control" v-model="edited_course_suffix" :placeholder="course.suffix" rows="5">
+          </div>
         </div>
       </div><br />
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>instructors</label>
+            <label>Lecture Times</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input v-for="time in course.course_times" :key="time.day" class="form-control" :value="time.day + ': ' + time.start_time + ' - ' +  time.end_time" rows="5" readonly>
+            <br>
+            <router-link :to="{name: 'new_lecture_time', params: { id:course._id}}">
+            <button class="btn btn-primary">Add Time</button>
+            </router-link>
+          </div>
+        </div>
+      </div><br />
+    
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Instructors</label>
           </div>
         </div>
         <div class="col-md-6">
@@ -134,12 +164,12 @@
         if(response.data)
           this.sections = response.data
       },
-      async updateCourse() {
-        let course_id = this.$route.params.id
-        this.course.instructors = this.instructors.map(a=>a.email)
-        const response = await CourseAPI.updateCourse(course_id, this.course)
-        location.reload()
-      },
+      // async updateCourse() {
+      //   let course_id = this.$route.params.id
+      //   this.course.instructors = this.instructors.map(a=>a.email)
+      //   const response = await CourseAPI.updateCourse(course_id, this.course)
+      //   location.reload()
+      // },
       addInstructorsToCourse() {
         let insts = this.instructors_to_add.split(',')
         if(insts.length) {
@@ -148,24 +178,37 @@
           })
         }
       },
-      // async updateCourse() {
-      //   this.waiting= true
-      //   if (this.edited_course_name != '')
-      //     this.course.name = this.edited_course_name
-      //   else 
-      //     this.course.name = this.course.name
-      //   if (this.edited_dept_name != '')
-      //     this.course.prefix = this.edited_dept_name
-      //   else 
-      //     this.course.prefix = this.course.prefix
+      async updateCourse() {
+        this.waiting= true
+        if (this.edited_course_name != ''){ 
+          this.course.name = this.edited_course_name
+        }
+        else {
+          this.course.name = this.course.name
+        }
+        if (this.edited_dept_name != '') {
+          this.course.prefix = this.edited_dept_name
+        }
+        else {
+          this.course.prefix = this.course.prefix
+        }
+        if (this.edited_course_suffix != '') {
+          this.course.suffix = this.edited_course_suffix
+        }
+        else {
+          this.course.suffix = this.course.suffix
+        }
 
-      //   CourseAPI.updateCourse(this.course._id, this.course).then(res => {
-      //     this.$store.dispatch('updateCurrentCourse', {token: this.$store.state.course.token, course: this.course})
-      //     this.edited_course_name = ''
-      //     this.edited_dept_name = ''
-      //     this.waiting = false
-      //   })
-      // }
+        await CourseAPI.updateCourse(this.course._id, this.course).then(res => {
+          this.edited_course_name = ''
+          this.edited_dept_name = ''
+          this.waiting = false
+          let course_id = this.$route.params.id
+          this.course.instructors = this.instructors.map(a=>a.email)
+          // const response = await CourseAPI.updateCourse(course_id, this.course) 
+        })
+        location.reload()
+      }
     }
   }
 </script>
