@@ -16,8 +16,8 @@
         <CourseInfoTitle v-else-if="sections[$route.params.id]" :course="sections[$route.params.id].course" :section_name="sections[$route.params.id].name" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta"/>
         
         <div class="title" :style="{height: '50px', width: '1000px'}">
-          <button v-if="is_instructor" class="btn btn-secondary" :style="{float: 'left', margin: '5px'}" @click="closeSections">Close All Sections</button>
-          <button v-if="is_instructor" class="btn btn-secondary" :style="{float: 'left', margin: '5px'}" @click="openSections" >Open All Sections</button>
+          <button v-if="is_instructor" class="btn btn-secondary" :style="{float: 'left', margin: '5px'}" @click="closeSections">Close Sections</button>
+          <button v-if="is_instructor" class="btn btn-secondary" :style="{float: 'left', margin: '5px'}" @click="openSections" >Open Sections</button>
         </div>
         <!-- Attendance History -->
         <div>
