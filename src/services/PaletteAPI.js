@@ -3,7 +3,6 @@ http://web-accessibility.carnegiemuseums.org/design/color/ (508 compliance guide
 https://wave.webaim.org/ (tests accessibility of website; also a helpful Google Chrome extension)
 https://imagecolorpicker.com/en/ (Select colors from pictures - provides HEX and RGB code of selected color)
 https://coolors.co/ (Color palette generator)
-
 */
 
 export default {
@@ -593,5 +592,4 @@ export default {
 ********************************************************************************** 
 **********************************************************************************
 **********************************************************************************          
-
 */

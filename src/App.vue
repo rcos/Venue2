@@ -19,6 +19,7 @@ import {getLiveLectures,getUpcomingLectures,getPastLectures} from './services/Gl
 import '@/assets/css/venue.css';
 import UserAPI from '@/services/UserAPI.js';
 
+
 export default {
   watch: {
     '$route' (to, from) {

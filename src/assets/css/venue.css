@@ -92,12 +92,13 @@ html,body {
 }
 
 .logo-text {
-  /* font-family: "Exo";
-  font-weight: bold; */
-  /*font-size: 25px;*/
+  /*font-family: "Exo";
+  font-weight: bold;
+  font-size: 25px;*/
   position: relative;
   margin-top: -20px;
-  color: #2C3E50; 
+  /* color: #2C3E50; */
+  color: var(--dashboard-text-color);
 }
 
 h1,h2,h4 {

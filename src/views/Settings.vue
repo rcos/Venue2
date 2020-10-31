@@ -27,6 +27,7 @@
                 </div>
             </div>
 
+            <!-- Dark mode setting
             <div class="setting-option-section">
               <div class="left">
                 <div>
@@ -47,14 +48,14 @@
                 </label>
               </div>
             </div> 
+            -->
           
-
-          <div style="position:relative" class="setting-option-section">
-              <div class="left"></div>
-              <div style="position:absolute" class="right">
-                <button class="btn btn-primary" @click="saveName()">Save Changes</button>
-              </div>
-          </div>
+            <div style="position:relative" class="setting-option-section">
+                <div class="left"></div>
+                <div style="position:absolute" class="right">
+                  <button class="btn btn-primary" @click="saveName()">Save Changes</button>
+                </div>
+            </div>
 
             <div style="position:relative" class="setting-option-section">
                 <div class="left" style="position:absolute">
@@ -65,7 +66,7 @@
                 </div>
             </div>
 
-          <!-- <div class="setting-option-section">
+            <!-- <div class="setting-option-section">
                 <div class="left">
                     <div>Current Password: <span class="value-area">*********</span></div>
                     <div class="small-div">The password is the key to your Venue account.</div>
@@ -73,16 +74,16 @@
                 <div class="right">
                     <div class="change-button" v-on:click="mode = 'change_password'">Change</div>
                 </div>
-            </div> -->
-
-          </div> 
+            </div> --> 
+          
+          </div>
 
           <!-- Setting Actions -->
           <div v-else>
             <ChangePassword v-if="mode == 'change_password'" :current_user="current_user" :complete="actionComplete" />
-          </div> 
-
-      </div>
+          </div>
+          
+    </div>
 
   </div>
 </template>
@@ -179,24 +180,6 @@
       --settings-switch-on: #42f593;
       --settings-switch-off: #f55442;
       --settings-switch-ball: white;
-    }
-
-    .pencil {
-      color: var(--main-text-color);
-      fill: currentColor;
-      width: 64px;
-      height: 64px;
-    }
-
-    .svg-color {
-      filter: var(--widgets-color);
-    }
-
-    .palette {
-      background-color: var(--main-background-color);
-      color: var(--settings-text);
-      position: relative;
-      font-weight: bold;
     }
 
     .settings-container {

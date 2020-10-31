@@ -331,10 +331,6 @@ export default {
 		--lecture-attendace-absent-glow: rgba(255, 99, 88, 0.36);
 	}
 
-	.svg-color {
-		filter: var(--widgets-color);
-	}
-
 	.input-group {
 		width: auto;
 		top: 0px;
