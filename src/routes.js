@@ -34,6 +34,8 @@ import LectureInfo from './views/LectureInfo.vue';
 import Settings from './views/Settings.vue';
 import RedirectCASLogin from './views/RedirectCASLogin.vue';
 import Statistics from './views/Statistics.vue';
+
+import UMLDiagram from './views/UMLDiagram.vue';
 import TeachNewCourse from '@/components/TeachNewCourse.vue';
 import NewSection from '@/components/NewSection.vue';
 import EditLecture from '@/components/EditLecture.vue';
@@ -381,6 +383,14 @@ const router = new VueRouter({
       meta: {
         title: "Edit Lecture",
         requiresAuth: true
+      }
+    },
+    {
+      name: 'show_uml',
+      path: '/show_uml',
+      component: UMLDiagram,
+      meta: {
+        Title: "Venue UML Diagram",
       }
     }
   ]
