@@ -49,11 +49,14 @@
         <!-- Mobile View -->
         <CourseInfoTitle v-if="is_instructor" :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta" mobileMode/>
         <CourseInfoTitle v-else-if="sections[$route.params.id]" :course="sections[$route.params.id].course" :section_name="sections[$route.params.id].name" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta" mobileMode/>
+        
 
         <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: $route.params.id }}" tabindex="-1">
           <div class="inline-block big-button mobile" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
         </router-link>
         <button v-if="is_instructor || is_ta" class="inline-block big-button mobile" :style="{float: 'right'}" tabindex="0" @click="copyURL">Copy Link to Join {{ course.prefix }} {{ course.suffix }}</button>
+        <button v-if="is_instructor" class="btn btn-secondary" :style="{float: 'left', margin: '5px'}" @click="closeSections">Close Sections</button>
+        <button v-if="is_instructor" class="btn btn-secondary" :style="{float: 'left', margin: '5px'}" @click="openSections" >Open Sections</button>
         <div class="courseinfo-attendance-listing">
           <div v-if="is_instructor" class="section-select-container mobile float-right">
             <label id="section_select_label">Section(s):</label>
@@ -61,8 +64,6 @@
               <option :value="'all'" selected>All</option>
               <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">{{section.name}}</option>
             </select>
-            <button v-if="is_instructor" @click="closeSections">Close Sections</button>
-            <button v-if="is_instructor" @click="openSections">Open Sections</button>
           </div>
           <div class="courseinfo-legend">Legend:</div>
           <div class="courseinfo-legend live-border">Synchronous</div>
@@ -463,10 +464,6 @@ export default {
 
 <style scoped>
 
-.buttons {
-  float: left;
-  padding: 20px;
-}
   .course-info-container {
     /*border: blue solid;*/
   }
