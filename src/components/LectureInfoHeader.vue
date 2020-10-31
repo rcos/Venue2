@@ -7,7 +7,7 @@
           <h3 class="lecture-title">
             {{lecture.title}}
             <router-link v-if="is_instructor" :to="{name: 'edit_lecture',params:{id: lecture._id}}" role="link" aria-label="Edit Lecture">
-              <img src="@/assets/settings.svg" width="30" height="30" class="d-inline-block align-top svg-color" alt="Settings" aria-label="Settings">
+              <img src="@/assets/hw/icons8-spider-web.svg" width="30" height="30" class="d-inline-block align-top" alt="Settings" aria-label="Settings">
             </router-link>
           </h3>
           <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.prefix}} {{lecture.sections[0].course.suffix}}</p></div>
@@ -37,7 +37,7 @@
             <h3 class="lecture-title">
               {{lecture.title}}
               <router-link v-if="is_instructor" :to="{name: 'edit_lecture',params:{id: lecture._id}}" role="link" aria-label="Edit Lecture">
-                <img src="@/assets/settings.svg" width="30" height="30" class="d-inline-block align-top svg-color" alt="Settings" aria-label="Settings">
+                <img src="@/assets/hw/icons8-spider-web.svg" width="30" height="30" class="d-inline-block align-top" alt="Settings" aria-label="Settings">
               </router-link>
             </h3>
             <div>{{lecture.sections[0].course.name}}<p class="dept-and-number">{{lecture.sections[0].course.prefix}} {{lecture.sections[0].course.suffix}}</p></div>

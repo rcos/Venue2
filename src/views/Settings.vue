@@ -11,7 +11,7 @@
                 <button class="btn btn-secondary" @click="editing_name = false">Cancel</button>
               </div>
             </div>
-            <div class="name-div" v-else>{{ current_user.first_name }} {{ current_user.last_name }} <button class="btn" title="Edit Course" id="edit-course" @click="editing_name = true"><img class="svg-color" id="edit-course" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit"/></button></div>
+            <div class="name-div" v-else>{{ current_user.first_name }} {{ current_user.last_name }} <button class="btn" title="Edit Course" id="edit-course" @click="editing_name = true"><img id="edit-course" src="@/assets/hw/icons8-jack-o-lantern-64.png" alt="Edit" width="40" aria-label="Edit"/></button></div>
             <div class="logout-div"><div class="logout-button" v-on:click="logoutUser" tabindex="0" role="button">Logout</div></div>
           </div>
 
