@@ -69,6 +69,9 @@ sectionRoutes.route('/update/:id').post(function (req, res) {
     if (req.body.updated_section.teaching_assistants) {
       updated_section.teaching_assistants = req.body.updated_section.teaching_assistants;
     }
+    if (undefined != req.body.updated_section.is_public) {
+      updated_section.is_public = req.body.updated_section.is_public;
+    }
   }
 
   Section.findByIdAndUpdate(id,
@@ -344,8 +347,8 @@ sectionRoutes.post('/add_students/:id', (req, res) => {
     User.find({ email: { $in: student_emails } }, function (err, students) {
       let student_ids = students.map(a => a._id);
       Promise.all([
-        User.updateMany({ _id: { $in: student_ids } }, { $push: { student_sections: [section_id] } }),
-        Section.findByIdAndUpdate(section_id, { $push: { students: { $each: student_emails } } })
+        User.updateMany({ _id: { $in: student_ids } }, { $push: { student_sections: section_id }, $pull: { ta_sections: section_id } }),
+        Section.findByIdAndUpdate(section_id, { $push: { students: { $each: student_emails } }, $pullAll: { teaching_assistants: student_emails } })
       ]).then(resolved => {
         res.json();
       });
@@ -360,8 +363,8 @@ sectionRoutes.post('/add_tas/:id', (req, res) => {
     User.find({ email: { $in: ta_emails } }, function (err, tas) {
       let ta_ids = tas.map(a => a._id);
       Promise.all([
-        User.updateMany({ _id: { $in: ta_ids } }, { $push: { ta_sections: [section_id] } }),
-        Section.findByIdAndUpdate(section_id, { $push: { teaching_assistants: { $each: ta_emails } } })
+        User.updateMany({ _id: { $in: ta_ids } }, { $push: { ta_sections: section_id, $pull: { student_sections: section_id } } }),
+        Section.findByIdAndUpdate(section_id, { $push: { teaching_assistants: { $each: ta_emails } }, $pullAll: { students: ta_emails } })
       ]).then(resolved => {
         res.json();
       });
@@ -371,30 +374,22 @@ sectionRoutes.post('/add_tas/:id', (req, res) => {
 
 sectionRoutes.post('/toggleOpenEnrollment/:id', (req, res) => {
   let id = req.params.id;
-  Section.findByIdAndUpdate(id,
-    {is_public: true}, {$set: {is_public: false}},
-      function (err, course) {
-        if (err || course == null) {
-          console.log("<ERROR> Changing section (ID:",id, ") status to private")
-          res.status(404).send("section not found");
-        } else {
-          console.log("<SUCCESS> Changing section (ID:",id, ") status to private")
-          res.json(course);
-        }
-      }
-    );
-    Section.findByIdAndUpdate(id,
-      {is_public: false}, {$set: {is_public: true}},
-        function (err, course) {
-          if (err || course == null) {
-            console.log("<ERROR> Changing section (ID:",id, ") status to open enrollment")
-            res.status(404).send("section not found");
-          } else {
-            console.log("<SUCCESS> Changing section (ID:",id, ") status to open enrollment")
-            res.json(section);
-          }
-        }
-      );
+  Promise.all([Section.findByIdAndUpdate(id,
+    {is_public: true}, {$set: {is_public: false}}), Section.findByIdAndUpdate(id,
+      {is_public: false}, {$set: {is_public: true}}
+      )]).then(resolved => {
+        res.json(course)
+      })
 })
+
+sectionRoutes.route('/join_public_sections').post(function (req, res) {
+  let section_ids = req.body.sections.map(a=>a._id)
+  Promise.all([
+    Section.updateMany({_id: {$in: section_ids}},{$push: {students: req.body.email}}),
+    User.updateOne({email: req.body.email},{$push: {student_sections: {$each: section_ids}}})
+  ]).then(resolved => { 
+    res.json(true)
+  })
+});
 
 module.exports = sectionRoutes;

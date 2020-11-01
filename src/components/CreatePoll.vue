@@ -119,11 +119,16 @@ export default {
 }
 textarea {
 	border-radius: 0.25rem;
-	border: 1px solid gray;
+	border: 1px solid var(--modal-border);
 }
 .row {
 	margin: 0;
 	width: 100%;
+}
+.col {
+	color: var(--input-text) !important;
+	background: var(--input-background) !important;
+	outline: none;
 }
 h2 {
   text-align: center;

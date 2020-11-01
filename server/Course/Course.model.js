@@ -11,6 +11,7 @@ let Course = new Schema({
 	suffix: Number,
 	default_link: String,	//Added this
 	snooze: Number,
+	meetingURL: String,
 	course_times: [{		//Added this
 		day: String,
 		start_time: String,

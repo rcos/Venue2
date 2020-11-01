@@ -92,16 +92,21 @@
 
 </script>
 <style>
+:root {
+  --change-password-error: #FC6F71;
+  --change-password-success: #34c759;
+  --change-password-success-border: #158f34;
+}
   .form-error-area {
     text-align: center;
-    color: #FC6F71;
+    color: var(--change-password-error);
   }
 
   .form-success-area {
     text-align: center;
-    color: white;
-    background-color: #34c759;
-    border: 1px solid #158f34;
+    color: var(--main-background-color);
+    background-color: var(--change-password-success);
+    border: 1px solid var(--change-password-success-border);
     padding: 15px 0px;
     border-radius: 5px;
     width: 60%;

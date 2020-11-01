@@ -20,6 +20,13 @@ export default {
 </script>
 
 <style>
+:root {
+  --card-background: DarkGray;
+  --card-shadow1: rgba(0,0,0,0.25);
+  --card-shadow2: rgba(0,0,0,0.22);
+  --card-title-light: white;
+  --card-title-dark: black;
+}
 .card {
   margin: 30px auto;
   width: 250px;
@@ -27,7 +34,7 @@ export default {
   border-radius: 40px;
   cursor: pointer;
   transition: 0.4s;
-  background-color: DarkGray
+  background-color: var(--card-background);
 }
 
 .card .card_image {
@@ -65,16 +72,16 @@ export default {
 
 .card:hover {
   transform: scale(0.9, 0.9);
-  box-shadow: 5px 5px 10px 10px rgba(0,0,0,0.25),
-    -5px -5px 10px 10px rgba(0,0,0,0.22);
+  box-shadow: 5px 5px 10px 10px var(--card-shadow1),
+    -5px -5px 10px 10px var(--card-shadow2);
 }
 
 .title-white {
-  color: white;
+  color: var(--card-title-light);
 }
 
 .title-black {
-  color: black;
+  color: var(--card-title-dark);
 }
 
 @media all and (max-width: 500px) {
