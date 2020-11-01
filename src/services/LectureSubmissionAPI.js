@@ -35,6 +35,11 @@ export default {
   getLectureSubmissionsForLecture(lecture_id) {
     return API().get('lecturesubmissions/for_lecture/' + lecture_id)
   },
+  getLectureSubmissionsForLectures(lecture_ids) {
+    return API().post('lecturesubmissions/for_lectures', {
+      lecture_ids: lecture_ids
+    })
+  },
   getLectureSubmissionsForStudent(lecture_id, student_id) {
     return API().get('lecturesubmissions/for_student/' + lecture_id + '/' + student_id)
   },

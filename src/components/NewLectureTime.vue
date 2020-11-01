@@ -1,41 +1,60 @@
 <template>
   <div v-if="course" id="new-lecture-time">
     <h2>Add Lecture Time</h2>
-    <form @submit.prevent="addSection">
+    <form @submit.prevent="updateCourse">
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Course Name:</label>
-            <input type="text" class="form-control" v-model="course.name" readonly>
+            <label>Course Name</label>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6" >
+        <div class="col-md-6">
           <div class="form-group">
-            <label>Day:</label>
+            <input type="text" class="form-control" v-model="course.name" readonly rows="5">
+          </div>
+        </div>
+      </div><br />
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Day</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
             <input type="text" class="form-control" v-model="new_day">
           </div>
         </div>
-      </div>
+      </div><br />
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Start Time:</label>
+            <label>Start Time</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
             <input type="text" class="form-control" v-model="new_start">
           </div>
         </div>
-      </div>
+      </div><br />
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>End Time:</label>
-            <input type="text" class="form-control" v-model="new_end">
-          </div>
-          <div class="form-group">
-            <button class="btn btn-primary">Create</button>
+            <label>End Time</label>
           </div>
         </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="text" class="form-control" v-model="new_end">
+          </div>
+        </div>
+      </div><br />
+    
+      <div class="row">
+          <div class="form-group col-md-5 float-right">
+            <button class="btn btn-primary" @click="addTime()" style="position:absolute">Add Time</button>
+          </div>
       </div>
     </form>
 
@@ -62,10 +81,16 @@
 			})
     },
     methods: {
-      async addTime(evt){
+      async addTime( ){
+        
         evt.preventDefault() // prevents the form's default action from redirecting the page
         this.course_times.course = this.course._id
-        const response = await CourseAPI.addTime(this.course_times)
+        let time = {
+          day: this.new_day,
+          start_time: this.new_start,
+          end_time: this.new_end
+        }
+        const response = await CourseAPI.addTime(this.course._id, this.course_times)
         this.$router.push({name: 'edit_course',params: {id: this.course._id}})
 				location.reload()
       }
@@ -74,7 +99,7 @@
 </script>
 
 <style scoped>
-#new-section {
+#new-lecture-time {
 	padding: 2rem;
 }
 .form-group {

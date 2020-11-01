@@ -6,21 +6,18 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Name</label>
-            <input type="text" class="form-control" v-model="edited_course_name" :placeholder="course.name"/>
           </div>
         </div>
         <div class="col-md-6">
-            <div>
-              <label>Meeting URL</label>
-              <input class="form-control" type="url" name="meetingURL" placeholder="Enter Meeting URL" size=75>
-            </div>
+          <div class="form-group">
+            <input type="text" class="form-control" v-model="edited_course_name" :placeholder="course.name"/>
           </div>
+        </div>
       </div><br />
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
             <label>Dept</label>
-            <input class="form-control" v-model="edited_dept_name" :placeholder="course.prefix"/>
           </div>
         </div>
         <div class="col-md-6">
@@ -28,47 +25,74 @@
           <br>
           <MultiSelectDropdown :options="['None','15','30','45','60']" @update="handleCourseChange" :max="1" :n="0"/>
           <br>
+          <div class="form-group">
+            <input type="text" class="form-control" v-model="edited_course_prefix" :placeholder="course.prefix" rows="5">
+          </div>
         </div>
       </div><br />
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Number</label>
-            <input class="form-control" v-model="course.suffix" rows="5">
+            <label>Meeting URL</label>
           </div>
         </div>
-          <div class="col-md-6">
-            <label>Lecture Times</label>
-            <!-- <input class="form-control" v-model="course.prefix" rows="5" readonly> -->
-            <input v-for="time in course.course_times" :key="time.day" class="form-control" :value="time.day + ': ' + time.start_time + ' - ' +  time.end_time" rows="5" readonly>
-            <br>
-            <router-link :to="{name: 'new_lecture_time', params: { id:course._id}}">
-              <button class="btn btn-primary">Add Time</button>
-            </router-link>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input class="form-control" type="url" name="edited_url" :placeholder="course.meetingURL" size=75>
+          </div>
         </div>
       </div><br />
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Instructors</label>
-            <input v-for="(instructor,i) in instructors" :key="i" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name" rows="5" readonly>
-            <br>
-            <label>Add instructors by email</label>
-            <input type="text" v-model="instructors_to_add"/>
-            <button type="button" @click="addInstructorsToCourse()">Update</button>
-            <br>
+            <label>Snooze</label>
           </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input class="form-control" v-model="edited_snooze" :placeholder="course.snooze" rows="5">
+          </div>
+          <br>
         </div>
       </div>
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <router-link v-for="section in sections" :key="section._id" :to="{name: 'edit_section', params: { id: section._id }}">
-                <button class="btn btn-secondary">Edit Section {{section.name}}</button>
+            <label>Number</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input class="form-control" v-model="edited_course_suffix" :placeholder="course.suffix" rows="5">
+          </div>
+        </div>
+      </div><br />
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Lecture Times</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input v-for="time in course.course_times" :key="time.day" class="form-control" :value="time.day + ': ' + time.start_time + ' - ' +  time.end_time" rows="5" readonly>
+            <br>
+            <router-link :to="{name: 'new_lecture_time', params: { id:course._id}}">
+            <button class="btn btn-primary">Add Time</button>
             </router-link>
-            <router-link :to="{name: 'new_section', params: { id: course._id }}">
-                <button class="btn btn-primary">New Section</button>
-            </router-link>
+          </div>
+        </div>
+      </div><br />
+    
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Instructors</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input v-for="(instructor,i) in instructors" :key="i" class="form-control" :value="instructor.first_name + ' ' + instructor.last_name" rows="5" readonly>
           </div>
         </div>
       </div>
@@ -76,6 +100,31 @@
         <button class="btn btn-primary" id="update-course-btn" @click="updateCourse()">Update</button>
       </div>
     </form>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Add instructors by email</label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input type="text" v-model="instructors_to_add"/>
+          <button type="button" @click="addInstructorsToCourse()">Update</button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <router-link v-for="section in sections" :key="section._id" :to="{name: 'edit_section', params: { id: section._id }}">
+              <button class="btn btn-secondary">Edit Section {{section.name}}</button>
+          </router-link>
+          <router-link :to="{name: 'new_section', params: { id: course._id }}">
+              <button class="btn btn-primary">New Section</button>
+          </router-link>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -121,12 +170,12 @@
         if(response.data)
           this.sections = response.data
       },
-      async updateCourse() {
-        let course_id = this.$route.params.id
-        this.course.instructors = this.instructors.map(a=>a._id)
-        const response = await CourseAPI.updateCourse(course_id, this.course)
-        location.reload()
-      },
+      // async updateCourse() {
+      //   let course_id = this.$route.params.id
+      //   this.course.instructors = this.instructors.map(a=>a.email)
+      //   const response = await CourseAPI.updateCourse(course_id, this.course)
+      //   location.reload()
+      // },
       addInstructorsToCourse() {
         let insts = this.instructors_to_add.split(',')
         if(insts.length) {
@@ -135,24 +184,37 @@
           })
         }
       },
-      // async updateCourse() {
-      //   this.waiting= true
-      //   if (this.edited_course_name != '')
-      //     this.course.name = this.edited_course_name
-      //   else 
-      //     this.course.name = this.course.name
-      //   if (this.edited_dept_name != '')
-      //     this.course.prefix = this.edited_dept_name
-      //   else 
-      //     this.course.prefix = this.course.prefix
+      async updateCourse() {
+        this.waiting= true
+        if (this.edited_course_name != ''){ 
+          this.course.name = this.edited_course_name
+        }
+        else {
+          this.course.name = this.course.name
+        }
+        if (this.edited_dept_name != '') {
+          this.course.prefix = this.edited_dept_name
+        }
+        else {
+          this.course.prefix = this.course.prefix
+        }
+        if (this.edited_course_suffix != '') {
+          this.course.suffix = this.edited_course_suffix
+        }
+        else {
+          this.course.suffix = this.course.suffix
+        }
 
-      //   CourseAPI.updateCourse(this.course._id, this.course).then(res => {
-      //     this.$store.dispatch('updateCurrentCourse', {token: this.$store.state.course.token, course: this.course})
-      //     this.edited_course_name = ''
-      //     this.edited_dept_name = ''
-      //     this.waiting = false
-      //   })
-      // }
+        await CourseAPI.updateCourse(this.course._id, this.course).then(res => {
+          this.edited_course_name = ''
+          this.edited_dept_name = ''
+          this.waiting = false
+          let course_id = this.$route.params.id
+          this.course.instructors = this.instructors.map(a=>a.email)
+          // const response = await CourseAPI.updateCourse(course_id, this.course) 
+        })
+        location.reload()
+      }
     }
   }
 </script>
@@ -160,6 +222,11 @@
 <style scoped>
 #edit-course {
   padding: 2rem;
+  max-width: 80rem;
+  margin: auto;
+}
+.btn {
+  margin: 0.5rem 0.25rem 0rem 0rem;
 }
 #update-course-btn {
   margin: 2rem;

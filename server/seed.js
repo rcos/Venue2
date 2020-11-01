@@ -397,6 +397,7 @@ c1 = {
 	name: "Data Structures",
 	prefix: "CSCI",
 	suffix: 1200,
+	meetingURL: "default_link",
 	course_times:[{
 		day: "Monday",
 		start_time: "12:00pm",
@@ -694,7 +695,7 @@ p4 = {
 	timestamp: 5
 }
 
-seeder.connect(process.env.MONGODB_URI || db, function () {
+seeder.connect(process.env.DB_URI || db, function () {
 	seeder.loadModels([
 		"./Course/Course.model",
 		"./User/User.model",

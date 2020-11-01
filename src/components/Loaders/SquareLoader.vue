@@ -51,17 +51,17 @@
       position:relative;
       opacity: 0;
       border-radius: 0.15rem;
-      box-shadow: 0px 1px 2px 0px rgba(128, 128, 128, 0.5);
+      box-shadow: 0px 1px 2px 0px var(--loader-square-shadow);
       animation: square-loader 2s infinite;
     }
 
     .square-loader .square.even {
-      background: #4CC9FF;
+      background: var(--loader-square-even);
       transition: background 250ms cubic-bezier(0.19, 1, 0.22, 1);
     }
 
     .square-loader .square.odd {
-      background: #FC6E71;
+      background: var(--loader-square-odd);
       transition: background 250ms cubic-bezier(0.19, 1, 0.22, 1);
     }
 

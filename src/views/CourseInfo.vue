@@ -63,9 +63,9 @@
           <div class="courseinfo-legend live-border">Synchronous</div>
           <div class="courseinfo-legend playback-border">Asynchronous</div>
           <InstructorAttendanceHistory :style='{textAlign: "center"}'
-            v-if="(is_instructor || is_ta) && lectures_loaded && sorted_lectures[selected_section] && scores_loaded"
+            v-if="(is_instructor || is_ta) && lectures_loaded && sorted_lectures[selected_section]"
             :lectures="sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded" mobileMode/>
-          <StudentAttendanceHistory :style='{textAlign: "center"}' v-else-if="is_student && lectures_loaded && sorted_lectures[section_id] && scores_loaded" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
+          <StudentAttendanceHistory :style='{textAlign: "center"}' v-else-if="is_student && lectures_loaded && sorted_lectures[section_id]" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
           <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
             <SquareLoader />
           </div>
@@ -150,14 +150,15 @@ export default {
       this.getAllSections()
       this.getStudentsForCourse()
       this.getCourse()
-    } else {
+    }
+    else {
       this.section_id = this.$route.params.id
       this.getSectionWithCourse()
     }
   },
   methods: {
     copyURL() {
-      navigator.clipboard.writeText((process.env.NODE_ENV === 'production'?'https://venue-meetings.com':'http://localhost:8080')+"/#/join_course/"+this.$route.params.id)
+      navigator.clipboard.writeText((process.env.NODE_ENV === 'production'?'https://www.venue-meetings.com':'http://localhost:8080')+"/#/join_course/"+this.course._id)
     },
     async getAllSections () {
       SectionAPI.getSectionsForCourse(this.course_id)
@@ -293,17 +294,41 @@ export default {
       }
     },
     perc2color(pct) {
+      let root = document.documentElement;
+      //const style = getComputedStyle(root);
+      var bad_attendance = new Color();
+      var medium_attendance = new Color();
+      var good_attendance = new Color();
+
+      var rainbow_blue = new Color();
+      var rainbow_purple = new Color();
+      var rainbow_red = new Color();
+      var rainbow_yellow = new Color();
+      var rainbow_green = new Color(); 
+
+      bad_attendance = getComputedStyle(root).getPropertyValue('--red-pill');
+      medium_attendance = getComputedStyle(root).getPropertyValue('--yellow-pill');
+      good_attendance = getComputedStyle(root).getPropertyValue('--green-pill');
+
+      // The rainbow is made up of these 5 pieces
+      rainbow_blue = getComputedStyle(root).getPropertyValue('--course-attendance-rainbow-blue');
+      rainbow_purple = getComputedStyle(root).getPropertyValue('--course-attendance-rainbow-purple');
+      rainbow_red = getComputedStyle(root).getPropertyValue('--course-attendance-rainbow-red');
+      rainbow_yellow = getComputedStyle(root).getPropertyValue('--course-attendance-rainbow-yellow');
+      rainbow_green = getComputedStyle(root).getPropertyValue('--course-attendance-rainbow-green');
+
       var percentColors = [
-        { pct: 0.0, color: { r: 0xd1, g: 0x3e, b: 0x34 } },
-        { pct: 0.6, color: { r: 0xd1, g: 0x3e, b: 0x34 } },
-        { pct: 0.8, color: { r: 0xb9, g: 0x57, b: 0x26 } },
+        //{ pct: 0.0, color: { r: 0xd1, g: 0x3e, b: 0x34 } },
+        { pct: 0.0, color: { r: "0x" + bad_attendance[1] + bad_attendance[2], g: "0x" + bad_attendance[3] + bad_attendance[4], b: "0x" + bad_attendance[5] + bad_attendance[6] } },
+        { pct: 0.6, color: { r: "0x" + bad_attendance[1] + bad_attendance[2], g: "0x" + bad_attendance[3] + bad_attendance[4], b: "0x" + bad_attendance[5] + bad_attendance[6] } },
+        { pct: 0.8, color: { r: "0x" + medium_attendance[1] + medium_attendance[2], g: "0x" + medium_attendance[3] + medium_attendance[4], b: "0x" + medium_attendance[5] + medium_attendance[6] } },
         // { pct: 0.85, color: { r: 0x82, g: 0x90, b: 0x25 } },
-        { pct: 1.0, color: { r: 0x04, g: 0x85, b: 0x2f } }
+        { pct: 1.0, color: { r: "0x" + good_attendance[1] + good_attendance[2], g: "0x" + good_attendance[3] + good_attendance[4], b: "0x" + good_attendance[5] + good_attendance[6] } } 
       ];
       for (var i = 1; i < percentColors.length - 1; i++) {
-          if (pct < percentColors[i].pct) {
-              break;
-          }
+        if (pct < percentColors[i].pct) {
+          break;
+        }
       }
       var lower = percentColors[i - 1];
       var upper = percentColors[i];
@@ -312,28 +337,28 @@ export default {
       var pctLower = 1 - rangePct;
       var pctUpper = rangePct;
       var color = {
-          r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
-          g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
-          b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
+        r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
+        g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
+        b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper) 
       };
-      if(pct == 1.0) {
-        return 'linear-gradient(90deg, rgba(62,73,202,1) 0%, rgba(143,62,202,1) 20%, rgba(209,62,52,1) 40%, rgba(176,95,22,1) 70%, rgba(4,133,47,1) 100%)'
+      if (pct == 1.0) {
+          return "linear-gradient(90deg, " + rainbow_blue + " 0%, " + rainbow_purple + " 20%, " + rainbow_red + " 40%, " + rainbow_yellow + " 70%, " + rainbow_green + " 100%)";
       }
-      return 'rgb(' + [color.r, color.g, color.b].join(',') + ')';
+        return "rgb(" + [color.r, color.g, color.b].join(",") + ")";
     },
     calculateInstructorAttendances() {
-      let promise_tracker = []
-      this.all_lectures.forEach(lecture_ => {
-        promise_tracker.push(
-          LectureSubmissionAPI.getLectureSubmissionsForLecture(lecture_._id)
-          .catch(err => { console.log('error retrieving lecture submissions for lecture ' + lecture_._id); console.log(err); })
-          .then(response => {
-            let submissions = response.data == undefined ? [] : response.data
+      LectureSubmissionAPI.getLectureSubmissionsForLectures(this.all_lectures.map(a=>a._id))
+      .catch(err => { console.log('error retrieving lecture submissions for lecture ' + lecture_._id); console.log(err); })
+      .then(response => {
+        let promise_tracker = []
+        this.all_lectures.forEach(lecture_ => {
+          promise_tracker.push( new Promise((resolve,reject) => {
+            let submissions = response.data == undefined ? [] : response.data.filter(a=>a.lecture == lecture_._id)
             let students = lecture_.students
             let running_total = 0
             students.forEach(stud => {
               submissions.forEach(submission => {
-                if(submission.submitter._id == stud) {
+                if(submission.submitter.email == stud) {
                   if(submission.live_percent) {
                     if(submission.video_percent) {
                       running_total += Math.max(
@@ -352,12 +377,13 @@ export default {
             lecture_.percentage = running_total / students.length
             // lecture_.color = this.getHTMLClassByAttendance(lecture_.percentage)
             lecture_.color = this.perc2color(lecture_.percentage / 100)
-          })
-        )
-      })
-      Promise.all(promise_tracker)
-      .then(res => {
-        this.scores_loaded = true
+            resolve(true)
+          }))
+        })
+        Promise.all(promise_tracker)
+        .then(res => {
+          this.scores_loaded = true
+        })
       })
     },
     calculateStudentAttendances() {
