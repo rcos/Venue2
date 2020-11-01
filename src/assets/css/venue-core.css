@@ -29,11 +29,14 @@
   --big-button-shadow: rgba(44, 62, 80, 0.2);
   --button-blue-shadow: rgba(67, 65, 120, 0.844);
   --button-grey-shadow: rgba(109, 109, 109, 0.644);
+  --button-tab: #0078c2;
+  --button-tab-text: grey;
   --button-text-color: white;
   --button-text-hover: white;
 
   --sync-border: #04852f;
   --async-border: #683eca;
+  --recording-namecard: #8f3eca;
 
   --red-pill: #d13e34;
   --red-pill-shadow: rgba(249, 82, 71, 0.3);
@@ -63,6 +66,7 @@
   --modal-border: grey;
   --modal-container-background: rgba(255, 255, 255, 0.65);
   --modal-lecture-border: rgba(120,120,120,1);
+  --poll-background: lightskyblue;
 }
 
 body {
@@ -906,17 +910,6 @@ a:hover {
   color: var(--button-text-hover);
 }
 
-<<<<<<< HEAD
-=======
-/* This is because white is not 508 with halloween *
- * Take this block out when halloween is over 
- * Also change invert(0) back to (1) */
-.btn.btn-primary img,
-.btn.btn-secondary img {
-  filter: brightness(0) !important;
-}
-
->>>>>>> master
 .btn.btn-primary:active:focus,
 .btn.btn-secondary:active:focus {
   outline: none !important;
@@ -927,7 +920,7 @@ a:hover {
 .btn.btn-primary:focus img,
 .btn.btn-primary:active img,
 .btn.btn-primary:target img {
-  filter: var(--widgets-color) invert(0);
+  filter: var(--widgets-color) invert(1);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
@@ -948,7 +941,7 @@ a:hover {
 .btn.btn-secondary:focus img,
 .btn.btn-secondary:active img,
 .btn.btn-secondary:target img {
-  filter: var(--widgets-color) invert(0);
+  filter: var(--widgets-color) invert(1);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
@@ -971,11 +964,7 @@ input,select {
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-<<<<<<< HEAD
 /* Auto fill styling */
-=======
-/* take out after halloween? */
->>>>>>> master
 input:-webkit-autofill {
   -webkit-text-fill-color: var(--input-text) !important;
   -webkit-box-shadow: 0 0 0px 1000px var(--input-background) inset;
