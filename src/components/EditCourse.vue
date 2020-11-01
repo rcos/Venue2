@@ -24,8 +24,9 @@
           </div>
         </div>
         <div class="col-md-6">
-          <label>Snooze</label>
-          <input class="form-control" v-model="edited_snooze" :placeholder="course.snooze" rows="5">
+          <label>Snooze (Minutes)</label>
+          <br>
+          <MultiSelectDropdown :options="['None','15','30','45','60']" @update="handleCourseChange" :max="1" :n="0"/>
           <br>
         </div>
       </div><br />
@@ -83,11 +84,13 @@
   import SectionAPI from '@/services/SectionAPI.js';
   import UserAPI from '@/services/UserAPI.js';
   import Instructors from '@/components/admin/User/Instructors'
+  import MultiSelectDropdown from "@/components/MultiSelectDropdown.vue";
 
   export default {
     name: 'EditCourse',
     components: {
-      Instructors
+      Instructors,
+      MultiSelectDropdown
     },
     data() {
       return {
