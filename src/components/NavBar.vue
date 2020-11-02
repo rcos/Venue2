@@ -17,14 +17,14 @@
         </div>
         <!-- Courses Link -->
         <div class="venue-nav-link-container" id="instructor-course-dropdown" v-if="instructor_courses.length">
-          <DropDown :is_active="is_instructor_course_info()" :whose_label="'Instructor Courses'" :whose_courses_sections="instructor_courses" :id="'course'"></DropDown>
+          <DropDown :is_active="is_instructor_course_info()" :navbar_label="'Instructor Courses'" :dd_content="instructor_courses" :id="'course'"></DropDown>
         </div>
         <div class="venue-nav-link-container" id="ta-section-dropdown" v-if="ta_sections.length">
-          <DropDown :is_active="is_ta_section_info()" :whose_label="'TA Sections'" :whose_courses_sections="ta_sections" :id="'section'"></DropDown>
+          <DropDown :is_active="is_ta_section_info()" :navbar_label="'TA Sections'" :dd_content="ta_sections" :id="'section'"></DropDown>
         </div>
 
         <div class="venue-nav-link-container" id="student-section-dropdown" v-if="student_sections.length">
-          <DropDown :is_active="is_student_section_info()" :whose_label="'Student Sections'" :whose_courses_sections="student_sections" :id="'section'"></DropDown>
+          <DropDown :is_active="is_student_section_info()" :navbar_label="'Student Sections'" :dd_content="student_sections" :id="'section'"></DropDown>
         </div>
 
         <!-- Statistics Link -->

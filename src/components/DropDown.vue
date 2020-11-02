@@ -4,20 +4,20 @@
     <!-- Courses Link -->
     <div id="course-link">
       <a data-toggle="collapse" href="#collapse-me" class="venue-nav-link" :class="{'active-link':this.is_active }" style="cursor:pointer;">
-        {{whose_label}} <img src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+        {{navbar_label}} <img src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
       </a>
 
     <hide-at breakpoint="mediumAndBelow">
       <div class="dropdown-content">
 
         <div v-if= "this.id === 'section'">
-          <router-link v-for="section in this.whose_courses_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
+          <router-link v-for="section in this.dd_content" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
             <p>{{ section.course.name }}  {{ section.name }}</p>
           </router-link>
         </div>
 
         <div v-else-if="this.id === 'course'">
-          <router-link v-for="course in this.whose_courses_sections" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
+          <router-link v-for="course in this.dd_content" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
             <p>{{ course.name }}</p>
           </router-link>
         </div>
@@ -36,7 +36,7 @@
 
           <div v-if= "this.id === 'section'">
             <ul class="mobile-course-list">
-              <li class="mobile-course-link" href="#collapse-me" data-toggle="collapse" v-for="section in this.whose_courses_sections" :key="section._id">
+              <li class="mobile-course-link" href="#collapse-me" data-toggle="collapse" v-for="section in this.dd_content" :key="section._id">
                 <router-link :to="{name: 'course_info', params: { id: section._id }}">
                   <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
                 </router-link>
@@ -46,7 +46,7 @@
 
           <div v-if= "this.id === 'course'">
             <ul class="mobile-course-list">
-              <li class="mobile-course-link" href="#collapse-me" data-toggle="collapse" v-for="course in this.whose_courses_sections" :key="course._id">
+              <li class="mobile-course-link" href="#collapse-me" data-toggle="collapse" v-for="course in this.dd_content" :key="course._id">
                 <router-link :to="{name: 'course_info', params: { id: course._id }}">
                   <p class="mobile-course-link-name">{{ course.name }}</p>
                 </router-link>
@@ -77,10 +77,10 @@
       is_active: {
         type: Boolean,
       },
-      whose_label: {
+      navbar_label: {
         type: String,
       },
-      whose_courses_sections: {
+      dd_content: {
         type:  Array,
       },
       id:{
