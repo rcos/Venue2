@@ -14,7 +14,11 @@
 
         <CourseInfoTitle v-if="is_instructor" :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta"/>
         <CourseInfoTitle v-else-if="sections[$route.params.id]" :course="sections[$route.params.id].course" :section_name="sections[$route.params.id].name" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta"/>
-
+        
+        <div class="title" :style="{height: '50px', width: '1000px'}">
+          <button v-if="is_instructor" class="btn btn-secondary" :style="{float: 'left', margin: '5px'}" @click="closeSections">Close Sections</button>
+          <button v-if="is_instructor" class="btn btn-secondary" :style="{float: 'left', margin: '5px'}" @click="openSections" >Open Sections</button>
+        </div>
         <!-- Attendance History -->
         <div>
           <div v-if="is_instructor" class="section-select-container float-right">
@@ -38,7 +42,6 @@
         <div v-else>
           None
         </div>
-
       </div>
     </show-at>
     <hide-at breakpoint="large">
@@ -46,11 +49,14 @@
         <!-- Mobile View -->
         <CourseInfoTitle v-if="is_instructor" :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta" mobileMode/>
         <CourseInfoTitle v-else-if="sections[$route.params.id]" :course="sections[$route.params.id].course" :section_name="sections[$route.params.id].name" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta" mobileMode/>
+        
 
         <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: $route.params.id }}" tabindex="-1">
           <div class="inline-block big-button mobile" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
         </router-link>
         <button v-if="is_instructor || is_ta" class="inline-block big-button mobile" :style="{float: 'right'}" tabindex="0" @click="copyURL">Copy Link to Join {{ course.prefix }} {{ course.suffix }}</button>
+        <button v-if="is_instructor" class="btn btn-secondary" :style="{float: 'left', margin: '5px'}" @click="closeSections">Close Sections</button>
+        <button v-if="is_instructor" class="btn btn-secondary" :style="{float: 'left', margin: '5px'}" @click="openSections" >Open Sections</button>
         <div class="courseinfo-attendance-listing">
           <div v-if="is_instructor" class="section-select-container mobile float-right">
             <label id="section_select_label">Section(s):</label>
@@ -69,6 +75,7 @@
           <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
             <SquareLoader />
           </div>
+  
           <div v-else>
             None
           </div>
@@ -159,6 +166,22 @@ export default {
   methods: {
     copyURL() {
       navigator.clipboard.writeText((process.env.NODE_ENV === 'production'?'https://www.venue-meetings.com':'http://localhost:8080')+"/#/join_course/"+this.course._id)
+    },
+    closeSections() {
+      let close = this.sorted_sections.filter(a=>a.is_public)
+      if (window.confirm("Are you sure you want to turn all sections to private?")) {
+        CourseAPI.turnSectionsOff(close, this.course_id).then(res=> {
+          location.reload()
+        })
+      }
+    },
+    openSections() {
+      let open = this.sorted_sections.filter(a=>!(a.is_public))
+      if (window.confirm("Are you sure you want to turn all sections to public?")) {
+        CourseAPI.turnSectionsOn(open, this.course_id).then(res=> {
+          location.reload()
+        })
+      }
     },
     async getAllSections () {
       SectionAPI.getSectionsForCourse(this.course_id)
