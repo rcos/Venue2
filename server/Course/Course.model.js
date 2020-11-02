@@ -13,10 +13,6 @@ let Course = new Schema({
 		type: String,
 		ref: 'User'
 	}],
-	is_public: {
-		type: Boolean,
-		default: false
-	},
 	sections: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Section'
