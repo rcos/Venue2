@@ -21,6 +21,11 @@
 </script>
 
 <style>
+  :root {
+    --loader-square-even: #4CC9FF; 
+    --loader-square-odd: #FC6E71;
+    --loader-square-shadow: rgba(128, 128, 128, 0.5);
+  }
 
     .square-loader {
       vertical-align: middle;

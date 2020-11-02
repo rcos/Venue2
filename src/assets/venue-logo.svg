@@ -64,7 +64,7 @@
        id="filter964">
       <feFlood
          flood-opacity="0.690196"
-         flood-color="rgb(0,0,0)"
+         flood-color="rgb(6,54,149)"
          result="flood"
          id="feFlood954" />
       <feComposite
@@ -96,7 +96,7 @@
        id="filter964-3">
       <feFlood
          flood-opacity="0.690196"
-         flood-color="rgb(0,0,0)"
+         flood-color="rgb(6,54,149)"
          result="flood"
          id="feFlood954-6" />
       <feComposite
@@ -128,7 +128,7 @@
        id="filter1012">
       <feFlood
          flood-opacity="0.690196"
-         flood-color="rgb(0,0,0)"
+         flood-color="rgb(138, 0, 15)"
          result="flood"
          id="feFlood1002" />
       <feComposite
@@ -160,7 +160,7 @@
        id="filter1012-9">
       <feFlood
          flood-opacity="0.690196"
-         flood-color="rgb(0,0,0)"
+         flood-color="rgb(138, 0, 15)"
          result="flood"
          id="feFlood1002-1" />
       <feComposite
@@ -228,7 +228,7 @@
       <use
          xlink:href="#bNmUTvdyB"
          opacity="0.89"
-         fill="#fc5d60"
+         fill="#d14454"
          fill-opacity="1"
          id="use919"
          x="0"
@@ -242,7 +242,7 @@
       <use
          xlink:href="#bNmUTvdyB"
          opacity="0.89"
-         fill="#fc5d60"
+         fill="#d14454"
          fill-opacity="1"
          id="use919-6"
          x="0"
@@ -257,7 +257,7 @@
       <use
          xlink:href="#b3eLhFgD6R"
          opacity="0.7"
-         fill="#00b3ff"
+         fill="#2189cf"
          fill-opacity="1"
          id="use915"
          x="0"
@@ -275,7 +275,7 @@
       <use
          xlink:href="#b3eLhFgD6R"
          opacity="0.7"
-         fill="#00b3ff"
+         fill="#2189cf"
          fill-opacity="1"
          id="use915-2"
          x="0"
