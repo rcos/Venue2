@@ -463,7 +463,13 @@ export default {
 </script>
 
 <style scoped>
-
+:root {
+  --course-attendance-rainbow-blue: rgba(62,73,202,1);
+  --course-attendance-rainbow-purple: rgba(143,62,202,1);
+  --course-attendance-rainbow-red: rgba(209,62,52,1);
+  --course-attendance-rainbow-yellow: rgba(176,95,22,1);
+  --course-attendance-rainbow-green: rgba(4,133,47,1);
+}
   .course-info-container {
     /*border: blue solid;*/
   }
