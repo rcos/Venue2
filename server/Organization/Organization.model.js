@@ -19,8 +19,8 @@ let Organization = new Schema({
         type: String,//by email?
 		ref: 'User'
     }],
-    max_courses: {type: int},
-    max_users: {type: int}
+    max_courses: {type: Number},
+    max_users: {type: Number}
 });
 
 module.exports = mongoose.model('Organization', Organization);
