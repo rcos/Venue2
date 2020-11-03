@@ -13,10 +13,10 @@
         🛑
       </button>
       <button v-else-if="lectureIsOngoing()" @click="handleStartScreenScan()" class="header-btn btn btn-primary" title="Scan QR">
-        <img src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
+        <img class="svg-color" src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
       </button>
       <router-link class="header-btn btn btn-secondary" v-else-if="canWatchRecording()" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
-        <img src="@/assets/icons8-video-64.png" width="60" alt="Video" aria-label="Video" title="Watch Recording">
+        <img class="svg-color" src="@/assets/icons8-video-64.png" width="60" alt="Video" aria-label="Video" title="Watch Recording">
       </router-link>
     </div>
     <LectureAttendanceTable :is_instructor="false" :lecture="lecture" :submissions="[submission]" />
@@ -224,16 +224,16 @@
   }
 
   .tab_btn h5 {
-    color: gray;
+    color: var(--button-tab-text);
   }
 
   .tab_btn.selected_tab {
-    color: #0078c2;
-    border-bottom: .2rem solid #0078c2;
+    color: var(--button-tab);
+    border-bottom: .2rem solid var(--button-tab);
   }
 
   .tab_btn.selected_tab h5 {
-    color: #0078c2;
+    color: var(--button-tab);
   }
 
   .tab_section {
@@ -253,27 +253,27 @@
   }
 
   .namecard-edging.live-color {
-    background: #04852f;
+    background: var(--green-pill);
   }
 
   .namecard-edging.playback-color {
-    background: #8f3eca;
+    background: var(--recording-namecard);
   }
 
   .namecard-edging.absent-color {
-    background: #d13e34;
+    background: var(--red-pill);
   }
 
   .namecard {
     position: relative;
-    background: white;
+    background: var(--course-card-background);
     text-align: center;
     border-radius: .25rem;
     top: 0.5rem;
     margin-left: 0.5rem;
     width: 11rem;
     height: 4rem;
-    box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+    box-shadow: 0px 3px 3px 0px var(--course-card-shadow);
     padding-top: 0.5rem;
     z-index: 100;
   }

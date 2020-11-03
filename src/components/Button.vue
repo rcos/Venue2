@@ -43,7 +43,7 @@
 
 <style scoped>
   .button {
-    background-color: white;
+    background-color: white; 
     font-size: 1.5rem;
     width: 12rem;
     /*margin-top: 1rem;*/
@@ -54,8 +54,8 @@
 
   .venue-btn:hover,
   .venue-btn:focus {
-    background-color: #0078c2;
-    color: white;
+    background-color: #0078c2; 
+    color: white; 
   }
 
   .hidden {

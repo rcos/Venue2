@@ -58,7 +58,7 @@
                 <div class="checkin-poll col col-4 my-auto">
                   <div v-if="null != polls[i]">
                     <button type="button" class="btn btn-secondary" @click="add_poll_index = i" :title="'Edit '+polls[i].question">
-                      <img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
+                      <img class="svg-color" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
                     </button>
                     <button type="button" class="btn btn-danger" @click="polls[i] = null" :title="'Remove ' +polls[i].question">X</button>
                   </div>
@@ -517,6 +517,7 @@ h1 {
   display: inline-block;
   margin-left: 1rem;
   margin-right: 1rem;
+
 }
 
 .create-lecture-btn {
@@ -528,11 +529,11 @@ h1 {
 }
 
 .error_msg {
-  color: red;
+  color: var(--error-brighter);
 }
 
 .checkin-container {
-  border: 1px solid gray;
+  border: 1px solid var(--checkins-border);
   margin: 0.25rem 0rem;
   border-radius: 0.5rem;
   padding-top: 1rem;
@@ -559,7 +560,7 @@ h1 {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.60);
+  background: var(--modal-container-background);
 }
 
 .modal-contents {
@@ -568,8 +569,8 @@ h1 {
   left: 25%;
   right: 25%;
   bottom: 25%;
-  background: white;
-  border: 1px solid gray;
+  background: var(--modal-background);
+  border: 1px solid var(--modal-border);
   border-radius: 0.5rem;
   padding: 1rem;
   text-align: left;
@@ -587,27 +588,29 @@ h1 {
   width: 100%;
   padding: 0.5rem;
   background: none;
-  color: rgba(100,100,100,1);
 }
 
 .picker-dialog {
   width: 100%;
   border-radius: 0.5rem;
-  border: 1px solid rgba(100,100,100,1);
+  background: var(--calendar-background); 
+  border: 1px solid var(--calendar-border);
 }
 
 .picker-item {
-  color: rgba(100,100,100,1);
+  color: var(--calendar-border);
+  background: var(--calendar-background);
 }
 .picker-cell__control,
 .picker-cell__control::before,
 .picker-cell__header {
-  color: rgba(100,100,100,1);
+  /* background-color: var(--calendar-background); */
+  color: var(--calendar-border);
   text-align: center;
 }
 
 .picker-picked {
-  color: rgba(20,75,250,1);
+  color: var(--calendar-selected);
   font-weight: 900;
 }
 
@@ -620,6 +623,6 @@ h1 {
 }
 
 .picker-cell__header {
-  border-bottom: 1px solid rgba(100,100,100,1);
+  border-bottom: 1px solid;
 }
 </style>
