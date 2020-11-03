@@ -7,6 +7,7 @@
         {{navbar_label}} <img src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
       </a>
 
+
     <hide-at breakpoint="mediumAndBelow">
       <div class="dropdown-content">
 
@@ -22,7 +23,19 @@
           </router-link>
         </div>
 
-        <div v-else></div>
+        <div v-else>
+          <div v-for="item in this.dd_content">
+            <p>{{item.name}}</p>
+
+            <div class="inner-content">
+            <div v-if="item.children">
+            <div v-for="child in item.children">
+              <p>{{child.name}}</p>
+            </div>
+            </div>
+            </div>
+          </div>
+        </div>
 
       </div>
     </hide-at>
@@ -44,7 +57,7 @@
             </ul>
           </div>
 
-          <div v-if= "this.id === 'course'">
+          <div v-else-if= "this.id === 'course'">
             <ul class="mobile-course-list">
               <li class="mobile-course-link" href="#collapse-me" data-toggle="collapse" v-for="course in this.dd_content" :key="course._id">
                 <router-link :to="{name: 'course_info', params: { id: course._id }}">
@@ -54,6 +67,13 @@
             </ul>
           </div>
 
+          <div v-else>
+            <ul class="mobile-course-list">
+              <li class="mobile-course-link" href="#collapse-me" data-toggle="collapse" v-for="item in this.dd_content">
+                <p class="mobile-course-link-name">{{ item.name }}</p>
+              </li>
+            </ul>
+          </div>
 
         </div>
       </div>
@@ -92,7 +112,8 @@
 
 <style scoped>
 
-.dropdown-content {
+.dropdown-content,
+.inner-content{
   margin-left: -1rem;
   margin-top: 0.2rem;
   position: absolute;
@@ -103,7 +124,8 @@
   border-radius: 0.5rem;
   /* transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1); */
 }
-.dropdown-content a {
+.dropdown-content a,
+.inner-content a {
   visibility: hidden;
   color: #2C3E50;
   background-color: #f7f7f7;
@@ -121,13 +143,13 @@
 .dropdown-content a:first-of-type {
   border-radius: 0.5rem 0.5rem 0rem 0rem;
 }
-.dropdown-content a:last-of-type {
+.dropdown-content a:last-of-type{
   border-radius: 0rem 0rem 0.5rem 0.5rem;
 }
 .dropdown-content a:not(:first-of-type) {
   border-top: 0.1rem solid rgba(0, 0, 0, 0.15);
 }
-.dropdown-content a:last-of-type {
+.dropdown-content a:last-of-type{
   border-radius: 0rem 0rem 0.5rem 0.5rem;
 }
 .dropdown-content a:only-of-type {
@@ -142,6 +164,11 @@
   /* -webkit-transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   -ms-transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1); */
+}
+
+.dropdown-content a:hover> .inner-content,
+.dropdown-content a:focus-within > .inner-content{
+  visibility: visible;
 }
 
 

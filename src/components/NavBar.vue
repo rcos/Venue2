@@ -17,7 +17,7 @@
         </div>
         <!-- Courses Link -->
         <div class="venue-nav-link-container" id="instructor-course-dropdown" v-if="instructor_courses.length">
-          <DropDown :is_active="is_instructor_course_info()" :navbar_label="'Instructor Courses'" :dd_content="instructor_courses" :id="'course'"></DropDown>
+          <DropDown :is_active="is_instructor_course_info()" :navbar_label="'Instructor Courses'" :dd_content="instructor_courses :id="'course'"></DropDown>
         </div>
         <div class="venue-nav-link-container" id="ta-section-dropdown" v-if="ta_sections.length">
           <DropDown :is_active="is_ta_section_info()" :navbar_label="'TA Sections'" :dd_content="ta_sections" :id="'section'"></DropDown>
@@ -26,6 +26,12 @@
         <div class="venue-nav-link-container" id="student-section-dropdown" v-if="student_sections.length">
           <DropDown :is_active="is_student_section_info()" :navbar_label="'Student Sections'" :dd_content="student_sections" :id="'section'"></DropDown>
         </div>
+
+
+        <div class="venue-nav-link-container" id="test-dropdown" v-if="testdat.length">
+          <DropDown :is_active="is_student_section_info()" :navbar_label="'TESTING'" :dd_content="testdat" :id="'test'"></DropDown>
+        </div>
+
 
         <!-- Statistics Link -->
         <!-- <show-at breakpoint="large">
@@ -107,7 +113,19 @@
       'DropDown': DropDown,
     },
     data(){
+
       return {
+
+      testdat: [
+        	{
+          	name: 'Item 1',
+            children: [{name: 'Subitem 1'},{name: 'Subitem 2'},{name: 'Subitem 3'}]
+          },
+          {
+          	name: 'Item 2'
+          }
+        ],
+
         current_user: {},
         instructor_courses: [],
         ta_sections: [],
