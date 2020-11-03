@@ -124,9 +124,6 @@ export default {
 </script>
 
 <style scoped>
-.svg-color {
-	filter: var(--widgets-color);
-}
 
 .multiselect {
 	text-align: left;

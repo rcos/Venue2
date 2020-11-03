@@ -142,17 +142,26 @@ courseRoutes.post('/add_instructors/:id', (req, res) => {
   });
 });
 
-courseRoutes.route('/toggleOpenEnrollment/:id').post(function (req, res) {
-  let id = req.params.id
-  let sections = req.body.sections
-  let section_ids = sections.map(a => a._id)
-  Promise.all([Course.findByIdAndUpdate(id,
-    {is_public: true}, {$set: {is_public: false}}, Section.updateMany( {_id: {$in: section_ids}}, {$set: {is_public: false}})), Course.findByIdAndUpdate(id,
-      {is_public: false}, {$set: {is_public: true}}, Section.updateMany( {_id: {$in: section_ids}}, {$set: {is_public: true}}))
-    ]).then(resolved => {
-      res.json(course)
-    });
+courseRoutes.post('/toggleAllSectionsPublic/:id', (req, res) => {
+  let id = req.params.id;
+  let ids = req.body.sections.map(a=>a._id);
+  Promise.all([
+    Section.updateMany({_id: {$in: ids}},{$set: {is_public: true}})
+  ]).then(resolved=> {
+    console.log("<SUCCESS> Turned all sections public in course with ID:", id);
+    res.json(true);
+  })
 });
 
+courseRoutes.post('/toggleAllSectionsPrivate/:id', (req, res) => {
+  let id = req.params.id;
+  let ids = req.body.sections.map(a=>a._id);
+  Promise.all([
+    Section.updateMany({_id: {$in: ids}},{$set: {is_public: false}})
+  ]).then(resolved=> {
+    console.log("<SUCCESS> Turned all sections private in course with ID:", id);
+    res.json(true);
+  })
+});
 
 module.exports = courseRoutes;

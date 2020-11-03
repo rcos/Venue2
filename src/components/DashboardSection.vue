@@ -39,7 +39,6 @@
 :root {
   --dashboard-background-color: #f5f5f5;
   --dashboard-text-color: #2c3e50;
-  --background-color: white;
 }
 .dashboard-section {
   width: 50%;
