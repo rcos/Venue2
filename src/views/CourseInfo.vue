@@ -14,7 +14,7 @@
 
         <CourseInfoTitle v-if="is_instructor" :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta"/>
         <CourseInfoTitle v-else-if="sections[$route.params.id]" :course="sections[$route.params.id].course" :section_name="sections[$route.params.id].name" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta"/>
-
+        
         <!-- Attendance History -->
         <div>
           <div v-if="is_instructor" class="section-select-container float-right">
@@ -38,7 +38,6 @@
         <div v-else>
           None
         </div>
-
       </div>
     </show-at>
     <hide-at breakpoint="large">
@@ -46,6 +45,7 @@
         <!-- Mobile View -->
         <CourseInfoTitle v-if="is_instructor" :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta" mobileMode/>
         <CourseInfoTitle v-else-if="sections[$route.params.id]" :course="sections[$route.params.id].course" :section_name="sections[$route.params.id].name" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta" mobileMode/>
+        
 
         <router-link v-if="is_instructor || is_ta" :to="{name: 'new_lecture', params: { course_id: $route.params.id }}" tabindex="-1">
           <div class="inline-block big-button mobile" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
@@ -69,6 +69,7 @@
           <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
             <SquareLoader />
           </div>
+  
           <div v-else>
             None
           </div>
@@ -440,6 +441,13 @@ export default {
 </script>
 
 <style scoped>
+:root {
+  --course-attendance-rainbow-blue: rgba(62,73,202,1);
+  --course-attendance-rainbow-purple: rgba(143,62,202,1);
+  --course-attendance-rainbow-red: rgba(209,62,52,1);
+  --course-attendance-rainbow-yellow: rgba(176,95,22,1);
+  --course-attendance-rainbow-green: rgba(4,133,47,1);
+}
   .course-info-container {
     /*border: blue solid;*/
   }
