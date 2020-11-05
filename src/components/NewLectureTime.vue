@@ -22,7 +22,7 @@
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <input type="text" class="form-control" v-model="new_day">
+            <MultiSelectDropdown :options="['Monday','Tuesday','Wednesday','Thursday','Friday', 'Saturday','Sunday']" @update="handleCourseChange" :max="1" :n="0"/>
           </div>
         </div>
       </div><br />
@@ -64,9 +64,13 @@
 <script>
   import UserAPI from '@/services/UserAPI.js';
   import CourseAPI from '@/services/CourseAPI.js';
+  import MultiSelectDropdown from "@/components/MultiSelectDropdown.vue";
 
   export default {
     name: 'NewLectureTime',
+    components:{
+      MultiSelectDropdown
+    },
     props: {
     },
     data(){
