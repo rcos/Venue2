@@ -119,12 +119,9 @@ export default {
 			pieLabel: 0
 		}
 	},
-	mounted() {
-		console.log(this.$route.params.course_id);
-	},
 	created() {
 		this.current_user = this.$store.state.user.current_user;
-		this.course_id = this.$route.params.id;
+		// this.course_id = this.$route.params.id;
 		this.fetchData()
 	},
 	methods: {
@@ -132,6 +129,10 @@ export default {
 			CourseAPI.getInstructorCourses(this.current_user._id)
 			.then(res => {
 				this.courses.all = res.data
+				let self = this
+				this.$nextTick(function() {
+				self.$refs['courseSelector'].setSelected([self.courses.all.find(course => course._id == self.$route.params.course_id)])
+				})
 				let allStudents = []
 				this.courses.all.forEach(course => {
 					SectionAPI.getSectionsForCourse(course._id)
