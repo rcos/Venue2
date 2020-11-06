@@ -6,59 +6,156 @@
       <!-- Nav Links -->
       <div id="venue-nav-links">
         <router-link id="nav-logo" :to="{name: 'dashboard'}" role="link" aria-label="Dashboard">
-          <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="Venue Logo" aria-label="Venue Logo">
+          <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top logo-color" alt="Venue Logo" aria-label="Venue Logo">
         </router-link>
         <!-- Dashboard Link -->
         <div class="venue-nav-link-container">
           <router-link class="venue-nav-link" :class="{'active-link':is_dashboard()}" :to="{name: 'dashboard'}">
-            <p>Dashboard</p>
+            Dashboard
           </router-link>
           <div :class="'active-link-underline ' + (is_dashboard()?'active':'')"></div>
         </div>
         <!-- Courses Link -->
         <div class="venue-nav-link-container" id="instructor-course-dropdown" v-if="instructor_courses.length">
-          <DropDown :is_active="is_instructor_course_info()" :navbar_label="'Instructor Courses'" :dd_content="instructor_courses :id="'course'"></DropDown>
+          <a data-toggle="collapse" href="#instructor-collapse" class="venue-nav-link" :class="{'active-link':is_instructor_course_info()}" style="cursor:pointer;">
+            Instructor Courses <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+          </a>
+          <hide-at breakpoint="mediumAndBelow">
+            <div class="dropdown-content">
+              <router-link v-for="course in instructor_courses" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
+                {{ course.name }}
+              </router-link>
+            </div>
+          </hide-at>
+          <div :class="'active-link-underline ' + (is_instructor_course_info()?'active':'')"></div>
+        </div>
+        <div class="venue-nav-link-container" v-if="instructor_courses.length">
+          <router-link class="venue-nav-link" :class="{'active-link':is_statistics()}" :to="{name: 'statistics'}">
+            Statistics
+          </router-link>
+          <div :class="'active-link-underline ' + (is_statistics()?'active':'')"></div>
         </div>
         <div class="venue-nav-link-container" id="ta-section-dropdown" v-if="ta_sections.length">
-          <DropDown :is_active="is_ta_section_info()" :navbar_label="'TA Sections'" :dd_content="ta_sections" :id="'section'"></DropDown>
+          <a data-toggle="collapse" href="#ta-collapse" class="venue-nav-link" :class="{'active-link':is_ta_section_info()}" style="cursor:pointer;">
+            TA Sections <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+          </a>
+          <hide-at breakpoint="mediumAndBelow">
+            <div class="dropdown-content">
+              <router-link v-for="section in ta_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
+                {{ section.course.name }} {{section.name}}
+              </router-link>
+            </div>
+          </hide-at>
+          <div :class="'active-link-underline ' + (is_ta_section_info()?'active':'')"></div>
         </div>
-
         <div class="venue-nav-link-container" id="student-section-dropdown" v-if="student_sections.length">
-          <DropDown :is_active="is_student_section_info()" :navbar_label="'Student Sections'" :dd_content="student_sections" :id="'section'"></DropDown>
+          <a data-toggle="collapse" href="#student-collapse" class="venue-nav-link" :class="{'active-link':is_student_section_info()}" style="cursor:pointer;">
+            Student Sections <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+          </a>
+          <hide-at breakpoint="mediumAndBelow">
+            <div class="dropdown-content">
+              <router-link v-for="section in student_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
+                {{ section.course.name }} {{ section.name }}
+              </router-link>
+            </div>
+          </hide-at>
+          <div :class="'active-link-underline ' + (is_student_section_info()?'active':'')"></div>
         </div>
-
-
-        <div class="venue-nav-link-container" id="test-dropdown" v-if="testdat.length">
-          <DropDown :is_active="is_student_section_info()" :navbar_label="'TESTING'" :dd_content="testdat" :id="'test'"></DropDown>
+        <!-- ADMIN -->
+        <div class="venue-nav-link-container" id="admin-dropdown" v-if="current_user.is_admin">
+          <a data-toggle="collapse" href="#admin-collapse" class="venue-nav-link" style="cursor:pointer;">
+            🔑 <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+          </a>
+          <hide-at breakpoint="mediumAndBelow">
+            <div class="dropdown-content">
+              <router-link :to="{name: 'new_user'}">
+                New User
+              </router-link>
+              <router-link :to="{name: 'admin_sections'}">
+                Sections
+              </router-link>
+              <router-link :to="{name: 'courses'}">
+                Courses
+              </router-link>
+              <router-link :to="{name: 'users'}">
+                Users
+              </router-link>
+            </div>
+          </hide-at>
         </div>
-
-
-        <!-- Statistics Link -->
-        <!-- <show-at breakpoint="large">
-          <div v-if="instructor_courses.length" class="venue-nav-link-container">
-            <router-link class="venue-nav-link" :class="{'active-link':is_statistics()}" :to="{name: 'statistics'}">
-              Statistics
-            </router-link>
-            <div v-if="is_statistics()" class="active-link-underline"></div>
-          </div>
-        </show-at> -->
+        <!-- Settings -->
         <div class="venue-nav-link-container">
           <router-link class="venue-nav-link" :class="{'active-link':is_settings()}" :to="{name: 'settings'}">
             <show-at breakpoint="large">
-              <p aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon"></p>
+              <p aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon"></p>
             </show-at>
             <show-at breakpoint="medium">
-              <p aria-label="User Name">{{ current_user.first_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon"></p>
+              <p aria-label="User Name">{{ current_user.first_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon"></p>
             </show-at>
             <show-at breakpoint="small">
-              <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
+              <img src="@/assets/settings.svg" width="20" height="20" :style="{marginRight: '6rem'}" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon">
             </show-at>
           </router-link>
           <div :class="'active-link-underline ' + (is_settings()?'active':'')"></div>
         </div>
       </div>
     </nav>
-
+    <!-- Mobile Course Dropdown -->
+    <show-at breakpoint="mediumAndBelow">
+      <div id="all-collapse">
+        <div class="collapse" id="instructor-collapse" data-parent="#all-collapse">
+          <ul class="mobile-course-list">
+            <li class="mobile-course-link" href="#instructor-collapse" data-toggle="collapse" v-for="course in instructor_courses" :key="course._id">
+              <router-link :to="{name: 'course_info', params: { id: course._id }}">
+                <p class="mobile-course-link-name">{{ course.name }}</p>
+              </router-link>
+            </li>
+          </ul>
+        </div>
+        <div class="collapse" id="ta-collapse" data-parent="#all-collapse">
+          <ul class="mobile-course-list">
+            <li class="mobile-course-link" href="#ta-collapse" data-toggle="collapse" v-for="section in ta_sections" :key="section._id">
+              <router-link :to="{name: 'course_info', params: { id: section._id }}">
+                <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
+              </router-link>
+            </li>
+          </ul>
+        </div>
+        <div class="collapse" id="student-collapse" data-parent="#all-collapse">
+          <ul class="mobile-course-list">
+            <li class="mobile-course-link" href="#student-collapse" data-toggle="collapse" v-for="section in student_sections" :key="section._id">
+              <router-link :to="{name: 'course_info', params: { id: section._id }}">
+                <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
+              </router-link>
+            </li>
+          </ul>
+        </div>
+        <div class="collapse" id="admin-collapse" data-parent="#all-collapse">
+          <ul class="mobile-course-list">
+            <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
+              <router-link :to="{name: 'new_user'}">
+                <p class="mobile-course-link-name">New User</p>
+              </router-link>
+            </li>
+            <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
+              <router-link :to="{name: 'admin_sections'}">
+                <p class="mobile-course-link-name">Sections</p>
+              </router-link>
+            </li>
+            <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
+              <router-link :to="{name: 'courses'}">
+                <p class="mobile-course-link-name">Courses</p>
+              </router-link>
+            </li>
+            <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
+              <router-link :to="{name: 'users'}">
+                <p class="mobile-course-link-name">Users</p>
+              </router-link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </show-at>
     <!-- Breadcrumbs -->
     <div id="breadcrumb-container" v-if="showBreadcrumb()">
       <router-link :to="{name: 'dashboard'}">
@@ -93,7 +190,6 @@
   import CourseAPI from '@/services/CourseAPI.js'
   import SectionAPI from '@/services/SectionAPI.js'
   import LectureAPI from '@/services/LectureAPI.js'
-  import DropDown from './DropDown.vue'
 
   export default {
     name: 'NavBar',
@@ -109,23 +205,10 @@
     },
     components: {
       hideAt,
-      showAt,
-      'DropDown': DropDown,
+      showAt
     },
     data(){
-
       return {
-
-      testdat: [
-        	{
-          	name: 'Item 1',
-            children: [{name: 'Subitem 1'},{name: 'Subitem 2'},{name: 'Subitem 3'}]
-          },
-          {
-          	name: 'Item 2'
-          }
-        ],
-
         current_user: {},
         instructor_courses: [],
         ta_sections: [],
@@ -204,6 +287,25 @@
 </script>
 
 <style scoped>
+
+  :root {
+    --nav-bar-text: #2C3E50;
+    --nav-bar-background: #f7f7f7;
+    --nav-bar-separator: rgba(0, 0, 0, 0.15);
+    --nav-bar-selected-text: #466D85;
+    --nav-bar-box-shadow:  rgba(109, 109, 109, 0.644);
+    --nav-bar-link-text: #575757;
+
+    --nav-bar-hover-background: #466D85;
+    --nav-bar-hover-text: white;
+    --nav-bar-hover-top-shadow: rgba(85, 85, 85, 0.644);
+    --nav-bar-hover-bottom-shadow: rgba(179, 179, 179, 0.644);
+  }
+
+  .logo-color {
+    filter: var(--logo-color);
+  }
+
   #venue-nav {
     height: 4rem;
     padding: 1rem 0rem;
@@ -245,24 +347,20 @@
     margin-top: 0.5rem;
     margin-bottom: 0;
     border-bottom: none;
+    border-radius: 5px;
     transition: border-bottom 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   .venue-nav-link-container.active {
-    border-bottom: 0.2rem solid #466D85;
+    border-bottom: 0.2rem solid var(--nav-bar-selected-text);
     transition: border-bottom 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1);
-  }
-
-  #instructor-course-dropdown,
-  #ta-section-dropdown,
-  #student-section-dropdown {
-    border-radius: 5px;
   }
 
   .dropdown-content {
     margin-left: -1rem;
     margin-top: 0.2rem;
     position: absolute;
+    visibility: hidden;
     /* background-color: #f7f7f7; */
 
     z-index: 9999;
@@ -272,17 +370,18 @@
   }
 
   .dropdown-content a {
-    opacity: 0;
-    color: #2C3E50;
-    background-color: #f7f7f7;
+    visibility: hidden;
+    color: var(--nav-bar-text);
+    background-color: var(--nav-bar-background);
     font-weight: bold;
+    font-size: 0rem;
     text-decoration: none;
     display: block;
     max-height: 0px;
     width: 15rem;
     margin: 0px;
     padding: 0px;
-    box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+    box-shadow: 0px 3px 3px 0px var(--nav-bar-box-shadow);
     transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
@@ -295,7 +394,7 @@
   }
 
   .dropdown-content a:not(:first-of-type) {
-    border-top: 0.1rem solid rgba(0, 0, 0, 0.15);
+    border-top: 0.1rem solid var(--nav-bar-separator);
   }
 
   .dropdown-content a:last-of-type {
@@ -306,99 +405,86 @@
     border-radius: 0.5rem;
   }
 
-  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(1),
-  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(1),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(1),
-  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(1),
-  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(1),
-  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(1) {
-    opacity: 1;
-    max-height: 3rem;
-    width: 15rem;
-    padding: 12px 16px;
-    transform: rotateY(0deg);
-    transition: all 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0s cubic-bezier(0.19, 1, 0.22, 1);
+  .venue-nav-link-container:hover > .dropdown-content,
+  .venue-nav-link-container:focus-within > .dropdown-content {
+    visibility: visible;
   }
 
-  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(2),
-  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(2),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(2),
-  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(2),
-  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(2),
-  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(2) {
-    opacity: 1;
+  .venue-nav-link-container:hover > .dropdown-content a,
+  .venue-nav-link-container:focus-within > .dropdown-content a {
+    visibility: visible;
+    font-size: 1rem;
     max-height: 3rem;
     width: 15rem;
     padding: 12px 16px;
     transform: rotateY(0deg);
-    transition: all 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.05s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: font-size 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
-  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(3),
-  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(3),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(3),
-  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(3),
-  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(3),
-  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(3) {
-    opacity: 1;
+  /* .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(2),
+  .venue-nav-link-container:focus-within > .dropdown-content a:nth-of-type(2) {
+    visibility: visible;
+    font-size: 1rem;
     max-height: 3rem;
     width: 15rem;
     padding: 12px 16px;
     transform: rotateY(0deg);
-    transition: all 0.25s 0.1s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.1s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: font-size 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.05s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.05s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
-  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(4),
-  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(4),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(4),
-  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(4),
-  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(4),
-  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(4) {
-    opacity: 1;
+  .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(3),
+  .venue-nav-link-container:focus-within > .dropdown-content a:nth-of-type(3) {
+    visibility: visible;
+    font-size: 1rem;
     max-height: 3rem;
     width: 15rem;
     padding: 12px 16px;
     transform: rotateY(0deg);
-    transition: all 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.15s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: font-size 0.25s 0.1s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.1s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.1s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.1s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
-  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(5),
-  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(5),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(5),
-  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(5),
-  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(5),
-  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(5) {
-    opacity: 1;
+  .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(4),
+  .venue-nav-link-container:focus-within > .dropdown-content a:nth-of-type(4) {
+    visibility: visible;
+    font-size: 1rem;
     max-height: 3rem;
     width: 15rem;
     padding: 12px 16px;
     transform: rotateY(0deg);
-    transition: all 0.25s 0.20s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: font-size 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.15s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.15s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
-  #instructor-course-dropdown:hover > .dropdown-content a:nth-of-type(6),
-  #ta-section-dropdown:hover > .dropdown-content a:nth-of-type(6),
-  #student-section-dropdown:hover > .dropdown-content a:nth-of-type(6),
-  #instructor-course-dropdown:focus-within > .dropdown-content a:nth-of-type(6),
-  #ta-section-dropdown:focus-within .dropdown-content a:nth-of-type(6),
-  #student-section-dropdown:focus-within > .dropdown-content a:nth-of-type(6) {
-    opacity: 1;
+  .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(5),
+  .venue-nav-link-container:focus-within > .dropdown-content a:nth-of-type(5) {
+    visibility: visible;
+    font-size: 1rem;
     max-height: 3rem;
     width: 15rem;
     padding: 12px 16px;
     transform: rotateY(0deg);
-    transition: all 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), transform 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: font-size 0.25s 0.2s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.2s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.2s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0.2s cubic-bezier(0.19, 1, 0.22, 1);
   }
+
+  .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(6),
+  .venue-nav-link-container:focus-within > .dropdown-content a:nth-of-type(6) {
+    visibility: visible;
+    font-size: 1rem;
+    max-height: 3rem;
+    width: 15rem;
+    padding: 12px 16px;
+    transform: rotateY(0deg);
+    transition: font-size 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), transform 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+  } */
 
   .dropdown-content a:hover,
   .dropdown-content a:focus {
-    background-color: #466D85;
-    color: white;
+    background-color: var(--nav-bar-hover-background);
+    color: var(--nav-bar-hover-text);
     outline: none;
-    box-shadow: 0px 3px 3px 0px rgba(85, 85, 85, 0.644) inset, 0px -3px 3px 0px rgba(179, 179, 179, 0.644) inset;
-    -webkit-transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0px 3px 3px 0px var(--nav-bar-hover-top-shadow) inset, 0px -3px 3px 0px var(--nav-bar-hover-bottom-shadow) inset;
+    /* -webkit-transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
     -ms-transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
-    transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1); */
   }
 
   .mobile-course-list {
@@ -420,7 +506,7 @@
 
   .venue-nav-link {
     text-decoration: none;
-    color: #575757;
+    color: var(--nav-bar-link-text);
     font-weight: 100;
     margin: 0;
     padding: 0;
@@ -428,18 +514,18 @@
   }
 
   .active-link {
-    color: #466D85;
+    color: var(--nav-bar-selected-text);
   }
 
   .active-link:hover,
   .active-link:focus {
-    color: #575757;
+    color: var(--nav-bar-link-text);
   }
 
   .active-link-underline {
     height: 0rem;
     width: 0rem;
-    background-color: #466D85;
+    background-color: var(--nav-bar-selected-text);
     margin: auto;
     transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   }
@@ -460,6 +546,7 @@
     margin-top: 0.1rem;
     margin-left: 0.25rem;
     margin-right: 1.5rem;
+    filter: var(--widgets-color);
   }
 
   .venue-nav-link:focus,
@@ -473,12 +560,13 @@
   .settings_link:focus .mr-2,
   .venue-nav-link:focus p,
   .venue-nav-link:hover p {
-    color: #466D85;
+    color: var(--nav-bar-selected-text);
   }
 
   .rotate-arrow {
-    transform: rotateX(-90deg);
+    transform: rotateZ(-90deg);
     margin-bottom: 0.1rem;
+    filter: var(--widgets-color);
   }
 
   img {

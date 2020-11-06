@@ -20,6 +20,9 @@
 </template>
 
 <script>
+  // Remove after halloween
+  import PaletteAPI from '../services/PaletteAPI';
+
   export default {
     name: 'Logo',
     props: {
@@ -30,6 +33,8 @@
       }
     },
     created() {
+      let root = document.documentElement;
+      PaletteAPI.setPalette(root, false);
     },
     methods: {
     }
@@ -37,15 +42,16 @@
 </script>
 
 <style>
+  :root {}
   .venue-logo {
     transition: width 0.75s;
   }
 
   .logotext1 {
-    color:#ca3279;
+    color:#ca3279; 
   }
 
   .logotext2 {
-    color:#0078c2;
+    color:#0078c2; 
   }
 </style>

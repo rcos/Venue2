@@ -159,29 +159,30 @@
 	}
 
 	.namecard-edging.live-color {
-	  background: #04852f;
+	  background: var(--green-pill);
 	}
 
 	.namecard-edging.playback-color {
-	  background: #8f3eca;
+	  background: var(--recording-namecard);
 	}
 
 	.namecard-edging.absent-color {
-	  background: #d13e34;
+	  background: var(--red-pill);
 	}
 
 	.namecard {
 	  position: relative;
-	  background: white;
+    background: var(--course-card-background);
+    color: var(--course-card-text);
 	  text-align: center;
-	  border-radius: .25rem;
+    border-radius: .25rem;
 	  /* top: 0.5rem; */
 	  /* margin-left: 0.5rem; */
     margin-bottom: -0.5rem;
     padding: 0.5rem 1rem;
 	  /* width: 11rem; */
 	  /* height: 4rem; */
-	  box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+	  box-shadow: 0px 3px 3px 0px var(--course-card-shadow);
 	  padding-top: 0.5rem;
 	  z-index: 100;
 	}

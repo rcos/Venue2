@@ -1,4 +1,4 @@
-<<template>
+<template>
   <div class="active-event-list">
     <div v-if="active_events.length > 0">
       <router-link class="active-event-link" v-for="event in active_events" :key="event._id" :to="{name: 'event_info', params: { event_id: event._id }}">
@@ -11,8 +11,6 @@
 
 <script>
   import ActiveEventCard from '@/components/ActiveEventCard.vue'
-  import EventAPI from '@/services/EventAPI.js'
-
   export default {
     name: 'ActiveEventList',
     components: {
@@ -29,7 +27,7 @@
     },
     methods: {
       async getActiveEvents() {
-        let response = await EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, true)
+        
         let events = response.data
         this.updateSubmissionWindowStatuses(events)
         this.active_events = this.sortEventsbySubmissionWindowStatus(events)
@@ -69,22 +67,23 @@
 </script>
 
 <style scoped>
+:root { 
+  --event-active-link: #2c3e50; 
+  --event-list-background: #F5F5F5; 
+}
 .active-event-list {
   height: 12.5rem;
   overflow-y: auto;
 }
-
 .active-event-list::-webkit-scrollbar {
   width: 12px;
 }
-
 .active-event-list::-webkit-scrollbar-thumb {
 border-radius: 10px;
--webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-background-color: #F5F5F5; 
+-webkit-box-shadow: inset 0 0 6px var(--event-active-shadow);
+background-color: var(--event-list-background); 
 }
-
 .active-event-link {
-  color: #2c3e50;
+  color: var(--event-active-link);
 }
 </style>

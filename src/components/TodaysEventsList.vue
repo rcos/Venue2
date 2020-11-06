@@ -1,4 +1,4 @@
-<<template>
+<template>
   <div class="todays-events-list">
     <div v-if="todays_events.length > 0">
       <!-- Desktop and tablet -->
@@ -37,10 +37,8 @@
 </template>
 
 <script>
-  import EventAPI from '@/services/EventAPI.js'
   import TodaysEventCard from '@/components/TodaysEventCard.vue'
   import {showAt, hideAt} from 'vue-breakpoints'
-
   export default {
     name: 'TodaysEventsList',
     components: {
@@ -59,12 +57,10 @@
     },
     methods: {
       async getTodaysEvents() {
-
         EventAPI.getActiveOrTodaysEventsForUser(this.current_user._id, false)
         .then(response => {
           this.data_loaded = true
           this.todays_events = response.data
-
           //order events by start time
           this.sortTodaysEventsByStartTime()
           this.setEventsStartedStoday()
@@ -107,91 +103,80 @@
 </script>
 
 <style scoped>
+:root {
+  --event-today-time: #757575;
+  --event-timeline-background: #f0f0f0;
+}
 .todays-events-section {
   /*border: blue solid;*/
   white-space: nowrap;
   padding-right: 2rem;
 }
-
 #horizontal-section {
   height: 9.5rem;
   overflow-x: auto;
   overflow-y: hidden;
 }
-
 #vertical-section {
   /*border: blue solid;*/
   height: 20rem;
   overflow-y: auto;
 }
-
 #horizontal-section::-webkit-scrollbar,
 #vertical-section::-webkit-scrollbar {
   width: 12px;
 }
-
 #horizontal-section::-webkit-scrollbar-thumb,
 #vertical-section::-webkit-scrollbar-thumb {
 border-radius: 10px;
--webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-background-color: #F5F5F5;
+-webkit-box-shadow: inset 0 0 6px var(--event-active-shadow);
+background-color: var(--event-list-background);
 }
-
 .mleft-one {
   margin-left: 1rem;
 }
-
 .mleft-four {
   margin-left: 4rem;
 }
-
 .horizontal-timeline {
-  border: #f0f0f0 solid 2px;
-  background-color: #f0f0f0;
+  border: var(--event-timeline-background) solid 2px;
+  background-color: var(--event-timeline-background);
   position: absolute;
   width: 30rem;
   margin-top: 1.75rem;
 }
-
 .vertical-timeline {
-  border: #f0f0f0 solid 2px;
-  background-color: #f0f0f0;
+  border: var(--event-timeline-background) solid 2px;
+  background-color: var(--event-timeline-background);
   position: absolute;
   width: 2px;
   margin-left: 7rem;
   height: 20rem;
   z-index: 0;
 }
-
 .todays-event-container {
   /*border: red solid;*/
   height: 5rem;
 }
-
 .desktop-event-container {
   display: inline-block;
   vertical-align: top;
   width: 10rem;
 }
-
 .mobile-event-container {
   width: 100%;
   /*margin-left: 2.5rem;*/
   margin-top: 2rem;
 }
-
 .todays-event-time {
   /*border: blue solid;*/
   text-align: center;
   font-size: 0.75rem;
   margin-top: 0.5rem;
-  color: #757575;
+  color: var(--event-today-time);
 }
-
 .desktop-event-time {
-
 }
-
 .mobile-event-time {
   display: inline-block;
   margin-top: 1.5rem;
@@ -200,7 +185,6 @@ background-color: #F5F5F5;
   width: 5.5rem;
   /*width: 2rem;*/
 }
-
 .todays-event-card-wrapper {
   display: inline-block;
   /*width: 21rem;*/
@@ -210,11 +194,9 @@ background-color: #F5F5F5;
   height: 100%;
   /*border: green solid;*/
 }
-
 .active-event-link {
-  color: #2c3e50;
+  color: var(--event-active-link);
 }
-
 /*Small devices*/
 /* @media (max-width: 575.98px) {
   .todays-events-section {

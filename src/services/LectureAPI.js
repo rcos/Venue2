@@ -4,6 +4,9 @@ export default {
   getLectures() {
     return API().get('lectures')
   },
+  deleteLecture(lecture_id) {
+    return API().get('lectures/delete/'+lecture_id)
+  },
   getLecturesForUser(user_id, preference) {
     return API().get('lectures/for_user/' + user_id + '/' + preference)
   },
@@ -16,22 +19,18 @@ export default {
   getLectureWithSectionsAndCourse(lecture_id) {
     return API().get('lectures/with_sections_and_course/' + lecture_id)
   },
+  getSignedUrl(filename) {
+    return API().get('lectures/get_signed_url/'+filename)
+  },
   addLecture(lecture) {
     return API().post('lectures/add', {
       lecture: lecture
     })
   },
-  addPlaybackVideo(lecture_id, video) {
-    let formdata = new FormData()
-    formdata.append('video', video)
-    return API().post('lectures/add_playback_video/' + lecture_id,
-      formdata,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }
-    )
+  update(lecture) {
+    return API().post('lectures/update/'+lecture._id, {
+      updated: lecture
+    })
   },
   updateToPlayback(lecture) {
     return API().post('lectures/update_to_playback/' + lecture._id,

@@ -2,7 +2,7 @@
   <div id="lecture-upload-modal">
     <LoadingOverlay v-if="waiting"/>
     <button type="button" id="video-upload-btn" class="btn btn-primary" @click="handleShowModal" :tabindex="(modal_open ? '-1' : '0')" title="Upload Recording">
-      <img src="@/assets/icons8-upload-96.png" width="60" alt="QR Code" aria-label="QR Code">
+      <img class="svg-color" src="@/assets/icons8-upload-96.png" width="60" alt="QR Code" aria-label="QR Code">
     </button>
     <div id="lecture_modal_viewable" class="hiddenModal">
       <div class="row titlerow">
@@ -11,7 +11,7 @@
         </h1>
       </div>
       <div class="row youtuberow">
-        <label id="youtube_label">Youtube URL:</label>
+        <label id="youtube_label">Youtube Video URL:</label>
         <input id="youtube_selector" type="text" class="form-control" role="input" tabindex="0" aria-labelledby="youtube_label"/>
         <div v-if="video_type == 'video/youtube'">
           <label id="yt_length_label" class="col-12">Length:</label>
@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="row webexrow">
-        <label id="webex_label">Webex URL:</label>
+        <label id="webex_label">Webex Recording URL:</label>
         <input id="webex_selector" type="text" class="form-control" role="input" tabindex="0" aria-labelledby="webex_label"/>
         <div v-if="video_type == 'webex'">
           <label id="webex_length_label" class="col-12">Length:</label>
@@ -141,6 +141,7 @@ import Picker from 'pickerjs';
 import '../../node_modules/pickerjs/src/index.css';
 require('videojs-youtube')
 const validator = require('youtube-url')
+import axios from 'axios';
 // DatePicker themes options:
 // "material_blue","material_green","material_red","material_orange",
 // "dark","airbnb","confetti"
@@ -168,11 +169,10 @@ export default {
       play_sub_start_picker: null,
       play_sub_end_picker: null,
       modal_open: false,
-      waiting: false,
+      waiting: false
     };
   },
   created() {
-    this.getPollsIfNeeded()
   },
   beforeDestroy() {
     if(this.vjs) {
@@ -180,11 +180,6 @@ export default {
     }
   },
   methods: {
-    getPollsIfNeeded() {
-      if(this.update_lecture) {
-        PlaybackPollAPI.getByLecture()
-      }
-    },
     async updateLecture() {
       if(this.isComplete()) {
         this.waiting = true;
@@ -207,8 +202,8 @@ export default {
         }
         this.lecture.video_type = this.video_type
         if(!this.lecture.video_type) {
-          let response = await LectureAPI.addPlaybackVideo(this.lecture._id, lecture_video)
-          this.lecture.video_ref = response.data
+          let response = await this.uploadMediaToS3(this.lecture)
+          this.lecture.video_ref = response.split("?")[0]
         }
         await LectureAPI.updateToPlayback(this.lecture)
         let n_saved = 0
@@ -228,7 +223,25 @@ export default {
                 this.waiting = false;
                 this.hideModal()
                 location.reload()
+              } else {
+                for(let i=0;i<this.need_timestamp.length;i++) {
+                  this.need_timestamp[i].lecture = this.lecture._id
+                  this.updateTimestamp(i)
+                  PlaybackPollAPI.update(this.need_timestamp[i])
+                  .then(res => {
+                    n_saved++
+                    if(n_saved == this.need_timestamp.length) {
+                      this.need_timestamp = []
+                      this.waiting = false;
+                      this.hideModal()
+                      location.reload()
+                    }
+                  })
+                }
               }
+            
+            }).catch(err => {
+              console.log("Error:",err)
             })
           }
         }
@@ -255,8 +268,8 @@ export default {
       }
       lect.video_type = this.video_type
       if(!lect.video_type) {
-        let response = await LectureAPI.addPlaybackVideo(lect._id, lecture_video)
-        lect.video_ref = response.data
+        let response = await this.uploadMediaToS3(lect)
+        lect.video_ref = response.split("?")[0]
       }
       await LectureAPI.updateToPlayback(lect)
       let n_saved = 0
@@ -281,10 +294,54 @@ export default {
                 name: "course_info",
                 params: { id: (this.$store.state.user.current_user.ta_sections.includes(this.$route.params.course_id)?this.$route.params.course_id:course_id) }
               })
+            } else {
+              for(let i=0;i<this.polls.length;i++) {
+                this.polls[i].lecture = lect._id
+                PlaybackPollAPI.addPoll(this.polls[i])
+                .then(res => {
+                  n_saved++
+                  if(n_saved == this.polls.length) {
+                    this.polls = []
+                    this.hideModal()
+                    this.waiting = false
+                    this.$router.push({
+                      name: "course_info",
+                      params: { id: course_id }
+                    })
+                  }
+                })
+              }
             }
+          }).catch(err => {
+            console.log("Error")
           })
         }
       }
+    },
+    getSignedURL(filename) {
+      return new Promise((resolve, reject) => {
+        LectureAPI.getSignedUrl(filename)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    },
+    uploadMediaToS3(lect) {
+      return new Promise((resolve,reject) => {
+        this.getSignedURL(lect._id + '-' + document.getElementById("video_selector").files[0].name).then(data => {
+          fetch(data.data, {
+            method: 'PUT',
+            body: document.getElementById("video_selector").files[0]
+          }).then(res => {
+            resolve(data.data)
+          })
+        }).catch(err => {
+          reject(err)
+        });
+      })
     },
     setLectureSubmissionVariables() {
       this.lecture.allow_live_submissions = false
@@ -464,7 +521,7 @@ export default {
 #video-upload-btn {
   min-height: calc(60px + .75rem);
   padding: 0.375rem 0.375rem;
-  border-radius: 0.75rem;
+  border-radius: 0.25rem;
 }
 .row {
   padding: 0;
@@ -491,12 +548,12 @@ h2 {
 }
 #lecture_modal_viewable {
   position: fixed;
-  background: white;
+  background: var(--modal-background);
   top: 7rem;
   left: 2rem;
   right: 2rem;
   bottom: 2rem;
-  border: 1px solid rgba(120,120,120,1);
+  border: 1px solid var(--modal-lecture-border);
   overflow-y: auto;
   z-index: 1001;
   padding: 1rem;

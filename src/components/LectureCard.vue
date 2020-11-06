@@ -17,7 +17,7 @@
           <div v-if="lecture_type === 'Live'" class="right-container">
             <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
             <p v-if="lecture.checkin_window_status === 'open'" class="lecture-time-text open-text">{{ getTimeToWindowCloseString(false) }}</p>
-            <p v-else class="lecture-time-text closed-text">closed</p>
+            <p v-else class="lecture-time-text closed-text">waiting...</p>
           </div>
           <div v-else-if="lecture_type === 'Playback'" class="right-container">
             <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
@@ -26,7 +26,7 @@
           </div>
           <div v-else-if="lecture_type === 'Recent'" class="right-container">
             <img src="@/assets/clock.svg" class="clock" aria-label="Time Icon" alt="Time Icon">
-            <p class="lecture-time-text">closed</p>
+            <p class="lecture-time-text closed-text">closed</p>
             <!-- <p class="recent-percentage-text">91% submission</p> -->
           </div>
           <div v-else-if="lecture_type === 'Upcoming'" class="right-container">
@@ -98,6 +98,23 @@
 </script>
 
 <style scoped>
+
+  :root {
+    --lecture-live: #04852F;
+    --lecture-live-closed: #f29f33;
+    --lecture-playback: #683eca;
+    --lecture-recent: #858585;
+    --lecture-upcoming: #0076a8;
+
+    --lecture-pill-shadow: rgba(109, 109, 109, 0.644);
+    --lecture-info-background: #a7640d;
+
+    --lecture-course-number-text: #097bac;
+    --lecture-course-name-text: #466D85;
+    --lecture-name-text: #2C3E50;
+    --lecture-closed-text: #a7640d;
+
+  }
   .lecture-card {
     position: relative;
     margin-bottom: 2rem;
@@ -111,26 +128,27 @@
     -webkit-transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
     -ms-transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
     transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0px 3px 3px 1px var(--lecture-pill-shadow);
   }
 
   .live-lecture-open {
-    background-color: #04852F;
+    background-color: var(--lecture-live);
   }
 
   .live-lecture-closed {
-    background-color: #f29f33;
+    background-color: var(--lecture-live-closed);
   }
 
   .playback-lecture {
-    background-color: #683eca;
+    background-color: var(--lecture-playback);
   }
 
   .recent-lecture {
-    background-color: #858585;
+    background-color: var(--lecture-recent);
   }
 
   .upcoming-lecture {
-    background-color: #0076a8;
+    background-color: var(--lecture-upcoming);
   }
 
   .lecture-card-foreground {
@@ -139,9 +157,9 @@
     width: 91%;
     margin-top: -3.5rem;
     margin-left: 1.7%;
-    background-color: white;
+    background-color: var(--lecture-info-background);
     border-radius: 5px;
-    box-shadow: 0px 3px 3px 1px rgba(109, 109, 109, 0.644);
+    box-shadow: 0px 3px 3px 1px var(--lecture-pill-shadow);
     z-index: 4;
   }
 
@@ -180,7 +198,7 @@
   .course-name {
     font-size: .75rem;
     margin-top: 1rem;
-    color: #466D85;
+    color: var(--lecture-course-name-text);
     font-weight: bold;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -190,12 +208,12 @@
 
   .course-title {
     font-size: .75rem;
-    color: #097bac;
+    color: var(--lecture-course-number-text);
     font-weight: bold;
   }
 
   .lecture-name {
-    color: #2C3E50;
+    color: var(--lecture-name-text);
     font-size: 1.25rem;
     margin-top: 1rem;
     font-weight: bold;
@@ -211,6 +229,7 @@
     height: 1rem;
     font-weight: bold;
     float: left;
+    filter: var(--clock-color);
   }
 
   .right-container {
@@ -230,25 +249,25 @@
   }
 
   .playback-percentage-text {
-    color: #683eca;
+    color: var(--lecture-playback);
     font-weight: bold;
   }
 
   .recent-percentage-text {
-    color: #858585;
+    color: var(--lecture-recent);
     font-weight: bold;
   }
 
   .upcoming-text {
-    color: #0076a8;
+    color: var(--lecture-upcoming);
   }
 
   .open-text {
-    color: #04852F;
+    color: var(--lecture-live);
   }
 
   .closed-text {
-    color: #a7640d;
+    color: var(--lecture-closed-text);
   }
 
 </style>

@@ -59,14 +59,12 @@ function start() {
   const userRouter = require('./User/User.route')
   const courseRouter = require('./Course/Course.route')
   const sectionRouter = require('./Section/Section.route')
-  const eventRouter = require('./Event/Event.route')
-  const submissionRouter = require('./Submission/Submission.route')
   const lectureRouter = require('./Lecture/Lecture.route')
   const lectureSubmissionRouter = require('./LectureSubmission/LectureSubmission.route')
   const pollRouter = require('./PlaybackPoll/PlaybackPoll.route')
 
   // Connect to the database before starting the application server.
-  mongoose.connect(process.env.MONGODB_URI || config.DB, function (err, client) {
+  mongoose.connect(process.env.DB_URI || config.DB, function (err, client) {
     if (err) {
       console.log(err);
       process.exit(1);
@@ -80,8 +78,8 @@ function start() {
   });
 
   app.use(cors({
-      origin:['https://www.venue-meetings.com','http://localhost:8080'],
-      methods:['GET','POST','DELETE'],
+      origin:['https://www.venue-meetings.com','http://localhost:8080','storage.googleapis.com/venue-meetings-recordings'],
+      methods:['GET','POST','DELETE','PUT'],
       credentials: true
   }));
   app.use(bodyParser.urlencoded({ extended: true }));
@@ -108,8 +106,6 @@ function start() {
   app.use('/users', jwtVerify, userRouter);
   app.use('/courses', jwtVerify, courseRouter);
   app.use('/sections', jwtVerify, sectionRouter);
-  app.use('/events', jwtVerify, eventRouter);
-  app.use('/submissions', jwtVerify, submissionRouter);
   app.use('/lectures', jwtVerify, lectureRouter);
   app.use('/polls', jwtVerify, pollRouter);
   app.use('/lecturesubmissions', jwtVerify, lectureSubmissionRouter);

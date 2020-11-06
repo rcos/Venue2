@@ -7,6 +7,7 @@ import store from './vuex/store'
 
 import VueAxios from 'vue-axios';
 import axios from 'axios';
+import './registerServiceWorker'
 Vue.use(VueAxios, axios);
 
 Vue.config.productionTip = false;

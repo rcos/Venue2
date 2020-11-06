@@ -3,6 +3,8 @@ const lectureSubmissionRoutes = express.Router();
 
 let LectureSubmission = require('../LectureSubmission/LectureSubmission.model');
 let Lecture = require('../Lecture/Lecture.model');
+let Section = require('../Section/Section.model');
+let Course = require('../Course/Course.model');
 let User = require('../User/User.model');
 
 lectureSubmissionRoutes.route('/add').post(function (req, res) {
@@ -18,7 +20,7 @@ lectureSubmissionRoutes.route('/add').post(function (req, res) {
     });
 });
 
-lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
+lectureSubmissionRoutes.route('/add_live_by_rcs').post(function (req, res) {
   let rcsids = req.body.rcs
   Lecture.findById(req.body.lecture_id,function(err,lecture) {
     if(err || lecture == null) {
@@ -54,10 +56,10 @@ lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
               updated_info,
               function (err, lectureSubmission) {
                 if (err) {
-                  console.log("<ERROR> Manually overriding lecture submission with lecture ID:",req.body.lecture_id,"and submitter ID:",user._id)
+                  console.log("<ERROR> Manually overriding live lecture submission with lecture ID:",req.body.lecture_id,"and submitter ID:",user._id)
                   res.json(err);
                 } else if (null != lectureSubmission) { // get
-                  console.log("<SUCCESS> Manually overriding lecture submission with lecture ID:",req.body.lecture_id,"and submitter ID:",user._id)
+                  console.log("<SUCCESS> Manually overriding live lecture submission with lecture ID:",req.body.lecture_id,"and submitter ID:",user._id)
                   if(n == rcsids.length) {
                     res.json(bad_ids)
                   }
@@ -66,12 +68,78 @@ lectureSubmissionRoutes.route('/add_by_rcs').post(function (req, res) {
                   updated_info.submitter = user._id
                   let updated = new LectureSubmission(updated_info);
                   updated.save().then(() => {
-                    console.log("<SUCCESS> Adding lecture submission for user with RCS:",rcs)
+                    console.log("<SUCCESS> Adding live lecture submission for user with RCS:",rcs)
                     if(n == rcsids.length) {
                       res.json(bad_ids)
                     }
                   }).catch(() => {
-                    console.log("<ERROR> Adding lecture submission for user with RCS:",rcs)
+                    console.log("<ERROR> Adding live lecture submission for user with RCS:",rcs)
+                    res.status(400).send("unable to save lectureSubmission to database");
+                  });
+                }
+              }
+            );
+          }
+        })
+      })
+    }
+  })
+});
+
+lectureSubmissionRoutes.route('/add_playback_by_rcs').post(function (req, res) {
+  let rcsids = req.body.rcs
+  Lecture.findById(req.body.lecture_id,function(err,lecture) {
+    if(err || lecture == null) {
+      console.log("<ERROR> Getting lecture with ID:",req.body.lecture_id)
+      res.json(err)
+    } else {
+      let n = 0
+      let bad_ids = []
+      rcsids.forEach(rcs => {
+        User.findOne({user_id: rcs},function(err,user){
+          n++
+          if(err) {
+            console.log("<ERROR> Getting user(s) with RCS:",rcs)
+            res.json(err)
+          } else if(user == null) {
+            bad_ids.push(rcs)
+            if(n == rcsids.length) {
+              console.log("<SUCCESS> Getting some user(s) with RCS. Bad RCS IDs:",bad_ids)
+              res.json(bad_ids)
+            }
+          } else {
+            //try to find and update a submission
+            let updated_info = {
+              video_percent: 1,
+              video_progress: lecture.video_length,
+              playback_submission_time: new Date()
+            }
+            LectureSubmission.findOneAndUpdate(
+              {
+                lecture: req.body.lecture_id,
+                submitter: user._id
+              },
+              updated_info,
+              function (err, lectureSubmission) {
+                if (err) {
+                  console.log("<ERROR> Manually overriding playback lecture submission with lecture ID:",req.body.lecture_id,"and submitter ID:",user._id)
+                  res.json(err);
+                } else if (null != lectureSubmission) { // get
+                  console.log("<SUCCESS> Manually overriding playback lecture submission with lecture ID:",req.body.lecture_id,"and submitter ID:",user._id)
+                  if(n == rcsids.length) {
+                    res.json(bad_ids)
+                  }
+                } else { // make
+                  updated_info.lecture = req.body.lecture_id
+                  updated_info.submitter = user._id
+                  let updated = new LectureSubmission(updated_info);
+                  updated.save().then(() => {
+                    console.log("<SUCCESS> Adding playback lecture submission for user with RCS:",rcs)
+                    if(n == rcsids.length) {
+                      res.json(bad_ids)
+                    }
+                  }).catch(() => {
+                    console.log("<ERROR> Adding playback lecture submission for user with RCS:",rcs)
                     res.status(400).send("unable to save lectureSubmission to database");
                   });
                 }
@@ -272,6 +340,43 @@ lectureSubmissionRoutes.get('/for_lecture/:lecture_id', (req, res) => {
   )
 })
 
+lectureSubmissionRoutes.post('/for_lectures', (req, res) => {
+  let lecture_ids = req.body.lecture_ids;
+  LectureSubmission.find(
+    {lecture: {$in: lecture_ids}},
+    function(err,lect_submissions) {
+      if(err || lect_submissions == null) {
+        res.json(err)
+      } else if(lect_submissions.length > 0){
+        let submitter_ids = lect_submissions.map(a=>a.submitter)
+        User.find({_id: {$in: submitter_ids}}, (error, submitters) => {
+          if(error || submitters == null) {
+            console.log("<ERROR> Getting lecture submissions for lectures with IDs:",lecture_ids)
+            res.json(error)
+          } else {
+            console.log(submitters)
+            let n = 0
+            lect_submissions.forEach(lect_sub => {
+              n++
+              let submitter = submitters.find(a => a._id.equals(lect_sub.submitter))
+              if(submitter) {
+                lect_sub.submitter = submitter
+              }
+              if(n == lect_submissions.length) {
+                console.log("<SUCCESS> Getting lecture submissions for lectures with IDs:",lecture_ids)
+                res.json(lect_submissions)
+              }
+            })
+          }
+        })
+      } else {
+        console.log("<SUCCESS> Getting lecture submissions for lectures with IDs:",lecture_ids)
+        res.json([])
+      }
+    }
+  )
+})
+
 lectureSubmissionRoutes.get('/for_student/:lecture_id/:student_id', (req, res) => {
   let lecture_id = req.params.lecture_id
   let student_id = req.params.student_id
@@ -294,79 +399,6 @@ lectureSubmissionRoutes.get('/for_student/:lecture_id/:student_id', (req, res) =
       }
     }
   )
-})
-
-lectureSubmissionRoutes.post('/update_all_to_new_model', (req, res) => {
-  Lecture.find(function(err,lectures) {
-    if(err) {
-      console.log("<ERROR> Getting all lectures")
-      res.json(err)
-    } else {
-      User.find(function(err,users) {
-        if(err) {
-          console.log("<ERROR> Getting all users")
-          res.json(err)
-        } else {
-          let submission_promises = []
-
-          users.forEach(user => {
-            lectures.forEach(lecture => {
-              submission_promises.push(new Promise((resolve,reject) => {
-                LectureSubmission.find(
-                {
-                  lecture: lecture._id,
-                  submitter: user._id
-                }, function(err,submissions){
-                  if(submissions && submissions.length) {
-                    let new_submission_data = {
-                      lecture: lecture._id,
-                      submitter: user._id
-                    }
-
-                    let live = submissions.filter(a => a.live_submission_time)
-                    let playback = submissions.filter(a => a.playback_submission_time || !a.live_submission_time)
-
-                    if(live && live.length > 0) {
-                      new_submission_data.live_progress = live.length
-                      new_submission_data.live_percent = live.length / lecture.checkins.length
-                      new_submission_data.live_submission_time = live.map(a => a.live_submission_time)[0]
-                    }
-
-                    if(playback && playback.length > 0) {
-                      new_submission_data.video_progress = playback[0].video_progress
-                      new_submission_data.video_percent = playback[0].video_percent
-                      new_submission_data.playback_submission_time = playback[0].playback_submission_time
-                    }
-
-                    let old_ids = submissions.map(a => a._id)
-
-                    LectureSubmission.deleteMany({_id: {$in: old_ids}},function(err) {
-                      if(err) {
-                        console.log("<ERROR> Removing old submissions")
-                        res.json(err)
-                      } else {
-                        let lecture_submission = new LectureSubmission(new_submission_data)
-                        lecture_submission.save()
-                        .then(() => {
-                          resolve(lecture_submission)
-                        })
-                      }
-                    })
-                  } else {
-                    resolve(null)
-                  }
-                })
-              }))
-            })
-          })
-
-          Promise.all(submission_promises).then(resolved => {
-            res.json(resolved)
-          })
-        }
-      })
-    }
-  })
 })
 
 module.exports = lectureSubmissionRoutes;

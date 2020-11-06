@@ -56,15 +56,27 @@
 				<h5>Instructors Only</h5>
 			</button>
 			<div v-if="selected_tab === 3" role="tabpanel" aria-labelledby="instructors_only_btn" id="instructors_only" class="tab_section">
-				<div id="manual-override-container">
-					<div v-if="override_err_msg != ''" id="override-err-msg">
-						<p class="err-msg">{{override_err_msg}}</p>
+				<div class="override-container">
+					<div v-if="sync_override_err_msg != ''" id="sync-override-err-msg">
+						<p class="err-msg">{{sync_override_err_msg}}</p>
 					</div>
 					<div class="input-group">
-						<label for="rcs-ids" id="override-label">Manual override:</label>
-						<input id="rcs-ids" type="text" v-model.lazy="overrides" class="form-control" placeholder="eg: 'whitte3,mbizin'" aria-label="RCS IDs to override"/>
+						<label for="sync-rcs-ids" id="sync-override-label">Synchronous override:</label>
+						<input id="sync-rcs-ids" type="text" v-model.lazy="sync_overrides" class="form-control" placeholder="eg: 'whitte3,mbizin'" aria-label="RCS IDs to override"/>
 						<div class="input-group-append">
-							<button id="submit-manual-override" class="btn btn-primary" aria-label="Submit Override" @click="handleOverride">Override</button>
+							<button style="border-radius: 0.5rem;" class="btn btn-primary" aria-label="Synchronous Submit Override" @click="handleSyncOverride">Override</button>
+						</div>
+					</div>
+				</div>
+				<div class="override-container">
+					<div v-if="async_override_err_msg != ''" id="async-override-err-msg">
+						<p class="err-msg">{{async_override_err_msg}}</p>
+					</div>
+					<div class="input-group">
+						<label for="async-rcs-ids" id="async-override-label">Asynchronous override:</label>
+						<input id="async-rcs-ids" type="text" v-model.lazy="async_overrides" class="form-control" placeholder="eg: 'whitte3,mbizin'" aria-label="RCS IDs to override"/>
+						<div class="input-group-append">
+							<button style="border-radius: 0.5rem;" class="btn btn-primary" aria-label="Asynchronous Submit Override" @click="handleAsyncOverride">Override</button>
 						</div>
 					</div>
 				</div>
@@ -96,7 +108,7 @@
 										</div>
 										{{polls[i].question}}
 										<button type="button" v-if="!checkin.start_time || (checkin.start_time && Date.parse(checkin.start_time) > Date.now())" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
-											<img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
+											<img class="svg-color" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
 										</button>
 									</td>
 									<td v-else>X</td>
@@ -124,7 +136,7 @@
 										</div>
 										{{polls[i].question}}
 										<button type="button" v-if="Date.parse(lecture.playback_submission_start_time) > Date.now()" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
-											<img src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
+											<img class="svg-color" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
 										</button>
 									</td>
 								</tr>
@@ -161,8 +173,10 @@ export default {
 	data(){
 		return {
 			selected_tab: -1,
-			overrides: "",
-			override_err_msg: "",
+			sync_overrides: "",
+			sync_override_err_msg: "",
+			async_overrides: "",
+			async_override_err_msg: "",
 			submissions_with_live: [],
 			submissions_with_playback: [],
 			submissions_with_nothing: [],
@@ -181,12 +195,12 @@ export default {
 			let playsum = 0
 			this.submissions.forEach(submission => {
 				let hasAttendance = false
-				if(submission.live_progress) {
+				if(submission.live_percent) {
 					this.submissions_with_live.push(submission)
 					hasAttendance = true
 					livesum += submission.live_percent
 				}
-				if(submission.video_progress) {
+				if(submission.video_percent) {
 					this.submissions_with_playback.push(submission)
 					hasAttendance = true
 					playsum += submission.video_percent
@@ -195,7 +209,7 @@ export default {
 					this.submissions_with_nothing.push(submission)
 				}
 			})
-			if(this.all_students) {
+			if(this.all_students && this.all_students.length) {
 				this.live_percent = livesum / this.all_students.length
 				this.playback_percent = playsum / this.all_students.length
 				let submitted_student_ids = this.submissions.map(a=>a.submitter._id)
@@ -225,8 +239,15 @@ export default {
 			}
 			for(let j=0;j<btns.length;j++) {
 				if(j==i) {
-					btns[j].classList.add("selected_tab")
-					btns[j].setAttribute("aria-selected","true")
+					if(i == this.selected_tab) {
+						btns[j].classList.remove("selected_tab")
+						btns[j].setAttribute("aria-selected","false")
+						i = -1
+						break
+					} else {
+						btns[j].classList.add("selected_tab")
+						btns[j].setAttribute("aria-selected","true")
+					}
 				} else {
 					btns[j].classList.remove("selected_tab")
 					btns[j].setAttribute("aria-selected","false")
@@ -234,20 +255,38 @@ export default {
 			}
 			this.selected_tab = i
 		},
-		handleOverride() {
-			let rcs_list = this.overrides.replace(/\s/g,'').split(",")
+		handleSyncOverride() {
+			let rcs_list = this.sync_overrides.replace(/\s/g,'').split(",")
 			if(rcs_list.length == 1 && rcs_list[0]=="") {
-				this.overrides = ""
-				this.override_err_msg = "Empty"
+				this.sync_overrides = ""
+				this.sync_override_err_msg = "Empty"
 			} else {
 				LectureSubmissionAPI.addLiveSubmissionByRCS(rcs_list,this.lecture._id)
 				.then(res => {
 					if(res.data.length == 0) {
-						this.overrides = ""
-						this.override_err_msg = ""
+						this.sync_overrides = ""
+						this.sync_override_err_msg = ""
 					} else {
-						this.overrides = res.data.join(",")
-						this.override_err_msg = "Remaining are invalid"
+						this.sync_overrides = res.data.join(",")
+						this.sync_override_err_msg = "Remaining are invalid"
+					}
+				})
+			}
+		},
+		handleAsyncOverride() {
+			let rcs_list = this.async_overrides.replace(/\s/g,'').split(",")
+			if(rcs_list.length == 1 && rcs_list[0]=="") {
+				this.async_overrides = ""
+				this.async_override_err_msg = "Empty"
+			} else {
+				LectureSubmissionAPI.addPlaybackSubmissionByRCS(rcs_list,this.lecture._id)
+				.then(res => {
+					if(res.data.length == 0) {
+						this.async_overrides = ""
+						this.async_override_err_msg = ""
+					} else {
+						this.async_overrides = res.data.join(",")
+						this.async_override_err_msg = "Remaining are invalid"
 					}
 				})
 			}
@@ -278,6 +317,26 @@ export default {
 </script>
 
 <style scoped>
+
+	:root {
+
+		--lecture-attendance-button-text: #636363;
+
+		--lecture-attendance-grey-pill: rgb(110, 110, 110);
+		--lecture-attendance-grey-shadow: rgba(109, 109, 109, 0.644);
+		--lecture-attendance-text: white;
+
+		--lecture-attendance-live-glow: rgba(65, 162, 91, 0.33);
+		--lecture-attendance-async-glow:  rgba(214, 71, 233, 0.36);
+		--lecture-attendace-absent-glow: rgba(255, 99, 88, 0.36);
+	}
+
+	.input-group {
+		width: auto;
+		top: 0px;
+		padding-right: 10px;
+	} 
+
 	#lecture-attendance-table {
 		margin-top: 3rem;
 		text-align: start;
@@ -289,7 +348,7 @@ export default {
 		bottom: 0;
 		left: 0;
 		right: 0;
-		background: rgba(255, 255, 255, 0.65);
+		background: var(--modal-container-background);
 	}
 
 	#edit-poll-modal-contents {
@@ -298,8 +357,8 @@ export default {
 		bottom: 25%;
 		left: 25%;
 		right: 25%;
-		background: white;
-		border: 1px solid gray;
+		background: var(--modal-background);
+		border: 1px solid var(--modal-border);
 		padding: 1rem;
 		border-radius: 1rem;
 	}
@@ -311,14 +370,14 @@ export default {
 	  background: none;
 	  outline: none;
 	  border: none;
-	  color: #636363;
+	  color: var(--lecture-attendance-button-text);
 	  /* margin-right: 3rem; */
 	  width: 100%;
 	  padding: 0;
-	  background: rgb(110, 110, 110);
+	  background: var(--lecture-attendance-grey-pill); 
 	  margin: 0.5rem 0rem;
 	  border-radius: 0.25rem;
-	  box-shadow: 0px 3px 3px 0px rgba(109, 109, 109, 0.644);
+	  box-shadow: 0px 3px 3px 0px var(--lecture-attendance-grey-shadow); 
 	}
 
 	.progress-bar {
@@ -330,17 +389,17 @@ export default {
 	}
 
 	#live-progress-bar {
-		background: #04852f;
+		background: var(--green-pill);
 		transition: width 0s linear;
 	}
 
 	#playback-progress-bar {
-		background: rgba(143,62,202,1);
+		background: var(--lecture-playback);
 		transition: width 0s linear;
 	}
 
 	#absent-progress-bar {
-		background: #d13e34;
+		background: var(--red-pill);
 		transition: width 0s linear;
 	}
 
@@ -348,25 +407,25 @@ export default {
 	  margin: 0;
 	  font-size: 1.5rem;
 	  margin: 0.5rem 1rem;
-	  color: white;
+	  color: var(--lecture-attendance-text);
 	}
 
 	#live_btn:hover,
 	#live_btn:focus,
 	#live_btn.selected_tab {
-		box-shadow: 0px 0px 10px 7px rgba(65, 162, 91, 0.33);
+		box-shadow: 0px 0px 10px 7px var(--lecture-attendance-live-glow);
 	}
 
 	#playback_btn:hover,
 	#playback_btn:focus,
 	#playback_btn.selected_tab {
-		box-shadow: 0px 0px 10px 7px rgba(214, 71, 233, 0.36);
+		box-shadow: 0px 0px 10px 7px var(--lecture-attendance-async-glow);
 	}
 
 	#absent_btn:hover,
 	#absent_btn:focus
 	#absent_btn.selected_tab {
-		box-shadow: 0px 0px 10px 7px rgba(255, 99, 88, 0.36);
+		box-shadow: 0px 0px 10px 7px var(--lecture-attendance-absent-glow);
 	}
 	
 
@@ -400,7 +459,11 @@ export default {
 		height: 100%;
 	}
 
-	#override-label {
+	#sync-override-label {
+		margin: auto 1rem;
+		font-size: 1.2rem;
+	}
+	#async-override-label {
 		margin: auto 1rem;
 		font-size: 1.2rem;
 	}
@@ -409,13 +472,20 @@ export default {
 		height: 2rem;
 	}
 
-	#manual-override-container {
+	.override-container {
+		position: relative;
+		padding-top: 10px;
+		bottom: 10px;
 		display: flex;
-		height: 3rem;
+		height: auto;
 	}
 
-	#override-err-msg {
-		color:#c40000;
+	#sync-override-err-msg {
+		color: var(--error);
+		padding: 0.5rem;
+	}
+	#async-override-err-msg {
+		color: var(--error);
 		padding: 0.5rem;
 	}
 
@@ -424,7 +494,7 @@ export default {
 	}
 
 	table, th, td {
-		border: 1px solid black;
+		border: 1px solid var(--main-text-color);
 		padding: 0.5rem;
 	}
 

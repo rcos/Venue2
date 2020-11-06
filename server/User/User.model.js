@@ -9,7 +9,7 @@ let User = new Schema({
 	first_name: String,
 	last_name: String,
 	user_id: String,
-	email: String,
+	email: {type: String, unique: true},
 	temp_password: String,
 	password: String,
 	connect_sid: {
@@ -31,7 +31,11 @@ let User = new Schema({
 	student_sections: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Section'
-	}]
+	}],
+	dark_mode: {
+		type: Boolean,
+		default: false
+	}
 });
 
 module.exports = mongoose.model('User', User);

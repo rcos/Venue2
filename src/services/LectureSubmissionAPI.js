@@ -10,7 +10,13 @@ export default {
     })
   },
   addLiveSubmissionByRCS(rcs,lecture_id) {
-    return API().post('lecturesubmissions/add_by_rcs', {
+    return API().post('lecturesubmissions/add_live_by_rcs', {
+      rcs: rcs,
+      lecture_id: lecture_id // add our data to the request body
+    })
+  },
+  addPlaybackSubmissionByRCS(rcs,lecture_id) {
+    return API().post('lecturesubmissions/add_playback_by_rcs', {
       rcs: rcs,
       lecture_id: lecture_id // add our data to the request body
     })
@@ -28,6 +34,11 @@ export default {
   },
   getLectureSubmissionsForLecture(lecture_id) {
     return API().get('lecturesubmissions/for_lecture/' + lecture_id)
+  },
+  getLectureSubmissionsForLectures(lecture_ids) {
+    return API().post('lecturesubmissions/for_lectures', {
+      lecture_ids: lecture_ids
+    })
   },
   getLectureSubmissionsForStudent(lecture_id, student_id) {
     return API().get('lecturesubmissions/for_student/' + lecture_id + '/' + student_id)

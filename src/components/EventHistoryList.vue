@@ -9,63 +9,13 @@
 
       <show-at breakpoint="small">
 
-        <div>
-          <div class="attendance-month-container" v-for="(month,index) in event_months">
-            <div class="month-bar-mobile">
-              <span class="month">{{ month_names[month] }}</span>
-            </div>
-
-            <router-link
-              v-for="event in event_history_by_month[index]"
-              :to="{name: 'event_info', params: { event_id: event._id }}">
-              <div class="event-pill-container-mobile">
-                <div class="day-of-week-mobile">Mon</div>
-                <div class="day-of-month-mobile">10</div>
-              </div>
-            </router-link>
-
-          </div>
-        </div>
-
+        
       </show-at>
       <hide-at breakpoint="small">
 
         <div>
 
-          <div class="attendance-month-container" v-for="(month,index) in event_months">
-            <div class="month-bar" v-on:click="toggleMonthVisibility(month)" ><span class="month">{{ month_names[month] }}</span></div>
-
-            <div class="event-pill-container">
-              <!-- Grid Mode -->
-              <div class="event-pill-list" v-if="monthVisible(month) && grid_mode" v-for="event in event_history_by_month[index]">
-                <router-link :to="{name: 'event_info', params: { event_id: event._id }}">
-                  <div class="event-pill">
-                    <div class="left-side">
-                      <div class="day-of-week">Mon</div>
-                      <div class="day-of-month">10</div>
-                    </div>
-                    <div class="right-side">
-                      <div class="name-of-event">Online Class #1</div>
-                      <div class="location-of-event">WebEx Meeting</div>
-                    </div>
-                  </div>
-                </router-link>
-              </div>
-
-              <!-- List Mode -->
-              <div class="event-pill-list-mode" v-if="monthVisible(month) && !grid_mode" v-for="event in event_history_by_month[index]">
-                <router-link :to="{name: 'event_info', params: {event_id: event._id}}">
-                  <div class="event-pill-list-item">
-                    <div class="event-date-section">Mon 10</div>
-                    <div class="event-name-section">Online Class #1</div>
-                    <div class="event-location-section">WebEx Meeting</div>
-                  </div>
-                </router-link>
-              </div>
-            </div>
-
-          </div>
-
+          
         </div>
 
       </hide-at>
@@ -75,8 +25,7 @@
 </template>
 
 <script>
-  import EventAPI from '@/services/EventAPI.js';
-
+  
   export default {
     name: 'EventHistoryList',
     props: {
@@ -111,13 +60,12 @@
     },
     methods: {
       async getEventHistoryForCourse() {
-        const response = await EventAPI.getEventHistoryForCourse(this.course._id)
+
         this.event_history = response.data
         this.sortEventsByStartTime()
         this.separateEventsByMonth()
       },
       async getEventHistoryForSection() {
-        const response = await EventAPI.getEventHistoryForSection(this.section._id)
         this.event_history = response.data
         this.sortEventsByStartTime()
         this.separateEventsByMonth()
@@ -143,10 +91,20 @@
 </script>
 
 <style scoped>
+:root {
+  --event-pill-green: #04852f;
+  --event-pill-shadow: rgba(0, 0, 0, 0.065);
+  --event-pill-date: rgba(0, 0, 0, 0.6);
+  --event-pill-name: rgba(0, 0, 0, 1);
+  --event-pill-location: rgba(0, 0, 0, 0.5);
+
+  --event-pill-border: rgba(35, 217, 96, 0.5);
+  --event-pill-text: black;
+}
 
   .event-pill-list-mode {
     width: 45%;
-    border: 1px solid #04852f;
+    border: 1px solid var(--event-pill-green);
     display: inline-block;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
@@ -155,7 +113,7 @@
     font-size: 0.9rem;
     padding: 0px 10px;
     border-radius: 5px;
-    box-shadow: 0px 3px 5px 5px rgba(0, 0, 0, 0.065);
+    box-shadow: 0px 3px 5px 5px var(--event-pill-shadow);
     height: 40px;
     line-height: 40px;
   }
@@ -168,17 +126,17 @@
 
   .event-pill-list-item .event-date-section {
     width: 20%;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--event-pill-date);
   }
 
   .event-pill-list-item .event-name-section {
     width: 50%;
-    color: rgba(0, 0, 0, 1);
+    color: var(--event-pill-name);
   }
 
   .event-pill-list-item .event-location-section {
     width: 30%;
-    color: rgba(0, 0, 0, 0.5);
+    color: var(--event-pill-location);
   }
 
   .attendance-month-container {
@@ -197,14 +155,14 @@
   }
 
   .event-pill {
-    border: 1px solid rgba(35, 217, 96, 0.5);
+    border: 1px solid var(--event-pill-border);
     width: 250px;
     height: 60px;
     min-width: 150px;
     border-radius: 5px;
     margin-top: 1rem;
     cursor: pointer;
-    color: black;
+    color: var(--event-pill-text);
   }
 
   .event-card-section {

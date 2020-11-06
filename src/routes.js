@@ -6,11 +6,11 @@ import EditUser from './components/admin/User/EditUser.vue';
 import Instructors from './components/admin/User/Instructors.vue';
 import Students from './components/admin/User/Students.vue';
 import Course from './components/admin/Course/Course.vue';
-import EditCourse from './components/admin/Course/EditCourse.vue';
+import EditCourse from './components/EditCourse.vue';
 import NewCourse from './components/admin/Course/NewCourse.vue';
 import Courses from './components/admin/Course/Courses.vue';
 import AdminSections from './components/admin/Section/AdminSections.vue';
-import AdminEditSection from './components/admin/Section/AdminEditSection.vue';
+import EditSection from './components/EditSection.vue';
 import AdminNewSection from './components/admin/Section/AdminNewSection.vue';
 import NewUser from './components/admin/User/NewUser.vue';
 import OnboardUser from './views/OnboardUser.vue';
@@ -34,8 +34,15 @@ import LectureInfo from './views/LectureInfo.vue';
 import Settings from './views/Settings.vue';
 import RedirectCASLogin from './views/RedirectCASLogin.vue';
 import Statistics from './views/Statistics.vue';
+import TeachNewCourse from '@/components/TeachNewCourse.vue';
+import NewSection from '@/components/NewSection.vue';
+import EditLecture from '@/components/EditLecture.vue';
+import JoinCourse from '@/components/JoinCourse.vue';
 
-import AuthAPI from '@/services/AuthAPI.js'
+import AuthAPI from '@/services/AuthAPI.js';
+import UserAPI from '@/services/UserAPI.js';
+import SectionAPI from './services/SectionAPI';
+import CourseAPI from './services/CourseAPI';
 
 const url = require('url')
 const query = require('querystring')
@@ -133,12 +140,12 @@ const router = new VueRouter({
       }
     },
     {
-      name: 'editCourse',
-      path: '/editCourse/:id',
+      name: 'edit_course',
+      path: '/edit_course/:id',
       component: EditCourse,
       meta: {
         requiresAuth: true,
-        requiresAdmin: true
+        requiresInstructor: true
       }
     },
     {
@@ -160,12 +167,12 @@ const router = new VueRouter({
       }
     },
     {
-      name: 'admin_edit_section',
-      path: '/admin/edit_section/:id',
-      component: AdminEditSection,
+      name: 'edit_section',
+      path: '/edit_section/:id',
+      component: EditSection,
       meta: {
         requiresAuth: true,
-        requiresAdmin: true
+        requiresInstructor: true
       }
     },
     {
@@ -175,6 +182,15 @@ const router = new VueRouter({
       meta: {
         requiresAuth: true,
         requiresAdmin: true
+      }
+    },
+    {
+      name: 'new_section',
+      path: '/new_section/:id',
+      component: NewSection,
+      meta: {
+        requiresAuth: true,
+        requiresInstructor: true
       }
     },
     {
@@ -259,6 +275,15 @@ const router = new VueRouter({
       }
     },
     {
+      name: 'join_course',
+      path: '/join_course/:id',
+      component: JoinCourse,
+      meta: {
+        title: "Join Course",
+        requiresAuth: true
+      }
+    },
+    {
       name: 'new_event',
       path: '/new_event/:course_id',
       component: NewEvent,
@@ -339,6 +364,24 @@ const router = new VueRouter({
         requiresAuth: true,
         requiresInstructor: true
       }
+    },
+    {
+      name: 'teach_new_course',
+      path: '/teach_new_course',
+      component: TeachNewCourse,
+      meta: {
+        title: "Teach New Course",
+        requiresAuth: true
+      }
+    },
+    {
+      name: 'edit_lecture',
+      path: '/edit_lecture/:id',
+      component: EditLecture,
+      meta: {
+        title: "Edit Lecture",
+        requiresAuth: true
+      }
     }
   ]
 })
@@ -348,17 +391,11 @@ router.beforeEach((to, from, next) => {
 
   if(to.name == 'landing_page' || to.name == 'dashboard') {
     let url_query = query.parse(url.parse(window.location.href).query)
-    console.log('here, surely?')
 		if(url_query && url_query.code) {
-      console.log('made it')
       if(process.env.NODE_ENV === 'production') {
-        console.log(url_query.code)
-        console.log(localStorage.getItem('last_webex'))
-        // window.location.href="https://www.venue-meetings.com/"+"?code="+url_query.code+"#/lecture_playback/"+localStorage.getItem('last_webex')
+        window.location.href="https://www.venue-meetings.com/"+"?code="+url_query.code+"#/lecture_playback/"+localStorage.getItem('last_webex')
       } else {
-        console.log(url_query.code)
-        console.log(localStorage.getItem('last_webex'))
-        // window.location.href="http://localhost:8080/"+"?code="+url_query.code+"#/lecture_playback/"+localStorage.getItem('last_webex')
+        window.location.href="http://localhost:8080/"+"?code="+url_query.code+"#/lecture_playback/"+localStorage.getItem('last_webex')
       }
 		}
   }
@@ -369,7 +406,9 @@ router.beforeEach((to, from, next) => {
 
       const user_data = JSON.parse(loggedIn)
 
-      if(to.matched.some(record => record.meta.requiresAdmin)) {
+      if(user_data.current_user.is_admin) {
+        next()
+      } else if(to.matched.some(record => record.meta.requiresAdmin)) {
 
         if (user_data.current_user.is_admin) {
           next()
@@ -379,19 +418,32 @@ router.beforeEach((to, from, next) => {
 
       } else if (to.matched.some(record => record.meta.requiresInstructor)) {
 
-        if (to.name == 'new_lecture' && user_data.current_user.instructor_courses.includes(to.params.course_id)
-        || to.name == 'new_lecture' && user_data.current_user.ta_sections.includes(to.params.course_id)
-        || to.name == 'statistics' && user_data.current_user.instructor_courses.length > 0) {
+        if ((to.name == 'new_lecture' && user_data.current_user.instructor_courses.includes(to.params.course_id))
+        || (to.name == 'new_lecture' && user_data.current_user.ta_sections.includes(to.params.course_id))
+        || (to.name == 'statistics' && user_data.current_user.instructor_courses.length > 0)
+        || (to.name == 'edit_course' && user_data.current_user.instructor_courses.includes(to.params.id))
+        || (to.name == 'edit_section' && user_data.current_user.ta_sections.includes(to.params.id))
+        || (to.name == 'edit_section' && from.name == 'edit_course')
+        || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))){
           next()
         } else {
           next('/dashboard')
         }
+      } 
+      else if (to.name == 'join_course') { //student implement new join route
 
-      } else {
+        if (user_data.current_user.instructor_courses.includes(to.params.id)) {
+          next('/course_info/' + to.params.id)
+        }
+        next()
+
+      }  
+      else {
         next()
       }
-
-    } else {
+    }
+    // not logged in
+    else {
       next('/')
     }
 

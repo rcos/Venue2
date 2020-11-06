@@ -48,7 +48,6 @@
 </template>
 
 <script>
-  import EventAPI from '@/services/EventAPI.js';
   import AdminSections from '@/components/admin/Section/AdminSections';
 
   export default {

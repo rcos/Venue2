@@ -11,13 +11,17 @@ let Section = new Schema({
 	},
 	name: {type:String,default:''},
 	teaching_assistants: [{
-		type: mongoose.Schema.Types.ObjectId,
+		type: String,
 		ref: 'User'
 	}],
 	students: [{
-		type: mongoose.Schema.Types.ObjectId,
+		type: String,
 		ref: 'User'
-	}]
+	}],
+	is_public: {
+		type: Boolean,
+		default: false
+	}
 });
 
 module.exports = mongoose.model('Section', Section);

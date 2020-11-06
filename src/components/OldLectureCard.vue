@@ -37,7 +37,6 @@
 
 <script>
 import SectionAPI from "@/services/SectionAPI.js";
-import SubmissionAPI from "@/services/SubmissionAPI.js";
 
 export default {
   name: "LectureCard",
@@ -131,33 +130,32 @@ export default {
   height: 3.5rem;
   margin-left: 2rem;
   margin-top: 2rem;
-  margin-bottom: 1rem;
   cursor: pointer;
 }
 
 .pending-container .active-event-card-background {
-  background-color: #E0932F;
+  background-color: var(--event-pending);
 }
 
 .ongoing-container .active-event-card-background {
-  background-color: #4bcc69;
+  background-color: var(--event-ongoing);
 }
 
 .static-container .active-event-card-background {
-  background-color: #2a8dc7;
+  background-color: var(--event-static);
 }
 
 .ended-container .active-event-card-background {
-  background-color: #919191;
+  background-color: var(--event-ending);
 }
 
 .active-event-card {
   position: absolute;
-  background-color: white;
+  background-color: var(--event-active-background);
   width: 100%;
   border-radius: 5px;
   padding: 0.8rem 0.4rem 0.7rem 0.4rem;
-  box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 3px 10px 5px var(--event-active-shadow);
   transition: background-color, box-shadow 0.25s;
   z-index: 4;
 }
@@ -177,13 +175,13 @@ export default {
 .course-name {
   /*font-size: 0.8rem;*/
   font-size: 0.8rem;
-  color: #466d85;
+  color: var(--event-course-name);
   font-weight: bold;
 }
 
 .course-title {
   font-size: 0.75rem;
-  color: #146c91;
+  color: var(--event-course-title);
 }
 
 .event-section {
@@ -209,7 +207,7 @@ export default {
 
 .event-location {
   font-size: 0.75rem;
-  color: #524e0a;
+  color: var(--event-location);
 }
 
 #time-section {
@@ -232,15 +230,15 @@ export default {
 }
 
 .pending-text {
-  color: #cf8423;
+  color: var(--event-pending);
 }
 
 .time-remaining-text {
-  color: #4bcc69;
+  color: var(--event-ongoing);
 }
 
 .ended-text {
-  color: #575757;
+  color: var(--event-ending);
 }
 
 /*Large devices (Laptops and above)*/

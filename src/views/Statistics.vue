@@ -61,6 +61,7 @@ import LectureAPI from '@/services/LectureAPI.js'
 import UserAPI from '@/services/UserAPI.js'
 import LectureSubmissionAPI from '@/services/LectureSubmissionAPI.js'
 import PlaybackPollAPI from '@/services/PlaybackPollAPI.js'
+import PaletteAPI from '@/services/PaletteAPI.js'
 
 import chartjs from 'chart.js'
 
@@ -110,7 +111,8 @@ export default {
 			colors: {
 				green: { fill: '#bfffc6', stroke: '#04dd74' },
 				blue: { fill: '#92bed2', stroke: '#3282bf' },
-				red: { fill: '#ff8787', stroke: '#e95454' }
+				red: { fill: '#ff8787', stroke: '#e95454' },
+				text: 'grey'
 			},
 			charts: [],
 			stacked: true,
@@ -121,9 +123,41 @@ export default {
 	},
 	created() {
 		this.current_user = this.$store.state.user.current_user;
+		this.getColors();
 		this.fetchData()
 	},
 	methods: {
+		getColors() {
+
+			let root = document.documentElement;
+
+			PaletteAPI.setPalette(root, this.current_user.dark_mode);
+
+			var live_border = new Color();
+      		var live_fill = new Color();
+      		var playback_border = new Color();
+      		var playback_fill = new Color();
+			var absent_border = new Color(); 
+			var absent_fill = new Color(); 
+
+			var text_color = new Color(); 
+
+			live_border = getComputedStyle(root).getPropertyValue('--stats-live-border');
+      		live_fill = getComputedStyle(root).getPropertyValue('--stats-live-fill');
+	  		playback_border = getComputedStyle(root).getPropertyValue('--stats-playback-border');
+	  		playback_fill = getComputedStyle(root).getPropertyValue('--stats-playback-fill');
+      		absent_border = getComputedStyle(root).getPropertyValue('--stats-absent-border');
+			absent_fill = getComputedStyle(root).getPropertyValue('--stats-absent-fill');
+
+			text_color = getComputedStyle(root).getPropertyValue('--main-text-color');
+			  
+			this.colors.green = { fill: live_fill, stroke: live_border },
+			this.colors.blue = { fill: playback_fill, stroke: playback_border },
+			this.colors.red = { fill: absent_fill, stroke: absent_border },
+
+			this.text = text_color
+			
+		},
 		fetchData() {
 			CourseAPI.getInstructorCourses(this.current_user._id)
 			.then(res => {
@@ -205,24 +239,24 @@ export default {
 					lecture.students = {}
 					lecture.sections.forEach(sectID => {
 						let section = this.sections.all.find(section => section._id == sectID)
-						section.students.forEach(studID => {
+						section.students.forEach(studEmail => {
 							if(this.students.active.length > 0) {
 								this.students.active.forEach(stud => {
-									if(stud._id == studID) {
-										lecture.students[studID] = {}
+									if(stud.email == studEmail) {
+										lecture.students[studEmail] = {}
 									}
 								})
 							} else {
-								lecture.students[studID] = {}
+								lecture.students[studEmail] = {}
 							}
 						})
 					})
 					let subsForLecture = this.lectureSubmissions.filtered.filter(a => a.lecture == lecture._id)
 					subsForLecture.forEach(sub => {
-						Object.keys(lecture.students).forEach(studID => {
-							if(sub.submitter._id == studID) {
-								lecture.students[studID] = sub
-								if(undefined == currentSubmissions[studID]) {
+						Object.keys(lecture.students).forEach(studEmail => {
+							if(sub.submitter.email == studEmail) {
+								lecture.students[studEmail] = sub
+								if(undefined == currentSubmissions[studEmail]) {
 									currentSubmissions[lecture._id] = []
 								}
 								currentSubmissions[lecture._id].push(sub)
@@ -315,23 +349,23 @@ export default {
 							lecture.students = {}
 							lecture.sections.forEach(sectID => {
 								let section = this.sections.all.find(section => section._id == sectID)
-								section.students.forEach(studID => {
+								section.students.forEach(studEmail => {
 									if(this.students.active.length > 0) {
 										this.students.active.forEach(stud => {
-											if(stud._id == studID) {
-												lecture.students[studID] = {}
+											if(stud.email == studEmail) {
+												lecture.students[studEmail] = {}
 											}
 										})
 									} else {
-										lecture.students[studID] = {}
+										lecture.students[studEmail] = {}
 									}
 								})
 							})
 							let subsForLecture = this.lectureSubmissions.filtered.filter(a => a.lecture == lecture._id)
 							subsForLecture.forEach(sub => {
-								Object.keys(lecture.students).forEach(studID => {
-									if(sub.submitter._id == studID) {
-										lecture.students[studID] = sub
+								Object.keys(lecture.students).forEach(studEmail => {
+									if(sub.submitter.email == studEmail) {
+										lecture.students[studEmail] = sub
 									}
 								})
 							})
@@ -372,23 +406,23 @@ export default {
 					lecture.students = {}
 					lecture.sections.forEach(sectID => {
 						let section = this.sections.all.find(section => section._id == sectID)
-						section.students.forEach(studID => {
+						section.students.forEach(studEmail => {
 							if(this.students.active.length > 0) {
 								this.students.active.forEach(stud => {
-									if(stud._id == studID) {
-										lecture.students[studID] = {}
+									if(stud.email == studEmail) {
+										lecture.students[studEmail] = {}
 									}
 								})
 							} else {
-								lecture.students[studID] = {}
+								lecture.students[studEmail] = {}
 							}
 						})
 					})
 					let subsForLecture = this.lectureSubmissions.filtered.filter(a => a.lecture == lecture._id)
 					subsForLecture.forEach(sub => {
-						Object.keys(lecture.students).forEach(studID => {
-							if(sub.submitter._id == studID) {
-								lecture.students[studID] = sub
+						Object.keys(lecture.students).forEach(studEmail => {
+							if(sub.submitter.email == studEmail) {
+								lecture.students[studEmail] = sub
 							}
 						})
 					})
@@ -416,13 +450,13 @@ export default {
 				})
 			}
 		},
-		getAttendanceForLecture(lecture) {
+		getAttendanceForLecture(lecture) {	
 			let lectureStudents = Object.keys(lecture.students)
 			let lectureLive = 0
 			let lecturePlayback = 0
 			let lectureAbsent = 0
-			lectureStudents.forEach(studID => {
-				let studSubmission = lecture.students[studID]
+			lectureStudents.forEach(studEmail => {
+				let studSubmission = lecture.students[studEmail]
 				if(studSubmission.live_percent && studSubmission.video_percent) {
 					let percentage = Math.max(studSubmission.live_percent, studSubmission.video_percent)
 					if(studSubmission.live_percent  == percentage) {
@@ -475,7 +509,13 @@ export default {
 					title: {
 						text: chartInfo.title,
 						display: true,
-						fontSize: 24
+						fontSize: 24,
+						fontColor: this.text
+					},
+					legend: {
+							labels: {
+								fontColor: this.text
+							}
 					},
 					cutoutPercentage: 65,
 					responsive: true,
@@ -502,7 +542,8 @@ export default {
 					title: {
 						text: chartInfo.title,
 						display: true,
-						fontSize: 24
+						fontSize: 24,
+						fontColor: this.text
 					},
 					tooltips: {
 						displayColors: true,
@@ -568,7 +609,8 @@ export default {
 					title: {
 						text: chartInfo.title,
 						display: true,
-						fontSize: 24
+						fontSize: 24,
+						fontColor: this.text
 					},
 					tooltips: {
 						displayColors: true,
@@ -581,22 +623,38 @@ export default {
 							stacked: this.stacked,
 							gridLines: {
 								display: false,
+							},
+							ticks: {
+								fontColor: this.text
+							},
+							gridLines: {
+								color: this.text
 							}
 						}],
 						yAxes: [{
 							stacked: this.stacked,
 							ticks: {
 								beginAtZero: true,
+								fontColor: this.text
 							},
 							type: 'linear',
 							ticks: {
 								callback: function(value, index, values) {
 									return value+"%";
-								}
+								},
+								fontColor: this.text
+							},
+							gridLines: {
+								color: this.text
 							}
-						}]
+						}],
 					},
-					responsive: true
+					legend: {
+							labels: {
+								fontColor: this.text
+							}
+						},
+					responsive: true	
 				}
 			}
 			))
@@ -648,7 +706,8 @@ export default {
 					title: {
 						display: true,
 						text: chartInfo.title,
-						fontSize: 24
+						fontSize: 24,
+						fontColor: this.text
 					},
 					scales: {
 						yAxes: [{
@@ -656,20 +715,33 @@ export default {
 							ticks: {
 								callback: function(value, index, values) {
 									return value+"%";
-								}
-							}
+								},
+								fontColor: this.text
+							},
+							gridLines: {
+								color: this.text
+							}							
 						}],
 						xAxes: [{
 							ticks: {
 								callback: function(value, index, values) {
 									return self.getPrettyDateTime(value);
-								}
+								},
+								fontColor: this.text
+							},
+							gridLines: {
+								color: this.text
 							}
-						}]
+						}],
 					},
 					animation: {
 						duration: 1000,
 					},
+					legend: {
+						labels: {
+							fontColor: this.text
+						}
+					}
 				}
 			}))
 		},
@@ -917,13 +989,31 @@ export default {
 </script>
 
 <style scoped>
+:root {
+	--stats-panel-background: #c4c4c4;
+	--stats-panel-shadow: rgba(109, 109, 109, 0.644);
+
+	--stats-live-border: #04dd74;
+	--stats-live-fill: #bfffc6;
+
+	--stats-playback-border: #3282bf;
+	--stats-playback-fill: #92bed2;
+
+	--stats-absent-border: #e95454;
+	--stats-absent-fill: #ff8787;
+}
 #stats-container {
+	color: var(--main-text-color);
 	position: absolute;
-	top: 4rem;
-	bottom: 2rem;
+	top: 0rem;
+	bottom: 0rem;
 	left: 0;
 	right: 0;
 }
+.title {
+	color: green;
+}
+
 .row {
 	width: 100%;
 	margin: 0;
@@ -962,7 +1052,8 @@ export default {
 	bottom: 0;
 	padding: 0rem 1rem;
 	padding-bottom: 1rem;
-	overflow-y: auto;
+	overflow-y: auto; 
+	/*overflow-y: visible; */
 }
 #stats-render {
 	padding: 0rem 10%;
@@ -983,8 +1074,10 @@ canvas:last-of-type {
 	left: 1rem;
 	bottom: 1rem;
 	right: 1rem;
-	background: #c4c4c4;
+	overflow-y: auto;
+	background: var(--stats-panel-background);
 	border-radius: 1rem;
+	box-shadow: 0px 3px 3px 0px var(--stats-panel-shadow);
 }
 #side-panel {
 	right: 0;
@@ -1001,7 +1094,7 @@ canvas:last-of-type {
 	text-align: center;
 }
 .side-panel-section:not(:first-of-type) {
-	border-top: 1px solid black;
+	border-top: 1px solid var(--main-text-color);
 }
 
 #course-selector {
