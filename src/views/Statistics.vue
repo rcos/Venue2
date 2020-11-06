@@ -119,9 +119,12 @@ export default {
 			pieLabel: 0
 		}
 	},
+	mounted() {
+		console.log(this.$route.params.course_id);
+	},
 	created() {
 		this.current_user = this.$store.state.user.current_user;
-		this.course._id = this.$route.params.id;
+		this.course_id = this.$route.params.id;
 		this.fetchData()
 	},
 	methods: {

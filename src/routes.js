@@ -357,7 +357,7 @@ const router = new VueRouter({
     },
     {
       name: 'statistics',
-      path: '/statistics',
+      path: '/statistics/:course_id',
       component: Statistics,
       meta: {
         title: "Statistics",
