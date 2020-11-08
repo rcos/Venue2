@@ -21,40 +21,11 @@
           </div>
         </div>
         <div class="col-md-6">
-          <label>Snooze (Minutes)</label>
-          <br>
-          <MultiSelectDropdown :options="['None','15','30','45','60']" @update="handleCourseChange" :max="1" :n="0"/>
-          <br>
           <div class="form-group">
             <input type="text" class="form-control" v-model="edited_course_prefix" :placeholder="course.prefix" rows="5">
           </div>
         </div>
       </div><br />
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Meeting URL</label>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <input class="form-control" type="url" name="edited_url" :placeholder="course.meetingURL" size=75>
-          </div>
-        </div>
-      </div><br />
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Snooze</label>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <input class="form-control" v-model="edited_snooze" :placeholder="course.snooze" rows="5">
-          </div>
-          <br>
-        </div>
-      </div>
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
@@ -70,13 +41,37 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
+            <label>Meeting URL</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input class="form-control" type="url" v-model="edited_course_url" :placeholder="course.meetingURL" rows=5>
+          </div>
+        </div>
+      </div><br />
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Snooze (Minutes)</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+          <MultiSelectDropdown :options="['None','15','30','45','60']" :preselected="course.snooze" :max="1" :n="0"/>       
+          </div>
+          <br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
             <label>Lecture Times</label>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <input v-for="time in course.course_times" :key="time.day" class="form-control" :value="time.day + ': ' + time.start_time + ' - ' +  time.end_time" rows="5" readonly>
-            <br>
             <router-link :to="{name: 'new_lecture_time', params: { id:course._id}}">
             <button class="btn btn-primary">Add Time</button>
             </router-link>
@@ -229,10 +224,18 @@
         else {
           this.course.suffix = this.course.suffix
         }
+        if (this.edited_course_url != '') {
+          this.course.meetingURL = this.edited_course_url
+        }
+        else {
+          this.course.meetingURL = this.course.meetingURL
+        }
 
         await CourseAPI.updateCourse(this.course._id, this.course).then(res => {
           this.edited_course_name = ''
           this.edited_dept_name = ''
+          this.edited_course_suffix = ''
+          this.edited_course_url = ''
           this.waiting = false
           let course_id = this.$route.params.id
           this.course.instructors = this.instructors.map(a=>a.email)

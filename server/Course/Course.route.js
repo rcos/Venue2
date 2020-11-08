@@ -142,31 +142,6 @@ courseRoutes.post('/add_instructors/:id', (req, res) => {
   });
 });
 
-<<<<<<< HEAD
-courseRoutes.post('/add_lecture_time/:id', (req, res) => {
-  
-  let course_times = req.body.course_times;
-  let course_id = req.params.id;
-  Course.findById(course_id, function (err, course) {
-    Promise.all([
-      Course.findByIdAndUpdate(course_id, { $push: { course_times: { $each: course_times } } })
-    ]).then(resolved => {
-      res.json();
-    });
-  });
-});
-
-courseRoutes.route('/toggleOpenEnrollment/:id').post(function (req, res) {
-  let id = req.params.id
-  let sections = req.body.sections
-  let section_ids = sections.map(a => a._id)
-  Promise.all([Course.findByIdAndUpdate(id,
-    {is_public: true}, {$set: {is_public: false}}, Section.updateMany( {_id: {$in: section_ids}}, {$set: {is_public: false}})), Course.findByIdAndUpdate(id,
-      {is_public: false}, {$set: {is_public: true}}, Section.updateMany( {_id: {$in: section_ids}}, {$set: {is_public: true}}))
-    ]).then(resolved => {
-      res.json(course)
-    });
-=======
 courseRoutes.post('/toggleAllSectionsPublic/:id', (req, res) => {
   let id = req.params.id;
   let ids = req.body.sections.map(a=>a._id);
@@ -176,7 +151,6 @@ courseRoutes.post('/toggleAllSectionsPublic/:id', (req, res) => {
     console.log("<SUCCESS> Turned all sections public in course with ID:", id);
     res.json(true);
   })
->>>>>>> master
 });
 
 courseRoutes.post('/toggleAllSectionsPrivate/:id', (req, res) => {
