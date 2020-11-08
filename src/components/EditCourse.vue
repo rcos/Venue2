@@ -1,6 +1,6 @@
 <template>
   <div id="edit-course">
-    <h2>Edit Course</h2>
+    <h1>Edit Course</h1>
     <form @submit.prevent="updateCourse">
       <div class="row">
         <div class="col-md-6">
@@ -113,6 +113,15 @@
         </div>
       </div>
     </div>
+    <h2>Sections</h2>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <button v-if="sections.find(a=>a.is_public)" class="btn btn-primary" :style="{margin: '5px'}" @click="closeSections">Make All Private</button>
+          <button v-if="sections.find(a=>!a.is_public)" class="btn btn-primary" :style="{margin: '5px'}" @click="openSections">Make All Publicly Joinable</button>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="col-md-12">
         <div class="form-group">
@@ -153,6 +162,22 @@
       this.getCurrentCourse()
     },
     methods: {
+      closeSections() {
+        let close = this.sections.filter(a=>a.is_public)
+        if (window.confirm("Are you sure you want to turn all sections to private?")) {
+          CourseAPI.turnSectionsOff(close, this.course._id).then(res=> {
+            location.reload()
+          })
+        }
+      },
+      openSections() {
+        let open = this.sections.filter(a=>!(a.is_public))
+        if (window.confirm("Are you sure you want to turn all sections to public?")) {
+          CourseAPI.turnSectionsOn(open, this.course._id).then(res=> {
+            location.reload()
+          })
+        }
+      },
       async getCurrentCourse() {
         let course_id = this.$route.params.id
         const response = await CourseAPI.getCourse(course_id)

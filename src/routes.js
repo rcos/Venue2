@@ -456,28 +456,6 @@ router.beforeEach((to, from, next) => {
         if (user_data.current_user.instructor_courses.includes(to.params.id)) {
           next('/course_info/' + to.params.id)
         }
-        /*
-        SectionAPI.getSectionsForCourse(to.params.id).then(res=>{
-          let in_course = false
-          let sections = res.data
-          for (let i = 0; i < sections.length; i++) {
-            if (user_data.current_user.student_sections.includes(sections[i]._id)) {
-              console.log(sections[i].name)
-              next('/course_info/' + sections[i]._id)
-              in_course = !in_course
-              break }
-          }
-          if (!in_course) {
-            var section_choice = prompt("Join Section")
-            for (let i = 0; i < sections.length; i++) {
-              if (sections[i].name == section_choice) {
-                  SectionAPI.addToSection(sections[i]._id, user_data.current_user._id)
-                  location.reload()
-                  next('/course_info/' + sections[i]._id)
-                break }
-            }
-          }
-        }) */
         next()
 
       }  

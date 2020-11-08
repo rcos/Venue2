@@ -38,7 +38,7 @@ export default {
       })
     }, 
     async joinSections() {
-      const response = await SectionAPI.joinPublicSections(this.sections, this.current_user.email)
+      const response = await SectionAPI.joinPublicSections(this.selected, this.current_user.email)
       location.reload()
     },
     handleSectionChange(selected) {
