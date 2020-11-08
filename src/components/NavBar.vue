@@ -6,7 +6,7 @@
       <!-- Nav Links -->
       <div id="venue-nav-links">
         <router-link id="nav-logo" :to="{name: 'dashboard'}" role="link" aria-label="Dashboard">
-          <img src="@/assets/hw/venue-bat.svg" width="30" height="30" class="d-inline-block align-top logo-color" alt="Venue Logo" aria-label="Venue Logo">
+          <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top logo-color" alt="Venue Logo" aria-label="Venue Logo">
         </router-link>
         <!-- Dashboard Link -->
         <div class="venue-nav-link-container">
@@ -64,7 +64,7 @@
         <!-- ADMIN -->
         <div class="venue-nav-link-container" id="admin-dropdown" v-if="current_user.is_admin">
           <a data-toggle="collapse" href="#admin-collapse" class="venue-nav-link" style="cursor:pointer;">
-            🍫 <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+            🔑 <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
@@ -87,13 +87,13 @@
         <div class="venue-nav-link-container">
           <router-link class="venue-nav-link" :class="{'active-link':is_settings()}" :to="{name: 'settings'}">
             <show-at breakpoint="large">
-              <p aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }} <img src="@/assets/hw/icons8-spider-web.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon"></p>
+              <p aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon"></p>
             </show-at>
             <show-at breakpoint="medium">
-              <p aria-label="User Name">{{ current_user.first_name }} <img src="@/assets/hw/icons8-spider-web.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon"></p>
+              <p aria-label="User Name">{{ current_user.first_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon"></p>
             </show-at>
             <show-at breakpoint="small">
-              <img src="@/assets/hw/icons8-spider-web.svg" width="20" height="20" :style="{marginRight: '6rem'}" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
+              <img src="@/assets/settings.svg" width="20" height="20" :style="{marginRight: '6rem'}" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon">
             </show-at>
           </router-link>
           <div :class="'active-link-underline ' + (is_settings()?'active':'')"></div>
@@ -302,10 +302,6 @@
     --nav-bar-hover-bottom-shadow: rgba(179, 179, 179, 0.644);
   }
 
-  .svg-color {
-    filter: var(--widgets-color);
-  }
-
   .logo-color {
     filter: var(--logo-color);
   }
@@ -331,10 +327,6 @@
     text-align: left;
     padding-left: 4rem;
     font-size: 0.9rem;
-  }
-
-  .svg-color {
-    filter: var(--widgets-color);
   }
 
   .crumb {
