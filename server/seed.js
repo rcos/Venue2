@@ -403,6 +403,11 @@ c1 = {
 		day: "Monday",
 		start_time: "12:00pm",
 		end_time: "1:50pm"
+	}, 
+	{
+		day: "Thursday",
+		start_time: "12:00pm",
+		end_time: "1:50pm"
 	}
 	],
 	instructors: [

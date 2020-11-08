@@ -237,13 +237,9 @@
         else {
           this.course.meetingURL = this.course.meetingURL
         }
+        this.course.snooze = this.course.snooze
 
         await CourseAPI.updateCourse(this.course._id, this.course).then(res => {
-          this.edited_course_name = ''
-          this.edited_dept_name = ''
-          this.edited_course_suffix = ''
-          this.edited_course_url = ''
-
           this.waiting = false
           let course_id = this.$route.params.id
           this.course.instructors = this.instructors.map(a=>a.email)
