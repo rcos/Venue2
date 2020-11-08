@@ -150,7 +150,11 @@
         course: {},
         instructors: [],
         sections: [],
-        instructors_to_add: ""
+        instructors_to_add: "",
+        edited_course_name: "",
+        edited_course_prefix: "",
+        edited_course_suffix:  "",
+        edited_course_url: ""
       }
     },
     created() {
@@ -212,8 +216,8 @@
         else {
           this.course.name = this.course.name
         }
-        if (this.edited_dept_name != '') {
-          this.course.prefix = this.edited_dept_name
+        if (this.edited_course_prefix != '') {
+          this.course.prefix = this.edited_course_prefix
         }
         else {
           this.course.prefix = this.course.prefix
@@ -236,6 +240,7 @@
           this.edited_dept_name = ''
           this.edited_course_suffix = ''
           this.edited_course_url = ''
+
           this.waiting = false
           let course_id = this.$route.params.id
           this.course.instructors = this.instructors.map(a=>a.email)
