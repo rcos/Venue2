@@ -22,7 +22,10 @@
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <MultiSelectDropdown :options="['Monday','Tuesday','Wednesday','Thursday','Friday', 'Saturday','Sunday']" @update="handleCourseChange" :max="1" :n="0"/>
+             <select class="form-control" aria-labelledby="section_select_label">
+              <option v-for="(day,i) in ['Monday','Tuesday','Wednesday','Thursday','Friday', 'Saturday','Sunday']" :key="i" :value="day">{{day}}</option>
+            </select>
+            <!-- <MultiSelectDropdown :options="['Monday','Tuesday','Wednesday','Thursday','Friday', 'Saturday','Sunday']" @update="handleCourseChange" :max="1" :n="0"/> -->
           </div>
         </div>
       </div><br />

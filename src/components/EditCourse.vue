@@ -58,7 +58,10 @@
         </div>
         <div class="col-md-6">
           <div class="form-group">
-          <MultiSelectDropdown :options="['None','15','30','45','60']" :preselected="course.snooze" :max="1" :n="0"/>       
+            <select v-model="course.snooze" class="form-control" aria-labelledby="section_select_label">
+              <option v-for="(time,i) in ['0','15','30','45','60']" :key="i" :value="time">{{time}}</option>
+            </select>
+          <!-- <MultiSelectDropdown :options="['None','15','30','45','60']" :preselected="course.course_times" :max="1" :n="0"/>        -->
           </div>
           <br>
         </div>
