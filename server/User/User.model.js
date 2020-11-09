@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 let Course = require('../Course/Course.model');
 let Section = require('../Section/Section.model');
+let Organization = require('../Organization/Organization.model');
 
 //Define collection and schema for User
 let User = new Schema({
@@ -32,6 +33,10 @@ let User = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Section'
 	}],
+	organization: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Organizations'
+	},
 	dark_mode: {
 		type: Boolean,
 		default: false

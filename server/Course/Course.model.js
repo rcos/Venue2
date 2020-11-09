@@ -2,7 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let User = require('../User/User.model');
-let Section = require('../Section/Section.model')
+let Section = require('../Section/Section.model');
+let Organization = require('../Organization/Organization.model');
+
 
 //Define collection and schema for User
 let Course = new Schema({

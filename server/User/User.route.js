@@ -7,6 +7,7 @@ let User = require('./User.model');
 let Course = require('../Course/Course.model');
 let Section = require('../Section/Section.model');
 let Lecture = require('../Lecture/Lecture.model');
+let Organization = require('../Organization/Organization.model');
 
 userRoutes.route('/add').post(function (req, res) {
   let user = new User(req.body.user);
@@ -120,26 +121,28 @@ userRoutes.route('/change_password/').post((req, res) => {
 
 })
 
-userRoutes.route('/update/:id').post(function (req, res) { 
-  let id = req.params.id; 
-  let updated_user = req.body.updated_user; 
-  User.findByIdAndUpdate(id, { 
-    first_name: updated_user.first_name, 
-    last_name: updated_user.last_name, 
-    email: updated_user.email, 
-    dark_mode: updated_user.dark_mode, 
-    password: updated_user.password, 
-    is_instructor: updated_user.is_instructor, 
-    ta_sections: updated_user.ta_sections, 
-    submissions: updated_user.submissions }, 
-    function(err, user) { if (err || user == null) { 
-      console.log("<ERROR> Updating user by ID:",id,"with:",updated_user) 
-      res.status(404).send("user not found"); 
-    } else { 
-      console.log("<SUCCESS> Updating user by ID:",id,"with:",updated_user) 
-      res.json(user); 
-    } 
-  }); 
+userRoutes.route('/update/:id').post(function (req, res) {
+  let id = req.params.id;
+  let updated_user = req.body.updated_user;
+  User.findByIdAndUpdate(id, {
+    first_name: updated_user.first_name,
+    last_name: updated_user.last_name,
+    email: updated_user.email,
+    dark_mode: updated_user.dark_mode,
+    password: updated_user.password,
+    is_instructor: updated_user.is_instructor,
+    ta_sections: updated_user.ta_sections,
+    submissions: updated_user.submissions
+  },
+    function (err, user) {
+      if (err || user == null) {
+        console.log("<ERROR> Updating user by ID:", id, "with:", updated_user)
+        res.status(404).send("user not found");
+      } else {
+        console.log("<SUCCESS> Updating user by ID:", id, "with:", updated_user)
+        res.json(user);
+      }
+    });
 });
 
 userRoutes.route('/delete/:id').delete(function (req, res) {
@@ -270,14 +273,14 @@ userRoutes.route('/students_for_lecture/:lecture_id').get(function (req, res) {
       console.log("<ERROR> Getting lecture with ID:", lecture_id)
       res.json([])
     } else {
-      Section.find({_id: {$in: lecture.sections}}, function (err, sections) {
+      Section.find({ _id: { $in: lecture.sections } }, function (err, sections) {
         if (err || sections == null) {
           console.log("<ERROR> Getting sections for lecture:", lecture_id)
           res.json([])
         } else {
-          let emails = [].concat.apply([], sections.map(a=>a.students))
-          User.find({email: {$in: emails}},function(err,students) {
-            if(err || students == null) {
+          let emails = [].concat.apply([], sections.map(a => a.students))
+          User.find({ email: { $in: emails } }, function (err, students) {
+            if (err || students == null) {
               console.log("<ERROR> Getting students for lecture:", lecture_id)
               res.json([])
             } else {
