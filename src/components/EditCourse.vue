@@ -74,8 +74,8 @@
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <input v-for="time in course.course_times" :key="time.day" class="form-control" :value="time.day + ': ' + time.start_time + ' - ' +  time.end_time" rows="5" readonly>
-            <router-link :to="{name: 'new_lecture_time', params: { id:course._id}}">
+            <input v-for="(time, i) in course.course_times" :key="i" class="form-control" :value="time.day + ': ' + time.start_time + ' - ' +  time.end_time" rows="5" readonly>
+            <router-link :to="{name: 'new_lecture_time', params: { id: course._id}}">
             <button class="btn btn-primary">Add Time</button>
             </router-link>
           </div>
@@ -157,7 +157,8 @@
         edited_course_name: "",
         edited_course_prefix: "",
         edited_course_suffix:  "",
-        edited_course_url: ""
+        edited_course_url: "",
+        waiting: false
       }
     },
     created() {
