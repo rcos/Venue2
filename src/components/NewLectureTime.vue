@@ -1,7 +1,7 @@
 <template>
   <div v-if="course" id="new-lecture-time">
     <h2>Add Lecture Time</h2>
-    <form @submit.prevent="updateCourse">
+    <form @submit.prevent="addTime">
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
@@ -56,7 +56,7 @@
     
       <div class="row">
           <div class="form-group col-md-5 float-right">
-            <button class="btn btn-primary" @click="addTime()" style="position:absolute">Add Time</button>
+            <button class="btn btn-primary" style="position:absolute">Add Time</button>
           </div>
       </div>
     </form>
@@ -80,7 +80,9 @@
       return {
         course: null,
         course_times: {},
-        new_day: "Monday"
+        new_day: "Monday",
+        new_start: "",
+        new_end: ""
       }
     },
     created() {
@@ -89,16 +91,14 @@
 			})
     },
     methods: {
-      async addTime( ){
-        
+      async addTime(evt){
         evt.preventDefault() // prevents the form's default action from redirecting the page
-        this.course_times.course = this.course._id
-        let time = {
+        let course_times = {
           day: this.new_day,
           start_time: this.new_start,
           end_time: this.new_end
         }
-        const response = await CourseAPI.addTime(this.course._id, this.course_times)
+        const response = await CourseAPI.addTime(this.course._id, course_times)
         this.$router.push({name: 'edit_course',params: {id: this.course._id}})
 				location.reload()
       }
