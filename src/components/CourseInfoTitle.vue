@@ -1,6 +1,6 @@
 <template>
   <div :class="'course-info-title ' + (this.mobileMode ? 'mobile' : '')">
-    <div class="course-edit-settings float-right">
+    <div v-if="is_instructor || is_ta" class="course-edit-settings float-right">
         <button class="btn" @click="handleCourseSettings()" v-if=" ! (is_instructor || is_ta)">
           <img src="/img/settings.7e19eab3.svg" width="30" height="30" alt="Settings Icon" aria-label="Settings Icon" class="d-inline-block align-top">
         </button>
