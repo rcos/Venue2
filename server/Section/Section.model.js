@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+require('mongoose-type-url');
 const Schema = mongoose.Schema;
 
 let Course = require('../Course/Course.model');
@@ -21,7 +22,10 @@ let Section = new Schema({
 	is_public: {
 		type: Boolean,
 		default: false
-	}
+	},
+	links: [{
+		type: mongoose.SchemaTypes.Url
+	}]
 });
 
 module.exports = mongoose.model('Section', Section);

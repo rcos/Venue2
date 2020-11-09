@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+require('mongoose-type-url');
 const Schema = mongoose.Schema;
 
 let Section = require('../Section/Section.model');
@@ -34,7 +35,10 @@ let Lecture = new Schema({
 	video_type: { type: String, default: "" },
 	num_playback_polls: Number,
 	email_sent: {type: Boolean, default: false},
-	meeting_link: String
+	meeting_link: mongoose.SchemaTypes.Url,
+	class_links: [{
+		type: mongoose.SchemaTypes.Url
+	}]
 });
 
 module.exports = mongoose.model('Lecture', Lecture);
