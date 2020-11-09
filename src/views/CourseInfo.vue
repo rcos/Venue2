@@ -19,9 +19,9 @@
         <div>
           <div v-if="is_instructor" class="section-select-container float-right">
             <label id="section_select_label">Section(s):</label>
-            <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange">
-              <option :value="'all'" selected>All</option>
-              <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">{{section.name}}</option>
+            <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange" multiple>
+              <!--<option :value="'all'" selected>All</option>-->
+              <option selected v-for="(section,i) in sorted_sections" :key="i" :value="section._id">{{section.name}}</option>
             </select>
           </div>
           <div class="courseinfo-legend">Legend:</div>
@@ -29,8 +29,8 @@
           <div class="courseinfo-legend playback-border">Asynchronous</div>
         </div>
         <InstructorAttendanceHistory
-          v-if="(is_instructor || is_ta) && lectures_loaded && sorted_lectures[selected_section]"
-          :lectures="sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded"/>
+          v-if="(is_instructor || is_ta) && lectures_loaded && sorted_lectures[sect]" v-for="(sect, i) in selected_section" :key="i"
+          :lectures="sorted_lectures[sect].lectures" :timeline="sorted_lectures[sect].timeline" :students="sect == 'all' ? course_students : sections[sect].students" :scores_loaded="scores_loaded" :section_name="sections[sect].name" />
         <StudentAttendanceHistory v-else-if="is_student && lectures_loaded && sorted_lectures[section_id]" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded"/>
         <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
           <SquareLoader />
@@ -54,17 +54,17 @@
         <div class="courseinfo-attendance-listing">
           <div v-if="is_instructor" class="section-select-container mobile float-right">
             <label id="section_select_label">Section(s):</label>
-            <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange">
-              <option :value="'all'" selected>All</option>
+            <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange" multiple>
+              <!--<option :value="'all'" selected>All</option>-->
               <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">{{section.name}}</option>
             </select>
           </div>
           <div class="courseinfo-legend">Legend:</div>
           <div class="courseinfo-legend live-border">Synchronous</div>
           <div class="courseinfo-legend playback-border">Asynchronous</div>
-          <InstructorAttendanceHistory :style='{textAlign: "center"}'
-            v-if="(is_instructor || is_ta) && lectures_loaded && sorted_lectures[selected_section]"
-            :lectures="sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded" mobileMode/>
+          <InstructorAttendanceHistory
+                  v-if="(is_instructor || is_ta) && lectures_loaded && sorted_lectures[sect]" v-for="(sect, i) in selected_section" :key="i"
+                  :lectures="sorted_lectures[sect].lectures" :timeline="sorted_lectures[sect].timeline" :students="sect == 'all' ? course_students : sections[sect].students" :scores_loaded="scores_loaded" :section_name="sections[sect].name" mobileView/>
           <StudentAttendanceHistory :style='{textAlign: "center"}' v-else-if="is_student && lectures_loaded && sorted_lectures[section_id]" :lectures="sorted_lectures[section_id].lectures" :timeline="sorted_lectures[section_id].timeline" :scores_loaded="scores_loaded" mobileMode/>
           <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
             <SquareLoader />

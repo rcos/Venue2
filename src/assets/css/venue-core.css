@@ -496,6 +496,7 @@ h1,h2,h4 {
   box-shadow: 0px 0px 10px 7px var(--red-pill-shadow);
 }
 
+.instructor-attendance .section_name_area
 .instructor-attendance .month-area,
 .student-attendance .month-area {
   text-align: left;

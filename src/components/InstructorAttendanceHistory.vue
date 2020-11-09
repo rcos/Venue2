@@ -1,5 +1,6 @@
 <template>
   <div class="instructor-attendance">
+    <div class="section_name_area">{{section_name}}</div>
     <div v-for="year in getStringsAscending(Object.keys(timeline))" :key="year">
       <div v-for="month in getStringsAscending(Object.keys(timeline[year]))" :key="month">
         <div class="month-area">
@@ -43,7 +44,8 @@
       lectures: Array,
       timeline: Object,
       students: Array,
-      scores_loaded: Boolean
+      scores_loaded: Boolean,
+      section_name: String
     },
     data () {
       return {
