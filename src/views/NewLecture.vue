@@ -58,7 +58,7 @@
                 <div class="checkin-poll col col-4 my-auto">
                   <div v-if="null != polls[i]">
                     <button type="button" class="btn btn-secondary" @click="add_poll_index = i" :title="'Edit '+polls[i].question">
-                      <img src="@/assets/hw/icons8-jack-o-lantern-64.png" alt="Edit" width="40" aria-label="Edit">
+                      <img class="svg-color" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
                     </button>
                     <button type="button" class="btn btn-danger" @click="polls[i] = null" :title="'Remove ' +polls[i].question">X</button>
                   </div>
@@ -470,10 +470,6 @@ export default {
 <style>
 h1 {
   text-align: center;
-}
-/* Remove after halloween */
-.btn.btn-secondary img {
-  filter: none !important;
 }
 
 .col {
