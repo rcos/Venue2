@@ -133,8 +133,9 @@ export default {
 			.then(res => {
 				let course_sections = res.data
 				let self = this
+				let lecture_sections = this.lecture.sections.map(a=>a._id)
 				this.all_students.forEach(function(student) {
-					course_sections.forEach(function(section) {
+					course_sections.filter(a=>lecture_sections.includes(a._id)).forEach(function(section) {
 						if(section.students.includes(student.email)) {
 							let stud_data = []
 
