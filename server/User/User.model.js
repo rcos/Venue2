@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 let Course = require('../Course/Course.model');
 let Section = require('../Section/Section.model');
+let Notification = require('../Notification/Notification.model')
 
 //Define collection and schema for User
 let User = new Schema({
@@ -31,6 +32,10 @@ let User = new Schema({
 	student_sections: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Section'
+	}],
+	notifications: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Notification'
 	}],
 	dark_mode: {
 		type: Boolean,
