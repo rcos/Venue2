@@ -2,7 +2,7 @@
   <div id="edit-lecture">
     <h1>Edit Lecture</h1>
     <SquareLoader v-if="!lecture"/>
-    <form v-else>
+    <form v-else @submit.prevent="updateLecture">
       <div class="row">
         <div class="col-md-6">
           <h2><strong>Settings</strong></h2>
@@ -126,7 +126,6 @@ export default {
   data() {
     return {
       lecture: null,
-      updated_lecture: {},
       waiting: false,
       all_sections: null
     }
@@ -156,20 +155,14 @@ export default {
     updateLecture() {
       if(confirm("All values in \"Updates\" column will be applied. Are you sure?")) {
         this.waiting = true
-        [Object.keys(this.updated_lecture).forEach(property => {
-          if(this.updated_lecture[property]) {
-            this.lecture[property] = this.updated_lecture[property]
-          }
-        })]
         LectureAPI.update(this.lecture).then(res => {
-          this.updated_lecture = {}
           this.waiting = false
+          location.reload()
         })
       }
     },
     handleSectionsUpdate(selected,n) {
-      console.log(selected.map(a=>a._id))
-      this.updated_lecture.sections = selected
+      this.lecture.sections = selected.map(a=>a._id)
     },
     handleDeleteLecture() {
       let del = confirm('Are you sure? This cannot be undone.')
