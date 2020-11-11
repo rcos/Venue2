@@ -98,7 +98,12 @@
           </router-link>
           <div :class="'active-link-underline ' + (is_settings()?'active':'')"></div>
         </div>
-      </div>
+        <!-- Notifications -->
+        <div :class = "venue-nav-link-container">
+          <img src="@/assets/notificationbell.png" width="30" height="30" :style="{marginRight: '6rem', marginTop: '0.3rem'}" class="d-inline-block align-top settings svg-color" alt="Notification Bell" aria-label="Notification Bell">
+        </div>
+      </div> 
+      
     </nav>
     <!-- Mobile Course Dropdown -->
     <show-at breakpoint="mediumAndBelow">
