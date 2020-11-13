@@ -39,12 +39,11 @@ import NewSection from '@/components/NewSection.vue';
 import EditLecture from '@/components/EditLecture.vue';
 import JoinCourse from '@/components/JoinCourse.vue';
 import InstructorCourseInfo from '@/views/instructor/InstructorCourseInfo.vue';
-import InstructorSectionInfo from '@/views/instructor/InstructorSectionInfo.vue';
 import InstructorLectureInfo from '@/views/instructor/InstructorLectureInfo.vue';
-import TASectionInfo from '@/views/ta/InstructorSectionInfo.vue';
-import TALectureInfo from '@/views/ta/InstructorLectureInfo.vue';
-import StudentSectionInfo from '@/views/student/InstructorSectionInfo.vue';
-import StudentLectureInfo from '@/views/student/InstructorLectureInfo.vue';
+import TASectionInfo from '@/views/ta/TASectionInfo.vue';
+import TALectureInfo from '@/views/ta/TALectureInfo.vue';
+import StudentSectionInfo from '@/views/student/StudentSectionInfo.vue';
+import StudentLectureInfo from '@/views/student/StudentLectureInfo.vue';
 
 import AuthAPI from '@/services/AuthAPI.js';
 import UserAPI from '@/services/UserAPI.js';
@@ -401,16 +400,6 @@ const router = new VueRouter({
       }
     },
     {
-      name: 'instructor_section_info',
-      path: '/section_info/instructor/:id',
-      component: InstructorSectionInfo,
-      meta: {
-        title: "Section Info",
-        requiresAuth: true,
-        requiresInstructor: true
-      }
-    },
-    {
       name: 'instructor_lecture_info',
       path: '/lecture_info/instructor/:id',
       component: InstructorLectureInfo,
@@ -484,7 +473,9 @@ router.beforeEach((to, from, next) => {
       const user_data = JSON.parse(loggedIn)
 
       if(user_data.current_user.is_admin) {
+
         next()
+
       } else if(to.matched.some(record => record.meta.requiresAdmin)) {
 
         if (user_data.current_user.is_admin) {
@@ -493,7 +484,7 @@ router.beforeEach((to, from, next) => {
           next('/dashboard')
         }
 
-      } else if (to.matched.some(record => record.meta.requiresInstructor)) {
+      } else if (to.matched.some(record => record.meta.requiresInstructor)) { // TODO check Instructor lectures
 
         if ((to.name == 'new_lecture' && user_data.current_user.instructor_courses.includes(to.params.course_id))
         || (to.name == 'new_lecture' && user_data.current_user.ta_sections.includes(to.params.course_id))
@@ -501,12 +492,40 @@ router.beforeEach((to, from, next) => {
         || (to.name == 'edit_course' && user_data.current_user.instructor_courses.includes(to.params.id))
         || (to.name == 'edit_section' && user_data.current_user.ta_sections.includes(to.params.id))
         || (to.name == 'edit_section' && from.name == 'edit_course')
-        || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))){
+        || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))
+        || user_data.current_user.instructor_courses.includes(to.params.id)){
+          next()
+        } else if(to.name == 'instructor_section_info') {
+          SectionAPI.getSection(to.params.id).then(res => {
+            if(user_data.current_user.instructor_courses.includes(res.data.course)) {
+              next()
+            } else {
+              next('/dashboard')
+            }
+          })
+        } else {
+          next('/dashboard')
+        }
+
+      } else if (to.matched.some(record => record.meta.requiresTA)) {
+
+        if (user_data.current_user.ta_sections.includes(to.params.id)
+        || (to.name == 'ta_course_info') && user_data.current_user.ta_sections.some(section => section.course == to.params.id) ) { // TODO check TA lectures
           next()
         } else {
           next('/dashboard')
         }
-      } 
+
+      } else if (to.matched.some(record => record.meta.requiresStudent)) {
+
+        if (user_data.current_user.student_sections.includes(to.params.id)
+        || (to.name == 'student_course_info') && user_data.current_user.student_sections.some(section => section.course == to.params.id) ){ // TODO check student lectures
+          next()
+        } else {
+          next('/dashboard')
+        }
+
+      }
       else if (to.name == 'join_course') { //student implement new join route
 
         if (user_data.current_user.instructor_courses.includes(to.params.id)) {
@@ -516,7 +535,9 @@ router.beforeEach((to, from, next) => {
 
       }  
       else {
+
         next()
+
       }
     }
     // not logged in

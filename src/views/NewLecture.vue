@@ -266,8 +266,8 @@ export default {
 
         Promise.all(poll_promises).then(resolved => {
           this.$router.push({
-            name: "course_info",
-            params: { id: this.$route.params.course_id }
+            name: "lecture_info",
+            params: { lecture_id: this.lecture._id }
           })
         })
       }
