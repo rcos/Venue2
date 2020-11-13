@@ -260,6 +260,7 @@ h1,h2,h4 {
   border-radius: 1.5rem;
   display: inline-block;
   box-sizing: border-box;
+  transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .courseinfo-legend {
@@ -271,6 +272,7 @@ h1,h2,h4 {
 }
 
 .live-border {
+  margin: 0.25rem;
   border-width: 0.25rem;
   border-style: dashed;
   border-radius: 1.5rem;
@@ -278,6 +280,7 @@ h1,h2,h4 {
 }
 
 .live-border:hover {
+  margin: 0.4rem;
   border-width: 0.1rem;
   border-style: dashed;
   border-radius: 1.5rem;
@@ -285,6 +288,7 @@ h1,h2,h4 {
 }
 
 .playback-border {
+  margin: 0.1rem;
   border-width: 0.25rem;
   border-style: dotted;
   border-radius: 1.5rem;
@@ -292,6 +296,7 @@ h1,h2,h4 {
 }
 
 .playback-border:hover {
+  margin: 0.4rem;
   border-width: 0.1rem;
   border-style: dotted;
   border-radius: 1.5rem;
