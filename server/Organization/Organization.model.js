@@ -15,10 +15,6 @@ let Organization = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Course'
     }],
-    users:[{
-        type: String,//by email?
-		ref: 'User'
-    }],
     max_courses: {type: Number},
     max_users: {type: Number}
 });
