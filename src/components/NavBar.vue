@@ -98,10 +98,25 @@
           </router-link>
           <div :class="'active-link-underline ' + (is_settings()?'active':'')"></div>
         </div>
-        <!-- Notifications -->
+        <!-- Notifications
         <div :class = "venue-nav-link-container">
-          <img src="@/assets/notificationbell.png" width="30" height="30" :style="{marginRight: '6rem', marginTop: '0.3rem'}" class="d-inline-block align-top settings svg-color" alt="Notification Bell" aria-label="Notification Bell">
+          <img src="@/assets/notificationbell2.png" width="30" height="30" :style="{marginRight: '6rem', marginTop: '0.3rem'}" class="d-inline-block align-top settings svg-color" alt="Notification Bell" aria-label="Notification Bell">
         </div>
+        -->
+
+        <div class = "venue-nav-link-container" :style="{marginLeft: '1px', marginTop: '1px'}">
+          <a data-toggle="collapse" href="#instructor-collapse" class="venue-nav-link" :class="{'active-link':is_instructor_course_info()}" style="cursor:pointer;">
+             <img src="@/assets/notificationbell2.png" width="30" height="30" :style="{ marginTop: '0.3rem'}" class="d-inline-block align-top settings svg-color" alt="Notification Bell" aria-label="Notification Bell">
+          </a>
+          <hide-at breakpoint="mediumAndBelow">
+            <div class="dropdown-content">
+              <router-link v-for="course in instructor_courses" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
+                {{ course.name }}
+              </router-link>
+            </div>
+          </hide-at>
+        </div>
+
       </div> 
       
     </nav>
@@ -214,6 +229,7 @@
     },
     data(){
       return {
+        notifications: [],
         current_user: {},
         instructor_courses: [],
         ta_sections: [],

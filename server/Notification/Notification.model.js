@@ -8,7 +8,8 @@ let Notification = new Schema({
     type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
   },
-  message: String,
+  type: String, 
+  display_message: String,
   
   viewed: {
     type: Boolean,
@@ -17,7 +18,11 @@ let Notification = new Schema({
   created: {
     type: Date,
     default: Date.now()
-  }
-  
+  },
+  redirect_to: String,
+
+  users_sent: Number,
+  users_acknowledged: Number
+
 })
 module.exports = mongoose.model('Notification', Notification);
