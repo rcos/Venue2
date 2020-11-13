@@ -10,7 +10,7 @@
           </router-link>
         </div>
         <button class="inline-block big-button" :style="{float: 'right'}" tabindex="0" @click="copyURL">Copy Link to Join {{ course.prefix }} {{ course.suffix }}</button>        
-        <CourseInfoTitle :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta"/>
+        <CourseInfoTitle :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="true"/>
         <!-- Attendance History -->
         <div>
           <div class="section-select-container float-right">
@@ -38,7 +38,7 @@
     <hide-at breakpoint="large">
       <div>
         <!-- Mobile View -->
-        <CourseInfoTitle v-if="is_instructor" :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="is_instructor" :is_ta="is_ta" mobileMode/>        
+        <CourseInfoTitle :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="true" mobileMode/>        
         <router-link :to="{name: 'new_lecture', params: { course_id: $route.params.id }}" tabindex="-1">
           <div class="inline-block big-button mobile" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
         </router-link>
@@ -93,7 +93,7 @@
   import '@/assets/icon-font.css'
 
 export default {
-  name: 'CourseInfo',
+  name: 'InstructorCourseInfo',
   props: {
   },
   computed: {
@@ -134,14 +134,11 @@ export default {
   created() {
     // when the component is created/loaded
     this.getCurrentUser()
-    this.section_id = null
 
-    if (this.is_instructor) {
-      this.course_id = this.$route.params.id
-      this.getAllSections()
-      this.getStudentsForCourse()
-      this.getCourse()
-    }
+    this.course_id = this.$route.params.id
+    this.getAllSections()
+    this.getStudentsForCourse()
+    this.getCourse()
   },
   methods: {
     copyURL() {
@@ -165,9 +162,6 @@ export default {
     },
     getCurrentUser() {
       this.current_user = this.$store.state.user.current_user
-      this.is_instructor = this.current_user.instructor_courses.includes(this.$route.params.id)
-      this.is_ta = this.current_user.ta_sections.includes(this.$route.params.id)
-      this.is_student = this.current_user.student_sections.includes(this.$route.params.id)
     },
     parseActivePlaybackLectures(all_lectures) {
       this.playback_lectures = getActivePlaybackLectures(all_lectures)
@@ -253,11 +247,8 @@ export default {
       })
       this.sorted_lectures = sorted
       this.lectures_loaded = true
-      if(this.is_instructor || this.is_ta) {
-        this.calculateInstructorAttendances()
-      } else {
-        this.calculateStudentAttendances()
-      }
+
+      this.calculateInstructorAttendances()
     },
     perc2color(pct) {
       let root = document.documentElement;
@@ -374,7 +365,7 @@ export default {
   }
 
   .info-section {
-    display: inline-block;
+    /* display: inline-block; */
     margin-top: 2rem;
     float: left;
   }
@@ -461,7 +452,7 @@ export default {
     border-radius: 5px;
     margin-left: 3rem;
     margin-top: 2rem;
-    display: inline-block;
+    /* display: inline-block; */
     float: left;
     cursor: pointer;
   }
