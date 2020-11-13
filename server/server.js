@@ -24,18 +24,18 @@ throng({
 
 function start() {
 
-  function jwtVerify(req,res,next) {
+  function jwtVerify(req, res, next) {
     const bearerHeader = req.headers['authorization']
     const userHeader = req.headers['user']
     if (typeof bearerHeader !== 'undefined') {
       const bearer = bearerHeader.split(' ')
       const bearerToken = bearer[1]
       req.token = bearerToken
-      if(userHeader) {
+      if (userHeader) {
         req.user = JSON.parse(userHeader)
       }
       jwt.verify(req.token, process.env.AUTH_KEY, err => {
-        if(err)
+        if (err)
           res.sendStatus(401).send("Unauthorized access")
         else
           next()
@@ -50,13 +50,14 @@ function start() {
     require('dotenv').config({ path: path.resolve(__dirname, '../variables.env') })
 
   // ensure auth key is available in environment
-  if(!process.env.AUTH_KEY){
+  if (!process.env.AUTH_KEY) {
     console.log("No auth key")
     process.exit(1);
   }
 
   const authRouter = require('./Auth/Auth.route')
   const userRouter = require('./User/User.route')
+  const organizationRouter = require('./Organization/Organization.route')
   const courseRouter = require('./Course/Course.route')
   const sectionRouter = require('./Section/Section.route')
   const lectureRouter = require('./Lecture/Lecture.route')
@@ -78,9 +79,9 @@ function start() {
   });
 
   app.use(cors({
-      origin:['https://www.venue-meetings.com','http://localhost:8080','storage.googleapis.com/venue-meetings-recordings'],
-      methods:['GET','POST','DELETE','PUT'],
-      credentials: true
+    origin: ['https://www.venue-meetings.com', 'http://localhost:8080', 'storage.googleapis.com/venue-meetings-recordings'],
+    methods: ['GET', 'POST', 'DELETE', 'PUT'],
+    credentials: true
   }));
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
@@ -103,6 +104,7 @@ function start() {
   app.use(passport.session());
 
   app.use('/auth', authRouter);
+  app.use('/organizations', organizationRouter);
   app.use('/users', jwtVerify, userRouter);
   app.use('/courses', jwtVerify, courseRouter);
   app.use('/sections', jwtVerify, sectionRouter);

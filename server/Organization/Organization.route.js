@@ -3,10 +3,20 @@ const organizationRoutes = express.Router();
 
 let Organization = require('./Organization.model');
 let Course = require('../Course/Course.model');
-let Section = require('../Section/Section.model');
 let User = require('../User/User.model');
-let Lecture = require('../Lecture/Lecture.model');
 
+organizationRoutes.route('/add').post(function (req, res) {
+    let organization = new Organization(req.body.organization);
+    organization.save()
+        .then(() => {
+            console.log("<SUCCESS> Adding organization:", organization);
+            res.status(200).json(organization);
+        })
+        .catch(() => {
+            console.log("<ERROR> Adding organization:", organization);
+            res.status(400).send("unable to save organization to database");
+        });
+});
 organizationRoutes.get('/', (req, res) => {
     Organization.find(function (err, organizations) {
         if (err || organizations == null) {
@@ -15,6 +25,18 @@ organizationRoutes.get('/', (req, res) => {
         } else {
             console.log("<SUCCESS> Getting all organizations")
             res.json(organizations);
+        }
+    });
+});
+organizationRoutes.route('/edit/:id').get(function (req, res) {
+    let id = req.params.id;
+    Organization.findById(id, function (err, organization) {
+        if (err || organization == null) {
+            console.log("<ERROR> Getting section with ID:", id);
+            res.json(err);
+        } else {
+            console.log("<SUCCESS> Getting section with ID:", id);
+            res.json(organization);
         }
     });
 });
@@ -38,6 +60,9 @@ organizationRoutes.route('/update/:id').post(function (req, res) {
             }
         });
 });
+organizationRoutes.route('/delete/:id').delete(function (req, res) {
+    //todo... do we want this?
+  });
 organizationRoutes.get('/get_courses/:id', (req, res) => {
     let organization_id = req.params.id;
     Organization.findById(organization_id, function (errorg, organization) {
@@ -96,7 +121,7 @@ organizationRoutes.get('/get_admins/:id', (req, res) => {
     });
 });
 organizationRoutes.post('/add_admins/:id', (req, res) => {
-    let admin_emails = req.body.admin_accounts;
+    let admin_emails = req.body.admins;
     let organization_id = req.params.id;
     Organization.findById(organization_id, function (err, organization) {
         User.find({ organization: organization_id }, function (err, users) {
@@ -157,3 +182,4 @@ organizationRoutes.post('/add_courses/:id', (req, res) => {
         }
     });
 });
+module.exports = organizationRoutes;
