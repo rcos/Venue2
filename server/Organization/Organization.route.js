@@ -18,6 +18,45 @@ organizationRoutes.get('/', (req, res) => {
         }
     });
 });
+organizationRoutes.route('/update/:id').post(function (req, res) {
+    let id = req.params.id;
+    let updated_org = req.body.updated_organization;
+    Organization.findByIdAndUpdate(id, {
+        name: updated_org.name,
+        admin_accounts: updated_org.admin_accounts,
+        courses: updated_org.courses,
+        max_courses: updated_org.max_courses,
+        max_users: updated_org.max_users
+    },
+        function (err, user) {
+            if (err || user == null) {
+                console.log("<ERROR> Updating organization by ID:", id, "with:", updated_org)
+                res.status(404).send("organization not found");
+            } else {
+                console.log("<SUCCESS> Updating organization by ID:", id, "with:", updated_org)
+                res.json(user);
+            }
+        });
+});
+organizationRoutes.get('/get_courses/:id', (req, res) => {
+    let organization_id = req.params.id;
+    Organization.findById(organization_id, function (errorg, organization) {
+        if (errorg || organization == null) {
+            console.log("<ERROR> Getting organization with ID ", organization_id);
+            res.json(err);
+        } else {
+            Courses.find({ organization: organization_id }, function (err, courses) {
+                if (err || courses == null) {
+                    console.log("<ERROR> Getting courses for organization with ID:", organization_id);
+                    res.json(err);
+                } else {
+                    console.log("<SUCCESS> Getting courses for organization with ID:", organization_id);
+                    res.json(courses);
+                }
+            });
+        }
+    });
+});
 organizationRoutes.get('/get_users/:id', (req, res) => {
     let organization_id = req.params.id;
     Organization.findById(organization_id, function (errorg, organization) {
