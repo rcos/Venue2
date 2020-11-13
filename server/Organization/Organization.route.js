@@ -27,10 +27,10 @@ organizationRoutes.get('/get_users/:id', (req, res) => {
         } else {
             User.find({ organization: organization_id }, function (err, users) {
                 if (err || users == null) {
-                    console.log("<ERROR> Getting users for :", organization_id);
+                    console.log("<ERROR> Getting users for organization with ID:", organization_id);
                     res.json(err);
                 } else {
-                    console.log("<SUCCESS> Getting instructors for course with ID:", organization_id);
+                    console.log("<SUCCESS> Getting users for organization with ID:", organization_id);
                     res.json(users);
                 }
             });
@@ -46,10 +46,10 @@ organizationRoutes.get('/get_admins/:id', (req, res) => {
         } else {
             User.find({ organization: organization_id }, function (err, users) {
                 if (err || users == null) {
-                    console.log("<ERROR> Getting users for :", organization_id);
+                    console.log("<ERROR> Getting admins for organizatoin with ID:", organization_id);
                     res.json(err);
                 } else {
-                    console.log("<SUCCESS> Getting instructors for course with ID:", organization_id);
+                    console.log("<SUCCESS> Getting admins for organization with ID:", organization_id);
                     res.json(users);
                 }
             });
