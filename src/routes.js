@@ -38,6 +38,13 @@ import TeachNewCourse from '@/components/TeachNewCourse.vue';
 import NewSection from '@/components/NewSection.vue';
 import EditLecture from '@/components/EditLecture.vue';
 import JoinCourse from '@/components/JoinCourse.vue';
+import InstructorCourseInfo from '@/views/instructor/InstructorCourseInfo.vue';
+import InstructorSectionInfo from '@/views/instructor/InstructorSectionInfo.vue';
+import InstructorLectureInfo from '@/views/instructor/InstructorLectureInfo.vue';
+import TASectionInfo from '@/views/ta/InstructorSectionInfo.vue';
+import TALectureInfo from '@/views/ta/InstructorLectureInfo.vue';
+import StudentSectionInfo from '@/views/student/InstructorSectionInfo.vue';
+import StudentLectureInfo from '@/views/student/InstructorLectureInfo.vue';
 
 import AuthAPI from '@/services/AuthAPI.js';
 import UserAPI from '@/services/UserAPI.js';
@@ -381,6 +388,76 @@ const router = new VueRouter({
       meta: {
         title: "Edit Lecture",
         requiresAuth: true
+      }
+    },
+    {
+      name: 'instructor_course_info',
+      path: '/course_info/instructor/:id',
+      component: InstructorCourseInfo,
+      meta: {
+        title: "Course Info",
+        requiresAuth: true,
+        requiresInstructor: true
+      }
+    },
+    {
+      name: 'instructor_section_info',
+      path: '/section_info/instructor/:id',
+      component: InstructorSectionInfo,
+      meta: {
+        title: "Section Info",
+        requiresAuth: true,
+        requiresInstructor: true
+      }
+    },
+    {
+      name: 'instructor_lecture_info',
+      path: '/lecture_info/instructor/:id',
+      component: InstructorLectureInfo,
+      meta: {
+        title: "Lecture Info",
+        requiresAuth: true,
+        requiresInstructor: true
+      }
+    },
+    {
+      name: 'ta_section_info',
+      path: '/section_info/ta/:id',
+      component: TASectionInfo,
+      meta: {
+        title: "Section Info",
+        requiresAuth: true,
+        requiresTA: true
+      }
+    },
+    {
+      name: 'ta_lecture_info',
+      path: '/lecture_info/ta/:id',
+      component: TALectureInfo,
+      meta: {
+        title: "Lecture Info",
+        requiresAuth: true,
+        requiresTA: true
+      }
+    },
+    {
+      name: 'student_section_info',
+      path: '/section_info/student/:id',
+      component: StudentSectionInfo,
+      meta: {
+        title: "Section Info",
+        requiresAuth: true,
+        requiresStudent: true
+      }
+    },
+    {
+      name: 'student_lecture_info',
+      path: '/lecture_info/student/:id',
+      component: StudentLectureInfo,
+      meta: {
+        title: "Lecture Info",
+        requiresAuth: true,
+        requiresStudent: true
       }
     }
   ]
