@@ -257,7 +257,9 @@ h1,h2,h4 {
   margin: 0.25rem;
   background: none;
   border: 0.25rem solid rgba(0,0,0,0);
+  border-radius: 1.5rem;
   display: inline-block;
+  box-sizing: border-box;
 }
 
 .courseinfo-legend {
@@ -269,13 +271,31 @@ h1,h2,h4 {
 }
 
 .live-border {
-  border: 0.25rem dashed var(--sync-border);
+  border-width: 0.25rem;
+  border-style: dashed;
   border-radius: 1.5rem;
+  border-color: var(--sync-border);
+}
+
+.live-border:hover {
+  border-width: 0.1rem;
+  border-style: dashed;
+  border-radius: 1.5rem;
+  border-color: var(--sync-border);
 }
 
 .playback-border {
-  border: 0.25rem dotted var(--async-border);
+  border-width: 0.25rem;
+  border-style: dotted;
   border-radius: 1.5rem;
+  border-color: var(--async-border);
+}
+
+.playback-border:hover {
+  border-width: 0.1rem;
+  border-style: dotted;
+  border-radius: 1.5rem;
+  border-color: var(--async-border);
 }
 
 .courseinfo-attendance-listing {
