@@ -7,7 +7,7 @@ let User = require('./User.model');
 let Course = require('../Course/Course.model');
 let Section = require('../Section/Section.model');
 let Lecture = require('../Lecture/Lecture.model');
-let Organization = require('../Organization/Organization.model');
+let Organization = require('../Organization/Organization.model');//todo organization cross referencing 
 
 userRoutes.route('/add').post(function (req, res) {
   let user = new User(req.body.user);

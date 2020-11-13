@@ -14,6 +14,7 @@ courseRoutes.route('/add').post(function (req, res) {
     .then(() => {
       console.log("<SUCCESS> Adding course:", course);
       res.status(200).json(course);
+      //todo look at section and do what section does with course to what course do with organizations
     })
     .catch(() => {
       console.log("<ERROR> Adding course:", course);
