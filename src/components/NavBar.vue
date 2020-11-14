@@ -232,7 +232,7 @@
     },
     methods: {
       showBreadcrumb() {
-        return !(this.$route.name === 'dashboard' || this.$route.name === 'settings')
+        return !(['dashboard','settings','statistics'].includes(this.$route.name))
       },
       async loadData() {
         this.current_user = this.$store.state.user.current_user
