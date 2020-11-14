@@ -15,6 +15,12 @@
           </router-link>
           <div :class="'active-link-underline ' + (is_dashboard()?'active':'')"></div>
         </div>
+        <div class="venue-nav-link-container">
+          <router-link class="venue-nav-link" :class="{'active-link':is_calendar()}" :to="{name: 'calendar'}">
+            Calendar
+          </router-link>
+          <div :class="'active-link-underline ' + (is_calendar()?'active':'')"></div>
+        </div>
         <!-- Courses Link -->
         <div class="venue-nav-link-container" id="instructor-course-dropdown" v-if="instructor_courses.length">
           <a data-toggle="collapse" href="#instructor-collapse" class="venue-nav-link" :class="{'active-link':is_instructor_course_info()}" style="cursor:pointer;">
@@ -232,7 +238,7 @@
     },
     methods: {
       showBreadcrumb() {
-        return !(['dashboard','settings','statistics'].includes(this.$route.name))
+        return !(['dashboard','settings','statistics','calendar'].includes(this.$route.name))
       },
       async loadData() {
         this.current_user = this.$store.state.user.current_user
@@ -276,13 +282,13 @@
         return this.$route.name === 'dashboard'
       },
       is_instructor_course_info() {
-        return this.$route.name === 'course_info' && this.instructor_courses.some(a => a._id == this.$route.params.id)
+        return this.$route.name === 'instructor_course_info' && this.instructor_courses.some(a => a._id == this.$route.params.id)
       },
       is_ta_section_info() {
-        return this.$route.name === 'course_info' && this.ta_sections.some(a => a._id == this.$route.params.id)
+        return this.$route.name === 'ta_section_info' && this.ta_sections.some(a => a._id == this.$route.params.id)
       },
       is_student_section_info() {
-        return this.$route.name === 'course_info' && this.student_sections.some(a => a._id == this.$route.params.id)
+        return this.$route.name === 'student_section_info' && this.student_sections.some(a => a._id == this.$route.params.id)
       },
       is_lecture_info() {
         return this.$route.name === 'lecture_info'
@@ -293,6 +299,9 @@
       is_settings() {
         return this.$route.name === 'settings'
       },
+      is_calendar() {
+        return this.$route.name === 'calendar'
+      }
     }
   }
 </script>
