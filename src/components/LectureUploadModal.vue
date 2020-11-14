@@ -277,8 +277,8 @@ export default {
         this.hideModal()
         this.waiting = false
         this.$router.push({
-          name: "course_info",
-          params: { id: (this.$store.state.user.current_user.ta_sections.includes(this.$route.params.course_id)?this.$route.params.course_id:course_id) }
+          name: "lecture_info",
+          params: { lecture_id: lect._id }
         })
       } else {
         for(let i=0;i<this.polls.length;i++) {
@@ -291,8 +291,8 @@ export default {
               this.hideModal()
               this.waiting = false
               this.$router.push({
-                name: "course_info",
-                params: { id: (this.$store.state.user.current_user.ta_sections.includes(this.$route.params.course_id)?this.$route.params.course_id:course_id) }
+                name: "lecture_info",
+                params: { lecture_id: lect._id }
               })
             } else {
               for(let i=0;i<this.polls.length;i++) {
@@ -305,8 +305,8 @@ export default {
                     this.hideModal()
                     this.waiting = false
                     this.$router.push({
-                      name: "course_info",
-                      params: { id: course_id }
+                      name: "lecture_info",
+                      params: { lecture_id: lect._id }
                     })
                   }
                 })
