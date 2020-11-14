@@ -44,6 +44,7 @@ import TASectionInfo from '@/views/ta/TASectionInfo.vue';
 import TALectureInfo from '@/views/ta/TALectureInfo.vue';
 import StudentSectionInfo from '@/views/student/StudentSectionInfo.vue';
 import StudentLectureInfo from '@/views/student/StudentLectureInfo.vue';
+import Calendar from '@/views/Calendar.vue';
 
 import AuthAPI from '@/services/AuthAPI.js';
 import UserAPI from '@/services/UserAPI.js';
@@ -447,6 +448,15 @@ const router = new VueRouter({
         title: "Lecture Info",
         requiresAuth: true,
         requiresStudent: true
+      }
+    },
+    {
+      name: 'calendar',
+      path: '/calendar',
+      component: Calendar,
+      meta: {
+        title: "Calendar",
+        requiresAuth: true
       }
     }
   ]
