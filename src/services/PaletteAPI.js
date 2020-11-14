@@ -47,8 +47,8 @@ export default {
           root.style.setProperty('--loader-square-shadow', 'rgba(128, 128, 128, 0.5)');
           
           // Course cards 
-          root.style.setProperty('--course-card-background', '#ffffff');
-          root.style.setProperty('--course-card-shadow', 'rgba(179, 179, 179, 0.644)');
+          root.style.setProperty('--course-card-background', '#f2f8ff'); //#ffffff
+          root.style.setProperty('--course-card-shadow', 'rgba(127, 151, 179, 0.644)'); //179, 179, 179     187, 171, 196   104, 127, 148
           root.style.setProperty('--course-card-text', '#000000');
           root.style.setProperty('--course-number-background', 'rgba(0, 0, 0, 0.86)');
           root.style.setProperty('--course-number-text', '#C1EDFF');
@@ -84,7 +84,7 @@ export default {
           root.style.setProperty('--big-button-text', 'rgba(44, 62, 80, 1)');
           root.style.setProperty('--big-button-border', 'rgba(44, 62, 80, 0.7)');
           root.style.setProperty('--big-button-shadow', 'rgba(44, 62, 80, 0.2)');
-          root.style.setProperty('--button-blue-shadow', 'rgba(67, 65, 120, 0.844)');
+          root.style.setProperty('--button-blue-shadow', 'rgba(67, 65, 120, 0.844)'); //67, 65, 120
           root.style.setProperty('--button-grey-shadow', 'rgba(109, 109, 109, 0.644)');
           root.style.setProperty('--button-text-color', 'white');
           root.style.setProperty('--button-text-hover', 'white');
@@ -121,8 +121,8 @@ export default {
           root.style.setProperty('--foreground-pill', '#f5f5f5');
           root.style.setProperty('--foreground-pill-shadow', 'rgba(109, 109, 109, 0.644)');
           root.style.setProperty('--date-and-percent', 'white');
-          root.style.setProperty('--course-pill-shadow', 'rgba(109, 109, 109, 0.644)');
-          root.style.setProperty('--course-pill-hover', 'rgba(160, 160, 160, 0.644)');
+          root.style.setProperty('--course-pill-shadow', 'rgba(111, 134, 173, 0.644)');  //109, 109, 109
+          root.style.setProperty('--course-pill-hover', 'rgba(143, 162, 194, 0.644)');  //160, 160, 160
 
           // Lecture pills con't - these live in LectureCard.vue
           root.style.setProperty('--lecture-live', '#04852F');
@@ -130,7 +130,7 @@ export default {
           root.style.setProperty('--lecture-playback', '#683eca');
           root.style.setProperty('--lecture-recent', '#858585');
           root.style.setProperty('--lecture-upcoming', '#0076a8');
-          root.style.setProperty('--lecture-pill-shadow', 'rgba(109, 109, 109, 0.644)');
+          root.style.setProperty('--lecture-pill-shadow', 'rgba(107, 133, 156, 0.644)'); //109, 109, 109
           root.style.setProperty('--lecture-info-background', 'white');
           root.style.setProperty('--lecture-course-number-text', '#097bac');
           root.style.setProperty('--lecture-course-name-text', '#2f7cae');                // original: #466D85
@@ -262,17 +262,17 @@ export default {
           root.style.setProperty('--main-text-color', '#ffffff');
           root.style.setProperty('--main-background-color', '#1d2324');
           root.style.setProperty('--input-background', '#000000');
-          root.style.setProperty('--input-border', 'lime');
-          root.style.setProperty('--input-text', 'green');
-          root.style.setProperty('--input-shadow', '#ff00ff');
+          root.style.setProperty('--input-border', '#0e83cc'); //lime
+          root.style.setProperty('--input-text', '#6cb6e6'); //green
+          root.style.setProperty('--input-shadow', '#9fdfed'); //#ff00ff
 
           // Errors 
-          root.style.setProperty('--error', '#00ff00');
-          root.style.setProperty('--error-brighter', 'lime');
+          root.style.setProperty('--error', '#b52d2d'); //#00ff00
+          root.style.setProperty('--error-brighter', 'red'); //lime
 
           // Links - venue.css
-          root.style.setProperty('--link', '#00ff00');
-          root.style.setProperty('--link-hover', '#00ff00');
+          root.style.setProperty('--link', 'red'); //#00ff00
+          root.style.setProperty('--link-hover', 'red'); //#00ff00
 
           root.style.setProperty('--widgets-color', 'brightness(0) invert(1)');
           root.style.setProperty('--clock-color', 'invert(20%) sepia(43%) saturate(454%) hue-rotate(168deg) brightness(93%) contrast(89%)');
@@ -284,8 +284,8 @@ export default {
           root.style.setProperty('--loader-square-shadow', 'rgba(128, 128, 128, 0.5)');
           
           // Course cards
-          root.style.setProperty('--course-card-background', '#2b485e');  //#272727
-          root.style.setProperty('--course-card-shadow', 'rgba(179, 179, 179, 0.644)');
+          root.style.setProperty('--course-card-background', '#3c586e');  //#272727
+          root.style.setProperty('--course-card-shadow', 'rgba(159, 195, 212, 0.644)'); //179, 179, 179
           root.style.setProperty('--course-card-text', '#ffffff');
           root.style.setProperty('--course-number-background', 'rgba(0, 0, 0, 0.86)');
           root.style.setProperty('--course-number-text', '#C1EDFF');
@@ -310,7 +310,7 @@ export default {
           root.style.setProperty('--button-hover-blue', '#005183');  // -- unsure if compliant
           root.style.setProperty('--button-secondary-grey', '#727272');
           root.style.setProperty('--button-hover-grey', '#444444');
-          root.style.setProperty('--button-danger', 'lime');
+          root.style.setProperty('--button-danger', '#b52d2d'); // lime
           root.style.setProperty('--button-danger-shadow', 'rgba(110, 26, 34, 0.74)');
           root.style.setProperty('--button-danger-hover', 'rgba(110, 26, 34, 0.74)');
           root.style.setProperty('--button-tab', '#0078c2');
@@ -355,8 +355,8 @@ export default {
           root.style.setProperty('--foreground-pill', '#f5f5f5');
           root.style.setProperty('--foreground-pill-shadow', 'rgba(109, 109, 109, 0.644)');
           root.style.setProperty('--date-and-percent', 'white');
-          root.style.setProperty('--course-pill-shadow', 'rgba(109, 109, 109, 0.644)');
-          root.style.setProperty('--course-pill-hover', 'rgba(160, 160, 160, 0.644)');
+          root.style.setProperty('--course-pill-shadow', 'rgba(71, 115, 168, 0.644)');  //109, 109, 109
+          root.style.setProperty('--course-pill-hover', 'rgba(116, 154, 219, 0.644)');  //160, 160, 160
 
           // Lecture pills con't - these live in LectureCard.vue
           root.style.setProperty('--lecture-live', '#04852F');
@@ -364,12 +364,12 @@ export default {
           root.style.setProperty('--lecture-playback', '#683eca');
           root.style.setProperty('--lecture-recent', '#858585');
           root.style.setProperty('--lecture-upcoming', '#0076a8');
-          root.style.setProperty('--lecture-pill-shadow', 'rgba(109, 109, 109, 0.644)');
+          root.style.setProperty('--lecture-pill-shadow', 'rgba(29, 109, 179, 0.644)');   //109, 109, 109   21, 90, 150
           root.style.setProperty('--lecture-info-background', 'white');
           root.style.setProperty('--lecture-course-number-text', '#097bac');
           root.style.setProperty('--lecture-course-name-text', '#466D85');
           root.style.setProperty('--lecture-name-text', '#2C3E50');
-          root.style.setProperty('--lecture-closed-text', '#a7640d');
+          root.style.setProperty('--lecture-closed-text', '#52514f'); //#a7640d -- changed from an orange to grey for darkmode only
 
           // Dark mode palette - lecture attendance
           root.style.setProperty('--lecture-attendance-button-text', '#636363');
