@@ -59,7 +59,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <select v-model="course.snooze" class="form-control" aria-labelledby="section_select_label">
-              <option v-for="(time,i) in ['0','15','30','45','60']" :key="i" :value="time">{{time}}</option>
+              <option v-for="(time,i) in ['0','15','30','45','60']" :key="i" :value="time">{{time}} </option>
             </select>
           <!-- <MultiSelectDropdown :options="['None','15','30','45','60']" :preselected="course.course_times" :max="1" :n="0"/>        -->
           </div>
@@ -74,12 +74,36 @@
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <input v-for="(time, i) in course.course_times" :key="i" class="form-control" :value="time.day + ': ' + time.start_time + ' - ' +  time.end_time" rows="5" readonly>
+            <!-- <table>
+              <tr>
+                <th>Day</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+              </tr>
+              <tr v-for="time in course.course_times" :key="time.day">
+                <td>{{time.day}}</td>
+                <td>{{time.start_time}}</td>
+                <td>{{time.end_time}}</td>
+
+              </tr>
+            </table> -->
+            <div v-for="(time, i) in course.course_times" :key="i" class="form-control">
+              <!-- <input {{"time.day + ': ' + time.start_time + ' - ' +  time.end_time "}} > -->
+              <!-- <input {{time.day}}> -->
+              <!-- <div>{{time.day}} {{time.start_time}} - {{time.end_time}} </div> -->
+               <router-link :to="{name: 'new_lecture_time', params: { id: course._id}}">
+                 <div>{{time.day}} {{time.start_time}} - {{time.end_time}} </div>
+                </router-link>
+            </div>
+            <input v-for="(time, i) in course.course_times" :key="i" class="form-control" :value="time.day + ': ' + time.start_time + ' - ' +  time.end_time " rows="5" readonly > <div >
+            <!-- <div  class="icon-spacer"/> <button class="btn" title="Delete Time" id="delete-time" @click="handleDeleteCourse()" ><img class="red-x" id="delete-time" src="@/assets/icons8-delete.svg" alt="Delete" width="40" aria-label="Delete"></button></div> -->
             <router-link :to="{name: 'new_lecture_time', params: { id: course._id}}">
             <button class="btn btn-primary">Add Time</button>
             </router-link>
+            
           </div>
         </div>
+       </div>
       </div><br />
     
       <div class="row">
