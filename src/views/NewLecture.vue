@@ -280,6 +280,9 @@ export default {
     async getSectionsForCourse() {
       const response = await SectionAPI.getSectionsForCourse(this.course_id);
       this.course_sections = response.data;
+      if(!this.$store.state.user.current_user.instructor_courses.includes(this.$route.params.course_id)) {
+        this.course_sections = this.course_sections.filter(section => this.$store.state.user.current_user.ta_sections.includes(section._id))
+      }
       this.course_sections_have_loaded = true;
     },
     hasOverlaps(checkins) {

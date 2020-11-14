@@ -232,7 +232,7 @@
     },
     methods: {
       showBreadcrumb() {
-        return !(this.$route.name === 'dashboard' || this.$route.name === 'settings' || this.$route.name === 'lecture_playback')
+        return !(this.$route.name === 'dashboard' || this.$route.name === 'settings')
       },
       async loadData() {
         this.current_user = this.$store.state.user.current_user
@@ -255,7 +255,7 @@
         this.current_lecture = this.user_lectures.find(a=>this.$route.params.lecture_id && a && a._id == this.$route.params.lecture_id)
         let sections = this.ta_sections.concat(this.student_sections)
 
-        if(this.$route.name == 'new_lecture') {
+        if(this.$route.name == 'new_lecture' || this.$route.name == 'new_lecture') {
           this.current_course = this.instructor_courses.find(a=>this.$route.params.course_id && a._id == this.$route.params.course_id)
         } else if(this.current_lecture) {
           this.current_ta_section = this.current_lecture.sections.find(section => this.ta_sections.map(a => a._id).includes(section._id))
