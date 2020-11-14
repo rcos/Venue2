@@ -38,12 +38,14 @@ export default {
     .then(res => {
       let events = []
       res.data.forEach(lecture => {
-        events.push({
-          id: lecture._id,
-          title: lecture.title,
-          start: (lecture.start_time?lecture.start_time:lecture.playback_submission_start_time),
-          end: (lecture.end_time?lecture.end_time:lecture.playback_submission_end_time),
-        })
+        if(lecture.start_time) {
+          events.push({
+            id: lecture._id,
+            title: lecture.title,
+            start: lecture.start_time,
+            end: lecture.end_time,
+          })
+        }
       })
       this.calendarOptions.initialEvents = events
     })
