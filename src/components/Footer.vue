@@ -18,7 +18,9 @@ import PaletteAPI from '../services/PaletteAPI';
 export default {
 	
 created() {
-	this.setPalette()
+	if(this.$store.state.user) {
+		this.setPalette()
+	}
 },
   name: "Footer",
   methods: {

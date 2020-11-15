@@ -116,7 +116,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  min-height: calc(100vh - 2rem);
+  min-height: calc(100vh - 2rem - 5px);
   // min-height: 100%;
 }
 
