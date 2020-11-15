@@ -3,6 +3,7 @@ require('mongoose-type-url');
 const Schema = mongoose.Schema;
 
 let Section = require('../Section/Section.model');
+let Attachment = require('../Attachments/Attachment.model');
 
 //Define collection and schema for Lecture
 let Lecture = new Schema({
@@ -38,6 +39,10 @@ let Lecture = new Schema({
 	meeting_link: mongoose.SchemaTypes.Url,
 	class_links: [{
 		type: mongoose.SchemaTypes.Url
+	}],
+	files: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Attachment'
 	}]
 });
 
