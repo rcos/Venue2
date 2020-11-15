@@ -159,6 +159,17 @@ courseRoutes.post('/add_lecture_time/:id', (req, res) => {
     });
   });
 });
+courseRoutes.post('/delete_lecture_time/:id', (req, res) => {
+  let times = req.body.course_times;
+  let course_id = req.params.id;
+  Course.findById(course_id, function (err, course) {
+    Promise.all([
+      Course.findByIdAndUpdate(course_id, { $pull: { course_times: { day:times.day, start_time: times.start_time, end_time: times.end_time } } })
+    ]).then(resolved => {
+      res.json();
+    });
+  });
+});
 courseRoutes.post('/toggleAllSectionsPublic/:id', (req, res) => {
   let id = req.params.id;
   let ids = req.body.sections.map(a=>a._id);
