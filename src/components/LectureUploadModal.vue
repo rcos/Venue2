@@ -568,6 +568,7 @@ h2 {
   overflow-y: auto;
   z-index: 1001;
   padding: 1rem;
+  border-radius: 0.5rem;
 }
 #close_lecture_modal {
   position: absolute;
