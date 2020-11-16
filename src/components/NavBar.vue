@@ -98,20 +98,16 @@
           </router-link>
           <div :class="'active-link-underline ' + (is_settings()?'active':'')"></div>
         </div>
-        <!-- Notifications
-        <div :class = "venue-nav-link-container">
-          <img src="@/assets/notificationbell2.png" width="30" height="30" :style="{marginRight: '6rem', marginTop: '0.3rem'}" class="d-inline-block align-top settings svg-color" alt="Notification Bell" aria-label="Notification Bell">
-        </div>
-        -->
+        <!-- Notifications -->
 
         <div class = "venue-nav-link-container" :style="{marginLeft: '1px', marginTop: '1px'}">
           <a data-toggle="collapse" href="#instructor-collapse" class="venue-nav-link" :class="{'active-link':is_instructor_course_info()}" style="cursor:pointer;">
              <img src="@/assets/notificationbell2.png" width="30" height="30" :style="{ marginTop: '0.3rem'}" class="d-inline-block align-top settings svg-color" alt="Notification Bell" aria-label="Notification Bell">
           </a>
           <hide-at breakpoint="mediumAndBelow">
-            <div class="dropdown-content">
+            <div class="dropdown-content" id="noti-dropdown"  :style="{}">
               <router-link v-for="course in instructor_courses" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
-                {{ course.name }}
+                {{ 'Test person100 posted a new lecture for Data Structures'  }}
               </router-link>
             </div>
           </hide-at>
@@ -398,7 +394,7 @@
     font-size: 0rem;
     text-decoration: none;  
     display: block;
-    max-height: 0px;
+    max-height: 0rem;
     width: 15rem;
     margin: 0px;
     padding: 0px;
@@ -418,10 +414,6 @@
     border-top: 0.1rem solid var(--nav-bar-separator);
   }
 
-  .dropdown-content a:last-of-type {
-    border-radius: 0rem 0rem 0.5rem 0.5rem;
-  }
-
   .dropdown-content a:only-of-type {
     border-radius: 0.5rem;
   }
@@ -435,12 +427,24 @@
   .venue-nav-link-container:focus-within > .dropdown-content a {
     visibility: visible;
     font-size: 1rem;
-    max-height: 3rem;
+    max-height: 240px;
     width: 15rem;
     padding: 12px 16px;
     transform: rotateY(0deg);
     transition: font-size 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0s cubic-bezier(0.19, 1, 0.22, 1);
   }
+
+  .venue-nav-link-container:hover> #noti-dropdown a,
+  .venue-nav-link-container:focus-within > #noti-dropdown a {
+    visibility: visible;
+    font-size: 0.8rem;
+    max-height: 15rem;
+    width: 15rem;
+    padding: 12px 16px;
+    transform: rotateY(0deg);
+    transition: font-size 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
 
   /* .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(2),
   .venue-nav-link-container:focus-within > .dropdown-content a:nth-of-type(2) {

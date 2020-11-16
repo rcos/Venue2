@@ -20,6 +20,22 @@ notificationRoutes.route('/get/').get(function(req, res) {
   })
 })
 
+notificationRoutes.route('/get_notifications').get(function (req, res) {
+  Notification.find({ _id: { $in: req.user.notifications } }, function (err, notifications) {
+    if (err || notifications == null) {
+      console.log("<ERROR> Getting notifications for user with ID:", req.user._id);
+      res.json(err);
+    } else {
+      console.log("<SUCCESS> Getting notifications user with ID:", req.user._id);
+      res.json(notifications);
+    }
+  });
+});
+
+
+
+/*
 notificationRoutes.route('/send').post(function(req, res) {
   let course_students = req.body.course.
 })
+*/

@@ -5,7 +5,7 @@ let User = require('../User/User.model');
 
 let Notification = new Schema({
   sender: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
 		ref: 'User'
   },
   type: String, 
