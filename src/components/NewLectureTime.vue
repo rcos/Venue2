@@ -37,7 +37,7 @@
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <input type="text" class="form-control" v-model="new_start">
+            <input type="time" class="form-control" v-model="new_start">
           </div>
         </div>
       </div><br />
@@ -49,7 +49,7 @@
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <input type="text" class="form-control" v-model="new_end">
+            <input type="time" class="form-control" v-model="new_end">
           </div>
         </div>
       </div><br />
