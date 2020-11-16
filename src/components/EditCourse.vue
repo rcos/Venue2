@@ -53,13 +53,13 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Snooze (Minutes)</label>
+            <label>Snooze</label>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <select v-model="course.snooze" class="form-control" aria-labelledby="section_select_label">
-              <option v-for="(time,i) in ['0','15','30','45','60']" :key="i" :value="time">{{time}} </option>
+              <option v-for="(time,i) in ['None','15 Minutes','30 Minutes','45 Minutes','60 Minutes']" :key="i" :value="time">{{time}} </option>
             </select>
           </div>
           <br>
@@ -81,7 +81,6 @@
             <router-link :to="{name: 'new_lecture_time', params: { id: course._id}}">
             <button class="btn btn-primary">Add Time</button>
             </router-link>
-            
           </div>
         </div>
        </div>
@@ -184,10 +183,15 @@
         function compare(a, b) {
           // aDay = getIndex(a.day)
           // bDay = getIndex(b.day)
-          if (a.day < b.day)
-            return -1;
-          if (a.day > b.day)
-            return 1;
+          // if (a.day < b.day)
+          //   return -1;
+          // if (a.day > b.day)
+          //   return 1;
+          // return 0;
+          if (a.time > b.time)
+            return b.time;
+          if (a.time < b.time)
+            return a.time;
           return 0;
       }
       return this.course.course_times.sort(compare);
