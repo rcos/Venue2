@@ -17,17 +17,7 @@
         </div>
         <!-- Courses Link -->
         <div class="venue-nav-link-container" id="instructor-course-dropdown" v-if="instructor_courses.length">
-          <a data-toggle="collapse" href="#instructor-collapse" class="venue-nav-link" :class="{'active-link':is_instructor_course_info()}" style="cursor:pointer;">
-            Instructor Courses <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
-          </a>
-          <hide-at breakpoint="mediumAndBelow">
-            <div class="dropdown-content">
-              <router-link v-for="course in instructor_courses" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
-                {{ course.name }}
-              </router-link>
-            </div>
-          </hide-at>
-          <div :class="'active-link-underline ' + (is_instructor_course_info()?'active':'')"></div>
+          <DropDown :is_active="is_instructor_course_info()" :navbar_label="'Instructor Courses'" v-bind:dd_content="instructor_courses" :did="'course'"></DropDown>
         </div>
         <div class="venue-nav-link-container" v-if="instructor_courses.length">
           <router-link class="venue-nav-link" :class="{'active-link':is_statistics()}" :to="{name: 'statistics'}">
@@ -36,30 +26,10 @@
           <div :class="'active-link-underline ' + (is_statistics()?'active':'')"></div>
         </div>
         <div class="venue-nav-link-container" id="ta-section-dropdown" v-if="ta_sections.length">
-          <a data-toggle="collapse" href="#ta-collapse" class="venue-nav-link" :class="{'active-link':is_ta_section_info()}" style="cursor:pointer;">
-            TA Sections <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
-          </a>
-          <hide-at breakpoint="mediumAndBelow">
-            <div class="dropdown-content">
-              <router-link v-for="section in ta_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
-                {{ section.course.name }} {{section.name}}
-              </router-link>
-            </div>
-          </hide-at>
-          <div :class="'active-link-underline ' + (is_ta_section_info()?'active':'')"></div>
+          <DropDown :is_active="is_ta_section_info()" :navbar_label="'TA Sections'" v-bind:dd_content="ta_sections" :did="'section'"></DropDown>
         </div>
         <div class="venue-nav-link-container" id="student-section-dropdown" v-if="student_sections.length">
-          <a data-toggle="collapse" href="#student-collapse" class="venue-nav-link" :class="{'active-link':is_student_section_info()}" style="cursor:pointer;">
-            Student Sections <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
-          </a>
-          <hide-at breakpoint="mediumAndBelow">
-            <div class="dropdown-content">
-              <router-link v-for="section in student_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
-                {{ section.course.name }} {{ section.name }}
-              </router-link>
-            </div>
-          </hide-at>
-          <div :class="'active-link-underline ' + (is_student_section_info()?'active':'')"></div>
+          <DropDown :is_active="is_student_section_info()" :navbar_label="'Student Sections'" v-bind:dd_content="student_sections" :did="'section'"></DropDown>
         </div>
         <!-- ADMIN -->
         <div class="venue-nav-link-container" id="admin-dropdown" v-if="current_user.is_admin">
@@ -103,33 +73,6 @@
     <!-- Mobile Course Dropdown -->
     <show-at breakpoint="mediumAndBelow">
       <div id="all-collapse">
-        <div class="collapse" id="instructor-collapse" data-parent="#all-collapse">
-          <ul class="mobile-course-list">
-            <li class="mobile-course-link" href="#instructor-collapse" data-toggle="collapse" v-for="course in instructor_courses" :key="course._id">
-              <router-link :to="{name: 'course_info', params: { id: course._id }}">
-                <p class="mobile-course-link-name">{{ course.name }}</p>
-              </router-link>
-            </li>
-          </ul>
-        </div>
-        <div class="collapse" id="ta-collapse" data-parent="#all-collapse">
-          <ul class="mobile-course-list">
-            <li class="mobile-course-link" href="#ta-collapse" data-toggle="collapse" v-for="section in ta_sections" :key="section._id">
-              <router-link :to="{name: 'course_info', params: { id: section._id }}">
-                <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
-              </router-link>
-            </li>
-          </ul>
-        </div>
-        <div class="collapse" id="student-collapse" data-parent="#all-collapse">
-          <ul class="mobile-course-list">
-            <li class="mobile-course-link" href="#student-collapse" data-toggle="collapse" v-for="section in student_sections" :key="section._id">
-              <router-link :to="{name: 'course_info', params: { id: section._id }}">
-                <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
-              </router-link>
-            </li>
-          </ul>
-        </div>
         <div class="collapse" id="admin-collapse" data-parent="#all-collapse">
           <ul class="mobile-course-list">
             <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
@@ -190,6 +133,7 @@
   import CourseAPI from '@/services/CourseAPI.js'
   import SectionAPI from '@/services/SectionAPI.js'
   import LectureAPI from '@/services/LectureAPI.js'
+  import DropDown from './DropDown.vue'
 
   export default {
     name: 'NavBar',
@@ -205,7 +149,8 @@
     },
     components: {
       hideAt,
-      showAt
+      showAt,
+      DropDown
     },
     data(){
       return {

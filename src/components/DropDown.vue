@@ -4,81 +4,51 @@
     <!-- Courses Link -->
     <div id="course-link">
       <a data-toggle="collapse" href="#collapse-me" class="venue-nav-link" :class="{'active-link':this.is_active }" style="cursor:pointer;">
-        {{navbar_label}} <img src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+        {{navbar_label}} <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
       </a>
-
 
     <hide-at breakpoint="mediumAndBelow">
       <div class="dropdown-content">
-
-        <div v-if= "this.id === 'section'">
-          <router-link v-for="section in this.dd_content" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
-            <p>{{ section.course.name }}  {{ section.name }}</p>
-          </router-link>
-        </div>
-
-        <div v-else-if="this.id === 'course'">
-          <router-link v-for="course in this.dd_content" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
-            <p>{{ course.name }}</p>
-          </router-link>
-        </div>
-
-        <div v-else>
-          <div v-for="item in this.dd_content">
-            <p>{{item.name}}</p>
-
-            <div class="inner-content">
-            <div v-if="item.children">
-            <div v-for="child in item.children">
-              <p>{{child.name}}</p>
-            </div>
-            </div>
-            </div>
+        <router-link v-for="content in this.dd_content" :key="content._id" :to="{name: 'course_info', params: { id: content._id }}">
+          <div v-if= "did === 'section'">
+            <p>{{ content.course.name }}  {{ content.name }}</p>
           </div>
-        </div>
-
+          <div v-else-if="did === 'course'">
+            <span @mouseover="hover = true">
+              <p>{{ content.name }}</p>
+            </span>
+            <span v-if="hover">
+              <div class="inner_content">
+                <NestedDropDown :is_active="is_active" :dd_content="nested_contents" :index=content :hover="content.name"></NestedDropDown>
+              </div>
+            </span>
+          </div>
+          <div v-else></div>
+        </router-link>
       </div>
     </hide-at>
-
     <div :class="'active-link-underline ' + ( this.is_active?'active':'')"></div>
     </div>
 
     <show-at breakpoint="mediumAndBelow">
       <div id="all-collapse">
         <div class="collapse" id="collapse-me" data-parent="#all-collapse">
-
-          <div v-if= "this.id === 'section'">
-            <ul class="mobile-course-list">
-              <li class="mobile-course-link" href="#collapse-me" data-toggle="collapse" v-for="section in this.dd_content" :key="section._id">
-                <router-link :to="{name: 'course_info', params: { id: section._id }}">
-                  <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
-                </router-link>
-              </li>
-            </ul>
-          </div>
-
-          <div v-else-if= "this.id === 'course'">
-            <ul class="mobile-course-list">
-              <li class="mobile-course-link" href="#collapse-me" data-toggle="collapse" v-for="course in this.dd_content" :key="course._id">
-                <router-link :to="{name: 'course_info', params: { id: course._id }}">
-                  <p class="mobile-course-link-name">{{ course.name }}</p>
-                </router-link>
-              </li>
-            </ul>
-          </div>
-
-          <div v-else>
-            <ul class="mobile-course-list">
-              <li class="mobile-course-link" href="#collapse-me" data-toggle="collapse" v-for="item in this.dd_content">
-                <p class="mobile-course-link-name">{{ item.name }}</p>
-              </li>
-            </ul>
-          </div>
-
+          <ul class="mobile-course-list">
+            <li class="mobile-course-link" href="#collapse-me" data-toggle="collapse" v-for="content in this.dd_content" :key="content._id">
+              <router-link :to="{name: 'course_info', params: { id: content._id }}">
+                <div v-if= "did === 'section'">
+                  <p class="mobile-course-link-name">{{ content.course.name }} {{ content.name }}</p>
+                </div>
+                <div v-else-if= "did === 'course'">
+                  <p class="mobile-course-link-name">{{ content.name }}</p>
+                </div>
+                <div v-else></div>
+              </router-link>
+            </li>
+          </ul>
         </div>
       </div>
     </show-at>
-
 
   </div>
 </template>
@@ -86,12 +56,42 @@
 
 <script>
   import {showAt, hideAt} from 'vue-breakpoints'
+  import SectionAPI from '@/services/SectionAPI.js'
+  import NestedDropDown from './NestedDropDown.vue'
 
   export default {
     name: 'DropDown',
     components: {
       hideAt,
-      showAt
+      showAt,
+      NestedDropDown
+    },
+    data(){
+      return {
+        nested_contents: [],
+        hover: false,
+        hoverItem: null,
+      }
+    },
+    created() {
+      this.loadData()
+    },
+    methods: {
+      async loadData(){
+         this.loadInstructorContents()
+      },
+      async loadInstructorContents(){
+        for (let i = 0; i < this.dd_content.length; i++){
+          let temp = []
+          let sections = []
+          await SectionAPI.getSectionsForCourse(this.dd_content[i]._id).then(res =>
+          {
+          temp.push(this.dd_content[i])
+          temp.push(res.data)
+          this.nested_contents.push(temp)
+          })
+        }
+      },
     },
     props: {
       is_active: {
@@ -103,29 +103,29 @@
       dd_content: {
         type:  Array,
       },
-      id:{
+      did:{
         type: String,
       },
-    },
+    }
   }
 </script>
 
 <style scoped>
 
-.dropdown-content,
-.inner-content{
+/*.inner_content{
+  visibility: hidden;
+}*/
+.dropdown-content{
   margin-left: -1rem;
   margin-top: 0.2rem;
   position: absolute;
   visibility: hidden;
   /* background-color: #f7f7f7; */
-
   z-index: 9999;
   border-radius: 0.5rem;
   /* transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1); */
 }
-.dropdown-content a,
-.inner-content a {
+.dropdown-content a{
   visibility: hidden;
   color: #2C3E50;
   background-color: #f7f7f7;
@@ -166,11 +166,10 @@
   transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1); */
 }
 
-.dropdown-content a:hover> .inner-content,
-.dropdown-content a:focus-within > .inner-content{
+.dropdown-content a:hover,
+.dropdown-content a:focus-within{
   visibility: visible;
 }
-
 
 #course-link:hover > .dropdown-content,
 #course-link:focus-within > .dropdown-content {
