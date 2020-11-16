@@ -20,7 +20,7 @@ export default {
 
           // Default palette - main (general)
           root.style.setProperty('--main-text-color', '#1d2324');
-          root.style.setProperty('--main-background-color', '#ffffff');
+          root.style.setProperty('--main-background-color', '#f2f8ff');  //#ffffff
           root.style.setProperty('--input-background', '#f7f7f7');
           root.style.setProperty('--input-border', 'grey');
           root.style.setProperty('--input-text', 'black');
@@ -47,7 +47,7 @@ export default {
           root.style.setProperty('--loader-square-shadow', 'rgba(128, 128, 128, 0.5)');
           
           // Course cards 
-          root.style.setProperty('--course-card-background', '#f2f8ff'); //#ffffff
+          root.style.setProperty('--course-card-background', '#f2f8ff'); //#ffffff ->#fafcff
           root.style.setProperty('--course-card-shadow', 'rgba(127, 151, 179, 0.644)'); //179, 179, 179     187, 171, 196   104, 127, 148
           root.style.setProperty('--course-card-text', '#000000');
           root.style.setProperty('--course-number-background', 'rgba(0, 0, 0, 0.86)');
@@ -92,7 +92,7 @@ export default {
           // Nav bar Palette
           // These are also used in MultiSelectDropdown.vue
           root.style.setProperty('--nav-bar-text', '#2C3E50');
-          root.style.setProperty('--nav-bar-background', '#f7f7f7');
+          root.style.setProperty('--nav-bar-background', '#fafcff'); //#f7f7f7 --> #fafcff
           root.style.setProperty('--nav-bar-separator', 'rgba(0, 0, 0, 0.15)');
           root.style.setProperty('--nav-bar-selected-text', '#2f7cae');                     // test: #2f7cae   original: #466D85
           root.style.setProperty('--nav-bar-box-shadow', 'rgba(109, 109, 109, 0.744)');
@@ -118,7 +118,7 @@ export default {
           root.style.setProperty('--green-pill-shadow', 'rgba(78, 205, 76, 0.3)');
           root.style.setProperty('--upcoming-pill', '#0078c2');
           root.style.setProperty('--upcoming-pill-shadow', 'rgba(109, 109, 109, 0.644)');
-          root.style.setProperty('--foreground-pill', '#f5f5f5');
+          root.style.setProperty('--foreground-pill', '#f2f8ff'); //#f5f5f5
           root.style.setProperty('--foreground-pill-shadow', 'rgba(109, 109, 109, 0.644)');
           root.style.setProperty('--date-and-percent', 'white');
           root.style.setProperty('--course-pill-shadow', 'rgba(111, 134, 173, 0.644)');  //109, 109, 109
@@ -131,7 +131,7 @@ export default {
           root.style.setProperty('--lecture-recent', '#858585');
           root.style.setProperty('--lecture-upcoming', '#0076a8');
           root.style.setProperty('--lecture-pill-shadow', 'rgba(107, 133, 156, 0.644)'); //109, 109, 109
-          root.style.setProperty('--lecture-info-background', 'white');
+          root.style.setProperty('--lecture-info-background', '#f2f8ff'); //white
           root.style.setProperty('--lecture-course-number-text', '#097bac');
           root.style.setProperty('--lecture-course-name-text', '#2f7cae');                // original: #466D85
           root.style.setProperty('--lecture-name-text', '#2C3E50');
@@ -173,7 +173,7 @@ export default {
           root.style.setProperty('--dashboard-background-color', '#636363');
 
           // Modal
-          root.style.setProperty('--modal-background', '#ffffff');
+          root.style.setProperty('--modal-background', '#f2f8ff');  //#ffffff
           root.style.setProperty('--modal-course-name', '#53788E');
           root.style.setProperty('--modal-course-number', '#2398C8');
           root.style.setProperty('--modal-border', 'grey');
@@ -215,7 +215,7 @@ export default {
           root.style.setProperty('--event-course-name', '#466D85');
           root.style.setProperty('--event-course-title', '#146c91');
 
-          root.style.setProperty('--event-active-background', 'white');
+          root.style.setProperty('--event-active-background', '#f2f8ff'); //white
           root.style.setProperty('--event-active-shadow', 'rgba(0, 0, 0, 0.1)');
 
           root.style.setProperty('--event-location', '#524e0a');
@@ -352,7 +352,7 @@ export default {
           root.style.setProperty('--green-pill-shadow', 'rgba(78, 205, 76, 0.3)');
           root.style.setProperty('--upcoming-pill', '#0078c2');
           root.style.setProperty('--upcoming-pill-shadow', 'rgba(109, 109, 109, 0.644)');
-          root.style.setProperty('--foreground-pill', '#f5f5f5');
+          root.style.setProperty('--foreground-pill', '#f2f8ff'); //#f5f5f5
           root.style.setProperty('--foreground-pill-shadow', 'rgba(109, 109, 109, 0.644)');
           root.style.setProperty('--date-and-percent', 'white');
           root.style.setProperty('--course-pill-shadow', 'rgba(71, 115, 168, 0.644)');  //109, 109, 109
@@ -365,7 +365,7 @@ export default {
           root.style.setProperty('--lecture-recent', '#858585');
           root.style.setProperty('--lecture-upcoming', '#0076a8');
           root.style.setProperty('--lecture-pill-shadow', 'rgba(29, 109, 179, 0.644)');   //109, 109, 109   21, 90, 150
-          root.style.setProperty('--lecture-info-background', 'white');
+          root.style.setProperty('--lecture-info-background', '#f2f8ff'); //white
           root.style.setProperty('--lecture-course-number-text', '#097bac');
           root.style.setProperty('--lecture-course-name-text', '#466D85');
           root.style.setProperty('--lecture-name-text', '#2C3E50');
