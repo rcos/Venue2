@@ -241,8 +241,10 @@
         }
       },
       async removeElement(time) {
+         if (window.confirm("Are you sure you want to delete this time?")) {
         const response = await CourseAPI.deleteTime(this.course._id, time)
         location.reload()
+         }
       },
      convertTime(time) {
        if (time == '' || time == undefined || time == null) return ''
