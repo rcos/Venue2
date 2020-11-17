@@ -73,8 +73,7 @@
               <td>{{ student.first_name }}</td>
               <td>{{ student.last_name }}</td>
               <td>{{ student.user_id }}</td>
-              <!-- <td><button class="btn btn-danger" @click.prevent="removeStudent(student)">Remove</button></td> -->
-              <!-- <td v-if="is_section_view"><button class="btn btn-secondary" @click.prevent="$emit('select-student', student)">Select</button></td> -->
+              <td><button class="btn btn-primary" type="button" @click="addTaToSection(student.email)">Make TA</button></td>
             </tr>
         </tbody>
     </table>
@@ -93,8 +92,7 @@
               <td>{{ ta.first_name }}</td>
               <td>{{ ta.last_name }}</td>
               <td>{{ ta.user_id }}</td>
-              <!-- <td><button class="btn btn-danger" @click.prevent="removeTA(ta)">Remove</button></td> -->
-              <!-- <td v-if="is_section_view"><button class="btn btn-secondary" @click.prevent="$emit('select-student', student)">Select</button></td> -->
+              <td><button class="btn btn-primary" type="button" @click="addStudentToSection(ta.email)">Make Student</button></td>
             </tr>
         </tbody>
     </table>
@@ -156,7 +154,6 @@
       this.getCurrentSection()
     },
     methods: {
-      //TODO: Change to getSection
       async getCurrentSection(){
         let section_id = this.$route.params.id
         const response = await SectionAPI.getSection(section_id)
@@ -182,20 +179,6 @@
         const response = await SectionAPI.getTeachingAssistants(this.section._id)
         this.tas = response.data
       },
-      addStudent(student){
-        if(!this.students.includes(student))
-          this.students.push(student)
-      },
-      removeStudent(student){
-        this.students.splice(this.students.indexOf(student),1)
-        this.section.students = this.students
-        SectionAPI.updateSection(this.$route.params.id, this.section)
-      },
-      removeTA(ta){
-        this.tas.splice(this.tas.indexOf(ta),1)
-        this.section.teaching_assistants = this.tas.map(a=>a.email)
-        SectionAPI.updateSection(this.$route.params.id, this.section)
-      },
       async updateSection() {
         const response = await SectionAPI.updateSection(this.$route.params.id, this.section)
         location.reload()
@@ -206,9 +189,19 @@
           location.reload()
         })
       },
+      addStudentToSection(email) {
+        SectionAPI.addStudents(this.section._id,[email]).then(res => {
+          location.reload()
+        })
+      },
       addTasToSection() {
         let tas = this.tas_to_add.split(',')
         SectionAPI.addTAs(this.section._id,tas).then(res => {
+          location.reload()
+        })
+      },
+      addTaToSection(email) {
+        SectionAPI.addTAs(this.section._id,[email]).then(res => {
           location.reload()
         })
       }

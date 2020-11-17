@@ -58,7 +58,7 @@
                 <div class="checkin-poll col col-4 my-auto">
                   <div v-if="null != polls[i]">
                     <button type="button" class="btn btn-secondary" @click="add_poll_index = i" :title="'Edit '+polls[i].question">
-                      <img src="@/assets/hw/icons8-jack-o-lantern-64.png" alt="Edit" width="40" aria-label="Edit">
+                      <img class="svg-color" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
                     </button>
                     <button type="button" class="btn btn-danger" @click="polls[i] = null" :title="'Remove ' +polls[i].question">X</button>
                   </div>
@@ -266,8 +266,8 @@ export default {
 
         Promise.all(poll_promises).then(resolved => {
           this.$router.push({
-            name: "course_info",
-            params: { id: this.$route.params.course_id }
+            name: "lecture_info",
+            params: { lecture_id: this.lecture._id }
           })
         })
       }
@@ -280,6 +280,9 @@ export default {
     async getSectionsForCourse() {
       const response = await SectionAPI.getSectionsForCourse(this.course_id);
       this.course_sections = response.data;
+      if(!this.$store.state.user.current_user.instructor_courses.includes(this.$route.params.course_id)) {
+        this.course_sections = this.course_sections.filter(section => this.$store.state.user.current_user.ta_sections.includes(section._id))
+      }
       this.course_sections_have_loaded = true;
     },
     hasOverlaps(checkins) {
@@ -470,10 +473,6 @@ export default {
 <style>
 h1 {
   text-align: center;
-}
-/* Remove after halloween */
-.btn.btn-secondary img {
-  filter: none !important;
 }
 
 .col {

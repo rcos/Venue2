@@ -6,14 +6,6 @@
         <router-view :key="$route.fullPath" />
       </main>
     </div>
-    <div>
-      <div class="cobweb">
-        <img class="web-size" src="@/assets/hw/web-corner.png" alt="cobweb"> 
-        <spider>
-          <img class="spider-size" src="@/assets/hw/icons8-spider-64.png" alt="spider">
-        </spider>
-      </div>
-    </div>
     <Footer/>
   </div>
 </template>
@@ -26,10 +18,6 @@ import LectureAPI from './services/LectureAPI';
 import {getLiveLectures,getUpcomingLectures,getPastLectures} from './services/GlobalFunctions.js'
 import '@/assets/css/venue.css';
 import UserAPI from '@/services/UserAPI.js';
-
-import '@/assets/hw/hw.css';
-import {showAt, hideAt} from 'vue-breakpoints'
-
 
 export default {
   watch: {
@@ -44,8 +32,7 @@ export default {
   },
   components: {
     NavBar,
-    Footer,
-    hideAt
+    Footer
   },
   data() {
     return {
@@ -129,7 +116,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  min-height: calc(100vh - 2rem);
+  min-height: calc(100vh - 2rem - 5px);
   // min-height: 100%;
 }
 

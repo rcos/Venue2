@@ -33,7 +33,7 @@
     "throng": "^4.0.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4",
+    "nodemon": "^2.0.6",
     "passport-cas": "^0.1.1"
   }
 }
