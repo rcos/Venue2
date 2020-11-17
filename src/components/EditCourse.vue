@@ -75,7 +75,7 @@
           <div class="form-group">
             <!-- <div v-for="(time, i) in sortTimes(course.course_times)" :key="i"> -->
               <div v-for="(time, i) in sortTimes" :key="i">
-                 <div class="form-control">{{time.day}} {{convertTime(time.start_time)}} - {{time.end_time}} <button class="btn"  @click="removeElement(time)"><img class="red-x btn-prima" id="delete-time" src="@/assets/icons8-delete.svg" alt="Delete" width="20" aria-label="Delete"></button> </div>
+                 <div class="form-control">{{time.day}} {{convertTime(time.start_time)}} - {{convertTime(time.end_time)}} <button class="btn"  @click="removeElement(time)"><img class="red-x btn-prima" id="delete-time" src="@/assets/icons8-delete.svg" alt="Delete" width="20" aria-label="Delete"></button> </div>
             </div>
              <div >
             <router-link :to="{name: 'new_lecture_time', params: { id: course._id}}">
@@ -241,16 +241,32 @@
         }
       },
       async removeElement(time) {
-         if (window.confirm("Are you sure you want to delete this time?")) {
-        const response = await CourseAPI.deleteTime(this.course._id, time)
-        location.reload()
+        if (window.confirm("Are you sure you want to delete this time?")) {
+          const response = await CourseAPI.deleteTime(this.course._id, time)
+          location.reload()
          }
       },
      convertTime(time) {
        if (time == '' || time == undefined || time == null) return ''
-       let newTime = time/100-12 + ":00";
+       let newTime = time.split(":")
+       let hours = parseInt(newTime[0])
+       let mod = hours / 12
+       let ampm = "am"
+       if (mod > 1) {
+         ampm = "pm"
+         hours = hours - 12
+       }
+       if (mod == 1) {
+         ampm = "pm"
+       }
+       if (hours == 0){
+         hours = 12
+       }
+       let mins = newTime[1]
        console.log(newTime)
-       return "123"
+       console.log(mins)
+
+       return `${hours}:${mins} ${ampm}`
      },
       async updateCourse() {
         this.waiting= true
