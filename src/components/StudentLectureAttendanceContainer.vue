@@ -16,7 +16,7 @@
         <img class="svg-color" src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
       </button>
       <router-link class="header-btn btn btn-secondary" v-else-if="canWatchRecording()" :to="{name: 'lecture_playback', params: { lecture_id: lecture._id }}">
-        <img class="svg-color" src="@/assets/icons8-video-64.png" width="60" alt="Video" aria-label="Video" title="Watch Recording">
+        <img class="svg-color" src="@/assets/venue-video-icon.svg" width="60" alt="Video" aria-label="Video" title="Watch Recording">
       </router-link>
     </div>
     <LectureAttendanceTable :is_instructor="false" :lecture="lecture" :submissions="[submission]" />

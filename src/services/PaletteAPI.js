@@ -558,7 +558,7 @@ export default {
  ***  essentially passes the image through a red filter, and the blanks pass no ***
  ***  filter. brightness(0) invert(0) is the equivalent of black.               ***
  ***  icons8-edit, settings and all buttons icons will use --widgets-color,     ***
- ***  icons8-delete will use --red-x, clock.svg will use --clock-color and      ***
+ ***  venue-delete will use --red-x, venue-clock.svg will use --clock-color and       ***
  ***  venue-logo.svg will use --logo-color                                      ***
  ***                                                                            ***
  ***                DECLARED IN: assets/css/venue-core.css,                     ***
