@@ -240,8 +240,10 @@
         }
       },
       async removeElement(time) {
+         if (window.confirm("Are you sure you want to delete this time?")) {
         const response = await CourseAPI.deleteTime(this.course._id, time)
         location.reload()
+         }
       },
       async updateCourse() {
         this.waiting= true
