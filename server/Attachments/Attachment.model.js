@@ -8,11 +8,11 @@ let Section = require('../Section/Section.model')
 //Define collection and schema for User
 let Attachment = new Schema({
 	name: String,
-	date_uploaded: String,
+	filepath: String,
     type: String,
-    size: String,
+    size: Number,
 	uploadedBy: {
-		type: String,
+		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	}
 });
