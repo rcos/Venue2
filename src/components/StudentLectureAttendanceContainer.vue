@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- TODO: Check if student submitted already -->
     <div id="qr-scanning-container" v-if="camera_scanning_window_open">
       <button @click="camera_scanning_window_open = false" id="exit_preview_btn" tabindex="0" aria-label="Close QR Scanner">X</button>
       <qrcode-stream id="video_preview" @decode="checkForQRMatch"></qrcode-stream>

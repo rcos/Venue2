@@ -58,7 +58,6 @@
       }
     },
     created() {
-      // TODO: Change plabyack and recent sections to show percentages like in figma
       this.is_instructor = this.$store.state.user.current_user.is_instructor
       this.lecture_course = this.lecture.sections[0].course
     },
