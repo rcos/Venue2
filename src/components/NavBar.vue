@@ -17,7 +17,7 @@
         </div>
         <!-- Courses Link -->
         <div class="venue-nav-link-container" id="instructor-course-dropdown" v-if="instructor_courses.length">
-          <DropDown :is_active="is_instructor_course_info()" :navbar_label="'Instructor Courses'" v-bind:dd_content="instructor_courses" :did="'course'"></DropDown>
+          <DropDown :is_active="is_instructor_course_info()" :navbar_label="'Instructor Courses'" v-bind:dd_content="instructor_courses" :did="'course'" :href_link="'instructor-collapse'"></DropDown>
         </div>
         <div class="venue-nav-link-container" v-if="instructor_courses.length">
           <router-link class="venue-nav-link" :class="{'active-link':is_statistics()}" :to="{name: 'statistics'}">
@@ -26,10 +26,10 @@
           <div :class="'active-link-underline ' + (is_statistics()?'active':'')"></div>
         </div>
         <div class="venue-nav-link-container" id="ta-section-dropdown" v-if="ta_sections.length">
-          <DropDown :is_active="is_ta_section_info()" :navbar_label="'TA Sections'" v-bind:dd_content="ta_sections" :did="'section'"></DropDown>
+          <DropDown :is_active="is_ta_section_info()" :navbar_label="'TA Sections'" v-bind:dd_content="ta_sections" :did="'section'" :href_link="'ta-collapse'"></DropDown>
         </div>
         <div class="venue-nav-link-container" id="student-section-dropdown" v-if="student_sections.length">
-          <DropDown :is_active="is_student_section_info()" :navbar_label="'Student Sections'" v-bind:dd_content="student_sections" :did="'section'"></DropDown>
+          <DropDown :is_active="is_student_section_info()" :navbar_label="'Student Sections'" v-bind:dd_content="student_sections" :did="'section'" :href_link="'student-collapse'"></DropDown>
         </div>
         <!-- ADMIN -->
         <div class="venue-nav-link-container" id="admin-dropdown" v-if="current_user.is_admin">
@@ -71,34 +71,61 @@
       </div>
     </nav>
     <!-- Mobile Course Dropdown -->
-    <show-at breakpoint="mediumAndBelow">
-      <div id="all-collapse">
-        <div class="collapse" id="admin-collapse" data-parent="#all-collapse">
-          <ul class="mobile-course-list">
-            <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
-              <router-link :to="{name: 'new_user'}">
-                <p class="mobile-course-link-name">New User</p>
-              </router-link>
-            </li>
-            <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
-              <router-link :to="{name: 'admin_sections'}">
-                <p class="mobile-course-link-name">Sections</p>
-              </router-link>
-            </li>
-            <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
-              <router-link :to="{name: 'courses'}">
-                <p class="mobile-course-link-name">Courses</p>
-              </router-link>
-            </li>
-            <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
-              <router-link :to="{name: 'users'}">
-                <p class="mobile-course-link-name">Users</p>
-              </router-link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </show-at>
+        <show-at breakpoint="mediumAndBelow">
+          <div id="all-collapse">
+            <div class="collapse" id="instructor-collapse" data-parent="#all-collapse">
+              <ul class="mobile-course-list">
+                <li class="mobile-course-link" href="#instructor-collapse" data-toggle="collapse" v-for="course in instructor_courses" :key="course._id">
+                  <router-link :to="{name: 'instructor_course_info', params: { id: course._id }}">
+                    <p class="mobile-course-link-name">{{ course.name }}</p>
+                  </router-link>
+                </li>
+              </ul>
+            </div>
+            <div class="collapse" id="ta-collapse" data-parent="#all-collapse">
+              <ul class="mobile-course-list">
+                <li class="mobile-course-link" href="#ta-collapse" data-toggle="collapse" v-for="section in ta_sections" :key="section._id">
+                  <router-link :to="{name: 'ta_section_info', params: { id: section._id }}">
+                    <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
+                  </router-link>
+                </li>
+              </ul>
+            </div>
+            <div class="collapse" id="student-collapse" data-parent="#all-collapse">
+              <ul class="mobile-course-list">
+                <li class="mobile-course-link" href="#student-collapse" data-toggle="collapse" v-for="section in student_sections" :key="section._id">
+                  <router-link :to="{name: 'student_section_info', params: { id: section._id }}">
+                    <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
+                  </router-link>
+                </li>
+              </ul>
+            </div>
+            <div class="collapse" id="admin-collapse" data-parent="#all-collapse">
+              <ul class="mobile-course-list">
+                <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
+                  <router-link :to="{name: 'new_user'}">
+                    <p class="mobile-course-link-name">New User</p>
+                  </router-link>
+                </li>
+                <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
+                  <router-link :to="{name: 'admin_sections'}">
+                    <p class="mobile-course-link-name">Sections</p>
+                  </router-link>
+                </li>
+                <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
+                  <router-link :to="{name: 'courses'}">
+                    <p class="mobile-course-link-name">Courses</p>
+                  </router-link>
+                </li>
+                <li class="mobile-course-link" href="#admin-collapse" data-toggle="collapse">
+                  <router-link :to="{name: 'users'}">
+                    <p class="mobile-course-link-name">Users</p>
+                  </router-link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </show-at>
     <!-- Breadcrumbs -->
     <div id="breadcrumb-container" v-if="showBreadcrumb()">
       <router-link :to="{name: 'dashboard'}">

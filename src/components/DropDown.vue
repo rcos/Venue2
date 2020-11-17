@@ -3,52 +3,35 @@
 
     <!-- Courses Link -->
     <div id="course-link">
-      <a data-toggle="collapse" href="#collapse-me" class="venue-nav-link" :class="{'active-link':this.is_active }" style="cursor:pointer;">
+      <a data-toggle="collapse":href="`#${href_link}`" class="venue-nav-link" :class="{'active-link':this.is_active }" style="cursor:pointer;">
         {{navbar_label}} <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
       </a>
 
     <hide-at breakpoint="mediumAndBelow">
       <div class="dropdown-content">
+        <span @mouseleave="hoverItem=none">
         <router-link v-for="content in this.dd_content" :key="content._id" :to="{name: 'course_info', params: { id: content._id }}">
           <div v-if= "did === 'section'">
             <p>{{ content.course.name }}  {{ content.name }}</p>
           </div>
           <div v-else-if="did === 'course'">
-            <span @mouseover="hover = true">
+            <span @mouseover="hoverItem=content, hover=true">
               <p>{{ content.name }}</p>
             </span>
             <span v-if="hover">
-              <div class="inner_content">
-                <NestedDropDown :is_active="is_active" :dd_content="nested_contents" :index=content :hover="content.name"></NestedDropDown>
+              <div id="inner_content">
+                <NestedDropDown :is_active="is_active" :dd_content="nested_contents" :parent=content :hover="hoverItem"></NestedDropDown>
               </div>
             </span>
           </div>
           <div v-else></div>
         </router-link>
+        </span>
       </div>
     </hide-at>
     <div :class="'active-link-underline ' + ( this.is_active?'active':'')"></div>
     </div>
 
-    <show-at breakpoint="mediumAndBelow">
-      <div id="all-collapse">
-        <div class="collapse" id="collapse-me" data-parent="#all-collapse">
-          <ul class="mobile-course-list">
-            <li class="mobile-course-link" href="#collapse-me" data-toggle="collapse" v-for="content in this.dd_content" :key="content._id">
-              <router-link :to="{name: 'course_info', params: { id: content._id }}">
-                <div v-if= "did === 'section'">
-                  <p class="mobile-course-link-name">{{ content.course.name }} {{ content.name }}</p>
-                </div>
-                <div v-else-if= "did === 'course'">
-                  <p class="mobile-course-link-name">{{ content.name }}</p>
-                </div>
-                <div v-else></div>
-              </router-link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </show-at>
 
   </div>
 </template>
@@ -106,15 +89,21 @@
       did:{
         type: String,
       },
+      href_link:{
+        type: String,
+      }
     }
   }
 </script>
 
 <style scoped>
 
-/*.inner_content{
-  visibility: hidden;
-}*/
+#inner_content{
+  position: relative;
+  left: 15rem;
+  top: -2.5rem;
+}
+
 .dropdown-content{
   margin-left: -1rem;
   margin-top: 0.2rem;
@@ -175,6 +164,15 @@
 #course-link:focus-within > .dropdown-content {
   visibility: visible;
 }
+
+/*#course-link:focus-within > #inner_content,
+.dropdown-content:hover >#inner_content,
+.dropdown-content:focus-within >#inner_content{
+  display:none;
+  visibility: hidden;
+}*/
+
+
 #course-link:hover > .dropdown-content a,
 #course-link:focus-within > .dropdown-content a {
   visibility: visible;
@@ -192,6 +190,22 @@
   margin: 0;
   padding: 0;
   height: 2rem;
+}
+.venue-nav-link-container {
+  margin-left: 1.5rem;
+  display: inline-block;
+  border-radius: 0.3rem;
+  /* height: 2rem; */
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  border-bottom: none;
+  border-radius: 5px;
+  transition: border-bottom 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1);
+}
+#venue-nav-links {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 .active-link {
   color: #466D85;
@@ -233,12 +247,15 @@ img {
   display: block;
   list-style-type: none;
   padding: 0;
+  display: block;
+  overflow: visible;
+  height: auto;
 }
-
 .mobile-course-link {
   height: 2rem;
   width: 100%;
-  display: inline-block;
+  overflow: visible;
+  height: auto;
 }
 .mobile-course-link-name {
   text-decoration: none;
