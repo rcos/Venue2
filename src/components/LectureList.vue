@@ -1,7 +1,7 @@
 <template>
   <div class="lecture-list">
     <div v-if="lecture_list.length > 0">
-      <span v-for="lecture in lecture_list" :key="lecture._id" class="lecture-list-item" :style="{width: two_lists? '50%': '100%'}">
+      <span v-for="lecture in lecture_list" :key="lecture._id" :class="two_lists ? 'lecture-list-item-split': 'lecture-list-item'">
         <LectureCard  :lecture_type="lecture_type" :lecture="lecture"/>
       </span>
     </div>
@@ -48,6 +48,13 @@
   .lecture-list-item {
     display: inline-block;
     float: left;
+    width: 100%;
+  }
+
+  .lecture-list-item-split {
+    display: inline-block;
+    float: left;
+    width: 50%;
   }
 
   .no-lecture-text {
@@ -59,5 +66,8 @@
     .lecture-list {
       width: 95%;
     }
+     .lecture-list-item-split {
+       width: 95%;
+     }
   } 
 </style>

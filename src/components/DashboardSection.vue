@@ -119,10 +119,6 @@
 
 /*Ipad & below*/
 @media only screen and (max-width: 800px) {
-  .dashboard-section {
-    width: 100%;
-    /*margin-top: 4rem;*/
-  }
 
   .dashboard-section-title-container {
     text-align: center;

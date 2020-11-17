@@ -238,4 +238,11 @@
     width: 50%;
     display: inline-block;
   }
+
+  @media only screen and (max-width: 800px) {
+    .dashboard-component {
+      width: 100%;
+      display: inline-block;
+    }
+  }
 </style>
