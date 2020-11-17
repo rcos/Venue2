@@ -75,7 +75,7 @@
           <div class="form-group">
             <!-- <div v-for="(time, i) in sortTimes(course.course_times)" :key="i"> -->
               <div v-for="(time, i) in sortTimes" :key="i">
-                 <div class="form-control">{{time.day}} {{time.start_time}} - {{time.end_time}} <button class="btn"  @click="removeElement(time)"><img class="red-x btn-prima" id="delete-time" src="@/assets/icons8-delete.svg" alt="Delete" width="20" aria-label="Delete"></button> </div>
+                 <div class="form-control">{{time.day}} {{convertTime(time.start_time)}} - {{time.end_time}} <button class="btn"  @click="removeElement(time)"><img class="red-x btn-prima" id="delete-time" src="@/assets/icons8-delete.svg" alt="Delete" width="20" aria-label="Delete"></button> </div>
             </div>
              <div >
             <router-link :to="{name: 'new_lecture_time', params: { id: course._id}}">
@@ -156,6 +156,7 @@
       return {
         course: {},
         instructors: [],
+        course_times: [],
         sections: [],
         instructors_to_add: "",
         edited_course_name: "",
@@ -170,28 +171,28 @@
     },
     computed: {
       sortTimes() {
-        // function getIndex(day) {
-        //   console.log(day)
-        //   if (day == "Sunday") {return 0;}
-        //   if (day == "Monday") {return 1;}
-        //   if (day == "Tuesday") {return 2;}
-        //   if (day == "Wednesday") {return 3;}
-        //   if (day == "Thursday") {return 4;}
-        //   if (day == "Friday") {return 5;}
-        //   if (day == "Saturday") {return 6;}
-        // }
+        function getIndex(day) {
+          if (day == "Sunday") {return 0;}
+          if (day == "Monday") {return 1;}
+          if (day == "Tuesday") {return 2;}
+          if (day == "Wednesday") {return 3;}
+          if (day == "Thursday") {return 4;}
+          if (day == "Friday") {return 5;}
+          if (day == "Saturday") {return 6;}
+        }
         function compare(a, b) {
-          // aDay = getIndex(a.day)
-          // bDay = getIndex(b.day)
-          // if (a.day < b.day)
-          //   return -1;
-          // if (a.day > b.day)
-          //   return 1;
-          // return 0;
-          if (a.time > b.time)
-            return b.time;
-          if (a.time < b.time)
-            return a.time;
+          let aDay = getIndex(a.day);
+          let bDay = getIndex(b.day);
+          if (aDay < bDay )
+            return -1;
+          if (aDay > bDay)
+            return 1;
+          if (aDay == bDay) {
+             if (a.start_time < b.start_time)
+              return -1;
+            if (a.start_time > b.start_time)
+              return 1;
+          }
           return 0;
       }
       return this.course.course_times.sort(compare);
@@ -243,6 +244,12 @@
         const response = await CourseAPI.deleteTime(this.course._id, time)
         location.reload()
       },
+     convertTime(time) {
+       if (time == '' || time == undefined || time == null) return ''
+       let newTime = time/100-12 + ":00";
+       console.log(newTime)
+       return "123"
+     },
       async updateCourse() {
         this.waiting= true
         if (this.edited_course_name != ''){ 

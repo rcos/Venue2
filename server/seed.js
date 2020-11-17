@@ -399,17 +399,6 @@ c1 = {
 	suffix: 1200,
 	snooze: 15,
 	meetingURL: "default_link",
-	course_times:[{
-		day: "Monday",
-		start_time: "12:00pm",
-		end_time: "1:50pm"
-	}, 
-	{
-		day: "Thursday",
-		start_time: "12:00pm",
-		end_time: "1:50pm"
-	}
-	],
 	instructors: [
 		u1.email
 	]
