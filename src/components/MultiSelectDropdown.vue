@@ -115,6 +115,7 @@ export default {
 				}
 			})
 			this.selected = selections
+			this.sendUpdates()
 		},
 		handleClickOutside(event) {
 			this.open = false

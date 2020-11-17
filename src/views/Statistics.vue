@@ -131,7 +131,10 @@ export default {
 				this.courses.all = res.data
 				let self = this
 				this.$nextTick(function() {
-				self.$refs['courseSelector'].setSelected([self.courses.all.find(course => course._id == self.$route.params.course_id)])
+					this.courses.active = self.courses.all.find(course => course._id == self.$route.params.course_id)
+					if(this.courses.active) {
+						self.$refs['courseSelector'].setSelected([this.courses.active])
+					}
 				})
 				let allStudents = []
 				this.courses.all.forEach(course => {
@@ -156,6 +159,9 @@ export default {
 				})
 				Promise.all(allStudents).then(resolved => {
 					this.students.all = ([].concat.apply([], resolved)).uniqueByProp("_id")
+					if(this.courses.active) {
+						this.handleCourseChange([this.courses.active])
+					}
 				})
 			})
 			LectureAPI.getLecturesForUser(this.current_user._id,'none')
@@ -196,9 +202,15 @@ export default {
 				})
 				Promise.all(all_submissions).then(resolved => {
 					this.lectureSubmissions.all = [].concat.apply([], resolved)
+					if(this.courses.active) {
+						this.handleCourseChange([this.courses.active])
+					}
 				})
 				Promise.all(all_playbackpolls).then(resolved => {
 					this.playbackPolls.all = [].concat.apply([], resolved)
+					if(this.courses.active) {
+						this.handleCourseChange([this.courses.active])
+					}
 				})
 			})
 		},
