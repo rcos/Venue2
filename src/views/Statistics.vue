@@ -135,6 +135,11 @@ export default {
 					if(this.courses.active) {
 						self.$refs['courseSelector'].setSelected([this.courses.active])
 					}
+
+					this.sections.active = self.sections.all.find(section => section._id == self.$route.params.section_id)
+					if(this.sections.active) {
+						self.$refs['sectionsSelector'].setSelected([this.sections.active])
+					}
 				})
 				let allStudents = []
 				this.courses.all.forEach(course => {
