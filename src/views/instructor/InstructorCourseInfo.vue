@@ -2,6 +2,7 @@
   <div>
     <show-at breakpoint="large">
       <div class="venue-body-container">
+
         <!-- Title -->
         <div class="title">
           <router-link :to="{name: 'new_lecture', params: { course_id: $route.params.id }}" tabindex="-1">
@@ -52,7 +53,7 @@
           <div class="courseinfo-legend live-border">Synchronous</div>
           <div class="courseinfo-legend playback-border">Asynchronous</div>
 
-          <InstructorAttendanceHistory
+          <InstructorAttendanceHistory :style='{textAlign: "center"}'
                   v-if="selected_lectures && selected_timeline" :students="course_students"
                   :lectures="selected_lectures" :timeline="selected_timeline" :scores_loaded="scores_loaded" mobileMode/>
           <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
