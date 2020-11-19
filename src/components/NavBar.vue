@@ -112,7 +112,7 @@
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content" id="noti-dropdown"  :style="{}">
-              <router-link v-for="course in instructor_courses" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
+              <router-link v-for="course in instructor_courses" :key="course._id" :to="{name: 'instructor_course_info', params: { id: course._id }}">
                 {{ 'Test person100 posted a new lecture for Data Structures'  }}
               </router-link>
             </div>
