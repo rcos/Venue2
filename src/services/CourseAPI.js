@@ -25,6 +25,16 @@ export default {
       message: message
     })
   },
+  addTime(course_id, course_times){
+    return API().post('courses/add_lecture_time/' + course_id, {
+      course_times: course_times
+    })
+  },
+  deleteTime(course_id, course_times){
+    return API().post('courses/delete_lecture_time/' + course_id, {
+      course_times: course_times
+    })
+  },
   getInstructor (course_id) {
     return API().get('courses/getInstructor/' + course_id)
   },
