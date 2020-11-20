@@ -149,15 +149,18 @@ export default {
   methods: {
     copyURL() {
       var link = (process.env.NODE_ENV === 'production'?'https://www.venue-meetings.com':'http://localhost:8080')+"/#/join_course/"+this.course._id;
-      navigator.permissions.query({name: "clipboard-write"}).then(result => {
-      if (result.state === "granted" || result.state === "prompt") {
-        navigator.clipboard.writeText(link);
-        this.copyMsg();
-      } else {
-        window.alert("Copy failed, the course link is: " + link + ".")
-      }
-    });
 
+      navigator.permissions.query({name: "clipboard-write"}).then(result => {
+        if (result.state === "granted" || result.state === "prompt") {
+          navigator.clipboard.writeText(link);
+          this.copyMsg();
+        } else {
+          window.alert("Copy failed, the course link is: " + link + ".")
+        }
+      }).catch(err => {
+        navigator.clipboard.writeText((process.env.NODE_ENV === 'production'?'https://www.venue-meetings.com':'http://localhost:8080')+"/#/join_course/"+this.course._id)
+        this.copyMsg();
+      });
     },
     async getAllSections () {
       SectionAPI.getSectionsForCourse(this.course_id)

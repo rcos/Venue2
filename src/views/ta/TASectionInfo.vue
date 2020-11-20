@@ -10,7 +10,10 @@
           </router-link>
         </div>
 
-        <button  class="inline-block big-button" :style="{float: 'right'}" tabindex="0" @click="copyURL">Copy Link to Join {{ course.prefix }} {{ course.suffix }}</button>        
+        <div class="copy-button-box">
+          <button class="inline-block big-button" tabindex="0" @click="copyURL">Copy Link to Join {{ course.prefix }} {{ course.suffix }}</button>
+          <div class="copy-message" :style="{opacity: show_copymsg ? 1 : 0}">Success!</div>
+        </div>        
 
         <CourseInfoTitle v-if="section" :course="section.course" :section_name="section.name" class="inline-block" :is_ta="true"/>
         
@@ -39,7 +42,10 @@
         <router-link :to="{name: 'new_lecture', params: { course_id: section_id }}" tabindex="-1">
           <div class="inline-block big-button mobile" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
         </router-link>
-        <button class="inline-block big-button mobile" :style="{float: 'right'}" tabindex="0" @click="copyURL">Copy Link to Join {{ course.prefix }} {{ course.suffix }}</button>
+        <div class="copy-button-box">
+          <button class="inline-block big-button mobile" tabindex="0" @click="copyURL">Copy Link to Join {{ course.prefix }} {{ course.suffix }}</button>
+          <div class="copy-message" :style="{opacity: show_copymsg ? 1 : 0}">Success!</div>
+        </div>  
         <div class="courseinfo-attendance-listing">
           <div class="courseinfo-legend">Legend:</div>
           <div class="courseinfo-legend live-border">Synchronous</div>
@@ -106,6 +112,7 @@ export default {
       sorted_lectures: {},
       lectures_loaded: false,
       scores_loaded: false,
+      show_copymsg: false
     }
   },
   created() {
@@ -116,7 +123,25 @@ export default {
   },
   methods: {
     copyURL() {
-      navigator.clipboard.writeText((process.env.NODE_ENV === 'production'?'https://www.venue-meetings.com':'http://localhost:8080')+"/#/join_course/"+this.course._id)
+      var link = (process.env.NODE_ENV === 'production'?'https://www.venue-meetings.com':'http://localhost:8080')+"/#/join_course/"+this.course._id;
+
+      navigator.permissions.query({name: "clipboard-write"}).then(result => {
+        if (result.state === "granted" || result.state === "prompt") {
+          navigator.clipboard.writeText(link);
+          this.copyMsg();
+        } else {
+          window.alert("Copy failed, the course link is: " + link + ".")
+        }
+      }).catch(err => {
+        navigator.clipboard.writeText((process.env.NODE_ENV === 'production'?'https://www.venue-meetings.com':'http://localhost:8080')+"/#/join_course/"+this.course._id)
+        this.copyMsg();
+      });
+    },
+    copyMsg(){
+      this.show_copymsg = 1;
+      setTimeout(() => {
+        this.show_copymsg = 0;
+      }, 1000);
     },
     async getSectionWithCourse() {
       const response = await SectionAPI.getSectionWithCourse(this.$route.params.id)
@@ -417,5 +442,20 @@ export default {
   .big-button.mobile {
     margin: 1rem 2rem;
     margin-bottom: 0rem;
+  }
+
+  .copy-button-box {
+    float: right;
+  }
+
+  .copy-message{
+    position: absolute;
+    margin: 1rem 2.5rem;
+    opacity: 0;
+    transition: opacity 1s;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
 </style>
