@@ -1,5 +1,4 @@
 import methods from './methods';
-import functions from './functions';
 
 // TODO - make this so after rows you can pass in a date to start at
 // so when you destroy a picker (checkin) the data gets transfered the right way
@@ -11,8 +10,10 @@ class BroderickPicker {
       var broderickpicker = document.createElement('BroderickPicker');
       this.id = id;
       this.options = {};
-      this.options.rows = options.rows;
-      this.options.date = options.date;
+      if (options != null) {
+        this.options.rows = options.rows;
+        this.options.date = options.date;
+      }
 
       //console.log(this.options.date);
       
