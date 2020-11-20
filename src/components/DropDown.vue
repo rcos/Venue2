@@ -101,7 +101,7 @@
 #inner_content{
   position: relative;
   left: 15rem;
-  top: -2.5rem;
+  top: -2.3rem;
 }
 
 .dropdown-content{
