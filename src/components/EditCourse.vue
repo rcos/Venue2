@@ -194,8 +194,11 @@
               return 1;
           }
           return 0;
-      }
-      return this.course.course_times.sort(compare);
+        }
+        if(this.course.course_times) {
+          return this.course.course_times.sort(compare);
+        }
+        return []
       }
     },
     methods: {
