@@ -6,10 +6,13 @@
         <!-- Title -->
         <div class="title">
           <router-link :to="{name: 'new_lecture', params: { course_id: $route.params.id }}" tabindex="-1">
-            <div class="inline-block big-button" :style="{float: 'right'}" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
+            <div class="big-button" :style="{float: 'right'}" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
           </router-link>
         </div>
-        <button class="inline-block big-button" :style="{float: 'right'}" tabindex="0" @click="copyURL">Copy Link to Join {{ course.prefix }} {{ course.suffix }}</button>        
+        <div class="copy-button-box">
+          <button class="inline-block big-button" tabindex="0" @click="copyURL">Copy Link to Join {{ course.prefix }} {{ course.suffix }}</button>
+          <div class="copy-message" :style="{opacity: show_copymsg ? 1 : 0}">Success!</div>
+        </div>
         <CourseInfoTitle :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="true"/>
         <!-- Attendance History -->
         <div>
@@ -42,7 +45,10 @@
         <router-link :to="{name: 'new_lecture', params: { course_id: $route.params.id }}" tabindex="-1">
           <div class="inline-block big-button mobile" tabindex="0">Create New Lecture for {{ course.prefix }} {{ course.suffix }}</div>
         </router-link>
-        <button class="inline-block big-button mobile" :style="{float: 'right'}" tabindex="0" @click="copyURL">Copy Link to Join {{ course.prefix }} {{ course.suffix }}</button>
+        <div class="copy-button-box">
+          <button class="inline-block big-button mobile" tabindex="0" @click="copyURL">Copy Link to Join {{ course.prefix }} {{ course.suffix }}</button>
+          <div class="copy-message" :style="{opacity: show_copymsg ? 1 : 0}">Success!</div>
+        </div>
         <div class="courseinfo-attendance-listing">
           <div class="section-select-container mobile float-right">
             <label id="section_select_label">Section(s):</label>
@@ -128,21 +134,33 @@ export default {
       scores_loaded: false,
       is_instructor: false,
       is_ta: false,
-      is_student: false
+      is_student: false,
+      show_copymsg: false
     }
   },
   created() {
     // when the component is created/loaded
-    this.getCurrentUser()
-
-    this.course_id = this.$route.params.id
-    this.getAllSections()
-    this.getStudentsForCourse()
-    this.getCourse()
+    this.getCurrentUser();
+    this.course_id = this.$route.params.id;
+    this.getAllSections();
+    this.getStudentsForCourse();
+    this.getCourse();
   },
   methods: {
     copyURL() {
-      navigator.clipboard.writeText((process.env.NODE_ENV === 'production'?'https://www.venue-meetings.com':'http://localhost:8080')+"/#/join_course/"+this.course._id)
+      var link = (process.env.NODE_ENV === 'production'?'https://www.venue-meetings.com':'http://localhost:8080')+"/#/join_course/"+this.course._id;
+
+      navigator.permissions.query({name: "clipboard-write"}).then(result => {
+        if (result.state === "granted" || result.state === "prompt") {
+          navigator.clipboard.writeText(link);
+          this.copyMsg();
+        } else {
+          window.alert("Copy failed, the course link is: " + link + ".")
+        }
+      }).catch(err => {
+        navigator.clipboard.writeText((process.env.NODE_ENV === 'production'?'https://www.venue-meetings.com':'http://localhost:8080')+"/#/join_course/"+this.course._id)
+        this.copyMsg();
+      });
     },
     async getAllSections () {
       SectionAPI.getSectionsForCourse(this.course_id)
@@ -344,6 +362,12 @@ export default {
     },
     onSectionChange() {
       this.$forceUpdate()
+    },
+    copyMsg(){
+      this.show_copymsg = 1;
+      setTimeout(() => {
+        this.show_copymsg = 0;
+      }, 1000);
     }
   }
 }
@@ -479,4 +503,20 @@ export default {
     margin: 1rem 2rem;
     margin-bottom: 0rem;
   }
+
+  .copy-button-box {
+    float: right;
+  }
+
+  .copy-message{
+    position: absolute;
+    margin: 1rem 2.5rem;
+    opacity: 0;
+    transition: opacity 1s;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
 </style>
