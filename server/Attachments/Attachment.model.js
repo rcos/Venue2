@@ -1,16 +1,17 @@
 const mongoose = require('mongoose');
-
+require('mongoose-type-url');
 const Schema = mongoose.Schema;
 
 let User = require('../User/User.model');
-let Section = require('../Section/Section.model')
+let Section = require('../Section/Section.model');
 
 //Define collection and schema for User
 let Attachment = new Schema({
 	name: String,
 	filepath: String,
     type: String,
-    size: Number,
+	size: Number,
+	attachmentRef: mongoose.SchemaTypes.url,
 	uploadedBy: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
