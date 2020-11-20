@@ -1066,6 +1066,15 @@ th,td {
   -ms-animation: fadeIn cubic-bezier(0.19, 1, 0.22, 1) 0.25s;
 }
 
+.disable-select{
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none
+}
+
 @keyframes fadeIn {
   0% {
     opacity:0;

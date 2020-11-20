@@ -24,6 +24,7 @@ import SetPermanentPassword from './views/SetPermanentPassword.vue';
 import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
 import CourseList from './components/CourseList.vue';
+import CourseSettings from './views/CourseSettings.vue'
 import CourseInfo from './views/CourseInfo.vue';
 import NewEvent from './views/NewEvent.vue';
 import EventInfo from './views/EventInfo.vue';
@@ -38,6 +39,7 @@ import TeachNewCourse from '@/components/TeachNewCourse.vue';
 import NewSection from '@/components/NewSection.vue';
 import EditLecture from '@/components/EditLecture.vue';
 import JoinCourse from '@/components/JoinCourse.vue';
+import NewLectureTime from '@/components/NewLectureTime.vue';
 import InstructorCourseInfo from '@/views/instructor/InstructorCourseInfo.vue';
 import InstructorLectureInfo from '@/views/instructor/InstructorLectureInfo.vue';
 import TASectionInfo from '@/views/ta/TASectionInfo.vue';
@@ -72,6 +74,15 @@ const router = new VueRouter({
       meta: {
         title: "Settings",
         requiresAuth: true
+      }
+    },
+    {
+      name: 'course_settings',    //ADDED THIS
+      path: '/course_settings',
+      component: CourseSettings,
+      meta: {
+        title: "CourseSettings",
+        requiresAdmin: true
       }
     },
     {
@@ -150,6 +161,15 @@ const router = new VueRouter({
       name: 'edit_course',
       path: '/edit_course/:id',
       component: EditCourse,
+      meta: {
+        requiresAuth: true,
+        requiresInstructor: true
+      }
+    },
+    {
+      name: 'new_lecture_time',
+      path: '/new_lecture_time/:id',
+      component: NewLectureTime,
       meta: {
         requiresAuth: true,
         requiresInstructor: true
@@ -502,6 +522,7 @@ router.beforeEach((to, from, next) => {
         || (to.name == 'edit_course' && user_data.current_user.instructor_courses.includes(to.params.id))
         || (to.name == 'edit_section' && user_data.current_user.ta_sections.includes(to.params.id))
         || (to.name == 'edit_section' && from.name == 'edit_course')
+        || (to.name == 'new_lecture_time' && user_data.current_user.instructor_courses.includes(to.params.id))
         || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))
         || user_data.current_user.instructor_courses.includes(to.params.id)){
           next()
