@@ -80,7 +80,7 @@
 
       this.getCurrentUser()
       this.getAllLecturesForUser()
-      this.setPalette()
+      //this.setPalette()
     },
     methods: {
       getColor (course_info) {
