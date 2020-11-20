@@ -116,6 +116,7 @@ export default {
 	position: relative;
 	width: 100%;
 	margin-bottom: 1rem;
+	background: var(--modal-background);
 }
 textarea {
 	border-radius: 0.25rem;
@@ -124,6 +125,7 @@ textarea {
 .row {
 	margin: 0;
 	width: 100%;
+	background: none;
 }
 .col {
 	color: var(--input-text) !important;

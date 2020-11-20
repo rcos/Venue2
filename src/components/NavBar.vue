@@ -190,6 +190,7 @@
   import CourseAPI from '@/services/CourseAPI.js'
   import SectionAPI from '@/services/SectionAPI.js'
   import LectureAPI from '@/services/LectureAPI.js'
+  import PaletteAPI from '../services/PaletteAPI';
 
   export default {
     name: 'NavBar',
@@ -222,6 +223,7 @@
     created() {
       this.current_user = this.$store.state.user.current_user
       this.loadData()
+      this.setPalette()
     },
     methods: {
       showBreadcrumb() {
@@ -282,6 +284,12 @@
       is_settings() {
         return this.$route.name === 'settings'
       },
+      setPalette() {
+		  let root = document.documentElement;
+		  if (this.current_user != null) {
+			  PaletteAPI.setPalette(root, this.current_user.dark_mode)
+		    }
+	    }
     }
   }
 </script>

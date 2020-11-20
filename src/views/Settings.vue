@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <!-- Dark mode switch
+            
             <div class="setting-option-section">
               <div class="left">
                 <div>
@@ -48,7 +48,7 @@
                 </label>
               </div>
             </div> 
-            -->
+            
             
           
             <div style="position:relative" class="setting-option-section">
@@ -95,6 +95,7 @@
   import {showAt, hideAt} from 'vue-breakpoints'
   import ChangePassword from '@/components/ChangePassword.vue'
   import AuthAPI from '../services/AuthAPI';
+  import PaletteAPI from '../services/PaletteAPI';
 
   import SquareLoader from '@/components/Loaders/SquareLoader.vue';
 
@@ -125,6 +126,7 @@
     created() {
       this.mode = "setting_options"
       this.getCurrentUser()
+      //this.setPalette()
     },
     methods: {
       getCurrentUser() {
@@ -164,7 +166,13 @@
           this.editing_name = false
         })
         location.reload()
-      }
+      },
+      setPalette() {
+		  let root = document.documentElement;
+		  if (this.current_user != null) {
+			  PaletteAPI.setPalette(root, this.current_user.dark_mode)
+		    }
+	    }
     }
   }
 </script>
