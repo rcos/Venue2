@@ -462,7 +462,7 @@ const router = new VueRouter({
     },
     {
       name: 'upload_files',
-      path: '/calendar',
+      path: '/upload_files',
       component: UploadFiles,
       meta: {
         title: "Upload Files",
