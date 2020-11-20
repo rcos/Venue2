@@ -25,6 +25,7 @@ import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
 import CourseList from './components/CourseList.vue';
 import CourseInfo from './views/CourseInfo.vue';
+import CourseOverview from '@/components/CourseOverview.vue';
 import NewEvent from './views/NewEvent.vue';
 import EventInfo from './views/EventInfo.vue';
 import LecturePlayback from './views/LecturePlayback.vue';
@@ -45,6 +46,7 @@ import TALectureInfo from '@/views/ta/TALectureInfo.vue';
 import StudentSectionInfo from '@/views/student/StudentSectionInfo.vue';
 import StudentLectureInfo from '@/views/student/StudentLectureInfo.vue';
 import Calendar from '@/views/Calendar.vue';
+
 
 import AuthAPI from '@/services/AuthAPI.js';
 import UserAPI from '@/services/UserAPI.js';
@@ -150,6 +152,15 @@ const router = new VueRouter({
       name: 'edit_course',
       path: '/edit_course/:id',
       component: EditCourse,
+      meta: {
+        requiresAuth: true,
+        requiresInstructor: true
+      }
+    },
+    {
+      name: 'course_overview',
+      path: '/course_overview/:id',
+      component: CourseOverview,
       meta: {
         requiresAuth: true,
         requiresInstructor: true

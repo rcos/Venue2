@@ -16,6 +16,10 @@ let Course = new Schema({
 	sections: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Section'
+	}],
+	announcements: [ {
+		message: String,
+		date: Date
 	}]
 });
 
