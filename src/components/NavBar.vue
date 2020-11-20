@@ -218,6 +218,7 @@
   import CourseAPI from '@/services/CourseAPI.js'
   import SectionAPI from '@/services/SectionAPI.js'
   import LectureAPI from '@/services/LectureAPI.js'
+  import NotificationAPI from '@/services/NotificationAPI.js'
 
   export default {
     name: 'NavBar',
@@ -271,6 +272,9 @@
 
         const response4 = await LectureAPI.getLecturesForUser(this.current_user._id,'with_sections_and_course')
         this.user_lectures = response4.data
+
+        const response5 = await NotificationAPI.getNotifications()
+        this.notifications = response5.data
         
         this.loadBreadcrumb()
       },

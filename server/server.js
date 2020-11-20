@@ -62,7 +62,7 @@ function start() {
   const lectureRouter = require('./Lecture/Lecture.route')
   const lectureSubmissionRouter = require('./LectureSubmission/LectureSubmission.route')
   const pollRouter = require('./PlaybackPoll/PlaybackPoll.route')
-
+  const notificationRouter= require('./Notification/Notification.route')
   // Connect to the database before starting the application server.
   mongoose.connect(process.env.DB_URI || config.DB, function (err, client) {
     if (err) {
@@ -109,5 +109,5 @@ function start() {
   app.use('/lectures', jwtVerify, lectureRouter);
   app.use('/polls', jwtVerify, pollRouter);
   app.use('/lecturesubmissions', jwtVerify, lectureSubmissionRouter);
-
+  app.use('/notifications', jwtVerify, notificationRouter);
 }

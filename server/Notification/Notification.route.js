@@ -7,6 +7,21 @@ let Section = require('../Section/Section.model');
 let User = require('../User/User.model');
 let Lecture = require('../Lecture/Lecture.model');
 
+// add notification to db
+notificationRoutes.route('/add').post(function (req, res) {
+  let notification = new Notification(req.body.notification)
+  notification.save()
+  .then(() => {
+    console.log("<SUCCESS> Adding notification:", notification);
+    res.status(200).json(course);
+  })
+  .catch(() => {
+    console.log("<ERROR> Adding notification:", notification);
+    res.status(400).send("unable to save course to database");
+  });
+})
+
+// get one notification by id
 notificationRoutes.route('/get/').get(function(req, res) {
   let id = req.body.id
   Notification.findById(id, function (err, noti) {
@@ -32,10 +47,13 @@ notificationRoutes.route('/get_notifications').get(function (req, res) {
   });
 });
 
-
-
-/*
 notificationRoutes.route('/send').post(function(req, res) {
-  let course_students = req.body.course.
+
 })
-*/
+
+notificationRoutes.route('/create_message').post(function(req, res) {
+  
+})
+
+
+module.exports = notificationRoutes;

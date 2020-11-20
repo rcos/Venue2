@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let User = require('../User/User.model');
+let Course = require('../Course/Course.model');
+let Section = require('../Section/Section.model');
+let Lecture = require('../Lecture/Lecture.model');
 
 let Notification = new Schema({
   sender: {
@@ -19,10 +22,10 @@ let Notification = new Schema({
     type: Date,
     default: Date.now()
   },
-  redirect_to: String,
+  redirect_to: String//,
 
-  users_sent: Number,
-  users_acknowledged: Number
+  //users_sent: Number,
+  //users_acknowledged: Number
 
 })
 module.exports = mongoose.model('Notification', Notification);
