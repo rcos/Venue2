@@ -20,6 +20,11 @@ export default {
   deleteCourse (id) {
     return API().delete('courses/delete/' + id)
   },
+  addAnnouncements(course_id) {
+    return API().post('courses/add_announcement/'+course_id,{
+      message: message
+    })
+  },
   getInstructor (course_id) {
     return API().get('courses/getInstructor/' + course_id)
   },

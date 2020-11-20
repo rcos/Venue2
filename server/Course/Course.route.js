@@ -89,6 +89,17 @@ courseRoutes.route('/delete/:id').delete(function (req, res) {//copied how old c
   });
 });
 
+courseRoutes.post('/add_announcement/:id', (req, res) => {
+  let messages = req.body.message;
+  let course_id = req.params.id;
+  Course.findById(course_id, function (err, course) {
+    Promise.all([
+      Course.findByIdAndUpdate(course_id, { $push: { announcements: { $each: messages } } })
+    ]).then(resolved => {
+      res.json();
+    });
+  });
+});
 
 //Todo: change the id being passed to just be the instructor id
 //and search for the instructor or remove this function entirely and use
