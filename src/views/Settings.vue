@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <!-- Dark mode switch
+            
             <div class="setting-option-section">
               <div class="left">
                 <div>
@@ -48,7 +48,7 @@
                 </label>
               </div>
             </div> 
-            -->
+            
             
           
             <div style="position:relative" class="setting-option-section">
