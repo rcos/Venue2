@@ -1,38 +1,42 @@
 <template>
   <div v-if="course" id="course-overview">
     <h2>{{course.name}}</h2>
-    <div>
-        <label> Instructors </label>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label> Instructors </label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
         <!-- maybe write a function to turn all instructors into one string its ugly rn -->
-        <ul>
-            <li v-for="(instructor, i) in instructors" :key="i">
-                {{instructor.first_name}} {{instructor.last_name}}
-            </li>
-        </ul>
+            <div v-for="(instructor, i) in instructors" :key="i">
+                <div class="form-control">{{instructor.first_name}} {{instructor.last_name}}
+                </div>
+            </div>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Lecture Times</label>
+          </div>
+        </div>
+      </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input class="form-control" placeholder="Monday 2:00 PM">
+          </div>
+        </div>
     </div>
-
-     <div>
-        <label> Lecture Times </label>
-        <!-- there are currently no times because course_settings is still in PR LOL so here are some fake ones -->
-        <ul>
-            <li>Monday 2:00pm</li>
-            <li>Wednesday 3:00pm</li>
-            <li>Thursday 2:00pm</li>
-        </ul>
-    </div>
-
-    <div>
+      <div>
         <label>Announcements</label><br>
         <button class="btn btn-primary" @click="new_announcement = true">Add new announcement</button>
         <div class="announcement-div" v-if="new_announcement">
             <textarea v-model="message" placeholder="Add announcement here"></textarea>
             <button class="btn btn-primary" @click="new_announcement = false">Cancel</button>
-
         </div>
-
-
     </div>
-
   </div>
 </template>
 
