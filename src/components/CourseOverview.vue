@@ -34,7 +34,11 @@
         <button class="btn btn-primary" @click="new_announcement = true">Add new announcement</button>
         <div class="announcement-div" v-if="new_announcement">
             <textarea v-model="message" placeholder="Add announcement here"></textarea>
+            <button class="btn btn-primary" @click="addAnnouncementToCourse">Create</button>
             <button class="btn btn-primary" @click="new_announcement = false">Cancel</button>
+        </div>
+        <div class="form-group">
+            <input v-for="(announcement, i) in course.announcements" :key="i" class="form-control" :value="announcement.message" rows="5" readonly>
         </div>
     </div>
   </div>
@@ -56,7 +60,8 @@
       return {
         new_announcement: false,
         course: {},
-		instructors: []
+        instructors: [],
+        message: ''
       }
     },
     created() {
@@ -74,13 +79,11 @@
             if(response.data)
             this.instructors = response.data
         },
-        async addSection(evt){
-            evt.preventDefault() // prevents the form's default action from redirecting the page
-            this.section.course = this.course._id
-            const response = await SectionAPI.addSection(this.section)
-            this.$router.push({name: 'edit_course',params: {id: this.course._id}})
-                    location.reload()
-      }
+        async addAnnouncementToCourse() {
+            Course.API.addAnnouncement(this.course_id, this.message).then(res => {
+              location.reload()
+            })
+        }
     }
   }
 </script>
