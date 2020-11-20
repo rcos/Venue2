@@ -19,7 +19,8 @@ let Course = new Schema({
 	}],
 	announcements: [ {
 		message: String,
-		date: Date
+		date: Date,
+		name: String
 	}]
 });
 

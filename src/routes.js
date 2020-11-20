@@ -513,6 +513,7 @@ router.beforeEach((to, from, next) => {
         || (to.name == 'edit_course' && user_data.current_user.instructor_courses.includes(to.params.id))
         || (to.name == 'edit_section' && user_data.current_user.ta_sections.includes(to.params.id))
         || (to.name == 'edit_section' && from.name == 'edit_course')
+        || (to.name == 'course_overview' && user_data.current_user.instructor_courses.includes(to.params.id))
         || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))
         || user_data.current_user.instructor_courses.includes(to.params.id)){
           next()

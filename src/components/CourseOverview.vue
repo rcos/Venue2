@@ -1,27 +1,31 @@
 <template>
   <div v-if="course" id="course-overview">
-    <h2>Add Section</h2>
-    <form @submit.prevent="addSection">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>course:</label>
-            <input type="text" class="form-control" v-model="course.name" readonly>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>section's name:</label>
-            <input type="text" class="form-control" v-model="section.name">
-          </div>
-          <div class="form-group">
-            <button class="btn btn-primary">Create</button>
-          </div>
-        </div>
-      </div>
-    </form>
+    <h2>{{course.name}}</h2>
+    <div>
+        <label> Instructors </label>
+        <!-- maybe write a function to turn all instructors into one string its ugly rn -->
+        <ul>
+            <li v-for="(instructor, i) in instructors" :key="i">
+                {{instructor.first_name}} {{instructor.last_name}}
+            </li>
+        </ul>
+    </div>
+
+     <div>
+        <label> Lecture Times </label>
+        <!-- there are currently no times because course_settings is still in PR LOL so here are some fake ones -->
+        <ul>
+            <li>Monday 2:00pm</li>
+            <li>Wednesday 3:00pm</li>
+            <li>Thursday 2:00pm</li>
+        </ul>
+    </div>
+
+    <div>
+        <label>Announcements</label>
+        <button class="btn btn-primary">Add new announcement</button>
+
+    </div>
 
   </div>
 </template>
@@ -29,29 +33,42 @@
 <script>
   import UserAPI from '@/services/UserAPI.js';
   import CourseAPI from '@/services/CourseAPI.js';
+  import Instructors from '@/components/admin/User/Instructors'
 
   export default {
     name: 'CourseOverview',
+    components: {
+        Instructors
+    },
     props: {
     },
     data(){
       return {
-        course: null,
-				section: {}
+        course: {},
+		instructors: []
       }
     },
     created() {
-			CourseAPI.getCourse(this.$route.params.id).then(res => {
-				this.course = res.data
-			})
+		this.getCurrentCourse()
     },
     methods: {
-      async addSection(evt){
-        evt.preventDefault() // prevents the form's default action from redirecting the page
-        this.section.course = this.course._id
-        const response = await SectionAPI.addSection(this.section)
-        this.$router.push({name: 'edit_course',params: {id: this.course._id}})
-				location.reload()
+        async getCurrentCourse() {
+            let course_id = this.$route.params.id
+            const response = await CourseAPI.getCourse(course_id)
+            this.course = response.data
+            this.getCurrentCourseInstructor()
+        },
+        async getCurrentCourseInstructor(){
+            const response = await UserAPI.getInstructorsForCourse(this.course._id)
+            if(response.data)
+            this.instructors = response.data
+        },
+        async addSection(evt){
+            evt.preventDefault() // prevents the form's default action from redirecting the page
+            this.section.course = this.course._id
+            const response = await SectionAPI.addSection(this.section)
+            this.$router.push({name: 'edit_course',params: {id: this.course._id}})
+                    location.reload()
       }
     }
   }

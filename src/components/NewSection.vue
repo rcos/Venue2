@@ -1,6 +1,7 @@
 <template>
   <div v-if="course" id="new-section">
     <h2>Add Section</h2>
+    
     <form @submit.prevent="addSection">
       <div class="row">
         <div class="col-md-6">
