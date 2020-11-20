@@ -85,6 +85,9 @@
           <router-link :to="{name: 'new_section', params: { id: course._id }}">
               <button class="btn btn-primary">New Section</button>
           </router-link>
+          <router-link :to="{name: 'upload_files', params: { id: course._id }}">
+              <button class="btn btn-primary">Upload Files</button>
+          </router-link>
         </div>
       </div>
     </div>
