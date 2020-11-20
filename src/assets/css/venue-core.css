@@ -943,6 +943,7 @@ a:hover {
 .btn.btn-secondary:target img {
   filter: var(--widgets-color) invert(1);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: 0;
 }
 
 .btn.btn-danger:hover,
@@ -974,6 +975,7 @@ input:-webkit-autofill {
 
 .input-group-append {
   padding-left: 20px;
+  z-index: 0;
 }
 
 .form-control {
@@ -998,6 +1000,27 @@ th,td {
 .picker-item {
   color: var(--calendar-border);
   background: var(--calendar-background);
+}
+
+.js-inline-picker:hover,
+.js-inline-picker:active,
+.js-inline-picker:target,
+.js-inline-picker:focus {
+  border: 0px solid var(--main-background-color);
+  outline: none;
+  background: none;
+}
+
+#picker-item {
+  display: none;
+}
+
+.picker-item:hover,
+.picker-item:active {
+  background: var(--nav-bar-hover-background);
+  color: var(--nav-bar-hover-text);
+  box-shadow: 0px 3px 3px 0px var(--nav-bar-hover-top-shadow) inset, 0px -3px 3px 0px var(--nav-bar-hover-bottom-shadow) inset;
+  border-radius: 0.25rem;
 }
 .picker-cell__control,
 .picker-cell__control::before,
@@ -1041,6 +1064,15 @@ th,td {
   -moz-animation: fadeIn cubic-bezier(0.19, 1, 0.22, 1) 0.25s;
   -o-animation: fadeIn cubic-bezier(0.19, 1, 0.22, 1) 0.25s;
   -ms-animation: fadeIn cubic-bezier(0.19, 1, 0.22, 1) 0.25s;
+}
+
+.disable-select{
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none
 }
 
 @keyframes fadeIn {
