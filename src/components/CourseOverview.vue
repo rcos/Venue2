@@ -22,8 +22,14 @@
     </div>
 
     <div>
-        <label>Announcements</label>
-        <button class="btn btn-primary">Add new announcement</button>
+        <label>Announcements</label><br>
+        <button class="btn btn-primary" @click="new_announcement = true">Add new announcement</button>
+        <div class="announcement-div" v-if="new_announcement">
+            <textarea v-model="message" placeholder="Add announcement here"></textarea>
+            <button class="btn btn-primary" @click="new_announcement = false">Cancel</button>
+
+        </div>
+
 
     </div>
 
@@ -44,6 +50,7 @@
     },
     data(){
       return {
+        new_announcement: false,
         course: {},
 		instructors: []
       }
@@ -75,9 +82,7 @@
 </script>
 
 <style scoped>
-#new-section {
-	padding: 2rem;
-}
+
 .form-group {
 	margin-top: 1rem;
 }
