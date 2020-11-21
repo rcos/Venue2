@@ -9,7 +9,7 @@
           <label>Instructors</label>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-5">
         <div class="form-group">
           <div v-for="(instructor, i) in instructors" :key="i">
             <div class="form-control">{{instructor.first_name}} {{instructor.last_name}}</div>
@@ -23,7 +23,7 @@
           <label>Lecture Times</label>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-5">
         <div class="form-group">
           <input class="form-control" placeholder="Monday 2:00 PM" readonly>
         </div>
@@ -35,15 +35,42 @@
           <label>Meeting URL</label>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-5">
         <div class="form-group">
           <input class="form-control" type="url" v-model="edited_course_url" :placeholder="course.meetingURL" rows=5 readonly>
+        </div>
+      </div>
+      <div class="col-md-1">
+        <div class="form-group">
+          <a href="https://github.com/rcos/Venue2" target="_blank">
+          <img src="https://img.icons8.com/fluent-systems-regular/24/000000/external-link.png"/>
+          </a>
+        </div>
+      </div>
+    </div><br>
+    <div class ="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Syllabus</label>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="form-group">
+          <input class="form-control" type="url" placeholder="Course Syllabus URL" rows=5 readonly> 
+        </div>
+      </div>
+      <div class="col-md-1">
+        <div class="form-group">
+          <a href="https://github.com/rcos/Venue2" target="_blank">
+          <img src="https://img.icons8.com/fluent-systems-regular/24/000000/external-link.png"/>
+          </a>
         </div>
       </div>
     </div><br>
     <hr>
     <div>
-      <label>Announcements</label><br>
+      <h4>Announcements</h4>
+      <br>
       <button class="btn btn-primary" @click="new_announcement = true">Add new announcement</button>
       <div class="announcement-div" v-if="new_announcement">
           <textarea v-model="message" placeholder="Add announcement here"></textarea>
@@ -108,6 +135,7 @@
 }
 
 hr {
-    border-top: 3px solid #3E8FCE;
+    border-top: 2px solid #3E8FCE;
+    width: 95%;
 }
 </style>
