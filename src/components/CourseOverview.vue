@@ -4,42 +4,40 @@
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
-          <label> Instructors </label>
+          <label>Instructors</label>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
-        <!-- maybe write a function to turn all instructors into one string its ugly rn -->
-            <div v-for="(instructor, i) in instructors" :key="i">
-                <div class="form-control">{{instructor.first_name}} {{instructor.last_name}}
-                </div>
-            </div>
-        </div>
-      </div><br>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Lecture Times</label>
+          <div v-for="(instructor, i) in instructors" :key="i">
+            <div class="form-control">{{instructor.first_name}} {{instructor.last_name}}</div>
           </div>
         </div>
       </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <input class="form-control" placeholder="Monday 2:00 PM">
-          </div>
-        </div>
-    </div>
-      <div>
-        <label>Announcements</label><br>
-        <button class="btn btn-primary" @click="new_announcement = true">Add new announcement</button>
-        <div class="announcement-div" v-if="new_announcement">
-            <textarea v-model="message" placeholder="Add announcement here"></textarea>
-            <button class="btn btn-primary" @click="addAnnouncementToCourse">Create</button>
-            <button class="btn btn-primary" @click="new_announcement = false">Cancel</button>
-        </div>
+    </div><br>
+    <div class="row">
+      <div class="col-md-6">
         <div class="form-group">
-            <input v-for="(announcement, i) in course.announcements" :key="i" class="form-control" :value="announcement.message" rows="5" readonly>
+          <label>Lecture Times</label>
         </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input class="form-control" placeholder="Monday 2:00 PM">
+        </div>
+      </div>
+    </div><br>
+    <div>
+      <label>Announcements</label><br>
+      <button class="btn btn-primary" @click="new_announcement = true">Add new announcement</button>
+      <div class="announcement-div" v-if="new_announcement">
+          <textarea v-model="message" placeholder="Add announcement here"></textarea>
+          <button class="btn btn-primary" @click="addAnnouncementToCourse">Create</button>
+          <button class="btn btn-primary" @click="new_announcement = false">Cancel</button>
+      </div>
+      <div class="form-group">
+        <input v-for="(announcement, i) in course.announcements" :key="i" class="form-control" :value="announcement.message" rows="5" readonly>
+      </div>
     </div>
   </div>
 </template>
