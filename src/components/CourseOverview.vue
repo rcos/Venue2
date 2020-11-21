@@ -1,6 +1,8 @@
 <template>
   <div v-if="course" id="course-overview">
     <h2>{{course.name}}</h2>
+    <h5>{{course.prefix}} {{course.suffix}}</h5>
+    <br>
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
@@ -35,7 +37,7 @@
       </div>
       <div class="col-md-6">
         <div class="form-group">
-          <input class="form-control" type="url" v-model="edited_course_url" rows=5 readonly>
+          <input class="form-control" type="url" v-model="edited_course_url" :placeholder="course.meetingURL" rows=5 readonly>
         </div>
       </div>
     </div><br>
