@@ -23,10 +23,23 @@
       </div>
       <div class="col-md-6">
         <div class="form-group">
-          <input class="form-control" placeholder="Monday 2:00 PM">
+          <input class="form-control" placeholder="Monday 2:00 PM" readonly>
         </div>
       </div>
     </div><br>
+    <div class ="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Meeting URL</label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input class="form-control" type="url" v-model="edited_course_url" rows=5 readonly>
+        </div>
+      </div>
+    </div><br>
+    <hr>
     <div>
       <label>Announcements</label><br>
       <button class="btn btn-primary" @click="new_announcement = true">Add new announcement</button>
@@ -90,5 +103,9 @@
 
 .form-group {
 	margin-top: 1rem;
+}
+
+hr {
+    border-top: 3px solid #3E8FCE;
 }
 </style>
