@@ -369,7 +369,7 @@ h1,h2,h4 {
 .instructor-attendance-history-pill:focus .name-area {
   padding-top: 0.8rem;
   border-radius: 1rem;
-  box-shadow: 0px 3px 5px 1px var(--foreground-pill-hover) inset;
+  box-shadow: 0px 3px 5px 1px var(--foreground-pill-shadow) inset;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
@@ -670,13 +670,13 @@ custom-scrollbar::-webkit-scrollbar-thumb {
 .big-button {
   font-size: 1rem;
   font-weight: normal;
-  border: 2px solid var(--big-button-border);
-  color: var(--big-button-text);
+  border: 2px solid var(--main-text-color);
+  color: var(--main-text-color);
   padding: 0px 30px;
   height: 40px;
   line-height: 35px;
   border-radius: 5px;
-  background-color: var(--big-button);
+  background-color: var(--main-background-color);
   box-shadow: 0px 3px 5px var(--big-button-shadow);
   cursor: pointer;
   transition: border 0.25s, box-shadow 0.25s;
