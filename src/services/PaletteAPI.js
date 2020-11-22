@@ -65,7 +65,7 @@ export default {
           root.style.setProperty('--settings-small-div', 'rgba(0, 0, 0, 0.64)');
           root.style.setProperty('--settings-logout-hover-text', 'white');
           root.style.setProperty('--settings-text', '#045c91');                            // original: #517B94
-          root.style.setProperty('--settings-switch-on', '#42f593');
+          root.style.setProperty('--settings-switch-on', '#04852F');
           root.style.setProperty('--settings-switch-off', '#f55442');
           root.style.setProperty('--settings-switch-ball', 'white');
 
@@ -255,8 +255,8 @@ export default {
           root.style.setProperty('--stats-panel-shadow', 'rgba(109, 109, 109, 0.644)');
 
           // ToggleSwitch.vue
-          root.style.setProperty('--toggle-switch-on-background', '#bfffc6');
-          root.style.setProperty('--toggle-switch-on-ball', '#04dd74');
+          root.style.setProperty('--toggle-switch-on-background', '#04dd74');
+          root.style.setProperty('--toggle-switch-on-ball', '#04852F');
           root.style.setProperty('--toggle-switch-off-background', '#ff8787');
           root.style.setProperty('--toggle-switch-off-ball', '#e95454');
           root.style.setProperty('--toggle-switch-disabled-background', '#7E7E7E');
@@ -302,7 +302,7 @@ export default {
           root.style.setProperty('--settings-small-div', 'rgba(216, 216, 216, 0.64)');
           root.style.setProperty('--settings-logout-hover-text', '#001324');              //#272727
           root.style.setProperty('--settings-text', '#2991C3');                           //#cccccc
-          root.style.setProperty('--settings-switch-on', '#42f593');
+          root.style.setProperty('--settings-switch-on', '#04852F');
           root.style.setProperty('--settings-switch-off', '#f55442');
           root.style.setProperty('--settings-switch-ball', 'white');
 
@@ -475,8 +475,8 @@ export default {
           root.style.setProperty('--stats-panel-shadow', 'rgba(109, 109, 109, 0.644)');
 
           // ToggleSwitch.vue
-          root.style.setProperty('--toggle-switch-on-background', '#bfffc6');
-          root.style.setProperty('--toggle-switch-on-ball', '#04dd74');
+          root.style.setProperty('--toggle-switch-on-background', '#04dd74');
+          root.style.setProperty('--toggle-switch-on-ball', '#04852F');
           root.style.setProperty('--toggle-switch-off-background', '#ff8787');
           root.style.setProperty('--toggle-switch-off-ball', '#e95454');
           root.style.setProperty('--toggle-switch-disabled-background', '#7E7E7E');
