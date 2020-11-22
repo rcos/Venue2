@@ -113,10 +113,15 @@ class BroderickPicker {
     // needs to have a pick() function that returns the selected date
   
     wrapAround(hov_section, new_value) {
+        this.currentYear();
+        this.calcMinMaxYear();
+        let today = new Date();
+        let daysInSelectedMonth = this.daysInCurrentMonth(today.getMonth(), this.currentYear());
+        console.log('days in selected month: ' + daysInSelectedMonth)
         let fix_const = this.fix_const;
         let min_val = this.min_year;
         let max_val = this.max_year;
-        let maxDays = this.daysInSelectedMonth;
+        let maxDays = daysInSelectedMonth;
         if (hov_section == 'year') {
           new_value = new_value > max_val ? new_value - fix_const : new_value < min_val ? new_value + fix_const : new_value;
         }
@@ -141,6 +146,20 @@ class BroderickPicker {
       let token = type == 'year' ? 'YYYY' : type == 'month' ? 'MM' : type == 'day' ? 'DD' : type == 'hour' ? 'HH' : 'mm'
       Col.setAttribute('data-token', token);
       Col.setAttribute('class', 'picker-cell picker-' + type + 's');
+
+      var arrowImageUp = document.createElement('img');
+      arrowImageUp.setAttribute('src', '@/assets/icons8-sort-up-26.svg');
+      arrowImageUp.setAttribute('alt', '▲');
+      arrowImageUp.setAttribute('width', 20);
+      arrowImageUp.setAttribute('height', 20);
+      arrowImageUp.setAttribute('class', 'picker-cell__control--prev');
+
+      var arrowImageDown = document.createElement('img');
+      arrowImageDown.setAttribute('src', '@/assets/icons8-sort-down-26.svg');
+      arrowImageDown.setAttribute('alt', '▼');
+      arrowImageDown.setAttribute('width', 20);
+      arrowImageDown.setAttribute('height', 20);
+      arrowImageDown.setAttribute('class', 'picker-cell__control--next');
   
       var colHeader = document.createElement('div');
       colHeader.setAttribute('class', 'picker-cell__header');
@@ -149,10 +168,12 @@ class BroderickPicker {
       var upBtn = document.createElement('div');
       upBtn.setAttribute('class', 'picker-cell__control picker-cell__control--prev');
       upBtn.setAttribute('data-picker-action', 'prev');
+      upBtn.appendChild(arrowImageUp);
   
       var dwnBtn = document.createElement('div');
       dwnBtn.setAttribute('class', 'picker-cell__control picker-cell__control--next');
       dwnBtn.setAttribute('data-picker-action', 'next');
+      dwnBtn.appendChild(arrowImageDown);
   
       Col.appendChild(colHeader);
       Col.appendChild(upBtn);
@@ -200,6 +221,11 @@ class BroderickPicker {
       return listdiv;
   
     }
+
+    daysInCurrentMonth(selected_month, selected_year) {
+      this.daysInSelectedMonth = new Date(selected_year, selected_month + 1, 0).getDate();
+      return new Date(selected_year, selected_month + 1, 0).getDate();
+    }
   
     stringify(number) {
       return number < 10 ? '0' + String(number) : String(number);
@@ -207,6 +233,21 @@ class BroderickPicker {
   
     getToday(today) {
       return [today.getFullYear(), today.getMonth() + 1, today.getDate(), today.getHours(), today.getMinutes()]
+    }
+
+    currentYear() {
+      var year = new Date();
+      return year.getFullYear();
+    }
+
+    calcMinMaxYear() {
+      let year = this.currentYear;
+      this.max_year = year() + 3;
+      this.min_year = year() - 3;
+      this.fix_const = (this.max_year - this.min_year) + 1
+      console.log(this.min_year)
+      console.log(this.max_year)
+      console.log(this.fix_const)
     }
 }
 export default BroderickPicker;

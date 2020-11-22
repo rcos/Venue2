@@ -2,7 +2,6 @@ let getJwt = function() {
 	cy.wait(0.2)
 	return 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
 }
-
 describe('API - PlaybackPoll Accessors',function() {
 	beforeEach(() => {
 		cy.setUser('testinst','password')
@@ -40,7 +39,6 @@ describe('API - PlaybackPoll Accessors',function() {
 		})
 	})
 })
-
 describe('API - PlaybackPoll Modifiers',function() {
 	beforeEach(() => {
 		cy.setUser('testinst','password')

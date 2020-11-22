@@ -236,7 +236,6 @@
     },
     created() {
       this.loadData()
-      this.setPalette()
     },
     methods: {
       showBreadcrumb() {
@@ -303,12 +302,7 @@
       },
       is_calendar() {
         return this.$route.name === 'calendar'
-      },
-      setPalette() {
-	  	  this.current_user = this.$store.state.user.current_user
-	  	  let root = document.documentElement;
-		    PaletteAPI.setPalette(root, this.current_user.dark_mode)
-	    }
+      }
     }
   }
 </script>

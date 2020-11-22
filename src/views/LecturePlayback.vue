@@ -12,17 +12,14 @@
 		</div>
 	</div>
 </template>
-
 <script>
 import LectureAPI from "@/services/LectureAPI";
 import LectureSubmissionAPI from '@/services/LectureSubmissionAPI';
 import RestrictedPlayback from "@/components/RestrictedPlayback";
 import UnrestrictedPlayback from "@/components/UnrestrictedPlayback";
 import AuthAPI from "@/services/AuthAPI";
-
 const query = require('querystring')
 const url = require('url')
-
 export default {
 	name: 'LecturePlayback',
 	components: {
@@ -80,7 +77,6 @@ export default {
 					LectureSubmissionAPI.getOrMake(this.lecture._id,this.$store.state.user.current_user._id)
 						.then(res => {
 							this.submission = res.data
-
 							if(this.submission.live_percent && this.submission.live_percent == 1) {
 								this.unrestricted = true
 								this.needs_decision = false
@@ -116,7 +112,6 @@ export default {
 	}
 }
 </script>
-
 <style scoped>
 #lecture_playback {
 	height: calc(100vh - 12rem)

@@ -1033,6 +1033,33 @@ th,td {
   color: var(--calendar-selected);
 }
 
+.picker-form-control {
+  color: var(--calendar-selected) !important;
+  background: none !important;
+  width: 90%;
+  height: 90%;
+  border: none;
+  caret-color: red;
+  outline: none;
+}
+
+.picker-form-control {
+  padding-left: 32%;
+}
+
+.picker-form-control.year {
+  padding-left: 22% !important;
+}
+
+.picker-form-control::placeholder {
+  padding-right: 10%;
+}
+
+.picker-form-control.error {
+  color: var(--error-brighter) !important;
+  font-weight: 900 !important;
+}
+
 /* ------------------ */
 
 .venue-modal-container {

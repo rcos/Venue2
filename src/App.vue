@@ -9,9 +9,7 @@
     <Footer/>
   </div>
 </template>
-
 <script>
-
 import NavBar from "./components/NavBar.vue";
 import Footer from "./components/Footer.vue";
 import LectureAPI from './services/LectureAPI';
@@ -19,7 +17,6 @@ import {getLiveLectures,getUpcomingLectures,getPastLectures} from './services/Gl
 import '@/assets/css/venue.css';
 import UserAPI from '@/services/UserAPI.js';
 import PaletteAPI from '@/services/PaletteAPI.js'
-
 export default {
   watch: {
     '$route' (to, from) {
@@ -114,7 +111,6 @@ export default {
   //initially displayNav is false because the first page loaded is the homepage
 }
 </script>
-
 <style lang="scss">
 #app {
   font-family: "Comfortaa", "Exo", sans-serif;
@@ -124,7 +120,6 @@ export default {
   min-height: calc(100vh - 2rem - 5px);
   // min-height: 100%;
 }
-
 main {
   position: relative;
   top: 0;

@@ -6,12 +6,10 @@
 		</video>
 	</div>
 </template>
-
 <script>
 import videojs from "video.js"
 import axios from 'axios'
 require('videojs-youtube')
-
 export default {
 	name: 'UnrestrictedPlayback',
 	props: {
@@ -38,7 +36,6 @@ export default {
 	}
 }
 </script>
-
 <style scoped>
 #unrestricted_playback {
 	position: fixed;

@@ -1,3 +1,5 @@
+import BroderickPicker from './bpicker.js'
+
 export default {
   daysInCurrentMonth(selected_month, selected_year) {
     this.daysInSelectedMonth = new Date(selected_year, selected_month + 1, 0).getDate();
@@ -16,6 +18,22 @@ export default {
     console.log(this.max_year)
     console.log(this.fix_const)
   },
+  isValidInput(val, section) {
+    console.log(section)
+    if (section == 'year') {
+      return Number(val) >= this.min_year && Number(val) <= this.max_year ? true : false
+    } else if (section == 'month') {
+      return Number(val) >= 1 && Number(val) <= 12 ? true : false
+    } else if (section == 'day') {
+      return Number(val) >= 1 && Number(val) <= this.daysInSelectedMonth ? true : false
+    } else if (section == 'hour') {
+      return Number(val) >= 0 && Number(val) <= 23 ? true : false
+    } else if (section == 'minute') {
+      return Number(val) >= 0 && Number(val) <= 59 ? true : false
+    } else {
+      return false
+    }
+  },
   windowScrollHandler() {
     var ext_scroll = false;
     var ext_scroll_timeout = null;
@@ -31,6 +49,9 @@ export default {
         }, 66);
     }
     return ext_scroll
+  },
+  stringify(value) {
+    return value >= 10 ? String(value) : '0' + String(value)
   },
   // Appropriate wrap around based on section
   wrapAround(hov_section, new_value) {
@@ -90,6 +111,7 @@ export default {
   calcNewYearCol(options, hovered_value, selected_value, hov_section, dir) {
     let updateDays = this.correctDays.bind(this);
     let fixMonths = this.fixMonths.bind(this);
+    let stringify = this.stringify;
     
     let wrapAround = this.wrapAround.bind(this);
     let calcNewValue = this.calcNewValue.bind(this);        
@@ -111,14 +133,11 @@ export default {
           months.push(new_value);
         }
 
-        new_value = wrapAround(hov_section, new_value);
+        new_value = stringify(wrapAround(hov_section, new_value));
         
-        if (new_value < 10 && new_value > -1) {
-          new_value = '0' + String(new_value)
-        }
         console.log('we are in calcnewyearcol and new_val is -> ' + new_value)
-        option.innerHTML = String(new_value)
-        option.setAttribute('data-value', String(new_value))
+        option.innerHTML = new_value
+        option.setAttribute('data-value', new_value)
       }
       if (hov_section == 'month' && section == 'day' || (hov_section == 'year' && section == 'day') || hov_section == 'day') {
         old_days.push(option.innerHTML);
@@ -161,6 +180,8 @@ export default {
     let today = new Date();
     let daysInSelectedMonth = this.daysInCurrentMonth(this.currentYear(), today.getMonth() + 1);
     //let initPickerClicker = this.initPickerClicker.bind(this);
+    let setColToInputVal = this.inputFieldHandler.bind(this);
+    let getAllSelected = this.getAllSelectedValues.bind(this);
 
     this.daysInSelectedMonth = daysInSelectedMonth;
 
@@ -174,8 +195,10 @@ export default {
     var pickerToInit = document.getElementById(picker);    
     var options = pickerToInit.getElementsByTagName("li");
     var arrow_buttons = pickerToInit.getElementsByClassName('picker-cell__control');
+    var headers = pickerToInit.getElementsByClassName('picker-cell__header');
 
     console.log('arrow buttons -> ' + arrow_buttons);
+    console.log('headers -> ' + headers.length);
 
     // Custom scroll listener for year column
     for (let option of options) {
@@ -221,6 +244,56 @@ export default {
       }
       console.log('i is: ' + i + ' and dir is ' + dir)
       
+    }
+    
+    // TODO - make input flash red if invalid
+    // TODO - make it so if you click the header you're automatically typing in the box
+    // TODO - styling
+
+    for (let header of headers) {
+      header.onclick = function() {
+        console.log('onclick -> ' + header)
+        let section = header.innerHTML.toLowerCase();
+        console.log(section)
+        let forms = header.getElementsByTagName('input');
+        console.log(forms.length)
+        if (forms.length == 0) {
+          console.log('this is where you put the form for text input')
+          var inputbox = document.createElement('input');
+          var selValues = getAllSelected(options);
+          var selValue = section == 'year' ? selValues[0] : section == 'month' ? selValues[1] : section == 'day' ? selValues[2] : section == 'hour' ? selValues[3] : section == 'minute' ? selValues[4] : ""
+          inputbox.setAttribute('type', 'text');
+          inputbox.setAttribute('class', 'picker-form-control');
+          if (section == 'year') {
+            inputbox.classList.add('year')
+          }
+          inputbox.setAttribute('id', section);
+          inputbox.setAttribute('size', 4);
+          inputbox.setAttribute('placeholder', selValue)
+          inputbox.onkeyup = function(evt) {
+            if (evt.keyCode === 13) {
+              if (setColToInputVal(options, section) == true) {
+                try {
+                  inputbox.remove()
+                  header.innerHTML = section.charAt(0).toUpperCase() + section.slice(1)
+                } catch (DOMException) {}
+              } else {
+                inputbox.classList.add('error')
+                  setTimeout(function() {
+                    inputbox.classList.remove('error')
+                  }, 750);
+              }
+            }
+          }
+          inputbox.onfocusout = function() {
+            inputbox.remove()
+            header.innerHTML = section.charAt(0).toUpperCase() + section.slice(1)
+          }
+          header.innerHTML = '';
+          header.appendChild(inputbox);
+          inputbox.focus();
+        }
+      }
     }
     
     // left: 37, up: 38, right: 39, down: 40,
@@ -269,14 +342,29 @@ export default {
     // TODO - scrolling resets values set by clicking on other columns
     // I believe this has something to do with how PickerJS refreshes as it usually resets to current date
   },
-  optionClickEvent(options) {
+  inputFieldHandler(options, section) {
+    let isValid = this.isValidInput.bind(this);
+    let setDate = this.optionClickEvent.bind(this);
+    console.log('some other function on form submit')
+    var data = ""
+    data = document.getElementById(section).value
+    console.log(isValid(data, section))
+    if (isValid(data, section)) {
+      setDate(options, data, section);
+      return true
+    } else {
+      return false
+    }
+  },
+  optionClickEvent(options, hovered_value, hovered_section) {
     let calcNewValue = this.calcNewValue.bind(this);
     let updateDays = this.correctDays.bind(this);
+    let stringify = this.stringify;
     for (let option of options) {
-      if (option.mouse) {
+      if (option.mouse && hovered_value == null) {
         var hovered_value = option.innerHTML;
         var hovered_section = option.getAttribute('data-name');
-      }
+      } 
     }
     for (let option of options) {
       let style = option.getAttribute('class');
@@ -292,12 +380,10 @@ export default {
       if (section == hovered_section) {
         console.log('hov', hovered_value);
         console.log('sel', selected_value);
-        var new_value = calcNewValue(section, hovered_value, selected_value, option.innerHTML)
-        if (new_value < 10 && new_value > -1) {
-          new_value = '0' + String(new_value)
-        }
-        option.innerHTML = String(new_value)
-        option.setAttribute('data-value', String(new_value))
+        var new_value = stringify(calcNewValue(section, hovered_value, selected_value, option.innerHTML))
+        
+        option.innerHTML = new_value
+        option.setAttribute('data-value', new_value)
       }
       if (hovered_section == 'month' && section == 'day' || (hovered_section == 'year' && section == 'day') || hovered_section == 'day') {
         old_days.push(option.innerHTML);
@@ -309,6 +395,7 @@ export default {
   },
   fixMonths(months, options) {
     let wrapAround = this.wrapAround.bind(this);
+    let stringify = this.stringify;
     if (months[1] - months[0] == 0 || months[6] - months[5] == 2 || months.includes(0) || months.includes(11)) {
       for (var i = 0; i < months.length - 1; i++) {
         let diff = months[i+1] - months[i]
@@ -329,12 +416,10 @@ export default {
         let section = option.getAttribute('data-name');
         if (section == 'month') {
           let new_value = months[mo_index]
-          new_value = wrapAround('month', new_value);
-          if (new_value < 10 && new_value > -1) {
-          new_value = '0' + String(new_value)
-          }
-          option.innerHTML = String(new_value)
-          option.setAttribute('data-value', String(new_value))
+          new_value = stringify(wrapAround('month', new_value));
+          
+          option.innerHTML = new_value
+          option.setAttribute('data-value', new_value)
           mo_index += 1
         }
       }
@@ -344,6 +429,7 @@ export default {
   correctDays(days, options) {
     // PARSE THRU DAYS AND UPDATE IF NEEDED
     let getSelected = this.getAllSelectedValues.bind(this);
+    let stringify = this.stringify;
 
     let all = getSelected(options);
 
@@ -371,12 +457,9 @@ export default {
           let old_day = Number(option.innerHTML);
           // If 8 is on the screen don't update because it'll throw off the whole col
           if (old_day >= 8 && (days.includes(String((daysInCurrentMonth - month_offset))) || Number(old_day) > maxDays)) {
-            let new_day = Math.abs(old_day + month_offset);
-            if (new_day < 10 && new_day > -1) {
-              new_day = '0' + String(new_day)
-            }
-            option.innerHTML = String(new_day)
-            option.setAttribute('data-value', String(new_day))
+            let new_day = stringify(Math.abs(old_day + month_offset));
+            option.innerHTML = new_day
+            option.setAttribute('data-value', new_day)
           }
         }
       }

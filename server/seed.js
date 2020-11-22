@@ -5,12 +5,9 @@ const User = require("./User/User.model")
 const Lecture = require("./Lecture/Lecture.model")
 const LectureSubmission = require("./LectureSubmission/LectureSubmission.model")
 const PlaybackPoll = require("./PlaybackPoll/PlaybackPoll.model")
-
 const db = "mongodb://localhost:27017/Venue2";
-
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-
 ////////USERS
 var u0 = new User()
 var u1 = new User()
@@ -40,37 +37,31 @@ var u24 = new User()
 var u25 = new User()
 var u26 = new User()
 var u27 = new User()
-
 ////////COURSES
 var c0 = new Course()
 var c1 = new Course()
 var c2 = new Course()
 var c3 = new Course()
 var c4 = new Course()
-
 ////////SECTIONS
 var s0 = new Section()
 var s1 = new Section()
 var s2 = new Section()
 var s3 = new Section()
 var s4 = new Section()
-
 ////////LECTURES
 var l0 = new Lecture()
 var l1 = new Lecture()
 var l2 = new Lecture()
 var l3 = new Lecture()
-
 ////////LECTURE SUBMISSIONS
 var ls0 = new LectureSubmission()
-
 ////////POLLS{
 var p0 = new PlaybackPoll()
 var p1 = new PlaybackPoll()
 var p2 = new PlaybackPoll()
 var p3 = new PlaybackPoll()
 var p4 = new PlaybackPoll()
-
 ////////USERS
 u0 = {
 	_id: u0._id,
@@ -381,7 +372,6 @@ u27 = {
 	ta_sections: [s0._id,s4._id],
 	student_sections: []
 }
-
 ////////COURSES
 c0 = {
 	_id: c0._id,
@@ -431,7 +421,6 @@ c4 = {
 		u1.email
 	]
 }
-
 ////////SECTIONS
 s0 = {
 	_id: s0._id,
@@ -537,7 +526,6 @@ s4 = {
 		u27.email //z
 	]
 }
-
 ////////LECTURES
 l0 = {
 	_id: l0._id,
@@ -604,7 +592,6 @@ l3 = {
 	}],
 	num_playback_polls: 2
 }
-
 ////////LECTURE SUBMISSIONS
 ls0 = {
 	_id: ls0._id,
@@ -615,7 +602,6 @@ ls0 = {
 	live_percent: 0.5,
 	live_submission_time: Date.now() - (3.5*60*1000)
 }
-
 ////////POLLS
 p0 = {
 	_id: p0._id,
@@ -689,7 +675,6 @@ p4 = {
 	],
 	timestamp: 5
 }
-
 seeder.connect(process.env.DB_URI || db, function () {
 	seeder.loadModels([
 		"./Course/Course.model",
@@ -700,15 +685,12 @@ seeder.connect(process.env.DB_URI || db, function () {
 		"./PlaybackPoll/PlaybackPoll.model"
 	]);
 	seeder.clearModels(['Course', 'User', 'Section', 'Lecture', 'LectureSubmission', 'PlaybackPoll'], function () {
-
 		let u = []
 		let c = []
 		let s = []
 		let l = []
 		let ls = []
 		let p = []
-
-
 		u.push(u0)
 		u.push(u1)
 		u.push(u2)
@@ -737,32 +719,26 @@ seeder.connect(process.env.DB_URI || db, function () {
 		u.push(u25)
 		u.push(u26)
 		u.push(u27)
-
 		c.push(c0)
 		c.push(c1)
 		c.push(c2)
 		c.push(c3)
 		c.push(c4)
-
 		s.push(s0)
 		s.push(s1)
 		s.push(s2)
 		s.push(s3)
 		s.push(s4)
-
 		l.push(l0)
 		l.push(l1)
 		l.push(l2)
 		l.push(l3)
-
 		ls.push(ls0)
-
 		p.push(p0)
 		p.push(p1)
 		p.push(p2)
 		p.push(p3)
 		p.push(p4)
-
 		let promises = []
 		u.forEach(user => {
 			promises.push(new Promise((resolve,reject) => {
@@ -771,13 +747,11 @@ seeder.connect(process.env.DB_URI || db, function () {
 				})
 			}))
 		})
-
 		Promise.all(promises)
 			.then((fulfilled) => {
 				for(i=0;i<u.length;i++){
 					u[i].password = fulfilled[i]
 				}
-
 				let data = [{
 					"model": "User",
 					"documents": u
@@ -797,7 +771,6 @@ seeder.connect(process.env.DB_URI || db, function () {
 					"model": "PlaybackPoll",
 					"documents": p
 				}]
-
 				seeder.populateModels(data, function (err, done) {
 					if (err) {
 						return console.log("seed err", err)

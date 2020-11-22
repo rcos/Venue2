@@ -30,14 +30,12 @@
 		</div>
 	</div>
 </template>
-
 <script>
 require('dotenv')
 import videojs from "video.js";
 import LectureSubmissionAPI from "../services/LectureSubmissionAPI";
 import PlaybackPollAPI from "../services/PlaybackPollAPI";
 require('videojs-youtube')
-
 export default {
 	name: 'RestrictedPlayback',
 	props: {
@@ -76,24 +74,19 @@ export default {
 			},
 			forceSSL: true
 		}
-
 		videojs("video_player", vidOptions, function() {
 			self.vjs = this
-
 			let vid = this;
-
 			vid.on("fullscreenchange", function(){
 				if(vid.isFullscreen()){
 					vid.exitFullscreen();
 				}
 			});
-
 			self.currentUser = self.$store.state.user.current_user
 			
 			PlaybackPollAPI.getByLecture(self.lecture._id)
 			.then(resp => {
 				self.polls = resp.data
-
 				// vid.on('timeupdate',
 				var bigbrother = () => {
 					let currTime = vid.currentTime()
@@ -188,7 +181,6 @@ export default {
 	}
 }
 </script>
-
 <style scoped>
 #restricted_playback {
 	position: absolute;

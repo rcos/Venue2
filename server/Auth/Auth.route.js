@@ -4,11 +4,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const axios = require('axios')
-
 let User = require('../User/User.model');
-
 const alnums = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
 async function generateSID() {
   let venueSID = ""
   for (let i = 1000; i > 0; --i) {
@@ -21,7 +18,6 @@ async function generateSID() {
     return null
   }
 }
-
 //Passport setup START
 const passport = require('passport')
 passport.serializeUser(function(user, done) {
@@ -62,7 +58,6 @@ passport.use(new (require('passport-cas').Strategy)({
   });
 }));
 //Passport setup END
-
 authRoutes.route('/signup').post(function (req, res) {
   let user = new User(req.body.user)
   user.save()
@@ -74,7 +69,6 @@ authRoutes.route('/signup').post(function (req, res) {
       res.status(400).send("unable to save user to database");
     });
 });
-
 authRoutes.route('/login').post(function (req, res) {
   let user = req.body.user
   if(user){
@@ -99,7 +93,6 @@ authRoutes.route('/login').post(function (req, res) {
     res.status(400).json({ error: 'Invalid login. Please try again.' })
   }
 });
-
 authRoutes.route('/check_for_temp_user/:user_id/:temp_password').get(function (req, res) {
   let user_id = req.params.user_id
   let temp_password = req.params.temp_password
@@ -118,7 +111,6 @@ authRoutes.route('/check_for_temp_user/:user_id/:temp_password').get(function (r
     res.status(400).json({ error: 'Invalid login. Please try again.' })
   }
 });
-
 authRoutes.route('/set_permanent_pasword').post(function (req, res) {
   let user = req.body.user
   if(user){
@@ -148,7 +140,6 @@ authRoutes.route('/set_permanent_pasword').post(function (req, res) {
     res.status(400).json({ error: 'Invalid user. Please try again.' })
   }
 });
-
 authRoutes.get("/loginCAS", (req, res, next) => {
   passport.authenticate('cas', function (err, user, info) {
     if (err) {
@@ -173,7 +164,7 @@ authRoutes.get("/loginCAS", (req, res, next) => {
                 if(err || user == null) {
                   return next(err);
                 } else {
-                  res.header("Set-Cookie","connect_sid="+resolvedSID)
+                  res.header("Set-Cookie: SameSite=None; Secure","connect_sid="+resolvedSID)
                   if(process.env.NODE_ENV === "production") {
                     return res.redirect('https://www.venue-meetings.com/#/redirectCASLogin');
                   } else {
@@ -190,7 +181,6 @@ authRoutes.get("/loginCAS", (req, res, next) => {
     }
   })(req, res, next);
 });
-
 authRoutes.get("/loginStatus", function(req, res) {
   User.findOne({connect_sid: req.cookies["connect_sid"]}, function (err, current_user) {
     if(err || current_user == null) {
@@ -201,12 +191,10 @@ authRoutes.get("/loginStatus", function(req, res) {
     }
   });
 });
-
 authRoutes.get("/logoutCAS", function(req, res) {
   res.header("Set-Cookie","connect_sid="+";expires=Thu, 01 Jan 1970 00:00:00 GMT")
   res.send()
 });
-
 authRoutes.get('/get_webex_src/:auth_code/:web_rec_id',function(req,res) {
   let auth_code = req.params.auth_code
   let web_rec_id = req.params.web_rec_id
@@ -229,5 +217,4 @@ authRoutes.get('/get_webex_src/:auth_code/:web_rec_id',function(req,res) {
     res.json({})
   })
 })
-
 module.exports = authRoutes;

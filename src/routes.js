@@ -47,17 +47,13 @@ import TALectureInfo from '@/views/ta/TALectureInfo.vue';
 import StudentSectionInfo from '@/views/student/StudentSectionInfo.vue';
 import StudentLectureInfo from '@/views/student/StudentLectureInfo.vue';
 import Calendar from '@/views/Calendar.vue';
-
 import AuthAPI from '@/services/AuthAPI.js';
 import UserAPI from '@/services/UserAPI.js';
 import SectionAPI from './services/SectionAPI';
 import CourseAPI from './services/CourseAPI';
-
 const url = require('url')
 const query = require('querystring')
-
 Vue.use(VueRouter);
-
 const router = new VueRouter({
   // mode: 'history',
   routes: [
@@ -481,10 +477,8 @@ const router = new VueRouter({
     }
   ]
 })
-
 router.beforeEach((to, from, next) => {
   const loggedIn = localStorage.getItem('user')
-
   if(to.name == 'landing_page' || to.name == 'dashboard') {
     let url_query = query.parse(url.parse(window.location.href).query)
 		if(url_query && url_query.code) {
@@ -495,27 +489,18 @@ router.beforeEach((to, from, next) => {
       }
 		}
   }
-
   if (to.matched.some(record => record.meta.requiresAuth)) {
-
     if (loggedIn) {
-
       const user_data = JSON.parse(loggedIn)
-
       if(user_data.current_user.is_admin) {
-
         next()
-
       } else if(to.matched.some(record => record.meta.requiresAdmin)) {
-
         if (user_data.current_user.is_admin) {
           next()
         } else {
           next('/dashboard')
         }
-
       } else if (to.matched.some(record => record.meta.requiresInstructor)) { // TODO check Instructor lectures
-
         if ((to.name == 'new_lecture' && user_data.current_user.instructor_courses.includes(to.params.course_id))
         || (to.name == 'new_lecture' && user_data.current_user.ta_sections.includes(to.params.course_id))
         || (to.name == 'statistics' && user_data.current_user.instructor_courses.length > 0)
@@ -537,56 +522,43 @@ router.beforeEach((to, from, next) => {
         } else {
           next('/dashboard')
         }
-
       } else if (to.matched.some(record => record.meta.requiresTA)) {
-
         if (user_data.current_user.ta_sections.includes(to.params.id)
         || (to.name == 'ta_course_info') && user_data.current_user.ta_sections.some(section => section.course == to.params.id) ) { // TODO check TA lectures
           next()
         } else {
           next('/dashboard')
         }
-
       } else if (to.matched.some(record => record.meta.requiresStudent)) {
-
         if (user_data.current_user.student_sections.includes(to.params.id)
         || (to.name == 'student_course_info') && user_data.current_user.student_sections.some(section => section.course == to.params.id) ){ // TODO check student lectures
           next()
         } else {
           next('/dashboard')
         }
-
       }
       else if (to.name == 'join_course') { //student implement new join route
-
         if (user_data.current_user.instructor_courses.includes(to.params.id)) {
           next('/course_info/' + to.params.id)
         }
         next()
-
       }  
       else {
-
         next()
-
       }
     }
     // not logged in
     else {
       next('/')
     }
-
   } else if (to.matched.some(record => record.meta.requiresNoLogin)) {
-
     if (loggedIn) {
       next('/dashboard')
     } else {
       next()
     }
-
   } else {
     next()
   }
 })
-
 export default router

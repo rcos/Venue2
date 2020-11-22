@@ -641,13 +641,13 @@ h1 {
 }
 
 .picker-cell__control--prev::before {
-  content: '⏶';
-  /*content: '🠹'*/
+  /*content: "/\\";*/
+  /*content: '⏶'*/
 }
 
 .picker-cell__control--next::before {
-  content: '⏷';
-  /*content: '🠻'*/
+  /*content: '\\/';*/
+  /*content: '⏷'*/
 }
 
 .picker-cell__header {

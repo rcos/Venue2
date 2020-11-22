@@ -2,7 +2,6 @@ let getJwt = function() {
 	cy.wait(0.2)
 	return 'Bearer '+JSON.parse(window.localStorage.getItem('user')).token
 }
-
 describe('API - Section Accessors',function() {
 	beforeEach(() => {
 		cy.setUser('testinst','password')
@@ -123,7 +122,6 @@ describe('API - Section Accessors',function() {
 		})
 	})
 })
-
 describe('API - Section Modifiers',function() {
 	beforeEach(() => {
 		cy.setUser('testinst','password')

@@ -221,27 +221,27 @@ export default {
 	cursor: pointer;
 	box-shadow: 0px 3px 3px 0px var(--nav-bar-hover-top-shadow) inset, 0px -3px 3px 0px var(--nav-bar-hover-top-shadow) inset;
 }
-.btn-danger {
+.btn.btn-danger {
 	border-radius: 0.25rem;
 	padding: 0.1rem 0.5rem;
 	padding-left: 0;
-	background: none;
+	background: none !important;
 	color: var(--error-brighter);
-	border: none;
+	border: none !important;
 	font-weight: 900;
-	outline: none;
+	outline: none !important;
 }
 .btn.btn-danger:hover,
 .btn.btn-danger:focus,
 .btn.btn-danger:focus:active,
 .btn.btn-danger:active,
 .btn.btn-danger:target {
-  outline: none;
-  border: none;
-  box-shadow: none;
-  background-color: none;
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  background-color: none !important;
   font-weight: 1200;
-  background: none;
+  background: none !important;
   color: var(--button-danger-hover);
 } 
 </style>

@@ -16,14 +16,12 @@
     </div>
   </div>
 </template>
-
 <script>
   import Logo from '@/components/Logo.vue'
   import Button from '@/components/Button.vue'
   import LoginForm from '@/Forms/LoginForm.vue'
   import AuthAPI from '@/services/AuthAPI.js'
   import axios from 'axios';
-
   export default {
     components: {
       Logo,
@@ -74,7 +72,6 @@
     }
   }
 </script>
-
 <style>
   .fade_out {
     visibility: hidden;

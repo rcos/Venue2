@@ -9,16 +9,12 @@ var transporter = nodemailer.createTransport({
 		pass: process.env.EMAIL_PASS
 	}
 });
-
 const legal_preferences = ["with_sections", "with_sections_and_course", "none"]
-
 let Lecture = require('../Lecture/Lecture.model')
 let User = require('../User/User.model')
 let Course = require('../Course/Course.model')
 let Section = require('../Section/Section.model')
-
 // Lecture Routes
-
 lectureRoutes.route('/add').post(function (req, res) {
 	let lecture = new Lecture(req.body.lecture);
 	lecture.save()
@@ -31,7 +27,6 @@ lectureRoutes.route('/add').post(function (req, res) {
 			res.status(400).send("unable to save lecture to database");
 		});
 });
-
 lectureRoutes.post('/update/:id', function(req,res) {
 	let lecture_id = req.params.id
 	let updated_lecture = req.body.updated
@@ -49,7 +44,6 @@ lectureRoutes.post('/update/:id', function(req,res) {
 		res.json({})
 	}
 })
-
 lectureRoutes.get('/delete/:id', function(req,res) {
 	Lecture.deleteOne({ _id: req.params.id },function(err) {
 		if(err) {
@@ -59,7 +53,6 @@ lectureRoutes.get('/delete/:id', function(req,res) {
 		}
 	})
 })
-
 // Lecture.findByIdAndUpdate(lecture_id,
 // 	{
 // 		video_ref: public_video_url,
@@ -73,14 +66,12 @@ lectureRoutes.get('/delete/:id', function(req,res) {
 // 			res.status(200).json(updated_lecture)
 // 	}
 // })
-
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3({
 	accessKeyId: process.env.AWSAccessKeyId,
 	secretAccessKey: process.env.AWSSecretKey,
 	region: 'us-east-2'
 });
-
 lectureRoutes.route('/get_signed_url/:filename').get(function(req, res) {
 	const fileurls = [];
 	const params = {
@@ -100,11 +91,9 @@ lectureRoutes.route('/get_signed_url/:filename').get(function(req, res) {
 		}
 	});
 });
-
 lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) {
 	let lecture_id = req.params.lecture_id
 	let lecture = req.body.lecture
-
 	Lecture.findByIdAndUpdate(lecture_id,
 		{
 			playback_submission_start_time: lecture.playback_submission_start_time,
@@ -152,7 +141,6 @@ lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) 
 		}
 	);
 });
-
 // //send email
 // let myhtml = ""
 // if (process.env.NODE_ENV === "production") {
@@ -174,7 +162,6 @@ lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) 
 // 		console.log('Email sent to ' + student.email + ': ' + info.response);
 // 	}
 // });
-
 lectureRoutes.route('/').get(function (req, res) {
 	Lecture.find(function (err, lectures) {
 		if (err || lectures == null) {
@@ -186,7 +173,6 @@ lectureRoutes.route('/').get(function (req, res) {
 		}
 	});
 });
-
 lectureRoutes.route('/:id').get(function (req, res) {
 	Lecture.findById(req.params.id, function (err, lecture) {
 		if (err || lecture == null) {
@@ -198,19 +184,15 @@ lectureRoutes.route('/:id').get(function (req, res) {
 		}
 	});
 });
-
 lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 	let preference = req.params.preference
-
 	if (!legal_preferences.includes(preference)) {
 		console.log("<ERROR> Invalid preference:", preference)
 		res.status(400).send("Illegal preference")
 		return
 	}
-
 	let all_lectures = []
 	let promises = []
-
 	if (req.user.instructor_courses.length) {
 		promises.push(new Promise((resolve, reject) => {
 			//get courses instructor teaches
@@ -276,7 +258,6 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 					} else {
 						console.log("<SUCCESS> Getting lectures for ta ID: " + req.user._id +
 							", with preference: " + preference)
-
 						// attach sections or courses to lectures based on preference
 						if (preference === "none")
 							resolve(ta_lectures)
@@ -336,7 +317,6 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 					} else {
 						console.log("<SUCCESS> Getting lectures for student ID: " + req.user._id +
 							", with preference: " + preference)
-
 						// attach sections or courses to lectures based on preference
 						if (preference === "none")
 							resolve(student_lectures)
@@ -399,7 +379,6 @@ lectureRoutes.get('/for_user/:user_id/:preference', (req, res) => {
 		res.json(ret.filter(a => a))
 	})
 })
-
 lectureRoutes.get('/for_course/:course_id', (req, res) => {
 	let course_id = req.params.course_id
 	// get sections for course
@@ -421,7 +400,6 @@ lectureRoutes.get('/for_course/:course_id', (req, res) => {
 		}
 	})
 })
-
 lectureRoutes.get('/for_section/:section_id', (req, res) => {
 	let section_id = req.params.section_id
 	Lecture.find({ sections: section_id }, (error, section_lectures) => {
@@ -434,7 +412,6 @@ lectureRoutes.get('/for_section/:section_id', (req, res) => {
 		}
 	})
 })
-
 lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
 	let lecture_id = req.params.lecture_id;
 	// get lecture
@@ -468,7 +445,6 @@ lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
 		}
 	});
 })
-
 lectureRoutes.post('/process_emails', (req, res) => {
 	let lectures = req.body.lectures
 	let toEmail = req.body.toEmail
@@ -516,7 +492,6 @@ lectureRoutes.post('/process_emails', (req, res) => {
 		res.json(lectures)
 	}
 })
-
 lectureRoutes.post('/end_early', (req, res) => {
 	let now = new Date()
 	Lecture.findByIdAndUpdate(req.body.lecture_id, { end_time: now }, function (err, lecture) {
@@ -530,5 +505,4 @@ lectureRoutes.post('/end_early', (req, res) => {
 		}
 	})
 })
-
 module.exports = lectureRoutes

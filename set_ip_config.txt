@@ -1,0 +1,57 @@
+# Use Config determines whether or not the script should use the values provided in this document.
+# Should something happen that corrupts this file and the values are getting read but are not right, you can
+# reset it by either deleting this file or setting this value to [FALSE]. As of now, manual mode has not been
+# implemented, so this should be kept at [TRUE] unless something gets corrupt.
+
+
+	use_config: true
+
+
+# Use Config determines whether or not the script should use the values provided in this document.
+# Should something happen that corrupts this file and the values are getting read but are not right, you can
+# reset it by either deleting this file or setting this value to [FALSE]. As of now, manual mode has not been
+# implemented, so this should be kept at [TRUE] unless something gets corrupt.
+
+
+
+# Provided the old IP is not the new IP, every instance of the old IP will be replaced with new IP.
+# The integrity check function will let you know if it detects irregularities between the number of IP's
+# each file is supposed to have vs. the amount of IP's it does have. This does not include domains.
+
+
+	old_ip: automatic
+
+	new_ip: automatic
+
+	warnings: true
+
+
+# Fatal errors will still be printed in red and most likely crash the program, but yellow warnings will not get printed if this is set to [FALSE].
+
+
+
+    	use_getch: true
+
+
+# Getch is a python library that allows the use of arrow keys in the input buffer. If you set use_getch to [FALSE] then you can still
+# use numbers to select your desired action in the main menu, but it won't feel as cool as using arrow keys.
+
+
+
+    	SameSite: true
+
+
+# SameSite is a property that lives inside the login cookie that makes it possible to login and logout from a different IP.
+# This is default [FALSE] because it's a security feature that improves the integrity of a cookie.
+# If logging in doesn't work from a non-localhost IP, set this to [TRUE] - but make sure to set it to [FALSE] before doing a PR!!!
+
+
+	cross_origin: true
+
+
+# Cross origin is the big brother of SameSite when it comes to cookie security. Setting cross origin to [TRUE] will let you log in
+# from both localhost AND new_ip. Leaving cross origin set to false will make the site only accessible from the new_ip.
+# Caution must be taken when changing this value, make sure you set it to [FALSE] before a PR!!!
+# * The line "origin:" in server/server.js should have 3 origins: venue-meetings.com, localhost, googleStorageApi
+
+
