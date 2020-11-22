@@ -147,7 +147,7 @@ class BroderickPicker {
       Col.setAttribute('data-token', token);
       Col.setAttribute('class', 'picker-cell picker-' + type + 's');
 
-      var arrowImageUp = document.createElement('img');
+      /*var arrowImageUp = document.createElement('img');
       arrowImageUp.setAttribute('src', '@/assets/icons8-sort-up-26.svg');
       arrowImageUp.setAttribute('alt', '▲');
       arrowImageUp.setAttribute('width', 20);
@@ -159,7 +159,7 @@ class BroderickPicker {
       arrowImageDown.setAttribute('alt', '▼');
       arrowImageDown.setAttribute('width', 20);
       arrowImageDown.setAttribute('height', 20);
-      arrowImageDown.setAttribute('class', 'picker-cell__control--next');
+      arrowImageDown.setAttribute('class', 'picker-cell__control--next'); */
   
       var colHeader = document.createElement('div');
       colHeader.setAttribute('class', 'picker-cell__header');
@@ -168,12 +168,12 @@ class BroderickPicker {
       var upBtn = document.createElement('div');
       upBtn.setAttribute('class', 'picker-cell__control picker-cell__control--prev');
       upBtn.setAttribute('data-picker-action', 'prev');
-      upBtn.appendChild(arrowImageUp);
+      //upBtn.appendChild(arrowImageUp);
   
       var dwnBtn = document.createElement('div');
       dwnBtn.setAttribute('class', 'picker-cell__control picker-cell__control--next');
       dwnBtn.setAttribute('data-picker-action', 'next');
-      dwnBtn.appendChild(arrowImageDown);
+      //dwnBtn.appendChild(arrowImageDown);
   
       Col.appendChild(colHeader);
       Col.appendChild(upBtn);
