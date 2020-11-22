@@ -351,6 +351,7 @@ def get_ip(prompt):
 
 # The method for adding / fixing corrupt values
 def mend(i, mode):
+    one_var = i
     if mode and mode != 'w':
         f = open(CONFIG, mode)
         lines = [i]
@@ -360,7 +361,7 @@ def mend(i, mode):
         f = open(CONFIG, mode)
         vars_written = []
     for i in lines:
-        if 'use_config:' in i.lower():
+        if 'use_config:' in i.lower() and one_var in i.lower():
             print("Set use_config to true?")
             if yes_or_no():
                 i = "\tuse_config: true\n"
@@ -372,19 +373,20 @@ def mend(i, mode):
                 return 'use_config'       
             else:
                 vars_written.append('use_config')         
-        elif 'warnings:' in i.lower():
+        elif 'warnings:' in i.lower() and one_var in i.lower():
             print("Set warnings to on?")
             if yes_or_no():
                 i = "\twarnings: true\n"
             else:
                 i = "\twarnings: false\n"
+            f.write(i + '\n')
             if (mode != 'w'):
                 f.write(DEFAULT_CONFIG_NOTES["warnings"]) 
                 return 'warnings'  
             else:
                 vars_written.append('warnings')
             f.write(i + '\n')
-        elif 'new_ip:' in i.lower():
+        elif 'new_ip:' in i.lower() and one_var in i.lower():
             ip = get_ip("Enter the IP to use in the future (new_ip): ")
             i = '\t' + 'new_ip: ' + ip + '\n'
             f.write(i + '\n')
@@ -393,7 +395,7 @@ def mend(i, mode):
                 return 'new_ip' 
             else:
                 vars_written.append('new_ip')
-        elif 'samesite:' in i.lower():
+        elif 'samesite:' in i.lower() and one_var in i.lower():
             print("Set SameSite to true?")
             if yes_or_no():
                 i = "\tSameSite: true\n"
@@ -405,16 +407,16 @@ def mend(i, mode):
                 return 'samesite'                
             else:
                 vars_written.append('samesite')
-        elif 'old_ip:' in i.lower():
+        elif 'old_ip:' in i.lower() and one_var in i.lower():
             ip = get_ip('Enter the IP to replace (old_ip): ')
             i = '\t' + 'old_ip: ' + ip + '\n'
             if (mode != 'w'):
                 f.write(DEFAULT_CONFIG_NOTES["old_ip"])
+                return 'old_ip'
             else:
                 vars_written.append('old_ip')
-            f.write(i + '\n')
-            return 'old_ip'
-        elif 'use_getch:' in i.lower():
+            f.write(i + '\n')    
+        elif 'use_getch:' in i.lower() and one_var in i.lower():
             print("Set use_getch to true?")
             if yes_or_no():
                 i = "\tuse_getch: true\n"
@@ -426,7 +428,7 @@ def mend(i, mode):
                 return 'use_getch'
             else:
                 vars_written.append('use_getch')
-        elif 'cross_origin:' in i.lower():
+        elif 'cross_origin:' in i.lower() and one_var in i.lower():
             print("Allow-Access-origin-control?")
             if yes_or_no():
                 i = "\tcross_origin: true\n"
@@ -474,7 +476,8 @@ def create_config(prompt):
             variables = ['use_config', 'old_ip', 'new_ip', 'warnings', 'use_getch', 'SameSite', 'cross_origin']
             variables_replaced = []
             if file_data:
-                mend('', 'w')
+                variables_replaced = mend('', 'w')
+                print(variables_replaced)
             else:
                 for i in variables:
                     if i not in variables_replaced:
@@ -567,6 +570,7 @@ def read_config(CONFIG):
         else:
             lines = file_data.split('\n')
             variables_replaced = []
+            corrupt_variables = []
             for i in lines:
                 if len(i.split()) > 0:
                     if 'use_config:' in i.split()[0].lower():
@@ -576,7 +580,7 @@ def read_config(CONFIG):
                             USE_CONFIG = False
                         else:
                             print(bcolors.RED + "The value for use_config was not recognized" + bcolors.RESET)
-                            return False
+                            corrupt_variables.append('use_config:')
                         variables_replaced.append('use_config')
                     elif 'warnings:' in i.split()[0].lower():
                         if i.lower().replace('warnings:', '').split()[0].lower() in true_words:
@@ -585,7 +589,7 @@ def read_config(CONFIG):
                             WARN = False
                         else:
                             print(bcolors.RED + "The value for warnings was not recognized" + bcolors.RESET)
-                            return False
+                            corrupt_variables.append('warnings:')
                         variables_replaced.append('warnings')
                     elif 'cross_origin:' in i.split()[0].lower():
                         if i.lower().replace('cross_origin:', '').split()[0].lower() in true_words:
@@ -594,21 +598,21 @@ def read_config(CONFIG):
                             CROSS_ORIGIN = False
                         else:
                             print(bcolors.RED + "The value for cross_origin was not recognized" + bcolors.RESET)
-                            return False
+                            corrupt_variables.append('cross_origin:')
                         variables_replaced.append('cross_origin')
                     elif 'new_ip:' in i.split()[0].lower():
                         if valid_ip(i.lower().replace('new_ip:', '').split()[0]):
                             NEW_IP = i.lower().replace('new_ip:', '').split()[0]
                         else:
                             print(bcolors.RED + "The value for new_ip is not a valid IP" + bcolors.RESET)
-                            return False
+                            corrupt_variables.append('new_ip:')
                         variables_replaced.append('new_ip') 
                     elif 'old_ip:' in i.split()[0].lower():
                         if valid_ip(i.lower().replace('old_ip:', '').split()[0]):
                             OLD_IP = i.lower().replace('old_ip:', '').split()[0]
                         else:
                             print(bcolors.RED + "The value for old_ip is not a valid IP" + bcolors.RESET)
-                            return False
+                            corrupt_variables.append('old_ip:')
                         variables_replaced.append('old_ip') 
                     elif 'samesite:' in i.split()[0].lower():
                         if i.lower().replace('samesite:', '').split()[0].lower() in true_words:
@@ -617,7 +621,7 @@ def read_config(CONFIG):
                             SAMESITE = False
                         else:
                             print(bcolors.RED + "The value for SameSite was not recognized" + bcolors.RESET)
-                            return False
+                            corrupt_variables.append('samesite:')
                         variables_replaced.append('SameSite')
                     elif 'use_getch:' in i.split()[0].lower():
                         if i.lower().replace('use_getch:', '').split()[0].lower() in true_words:
@@ -626,8 +630,13 @@ def read_config(CONFIG):
                             USE_GETCH = False
                         else:
                             print(bcolors.RED + "The value for use_getch was not recognized" + bcolors.RESET)
-                            return False
+                            corrupt_variables.append('use_getch:')
                         variables_replaced.append('use_getch')
+
+            if len(corrupt_variables) > 0:
+                for i in corrupt_variables:
+                    print('corrupt variables caught => ' + i)
+                    mend(i, 'w')
 
             # If there is an error reading, this will catch it
             if not overwrite_summary(variables, variables_replaced):
@@ -638,8 +647,11 @@ def read_config(CONFIG):
     except FileNotFoundError:
         print(bcolors.RED + "NO CONFIG FILE FOUND" + bcolors.RESET) 
         create_config("Would you like to create one?")
+    try:
+        return (USE_CONFIG, OLD_IP, NEW_IP, SAMESITE, WARN, USE_GETCH, CROSS_ORIGIN)
+    except UnboundLocalError:
+        read_config(CONFIG)
 
-    return (USE_CONFIG, OLD_IP, NEW_IP, SAMESITE, WARN, USE_GETCH, CROSS_ORIGIN)
        
 
 # Initialize settings from config file
@@ -647,7 +659,7 @@ def init_settings():
     """if not read_config(CONFIG):
         return False """
     settings = read_config(CONFIG)
-    if settings == False:
+    if settings == False or settings == None:
         return False
     if len(settings) == NUM_VARIABLES:
         OPTIONS.use_config = settings[0]
@@ -690,6 +702,7 @@ def overwrite_summary(variables, variables_replaced):
         #print(missing_variables)
         for i in missing_variables:
             mend(i + ':', 'a')
+        init_settings()
     else:
         return True
         
@@ -936,8 +949,10 @@ if __name__ == "__main__":
 
     # First try to read the config file
     #try:
-    if not init_settings():
-        create_config(bcolors.RED + "Could not read " + bcolors.GREEN + CONFIG + bcolors.RESET + " - fix it?")
+    settings = init_settings()
+    while (not settings):
+        settings = init_settings()
+        #create_config(bcolors.RED + "Could not read " + bcolors.GREEN + CONFIG + bcolors.RESET + " - fix it?")
     #except:
     print(bcolors.GREEN + "OK" + bcolors.RESET)
         #create_config(bcolors.RED + "Could not read " + bcolors.GREEN + CONFIG + bcolors.RESET + " - fix it?")
