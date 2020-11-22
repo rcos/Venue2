@@ -293,8 +293,8 @@ export default {
           root.style.setProperty('--course-card-background', '#3c586e');                  //#272727
           root.style.setProperty('--course-card-shadow', 'rgba(159, 195, 212, 0.644)');   //179, 179, 179
           root.style.setProperty('--course-card-text', '#ffffff');
-          root.style.setProperty('--course-number-background', 'rgba(0, 0, 0, 0.86)');
-          root.style.setProperty('--course-number-text', '#C1EDFF');
+          root.style.setProperty('--course-number-background', '#C1EDFF');
+          root.style.setProperty('--course-number-text', 'rgba(0, 0, 0, 0.86)');
 
           // Dark mode palette - settings
           root.style.setProperty('--settings-logout-button', 'rgba(110, 148, 186, 1)');   
@@ -359,10 +359,11 @@ export default {
           root.style.setProperty('--upcoming-pill', '#0078c2');
           root.style.setProperty('--upcoming-pill-shadow', 'rgba(109, 109, 109, 0.644)');
           root.style.setProperty('--foreground-pill', '#f2f8ff'); //#f5f5f5
+          root.style.setProperty('--foreground-pill-text', 'white'); //#f5f5f5
           root.style.setProperty('--foreground-pill-shadow', 'rgba(109, 109, 109, 0.644)');
           root.style.setProperty('--date-and-percent', 'white');
-          root.style.setProperty('--course-pill-shadow', 'rgba(71, 115, 168, 0.644)');  //109, 109, 109
-          root.style.setProperty('--course-pill-hover', 'rgba(116, 154, 219, 0.644)');  //160, 160, 160
+          root.style.setProperty('--course-pill-shadow', 'rgba(109, 109, 109, 0.644)');  //109, 109, 109
+          root.style.setProperty('--course-pill-hover', 'rgba(109, 109, 109, 0.644)');  //160, 160, 160
 
           // Lecture pills con't - these live in LectureCard.vue
           root.style.setProperty('--lecture-live', '#04852F');
