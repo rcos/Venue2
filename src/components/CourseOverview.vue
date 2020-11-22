@@ -12,7 +12,9 @@
       <div class="col-md-5">
         <div class="form-group">
           <div v-for="(instructor, i) in instructors" :key="i">
-            <div class="form-control">{{instructor.first_name}} {{instructor.last_name}}</div>
+            <div class="form-control">{{instructor.first_name}} {{instructor.last_name}} 
+            <!-- <a href="mailto: wangx45@rpi.edu"><img src="https://img.icons8.com/fluent-systems-regular/24/000000/send-mass-email.png"/></a> -->
+            </div>
           </div>
         </div>
       </div>
@@ -25,7 +27,7 @@
       </div>
       <div class="col-md-5">
         <div class="form-group">
-          <input class="form-control" placeholder="Monday 2:00 PM" readonly>
+          <div class="form-control">Monday 2:00 PM</div>
         </div>
       </div>
     </div><br>
@@ -37,13 +39,8 @@
       </div>
       <div class="col-md-5">
         <div class="form-group">
-          <input class="form-control" type="url" v-model="edited_course_url" :placeholder="course.meetingURL" rows=5 readonly>
-        </div>
-      </div>
-      <div class="col-md-1">
-        <div class="form-group">
-          <a href="https://github.com/rcos/Venue2" target="_blank">
-          <img src="https://img.icons8.com/fluent-systems-regular/24/000000/external-link.png"/>
+          <a :href="course.meetingURL" target="_blank">
+          <div class="form-control"> {{course.meetingURL}} </div>
           </a>
         </div>
       </div>
@@ -56,13 +53,9 @@
       </div>
       <div class="col-md-5">
         <div class="form-group">
-          <input class="form-control" type="url" placeholder="Course Syllabus URL" rows=5 readonly> 
-        </div>
-      </div>
-      <div class="col-md-1">
-        <div class="form-group">
-          <a href="https://github.com/rcos/Venue2" target="_blank">
-          <img src="https://img.icons8.com/fluent-systems-regular/24/000000/external-link.png"/>
+          <!-- Replace with course syllabus PDF link -->
+          <a href="https://www.unl.edu/gradstudies/current/teaching/Syllabus_Sample.pdf" target="_blank">
+          <div class="form-control">Course Syllabus PDF</div>
           </a>
         </div>
       </div>
