@@ -92,7 +92,7 @@
         <!-- Playback video adder -->
         <LectureUploadModal ref="uploadmodal" v-if="allow_playback_submissions" :lecture="lecture" :update_lecture="false" :shown="modal_open" @openstatus="handleModalChange"/>
         <p class="error_msg" v-if="input_error_message!=''">{{input_error_message}}</p>
-        <button class="btn btn-primary create-lecture-btn" :tabindex="(modal_open ? '-1' : '0')">Create Lecture</button>
+        <button class="btn btn-primary create-lecture-btn" :tabindex="(modal_open ? '-1' : '0')" @click="sendNotification">Create Lecture</button>
       </div>
     </form>
   </div>
@@ -102,6 +102,7 @@
 import LectureAPI from "@/services/LectureAPI.js";
 import CourseAPI from "@/services/CourseAPI.js";
 import SectionAPI from "@/services/SectionAPI.js";
+import NotificationAPI from "@/services/NotificationAPI.js"
 import PlaybackPollAPI from "@/services/PlaybackPollAPI.js";
 import Sections from "@/components/Sections";
 import QRCode from "qrcode";
@@ -127,6 +128,7 @@ export default {
   },
   data() {
     return {
+      notification: {},
       course: {},
       lecture: {},
       lecture_sections: [],
@@ -163,6 +165,14 @@ export default {
     }
   },
   methods: {
+    sendNotification(evt) {
+      this.notification.sender = this.$store.state.current_user.email
+      this.notification.created = Date.now()
+      evt.preventDefault()
+      NotificationAPI.addNotification(this.notification).then(res=> {
+        NotificationAPI.sendNotification(res.data._id)
+      })
+    },
     async getCourse() {
       const response = await CourseAPI.getCourse(this.course_id);
       this.course = response.data;

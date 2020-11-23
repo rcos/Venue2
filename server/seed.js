@@ -10,7 +10,7 @@ const db = "mongodb://localhost:27017/Venue2";
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-var n1 = new Notification()
+
 ////////USERS
 var u0 = new User()
 var u1 = new User()
@@ -71,7 +71,6 @@ var p2 = new PlaybackPoll()
 var p3 = new PlaybackPoll()
 var p4 = new PlaybackPoll()
 
-
 ////////USERS
 u0 = {
 	_id: u0._id,
@@ -106,12 +105,6 @@ u2 = {
 	instructor_courses: [],
 	ta_sections: [],
 	student_sections: [s0._id,s1._id,s2._id,s3._id,s4._id]
-}
-n1 = {
-	_id = n1._id,
-	sender: u1._id,
-	type: "lecture",
-	display_message: "${u1.first_name} ${u1.last_name} posted a new {} for test course"
 }
 u3 = {
 	_id: u3._id,

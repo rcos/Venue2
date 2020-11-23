@@ -17,12 +17,12 @@ notificationRoutes.route('/add').post(function (req, res) {
   })
   .catch(() => {
     console.log("<ERROR> Adding notification:", notification);
-    res.status(400).send("unable to save course to database");
+    res.status(400).send("unable to save notification to database");
   });
 })
 
 // get one notification by id
-notificationRoutes.route('/get/').get(function(req, res) {
+notificationRoutes.route('/get').get(function(req, res) {
   let id = req.body.id
   Notification.findById(id, function (err, noti) {
     if (err || noti == null) {
@@ -47,11 +47,20 @@ notificationRoutes.route('/get_notifications').get(function (req, res) {
   });
 });
 
+// send it out
 notificationRoutes.route('/send').post(function(req, res) {
-
+  let noti_id = req.body.id
+  let student_emails = req.body.students.map(a=>a.email);
+  Promise.all([
+    User.updateMany({email: {$in: student_emails}},{$push: {notifications: noti_id}})
+  ]).then(resolved=> {
+    console.log("<SUCCESS> Sent all notifications out");
+    res.json(true);
+  })
 })
 
-notificationRoutes.route('/create_message').post(function(req, res) {
+//delete if viewed and from db
+notificationRoutes.route('delete').delete(function(req, res) {
   
 })
 

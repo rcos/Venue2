@@ -6,8 +6,22 @@ export default {
       notification: notification 
     })
   },
+  
+  getByID() {
+    return API().get('notifications/get', {
+      id: id
+    })
+  },
+
   getNotifications() {
     return API().get('notifications/get_notifications')
+  },
+
+  sendNotification() {
+    return API().post('notifications/send', {
+      id: id,
+      students: students
+    })
   },
 
   createNotification() {

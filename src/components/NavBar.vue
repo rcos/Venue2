@@ -115,7 +115,7 @@
               <router-link v-for="course in instructor_courses" :key="course._id" :to="{name: 'instructor_course_info', params: { id: course._id }}">
                 {{ 'Test person100 posted a new lecture for Data Structures'  }}
               </router-link>
-            </div>
+            </div>  
           </hide-at>
         </div>
 
@@ -275,7 +275,11 @@
 
         const response5 = await NotificationAPI.getNotifications()
         this.notifications = response5.data
-        
+        this.notifications.sort(function(a,b){
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+          return b.created - a.created;
+        });      
         this.loadBreadcrumb()
       },
       loadBreadcrumb() {

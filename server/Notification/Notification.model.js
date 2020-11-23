@@ -11,6 +11,12 @@ let Notification = new Schema({
     type: String,
 		ref: 'User'
   },
+  /*
+  sections: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Section'
+	}],
+  */
   type: String, 
   display_message: String,
   
