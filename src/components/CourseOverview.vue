@@ -174,7 +174,7 @@ hr {
 .vsa-list {
   --vsa-max-width: 750px;
   --vsa-min-width: 100px;
-  --vsa-text-color: #8B9094;
+  --vsa-text-color:#4B5154;
   --vsa-highlight-color: #3E8FCE;
   --vsa-bg-color: #FFFFFF;
   --vsa-border-color: #8F9091;
@@ -185,7 +185,4 @@ hr {
   --vsa-default-icon-size: 0.3;
 }
 
-.vsa-heading {
-  font-size: 0.5rem;
-}
 </style>
