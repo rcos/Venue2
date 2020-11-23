@@ -18,6 +18,7 @@ import LectureAPI from './services/LectureAPI';
 import {getLiveLectures,getUpcomingLectures,getPastLectures} from './services/GlobalFunctions.js'
 import '@/assets/css/venue.css';
 import UserAPI from '@/services/UserAPI.js';
+import PaletteAPI from '@/services/PaletteAPI.js'
 
 export default {
   watch: {
@@ -53,6 +54,7 @@ export default {
     afterUser() {
       UserAPI.getUser(this.$store.state.user.current_user._id).then(res => {
         this.current_user = res.data
+        this.setPalette()
         this.$store.dispatch('updateCurrentUser',{token: this.$store.state.user.token, current_user: res.data})
         if((this.current_user.instructor_courses && this.current_user.instructor_courses.length) || (this.current_user.ta_sections && this.current_user.ta_sections.length)) {
           LectureAPI.getLecturesForUser(this.current_user._id, "with_sections_and_course")
@@ -104,6 +106,9 @@ export default {
     },
     processInstructorEmails(lectures) {
       LectureAPI.processEmailsForLectures(lectures,this.current_user.email)
+    },
+    setPalette() {
+		  PaletteAPI.setPalette(document.documentElement, this.current_user.dark_mode)
     }
   }
   //initially displayNav is false because the first page loaded is the homepage
@@ -116,7 +121,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  min-height: calc(100vh - 2rem - 5px);
+  min-height: calc(100vh - 2rem);
   // min-height: 100%;
 }
 
@@ -125,6 +130,6 @@ main {
   top: 0;
   width: 100%;
   overflow-y: auto;
-  min-height: calc(100vh - 10rem);
+  min-height: calc(100vh - 9.5rem);
 }
 </style>
