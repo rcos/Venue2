@@ -265,7 +265,7 @@ export default {
         } else {
 
           // Dark mode palette - main (general)
-          root.style.setProperty('--main-text-color', '#ffffff');
+          root.style.setProperty('--main-text-color', '#87a7c7');
           root.style.setProperty('--main-background-color', '#1d2324');
           root.style.setProperty('--input-background', '#000000');
           root.style.setProperty('--input-border', '#0e83cc');         //lime
@@ -292,7 +292,7 @@ export default {
           // Course cards
           root.style.setProperty('--course-card-background', '#3c586e');                  //#272727
           root.style.setProperty('--course-card-shadow', 'rgba(159, 195, 212, 0.644)');   //179, 179, 179
-          root.style.setProperty('--course-card-text', '#ffffff');
+          root.style.setProperty('--course-card-text', '#87a7c7');
           root.style.setProperty('--course-number-background', '#C1EDFF');
           root.style.setProperty('--course-number-text', 'rgba(0, 0, 0, 0.86)');
 
@@ -358,8 +358,8 @@ export default {
           root.style.setProperty('--green-pill-shadow', 'rgba(78, 205, 76, 0.3)');
           root.style.setProperty('--upcoming-pill', '#0078c2');
           root.style.setProperty('--upcoming-pill-shadow', 'rgba(109, 109, 109, 0.644)');
-          root.style.setProperty('--foreground-pill', '#f2f8ff'); //#f5f5f5
-          root.style.setProperty('--foreground-pill-text', 'white'); //#f5f5f5
+          root.style.setProperty('--foreground-pill', '#87a7c7'); //#f5f5f5
+          root.style.setProperty('--foreground-pill-text', '#87a7c7'); //#f5f5f5
           root.style.setProperty('--foreground-pill-shadow', 'rgba(109, 109, 109, 0.644)');
           root.style.setProperty('--date-and-percent', 'white');
           root.style.setProperty('--course-pill-shadow', 'rgba(109, 109, 109, 0.644)');  //109, 109, 109
