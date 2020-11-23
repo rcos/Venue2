@@ -5,36 +5,36 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Name</label>
+            <label>name</label>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <input type="text" class="form-control" v-model="edited_course_name" :placeholder="course.name"/>
-          </div>
-        </div>
-      </div><br />
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Dept</label>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <input type="text" class="form-control" v-model="edited_course_prefix" :placeholder="course.prefix" rows="5">
+            <input type="text" class="form-control" v-model="course.name">
           </div>
         </div>
       </div><br />
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Number</label>
+            <label>dept</label>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <input class="form-control" v-model="edited_course_suffix" :placeholder="course.suffix" rows="5">
+            <input class="form-control" v-model="course.prefix" rows="5">
+          </div>
+        </div>
+      </div><br />
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>number</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input class="form-control" v-model="course.suffix" rows="5">
           </div>
         </div>
       </div><br />
@@ -53,12 +53,12 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Snooze</label>
+            <label>Snooze Duration (Coming soon)</label>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <select v-model="course.snooze" class="form-control" aria-labelledby="section_select_label">
+            <select v-model="course.snooze" class="form-control" aria-labelledby="section_select_label" disabled>
               <option v-for="(time,i) in ['None','15 Minutes','30 Minutes','45 Minutes','60 Minutes']" :key="i" :value="time">{{time}} </option>
             </select>
           </div>
@@ -68,7 +68,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Lecture Times</label>
+            <label>Lecture Times (Coming soon)</label>
           </div>
         </div>
         <div class="col-md-6">
@@ -79,7 +79,7 @@
             </div>
              <div >
             <router-link :to="{name: 'new_lecture_time', params: { id: course._id}}">
-            <button class="btn btn-primary">Add Time</button>
+              <button class="btn btn-primary" disabled>Add Time</button>
             </router-link>
           </div>
         </div>
@@ -99,7 +99,7 @@
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" id="update-course-btn" @click="updateCourse()">Update</button>
+        <button class="btn btn-primary" id="update-course-btn">Update</button>
       </div>
     </form>
     <div class="row">
@@ -144,62 +144,22 @@
   import SectionAPI from '@/services/SectionAPI.js';
   import UserAPI from '@/services/UserAPI.js';
   import Instructors from '@/components/admin/User/Instructors'
-  import MultiSelectDropdown from "@/components/MultiSelectDropdown.vue";
 
   export default {
     name: 'EditCourse',
     components: {
-      Instructors,
-      MultiSelectDropdown
+      Instructors
     },
     data() {
       return {
         course: {},
         instructors: [],
-        course_times: [],
         sections: [],
-        instructors_to_add: "",
-        edited_course_name: "",
-        edited_course_prefix: "",
-        edited_course_suffix:  "",
-        edited_course_url: "",
-        waiting: false
+        instructors_to_add: ""
       }
     },
     created() {
       this.getCurrentCourse()
-    },
-    computed: {
-      sortTimes() {
-        function getIndex(day) {
-          if (day == "Sunday") {return 0;}
-          if (day == "Monday") {return 1;}
-          if (day == "Tuesday") {return 2;}
-          if (day == "Wednesday") {return 3;}
-          if (day == "Thursday") {return 4;}
-          if (day == "Friday") {return 5;}
-          if (day == "Saturday") {return 6;}
-        }
-        function compare(a, b) {
-          let aDay = getIndex(a.day);
-          let bDay = getIndex(b.day);
-          if (aDay < bDay )
-            return -1;
-          if (aDay > bDay)
-            return 1;
-          if (aDay == bDay) {
-             if (a.start_time < b.start_time)
-              return -1;
-            if (a.start_time > b.start_time)
-              return 1;
-          }
-          return 0;
-        }
-        if(this.course.course_times) {
-          return this.course.course_times.sort(compare);
-        }
-        return []
-      }
     },
     methods: {
       closeSections() {
@@ -234,6 +194,12 @@
         const response = await SectionAPI.getSectionsForCourse(this.course._id)
         if(response.data)
           this.sections = response.data
+      },
+      async updateCourse() {
+        let course_id = this.$route.params.id
+        this.course.instructors = this.instructors.map(a=>a.email)
+        const response = await CourseAPI.updateCourse(course_id, this.course)
+        location.reload()
       },
       addInstructorsToCourse() {
         let insts = this.instructors_to_add.split(',')
@@ -309,9 +275,6 @@
 </script>
 
 <style scoped>
-:root {
-  --red-x: ''
-}
 #edit-course {
   padding: 2rem;
   max-width: 80rem;
@@ -320,19 +283,7 @@
 .btn {
   margin: 0.5rem 0.25rem 0rem 0rem;
 }
-.icon-spacer {
-  width: 40px;
-  display: inline-block;
-}
 #update-course-btn {
   margin: 2rem;
-}
-.red-x {
-  filter: var(--red-x);
-  border: 0ch;
-  margin-top:-20px;
-}
-.lecture-remove {
-  margin-left:75px;
 }
 </style>

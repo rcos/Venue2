@@ -1,41 +1,105 @@
 <template>
   <div v-if="course" id="course-overview">
     <h2>{{course.name}}</h2>
-    <div>
-        <label> Instructors </label>
-        <!-- maybe write a function to turn all instructors into one string its ugly rn -->
-        <ul>
-            <li v-for="(instructor, i) in instructors" :key="i">
-                {{instructor.first_name}} {{instructor.last_name}}
-            </li>
-        </ul>
-    </div>
-
-     <div>
-        <label> Lecture Times </label>
-        <!-- there are currently no times because course_settings is still in PR LOL so here are some fake ones -->
-        <ul>
-            <li>Monday 2:00pm</li>
-            <li>Wednesday 3:00pm</li>
-            <li>Thursday 2:00pm</li>
-        </ul>
-    </div>
-
-    <div>
-        <label>Announcements</label><br>
-        <button class="btn btn-primary" @click="new_announcement = true">Add new announcement</button>
-        <div class="announcement-div" v-if="new_announcement">
-            <textarea v-model="message" placeholder="Add announcement here"></textarea>
-            <button class="btn btn-primary" @click="addAnnouncementToCourse">Create</button>
-            <button class="btn btn-primary" @click="new_announcement = false">Cancel</button>
-        </div>
+    <h5>{{course.prefix}} {{course.suffix}}</h5>
+    <br>
+    <div class="row">
+      <div class="col-md-6">
         <div class="form-group">
-            <input v-for="(announcement, i) in course.announcements" :key="i" class="form-control" :value="announcement.message" rows="5" readonly>
+          <label>Instructors</label>
         </div>
-
-
+      </div>
+      <div class="col-md-5">
+        <div class="form-group">
+          <div v-for="(instructor, i) in instructors" :key="i">
+            <div class="form-control">{{instructor.first_name}} {{instructor.last_name}} 
+            <!-- <a href="mailto: wangx45@rpi.edu"><img src="https://img.icons8.com/fluent-systems-regular/24/000000/send-mass-email.png"/></a> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><br>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Lecture Times</label>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="form-group">
+          <div class="form-control">Monday 2:00 PM</div>
+        </div>
+      </div>
+    </div><br>
+    <div class ="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Meeting URL</label>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="form-group">
+          <a :href="course.meetingURL" target="_blank">
+          <div class="form-control"> {{course.meetingURL}} </div>
+          </a>
+        </div>
+      </div>
+    </div><br>
+    <div class ="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Syllabus</label>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="form-group">
+          <!-- Replace with course syllabus PDF link -->
+          <a href="https://www.unl.edu/gradstudies/current/teaching/Syllabus_Sample.pdf" target="_blank">
+          <div class="form-control">Course Syllabus PDF</div>
+          </a>
+        </div>
+      </div>
+    </div><br>
+    <hr>
+    <div>
+      <h4>Announcements</h4>
+      <br>
+      <button class="btn btn-primary" @click="new_announcement = true">Add new announcement</button>
+      <div class="announcement-div" v-if="new_announcement">
+          <textarea v-model="message" placeholder="Add announcement here"></textarea>
+          <button class="btn btn-primary" @click="addAnnouncementToCourse">Create</button>
+          <button class="btn btn-primary" @click="new_announcement = false">Cancel</button>
+      </div>
+      <!-- <div class="form-group">
+        <input v-for="(announcement, i) in course.announcements" :key="i" class="form-control" :value="announcement.message" rows="5" readonly>
+      </div> -->
+      <br>
+      <br>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>November 22, 2020 3:00 PM</label> <!--Replace with posted time-->
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="form-group">
+            <vsa-list>
+              <!-- Add v-for to loop through announcements  -->
+              <vsa-item>
+                <vsa-heading>
+                  Announcement Title
+                </vsa-heading>
+                <vsa-content>
+                  Announcement content: Midst fifth divide can't evening, was days, divide. And let. One doesn't hath green set likeness let called beginning him spirit they're fifth be. Midst fill darkness have waters Had he i. Replenish morning and beginning him. You'll herb image over. Wherein darkness brought brought day let, one gathered have wherein thing you're shall all.
+                </vsa-content>
+              </vsa-item>
+            </vsa-list>
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
     </div>
-
   </div>
 </template>
 
@@ -43,11 +107,24 @@
   import UserAPI from '@/services/UserAPI.js';
   import CourseAPI from '@/services/CourseAPI.js';
   import Instructors from '@/components/admin/User/Instructors'
+  import {
+    VsaList,
+    VsaItem,
+    VsaHeading,
+    VsaContent,
+    VsaIcon
+    } from 'vue-simple-accordion';
+  import 'vue-simple-accordion/dist/vue-simple-accordion.css';
 
   export default {
     name: 'CourseOverview',
     components: {
-        Instructors
+      Instructors,
+      VsaList,
+      VsaItem,
+      VsaHeading,
+      VsaContent,
+      VsaIcon
     },
     props: {
     },
@@ -78,14 +155,37 @@
             CourseAPI.addAnnouncement(this.course_id, this.message).then(res => {
               location.reload()
             })
-        }
+        },
+      },
     }
-  }
 </script>
 
 <style scoped>
 
 .form-group {
 	margin-top: 1rem;
+}
+
+hr {
+    border-top: 2px solid #3E8FCE;
+    width: 95%;
+}
+
+.vsa-list {
+  --vsa-max-width: 750px;
+  --vsa-min-width: 100px;
+  --vsa-text-color: #8B9094;
+  --vsa-highlight-color: #3E8FCE;
+  --vsa-bg-color: #FFFFFF;
+  --vsa-border-color: #8F9091;
+  --vsa-border-width: 1px;
+  --vsa-border-style: solid;
+  --vsa-heading-padding: 0 0.5rem;
+  --vsa-content-padding: 0.5rem 0.5rem;
+  --vsa-default-icon-size: 0.3;
+}
+
+.vsa-heading {
+  font-size: 0.5rem;
 }
 </style>
