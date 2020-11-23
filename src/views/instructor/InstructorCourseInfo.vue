@@ -136,8 +136,8 @@ export default {
       is_ta: false,
       is_student: false,
       selected_lectures: [],
-      selected_timeline: []
-      show_copymsg: false
+      selected_timeline: [],
+      show_copymsg: false,
     }
   },
   created() {
@@ -367,10 +367,12 @@ export default {
     onSectionChange(data) {
       var lectures = [];
       for (let sec of data) {
-        let sl = this.sorted_lectures[sec._id].lectures;
-        for (let lect of sl){
-          if (!lectures.find(x => x._id === lect._id)){
-            lectures.push(lect);
+        if (this.sorted_lectures.hasOwnProperty(sec._id)) {
+          let sl = this.sorted_lectures[sec._id].lectures;
+          for (let lect of sl) {
+            if (!lectures.find(x => x._id === lect._id)) {
+              lectures.push(lect);
+            }
           }
         }
       }
