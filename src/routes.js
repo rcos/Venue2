@@ -26,6 +26,7 @@ import Dashboard from './views/Dashboard.vue';
 import CourseList from './components/CourseList.vue';
 import CourseInfo from './views/CourseInfo.vue';
 import CourseOverview from '@/components/CourseOverview.vue';
+import NewLectureTime from '@/components/NewLectureTime.vue';
 import NewEvent from './views/NewEvent.vue';
 import EventInfo from './views/EventInfo.vue';
 import LecturePlayback from './views/LecturePlayback.vue';
