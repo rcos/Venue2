@@ -391,8 +391,8 @@
 
   .dropdown-content a {
     visibility: hidden;
-    color: var(--nav-bar-text);
-    background-color: var(--nav-bar-background);
+    color: var(--main-text-color);
+    background-color: var(--main-background-color);
     font-weight: bold;
     font-size: 0rem;
     text-decoration: none;  

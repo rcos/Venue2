@@ -333,7 +333,7 @@ export default {
           // Dark mode Palette - Nav bar 
           root.style.setProperty('--nav-bar-text', '#034066');                              //#5e2f2f
           root.style.setProperty('--nav-bar-background', '#92AABA');                        //#a16262
-          root.style.setProperty('--nav-bar-separator', 'rgba(7, 58, 89, 0.20)');           //7, 58, 89, 0.35
+          root.style.setProperty('--nav-bar-separator', 'rgba(80, 88, 100, 0.50)');           //7, 58, 89, 0.35
           root.style.setProperty('--nav-bar-selected-text', '#308CDE');                     //#a12725
           root.style.setProperty('--nav-bar-box-shadow', 'rgba(78, 120, 148, 0.744)');
           root.style.setProperty('--nav-bar-link-text', '#9fbed4');                         //#c9abab
