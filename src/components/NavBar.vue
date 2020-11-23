@@ -6,7 +6,7 @@
       <!-- Nav Links -->
       <div id="venue-nav-links">
         <router-link id="nav-logo" :to="{name: 'dashboard'}" role="link" aria-label="Dashboard">
-          <img src="@/assets/hw/venue-bat.svg" width="30" height="30" class="d-inline-block align-top logo-color" alt="Venue Logo" aria-label="Venue Logo">
+          <img src="@/assets/venue-logo.svg" width="30" height="30" class="d-inline-block align-top logo-color" alt="Venue Logo" aria-label="Venue Logo">
         </router-link>
         <!-- Dashboard Link -->
         <div class="venue-nav-link-container">
@@ -15,6 +15,12 @@
           </router-link>
           <div :class="'active-link-underline ' + (is_dashboard()?'active':'')"></div>
         </div>
+        <div class="venue-nav-link-container">
+          <router-link class="venue-nav-link" :class="{'active-link':is_calendar()}" :to="{name: 'calendar'}">
+            Calendar
+          </router-link>
+          <div :class="'active-link-underline ' + (is_calendar()?'active':'')"></div>
+        </div>
         <!-- Courses Link -->
         <div class="venue-nav-link-container" id="instructor-course-dropdown" v-if="instructor_courses.length">
           <a data-toggle="collapse" href="#instructor-collapse" class="venue-nav-link" :class="{'active-link':is_instructor_course_info()}" style="cursor:pointer;">
@@ -22,7 +28,7 @@
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
-              <router-link v-for="course in instructor_courses" :key="course._id" :to="{name: 'course_info', params: { id: course._id }}">
+              <router-link v-for="course in instructor_courses" :key="course._id" :to="{name: 'instructor_course_info', params: { id: course._id }}">
                 {{ course.name }}
               </router-link>
             </div>
@@ -41,7 +47,7 @@
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
-              <router-link v-for="section in ta_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
+              <router-link v-for="section in ta_sections" :key="section._id" :to="{name: 'ta_section_info', params: { id: section._id }}">
                 {{ section.course.name }} {{section.name}}
               </router-link>
             </div>
@@ -54,7 +60,7 @@
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
-              <router-link v-for="section in student_sections" :key="section._id" :to="{name: 'course_info', params: { id: section._id }}">
+              <router-link v-for="section in student_sections" :key="section._id" :to="{name: 'student_section_info', params: { id: section._id }}">
                 {{ section.course.name }} {{ section.name }}
               </router-link>
             </div>
@@ -64,7 +70,7 @@
         <!-- ADMIN -->
         <div class="venue-nav-link-container" id="admin-dropdown" v-if="current_user.is_admin">
           <a data-toggle="collapse" href="#admin-collapse" class="venue-nav-link" style="cursor:pointer;">
-            🍫 <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+            🔑 <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
@@ -87,13 +93,13 @@
         <div class="venue-nav-link-container">
           <router-link class="venue-nav-link" :class="{'active-link':is_settings()}" :to="{name: 'settings'}">
             <show-at breakpoint="large">
-              <p aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }} <img src="@/assets/hw/icons8-spider-web.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon"></p>
+              <p aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }}<img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon"></p>
             </show-at>
             <show-at breakpoint="medium">
-              <p aria-label="User Name">{{ current_user.first_name }} <img src="@/assets/hw/icons8-spider-web.svg" width="20" height="20" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon"></p>
+              <p aria-label="User Name">{{ current_user.first_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon"></p>
             </show-at>
             <show-at breakpoint="small">
-              <img src="@/assets/hw/icons8-spider-web.svg" width="20" height="20" :style="{marginRight: '6rem'}" class="d-inline-block align-top settings" alt="Settings Icon" aria-label="Settings Icon">
+              <img src="@/assets/settings.svg" width="20" height="20" :style="{marginRight: '6rem'}" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon">
             </show-at>
           </router-link>
           <div :class="'active-link-underline ' + (is_settings()?'active':'')"></div>
@@ -106,7 +112,7 @@
         <div class="collapse" id="instructor-collapse" data-parent="#all-collapse">
           <ul class="mobile-course-list">
             <li class="mobile-course-link" href="#instructor-collapse" data-toggle="collapse" v-for="course in instructor_courses" :key="course._id">
-              <router-link :to="{name: 'course_info', params: { id: course._id }}">
+              <router-link :to="{name: 'instructor_course_info', params: { id: course._id }}">
                 <p class="mobile-course-link-name">{{ course.name }}</p>
               </router-link>
             </li>
@@ -115,7 +121,7 @@
         <div class="collapse" id="ta-collapse" data-parent="#all-collapse">
           <ul class="mobile-course-list">
             <li class="mobile-course-link" href="#ta-collapse" data-toggle="collapse" v-for="section in ta_sections" :key="section._id">
-              <router-link :to="{name: 'course_info', params: { id: section._id }}">
+              <router-link :to="{name: 'ta_section_info', params: { id: section._id }}">
                 <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
               </router-link>
             </li>
@@ -124,7 +130,7 @@
         <div class="collapse" id="student-collapse" data-parent="#all-collapse">
           <ul class="mobile-course-list">
             <li class="mobile-course-link" href="#student-collapse" data-toggle="collapse" v-for="section in student_sections" :key="section._id">
-              <router-link :to="{name: 'course_info', params: { id: section._id }}">
+              <router-link :to="{name: 'student_section_info', params: { id: section._id }}">
                 <p class="mobile-course-link-name">{{ section.course.name }} {{ section.name }}</p>
               </router-link>
             </li>
@@ -156,20 +162,26 @@
         </div>
       </div>
     </show-at>
-    <!-- Breadcrumbs -->
+    <!-- TODO Breadcrumbs --> 
     <div id="breadcrumb-container" v-if="showBreadcrumb()">
       <router-link :to="{name: 'dashboard'}">
         Venue
       </router-link>
-      <div v-if="current_section" class="crumb">
+      <div v-if="current_ta_section" class="crumb">
         <img class="rotate-arrow" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
-        <router-link :to="{name: 'course_info', params: { id: current_section._id }}">
-          {{current_section.course.name}}
+        <router-link :to="{name: 'ta_section_info', params: { id: current_ta_section._id }}">
+          {{current_ta_section.course.name}}
+        </router-link>
+      </div>
+      <div v-else-if="current_student_section" class="crumb">
+        <img class="rotate-arrow" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+        <router-link :to="{name: 'student_section_info', params: { id: current_student_section._id }}">
+          {{current_student_section.course.name}}
         </router-link>
       </div>
       <div v-else-if="current_course" class="crumb">
         <img class="rotate-arrow" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
-        <router-link :to="{name: 'course_info', params: { id: current_course._id }}">
+        <router-link :to="{name: 'instructor_course_info', params: { id: current_course._id }}">
           {{current_course.name}}
         </router-link>
       </div>
@@ -200,7 +212,7 @@
         this.current_course = null,
         this.current_section = null,
         this.current_lecture = null,
-        this.loadBreadcrumb()
+        this.loadData()
       }
     },
     components: {
@@ -216,18 +228,21 @@
         user_lectures: [],
         current_course: null,
         current_section: null,
+        current_ta_section: null,
+        current_student_section: null,
         current_lecture: null
       }
     },
     created() {
-      this.current_user = this.$store.state.user.current_user
       this.loadData()
     },
     methods: {
       showBreadcrumb() {
-        return !(this.$route.name === 'dashboard' || this.$route.name === 'settings' || this.$route.name === 'lecture_playback')
+        return !(['dashboard','settings','statistics','calendar'].includes(this.$route.name))
       },
       async loadData() {
+        this.current_user = this.$store.state.user.current_user
+
         const response1 = await CourseAPI.getInstructorCourses()
         this.instructor_courses = response1.data
 
@@ -246,15 +261,17 @@
         this.current_lecture = this.user_lectures.find(a=>this.$route.params.lecture_id && a && a._id == this.$route.params.lecture_id)
         let sections = this.ta_sections.concat(this.student_sections)
 
-        if(this.$route.name == 'new_lecture') {
+        if(this.$route.name == 'new_lecture' || this.$route.name == 'new_lecture') {
           this.current_course = this.instructor_courses.find(a=>this.$route.params.course_id && a._id == this.$route.params.course_id)
         } else if(this.current_lecture) {
-          this.current_section = this.current_lecture.sections.find(section => sections.map(a => a._id).includes(section._id))
+          this.current_ta_section = this.current_lecture.sections.find(section => this.ta_sections.map(a => a._id).includes(section._id))
+          this.current_student_section = this.current_lecture.sections.find(section => this.student_sections.map(a => a._id).includes(section._id))
           if(!this.current_section) {
             this.current_course = this.current_lecture.sections[0].course
           }
         } else {
-          this.current_section = sections.find(section => section._id == this.$route.params.id)
+          this.current_ta_section = this.ta_sections.find(section => section._id == this.$route.params.id)
+          this.current_student_section = this.student_sections.find(section => section._id == this.$route.params.id)
           if(!this.current_section) {
             this.current_course = this.instructor_courses.find(course => course._id == this.$route.params.id)
           }
@@ -265,13 +282,13 @@
         return this.$route.name === 'dashboard'
       },
       is_instructor_course_info() {
-        return this.$route.name === 'course_info' && this.instructor_courses.some(a => a._id == this.$route.params.id)
+        return this.$route.name === 'instructor_course_info' && this.instructor_courses.some(a => a._id == this.$route.params.id)
       },
       is_ta_section_info() {
-        return this.$route.name === 'course_info' && this.ta_sections.some(a => a._id == this.$route.params.id)
+        return this.$route.name === 'ta_section_info' && this.ta_sections.some(a => a._id == this.$route.params.id)
       },
       is_student_section_info() {
-        return this.$route.name === 'course_info' && this.student_sections.some(a => a._id == this.$route.params.id)
+        return this.$route.name === 'student_section_info' && this.student_sections.some(a => a._id == this.$route.params.id)
       },
       is_lecture_info() {
         return this.$route.name === 'lecture_info'
@@ -282,6 +299,9 @@
       is_settings() {
         return this.$route.name === 'settings'
       },
+      is_calendar() {
+        return this.$route.name === 'calendar'
+      }
     }
   }
 </script>
@@ -300,10 +320,6 @@
     --nav-bar-hover-text: white;
     --nav-bar-hover-top-shadow: rgba(85, 85, 85, 0.644);
     --nav-bar-hover-bottom-shadow: rgba(179, 179, 179, 0.644);
-  }
-
-  .svg-color {
-    filter: var(--widgets-color);
   }
 
   .logo-color {
@@ -331,10 +347,6 @@
     text-align: left;
     padding-left: 4rem;
     font-size: 0.9rem;
-  }
-
-  .svg-color {
-    filter: var(--widgets-color);
   }
 
   .crumb {
@@ -379,8 +391,8 @@
 
   .dropdown-content a {
     visibility: hidden;
-    color: var(--nav-bar-text);
-    background-color: var(--nav-bar-background);
+    color: var(--main-text-color);
+    background-color: var(--main-background-color);
     font-weight: bold;
     font-size: 0rem;
     text-decoration: none;  
@@ -423,7 +435,7 @@
     visibility: visible;
     font-size: 1rem;
     max-height: 3rem;
-    width: 15rem;
+    width: 20rem;
     padding: 12px 16px;
     transform: rotateY(0deg);
     transition: font-size 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0s cubic-bezier(0.19, 1, 0.22, 1);
@@ -553,7 +565,7 @@
     cursor: pointer;
     margin-top: 0.1rem;
     margin-left: 0.25rem;
-    margin-right: 1.5rem;
+    margin-right: 0;
     filter: var(--widgets-color);
   }
 

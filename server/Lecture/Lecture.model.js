@@ -7,7 +7,6 @@ let Attachment = require('../Attachments/Attachment.model');
 
 //Define collection and schema for Lecture
 let Lecture = new Schema({
-	// TODO: Add Boolean that determines whether or not a lecture is live or a lecture is playback
 	title: String,
 	sections: [{
 		type: mongoose.Schema.Types.ObjectId,
