@@ -65,7 +65,7 @@ export default {
           root.style.setProperty('--settings-small-div', 'rgba(0, 0, 0, 0.64)');
           root.style.setProperty('--settings-logout-hover-text', 'white');
           root.style.setProperty('--settings-text', '#045c91');                            // original: #517B94
-          root.style.setProperty('--settings-switch-on', '#42f593');
+          root.style.setProperty('--settings-switch-on', '#04852F');
           root.style.setProperty('--settings-switch-off', '#f55442');
           root.style.setProperty('--settings-switch-ball', 'white');
 
@@ -255,8 +255,8 @@ export default {
           root.style.setProperty('--stats-panel-shadow', 'rgba(109, 109, 109, 0.644)');
 
           // ToggleSwitch.vue
-          root.style.setProperty('--toggle-switch-on-background', '#bfffc6');
-          root.style.setProperty('--toggle-switch-on-ball', '#04dd74');
+          root.style.setProperty('--toggle-switch-on-background', '#04dd74');
+          root.style.setProperty('--toggle-switch-on-ball', '#04852F');
           root.style.setProperty('--toggle-switch-off-background', '#ff8787');
           root.style.setProperty('--toggle-switch-off-ball', '#e95454');
           root.style.setProperty('--toggle-switch-disabled-background', '#7E7E7E');
@@ -265,7 +265,7 @@ export default {
         } else {
 
           // Dark mode palette - main (general)
-          root.style.setProperty('--main-text-color', '#ffffff');
+          root.style.setProperty('--main-text-color', '#87a7c7');
           root.style.setProperty('--main-background-color', '#1d2324');
           root.style.setProperty('--input-background', '#000000');
           root.style.setProperty('--input-border', '#0e83cc');         //lime
@@ -292,9 +292,9 @@ export default {
           // Course cards
           root.style.setProperty('--course-card-background', '#3c586e');                  //#272727
           root.style.setProperty('--course-card-shadow', 'rgba(159, 195, 212, 0.644)');   //179, 179, 179
-          root.style.setProperty('--course-card-text', '#ffffff');
-          root.style.setProperty('--course-number-background', 'rgba(0, 0, 0, 0.86)');
-          root.style.setProperty('--course-number-text', '#C1EDFF');
+          root.style.setProperty('--course-card-text', '#87a7c7');
+          root.style.setProperty('--course-number-background', '#C1EDFF');
+          root.style.setProperty('--course-number-text', 'rgba(0, 0, 0, 0.86)');
 
           // Dark mode palette - settings
           root.style.setProperty('--settings-logout-button', 'rgba(110, 148, 186, 1)');   
@@ -302,7 +302,7 @@ export default {
           root.style.setProperty('--settings-small-div', 'rgba(216, 216, 216, 0.64)');
           root.style.setProperty('--settings-logout-hover-text', '#001324');              //#272727
           root.style.setProperty('--settings-text', '#2991C3');                           //#cccccc
-          root.style.setProperty('--settings-switch-on', '#42f593');
+          root.style.setProperty('--settings-switch-on', '#04852F');
           root.style.setProperty('--settings-switch-off', '#f55442');
           root.style.setProperty('--settings-switch-ball', 'white');
 
@@ -333,7 +333,7 @@ export default {
           // Dark mode Palette - Nav bar 
           root.style.setProperty('--nav-bar-text', '#034066');                              //#5e2f2f
           root.style.setProperty('--nav-bar-background', '#92AABA');                        //#a16262
-          root.style.setProperty('--nav-bar-separator', 'rgba(7, 58, 89, 0.20)');           //7, 58, 89, 0.35
+          root.style.setProperty('--nav-bar-separator', 'rgba(80, 88, 100, 0.50)');           //7, 58, 89, 0.35
           root.style.setProperty('--nav-bar-selected-text', '#308CDE');                     //#a12725
           root.style.setProperty('--nav-bar-box-shadow', 'rgba(78, 120, 148, 0.744)');
           root.style.setProperty('--nav-bar-link-text', '#9fbed4');                         //#c9abab
@@ -358,11 +358,12 @@ export default {
           root.style.setProperty('--green-pill-shadow', 'rgba(78, 205, 76, 0.3)');
           root.style.setProperty('--upcoming-pill', '#0078c2');
           root.style.setProperty('--upcoming-pill-shadow', 'rgba(109, 109, 109, 0.644)');
-          root.style.setProperty('--foreground-pill', '#f2f8ff'); //#f5f5f5
+          root.style.setProperty('--foreground-pill', '#87a7c7'); //#f5f5f5
+          root.style.setProperty('--foreground-pill-text', '#87a7c7'); //#f5f5f5
           root.style.setProperty('--foreground-pill-shadow', 'rgba(109, 109, 109, 0.644)');
           root.style.setProperty('--date-and-percent', 'white');
-          root.style.setProperty('--course-pill-shadow', 'rgba(71, 115, 168, 0.644)');  //109, 109, 109
-          root.style.setProperty('--course-pill-hover', 'rgba(116, 154, 219, 0.644)');  //160, 160, 160
+          root.style.setProperty('--course-pill-shadow', 'rgba(109, 109, 109, 0.644)');  //109, 109, 109
+          root.style.setProperty('--course-pill-hover', 'rgba(109, 109, 109, 0.644)');  //160, 160, 160
 
           // Lecture pills con't - these live in LectureCard.vue
           root.style.setProperty('--lecture-live', '#04852F');
@@ -474,8 +475,8 @@ export default {
           root.style.setProperty('--stats-panel-shadow', 'rgba(109, 109, 109, 0.644)');
 
           // ToggleSwitch.vue
-          root.style.setProperty('--toggle-switch-on-background', '#bfffc6');
-          root.style.setProperty('--toggle-switch-on-ball', '#04dd74');
+          root.style.setProperty('--toggle-switch-on-background', '#04dd74');
+          root.style.setProperty('--toggle-switch-on-ball', '#04852F');
           root.style.setProperty('--toggle-switch-off-background', '#ff8787');
           root.style.setProperty('--toggle-switch-off-ball', '#e95454');
           root.style.setProperty('--toggle-switch-disabled-background', '#7E7E7E');
