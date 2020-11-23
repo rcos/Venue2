@@ -149,7 +149,7 @@
     padding: 2rem;
     margin: 0;
     text-align: left;
-    background-color: var(--course-card-background);
+    background-color: var(--main-background-color);
     color: var(--course-card-text);
     box-shadow: 0px 3px 3px 0px var(--course-card-shadow);
     width: 100%;
@@ -162,7 +162,7 @@
     width: 100%;
     margin: 0;
     text-align: center;
-    background-color: var(--course-card-background);
+    background-color: var(--main-background-color);
     color: var(--course-card-text);
     box-shadow: 0px 3px 3px 0px var(--course-card-shadow);
   }
