@@ -23,10 +23,6 @@
         type: Function,
         default: (x) => {}
       },
-      is_main: {
-        type: Boolean,
-        default: false
-      }
     },
     created() {
       this.is_main = false;
@@ -38,6 +34,7 @@
     },
     data(){
       return {
+        is_main: false
       }
     },
     methods: {
@@ -48,7 +45,7 @@
         } else {
           this.$emit("reveal_all")
         }
-        this.forceUpdate();
+        this.$forceUpdate();
       }
     }
   }

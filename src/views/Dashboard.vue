@@ -41,10 +41,6 @@
   export default {
     name: 'Dashboard',
     props: {
-      main: {
-        type: String,
-        default: "None"
-      }
     },
     computed: {
       ...authComputed
@@ -80,10 +76,12 @@
         recent_lectures_loaded: Boolean,
         playback_lectures_loaded: Boolean,
         section_1: String,
-        section_2: String
+        section_2: String,
+        main: String,
       }
     },
     created() {
+      this.main = "None";
       this.STATIC_COURSE_COLORS = ['Aquamarine', 'Tomato', 'LightSalmon', 'Cyan', 'MediumTurquoise', 'PaleGreen', 'pink', 'violet', ]
       this.courses_loaded = 0
 
