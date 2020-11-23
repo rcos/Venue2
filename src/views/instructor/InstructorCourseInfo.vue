@@ -396,6 +396,12 @@ export default {
       }
       this.selected_timeline = timeline;
       this.forceUpdate();
+    },
+    copyMsg(){
+      this.show_copymsg = 1;
+      setTimeout(() => {
+        this.show_copymsg = 0;
+      }, 1000);
     }
   }
 }
