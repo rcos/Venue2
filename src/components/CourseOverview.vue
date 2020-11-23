@@ -27,7 +27,7 @@
       </div>
       <div class="col-md-5">
         <div class="form-group">
-          <div class="form-control">Monday 2:00 PM</div>
+          <div class="form-control">Monday 2:00 PM - 4:00 PM</div>
         </div>
       </div>
     </div><br>
@@ -66,7 +66,9 @@
       <br>
       <button class="btn btn-primary" @click="new_announcement = true">Add new announcement</button>
       <div class="announcement-div" v-if="new_announcement">
-          <textarea v-model="message" placeholder="Add announcement here"></textarea>
+          <br>
+          <textarea v-model="title" placeholder="Announcement Title" rows=1 cols=80></textarea>
+          <textarea v-model="message" placeholder="Add announcement here" cols=80></textarea><br>
           <button class="btn btn-primary" @click="addAnnouncementToCourse">Create</button>
           <button class="btn btn-primary" @click="new_announcement = false">Cancel</button>
       </div>
@@ -87,10 +89,10 @@
               <!-- Add v-for to loop through announcements  -->
               <vsa-item>
                 <vsa-heading>
-                  Announcement Title
+                  Homework 4 Deadline Extended
                 </vsa-heading>
                 <vsa-content>
-                  Announcement content: Midst fifth divide can't evening, was days, divide. And let. One doesn't hath green set likeness let called beginning him spirit they're fifth be. Midst fill darkness have waters Had he i. Replenish morning and beginning him. You'll herb image over. Wherein darkness brought brought day let, one gathered have wherein thing you're shall all.
+                  Due to changes in our schedule, the deadline for Homework 4 has been extended to next Tuesday, November 30th. Please let me know if you have any questions.
                 </vsa-content>
               </vsa-item>
             </vsa-list>
