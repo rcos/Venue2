@@ -391,8 +391,8 @@
 
   .dropdown-content a {
     visibility: hidden;
-    color: var(--nav-bar-text);
-    background-color: var(--nav-bar-background);
+    color: var(--main-text-color);
+    background-color: var(--main-background-color);
     font-weight: bold;
     font-size: 0rem;
     text-decoration: none;  
@@ -435,7 +435,7 @@
     visibility: visible;
     font-size: 1rem;
     max-height: 3rem;
-    width: 15rem;
+    width: 20rem;
     padding: 12px 16px;
     transform: rotateY(0deg);
     transition: font-size 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0s cubic-bezier(0.19, 1, 0.22, 1);
@@ -565,7 +565,7 @@
     cursor: pointer;
     margin-top: 0.1rem;
     margin-left: 0.25rem;
-    margin-right: 1.5rem;
+    margin-right: 0;
     filter: var(--widgets-color);
   }
 
