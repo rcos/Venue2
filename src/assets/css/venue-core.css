@@ -272,7 +272,7 @@ h1,h2,h4 {
 }
 
 .live-border {
-  margin: 0.25rem;
+  margin: 0.1rem;
   border-width: 0.25rem;
   border-style: dashed;
   border-radius: 1.5rem;
@@ -280,8 +280,8 @@ h1,h2,h4 {
 }
 
 .live-border:hover {
-  margin: 0.4rem;
   border-width: 0.1rem;
+  padding: 0.4rem;
   border-style: dashed;
   border-radius: 1.5rem;
   border-color: var(--sync-border);
@@ -296,7 +296,7 @@ h1,h2,h4 {
 }
 
 .playback-border:hover {
-  margin: 0.4rem;
+  padding: 0.4rem;
   border-width: 0.1rem;
   border-style: dotted;
   border-radius: 1.5rem;
