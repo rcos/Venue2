@@ -165,11 +165,12 @@ export default {
 }
 .multiselect-selected-text {
 	padding: 0.25rem 0.5rem;
-	font-size: 0.8rem;
+	font-size: 0.9rem;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	cursor: text;
+	color: black;
 }
 .multiselect-dropdown {
 	max-height: 10rem;
