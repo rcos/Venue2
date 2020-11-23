@@ -46,8 +46,8 @@
   --blue-pill-shadow: rgba(79, 109, 234, 0.3);
   --green-pill: #04852f;
   --green-pill-shadow: rgba(78, 205, 76, 0.3);
-  --foreground-pill: #f5f5f5;
-  --foreground-pill-text: #000000;
+  /* --foreground-pill: #f5f5f5; */
+  /* --foreground-pill-text: #000000; */
   --foreground-pill-shadow: rgba(109, 109, 109, 0.644);
   --foreground-pill-hover: rgba(54, 54, 54, 0.644);
   --date-and-percent: white;
@@ -116,7 +116,7 @@ h1,h2,h4 {
   box-shadow: 0px 3px 3px 0px var(--course-card-shadow);
   border-radius: 5px;
   margin-right: 2rem;
-  background-color: var(--course-card-background); 
+  background-color: var(--main-background-color); 
   color: var(--course-card-text);
 }
 
@@ -356,10 +356,10 @@ h1,h2,h4 {
   left: 20%;
   bottom: 0;
   padding-left: 1rem;
-  background: var(--foreground-pill);
+  background: var(--main-background-color);
   margin: 0.5rem 0rem;
   border-radius: 0.75rem;
-  color: var(--forgeround-pill-text);
+  color: var(--foreground-pill-text);
   box-shadow: 0px 3px 3px 1px var(--foreground-pill-shadow) inset;
   text-align: left;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
@@ -369,7 +369,7 @@ h1,h2,h4 {
 .instructor-attendance-history-pill:focus .name-area {
   padding-top: 0.8rem;
   border-radius: 1rem;
-  box-shadow: 0px 3px 5px 1px var(--foreground-pill-hover) inset;
+  box-shadow: 0px 3px 5px 1px var(--foreground-pill-shadow) inset;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
@@ -670,13 +670,13 @@ custom-scrollbar::-webkit-scrollbar-thumb {
 .big-button {
   font-size: 1rem;
   font-weight: normal;
-  border: 2px solid var(--big-button-border);
-  color: var(--big-button-text);
+  border: 2px solid var(--main-text-color);
+  color: var(--main-text-color);
   padding: 0px 30px;
   height: 40px;
   line-height: 35px;
   border-radius: 5px;
-  background-color: var(--big-button);
+  background-color: var(--main-background-color);
   box-shadow: 0px 3px 5px var(--big-button-shadow);
   cursor: pointer;
   transition: border 0.25s, box-shadow 0.25s;
@@ -943,6 +943,7 @@ a:hover {
 .btn.btn-secondary:target img {
   filter: var(--widgets-color) invert(1);
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: 0;
 }
 
 .btn.btn-danger:hover,
@@ -974,6 +975,7 @@ input:-webkit-autofill {
 
 .input-group-append {
   padding-left: 20px;
+  z-index: 0;
 }
 
 .form-control {
@@ -998,6 +1000,27 @@ th,td {
 .picker-item {
   color: var(--calendar-border);
   background: var(--calendar-background);
+}
+
+.js-inline-picker:hover,
+.js-inline-picker:active,
+.js-inline-picker:target,
+.js-inline-picker:focus {
+  border: 0px solid var(--main-background-color);
+  outline: none;
+  background: none;
+}
+
+#picker-item {
+  display: none;
+}
+
+.picker-item:hover,
+.picker-item:active {
+  background: var(--nav-bar-hover-background);
+  color: var(--nav-bar-hover-text);
+  box-shadow: 0px 3px 3px 0px var(--nav-bar-hover-top-shadow) inset, 0px -3px 3px 0px var(--nav-bar-hover-bottom-shadow) inset;
+  border-radius: 0.25rem;
 }
 .picker-cell__control,
 .picker-cell__control::before,
@@ -1041,6 +1064,15 @@ th,td {
   -moz-animation: fadeIn cubic-bezier(0.19, 1, 0.22, 1) 0.25s;
   -o-animation: fadeIn cubic-bezier(0.19, 1, 0.22, 1) 0.25s;
   -ms-animation: fadeIn cubic-bezier(0.19, 1, 0.22, 1) 0.25s;
+}
+
+.disable-select{
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none
 }
 
 @keyframes fadeIn {
