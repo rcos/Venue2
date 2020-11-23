@@ -70,9 +70,35 @@
           <button class="btn btn-primary" @click="addAnnouncementToCourse">Create</button>
           <button class="btn btn-primary" @click="new_announcement = false">Cancel</button>
       </div>
-      <div class="form-group">
+      <!-- <div class="form-group">
         <input v-for="(announcement, i) in course.announcements" :key="i" class="form-control" :value="announcement.message" rows="5" readonly>
+      </div> -->
+      <br>
+      <br>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>November 22, 2020 3:00 PM</label> <!--Replace with posted time-->
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="form-group">
+            <vsa-list>
+              <!-- Add v-for to loop through announcements  -->
+              <vsa-item>
+                <vsa-heading>
+                  Announcement Title
+                </vsa-heading>
+                <vsa-content>
+                  Announcement content: Midst fifth divide can't evening, was days, divide. And let. One doesn't hath green set likeness let called beginning him spirit they're fifth be. Midst fill darkness have waters Had he i. Replenish morning and beginning him. You'll herb image over. Wherein darkness brought brought day let, one gathered have wherein thing you're shall all.
+                </vsa-content>
+              </vsa-item>
+            </vsa-list>
+          </div>
+        </div>
       </div>
+      <br>
+      <br>
     </div>
   </div>
 </template>
@@ -81,11 +107,24 @@
   import UserAPI from '@/services/UserAPI.js';
   import CourseAPI from '@/services/CourseAPI.js';
   import Instructors from '@/components/admin/User/Instructors'
+  import {
+    VsaList,
+    VsaItem,
+    VsaHeading,
+    VsaContent,
+    VsaIcon
+    } from 'vue-simple-accordion';
+  import 'vue-simple-accordion/dist/vue-simple-accordion.css';
 
   export default {
     name: 'CourseOverview',
     components: {
-        Instructors
+      Instructors,
+      VsaList,
+      VsaItem,
+      VsaHeading,
+      VsaContent,
+      VsaIcon
     },
     props: {
     },
@@ -116,9 +155,9 @@
             Course.API.addAnnouncement(this.course_id, this.message).then(res => {
               location.reload()
             })
-        }
+        },
+      },
     }
-  }
 </script>
 
 <style scoped>
@@ -130,5 +169,23 @@
 hr {
     border-top: 2px solid #3E8FCE;
     width: 95%;
+}
+
+.vsa-list {
+  --vsa-max-width: 750px;
+  --vsa-min-width: 100px;
+  --vsa-text-color: #8B9094;
+  --vsa-highlight-color: #3E8FCE;
+  --vsa-bg-color: #FFFFFF;
+  --vsa-border-color: #8F9091;
+  --vsa-border-width: 1px;
+  --vsa-border-style: solid;
+  --vsa-heading-padding: 0 0.5rem;
+  --vsa-content-padding: 0.5rem 0.5rem;
+  --vsa-default-icon-size: 0.3;
+}
+
+.vsa-heading {
+  font-size: 0.5rem;
 }
 </style>
