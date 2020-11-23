@@ -564,7 +564,7 @@ export default {
  *** DESCRIPTION: All of these get passed into a filter() css method. --red-x's ***
  ***  essentially passes the image through a red filter, and the blanks pass no ***
  ***  filter. brightness(0) invert(0) is the equivalent of black.               ***
- ***  icons8-edit, settings and all buttons icons will use --widgets-color,     ***
+ ***  venue-edit, settings and all buttons icons will use --widgets-color,     ***
  ***  venue-delete will use --red-x, venue-clock.svg will use --clock-color and       ***
  ***  venue-logo.svg will use --logo-color                                      ***
  ***                                                                            ***

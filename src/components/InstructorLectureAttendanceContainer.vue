@@ -14,7 +14,7 @@
 			</button>
 			<div v-for="(checkin,i) in lecture.checkins" :key="i" class="inline-block">
 				<button v-if="checkin.activation != 'Manual Activation' && checkinIsOpen(checkin)" type="button" class="header-btn btn btn-secondary" @click="showQR(i)">
-					<img class="svg-color" src="@/assets/icons8-qr-code-50.png" width="60" alt="QR Code" aria-label="QR Code">
+					<img class="svg-color" src="@/assets/venue-qr-code.svg" width="60" alt="QR Code" aria-label="QR Code">
 				</button>
 			</div>
 			<button class="header-btn btn btn-primary" v-if="!lectureIsOver()" @click="handleEndEarly">End Now</button>
@@ -23,7 +23,7 @@
 				<img class="svg-color" src="@/assets/venue-video-icon.svg" width="60" alt="Video" aria-label="Video">
 			</router-link>
 			<button class="header-btn btn btn-primary" @click="download_submitty_csv" id="submitty_export" title="CSV Export">
-				<img class="svg-color" src="@/assets/icons8-database-export-64.png" width="60" alt="QR Code" aria-label="QR Code">
+				<img class="svg-color" src="@/assets/venue-database-export.svg" width="60" alt="QR Code" aria-label="QR Code">
 			</button>
 			<!-- Manual Checkins -->
 			<div class="float-right" v-for="(checkin,i) in lecture.checkins" :key="'Live'+i">
