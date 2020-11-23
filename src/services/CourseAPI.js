@@ -20,7 +20,7 @@ export default {
   deleteCourse (id) {
     return API().delete('courses/delete/' + id)
   },
-  addAnnouncements(course_id) {
+  addAnnouncement(course_id, message) {
     return API().post('courses/add_announcement/'+course_id,{
       message: message
     })

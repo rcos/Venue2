@@ -6,6 +6,7 @@ let Section = require('../Section/Section.model');
 let User = require('../User/User.model');
 let Lecture = require('../Lecture/Lecture.model');
 const { update } = require('../Section/Section.model');
+const { NULL } = require('node-sass');
 
 courseRoutes.route('/add').post(function (req, res) {
   let course = new Course(req.body.course);
@@ -95,18 +96,6 @@ courseRoutes.route('/delete/:id').delete(function (req, res) {//copied how old c
   });
 });
 
-courseRoutes.post('/add_announcement/:id', (req, res) => {
-  let messages = req.body.message;
-  let course_id = req.params.id;
-  Course.findById(course_id, function (err, course) {
-    Promise.all([
-      Course.findByIdAndUpdate(course_id, { $push: { announcements: { $each: messages } } })
-    ]).then(resolved => {
-      res.json();
-    });
-  });
-});
-
 //Todo: change the id being passed to just be the instructor id
 //and search for the instructor or remove this function entirely and use
 //the userapis get user function
@@ -155,6 +144,19 @@ courseRoutes.post('/add_instructors/:id', (req, res) => {
       ]).then(resolved => {
         res.json();
       });
+    });
+  });
+});
+
+courseRoutes.post('/add_announcement/:id', (req, res) => {
+  let message = req.body.message;
+  console.log(message)
+  let course_id = req.params.id;
+  Course.findById(course_id, function (err, course) {
+    Promise.all([
+      Course.findByIdAndUpdate(course_id, { $push: { announcements: { message:message, date: NULL, name: NULL } } })
+    ]).then(resolved => {
+      res.json();
     });
   });
 });

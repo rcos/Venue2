@@ -172,6 +172,8 @@ const router = new VueRouter({
       name: 'course_overview',
       path: '/course_overview/:id',
       component: CourseOverview,
+    },
+    {
       name: 'new_lecture_time',
       path: '/new_lecture_time/:id',
       component: NewLectureTime,

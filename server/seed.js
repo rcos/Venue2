@@ -398,7 +398,6 @@ c1 = {
 	prefix: "CSCI",
 	suffix: 1200,
 	snooze: 15,
-	meetingURL: "default_link",
 	instructors: [
 		u1.email
 	]

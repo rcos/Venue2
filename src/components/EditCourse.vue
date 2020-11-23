@@ -266,9 +266,6 @@
          hours = 12
        }
        let mins = newTime[1]
-       console.log(newTime)
-       console.log(mins)
-
        return `${hours}:${mins} ${ampm}`
      },
       async updateCourse() {
