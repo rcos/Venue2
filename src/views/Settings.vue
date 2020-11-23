@@ -11,7 +11,7 @@
                 <button class="btn btn-secondary" @click="editing_name = false">Cancel</button>
               </div>
             </div>
-            <div class="name-div" v-else>{{ current_user.first_name }} {{ current_user.last_name }} <button class="btn" title="Edit Course" id="edit-course" @click="editing_name = true"><img id="edit-course" src="@/assets/hw/icons8-jack-o-lantern-64.png" alt="Edit" width="40" aria-label="Edit"/></button></div>
+            <div class="name-div" v-else>{{ current_user.first_name }} {{ current_user.last_name }} <button class="btn" title="Edit Course" id="edit-course" @click="editing_name = true"><img class="svg-color" id="edit-course" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit"/></button></div>
             <div class="logout-div"><div class="logout-button" v-on:click="logoutUser" tabindex="0" role="button">Logout</div></div>
           </div>
 
@@ -27,35 +27,36 @@
                 </div>
             </div>
 
-          <!-- Dark mode setting
-          <div class="setting-option-section">
-            <div class="left">
-              <div>
-                Dark mode
+            
+            <div class="setting-option-section">
+              <div class="left">
+                <div>
+                  Dark mode
+                </div>
               </div>
-            </div>
 
-            <div class="right">
-              <label class="dark-mode-switch">
-                <div v-if="this.edited_dark_mode">
-                  <input type="checkbox" v-on:click="toggleDarkMode()" checked>
-                  <span class="dark-mode-slider"></span>
-                </div>
-                <div v-else>
-                  <input type="checkbox" v-on:click="toggleDarkMode()">
-                  <span class="dark-mode-slider"></span>
-                </div>
-              </label>
-          </div> 
-          -->
+              <div class="right">
+                <label class="dark-mode-switch">
+                  <div v-if="this.edited_dark_mode">
+                    <input type="checkbox" v-on:click="toggleDarkMode()" checked>
+                    <span class="dark-mode-slider"></span>
+                  </div>
+                  <div v-else>
+                    <input type="checkbox" v-on:click="toggleDarkMode()">
+                    <span class="dark-mode-slider"></span>
+                  </div>
+                </label>
+              </div>
+            </div> 
+            
+            
           
-
-          <div style="position:relative" class="setting-option-section">
-              <div class="left"></div>
-              <div style="position:absolute" class="right">
-                <button class="btn btn-primary" @click="saveName()">Save Changes</button>
-              </div>
-        </div>
+            <div style="position:relative" class="setting-option-section">
+                <div class="left"></div>
+                <div style="position:absolute" class="right">
+                  <button class="btn btn-primary" @click="saveName()">Save Changes</button>
+                </div>
+            </div>
 
             <div style="position:relative" class="setting-option-section">
                 <div class="left" style="position:absolute">
@@ -66,7 +67,7 @@
                 </div>
             </div>
 
-          <!-- <div class="setting-option-section">
+            <!-- <div class="setting-option-section">
                 <div class="left">
                     <div>Current Password: <span class="value-area">*********</span></div>
                     <div class="small-div">The password is the key to your Venue account.</div>
@@ -74,15 +75,15 @@
                 <div class="right">
                     <div class="change-button" v-on:click="mode = 'change_password'">Change</div>
                 </div>
-            </div> -->
-
-          </div> 
+            </div> --> 
+          
+          </div>
 
           <!-- Setting Actions -->
           <div v-else>
             <ChangePassword v-if="mode == 'change_password'" :current_user="current_user" :complete="actionComplete" />
           </div>
-
+          
     </div>
 
   </div>
@@ -177,27 +178,9 @@
       --settings-text: #517B94;
       --settings-small-div: rgba(0, 0, 0, 0.64);
 
-      --settings-switch-on: #42f593;
+      /* --settings-switch-on: #04852F; */
       --settings-switch-off: #f55442;
       --settings-switch-ball: white;
-    }
-
-    .pencil {
-      color: var(--main-text-color);
-      fill: currentColor;
-      width: 64px;
-      height: 64px;
-    }
-
-    .svg-color {
-      filter: var(--widgets-color);
-    }
-
-    .palette {
-      background-color: var(--main-background-color);
-      color: var(--settings-text);
-      position: relative;
-      font-weight: bold;
     }
 
     .settings-container {

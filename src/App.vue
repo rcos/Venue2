@@ -6,14 +6,6 @@
         <router-view :key="$route.fullPath" />
       </main>
     </div>
-    <div>
-      <div class="cobweb">
-        <img class="web-size" src="@/assets/hw/web-corner.png" alt="cobweb"> 
-        <spider>
-          <img class="spider-size" src="@/assets/hw/icons8-spider-64.png" alt="spider">
-        </spider>
-      </div>
-    </div>
     <Footer/>
   </div>
 </template>
@@ -26,10 +18,7 @@ import LectureAPI from './services/LectureAPI';
 import {getLiveLectures,getUpcomingLectures,getPastLectures} from './services/GlobalFunctions.js'
 import '@/assets/css/venue.css';
 import UserAPI from '@/services/UserAPI.js';
-
-import '@/assets/hw/hw.css';
-import {showAt, hideAt} from 'vue-breakpoints'
-
+import PaletteAPI from '@/services/PaletteAPI.js'
 
 export default {
   watch: {
@@ -44,8 +33,7 @@ export default {
   },
   components: {
     NavBar,
-    Footer,
-    hideAt
+    Footer
   },
   data() {
     return {
@@ -66,6 +54,7 @@ export default {
     afterUser() {
       UserAPI.getUser(this.$store.state.user.current_user._id).then(res => {
         this.current_user = res.data
+        this.setPalette()
         this.$store.dispatch('updateCurrentUser',{token: this.$store.state.user.token, current_user: res.data})
         if((this.current_user.instructor_courses && this.current_user.instructor_courses.length) || (this.current_user.ta_sections && this.current_user.ta_sections.length)) {
           LectureAPI.getLecturesForUser(this.current_user._id, "with_sections_and_course")
@@ -117,6 +106,9 @@ export default {
     },
     processInstructorEmails(lectures) {
       LectureAPI.processEmailsForLectures(lectures,this.current_user.email)
+    },
+    setPalette() {
+		  PaletteAPI.setPalette(document.documentElement, this.current_user.dark_mode)
     }
   }
   //initially displayNav is false because the first page loaded is the homepage
@@ -138,6 +130,6 @@ main {
   top: 0;
   width: 100%;
   overflow-y: auto;
-  min-height: calc(100vh - 10rem);
+  min-height: calc(100vh - 9.5rem);
 }
 </style>

@@ -108,7 +108,7 @@
 										</div>
 										{{polls[i].question}}
 										<button type="button" v-if="!checkin.start_time || (checkin.start_time && Date.parse(checkin.start_time) > Date.now())" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
-											<img src="@/assets/hw/icons8-jack-o-lantern-64.png" alt="Edit" width="40" aria-label="Edit">
+											<img class="svg-color" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
 										</button>
 									</td>
 									<td v-else>X</td>
@@ -136,7 +136,7 @@
 										</div>
 										{{polls[i].question}}
 										<button type="button" v-if="Date.parse(lecture.playback_submission_start_time) > Date.now()" class="btn btn-secondary" @click="edit_poll_index = i" :title="'Edit '+polls[i].question">
-											<img src="@/assets/hw/icons8-jack-o-lantern-64.png" alt="Edit" width="40" aria-label="Edit">
+											<img class="svg-color" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
 										</button>
 									</td>
 								</tr>
@@ -329,10 +329,6 @@ export default {
 		--lecture-attendance-live-glow: rgba(65, 162, 91, 0.33);
 		--lecture-attendance-async-glow:  rgba(214, 71, 233, 0.36);
 		--lecture-attendace-absent-glow: rgba(255, 99, 88, 0.36);
-	}
-
-	.svg-color {
-		filter: var(--widgets-color);
 	}
 
 	.input-group {
