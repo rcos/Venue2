@@ -11,7 +11,7 @@
         </div>
         <div class="copy-button-box">
           <button class="inline-block big-button" tabindex="0" @click="copyURL">Copy Link to Join {{ course.prefix }} {{ course.suffix }}</button>
-          <div class="copy-message" :style="{opacity: show_copymsg}">Success!</div>
+          <div class="copy-message" :style="{opacity: show_copymsg ? 1 : 0}">Success!</div>
         </div>
         <CourseInfoTitle :course="course" :section_name="sorted_sections.map(a => a.name).join(', ')" class="inline-block" :is_instructor="true"/>
         <!-- Attendance History -->
@@ -137,7 +137,7 @@ export default {
       is_student: false,
       selected_lectures: [],
       selected_timeline: [],
-      show_copymsg: 0,
+      show_copymsg: false,
     }
   },
   created() {
