@@ -37,9 +37,9 @@
           None
         </div>
 
-        <!-- Reroute to Statistics.vue with preloaded parameters for course and section -->
+        <!-- Reroute to Statistics.vue with preloaded parameter for course-->
         <div >
-            <router-link :to="{name: 'statistics', params: { course_id: $route.params.id, section_id: $route.params.id}}" tabindex="-1">
+            <router-link :to="{name: 'statistics', params: { course_id: $route.params.id}}" tabindex="-1">
               <div class="inline-block big-button" :style="{float: 'left'}" tabindex="0">Attendance Graph for {{ course.prefix }} {{ course.suffix }}</div>
             </router-link>
         </div>

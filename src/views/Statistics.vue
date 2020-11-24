@@ -135,17 +135,19 @@ export default {
 					if(this.courses.active) {
 						self.$refs['courseSelector'].setSelected([this.courses.active])
 					}
-
-					this.sections.active = self.sections.all.find(section => section._id == self.$route.params.section_id)
-					if(this.sections.active) {
-						self.$refs['sectionsSelector'].setSelected([this.sections.active])
-					}
 				})
 				let allStudents = []
 				this.courses.all.forEach(course => {
 					SectionAPI.getSectionsForCourse(course._id)
 					.then(res2 => {
 						this.sections.all = this.sections.all.concat(res2.data)
+						let self = this
+						this.$nextTick(function() {
+							this.sections.active = self.sections.all.find(section => section._id == self.$route.params.section_id)
+							if(this.sections.active) {
+								self.$refs['sectionsSelector'].setSelected([this.sections.active])
+							}
+						})						
 					})
 					allStudents = allStudents.concat(new Promise((resolve,reject) => {
 						UserAPI.getStudentsForCourse(course._id)
