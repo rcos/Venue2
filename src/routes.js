@@ -24,6 +24,7 @@ import SetPermanentPassword from './views/SetPermanentPassword.vue';
 import Signup from './components/Signup.vue';
 import Dashboard from './views/Dashboard.vue';
 import CourseList from './components/CourseList.vue';
+import CourseSettings from './views/CourseSettings.vue'
 import CourseInfo from './views/CourseInfo.vue';
 import NewEvent from './views/NewEvent.vue';
 import EventInfo from './views/EventInfo.vue';
@@ -40,6 +41,14 @@ import TeachNewCourse from '@/components/TeachNewCourse.vue';
 import NewSection from '@/components/NewSection.vue';
 import EditLecture from '@/components/EditLecture.vue';
 import JoinCourse from '@/components/JoinCourse.vue';
+import NewLectureTime from '@/components/NewLectureTime.vue';
+import InstructorCourseInfo from '@/views/instructor/InstructorCourseInfo.vue';
+import InstructorLectureInfo from '@/views/instructor/InstructorLectureInfo.vue';
+import TASectionInfo from '@/views/ta/TASectionInfo.vue';
+import TALectureInfo from '@/views/ta/TALectureInfo.vue';
+import StudentSectionInfo from '@/views/student/StudentSectionInfo.vue';
+import StudentLectureInfo from '@/views/student/StudentLectureInfo.vue';
+import Calendar from '@/views/Calendar.vue';
 
 import AuthAPI from '@/services/AuthAPI.js';
 import UserAPI from '@/services/UserAPI.js';
@@ -67,6 +76,15 @@ const router = new VueRouter({
       meta: {
         title: "Settings",
         requiresAuth: true
+      }
+    },
+    {
+      name: 'course_settings',    //ADDED THIS
+      path: '/course_settings',
+      component: CourseSettings,
+      meta: {
+        title: "CourseSettings",
+        requiresAdmin: true
       }
     },
     {
@@ -145,6 +163,15 @@ const router = new VueRouter({
       name: 'edit_course',
       path: '/edit_course/:id',
       component: EditCourse,
+      meta: {
+        requiresAuth: true,
+        requiresInstructor: true
+      }
+    },
+    {
+      name: 'new_lecture_time',
+      path: '/new_lecture_time/:id',
+      component: NewLectureTime,
       meta: {
         requiresAuth: true,
         requiresInstructor: true
@@ -392,6 +419,75 @@ const router = new VueRouter({
       meta: {
         Title: "Venue UML Diagram",
       }
+    },
+    {
+      name: 'instructor_course_info',
+      path: '/course_info/instructor/:id',
+      component: InstructorCourseInfo,
+      meta: {
+        title: "Course Info",
+        requiresAuth: true,
+        requiresInstructor: true
+      }
+    },
+    {
+      name: 'instructor_lecture_info',
+      path: '/lecture_info/instructor/:id',
+      component: InstructorLectureInfo,
+      meta: {
+        title: "Lecture Info",
+        requiresAuth: true,
+        requiresInstructor: true
+      }
+    },
+    {
+      name: 'ta_section_info',
+      path: '/section_info/ta/:id',
+      component: TASectionInfo,
+      meta: {
+        title: "Section Info",
+        requiresAuth: true,
+        requiresTA: true
+      }
+    },
+    {
+      name: 'ta_lecture_info',
+      path: '/lecture_info/ta/:id',
+      component: TALectureInfo,
+      meta: {
+        title: "Lecture Info",
+        requiresAuth: true,
+        requiresTA: true
+      }
+    },
+    {
+      name: 'student_section_info',
+      path: '/section_info/student/:id',
+      component: StudentSectionInfo,
+      meta: {
+        title: "Section Info",
+        requiresAuth: true,
+        requiresStudent: true
+      }
+    },
+    {
+      name: 'student_lecture_info',
+      path: '/lecture_info/student/:id',
+      component: StudentLectureInfo,
+      meta: {
+        title: "Lecture Info",
+        requiresAuth: true,
+        requiresStudent: true
+      }
+    },
+    {
+      name: 'calendar',
+      path: '/calendar',
+      component: Calendar,
+      meta: {
+        title: "Calendar",
+        requiresAuth: true
+      }
     }
   ]
 })
@@ -417,7 +513,9 @@ router.beforeEach((to, from, next) => {
       const user_data = JSON.parse(loggedIn)
 
       if(user_data.current_user.is_admin) {
+
         next()
+
       } else if(to.matched.some(record => record.meta.requiresAdmin)) {
 
         if (user_data.current_user.is_admin) {
@@ -426,7 +524,7 @@ router.beforeEach((to, from, next) => {
           next('/dashboard')
         }
 
-      } else if (to.matched.some(record => record.meta.requiresInstructor)) {
+      } else if (to.matched.some(record => record.meta.requiresInstructor)) { // TODO check Instructor lectures
 
         if ((to.name == 'new_lecture' && user_data.current_user.instructor_courses.includes(to.params.course_id))
         || (to.name == 'new_lecture' && user_data.current_user.ta_sections.includes(to.params.course_id))
@@ -434,12 +532,41 @@ router.beforeEach((to, from, next) => {
         || (to.name == 'edit_course' && user_data.current_user.instructor_courses.includes(to.params.id))
         || (to.name == 'edit_section' && user_data.current_user.ta_sections.includes(to.params.id))
         || (to.name == 'edit_section' && from.name == 'edit_course')
-        || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))){
+        || (to.name == 'new_lecture_time' && user_data.current_user.instructor_courses.includes(to.params.id))
+        || (to.name == 'new_section' && user_data.current_user.instructor_courses.includes(to.params.id))
+        || user_data.current_user.instructor_courses.includes(to.params.id)){
+          next()
+        } else if(to.name == 'instructor_section_info') {
+          SectionAPI.getSection(to.params.id).then(res => {
+            if(user_data.current_user.instructor_courses.includes(res.data.course)) {
+              next()
+            } else {
+              next('/dashboard')
+            }
+          })
+        } else {
+          next('/dashboard')
+        }
+
+      } else if (to.matched.some(record => record.meta.requiresTA)) {
+
+        if (user_data.current_user.ta_sections.includes(to.params.id)
+        || (to.name == 'ta_course_info') && user_data.current_user.ta_sections.some(section => section.course == to.params.id) ) { // TODO check TA lectures
           next()
         } else {
           next('/dashboard')
         }
-      } 
+
+      } else if (to.matched.some(record => record.meta.requiresStudent)) {
+
+        if (user_data.current_user.student_sections.includes(to.params.id)
+        || (to.name == 'student_course_info') && user_data.current_user.student_sections.some(section => section.course == to.params.id) ){ // TODO check student lectures
+          next()
+        } else {
+          next('/dashboard')
+        }
+
+      }
       else if (to.name == 'join_course') { //student implement new join route
 
         if (user_data.current_user.instructor_courses.includes(to.params.id)) {
@@ -449,7 +576,9 @@ router.beforeEach((to, from, next) => {
 
       }  
       else {
+
         next()
+
       }
     }
     // not logged in
