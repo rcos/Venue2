@@ -9,7 +9,8 @@
     	</a> |
 		<a href="https://girlswhocode.com/" target="_blank" aria-label="Girls Who Code">
 			<img class="icon girls-who-code-icon" src="../assets/Girls_who_code_logo.svg" aria-label="Girls Who Code Icon" alt="Girls Who Code Icon"/>
-		</a>
+	</a> |
+		An RCOS project
     </footer>
 </template>
 
