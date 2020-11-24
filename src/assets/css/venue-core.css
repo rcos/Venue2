@@ -891,10 +891,8 @@ a:hover {
 }
 
 .btn.btn-danger {
-  background: var(--button-danger);
-  border: 0.1rem solid rgba(255,255,255, 0);
   box-shadow: none;
-  color: var(--button-text-color);
+  color: var(--button-danger);
 } 
 
 .btn.btn-primary:hover,
@@ -951,11 +949,9 @@ a:hover {
 .btn.btn-danger:active,
 .btn.btn-danger:target {
   outline: none;
-  border: 0.1rem solid var(--button-danger-shadow);
-  background-color: var(--button-danger-hover);
   box-shadow: 0px 3px 3px 0px var(--button-danger-shadow) inset;
   transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
-  color: white;
+  color: var(--button-danger-hover);
 } 
 
 input,select {
