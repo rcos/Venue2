@@ -92,7 +92,7 @@
         <!-- Playback video adder -->
         <LectureUploadModal ref="uploadmodal" v-if="allow_playback_submissions" :lecture="lecture" :update_lecture="false" :shown="modal_open" @openstatus="handleModalChange"/>
         <p class="error_msg" v-if="input_error_message!=''">{{input_error_message}}</p>
-        <button class="btn btn-primary create-lecture-btn" :tabindex="(modal_open ? '-1' : '0')" @click="sendNotification">Create Lecture</button>
+        <button class="btn btn-primary create-lecture-btn" :tabindex="(modal_open ? '-1' : '0')" >Create Lecture</button>
       </div>
     </form>
   </div>
@@ -165,14 +165,6 @@ export default {
     }
   },
   methods: {
-    sendNotification(evt) {
-      this.notification.sender = this.$store.state.current_user.email
-      this.notification.created = Date.now()
-      evt.preventDefault()
-      NotificationAPI.addNotification(this.notification).then(res=> {
-        NotificationAPI.sendNotification(res.data._id)
-      })
-    },
     async getCourse() {
       const response = await CourseAPI.getCourse(this.course_id);
       this.course = response.data;
@@ -293,6 +285,18 @@ export default {
         this.lecture = response.data
         this.$refs["uploadmodal"].updateLectureFromParent(this.lecture,this.course_id)
       }
+      this.sendOutNotification()
+    },
+    async sendOutNotification() {
+      this.notification.sender = this.$store.state.user.current_user.email
+      this.notification.created = new Date()
+      console.log(this.notification.created)
+      this.notification.type = "lecture"
+      this.notification.display_message = "waddup habibi"
+      this.notification.unique_id = this.lecture._id
+      NotificationAPI.addNotification(this.notification).then(res=> {
+        NotificationAPI.sendNotification(res.data._id, this.course_sections[0].students)
+      })
     },
     async getSectionsForCourse() {
       const response = await SectionAPI.getSectionsForCourse(this.course_id);

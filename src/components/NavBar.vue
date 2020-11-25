@@ -107,15 +107,15 @@
         <!-- Notifications -->
 
         <div class = "venue-nav-link-container" :style="{marginLeft: '1px', marginTop: '1px'}">
-          <a data-toggle="collapse" href="#instructor-collapse" class="venue-nav-link" :class="{'active-link':is_instructor_course_info()}" style="cursor:pointer;">
+          <a data-toggle="collapse" href="#notification-collapse" class="venue-nav-link" :class="{'active-link':is_lecture_info()}" style="cursor:pointer;">
              <img src="@/assets/notificationbell2.png" width="30" height="30" :style="{ marginTop: '0.3rem'}" class="d-inline-block align-top settings svg-color" alt="Notification Bell" aria-label="Notification Bell">
           </a>
           <hide-at breakpoint="mediumAndBelow">
-            <div class="dropdown-content" id="noti-dropdown"  :style="{}">
-              <router-link v-for="course in instructor_courses" :key="course._id" :to="{name: 'instructor_course_info', params: { id: course._id }}">
-                {{ 'Test person100 posted a new lecture for Data Structures'  }}
+            <div class="dropdown-content" id="notification-dropdown" v-if="notifications.length">
+              <router-link v-for="notification in notifications" :key="notification._id" :to="{name: 'lecture_info', params: { lecture_id: notification.unique_id }}">
+                {{ notification.display_message  }}
               </router-link>
-            </div>  
+            </div>
           </hide-at>
         </div>
 
@@ -255,6 +255,18 @@
       this.loadData()
     },
     methods: {
+      removeNoti(noti_id) {
+        console.log('hi')
+        const ids = this.notifications.map(a=>a._id)
+        const index = ids.indexOf(noti_id)
+        if (index > -1) { this.notifications.splice(index, 1) }
+        /*
+        if (this.notifications[index].users_sent === this.notifications[index].users_acknowledged) {
+          NotificationAPI.deleteNotification(noti_id)
+        }
+        */
+
+      },
       showBreadcrumb() {
         return !(['dashboard','settings','statistics','calendar'].includes(this.$route.name))
       },
@@ -272,14 +284,14 @@
 
         const response4 = await LectureAPI.getLecturesForUser(this.current_user._id,'with_sections_and_course')
         this.user_lectures = response4.data
-
+        
         const response5 = await NotificationAPI.getNotifications()
         this.notifications = response5.data
         this.notifications.sort(function(a,b){
         // Turn your strings into dates, and then subtract them
         // to get a value that is either negative, positive, or zero.
-          return b.created - a.created;
-        });      
+          return new Date(b.created) - new Date(a.created);
+        }); 
         this.loadBreadcrumb()
       },
       loadBreadcrumb() {

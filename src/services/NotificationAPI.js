@@ -6,27 +6,32 @@ export default {
       notification: notification 
     })
   },
-  
-  getByID() {
+  deleteNotification(id) {
+    return API().delete('notifications/delete', {
+      id: id
+    })
+  },
+  getByID(id) {
     return API().get('notifications/get', {
       id: id
     })
   },
-
   getNotifications() {
     return API().get('notifications/get_notifications')
   },
-
-  sendNotification() {
+  sendNotification(id, students) {
     return API().post('notifications/send', {
       id: id,
       students: students
     })
+  }, 
+  updateNotification(id, email) {
+    return API().post('notifications/update', {
+      id: id
+    })
   },
-
-  createNotification() {
-
+  clearAllNotifications(email) {
+    return API().post('notifications/clear_all')
   }
-
-
+  
 }

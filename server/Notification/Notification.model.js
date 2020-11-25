@@ -11,27 +11,25 @@ let Notification = new Schema({
     type: String,
 		ref: 'User'
   },
-  /*
-  sections: [{
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Section'
-	}],
-  */
   type: String, 
   display_message: String,
-  
+  created: Date,
+  unique_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Lecture'
+  },
+  /*
+  users_sent: Number
+  */
+  users_acknowledged: {
+    type: Number,
+    default: 0
+  }
+  /*,
   viewed: {
     type: Boolean,
     default: false
-  },
-  created: {
-    type: Date,
-    default: Date.now()
-  },
-  redirect_to: String//,
-
-  //users_sent: Number,
-  //users_acknowledged: Number
+  } */
 
 })
 module.exports = mongoose.model('Notification', Notification);
