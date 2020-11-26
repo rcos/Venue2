@@ -26,6 +26,7 @@ import Dashboard from './views/Dashboard.vue';
 import CourseList from './components/CourseList.vue';
 import CourseInfo from './views/CourseInfo.vue';
 import CourseOverview from '@/components/CourseOverview.vue';
+import NewLectureTime from '@/components/NewLectureTime.vue';
 import NewEvent from './views/NewEvent.vue';
 import EventInfo from './views/EventInfo.vue';
 import LecturePlayback from './views/LecturePlayback.vue';
@@ -161,6 +162,11 @@ const router = new VueRouter({
       name: 'course_overview',
       path: '/course_overview/:id',
       component: CourseOverview,
+    },
+    {
+      name: 'new_lecture_time',
+      path: '/new_lecture_time/:id',
+      component: NewLectureTime,
       meta: {
         requiresAuth: true,
         requiresInstructor: true

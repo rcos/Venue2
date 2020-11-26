@@ -6,6 +6,7 @@ let Section = require('../Section/Section.model');
 let User = require('../User/User.model');
 let Lecture = require('../Lecture/Lecture.model');
 const { update } = require('../Section/Section.model');
+const { NULL } = require('node-sass');
 
 courseRoutes.route('/add').post(function (req, res) {
   let course = new Course(req.body.course);
@@ -89,7 +90,6 @@ courseRoutes.route('/delete/:id').delete(function (req, res) {//copied how old c
   });
 });
 
-
 //Todo: change the id being passed to just be the instructor id
 //and search for the instructor or remove this function entirely and use
 //the userapis get user function
@@ -142,6 +142,41 @@ courseRoutes.post('/add_instructors/:id', (req, res) => {
   });
 });
 
+courseRoutes.post('/add_announcement/:id', (req, res) => {
+  let message = req.body.message;
+  console.log(message)
+  let course_id = req.params.id;
+  Course.findById(course_id, function (err, course) {
+    Promise.all([
+      Course.findByIdAndUpdate(course_id, { $push: { announcements: { message:message, date: NULL, name: NULL } } })
+    ]).then(resolved => {
+      res.json();
+    });
+  });
+});
+
+courseRoutes.post('/add_lecture_time/:id', (req, res) => {
+  let times = req.body.course_times;
+  let course_id = req.params.id;
+  Course.findById(course_id, function (err, course) {
+    Promise.all([
+      Course.findByIdAndUpdate(course_id, { $push: { course_times: { day:times.day, start_time: times.start_time, end_time: times.end_time } } })
+    ]).then(resolved => {
+      res.json();
+    });
+  });
+});
+courseRoutes.post('/delete_lecture_time/:id', (req, res) => {
+  let times = req.body.course_times;
+  let course_id = req.params.id;
+  Course.findById(course_id, function (err, course) {
+    Promise.all([
+      Course.findByIdAndUpdate(course_id, { $pull: { course_times: { day:times.day, start_time: times.start_time, end_time: times.end_time } } })
+    ]).then(resolved => {
+      res.json();
+    });
+  });
+});
 courseRoutes.post('/toggleAllSectionsPublic/:id', (req, res) => {
   let id = req.params.id;
   let ids = req.body.sections.map(a=>a._id);

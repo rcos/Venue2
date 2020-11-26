@@ -154,7 +154,7 @@
             this.instructors = response.data
         },
         async addAnnouncementToCourse() {
-            Course.API.addAnnouncement(this.course_id, this.message).then(res => {
+            CourseAPI.addAnnouncement(this.course_id, this.message).then(res => {
               location.reload()
             })
         },
