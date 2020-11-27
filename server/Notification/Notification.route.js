@@ -9,14 +9,20 @@ let Lecture = require('../Lecture/Lecture.model');
 
 // add notification to db
 notificationRoutes.route('/add').post(function (req, res) {
-  let notification = new Notification(req.body.notification)
-  notification.save()
+  let notification = {}
+  notification.sender = req.user.first_name + ' ' + req.user.last_name 
+  notification.created = new Date()
+  notification.type = req.body.type
+  notification.display_message = `${notification.sender} posted a new ${notification.type}.`
+  notification.unique_id = req.body.id
+  let new_notification = new Notification(notification)
+  new_notification.save()
   .then(() => {
-    console.log("<SUCCESS> Adding notification:", notification);
-    res.status(200).json(notification);
+    console.log("<SUCCESS> Adding notification:", new_notification);
+    res.status(200).json(new_notification);
   })
   .catch(() => {
-    console.log("<ERROR> Adding notification:", notification);
+    console.log("<ERROR> Adding notification:", new_notification);
     res.status(400).send("unable to save notification to database");
   });
 })
@@ -59,14 +65,14 @@ notificationRoutes.route('/get_notifications').get(function (req, res) {
       res.json(notifications);
     }
   });
-});
+})
 
 // send it out
 notificationRoutes.route('/send').post(function(req, res) {
   let noti_id = req.body.id
   let student_emails = req.body.students
   Promise.all([
-    User.update({email: {$in: student_emails}},{$push: {notifications: noti_id}})
+    User.updateMany({email: {$in: student_emails}},{$push: {notifications: noti_id}})
   ]).then(resolved=> {
     console.log("<SUCCESS> Sent all notifications out");
     res.json(true);
@@ -88,7 +94,7 @@ notificationRoutes.route('/update').post(function(req, res) {
 //clear all the notifications for a user and mark all as acknowledged
 notificationRoutes.route('/clear_all').post(function(req, res) {
   Promise.all([
-    Notification.update({_id: {$in: req.user.notifications }}, {$inc: {users_acknowledged: 1}}),
+    Notification.updateMany({_id: {$in: req.user.notifications }}, {$inc: {users_acknowledged: 1}}),
     User.updateOne({email: req.user.email}, {$set: {notifications: []}})
   ]).then(resolved => {
     console.log("Notifications cleared for user with ID: ", req.user._id)

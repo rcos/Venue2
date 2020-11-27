@@ -1,9 +1,9 @@
 import API from '@/services/API'
 export default {
-  
-  addNotification(notification) {
+  addNotification(type, id) {
     return API().post('notifications/add', {
-      notification: notification 
+      type: type,
+      id: id
     })
   },
   deleteNotification(id) {
@@ -25,13 +25,12 @@ export default {
       students: students
     })
   }, 
-  updateNotification(id, email) {
+  updateNotification(id) {
     return API().post('notifications/update', {
       id: id
     })
   },
-  clearAllNotifications(email) {
+  clearAllNotifications() {
     return API().post('notifications/clear_all')
-  }
-  
+  } 
 }

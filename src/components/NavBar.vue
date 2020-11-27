@@ -106,15 +106,19 @@
         </div>
         <!-- Notifications -->
 
-        <div class = "venue-nav-link-container" :style="{marginLeft: '1px', marginTop: '1px'}">
+        <div class = "venue-nav-link-container" :style="{marginTop: '1px'}">
           <a data-toggle="collapse" href="#notification-collapse" class="venue-nav-link" :class="{'active-link':is_lecture_info()}" style="cursor:pointer;">
-             <img src="@/assets/notificationbell2.png" width="30" height="30" :style="{ marginTop: '0.3rem'}" class="d-inline-block align-top settings svg-color" alt="Notification Bell" aria-label="Notification Bell">
+             <img src="@/assets/notificationbell2.png" width="30" height="30" :style="{ marginTop: '0.3rem', marginRight: '1.75rem'}" class="d-inline-block align-top settings svg-color" alt="Notification Bell" aria-label="Notification Bell">
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content" id="notification-dropdown" v-if="notifications.length">
               <router-link v-for="notification in notifications" :key="notification._id" :to="{name: 'lecture_info', params: { lecture_id: notification.unique_id }}">
-                {{ notification.display_message  }}
+                {{ notification.display_message }}
+               <img class="red-x" id="delete-course" src="@/assets/icons8-delete.svg" alt="Delete" width="15" height="15" aria-label="Delete">
               </router-link>
+            </div>
+            <div class="dropdown-content" id="no-notifications" v-else>
+              <a v-for="index in 1" :key="index">{{"No new notifications"}}</a>
             </div>
           </hide-at>
         </div>
@@ -255,18 +259,19 @@
       this.loadData()
     },
     methods: {
+      /*
       removeNoti(noti_id) {
         console.log('hi')
         const ids = this.notifications.map(a=>a._id)
         const index = ids.indexOf(noti_id)
         if (index > -1) { this.notifications.splice(index, 1) }
-        /*
+      
         if (this.notifications[index].users_sent === this.notifications[index].users_acknowledged) {
           NotificationAPI.deleteNotification(noti_id)
         }
-        */
 
-      },
+
+      }, */
       showBreadcrumb() {
         return !(['dashboard','settings','statistics','calendar'].includes(this.$route.name))
       },
@@ -292,6 +297,7 @@
         // to get a value that is either negative, positive, or zero.
           return new Date(b.created) - new Date(a.created);
         }); 
+        console.log(this.notifications.length)
         this.loadBreadcrumb()
       },
       loadBreadcrumb() {
@@ -344,6 +350,13 @@
 </script>
 
 <style scoped>
+/*
+  :root {
+    --red-x: ''
+  }
+  .red-x {
+    filter: var(--red-x);
+  } */
 
   :root {
     --nav-bar-text: #2C3E50;
@@ -352,17 +365,14 @@
     --nav-bar-selected-text: #466D85;
     --nav-bar-box-shadow:  rgba(109, 109, 109, 0.644);
     --nav-bar-link-text: #575757;
-
     --nav-bar-hover-background: #466D85;
     --nav-bar-hover-text: white;
     --nav-bar-hover-top-shadow: rgba(85, 85, 85, 0.644);
     --nav-bar-hover-bottom-shadow: rgba(179, 179, 179, 0.644);
   }
-
   .logo-color {
     filter: var(--logo-color);
   }
-
   #venue-nav {
     height: 4rem;
     padding: 1rem 0rem;
@@ -370,13 +380,11 @@
     top: 0;
     left: 0;
   }
-
   #venue-nav-links {
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
   }
-
   #breadcrumb-container {
     position: relative;
     margin: 1rem 0rem;
@@ -385,17 +393,14 @@
     padding-left: 4rem;
     font-size: 0.9rem;
   }
-
   .crumb {
     display: inline-block;
     margin-right: 0.5rem;
   }
-
   #nav-logo {
     margin-left: 1.5rem;
     display: inline-block;
   }
-
   .venue-nav-link-container {
     margin-left: 1.5rem;
     display: inline-block;
@@ -407,12 +412,10 @@
     border-radius: 5px;
     transition: border-bottom 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1);
   }
-
   .venue-nav-link-container.active {
     border-bottom: 0.2rem solid var(--nav-bar-selected-text);
     transition: border-bottom 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1);
   }
-
   .dropdown-content {
     margin-left: -1rem;
     margin-top: 0.2rem;
@@ -422,68 +425,72 @@
     
     z-index: 9999;
     border-radius: 0.5rem;
-
     /* transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1); */
   }
-
   .dropdown-content a {
     visibility: hidden;
-    color: var(--nav-bar-text);
-    background-color: var(--nav-bar-background);
+    color: var(--main-text-color);
+    background-color: var(--main-background-color);
     font-weight: bold;
     font-size: 0rem;
     text-decoration: none;  
     display: block;
-    max-height: 0rem;
+    max-height: 0px;
     width: 15rem;
     margin: 0px;
     padding: 0px;
     box-shadow: 0px 3px 3px 0px var(--nav-bar-box-shadow);
     transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   }
-
   .dropdown-content a:first-of-type {
     border-radius: 0.5rem 0.5rem 0rem 0rem;
   }
-
   .dropdown-content a:last-of-type {
     border-radius: 0rem 0rem 0.5rem 0.5rem;
   }
-
   .dropdown-content a:not(:first-of-type) {
     border-top: 0.1rem solid var(--nav-bar-separator);
   }
-
+  .dropdown-content a:last-of-type {
+    border-radius: 0rem 0rem 0.5rem 0.5rem;
+  }
   .dropdown-content a:only-of-type {
     border-radius: 0.5rem;
   }
-
   .venue-nav-link-container:hover > .dropdown-content,
   .venue-nav-link-container:focus-within > .dropdown-content {
     visibility: visible;
   }
-
   .venue-nav-link-container:hover > .dropdown-content a,
   .venue-nav-link-container:focus-within > .dropdown-content a {
     visibility: visible;
     font-size: 1rem;
-    max-height: 240px;
-    width: 15rem;
+    max-height: 3rem;
+    width: 20rem;
     padding: 12px 16px;
     transform: rotateY(0deg);
     transition: font-size 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
-  .venue-nav-link-container:hover> #noti-dropdown a,
-  .venue-nav-link-container:focus-within > #noti-dropdown a {
-    visibility: visible;
-    font-size: 0.8rem;
-    max-height: 15rem;
-    width: 15rem;
-    padding: 12px 16px;
-    transform: rotateY(0deg);
-    transition: font-size 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0s cubic-bezier(0.19, 1, 0.22, 1);
+  /* START STYLING NOTIFICATIONS */
+
+  #notification-dropdown a{
+    width: 22rem;
   }
+  .venue-nav-link-container:hover> #notification-dropdown a,
+  .venue-nav-link-container:focus-within > #notification-dropdown a {
+    width: 22rem;
+    padding: 10px 15px;
+  }
+
+  #notification-dropdown,
+  #no-notifications {
+    margin-left: -9rem;
+  }
+  #no-notifications a{
+    width: 20rem;
+  }
+
 
 
   /* .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(2),
@@ -566,7 +573,6 @@
 
   .mobile-course-link-name {
     text-decoration: none;
-
   }
 
   .venue-nav-link {
@@ -637,4 +643,5 @@
   img {
     display: inline-block;
   }
+
 </style>

@@ -7,10 +7,7 @@ let Section = require('../Section/Section.model');
 let Lecture = require('../Lecture/Lecture.model');
 
 let Notification = new Schema({
-  sender: {
-    type: String,
-		ref: 'User'
-  },
+  sender: String,
   type: String, 
   display_message: String,
   created: Date,
@@ -25,11 +22,5 @@ let Notification = new Schema({
     type: Number,
     default: 0
   }
-  /*,
-  viewed: {
-    type: Boolean,
-    default: false
-  } */
-
 })
 module.exports = mongoose.model('Notification', Notification);

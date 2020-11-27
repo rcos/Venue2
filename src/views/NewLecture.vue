@@ -288,13 +288,9 @@ export default {
       this.sendOutNotification()
     },
     async sendOutNotification() {
-      this.notification.sender = this.$store.state.user.current_user.email
-      this.notification.created = new Date()
-      console.log(this.notification.created)
-      this.notification.type = "lecture"
-      this.notification.display_message = "waddup habibi"
-      this.notification.unique_id = this.lecture._id
-      NotificationAPI.addNotification(this.notification).then(res=> {
+      NotificationAPI.addNotification('lecture', this.lecture._id).then(res=> {
+        console.log(this.lecture._id)
+        console.log(res.data.unique_id)
         NotificationAPI.sendNotification(res.data._id, this.course_sections[0].students)
       })
     },
