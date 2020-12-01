@@ -106,16 +106,22 @@
         </div>
         <!-- Notifications -->
 
-        <div class = "venue-nav-link-container" :style="{marginTop: '1px'}">
+        <div class = "venue-nav-link-container" :style="{marginTop: '1px', marginLeft: '20px'}">
           <a data-toggle="collapse" href="#notification-collapse" class="venue-nav-link" :class="{'active-link':is_lecture_info()}" style="cursor:pointer;">
-             <img src="@/assets/notificationbell2.png" width="30" height="30" :style="{ marginTop: '0.3rem', marginRight: '1.75rem'}" class="d-inline-block align-top settings svg-color" alt="Notification Bell" aria-label="Notification Bell">
+             <img src="@/assets/notificationbell2.png" width="30" height="30" :style="{ marginTop: '0.3rem'}" class="d-inline-block align-top settings svg-color" alt="Notification Bell" aria-label="Notification Bell">
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content" id="notification-dropdown" v-if="notifications.length">
-              <router-link v-for="notification in notifications" :key="notification._id" :to="{name: 'lecture_info', params: { lecture_id: notification.unique_id }}">
+
+              <router-link v-for="notification in notifications" :key="notification._id"  :to="{name: 'lecture_info', params: { lecture_id: notification.unique_id }}">
                 {{ notification.display_message }}
-               <img class="red-x" id="delete-course" src="@/assets/icons8-delete.svg" alt="Delete" width="15" height="15" aria-label="Delete">
+
+               <!--<img class="red-x" id="delete-course" src="@/assets/icons8-delete.svg" alt="Delete" width="15" height="15" aria-label="Delete"> -->
+               <div class= "notification-date">
+               {{ convertTime(notification.created) }} 
+              </div> 
               </router-link>
+
             </div>
             <div class="dropdown-content" id="no-notifications" v-else>
               <a v-for="index in 1" :key="index">{{"No new notifications"}}</a>
@@ -260,6 +266,11 @@
     },
     methods: {
       /*
+      async removeNotification(noti_id) {
+        console.log('hello')
+        await NotificationAPI.updateNotification(noti_id)
+      },
+    
       removeNoti(noti_id) {
         console.log('hi')
         const ids = this.notifications.map(a=>a._id)
@@ -272,6 +283,20 @@
 
 
       }, */
+      // COPIED FROM LECTUREINFOHEADER.VUE
+      convertTime(date) {
+        var datetime = new Date(date)
+        let hours = datetime.getHours()
+        let minutes = datetime.getMinutes()
+        if(minutes < 10) {
+          minutes = "0" + minutes
+        }
+        if(hours < 12) {
+          return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==0 ? "12" : hours) + ":" + minutes + " AM")
+        } else {
+          return ((datetime.getMonth()+1) + "/" + (datetime.getDate()) + "/" + (datetime.getFullYear()) + " " + (hours==12 ? hours : hours-12) + ":" + minutes + " PM")
+        }
+      },
       showBreadcrumb() {
         return !(['dashboard','settings','statistics','calendar'].includes(this.$route.name))
       },
@@ -476,8 +501,10 @@
 
   #notification-dropdown a{
     width: 22rem;
+    transition: none;
+    height: 22rem;
   }
-  .venue-nav-link-container:hover> #notification-dropdown a,
+  .venue-nav-link-container:hover> #notification-dropdown a, 
   .venue-nav-link-container:focus-within > #notification-dropdown a {
     width: 22rem;
     padding: 10px 15px;
@@ -489,6 +516,12 @@
   }
   #no-notifications a{
     width: 20rem;
+    transition: none;
+    height: 20rem;
+  }
+  .notification-date {
+    font-size:0.7rem;
+    float: right;
   }
 
 

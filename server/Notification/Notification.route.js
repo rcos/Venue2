@@ -79,6 +79,7 @@ notificationRoutes.route('/send').post(function(req, res) {
   })
 })
 
+// TEST THESE STILL
 // for when users acknowledge a notification (remove, view)
 notificationRoutes.route('/update').post(function(req, res) {
   let noti_id = req.body.id

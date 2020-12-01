@@ -32,5 +32,5 @@ export default {
   },
   clearAllNotifications() {
     return API().post('notifications/clear_all')
-  } 
+  }
 }
