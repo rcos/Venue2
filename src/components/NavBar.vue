@@ -150,6 +150,12 @@
         </router-link>
       </div>
     </div>
+    <div v-for="user_lecture in this.user_lectures">
+      <div v-if="user_lecture.allow_live_submissions">
+        <Snooze :lecture=user_lecture :mode="'live'"></Snooze> </div>
+      <div v-if="user_lecture.allow_playback_submissions">
+        <Snooze :lecture=user_lecture :mode="'playback'"></Snooze> </div>
+    </div>
   </div>
 </template>
 
@@ -161,6 +167,7 @@
   import SectionAPI from '@/services/SectionAPI.js'
   import LectureAPI from '@/services/LectureAPI.js'
   import DropDown from './DropDown.vue'
+  import Snooze from './Snooze.vue'
 
   export default {
     name: 'NavBar',
@@ -177,7 +184,8 @@
     components: {
       hideAt,
       showAt,
-      DropDown
+      DropDown,
+      Snooze
     },
     data(){
       return {
