@@ -287,10 +287,9 @@ export default {
       }
       this.sendOutNotification()
     },
+    // FIX THIS
     async sendOutNotification() {
-      NotificationAPI.addNotification('lecture', this.lecture._id).then(res=> {
-        console.log(this.lecture._id)
-        console.log(res.data.unique_id)
+      NotificationAPI.addNotification('lecture', this.lecture._id, this.course.name).then(res=> {
         NotificationAPI.sendNotification(res.data._id, this.course_sections[0].students)
       })
     },

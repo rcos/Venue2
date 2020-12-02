@@ -1,9 +1,10 @@
 import API from '@/services/API'
 export default {
-  addNotification(type, id) {
+  addNotification(type, id, course) {
     return API().post('notifications/add', {
       type: type,
-      id: id
+      id: id,
+      course: course
     })
   },
   deleteNotification(id) {

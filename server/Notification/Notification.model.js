@@ -9,6 +9,7 @@ let Lecture = require('../Lecture/Lecture.model');
 let Notification = new Schema({
   sender: String,
   type: String, 
+  course_name: String,
   display_message: String,
   created: Date,
   unique_id: {

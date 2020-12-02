@@ -13,7 +13,8 @@ notificationRoutes.route('/add').post(function (req, res) {
   notification.sender = req.user.first_name + ' ' + req.user.last_name 
   notification.created = new Date()
   notification.type = req.body.type
-  notification.display_message = `${notification.sender} posted a new ${notification.type}.`
+  notification.course_name = req.body.course
+  notification.display_message = `${notification.sender} posted a new ${notification.type} in`
   notification.unique_id = req.body.id
   let new_notification = new Notification(notification)
   new_notification.save()
