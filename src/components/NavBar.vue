@@ -106,32 +106,35 @@
         </div>
         <!-- Notifications -->
 
-        <div class = "venue-nav-link-container" :style="{marginTop: '1px', marginLeft: '20px'}">
+        <div class = "venue-nav-link-container" :style="{marginTop: '1px', marginLeft: '10px'}">
           <a data-toggle="collapse" href="#notification-collapse" class="venue-nav-link" :class="{'active-link':is_lecture_info()}" style="cursor:pointer;">
-             <img src="@/assets/notificationbell2.png" width="30" height="30" :style="{ marginTop: '0.3rem'}" class="d-inline-block align-top settings svg-color" alt="Notification Bell" aria-label="Notification Bell">
-          </a>
+            <!-- with red dot -->
+            <div class="image">
+              <img src="@/assets/notificationbell2.png" width="30" height="30" :style="{ marginTop: '0.3rem'}" class="d-inline-block align-top settings svg-color" id= "bell" alt="Notification Bell" aria-label="Notification Bell">
+              <span class="style-badge" v-if="notifications.length && notifications.length < 10">{{notifications.length}}</span>
+              <span class="style-badge" v-if="notifications.length && notifications.length >= 10">9+</span>
+            </div>
+            </a>
           <hide-at breakpoint="mediumAndBelow">
-            <div class="dropdown-content" id="notification-dropdown" v-if="notifications.length">
-              
+            <div class="dropdown-content" id="notification-dropdown" v-if="notifications.length">      
               <!-- Best to generalize this for all notification types (not just lecture) -->
               <router-link v-for="notification in notifications" :key="notification._id"  :to="{name: 'lecture_info', params: { lecture_id: notification.unique_id }}">
-                {{ notification.display_message}}
-              
+                {{ notification.display_message}}           
                <!--<img class="red-x" id="delete-course" src="@/assets/icons8-delete.svg" alt="Delete" width="15" height="15" aria-label="Delete"> -->
                 <p class="coursename">{{ notification.course_name }}</p>
                 <p class="notification-date">{{ convertTime(notification.created) }}</p>
-
               </router-link>
-
             </div>
             <div class="dropdown-content" id="no-notifications" v-else>
-              <a v-for="index in 1" :key="index">{{"No new notifications"}}</a>
+              <a v-for="index in 1" :key="index">
+                <span class="style-none">
+                {{"No new notifications"}}</span>
+              </a>
             </div>
           </hide-at>
         </div>
 
-      </div> 
-      
+      </div>  
     </nav>
     <!-- Mobile Course Dropdown -->
     <show-at breakpoint="mediumAndBelow">
@@ -500,33 +503,67 @@
 
   /* START STYLING NOTIFICATIONS */
 
-  #notification-dropdown a{
+  .image {
+    position: relative;
+    height: 35px;
+    width: 50px;
+    display: inline-block;
+  }
+  .style-badge {
+    position: absolute;
+    right: 7px;
+    top: 5px;
+    background: var(--red-pill);
+    text-align: center;
+    border-radius: 50%;
+    height: 15px;
+    width: 15px;
+    color: var(--nav-bar-hover-text);
+    font-size: 0.6rem;
+    font-weight: bold;
+  }
+
+  #notification-dropdown a,
+  #no-notifications a {
     transition: none;
   }
+
+  #notification-dropdown,
+  #no-notifications {
+    margin-left: -9rem;
+  } 
+
   .venue-nav-link-container:hover> #notification-dropdown a, 
   .venue-nav-link-container:focus-within > #notification-dropdown a {
-    width: 20rem;
     padding: 10px 10px;
     font-size: 0.85rem;
     max-height: 5rem;
     height: 4.2rem;
   }
 
-  #notification-dropdown,
-  #no-notifications {
-    margin-left: -9rem;
-  }
-  #no-notifications a{
-    width: 20rem;
-    transition: none;
-  }
-
   .notification-date {
     font-size: 0.7rem;
     float: right;
   }
+  
   .coursename {
     font-size: 0.85rem;
+  }
+
+  .venue-nav-link-container:hover> #no-notifications a, 
+  .venue-nav-link-container:focus-within > #no-notifications a {
+    max-height: 5rem;
+    height: 4.2rem;
+    padding-top: 22px;
+  }
+
+  #no-notifications a:hover,
+  #no-notifications a:focus {
+    
+    
+    /* -webkit-transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+    -ms-transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);  */
   }
 
   /* .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(2),
@@ -584,16 +621,20 @@
     transition: font-size 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1), transform 0.25s 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   } */
 
+
   .dropdown-content a:hover,
   .dropdown-content a:focus {
+
     background-color: var(--nav-bar-hover-background);
     color: var(--nav-bar-hover-text);
     outline: none;
     box-shadow: 0px 3px 3px 0px var(--nav-bar-hover-top-shadow) inset, 0px -3px 3px 0px var(--nav-bar-hover-bottom-shadow) inset;
+
     /* -webkit-transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
     -ms-transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
-    transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1); */
+    transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);  */
   }
+  
 
   .mobile-course-list {
     display: block;
