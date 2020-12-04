@@ -106,7 +106,7 @@
         </div>
         <!-- Notifications -->
 
-        <div class = "venue-nav-link-container" :style="{marginTop: '1px', marginLeft: '10px'}">
+        <div class = "venue-nav-link-container" :style="{marginTop: '1px', marginLeft: '12px'}">
           <a data-toggle="collapse" href="#notification-collapse" class="venue-nav-link" :class="{'active-link':is_lecture_info()}" style="cursor:pointer;">
             <!-- with red dot -->
             <div class="image">
@@ -559,11 +559,9 @@
 
   #no-notifications a:hover,
   #no-notifications a:focus {
-    
-    
-    /* -webkit-transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
-    -ms-transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
-    transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);  */
+    color: var(--main-text-color);
+    background-color: var(--main-background-color);
+    box-shadow: 0px 3px 3px 0px var(--nav-bar-box-shadow);
   }
 
   /* .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(2),
