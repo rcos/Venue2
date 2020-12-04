@@ -10,17 +10,14 @@
       <p>Start Time: {{formatStart}}</p>
       <p>End Time: {{formatEnd}}</p>
     </div>
-    <div>
-      <button>Join</button>
+    <div id="snooze">
+      <select class="form-control" @change="delay($event)">
+      <option value="">Snooze</option>
+      <option v-for="time in this.times" :value="time.id" :key="time.id">{{ time.name }}</option>
+      </select>
     </div>
-    <div>
-      <button onclick="show()">Snooze</button>
-      <div id="snooze-time">
-        <ul v-on:click="delay(2)">5 minutes</ul>
-        <ul v-on:click="delay(2)">10 minutes</ul>
-        <ul v-on:click="delay(2)">15 minutes</ul>
-        <ul v-on:click="delay(2)">30 minutes</ul>
-      </div>
+    <div id="join">
+      <button id="join">Join</button>
     </div>
   </div>
   </div>
@@ -43,7 +40,9 @@
         clientY: undefined,
         movementX: 0,
         movementY: 0,
-        show: true,
+        show: null,
+        times : null,
+        selectedTime: null
         }
       }
     },
@@ -65,6 +64,12 @@
     methods: {
       async loadData(){
         this.show = true
+        this.times= [
+          { name: "5 minutes", id: 5 },
+          { name: "10 minutes", id: 10 },
+          { name: "15 minutes", id: 15 },
+          { name: "30 minutes", id: 30 },
+        ]
         this.getLectures()
       },
       async getLectures(){
@@ -96,14 +101,14 @@
       sleep: function(time) {
         return new Promise((resolve) => setTimeout(resolve, time));
       },
-      delay: function(time){
-        //document.getElementById("snooze-box").style.visibility = "hidden";
+      delay: function(event){
+        this.selectedTime = parseInt(event.target.options[event.target.options.selectedIndex].text)
+        console.log(this.selectedTime)
         this.show=false
         this.$forceUpdate();
         console.log(this.show)
-        this.sleep(time*3*1000).then(() => {
-        // Do something after the sleep!
-        //document.getElementById("snooze-box").style.visibility = "visible";
+        this.sleep(this.selectedTime*60000).then(() => {
+        console.log(this.selectedTime*60000)
         this.show=true
         console.log(this.show)
         this.$forceUpdate();
@@ -143,4 +148,14 @@
 #draggable-header {
   z-index: 10;
 }
+#join,#snooze{
+  float: right;
+  margin-right: 5px;
+  padding: 0.2em;
+  margin: 0.1em 0.2em;
+  -moz-box-sizing: content-box; /* or `border-box` */
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
 </style>
