@@ -20,6 +20,16 @@ export default {
   deleteCourse (id) {
     return API().delete('courses/delete/' + id)
   },
+  addTime(course_id, course_times){
+    return API().post('courses/add_lecture_time/' + course_id, {
+      course_times: course_times
+    })
+  },
+  deleteTime(course_id, course_times){
+    return API().post('courses/delete_lecture_time/' + course_id, {
+      course_times: course_times
+    })
+  },
   getInstructor (course_id) {
     return API().get('courses/getInstructor/' + course_id)
   },
@@ -29,6 +39,16 @@ export default {
   addInstructors(course_id,instructors) {
     return API().post('courses/add_instructors/'+course_id,{
       instructors: instructors
+    })
+  },
+  turnSectionsOn(sections, id) {
+    return API().post('courses/toggleAllSectionsPublic/' + id, {
+      sections: sections
+    })
+  }, 
+  turnSectionsOff(sections, id) {
+    return API().post('courses/toggleAllSectionsPrivate/' + id, {
+      sections: sections
     })
   }
 }
