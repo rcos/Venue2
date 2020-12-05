@@ -20,9 +20,9 @@ export default {
   deleteCourse (id) {
     return API().delete('courses/delete/' + id)
   },
-  addAnnouncement(course_id, message) {
-    return API().post('courses/add_announcement/'+course_id,{
-      message: message
+  addAnnouncement(course_id, announcements) {
+    return API().post('courses/add_announcement/'+ course_id,{
+      announcements: announcements
     })
   },
   addTime(course_id, course_times){
