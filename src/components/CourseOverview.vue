@@ -162,7 +162,7 @@
           if(response.data)
           this.instructors = response.data
         },
-        async addAnnouncementToCourse() {
+        async addAnnouncementToCourse(evt) {
           this.waiting = true
           let current_date = new Date()
           let current_user = this.first_name + " " + this.last_name

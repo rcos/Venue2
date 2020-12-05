@@ -149,18 +149,11 @@ courseRoutes.post('/add_instructors/:id', (req, res) => {
 });
 
 courseRoutes.post('/add_announcement/:id', (req, res) => {
-  let announcement = req.body.announcements;
-  console.log("hi");
-  console.log("hi");
-  console.log("hi");
-  console.log("hi");
-  console.log("hi");
-  console.log("hi");
-  console.log("hi");
+  let a = req.body.announcements;
   let course_id = req.params.id;
   Course.findById(course_id, function (err, course) {
     Promise.all([
-      Course.findByIdAndUpdate(course_id, { $push: { announcements: { message:announcement.message, date: announcement.date, name: announcement.name } } })
+      Course.findByIdAndUpdate(course_id, { $push: { announcements: { message:a.message, date: a.date, name: a.name } } })
     ]).then(resolved => {
       res.json();
     });
