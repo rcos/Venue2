@@ -18,7 +18,7 @@ export default {
         });
     },
     /*deleteSection(id) {
-      return API().delete('sections/delete/' + id)
+        return API().delete('organizations/delete/' + id)
     },*/
     getCourses(id) {
         return API().get('organizations/get_courses/' + id);
@@ -30,17 +30,17 @@ export default {
         return API().get('organizations/get_admins/' + id);
     },
     addAdmins(id, admins) {
-        return API().post('courses/add_instructors/' + id, {
+        return API().post('courses/add_admins/' + id, {
             admins: admins
         });
     },
     addUsers(id, users) {
-        return API().post('sections/add_students/' + id, {
+        return API().post('sections/add_users/' + id, {
             users: users
         })
     },
     addCourses(id, courses) {
-        return API().post('sections/add_tas/' + id, {
+        return API().post('sections/add_courses/' + id, {
             courses: courses
         })
     }
