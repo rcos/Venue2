@@ -27,7 +27,7 @@ let Course = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Section'
 	}],
-	organizations:{
+	organization:{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Organization'
 	}

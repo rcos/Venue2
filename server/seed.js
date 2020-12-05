@@ -3,6 +3,7 @@ const Course = require("./Course/Course.model")
 const Section = require("./Section/Section.model")
 const User = require("./User/User.model")
 const Lecture = require("./Lecture/Lecture.model")
+const Organization = require("./Organization/Organization.model")
 const LectureSubmission = require("./LectureSubmission/LectureSubmission.model")
 const PlaybackPoll = require("./PlaybackPoll/PlaybackPoll.model")
 
@@ -71,6 +72,9 @@ var p2 = new PlaybackPoll()
 var p3 = new PlaybackPoll()
 var p4 = new PlaybackPoll()
 
+////////ORGANIZATIONS
+var o0 = new Organization()
+
 ////////USERS
 u0 = {
 	_id: u0._id,
@@ -82,6 +86,7 @@ u0 = {
 	is_admin: true,
 	instructor_courses: [c0,c2._id,c3._id,c4._id],
 	ta_sections: [s1._id,s2._id],
+	organization: o0,
 	student_sections: []
 }
 u1 = {
@@ -104,6 +109,7 @@ u2 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s1._id,s2._id,s3._id,s4._id]
 }
 u3 = {
@@ -115,6 +121,7 @@ u3 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s1._id,s3._id]
 }
 u4 = {
@@ -126,6 +133,7 @@ u4 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s2._id,s3._id]
 }
 u5 = {
@@ -148,6 +156,7 @@ u6 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s3._id]
 }
 u7 = {
@@ -170,6 +179,7 @@ u8 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s3._id]
 }
 u9 = {
@@ -181,6 +191,7 @@ u9 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s3._id]
 }
 u10 = {
@@ -192,6 +203,7 @@ u10 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s3._id]
 }
 u11 = {
@@ -203,6 +215,7 @@ u11 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s3._id]
 }
 u12 = {
@@ -214,6 +227,7 @@ u12 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s3._id]
 }
 u13 = {
@@ -236,6 +250,7 @@ u14 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s4._id]
 }
 u15 = {
@@ -247,6 +262,7 @@ u15 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s4._id]
 }
 u16 = {
@@ -258,6 +274,7 @@ u16 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s4._id]
 }
 u17 = {
@@ -269,6 +286,7 @@ u17 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s4._id]
 }
 u18 = {
@@ -280,6 +298,7 @@ u18 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s4._id]
 }
 u19 = {
@@ -291,6 +310,7 @@ u19 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s4._id]
 }
 u20 = {
@@ -302,6 +322,7 @@ u20 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s4._id]
 }
 u21 = {
@@ -313,6 +334,7 @@ u21 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s4._id]
 }
 u22 = {
@@ -324,6 +346,7 @@ u22 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s4._id]
 }
 u23 = {
@@ -335,6 +358,7 @@ u23 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s4._id]
 }
 u24 = {
@@ -346,6 +370,7 @@ u24 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s4._id]
 }
 u25 = {
@@ -357,6 +382,7 @@ u25 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [],
+	organization: o0,
 	student_sections: [s0._id,s4._id]
 }
 u26 = {
@@ -368,6 +394,7 @@ u26 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [s0._id,s3._id],
+	organization: o0,
 	student_sections: []
 }
 u27 = {
@@ -379,6 +406,7 @@ u27 = {
 	password: "password",
 	instructor_courses: [],
 	ta_sections: [s0._id,s4._id],
+	organization: o0,
 	student_sections: []
 }
 
@@ -388,6 +416,7 @@ c0 = {
 	name: "RCOS",
 	prefix: "CSCI",
 	suffix: 2961,
+	organization: o0,
 	instructors: [
 		u0.email
 	]
@@ -399,6 +428,7 @@ c1 = {
 	suffix: 1200,
 	snooze: 15,
 	meetingURL: "default_link",
+	organization: o0,
 	instructors: [
 		u1.email
 	]
@@ -408,6 +438,7 @@ c2 = {
 	name: "Multiletiable Calculus",
 	prefix: "MATH",
 	suffix: 2010,
+	organization: o0,
 	instructors: [
 		u0.email
 	]
@@ -417,6 +448,7 @@ c3 = {
 	name: "Physics I",
 	prefix: "PHYS",
 	suffix: 1100,
+	organization: o0,
 	instructors: [
 		u0._id
 	]
@@ -426,6 +458,7 @@ c4 = {
 	name: "Testing Course",
 	prefix: "TEST",
 	suffix: 1000,
+	organization: o0,
 	instructors: [
 		u0.email,
 		u1.email
@@ -689,7 +722,23 @@ p4 = {
 	],
 	timestamp: 5
 }
-
+////////ORGANIATIONS
+o0 = {
+	_id: o0._id,
+	name: "RPI",
+	admin_accounts: [
+		u0.email
+	],
+	courses: [
+		c0,
+		c1,
+		c2,
+		c3,
+		c4
+	],
+	max_courses: 256,
+	max_users: 256
+}
 seeder.connect(process.env.DB_URI || db, function () {
 	seeder.loadModels([
 		"./Course/Course.model",
@@ -697,9 +746,10 @@ seeder.connect(process.env.DB_URI || db, function () {
 		"./Section/Section.model",
 		"./Lecture/Lecture.model",
 		"./LectureSubmission/LectureSubmission.model",
-		"./PlaybackPoll/PlaybackPoll.model"
+		"./PlaybackPoll/PlaybackPoll.model",
+		"./Organization/Organization.model"
 	]);
-	seeder.clearModels(['Course', 'User', 'Section', 'Lecture', 'LectureSubmission', 'PlaybackPoll'], function () {
+	seeder.clearModels(['Course', 'User', 'Section', 'Lecture', 'LectureSubmission', 'PlaybackPoll','Organization'], function () {
 
 		let u = []
 		let c = []
@@ -707,7 +757,7 @@ seeder.connect(process.env.DB_URI || db, function () {
 		let l = []
 		let ls = []
 		let p = []
-
+		let o = []
 
 		u.push(u0)
 		u.push(u1)
@@ -763,6 +813,7 @@ seeder.connect(process.env.DB_URI || db, function () {
 		p.push(p3)
 		p.push(p4)
 
+		o.push(o0);
 		let promises = []
 		u.forEach(user => {
 			promises.push(new Promise((resolve,reject) => {
@@ -796,6 +847,9 @@ seeder.connect(process.env.DB_URI || db, function () {
 				}, {
 					"model": "PlaybackPoll",
 					"documents": p
+				},{
+					"model": "Organization",
+					"documents": o
 				}]
 
 				seeder.populateModels(data, function (err, done) {
