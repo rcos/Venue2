@@ -178,7 +178,7 @@
       --settings-text: #517B94;
       --settings-small-div: rgba(0, 0, 0, 0.64);
 
-      --settings-switch-on: #42f593;
+      /* --settings-switch-on: #04852F; */
       --settings-switch-off: #f55442;
       --settings-switch-ball: white;
     }
