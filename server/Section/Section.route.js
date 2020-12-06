@@ -6,6 +6,7 @@ const ObjectID = require(`mongoose`).Types.ObjectId;
 let Section = require('./Section.model');
 let User = require('../User/User.model');
 let Course = require('../Course/Course.model');
+let Attachment = require('../Attachments/Attachment.model');
 
 sectionRoutes.route('/add').post(function (req, res) {
   let section = new Section(req.body.section);

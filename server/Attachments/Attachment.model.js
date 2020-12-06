@@ -11,7 +11,6 @@ let Attachment = new Schema({
 	filepath: String,
     type: String,
 	size: Number,
-	attachmentRef: mongoose.SchemaTypes.url,
 	uploadedBy: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'

@@ -26,11 +26,11 @@ let Section = new Schema({
 	},
 	links: [{
 		type: mongoose.SchemaTypes.Url
-	}],
+	}],/*
 	files: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Attachment'
-	}]
+	}]*/
 });
 
 module.exports = mongoose.model('Section', Section);
