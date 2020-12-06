@@ -105,8 +105,7 @@
           <div :class="'active-link-underline ' + (is_settings()?'active':'')"></div>
         </div>
         <!-- Notifications -->
-
-        <div class = "venue-nav-link-container" :style="{marginTop: '1px', marginLeft: '12px'}">
+        <div class = "venue-nav-link-container" :style="{marginTop: '1px', marginLeft: '14px'}">
           <a data-toggle="collapse" href="#notification-collapse" class="venue-nav-link" :class="{'active-link':is_lecture_info()}" style="cursor:pointer;">
             <!-- with red dot -->
             <div class="image">
@@ -133,7 +132,7 @@
             </div>
           </hide-at>
         </div>
-
+        <!-- End -->
       </div>  
     </nav>
     <!-- Mobile Course Dropdown -->
@@ -326,7 +325,7 @@
         // to get a value that is either negative, positive, or zero.
           return new Date(b.created) - new Date(a.created);
         }); 
-        console.log(this.notifications.length)
+        // console.log(this.notifications.length)
         this.loadBreadcrumb()
       },
       loadBreadcrumb() {
@@ -554,7 +553,7 @@
   .venue-nav-link-container:focus-within > #no-notifications a {
     max-height: 5rem;
     height: 4.2rem;
-    padding-top: 22px;
+    padding-top: 24px;
   }
 
   #no-notifications a:hover,
@@ -562,6 +561,7 @@
     color: var(--main-text-color);
     background-color: var(--main-background-color);
     box-shadow: 0px 3px 3px 0px var(--nav-bar-box-shadow);
+
   }
 
   /* .venue-nav-link-container:hover > .dropdown-content a:nth-of-type(2),

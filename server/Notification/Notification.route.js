@@ -6,6 +6,7 @@ let Course = require('../Course/Course.model');
 let Section = require('../Section/Section.model');
 let User = require('../User/User.model');
 let Lecture = require('../Lecture/Lecture.model');
+const { set } = require('core-js/fn/dict');
 
 // add notification to db
 notificationRoutes.route('/add').post(function (req, res) {
@@ -55,7 +56,7 @@ notificationRoutes.route('/get').get(function(req, res) {
   })
 })
 
-// get all notifications for one users
+// get all notifications for one user
 notificationRoutes.route('/get_notifications').get(function (req, res) {
   Notification.find({ _id: { $in: req.user.notifications } }, function (err, notifications) {
     if (err || notifications == null) {
@@ -72,6 +73,18 @@ notificationRoutes.route('/get_notifications').get(function (req, res) {
 notificationRoutes.route('/send').post(function(req, res) {
   let noti_id = req.body.id
   let student_emails = req.body.students
+  let emails = Set()
+  /*
+  Section.find({ _id: { $in: req.user.notifications } }, function (err, notifications) {
+    if (err || notifications == null) {
+      console.log("<ERROR> Getting notifications for user with ID:", req.user._id);
+      res.json(err);
+    } else {
+      console.log("<SUCCESS> Getting notifications for user with ID:", req.user._id);
+      res.json(notifications);
+    }
+  });
+  */
   Promise.all([
     User.updateMany({email: {$in: student_emails}},{$push: {notifications: noti_id}})
   ]).then(resolved=> {
