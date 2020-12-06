@@ -55,5 +55,11 @@ export default {
     return API().post('lectures/end_early', {
       lecture_id: lecture_id
     })
+  },
+  addLinks(lecture, class_links) {
+    return API().post('lectures/add_links'), {
+      lecture: lecture,
+      class_links: class_links
+    }
   }
 }
