@@ -105,7 +105,7 @@ export default {
       }
     },
     processInstructorEmails(lectures) {
-      LectureAPI.processEmailsForLectures(lectures,this.current_user.email)
+      // LectureAPI.processEmailsForLectures(lectures,this.current_user.email)
     },
     setPalette() {
 		  PaletteAPI.setPalette(document.documentElement, this.current_user.dark_mode)

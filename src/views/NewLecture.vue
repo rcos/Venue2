@@ -331,7 +331,7 @@ export default {
       for(let i=0;i<this.lecture.checkins.length;i++) {
         const alnums = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         let result = "";
-        for (let j = 100; j > 0; --j) {
+        for (let j = 50; j > 0; --j) {
           result += alnums[Math.floor(Math.random() * alnums.length)];
         }
         this.lecture.checkins[i].code = result;

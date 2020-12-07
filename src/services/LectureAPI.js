@@ -45,12 +45,12 @@ export default {
   getLecture(id) {
     return API().get('lectures/' + id)
   },
-  processEmailsForLectures(lectures,toEmail) {
-    return API().post('lectures/process_emails', {
-      lectures: lectures,
-      toEmail: toEmail
-    })
-  },
+  // processEmailsForLectures(lectures,toEmail) {
+  //   return API().post('lectures/process_emails', {
+  //     lectures: lectures,
+  //     toEmail: toEmail
+  //   })
+  // },
   endEarly(lecture_id) {
     return API().post('lectures/end_early', {
       lecture_id: lecture_id
