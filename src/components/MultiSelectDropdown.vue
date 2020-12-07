@@ -44,19 +44,19 @@ export default {
 	created() {
 		this.options.forEach(option => {
 			if(this.preselected) {
-				let found = this.preselected.find(a => a._id == option._id || a === option)
+				let found = this.preselected.find(a => a._id === option._id || a === option);
 				if(found) {
-					this.selected.push(option)
+					this.selected.push(option);
 				} else {
-					this.unselected.push(option)
+					this.unselected.push(option);
 				}
 			} else {
-				this.unselected.push(option)
+				this.unselected.push(option);
 			}
 			
-		})
+		});
 		if(this.sortBy) {
-			this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
+			this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1);
 		}
 	},
 	methods: {
