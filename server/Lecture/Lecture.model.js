@@ -36,9 +36,12 @@ let Lecture = new Schema({
 	num_playback_polls: Number,
 	email_sent: {type: Boolean, default: false},
 	meeting_link: mongoose.SchemaTypes.Url,
-	class_links: [{
-		type: mongoose.SchemaTypes.Url
-	}],
+	class_links: {
+		type: [{
+			type: mongoose.SchemaTypes.Url
+		}],
+		default: []
+	},
 	files: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Attachment'
