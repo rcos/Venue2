@@ -156,7 +156,7 @@
     width: 91%;
     margin-top: -3.5rem;
     margin-left: 1.7%;
-    background-color: var(--lecture-info-background);
+    background-color: var(--main-background-color);
     border-radius: 5px;
     box-shadow: 0px 3px 3px 1px var(--lecture-pill-shadow);
     z-index: 4;
@@ -197,7 +197,7 @@
   .course-name {
     font-size: .75rem;
     margin-top: 1rem;
-    color: var(--lecture-course-name-text);
+    color: var(--dashboard-text-color);
     font-weight: bold;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -212,7 +212,7 @@
   }
 
   .lecture-name {
-    color: var(--lecture-name-text);
+    color: var(--dashboard-text-color);
     font-size: 1.25rem;
     margin-top: 1rem;
     font-weight: bold;
