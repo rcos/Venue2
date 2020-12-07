@@ -2,7 +2,7 @@
 	<div class="multiselect" v-click-outside="handleClickOutside">
 		<div :class="'multiselect-box z'+(999-(2*n)+1)" @click="open = !open">
 			<div class="multiselect-toggle float-right disable-select">
-				<img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+				<img class="svg-color" src="@/assets/venue-dropdown_icon.svg" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
 			</div>
 			<div v-for="(selection,i) in selected" :class="'multiselect-selected ' + (i==0?'first ':'') + (i==selected.length-1?'last ':'')" :key="i" v-on:click.stop>
 				<div class="multiselect-selected-text" :title="getDisplayText(selection)">
