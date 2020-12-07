@@ -124,9 +124,9 @@
     width: 95%;
     margin-left: 0;
     border-radius: 5px;
-    -webkit-transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
-    -ms-transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
-    transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
+    -webkit-transition: width 250ms cubic-bezier(0.19, 1, 0.22, 1);
+    -ms-transition: width 250ms cubic-bezier(0.19, 1, 0.22, 1);
+    transition: width 250ms cubic-bezier(0.19, 1, 0.22, 1);
     box-shadow: 0px 3px 3px 1px var(--lecture-pill-shadow);
   }
 
@@ -167,9 +167,9 @@
     /* height: 4.5rem; */
     width: 100%;
     /* margin-left: -1.25%; */
-    -webkit-transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
-    -ms-transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
-    transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
+    -webkit-transition: width 250ms cubic-bezier(0.19, 1, 0.22, 1);
+    -ms-transition: width 250ms cubic-bezier(0.19, 1, 0.22, 1);
+    transition: width 250ms cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   .lecture_card_link:focus {
