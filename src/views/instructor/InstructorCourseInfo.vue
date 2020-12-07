@@ -56,9 +56,6 @@
             </div>
           </div>
           <div class="courseinfo-legend">Legend:</div>
-          <!-- <div class="courseinfo-legend live-border">Synchronous</div>
-          <div class="courseinfo-legend playback-border">Asynchronous</div> -->
-
           <div class="courseinfo-legend live-border-display-only">Synchronous</div>
           <div class="courseinfo-legend playback-border-display-only">Asynchronous</div>
           <InstructorAttendanceHistory :style='{textAlign: "center"}'
@@ -138,7 +135,7 @@ export default {
       is_ta: false,
       is_student: false,
       selected_lectures: [],
-      selected_timeline: [],
+      selected_timeline: {},
       show_copymsg: false,
     }
   },
@@ -270,9 +267,10 @@ export default {
       this.sorted_lectures = sorted
       this.lectures_loaded = true
 
-      this.calculateInstructorAttendances()
       this.selected_lectures = sorted["all"].lectures
       this.selected_timeline = sorted["all"].timeline
+
+      this.calculateInstructorAttendances()
     },
     perc2color(pct) {
       let root = document.documentElement;
@@ -397,7 +395,7 @@ export default {
         timeline[year][month].push(i);
       }
       this.selected_timeline = timeline;
-      this.forceUpdate();
+      this.$forceUpdate();
     },
     copyMsg(){
       this.show_copymsg = 1;
