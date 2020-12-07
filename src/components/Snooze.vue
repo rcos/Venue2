@@ -17,7 +17,7 @@
       </select>
     </div>
     <div id="join">
-      <button id="join">Join</button>
+      <button id="join"> <a href="`{this.lecture.meeting_link}`">Join</a> </button>
     </div>
   </div>
   </div>
@@ -114,6 +114,10 @@
         this.$forceUpdate();
         });
       },
+      hide: function(){
+        console.log("hello??")
+        this.show=false
+      },
     },
     props: {
       lecture:{
@@ -138,6 +142,7 @@
   right: 0;
   z-index: 100;
   overflow-y: scroll;
+  background-color: yellow;
 }
 #header{
   text-align: left;
