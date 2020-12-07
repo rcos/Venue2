@@ -9,6 +9,12 @@ let Course = new Schema({
 	name: String,
 	prefix: String,
 	suffix: Number,
+	snooze: String,
+	course_times: [{
+		day: String,
+		start_time: String,
+		end_time: String
+	}],
 	instructors: [{
 		type: String,
 		ref: 'User'

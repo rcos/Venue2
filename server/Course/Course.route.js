@@ -58,6 +58,12 @@ courseRoutes.route('/update/:id').post(function (req, res) {
   if(req.body.updated_course.suffix) {
     updated_course.suffix = req.body.updated_course.suffix
   }
+  if(req.body.updated_course.meetingURL) {
+    updated_course.meetingURL = req.body.updated_course.meetingURL
+  }
+  if(req.body.updated_course.snooze) {
+    updated_course.snooze = req.body.updated_course.snooze
+  }
   Course.findByIdAndUpdate(id,
     updated_course,
     function (err, course) {
@@ -143,12 +149,11 @@ courseRoutes.post('/add_instructors/:id', (req, res) => {
 });
 
 courseRoutes.post('/add_announcement/:id', (req, res) => {
-  let message = req.body.message;
-  console.log(message)
+  let a = req.body.announcements;
   let course_id = req.params.id;
   Course.findById(course_id, function (err, course) {
     Promise.all([
-      Course.findByIdAndUpdate(course_id, { $push: { announcements: { message:message, date: NULL, name: NULL } } })
+      Course.findByIdAndUpdate(course_id, { $push: { announcements: { message:a.message, date: a.date, name: a.name } } })
     ]).then(resolved => {
       res.json();
     });

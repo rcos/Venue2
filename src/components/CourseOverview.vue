@@ -132,31 +132,54 @@
     },
     data(){
       return {
+        current_user: {},
+        announcements: {},
         new_announcement: false,
         course: {},
         instructors: [],
-        message: ''
+        message: "",
+        first_name: "",
+        last_name: "",
+        waiting: false
       }
     },
     created() {
-		this.getCurrentCourse()
+    this.getCurrentCourse()
+    this.getCurrentUser()
     },
     methods: {
+      getCurrentUser() {
+        this.current_user = this.$store.state.user.current_user
+        this.first_name = this.$store.state.user.current_user.first_name
+        this.last_name = this.$store.state.user.current_user.last_name
+      },
         async getCurrentCourse() {
-            let course_id = this.$route.params.id
-            const response = await CourseAPI.getCourse(course_id)
-            this.course = response.data
-            this.getCurrentCourseInstructor()
+          let course_id = this.$route.params.id
+          const response = await CourseAPI.getCourse(course_id)
+          this.course = response.data
+          this.getCurrentCourseInstructor()
         },
         async getCurrentCourseInstructor(){
-            const response = await UserAPI.getInstructorsForCourse(this.course._id)
-            if(response.data)
-            this.instructors = response.data
+          const response = await UserAPI.getInstructorsForCourse(this.course._id)
+          if(response.data)
+          this.instructors = response.data
         },
-        async addAnnouncementToCourse() {
-            CourseAPI.addAnnouncement(this.course_id, this.message).then(res => {
-              location.reload()
-            })
+        async addAnnouncementToCourse(evt) {
+          this.waiting = true
+          let current_date = new Date()
+          let current_user = this.first_name + " " + this.last_name
+          let announcements = {
+            message: this.message,
+            date: current_date,
+            name: current_user
+          }
+          const response = await CourseAPI.addAnnouncement(this.course._id, announcements)
+          // await CourseAPI.addAnnouncement(this.course_id, announcements).then(res => {
+          //   this.waiting = false
+          //   let course_id = this.$route.params.id
+          //   this.course.announcements = this.announ
+          // }) 
+          location.reload()
         },
       },
     }
