@@ -23,8 +23,8 @@
             </div>
           </div>
           <div class="courseinfo-legend">Legend:</div>
-          <div class="courseinfo-legend live-border">Synchronous</div>
-          <div class="courseinfo-legend playback-border">Asynchronous</div>
+          <div class="courseinfo-legend live-border-display-only">Synchronous</div>
+          <div class="courseinfo-legend playback-border-display-only">Asynchronous</div>
         </div>
         <InstructorAttendanceHistory
           v-if="selected_lectures && selected_timeline" :students="course_students"
@@ -56,9 +56,11 @@
             </div>
           </div>
           <div class="courseinfo-legend">Legend:</div>
-          <div class="courseinfo-legend live-border">Synchronous</div>
-          <div class="courseinfo-legend playback-border">Asynchronous</div>
+          <!-- <div class="courseinfo-legend live-border">Synchronous</div>
+          <div class="courseinfo-legend playback-border">Asynchronous</div> -->
 
+          <div class="courseinfo-legend live-border-display-only">Synchronous</div>
+          <div class="courseinfo-legend playback-border-display-only">Asynchronous</div>
           <InstructorAttendanceHistory :style='{textAlign: "center"}'
                   v-if="selected_lectures && selected_timeline" :students="course_students"
                   :lectures="selected_lectures" :timeline="selected_timeline" :scores_loaded="scores_loaded" mobileMode/>
