@@ -551,17 +551,4 @@ lectureRoutes.post('/end_early', (req, res) => {
 		}
 	})
 })
-
-lectureRoutes.post('/add_links', (req,res) => {
-	let lecture = req.body.lecture
-	let classLinks = req.body.classLinks
-	Lecture.findByIdAndUpdate(lecture._id, function(err, lecture) {
-		let class_links = lecture.class_links
-		classLinks.forEach(link => {
-			Lecture.find({link: {$nin: class_links}}, function(err, link) {
-				Lecture.findByIdAndUpdate(lecture._id, {$push: {class_link: link}})
-			})
-		})
-	})
-})
 module.exports = lectureRoutes

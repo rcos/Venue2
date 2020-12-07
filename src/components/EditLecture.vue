@@ -100,18 +100,18 @@
       </div>
       <div class="row">
       
-      </div>
+      <!-- </div>
       <div class="row">
         <h1>Finds</h1>
   <div class="row">
   <h1>Add Links</h1>
-  <div v-for="(link, index) in class_links": key = "link">
-    <input v-model="link.value">
+  <div v-for="(link, index) in lecture.class_links" :key="index">
+    <input v-model="lecture.class_links[index]">
   </div>
-  <button @click="addLink">
+  <button type="button" @click="addLink">
     New Link
   </button>
-</div>
+</div> -->
         <div class="col-md-12">
           <button v-if="waiting" class="btn btn-primary" disabled><SquareLoader/></button>
           <button v-else class="btn btn-primary">Save</button>
@@ -137,7 +137,6 @@ export default {
     MultiSelectDropdown
   },
   data() {
-    classLinks: []
     return {
       lecture: null,
       waiting: false,
@@ -169,6 +168,7 @@ export default {
     updateLecture() {
       if(confirm("All values in \"Updates\" column will be applied. Are you sure?")) {
         this.waiting = true
+        this.lecture.class_links.filter(link => link != "")
         LectureAPI.update(this.lecture).then(res => {
           this.waiting = false
           location.reload()
@@ -187,10 +187,7 @@ export default {
       }
     },
     addLink() {
-      this.classLinks.push({value: ''});
-    },
-    addAllLinks(classLinks) {
-      LectureAPI.addLinks(this.lecture, classLinks)
+      this.lecture.class_links.push("");
     }
   }
 };

@@ -75,7 +75,7 @@
           <div class="form-group">
             <!-- <div v-for="(time, i) in sortTimes(course.course_times)" :key="i"> -->
               <div v-for="(time, i) in sortTimes" :key="i">
-                 <div class="form-control">{{time.day}} {{convertTime(time.start_time)}} - {{convertTime(time.end_time)}} <button class="btn"  @click="removeElement(time)"><img class="red-x btn-prima" id="delete-time" src="@/assets/icons8-delete.svg" alt="Delete" width="20" aria-label="Delete"></button> </div>
+                 <div class="form-control">{{time.day}} {{convertTime(time.start_time)}} - {{convertTime(time.end_time)}} <button class="btn"  @click="removeElement(time)"><img class="red-x btn-prima" id="delete-time" src="@/assets/venue-delete.svg" alt="Delete" width="20" aria-label="Delete"></button> </div>
             </div>
              <div >
             <router-link :to="{name: 'new_lecture_time', params: { id: course._id}}">
