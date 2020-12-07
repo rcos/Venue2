@@ -81,7 +81,7 @@ const s3 = new AWS.S3({
 	region: 'us-east-2'
 });
 
-lectureRoutes.route('/get_signed_url/:filename').get(function(req, res) {
+lectureRoutes.route('/get_signed_recording_url/:filename').get(function(req, res) {
 	const fileurls = [];
 	const params = {
 		Bucket: "venue-recordings",
@@ -89,7 +89,7 @@ lectureRoutes.route('/get_signed_url/:filename').get(function(req, res) {
 		Expires: 60*60, // expiry time
 		ACL: "bucket-owner-full-control"
 	};
-	s3.getSignedUrl("putObject", params, function(err, url) {
+	s3.getSignedRecordingUrl("putObject", params, function(err, url) {
 		if (err) {
 			console.log("<ERROR> Getting signed URL");
 			res.json();
@@ -100,6 +100,27 @@ lectureRoutes.route('/get_signed_url/:filename').get(function(req, res) {
 		}
 	});
 });
+
+lectureRoutes.route('/get_signed_file_url/:filename').get(function(req, res) {
+	const fileurls = [];
+	const params = {
+		Bucket: "venue-attachments",
+		Key: req.params.filename,
+		Expires: 60*60, // expiry time
+		ACL: "bucket-owner-full-control"
+	};
+	s3.getSignedFileUrl("putObject", params, function(err, url) {
+		if (err) {
+			console.log("<ERROR> Getting file");
+			res.json();
+		} else {
+			fileurls[0] = url;
+			console.log("<SUCCESS> Getting file: ", fileurls[0]);
+			res.json(fileurls[0]);
+		}
+	});
+});
+
 
 lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) {
 	let lecture_id = req.params.lecture_id
@@ -530,5 +551,4 @@ lectureRoutes.post('/end_early', (req, res) => {
 		}
 	})
 })
-
 module.exports = lectureRoutes

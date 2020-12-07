@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+require('mongoose-type-url');
+const Grid = require('gridfs-stream');
+
 const Schema = mongoose.Schema;
 
 let User = require('../User/User.model');
@@ -24,6 +27,9 @@ let Course = new Schema({
 	sections: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Section'
+	}],
+	important_links: [{
+		type: mongoose.SchemaTypes.Url
 	}]
 });
 
