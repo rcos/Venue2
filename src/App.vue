@@ -121,7 +121,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  min-height: calc(100vh - 2rem - 5px);
+  min-height: calc(100vh - 2rem);
   // min-height: 100%;
 }
 
@@ -130,6 +130,6 @@ main {
   top: 0;
   width: 100%;
   overflow-y: auto;
-  min-height: calc(100vh - 10rem);
+  min-height: calc(100vh - 9.5rem);
 }
 </style>

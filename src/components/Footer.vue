@@ -53,7 +53,7 @@ created() {
 	/* padding-top: 0.2rem; */
 	margin: auto;
 	text-align: center;
-	padding: 5px;
+	padding: 0.25rem;
 }
 
 .icon {
