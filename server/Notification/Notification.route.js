@@ -72,19 +72,7 @@ notificationRoutes.route('/get_notifications').get(function (req, res) {
 // send it out
 notificationRoutes.route('/send').post(function(req, res) {
   let noti_id = req.body.id
-  let student_emails = req.body.students
-  let emails = Set()
-  /*
-  Section.find({ _id: { $in: req.user.notifications } }, function (err, notifications) {
-    if (err || notifications == null) {
-      console.log("<ERROR> Getting notifications for user with ID:", req.user._id);
-      res.json(err);
-    } else {
-      console.log("<SUCCESS> Getting notifications for user with ID:", req.user._id);
-      res.json(notifications);
-    }
-  });
-  */
+  let student_emails = req.body.emails
   Promise.all([
     User.updateMany({email: {$in: student_emails}},{$push: {notifications: noti_id}})
   ]).then(resolved=> {
@@ -107,7 +95,7 @@ notificationRoutes.route('/update').post(function(req, res) {
 })
 
 //clear all the notifications for a user and mark all as acknowledged
-notificationRoutes.route('/clear_all').post(function(req, res) {
+notificationRoutes.route('/clear_all').post(function(req, res) { 
   Promise.all([
     Notification.updateMany({_id: {$in: req.user.notifications }}, {$inc: {users_acknowledged: 1}}),
     User.updateOne({email: req.user.email}, {$set: {notifications: []}})

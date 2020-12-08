@@ -289,9 +289,10 @@ export default {
     },
     // FIX THIS
     async sendOutNotification() {
+      let all_emails = await SectionAPI.getStudentsForSections(this.lecture_sections)
       NotificationAPI.addNotification('lecture', this.lecture._id, this.course.name).then(res=> {
-        console.log(this.lecture_sections[0])
-        NotificationAPI.sendNotification(res.data._id, this.course_sections[0].students)
+        console.log(this.lecture_sections.length)
+        NotificationAPI.sendNotification(res.data._id, all_emails)
       })
     },
     async getSectionsForCourse() {

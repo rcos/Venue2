@@ -20,10 +20,10 @@ export default {
   getNotifications() {
     return API().get('notifications/get_notifications')
   },
-  sendNotification(id, students) {
+  sendNotification(id, emails) {
     return API().post('notifications/send', {
       id: id,
-      students: students
+      emails: emails
     })
   }, 
   updateNotification(id) {
