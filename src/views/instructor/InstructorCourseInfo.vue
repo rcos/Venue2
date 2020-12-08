@@ -18,18 +18,17 @@
         <div>
           <div class="section-select-container float-right">
             <label id="section_select_label">Section(s):</label>
-            <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange">
-              <option :value="'all'" selected>All</option>
-              <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">{{section.name}}</option>
-            </select>
+            <div>
+              <MultiSelectDropdown :options="sorted_sections" :preselected="sorted_sections" v-if="sorted_sections.length > 0" sort-by="name" @update="onSectionChange"/>
+            </div>
           </div>
           <div class="courseinfo-legend">Legend:</div>
-          <div class="courseinfo-legend live-border">Synchronous</div>
-          <div class="courseinfo-legend playback-border">Asynchronous</div>
+          <div class="courseinfo-legend live-border-display-only">Synchronous</div>
+          <div class="courseinfo-legend playback-border-display-only">Asynchronous</div>
         </div>
         <InstructorAttendanceHistory
-          v-if="lectures_loaded && sorted_lectures[selected_section]"
-          :lectures="sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded"/>
+          v-if="selected_lectures && selected_timeline" :students="course_students"
+          :lectures="selected_lectures" :timeline="selected_timeline" :scores_loaded="scores_loaded"/>
         <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
           <SquareLoader />
         </div>
@@ -52,17 +51,16 @@
         <div class="courseinfo-attendance-listing">
           <div class="section-select-container mobile float-right">
             <label id="section_select_label">Section(s):</label>
-            <select v-model="selected_section" class="form-control" aria-labelledby="section_select_label" @change="onSectionChange">
-              <option :value="'all'" selected>All</option>
-              <option v-for="(section,i) in sorted_sections" :key="i" :value="section._id">{{section.name}}</option>
-            </select>
+            <div>
+              <MultiSelectDropdown :options="sorted_sections" :preselected="sorted_sections" v-if="sorted_sections.length > 0" sort-by="name" @update="onSectionChange"/>
+            </div>
           </div>
           <div class="courseinfo-legend">Legend:</div>
-          <div class="courseinfo-legend live-border">Synchronous</div>
-          <div class="courseinfo-legend playback-border">Asynchronous</div>
+          <div class="courseinfo-legend live-border-display-only">Synchronous</div>
+          <div class="courseinfo-legend playback-border-display-only">Asynchronous</div>
           <InstructorAttendanceHistory :style='{textAlign: "center"}'
-            v-if="lectures_loaded && sorted_lectures[selected_section]"
-            :lectures="sorted_lectures[selected_section].lectures" :timeline="sorted_lectures[selected_section].timeline" :students="selected_section == 'all' ? course_students : sections[selected_section].students" :scores_loaded="scores_loaded" mobileMode/>
+                  v-if="selected_lectures && selected_timeline" :students="course_students"
+                  :lectures="selected_lectures" :timeline="selected_timeline" :scores_loaded="scores_loaded" mobileMode/>
           <div v-else-if="!lectures_loaded" :style='{textAlign: "center"}'>
             <SquareLoader />
           </div>
@@ -92,8 +90,8 @@
   import StudentAttendanceHistory from '@/components/StudentAttendanceHistory.vue'
   import LecturePillList from '@/components/LecturePillList.vue'
   import UpcomingLecturesList from '@/components/UpcomingLecturesList.vue'
-
   import SquareLoader from '@/components/Loaders/SquareLoader.vue'
+  import MultiSelectDropdown from "../../components/MultiSelectDropdown";
 
   import '@/assets/css/venue-core.css'
   import '@/assets/icon-font.css'
@@ -105,6 +103,7 @@ export default {
   computed: {
   },
   components: {
+    MultiSelectDropdown,
     EventHistoryList,
     showAt,
     hideAt,
@@ -113,7 +112,7 @@ export default {
     InstructorAttendanceHistory,
     LecturePillList,
     UpcomingLecturesList,
-    SquareLoader
+    SquareLoader,
   },
   data(){
     return {
@@ -135,7 +134,9 @@ export default {
       is_instructor: false,
       is_ta: false,
       is_student: false,
-      show_copymsg: false
+      selected_lectures: [],
+      selected_timeline: {},
+      show_copymsg: false,
     }
   },
   created() {
@@ -266,6 +267,9 @@ export default {
       this.sorted_lectures = sorted
       this.lectures_loaded = true
 
+      this.selected_lectures = sorted["all"].lectures
+      this.selected_timeline = sorted["all"].timeline
+
       this.calculateInstructorAttendances()
     },
     perc2color(pct) {
@@ -360,8 +364,38 @@ export default {
         })
       })
     },
-    onSectionChange() {
-      this.$forceUpdate()
+    onSectionChange(data) {
+      var lectures = [];
+      for (let sec of data) {
+        if (this.sorted_lectures.hasOwnProperty(sec._id)) {
+          let sl = this.sorted_lectures[sec._id].lectures;
+          for (let lect of sl) {
+            if (!lectures.find(x => x._id === lect._id)) {
+              lectures.push(lect);
+            }
+          }
+        }
+      }
+      this.selected_lectures = lectures;
+      let timeline = {};
+      for (let [i,lect] of lectures.entries()) {
+        if(undefined === lect.start_time || "Invalid Date" === lect.start_time || null === lect.start_time) {
+          lect.start_time = new Date(lect.playback_submission_start_time);
+        } else {
+          lect.start_time = new Date(lect.start_time);
+        }
+        let year = lect.start_time.getFullYear();
+        let month = lect.start_time.getMonth();
+        if(!timeline[year]) {
+          timeline[year] = {};
+        }
+        if(!timeline[year][month]) {
+          timeline[year][month] = [];
+        }
+        timeline[year][month].push(i);
+      }
+      this.selected_timeline = timeline;
+      this.$forceUpdate();
     },
     copyMsg(){
       this.show_copymsg = 1;

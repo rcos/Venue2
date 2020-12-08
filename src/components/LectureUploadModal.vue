@@ -2,7 +2,7 @@
   <div id="lecture-upload-modal">
     <LoadingOverlay v-if="waiting"/>
     <button type="button" id="video-upload-btn" class="btn btn-primary" @click="handleShowModal" :tabindex="(modal_open ? '-1' : '0')" title="Upload Recording">
-      <img class="svg-color" src="@/assets/icons8-upload-96.png" width="60" alt="QR Code" aria-label="QR Code">
+      <img class="svg-color" src="@/assets/venue-upload.svg" width="60" alt="QR Code" aria-label="QR Code">
     </button>
     <div id="lecture_modal_viewable" class="hiddenModal">
       <div class="row titlerow">
@@ -32,6 +32,9 @@
       </div>
       <div class="row filerow" v-if="video_type == ''">
         <input id="video_selector" name="lecturevideo" type="file" accept="video/*" class="btn" role="button" tabindex="0" aria-label="Select Video and Show Poll Creation Options"/>
+      </div>
+      <div class="row attachmentrow" v-if="file_type == ''">
+        <input id="attachment_selector" name="lectureattachment" type="file" accept="image/*, .docx, .pptx, .doc, .ppt, .txt, .pdf" class="btn" role="button" tabindex="0" aria-label="Select File to Upload"/>
       </div>
       <div class="row" id="lecture_container" v-if="file_selected">
         <div class="col add-poll-col" v-if="!update_lecture">
@@ -329,9 +332,9 @@ export default {
         }
       }
     },
-    getSignedURL(filename) {
+    getSignedRecordingURL(filename) {
       return new Promise((resolve, reject) => {
-        LectureAPI.getSignedUrl(filename)
+        LectureAPI.getSignedRecordingUrl(filename)
           .then(data => {
             resolve(data);
           })
@@ -340,12 +343,37 @@ export default {
           });
       });
     },
-    uploadMediaToS3(lect) {
+    uploadVideoToS3(lect) {
       return new Promise((resolve,reject) => {
-        this.getSignedURL(lect._id + '-' + document.getElementById("video_selector").files[0].name).then(data => {
+        this.getSignedRecordingURL(lect._id + '-' + document.getElementById("video_selector").files[0].name).then(data => {
           fetch(data.data, {
             method: 'PUT',
             body: document.getElementById("video_selector").files[0]
+          }).then(res => {
+            resolve(data.data)
+          })
+        }).catch(err => {
+          reject(err)
+        });
+      })
+    },
+    getSignedFileURL(filename) {
+      return new Promise((resolve, reject) => {
+        LectureAPI.getSignedFileUrl(filename)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    },
+    uploadFileToS3(lect) {
+      return new Promise((resolve,reject) => {
+        this.getSignedFileURL(lect._id + '-' + document.getElementById("file_selector").files[0].name).then(data => {
+          fetch(data.data, {
+            method: 'PUT',
+            body: document.getElementById("file_selector").files[0]
           }).then(res => {
             resolve(data.data)
           })
