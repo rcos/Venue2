@@ -393,26 +393,6 @@ sectionRoutes.route('/join_public_sections').post(function (req, res) {
   })
 });
 
-sectionRoutes.route('/getStudents_forSections').get(function(req, res) {
-  let ids = req.body.section_ids
-  let emails = []
-  let promises = []
-  ids.forEach( (section_id) => {
-    promises.push(new Promise((resolve, reject) => {
-      Section.findById(section_id, function(err, sec) {
-        emails = emails.concat(sec.students)
-        resolve(sec)
-      })
-    }))
-  })
-  Promise.all(promises).then(resolved => {
-    let elim_dups = new Set(emails)
-    console.log(elim_dups.length)
-    emails = Array.from(elim_dups)
-    res.json(emails)
-  })
-})
-
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3({
 	accessKeyId: process.env.AWSAccessKeyId,

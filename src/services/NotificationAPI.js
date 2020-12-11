@@ -26,6 +26,7 @@ export default {
       emails: emails
     })
   }, 
+  // need testing
   updateNotification(id) {
     return API().post('notifications/update', {
       id: id

@@ -62,10 +62,5 @@ export default {
     return API().post('sections/add_tas/'+section_id, {
       tas: tas
     })
-  },
-  getStudentsForSections(section_ids) {
-    return API().get('sections/getStudents_forSections', {
-      section_ids: section_ids
-    })
   }
 }

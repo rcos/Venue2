@@ -109,7 +109,7 @@
           <a data-toggle="collapse" href="#notification-collapse" class="venue-nav-link" :class="{'active-link':is_lecture_info()}" style="cursor:pointer;">
             <!-- with red dot -->
             <div class="image">
-              <img src="@/assets/notificationbell2.png" width="30" height="30" :style="{ marginTop: '0.3rem'}" class="d-inline-block align-top settings svg-color" id= "bell" alt="Notification Bell" aria-label="Notification Bell">
+              <img src="@/assets/venue-notification-bell.svg" width="30" height="30" :style="{ marginTop: '0.3rem'}" class="d-inline-block align-top settings svg-color" id= "bell" alt="Notification Bell" aria-label="Notification Bell">
               <span class="style-badge" v-if="notifications.length && notifications.length < 10">{{notifications.length}}</span>
               <span class="style-badge" v-if="notifications.length && notifications.length >= 10">9+</span>
             </div>

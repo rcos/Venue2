@@ -148,7 +148,8 @@ export default {
       max_year: null,
       min_year: null,
       fix_const: null,
-      daysInSelectedMonth: null
+      daysInSelectedMonth: null,
+      emails: []
     };
   },
   created() {
@@ -285,14 +286,24 @@ export default {
         this.lecture = response.data
         this.$refs["uploadmodal"].updateLectureFromParent(this.lecture,this.course_id)
       }
-      this.sendOutNotification()
+
+      this.combineEmails(this.lecture_sections).then(resolved => {
+        this.sendOutNotification()
+      })
     },
-    // FIX THIS
+    // Notification stuff for notifying new lecture
     async sendOutNotification() {
-      let all_emails = await SectionAPI.getStudentsForSections(this.lecture_sections)
       NotificationAPI.addNotification('lecture', this.lecture._id, this.course.name).then(res=> {
-        console.log(this.lecture_sections.length)
-        NotificationAPI.sendNotification(res.data._id, all_emails)
+        NotificationAPI.sendNotification(res.data._id, this.emails)
+      })
+    },
+    // gather all emails you want to send the notification to
+    async combineEmails(sections) {
+      sections.forEach(section => {
+        SectionAPI.getSection(section).then(res=> {
+          console.log(res.data.students.length)
+          this.emails = this.emails.concat(res.data.students)
+        })
       })
     },
     async getSectionsForCourse() {

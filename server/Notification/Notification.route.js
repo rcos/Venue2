@@ -72,13 +72,15 @@ notificationRoutes.route('/get_notifications').get(function (req, res) {
 // send it out
 notificationRoutes.route('/send').post(function(req, res) {
   let noti_id = req.body.id
-  let student_emails = req.body.emails
+  // remove all the duplicates
+  let student_emails = [...new Set(req.body.emails)]
   Promise.all([
-    User.updateMany({email: {$in: student_emails}},{$push: {notifications: noti_id}})
+    User.updateMany({email: {$in: student_emails}},{$push: {notifications: noti_id}}),
+    Notification.update({_id: {noti_id}}, {$set: {users_sent: student_emails.length}})
   ]).then(resolved=> {
     console.log("<SUCCESS> Sent all notifications out");
     res.json(true);
-  })
+  }) 
 })
 
 // TEST THESE STILL

@@ -16,9 +16,10 @@ let Notification = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Lecture'
   },
-  /*
-  users_sent: Number
-  */
+  users_sent: {
+    type: Number, 
+    default: 0
+  },
   users_acknowledged: {
     type: Number,
     default: 0
