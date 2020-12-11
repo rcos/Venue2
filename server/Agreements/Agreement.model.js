@@ -8,7 +8,9 @@ const Schema = mongoose.Schema;
 let Agreement = new Schema({
     user_id: String,
     doc_id: String,
-    date: String
+    date: String ,
+    time: String
+    //hope to change date & time to an actual date/time format
 });
 
 module.exports = mongoose.model('Agreement', Agreement);

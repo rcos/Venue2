@@ -1,4 +1,5 @@
 const seeder = require("mongoose-seed");
+const Agreement = require("./Agreements/Agreement.model")
 const Course = require("./Course/Course.model")
 const Section = require("./Section/Section.model")
 const User = require("./User/User.model")
@@ -382,6 +383,16 @@ u27 = {
 	student_sections: []
 }
 
+////////AGREEMENTS -- for testing purposes
+// relates to studenta
+a2 = {
+	_id: a2._id,
+	user_id: u2.user_id,
+	doc_id: "doc0",
+	date: "12.11.2020",
+	time: "04:22:00"
+}
+
 ////////COURSES
 c0 = {
 	_id: c0._id,
@@ -692,6 +703,7 @@ p4 = {
 
 seeder.connect(process.env.DB_URI || db, function () {
 	seeder.loadModels([
+		"./Agreements/Agreement.model",
 		"./Course/Course.model",
 		"./User/User.model",
 		"./Section/Section.model",
@@ -699,8 +711,9 @@ seeder.connect(process.env.DB_URI || db, function () {
 		"./LectureSubmission/LectureSubmission.model",
 		"./PlaybackPoll/PlaybackPoll.model"
 	]);
-	seeder.clearModels(['Course', 'User', 'Section', 'Lecture', 'LectureSubmission', 'PlaybackPoll'], function () {
-
+	seeder.clearModels(['Agreement', 'Course', 'User', 'Section', 'Lecture', 'LectureSubmission', 'PlaybackPoll'], function () {
+		
+		let a = []
 		let u = []
 		let c = []
 		let s = []
@@ -737,6 +750,8 @@ seeder.connect(process.env.DB_URI || db, function () {
 		u.push(u25)
 		u.push(u26)
 		u.push(u27)
+
+		a.push(a2)
 
 		c.push(c0)
 		c.push(c1)

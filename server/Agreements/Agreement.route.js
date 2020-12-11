@@ -50,7 +50,8 @@ agreementRoutes.route('/update/:id').post(function (req, res) {
     let updated_agreement = req.body.updated_agreement; 
     Agreement.findByUserIdAndUpdate(id, { 
       doc_id: updated_agreement.doc_id,
-      date: updated_agreement.date },
+      date: updated_agreement.date,
+      time: updated_agreement.time },
       function(err, agreement) { if (err || agreement == null) { 
         console.log("<ERROR> Updating agreement by User ID:",id,"with:",updated_agreement) 
         res.status(404).send("user not found"); 
