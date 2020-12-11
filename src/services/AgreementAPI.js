@@ -17,9 +17,10 @@ export default {
       agreement: agreement // add our data to the request body
     })
   },
-  updateAgreement(agreement) {
-    return API().post('agreements/update', {
-      agreement: agreement // add our data to the request body
+  //unsure if needed, since each update is hypothetically a new version
+  updateAgreement(docid, agreement) {
+    return API().post('agreements/update' + docid, {
+      updated_agreement: agreement // add our data to the request body
     })
   },
   deleteAgreement (docid) {
