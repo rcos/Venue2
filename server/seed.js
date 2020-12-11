@@ -42,6 +42,9 @@ var u25 = new User()
 var u26 = new User()
 var u27 = new User()
 
+////////AGREEMENTS
+var a2 = new Agreement() // relates to studenta
+
 ////////COURSES
 var c0 = new Course()
 var c1 = new Course()
