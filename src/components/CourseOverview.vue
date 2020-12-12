@@ -56,8 +56,8 @@
       <div class="col-md-5">
         <div class="form-group">
           <!-- Replace with course syllabus PDF link -->
-          <a href="https://www.unl.edu/gradstudies/current/teaching/Syllabus_Sample.pdf" target="_blank">
-          <div class="form-control">Course Syllabus PDF</div>
+          <a :href="course.syllabus" target="_blank">
+          <div class="form-control"> {{course.syllabus}} </div>
           </a>
         </div>
       </div>
