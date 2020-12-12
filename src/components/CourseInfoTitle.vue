@@ -12,6 +12,7 @@
       <!-- Time Block -->
       <div v-if="is_instructor"><div v-if="mobileMode && is_instructor" class="icon-spacer"/> Section(s): {{ (section_name?section_name:'None') }} <button class="btn" title="Delete Course" id="delete-course" @click="handleDeleteCourse()" v-if="is_instructor"><img class="red-x" id="delete-course" src="@/assets/icons8-delete.svg" alt="Delete" width="40" aria-label="Delete"></button></div>
       <div v-else>Section: {{ section_name }}</div>
+      <br>
       <router-link :to="{name: 'course_overview', params: { id: course._id }}">
         <button class="btn btn-primary">Overview</button>
       </router-link>

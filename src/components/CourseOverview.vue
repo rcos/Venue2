@@ -42,7 +42,7 @@
       <div class="col-md-5">
         <div class="form-group">
           <a :href="course.meetingURL" target="_blank">
-          <div class="form-control"> {{course.meetingURL}} </div>
+          <div class="form-control"> Join Meeting </div>
           </a>
         </div>
       </div>
@@ -57,7 +57,7 @@
         <div class="form-group">
           <!-- Replace with course syllabus PDF link -->
           <a :href="course.syllabus" target="_blank">
-          <div class="form-control"> {{course.syllabus}} </div>
+          <div class="form-control"> View Syllabus </div>
           </a>
         </div>
       </div>
@@ -242,6 +242,7 @@
 
 .form-group {
 	margin-top: 1rem;
+  word-wrap: break-word;
 }
 
 hr {
