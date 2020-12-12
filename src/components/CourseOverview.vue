@@ -13,7 +13,7 @@
         <div class="form-group">
           <div v-for="(instructor, i) in instructors" :key="i">
             <div class="form-control">{{instructor.first_name}} {{instructor.last_name}} 
-            <!-- <a href="mailto: wangx45@rpi.edu"><img src="https://img.icons8.com/fluent-systems-regular/24/000000/send-mass-email.png"/></a> -->
+            <!-- <a href="mailto: {{instructor.email}}"><img src="https://img.icons8.com/fluent-systems-regular/24/000000/send-mass-email.png"/></a> -->
             </div>
           </div>
         </div>
@@ -27,7 +27,9 @@
       </div>
       <div class="col-md-5">
         <div class="form-group">
-          <div class="form-control">Monday 2:00 PM - 4:00 PM</div>
+          <div v-for="(time, i) in sortTimes" :key="i">
+            <div class="form-control">{{time.day}} {{convertTime(time.start_time)}} - {{convertTime(time.end_time)}}</div>
+          </div>
         </div>
       </div>
     </div><br>
@@ -147,6 +149,38 @@
     this.getCurrentCourse()
     this.getCurrentUser()
     },
+    computed: {
+      sortTimes() {
+        function getIndex(day) {
+          if (day == "Sunday") {return 0;}
+          if (day == "Monday") {return 1;}
+          if (day == "Tuesday") {return 2;}
+          if (day == "Wednesday") {return 3;}
+          if (day == "Thursday") {return 4;}
+          if (day == "Friday") {return 5;}
+          if (day == "Saturday") {return 6;}
+        }
+        function compare(a, b) {
+          let aDay = getIndex(a.day);
+          let bDay = getIndex(b.day);
+          if (aDay < bDay )
+            return -1;
+          if (aDay > bDay)
+            return 1;
+          if (aDay == bDay) {
+             if (a.start_time < b.start_time)
+              return -1;
+            if (a.start_time > b.start_time)
+              return 1;
+          }
+          return 0;
+        }
+        if(this.course.course_times) {
+          return this.course.course_times.sort(compare);
+        }
+        return []
+      }
+    },
     methods: {
       getCurrentUser() {
         this.current_user = this.$store.state.user.current_user
@@ -164,6 +198,25 @@
           if(response.data)
           this.instructors = response.data
         },
+        convertTime(time) {
+        if (time == '' || time == undefined || time == null) return ''
+        let newTime = time.split(":")
+        let hours = parseInt(newTime[0])
+        let mod = hours / 12
+        let ampm = "am"
+        if (mod > 1) {
+          ampm = "pm"
+          hours = hours - 12
+        }
+        if (mod == 1) {
+          ampm = "pm"
+        }
+        if (hours == 0){
+          hours = 12
+        }
+        let mins = newTime[1]
+        return `${hours}:${mins} ${ampm}`
+      },
         async addAnnouncementToCourse(evt) {
           this.waiting = true
           let current_date = new Date()
