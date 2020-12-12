@@ -5,7 +5,7 @@
     <div id="draggable-header" @mousedown="dragMouseDown">
       <p id = "header">Lecture Meeting Reminder</p>
     </div>
-    <div>
+    <div class = "info">
       <p>{{lecture.title}} <p>
       <p>Start Time: {{formatStart}}</p>
       <p>End Time: {{formatEnd}}</p>
@@ -49,13 +49,15 @@
     computed:{
       formatStart: function(){
         var date = new Date(this.lecture.start_time);
-        return date.getMonth()+"-"+date.getDate()+ " at "+(date.getHours()%12)+":"+date.getMinutes()+":"+date.getSeconds();
+        var ampm = (date.getHours() >= 12) ? 'pm' : 'am'
+        return date.getMonth()+"-"+date.getDate()+ " at "+(date.getHours()%12)+":"+date.getMinutes()+" "+ampm;
       },
       formatEnd: function(){
         var date = new Date(this.lecture.end_time);
         var d = date.getDate();
         var m = date.getMonth();
-        return date.getMonth()+"-"+date.getDate()+ " at "+(date.getHours()%12)+":"+date.getMinutes()+":"+date.getSeconds();
+        var ampm = (date.getHours() >= 12) ? 'pm' : 'am'
+        return date.getMonth()+"-"+date.getDate()+ " at "+(date.getHours()%12)+":"+date.getMinutes()+" "+ampm;
       }
     },
     created() {
@@ -71,10 +73,38 @@
           { name: "30 minutes", id: 30 },
         ]
         this.getLectures()
+        this.NaNCheck()
       },
       async getLectures(){
         const response4 = await LectureAPI.getLectures()
         this.lectures = response4.data
+      },
+      timeCheck(){
+        var today = new Date()
+        var start = new Date(this.lecture.start_time);
+        var end = new Date(this.lecture.end_time);
+        var res= (today>=start && today<=end) ? true : false;
+        console.log(today>=start)
+        console.log(today<=end)
+        if(!res){
+          console.log("should not show...")
+          this.show = false
+          this.$forceUpdate();
+        }
+      },
+      NaNCheck(){
+        var start = new Date(this.lecture.start_time);
+        var end = new Date(this.lecture.end_time);
+        var startCheck = (isNaN(start.getMonth()) ||  isNaN(start.getDate()) ||  isNaN(start.getHours())||  isNaN(start.getMinutes()));
+        var endCheck =  isNaN(end.getMonth()) ||  isNaN(end.getDate()) ||  isNaN(end.getHours())||  isNaN(end.getMinutes());
+        if(startCheck||endCheck){
+          this.show = false
+          this.$forceUpdate();
+        }
+        else{
+          console.log("timecheck??")
+          this.timeCheck()
+        }
       },
       dragMouseDown: function (event) {
         event.preventDefault()
@@ -106,16 +136,13 @@
         console.log(this.selectedTime)
         this.show=false
         this.$forceUpdate();
-        console.log(this.show)
         this.sleep(this.selectedTime*60000).then(() => {
         console.log(this.selectedTime*60000)
         this.show=true
-        console.log(this.show)
         this.$forceUpdate();
         });
       },
       hide: function(){
-        console.log("hello??")
         this.show=false
       },
     },
@@ -137,11 +164,11 @@
   border:1px solid black;
   position: absolute;
   width:300px;
-  height:100px;
+  height:150px;
   bottom: 0;
   right: 0;
   z-index: 100;
-  overflow-y: scroll;
+  //overflow-y: scroll;
   background-color: yellow;
 }
 #header{
@@ -155,12 +182,15 @@
 }
 #join,#snooze{
   float: right;
-  margin-right: 5px;
+  margin-right: 1 px;
   padding: 0.2em;
   margin: 0.1em 0.2em;
   -moz-box-sizing: content-box; /* or `border-box` */
   -webkit-box-sizing: content-box;
   box-sizing: content-box;
+}
+.info{
+  text-align: left;
 }
 
 </style>
