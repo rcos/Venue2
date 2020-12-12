@@ -64,6 +64,9 @@ courseRoutes.route('/update/:id').post(function (req, res) {
   if(req.body.updated_course.snooze) {
     updated_course.snooze = req.body.updated_course.snooze
   }
+  if(req.body.updated_course.syllabus) {
+    updated_course.syllabus = req.body.updated_course.syllabus
+  }
   Course.findByIdAndUpdate(id,
     updated_course,
     function (err, course) {

@@ -68,6 +68,18 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
+            <label>Syllabus URL</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input class="form-control" type="url" v-model="edited_course_syllabus" :placeholder="course.syllabus" rows=5>
+          </div>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
             <label>Lecture Times</label>
           </div>
         </div>
@@ -162,6 +174,7 @@
         edited_course_prefix: "",
         edited_course_suffix:  "",
         edited_course_url: "",
+        edited_course_syllabus: "",
         waiting: false
       }
     },
@@ -292,6 +305,12 @@
         }
         else {
           this.course.meetingURL = this.course.meetingURL
+        }
+        if (this.edited_course_syllabus != ''){
+          this.course.syllabus = this.edited_course_syllabus
+        }
+        else {
+          this.course.syllabus = this.course.syllabus
         }
         this.course.snooze = this.course.snooze
         await CourseAPI.updateCourse(this.course._id, this.course).then(res => {
