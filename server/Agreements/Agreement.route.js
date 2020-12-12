@@ -77,7 +77,7 @@ agreementRoutes.route('/update/:id').post(function (req, res) {
 });
 
 agreementRoutes.route('/delete/:id').delete(function (req, res) {
-    Agreement.findByUserIdAndRemove({ _id: req.params.id }, function (err) {
+    Agreement.findByDocIdAndRemove({ _id: req.params.id }, function (err) {
       if (err) {
         console.log("<ERROR> Deleting agreement by Doc ID:", req.params.id)
         res.json(err);
