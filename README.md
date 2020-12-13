@@ -2,8 +2,6 @@
 
 # Venue
 
-### Gauging Engagement | venue-meetings.com
+# "Deprecated" ?
 
-### <em>Every second LMS fails, we get one step closer</em>
-
-# Active development has moved to https://github.com/TheStopsign/Venue
+## Active development has moved to https://github.com/TheStopsign/Venue
