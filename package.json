@@ -18,7 +18,7 @@
     "@fullcalendar/vue": "^5.4.0",
     "@google-cloud/storage": "^5.2.0",
     "aws-sdk": "^2.771.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "bcrypt": "^5.0.0",
     "bootstrap": "^4.5.2",
