@@ -300,6 +300,12 @@
       is_settings() {
         return this.$route.name === 'settings'
       },
+      setPalette() {
+		  let root = document.documentElement;
+		  if (this.current_user != null) {
+			  PaletteAPI.setPalette(root, this.current_user.dark_mode)
+		    }
+	    },
       is_calendar() {
         return this.$route.name === 'calendar'
       }
