@@ -72,7 +72,6 @@ const s3 = new AWS.S3({
 	secretAccessKey: process.env.AWSSecretKey,
 	region: 'us-east-2'
 });
-
 lectureRoutes.route('/get_signed_recording_url/:filename').get(function(req, res) {
 	const fileurls = [];
 	const params = {
@@ -92,7 +91,6 @@ lectureRoutes.route('/get_signed_recording_url/:filename').get(function(req, res
 		}
 	});
 });
-
 lectureRoutes.route('/get_signed_file_url/:filename').get(function(req, res) {
 	const fileurls = [];
 	const params = {
@@ -112,8 +110,6 @@ lectureRoutes.route('/get_signed_file_url/:filename').get(function(req, res) {
 		}
 	});
 });
-
-
 lectureRoutes.route('/update_to_playback/:lecture_id').post(function (req, res) {
 	let lecture_id = req.params.lecture_id
 	let lecture = req.body.lecture
@@ -468,7 +464,6 @@ lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
 		}
 	});
 })
-
 // lectureRoutes.post('/process_emails', (req, res) => {
 // 	let lectures = req.body.lectures
 // 	let toEmail = req.body.toEmail
@@ -516,7 +511,6 @@ lectureRoutes.get('/with_sections_and_course/:lecture_id', (req, res) => {
 // 		res.json(lectures)
 // 	}
 // })
-
 lectureRoutes.post('/end_early', (req, res) => {
 	let now = new Date()
 	Lecture.findByIdAndUpdate(req.body.lecture_id, { end_time: now }, function (err, lecture) {

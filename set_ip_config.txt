@@ -21,7 +21,7 @@
 
 	old_ip: automatic
 
-	new_ip: automatic
+	new_ip: localhost
 
 	warnings: true
 

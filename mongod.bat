@@ -1,0 +1,1 @@
+"C:\Program Files\MongoDB\Server\4.4\bin\mongod.exe" --dbpath="c:\users\brody\desktop\rpi\venue2-master\venue2-master\server"
