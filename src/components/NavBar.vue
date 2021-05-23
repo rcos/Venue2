@@ -24,7 +24,7 @@
         <!-- Courses Link -->
         <div class="venue-nav-link-container" id="instructor-course-dropdown" v-if="instructor_courses.length">
           <a data-toggle="collapse" href="#instructor-collapse" class="venue-nav-link" :class="{'active-link':is_instructor_course_info()}" style="cursor:pointer;">
-            Instructor Courses <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+            Instructor Courses <img class="svg-color" src="@/assets/venue-dropdown_icon.svg" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
@@ -43,7 +43,7 @@
         </div>
         <div class="venue-nav-link-container" id="ta-section-dropdown" v-if="ta_sections.length">
           <a data-toggle="collapse" href="#ta-collapse" class="venue-nav-link" :class="{'active-link':is_ta_section_info()}" style="cursor:pointer;">
-            TA Sections <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+            TA Sections <img class="svg-color" src="@/assets/venue-dropdown_icon.svg" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
@@ -56,7 +56,7 @@
         </div>
         <div class="venue-nav-link-container" id="student-section-dropdown" v-if="student_sections.length">
           <a data-toggle="collapse" href="#student-collapse" class="venue-nav-link" :class="{'active-link':is_student_section_info()}" style="cursor:pointer;">
-            Student Sections <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+            Student Sections <img class="svg-color" src="@/assets/venue-dropdown_icon.svg" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
@@ -70,7 +70,7 @@
         <!-- ADMIN -->
         <div class="venue-nav-link-container" id="admin-dropdown" v-if="current_user.is_admin">
           <a data-toggle="collapse" href="#admin-collapse" class="venue-nav-link" style="cursor:pointer;">
-            🔑 <img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+            🔑 <img class="svg-color" src="@/assets/venue-dropdown_icon.svg" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
           </a>
           <hide-at breakpoint="mediumAndBelow">
             <div class="dropdown-content">
@@ -93,13 +93,13 @@
         <div class="venue-nav-link-container">
           <router-link class="venue-nav-link" :class="{'active-link':is_settings()}" :to="{name: 'settings'}">
             <show-at breakpoint="large">
-              <p aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }}<img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon"></p>
+              <p aria-label="User Name">{{ current_user.first_name }} {{ current_user.last_name }} <img src="@/assets/venue-settings.svg" width="20" height="20" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon"></p>
             </show-at>
             <show-at breakpoint="medium">
-              <p aria-label="User Name">{{ current_user.first_name }} <img src="@/assets/settings.svg" width="20" height="20" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon"></p>
+              <p aria-label="User Name">{{ current_user.first_name }} <img src="@/assets/venue-settings.svg" width="20" height="20" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon"></p>
             </show-at>
             <show-at breakpoint="small">
-              <img src="@/assets/settings.svg" width="20" height="20" :style="{marginRight: '6rem'}" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon">
+              <img src="@/assets/venue-settings.svg" width="20" height="20" :style="{marginRight: '6rem'}" class="d-inline-block align-top settings svg-color" alt="Settings Icon" aria-label="Settings Icon">
             </show-at>
           </router-link>
           <div :class="'active-link-underline ' + (is_settings()?'active':'')"></div>
@@ -168,25 +168,25 @@
         Venue
       </router-link>
       <div v-if="current_ta_section" class="crumb">
-        <img class="rotate-arrow" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+        <img class="rotate-arrow" src="@/assets/venue-dropdown_icon.svg" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
         <router-link :to="{name: 'ta_section_info', params: { id: current_ta_section._id }}">
           {{current_ta_section.course.name}}
         </router-link>
       </div>
       <div v-else-if="current_student_section" class="crumb">
-        <img class="rotate-arrow" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+        <img class="rotate-arrow" src="@/assets/venue-dropdown_icon.svg" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
         <router-link :to="{name: 'student_section_info', params: { id: current_student_section._id }}">
           {{current_student_section.course.name}}
         </router-link>
       </div>
       <div v-else-if="current_course" class="crumb">
-        <img class="rotate-arrow" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+        <img class="rotate-arrow" src="@/assets/venue-dropdown_icon.svg" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
         <router-link :to="{name: 'instructor_course_info', params: { id: current_course._id }}">
           {{current_course.name}}
         </router-link>
       </div>
       <div v-if="current_lecture" class="crumb">
-        <img class="rotate-arrow" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+        <img class="rotate-arrow" src="@/assets/venue-dropdown_icon.svg" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
         <router-link :to="{name: 'lecture_info', params: { lecture_id: current_lecture._id }}">
           {{current_lecture.title}}
         </router-link>
@@ -404,8 +404,8 @@
 
   .dropdown-content a {
     visibility: hidden;
-    color: var(--nav-bar-text);
-    background-color: var(--nav-bar-background);
+    color: var(--main-text-color);
+    background-color: var(--main-background-color);
     font-weight: bold;
     font-size: 0rem;
     text-decoration: none;  
@@ -448,7 +448,7 @@
     visibility: visible;
     font-size: 1rem;
     max-height: 3rem;
-    width: 15rem;
+    width: 20rem;
     padding: 12px 16px;
     transform: rotateY(0deg);
     transition: font-size 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), max-height 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), padding 0.25s 0s cubic-bezier(0.19, 1, 0.22, 1), transform 0.05s 0s cubic-bezier(0.19, 1, 0.22, 1);

@@ -53,12 +53,12 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Snooze</label>
+            <label>Snooze Duration (Coming soon)</label>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <select v-model="course.snooze" class="form-control" aria-labelledby="section_select_label">
+            <select v-model="course.snooze" class="form-control" aria-labelledby="section_select_label" disabled>
               <option v-for="(time,i) in ['None','15 Minutes','30 Minutes','45 Minutes','60 Minutes']" :key="i" :value="time">{{time}} </option>
             </select>
           </div>
@@ -68,18 +68,18 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Lecture Times</label>
+            <label>Lecture Times (Coming soon)</label>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <!-- <div v-for="(time, i) in sortTimes(course.course_times)" :key="i"> -->
               <div v-for="(time, i) in sortTimes" :key="i">
-                 <div class="form-control">{{time.day}} {{convertTime(time.start_time)}} - {{convertTime(time.end_time)}} <button class="btn"  @click="removeElement(time)"><img class="red-x btn-prima" id="delete-time" src="@/assets/icons8-delete.svg" alt="Delete" width="20" aria-label="Delete"></button> </div>
+                 <div class="form-control">{{time.day}} {{convertTime(time.start_time)}} - {{convertTime(time.end_time)}} <button class="btn"  @click="removeElement(time)"><img class="red-x btn-prima" id="delete-time" src="@/assets/venue-delete.svg" alt="Delete" width="20" aria-label="Delete"></button> </div>
             </div>
              <div >
             <router-link :to="{name: 'new_lecture_time', params: { id: course._id}}">
-            <button class="btn btn-primary">Add Time</button>
+              <button class="btn btn-primary" disabled>Add Time</button>
             </router-link>
           </div>
         </div>

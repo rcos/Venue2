@@ -5,10 +5,12 @@
     		<img class="icon github-icon" src="../assets/github_mark.png" aria-label="Github Icon" alt="Github Icon"/>
     	</a> |
 		<a href="https://blacklivesmatter.com/" target="_blank" aria-label="Black Lives Matter">
-    		<img class="icon" src="../assets/black_lives_matter.svg" aria-label="BLM Icon" alt="BLM Icon"/>
+    		<img class="icon" src="../assets/venue-black-lives-matter.svg" aria-label="BLM Icon" alt="BLM Icon"/>
     	</a> |
-		An RCOS project | Icons by <a target="_blank" href="https://icons8.com">Icons8
-		</a>
+		<a href="https://girlswhocode.com/" target="_blank" aria-label="Girls Who Code">
+			<img class="icon girls-who-code-icon" src="../assets/Girls_who_code_logo.svg" aria-label="Girls Who Code Icon" alt="Girls Who Code Icon"/>
+	</a> |
+		An RCOS project
     </footer>
 </template>
 
@@ -53,7 +55,7 @@ created() {
 	/* padding-top: 0.2rem; */
 	margin: auto;
 	text-align: center;
-	padding: 5px;
+	padding: 0.25rem;
 }
 
 .icon {
@@ -70,5 +72,9 @@ created() {
 
 .github-icon {
 	width: 1.25rem;
+}
+
+.girls-who-code-icon {
+	width: 3rem;
 }
 </style>

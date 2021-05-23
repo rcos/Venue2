@@ -58,7 +58,7 @@
                 <div class="checkin-poll col col-4 my-auto">
                   <div v-if="null != polls[i]">
                     <button type="button" class="btn btn-secondary" @click="add_poll_index = i" :title="'Edit '+polls[i].question">
-                      <img class="svg-color" src="@/assets/icons8-edit.svg" alt="Edit" width="40" aria-label="Edit">
+                      <img class="svg-color" src="@/assets/venue-edit.svg" alt="Edit" width="40" aria-label="Edit">
                     </button>
                     <button type="button" class="btn btn-danger" @click="polls[i] = null" :title="'Remove ' +polls[i].question">X</button>
                   </div>
@@ -331,7 +331,7 @@ export default {
       for(let i=0;i<this.lecture.checkins.length;i++) {
         const alnums = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         let result = "";
-        for (let j = 100; j > 0; --j) {
+        for (let j = 50; j > 0; --j) {
           result += alnums[Math.floor(Math.random() * alnums.length)];
         }
         this.lecture.checkins[i].code = result;

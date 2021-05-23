@@ -2,7 +2,7 @@
 	<div class="multiselect" v-click-outside="handleClickOutside">
 		<div :class="'multiselect-box z'+(999-(2*n)+1)" @click="open = !open">
 			<div class="multiselect-toggle float-right disable-select">
-				<img class="svg-color" src="@/assets/icons8-sort-down-26.png" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
+				<img class="svg-color" src="@/assets/venue-dropdown_icon.svg" width="10" height="10" alt="Down Icon" aria-label="Down Icon">
 			</div>
 			<div v-for="(selection,i) in selected" :class="'multiselect-selected ' + (i==0?'first ':'') + (i==selected.length-1?'last ':'')" :key="i" v-on:click.stop>
 				<div class="multiselect-selected-text" :title="getDisplayText(selection)">
@@ -44,19 +44,19 @@ export default {
 	created() {
 		this.options.forEach(option => {
 			if(this.preselected) {
-				let found = this.preselected.find(a => a._id == option._id || a === option)
+				let found = this.preselected.find(a => a._id === option._id || a === option);
 				if(found) {
-					this.selected.push(option)
+					this.selected.push(option);
 				} else {
-					this.unselected.push(option)
+					this.unselected.push(option);
 				}
 			} else {
-				this.unselected.push(option)
+				this.unselected.push(option);
 			}
 			
-		})
+		});
 		if(this.sortBy) {
-			this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1)
+			this.unselected.sort((a,b) => a[this.sortBy] > b[this.sortBy] ? 1 : -1);
 		}
 	},
 	methods: {
@@ -165,11 +165,12 @@ export default {
 }
 .multiselect-selected-text {
 	padding: 0.25rem 0.5rem;
-	font-size: 0.8rem;
+	font-size: 0.9rem;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	cursor: text;
+	color: black;
 }
 .multiselect-dropdown {
 	max-height: 10rem;
