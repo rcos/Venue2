@@ -132,6 +132,7 @@ class BroderickPicker {
         }
         if (hov_section == 'day') {
           new_value = new_value <= 0 ? maxDays + new_value : new_value
+          new_value = new_value > maxDays ? new_value - maxDays : new_value
         }
         if (hov_section == 'hour' || hov_section == 'minute') {
           new_value = new_value == -1 && hov_section == 'minute' ? 59 : new_value == -1 && hov_section == 'hour' ? 23 : new_value 
@@ -233,7 +234,7 @@ class BroderickPicker {
   
     getToday(today) {
       //return [today.getFullYear(), today.getMonth() + 1, today.getDate(), today.getHours(), today.getMinutes()]
-      return [today.getFullYear(), today.getMonth() + 2, today.getDate(), today.getHours(), today.getMinutes()]
+      return [today.getFullYear(), today.getMonth() + 2, 30, today.getHours(), today.getMinutes()]
     }
 
     currentYear() {
