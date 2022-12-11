@@ -29,7 +29,7 @@
     "core-js": "^2.6.11",
     "cors": "^2.8.5",
     "cypress-axe": "^0.8.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-session": "^1.17.1",
     "formidable": "^1.2.2",
     "google-maps": "^3.3.0",
